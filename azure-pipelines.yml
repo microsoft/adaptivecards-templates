@@ -7,23 +7,20 @@ trigger:
 - master
 
 pool:
-  vmImage: 'vs2017-win2016'
+  vmImage: 'ubuntu-latest'
 
 steps:
 - script: echo Hello, world!
   displayName: 'Run a one-line script'
 
+- task: Bash@3
+  inputs:
+    targetType: 'inline'
+    script: 'sudo apt-get update
+      sudo apt-get install -y build-essential libssl-dev libffi-dev python3-dev python3-pip
+      pip3 install blobxfer'
+
 - script: |
     echo Add other tasks to build, test, and deploy your project.
     echo See https://aka.ms/yaml
   displayName: 'Run a multi-line script'
-
-- task: AzureFileCopy@3
-  inputs:
-    SourcePath: './templates'
-    azureSubscription: 'Adaptive Cards (47c80630-3d74-4b3e-a2f4-57e6368cd8c6)'
-    Destination: 'AzureBlob'
-    storage: 'adaptivecardstemplates'
-    ContainerName: 'templates'
-    outputStorageUri: 'https://core.windows.net/adaptivecardstemplates'
-    outputStorageContainerSasToken: '$(STORAGE_SAS)'
