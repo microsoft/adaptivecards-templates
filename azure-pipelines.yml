@@ -17,3 +17,13 @@ steps:
     echo Add other tasks to build, test, and deploy your project.
     echo See https://aka.ms/yaml
   displayName: 'Run a multi-line script'
+
+- task: AzureFileCopy@3
+  inputs:
+    SourcePath: './templates'
+    azureSubscription: 'Adaptive Cards (47c80630-3d74-4b3e-a2f4-57e6368cd8c6)'
+    Destination: 'AzureBlob'
+    storage: 'adaptivecardstemplates'
+    ContainerName: 'templates'
+    outputStorageUri: 'https://core.windows.net/adaptivecardstemplates'
+    outputStorageContainerSasToken: '$(STORAGE_SAS)'
