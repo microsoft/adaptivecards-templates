@@ -14,10 +14,9 @@ steps:
   displayName: 'Run a one-line script'
 
 - script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
     sudo apt-get update
     sudo apt-get install -y build-essential libssl-dev libffi-dev python3-dev python3-pip
+    pip3 --version
     pip3 install --upgrade pip
     pip3 install blobxfer
   displayName: 'Run a multi-line script'
