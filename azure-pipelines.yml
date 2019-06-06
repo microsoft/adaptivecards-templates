@@ -19,5 +19,5 @@ steps:
     sudo python3 -m pip install --upgrade pip
     sudo pip3 install setuptools wheel
     sudo pip3 install blobxfer
-    blobxfer upload --storage-account adaptivecardstemplates --sas "$(Storage_SAS)" --local-path ../templates --remote-path templates --skip-on-lmt-ge
+    blobxfer upload --storage-account adaptivecardstemplates --sas "$(storage_sas)" --local-path ../templates --remote-path templates --skip-on-lmt-ge
   displayName: 'Install blobxfer'
