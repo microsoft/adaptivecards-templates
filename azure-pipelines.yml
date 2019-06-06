@@ -1,6 +1,3 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 
 trigger:
@@ -10,8 +7,6 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
 
 - script: |
     sudo apt-get update
@@ -19,5 +14,5 @@ steps:
     sudo python3 -m pip install --upgrade pip
     sudo pip3 install setuptools wheel
     sudo pip3 install blobxfer
-    blobxfer upload --storage-account adaptivecardstemplates --sas "$(storage_sas)" --local-path ../templates --remote-path templates --skip-on-lmt-ge
+    blobxfer upload --storage-account adaptivecardstemplates --sas "$(storage_sas)" --local-path ./s/templates --remote-path templates --skip-on-lmt-ge
   displayName: 'Install blobxfer'
