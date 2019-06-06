@@ -15,8 +15,8 @@ steps:
 
 - script: |
     sudo apt-get update
-    sudo apt-get install -y build-essential libssl-dev libffi-dev
-    pip3 --version
-    
+    sudo apt-get install -y build-essential libssl-dev libffi-dev python3-dev python3-pip
+    sudo python3 -m pip install --upgrade pip
+    sudo pip3 install setuptools wheel
     sudo pip3 install blobxfer
-  displayName: 'Run a multi-line script'
+  displayName: 'Install blobxfer'
