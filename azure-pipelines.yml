@@ -1,4 +1,7 @@
 # https://aka.ms/yaml
+# This build copies the templates directory into Azure Blob Storage
+# It uses a tool called blobxfer 
+# More about blobxfer here: https://blobxfer.readthedocs.io/en/latest/
 
 trigger:
 - master
@@ -18,4 +21,4 @@ steps:
     sudo pip3 install setuptools wheel
     sudo pip3 install blobxfer
     blobxfer upload --storage-account adaptivecardstemplates --sas "$(storage_sas)" --local-path ./templates --remote-path templates --skip-on-lmt-ge
-  displayName: 'Install blobxfer'
+  displayName: 'Copy templates directory to Blob storage using blobxfer'

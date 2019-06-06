@@ -1,4 +1,9 @@
 
+# Adaptive Cards Template Repository
+
+This project contains a variety of [Adaptive Card](https://adaptivecards.io) templates for common domain models.
+
+
 # Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
