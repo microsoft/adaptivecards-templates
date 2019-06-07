@@ -12,7 +12,35 @@ pr: none
 pool:
   vmImage: 'ubuntu-latest'
 
+
 steps:
+
+
+# Copy files    
+- task: CopyFiles@2
+  displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
+  inputs:
+    SourceFolder: '$(system.defaultworkingdirectory)'
+    Contents: 'src/**'
+    TargetFolder: '$(build.artifactstagingdirectory)'
+
+- task: ArchiveFiles@2
+  displayName: 'Archive the functions: $(build.artifactstagingdirectory)/src'
+  inputs:
+    rootFolderOrFile: '$(build.artifactstagingdirectory)/src'
+    includeRootFolder: false
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    replaceExistingArchive: true
+
+- task: AzureRmWebAppDeployment@4
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'Adaptive Cards (47c80630-3d74-4b3e-a2f4-57e6368cd8c6)'
+    appType: 'functionApp'
+    WebAppName: 'adaptivecardstemplates'
+    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+    
 
 - script: |
     sudo apt-get update
