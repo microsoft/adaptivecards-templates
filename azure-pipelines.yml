@@ -24,10 +24,19 @@ steps:
     blobxfer upload --storage-account adaptivecardstemplates --sas "$(storage_sas)" --local-path ./templates --remote-path templates --skip-on-lmt-ge
   displayName: 'Copy templates directory to Blob storage using blobxfer'
 
-- task: ArchiveFiles@2
+# Copy files    
+- task: CopyFiles@2
+  displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
   inputs:
-    rootFolderOrFile: '$(System.DefaultWorkingDirectory)/src'
-    includeRootFolder: true
+    SourceFolder: '$(system.defaultworkingdirectory)'
+    Contents: 'src'
+    TargetFolder: '$(build.artifactstagingdirectory)'
+
+- task: ArchiveFiles@2
+  displayName: 'Archive the functions: $(build.artifactstagingdirectory)/src'
+  inputs:
+    rootFolderOrFile: '$(build.artifactstagingdirectory)/src'
+    includeRootFolder: false
     archiveType: 'zip'
     archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
     replaceExistingArchive: true
