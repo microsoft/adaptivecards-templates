@@ -19,8 +19,7 @@
   },
   "bin": "generate",
   "dependencies": {
-    "adaptivecards-templating": "0.1.0-alpha1",
-    "ts-jest": "^24.0.2"
+    "adaptivecards-templating": "0.1.0-alpha1"
   },
   "devDependencies": {
     "@azure/functions": "^1.0.2-beta2",
@@ -28,7 +27,8 @@
     "@types/jest": "^24.0.13",
     "glob": "^7.1.4",
     "jest": "^24.8.0",
-    "typescript": "^3.3.3"
+    "typescript": "^3.3.3",
+    "ts-jest": "^24.0.2"
   },
   "jest": {
     "transform": {
