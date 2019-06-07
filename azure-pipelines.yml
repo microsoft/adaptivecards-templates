@@ -15,14 +15,15 @@ pool:
 
 steps:
 
-
-# Copy files    
-- task: CopyFiles@2
-  displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
-  inputs:
-    SourceFolder: '$(system.defaultworkingdirectory)'
-    Contents: 'src/**'
-    TargetFolder: '$(build.artifactstagingdirectory)'
+- bash: |
+    cd src
+    if [ -f extensions.csproj ]
+    then
+        dotnet build extensions.csproj --output ./bin
+    fi
+    npm install 
+    npm run build --if-present
+    npm prune --production
 
 - task: ArchiveFiles@2
   displayName: 'Archive the function source code'
@@ -33,6 +34,11 @@ steps:
     archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
     replaceExistingArchive: true
 
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact: drop'
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    
 - task: AzureRmWebAppDeployment@4
   inputs:
     ConnectionType: 'AzureRM'
@@ -56,7 +62,3 @@ steps:
     blobxfer upload --storage-account adaptivecardstemplates --sas "$(storage_sas)" --local-path ./templates --remote-path templates --skip-on-lmt-ge
   displayName: 'Copy templates directory to Blob storage using blobxfer'
 
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish Artifact: drop'
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
