@@ -1,21 +1,45 @@
 {
-  "name": "src",
+  "name": "adaptivecards-templates",
   "version": "1.0.0",
-  "description": "",
+  "description": "Template repository and service for Adaptive Cards",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/adaptivecards-templates"
+  },
+  "license": "MIT",
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
+    "generate": "npm run build && node -e 'require(\"./dist/Utils\").generate()'",
     "prestart": "npm run build && func extensions install",
     "start:host": "func start",
     "start": "npm run start:host & npm run watch",
     "build:production": "npm run prestart && npm prune --production",
-    "test": "echo \"No tests yet...\""
+    "test": "jest"
   },
   "dependencies": {
-    "adaptivecards-templating": "0.1.0-alpha1"
+    "adaptivecards-templating": "0.1.0-alpha1",
+    "ts-jest": "^24.0.2"
   },
   "devDependencies": {
     "@azure/functions": "^1.0.2-beta2",
+    "@types/glob": "^7.1.1",
+    "@types/jest": "^24.0.13",
+    "glob": "^7.1.4",
+    "jest": "^24.8.0",
     "typescript": "^3.3.3"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json"
+    ]
   }
 }

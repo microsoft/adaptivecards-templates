@@ -4,7 +4,9 @@
 This project contains a variety of [Adaptive Card](https://adaptivecards.io) templates for common domain models.
 
 
-Install the Azure Function tools
+## Build templating service
+
+### Install Azure Functions Tools 
 
 **On macOC**, install using Homebrew
 
@@ -19,12 +21,19 @@ $ brew install azure-functions-core-tools
 $ npm install -g azure-functions-core-tools
 ```
 
+**On Linux**, follow the instructions in the Azure Functions Core Tools [GitHub repository](https://github.com/Azure/azure-functions-core-tools#linux).
+
+
+### Update **local.settings.json** to point to a Storage account
+
+The JSON template files get copied from the Git repo into Blob storage and the Function serves them from there.
+
 ```console
 cd src
 func extensions sync
 ```
 
-Update **local.settings.json**
+
 
 ```json
 "AzureWebJobsStorage": "DefaultEndpointsProtocol=https;AccountName=XXXXXXX;AccountKey=XXXXXXXXXX",
@@ -32,7 +41,6 @@ Update **local.settings.json**
 
 F5
 
-On Linux, follow the instructions in the Azure Functions Core Tools [GitHub repository](https://github.com/Azure/azure-functions-core-tools#linux).
 
 # Contributing
 
