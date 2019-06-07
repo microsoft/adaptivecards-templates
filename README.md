@@ -4,6 +4,23 @@
 This project contains a variety of [Adaptive Card](https://adaptivecards.io) templates for common domain models.
 
 
+Install the Azure Function tools
+
+**On macOC**, install using Homebrew
+
+```console
+$ brew tap azure/functions
+$ brew install azure-functions-core-tools
+```
+
+**On Windows**, install using npm.
+
+```console
+$ npm install -g azure-functions-core-tools
+```
+
+On Linux, follow the instructions in the Azure Functions Core Tools [GitHub repository](https://github.com/Azure/azure-functions-core-tools#linux).
+
 # Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
