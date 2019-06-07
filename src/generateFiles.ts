@@ -1,12 +1,10 @@
 import * as glob from "glob"
 import * as fs from "fs"
 import * as path from "path"
-import * as findParentDir from "find-parent-dir"
 
 export function generate() {
     let knownSamples = [];
     try {
-        //let templatesDir = findParentDir.sync(__dirname, "templates");
         let templatesDir = path.resolve(__filename, "../../../templates");
         console.log(templatesDir);
         glob.sync("**/*.json", { cwd: templatesDir, nocase: false }).map(file => {
@@ -29,7 +27,7 @@ export function generate() {
 
         });
 
-        fs.writeFileSync("../templates/templateFields.json", JSON.stringify(knownSamples));
+        fs.writeFileSync(path.resolve(templatesDir, "templateFields.json"), JSON.stringify(knownSamples));
     }
     catch (err) {
         console.error(err);

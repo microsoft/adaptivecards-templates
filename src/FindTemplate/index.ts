@@ -3,13 +3,13 @@ import { AzureFunction, Context, HttpRequest } from "@azure/functions"
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest, templateFieldsBlob: any): Promise<void> {
     context.log('HTTP trigger function processed a request.');
     
-    let templates = JSON.parse(templateFieldsBlob);
+
 
     let dataProperties = Object.getOwnPropertyNames(req.body);
     let final = [];
-    for(let template of templates) {
+    for(let template of templateFieldsBlob) {
         let match = {
-            file: template.file,
+            file: template.templatePath,
             propMatchCount: 0
         };
 

@@ -9,7 +9,7 @@
           "get",
           "post"
         ],
-        "route": "{*name}"
+        "route": "find"
       },
       {
         "type": "http",
