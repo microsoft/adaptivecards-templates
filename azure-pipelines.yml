@@ -40,6 +40,11 @@ steps:
     appType: 'functionApp'
     WebAppName: 'adaptivecardstemplates'
     packageForLinux: '$(Build.ArtifactStagingDirectory)/**/*.zip'
+    enableCustomDeployment: true
+    DeploymentType: runFromZip    
+    TakeAppOfflineFlag: false
+    ExcludeFilesFromAppDataFlag: false
+    RenameFilesFlag: false
     
 
 - script: |
@@ -50,3 +55,8 @@ steps:
     sudo pip3 install blobxfer
     blobxfer upload --storage-account adaptivecardstemplates --sas "$(storage_sas)" --local-path ./templates --remote-path templates --skip-on-lmt-ge
   displayName: 'Copy templates directory to Blob storage using blobxfer'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact: drop'
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
