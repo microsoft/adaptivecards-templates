@@ -24,6 +24,14 @@ steps:
     blobxfer upload --storage-account adaptivecardstemplates --sas "$(storage_sas)" --local-path ./templates --remote-path templates --skip-on-lmt-ge
   displayName: 'Copy templates directory to Blob storage using blobxfer'
 
+- task: ArchiveFiles@2
+  inputs:
+    rootFolderOrFile: '$(Build.BinariesDirectory)/src'
+    includeRootFolder: true
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    replaceExistingArchive: true
+
 - task: AzureRmWebAppDeployment@4
   inputs:
     ConnectionType: 'AzureRM'
@@ -31,3 +39,4 @@ steps:
     appType: 'functionApp'
     WebAppName: 'adaptivecardstemplates'
     packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+    
