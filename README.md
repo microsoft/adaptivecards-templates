@@ -19,6 +19,19 @@ $ brew install azure-functions-core-tools
 $ npm install -g azure-functions-core-tools
 ```
 
+```console
+cd src
+func extensions sync
+```
+
+Update **local.settings.json**
+
+```json
+"AzureWebJobsStorage": "DefaultEndpointsProtocol=https;AccountName=XXXXXXX;AccountKey=XXXXXXXXXX",
+```
+
+F5
+
 On Linux, follow the instructions in the Azure Functions Core Tools [GitHub repository](https://github.com/Azure/azure-functions-core-tools#linux).
 
 # Contributing
