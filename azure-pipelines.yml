@@ -12,6 +12,7 @@ pr: none
 pool:
   vmImage: 'ubuntu-latest'
 
+
 steps:
 
 - script: |
@@ -22,3 +23,11 @@ steps:
     sudo pip3 install blobxfer
     blobxfer upload --storage-account adaptivecardstemplates --sas "$(storage_sas)" --local-path ./templates --remote-path templates --skip-on-lmt-ge
   displayName: 'Copy templates directory to Blob storage using blobxfer'
+
+- task: AzureRmWebAppDeployment@4
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'Adaptive Cards (47c80630-3d74-4b3e-a2f4-57e6368cd8c6)'
+    appType: 'functionApp'
+    WebAppName: 'adaptivecardstemplates'
+    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
