@@ -1,5 +1,5 @@
-import { Utils } from "../utils/GenerateFiles";
 import { equal, strictEqual } from "assert";
+import { generate } from "../generateFiles";
 
 test('generate known', () => {
 
@@ -111,5 +111,5 @@ test('generate known', () => {
 })
 
 test("Generate properties from sample data", () => {
-    Utils.generate();
+    generate();
 })

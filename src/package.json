@@ -10,13 +10,14 @@
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
-    "generate": "npm run build && node -e 'require(\"./dist/Utils\").generate()'",
+    "generate": "npm run build && node ../bin/generate",
     "prestart": "npm run build && func extensions install",
     "start:host": "func start",
     "start": "npm run start:host & npm run watch",
     "build:production": "npm run prestart && npm prune --production",
     "test": "jest"
   },
+  "bin": "generate",
   "dependencies": {
     "adaptivecards-templating": "0.1.0-alpha1",
     "ts-jest": "^24.0.2"

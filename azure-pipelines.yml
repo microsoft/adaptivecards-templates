@@ -19,7 +19,7 @@ steps:
     cd src
     dotnet build extensions.csproj --output ./bin
     npm install 
-    npm run build
+    npm run generate
     npm prune --production
 
 - task: ArchiveFiles@2
