@@ -21,7 +21,7 @@ steps:
   displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
   inputs:
     SourceFolder: '$(system.defaultworkingdirectory)'
-    Contents: 'src'
+    Contents: 'src/**'
     TargetFolder: '$(build.artifactstagingdirectory)'
 
 - task: ArchiveFiles@2
@@ -41,7 +41,7 @@ steps:
     WebAppName: 'adaptivecardstemplates'
     packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
     
-    
+
 - script: |
     sudo apt-get update
     sudo apt-get install -y build-essential libssl-dev libffi-dev python3-dev python3-pip
