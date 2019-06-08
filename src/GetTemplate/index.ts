@@ -1,7 +1,7 @@
 import { AzureFunction, Context, HttpRequest } from "@azure/functions"
 import * as ACData from "adaptivecards-templating"
 
-const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest, templateBlob: any): Promise<void> {
+const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest, templateBlob: any, templatesBlob: any): Promise<void> {
     context.log('HTTP trigger function processed a request.');
 
     if (templateBlob) {
@@ -32,6 +32,10 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
         };
 
 
+    } else if (context.req.url.indexOf("/list") > 0) {
+        context.res = {
+            body: templatesBlob
+        };
     } else {
         context.res = {
             status: 404,
