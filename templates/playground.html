@@ -33,6 +33,23 @@
         }
 
 		window.onload = function() {
+
+            $.getJSON("https://templates.adaptivecards.io/list", function(templates) {
+                var tree = [];
+                Object.getOwnPropertyNames(templates).forEach(function(item) { 
+                    tree.push({
+                        "text": item,
+                        "children": templates[item].templates
+                    })
+                });
+
+                $("#templateTree").jstree(tree);
+                
+            });
+
+
+            });
+
             $("#urlGo").click(function(e) {
                 var url = $("#url").val();
                 log("Fetching data from URL: " + url);
@@ -93,8 +110,8 @@
             <div>
                 <input type="checkbox" id="autoTemplate" checked="checked" /><label for="autoTemplate">Automatic template lookup</label>
             </div>
-            <div>
-                <input type="text" id="template" />
+            <div id="templateTree">
+              
             </div>
             <div>
                 <input type="checkbox" id="serverRender" checked="checked" /><label for="serverRender">Render on the server</label>
