@@ -15,34 +15,107 @@
 	<script src="https://unpkg.com/adaptivecards-designer@0.1.1/dist/adaptivecards-designer.min.js"></script>
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+ 
+    <script src="https://unpkg.com/adaptivecards/dist/adaptivecards.min.js"></script>
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jstree/3.3.8/themes/default/style.min.css" />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jstree/3.3.8/jstree.min.js"></script>
+ 
 
 	<script type="text/javascript">
+        function log(message) {
+            var p = $("p").text(message);
+            $("#log").append(p);
+        }
+
+        function reset() {
+            $("#log").empty();
+        }
+
 		window.onload = function() {
-			if (!ACDesigner.SettingsManager.isLocalStorageAvailable) {
-				console.log("Local storage is not available.");
-			}
+            $("#urlGo").click(function(e) {
+                var url = $("#url").val();
+                log("Fetching data from URL: " + url);
+                $.getJSON(url).then(function(data) { 
+                    log("Got data!");
+                    $("#data").val(JSON.stringify(data));
+                });
+            });
+
+            $("#renderButton").click(function(e) {
+                var autoLookup = $("#autoTemplate").prop("checked");
+                var serverRender = $("#serverRender").prop("checked");
+
+                if(autoLookup) {
+                    $.post("https://templates.adaptivecards.io/find", $("#data").val(), function(response) {
+                        // if(serverRender) {
+                        //     $.post("https://templates.adaptivecards.io/" + template)
+                        // }
+                    });
+                }
+            });
+
+			// if (!ACDesigner.SettingsManager.isLocalStorageAvailable) {
+			// 	console.log("Local storage is not available.");
+			// }
 			
-			let hostContainers = [];
-			hostContainers.push(new ACDesigner.WebChatContainer("Bot Framework WebChat", "containers/webchat-container.css"));
-			hostContainers.push(new ACDesigner.CortanaContainer("Cortana Skills", "containers/cortana-container.css"));
+			// let hostContainers = [];
+			// hostContainers.push(new ACDesigner.WebChatContainer("Bot Framework WebChat", "containers/webchat-container.css"));
+			// hostContainers.push(new ACDesigner.CortanaContainer("Cortana Skills", "containers/cortana-container.css"));
 
-			let designer = new ACDesigner.CardDesigner(hostContainers);
-			designer.assetPath = "https://unpkg.com/adaptivecards-designer@0.1.1/dist";
+			// let designer = new ACDesigner.CardDesigner(hostContainers);
+			// designer.assetPath = "https://unpkg.com/adaptivecards-designer@0.1.1/dist";
 
-			designer.attachTo(document.getElementById("designerRootHost"));
+			// designer.attachTo(document.getElementById("designerRootHost"));
 
-			require.config({ paths: { 'vs': 'https://unpkg.com/adaptivecards-designer@0.1.1/dist/monaco-editor/min/vs' } });
-			require(['vs/editor/editor.main'], function () {
-				designer.monacoModuleLoaded();
-			});
+			// require.config({ paths: { 'vs': 'https://unpkg.com/adaptivecards-designer@0.1.1/dist/monaco-editor/min/vs' } });
+			// require(['vs/editor/editor.main'], function () {
+			// 	designer.monacoModuleLoaded();
+			// });
+
+
 		};
 	</script>
 </head>
 
 <body>
-	<div style="display: flex; flex-direction: column; height: 100%;">
+	<div class="w3-container">
 
-		<div id="designerRootHost"></div>
+		<div class="w3-third">
+            <h2>URL</h2>
+            <input type="text" id="url" value="https://api.iextrading.com/1.0/stock/msft/quote" />
+            <input type="button" id="urlGo" value="Go" />
+
+            <h2>Data</h2>
+            <textarea rows="5"  id="data" ></textarea>
+
+            <h2>Template</h2>
+            <div>
+                <input type="checkbox" id="autoTemplate" checked="checked" /><label for="autoTemplate">Automatic template lookup</label>
+            </div>
+            <div>
+                <input type="text" id="template" />
+            </div>
+            <div>
+                <input type="checkbox" id="serverRender" checked="checked" /><label for="serverRender">Render on the server</label>
+            </div>
+        
+            <div>
+                <input type="button" id="renderButton" value="Render"  />
+            </div>
+
+        </div>
+
+        
+        <div class="w3-third">
+            <h2>Log</h2>
+            <div id="log"></div>
+        </div>
+
+        <div class="w3-third">
+            <h2>Card</h2>
+            <div id="card"></div>
+        </div>
 	</div>
 </body>
 

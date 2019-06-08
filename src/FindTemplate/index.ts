@@ -1,9 +1,6 @@
 import { AzureFunction, Context, HttpRequest } from "@azure/functions"
 
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest, templateFieldsBlob: any): Promise<void> {
-    context.log('HTTP trigger function processed a request.');
-
-
 
     let dataProperties = Object.getOwnPropertyNames(req.body);
     let final = [];

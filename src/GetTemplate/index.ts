@@ -3,6 +3,7 @@ import * as ACData from "adaptivecards-templating"
 
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest, templateBlob: any): Promise<void> {
     context.log('HTTP trigger function processed a request.');
+
     if(templateBlob) {
 
         let body: string;

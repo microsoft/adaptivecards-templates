@@ -3,15 +3,40 @@ import * as fs from "fs"
 import * as path from "path"
 
 export function generate() {
-    let knownSamples = [];
+
+
+    const knownSamples = [];
+    const knownTemplates = {};
+    const test =
+    {
+        "schema.org": {
+            "templates": [
+                {
+                    "file": "Restaunt.json",
+                    "fullPath": "schema.org/Restaurant.json"
+                }
+            ]
+        }
+    }
+
     try {
         let templatesDir = path.resolve(__filename, "../../../templates");
-        console.log(templatesDir);
-        glob.sync("**/*.json", { cwd: templatesDir, nocase: false }).map(file => {
+        glob.sync("**/*/*.json", { cwd: templatesDir, nocase: false }).map(file => {
             try {
-                console.log(file);
-                let contents = fs.readFileSync(path.resolve(templatesDir, file), "utf8");
-                let template = JSON.parse(contents);
+                const contents = fs.readFileSync(path.resolve(templatesDir, file), "utf8");
+                const dirName = path.dirname(file);
+                const template = JSON.parse(contents);
+                if (!knownTemplates[dirName]) {
+                    knownTemplates[dirName] = {
+                        templates: []
+                    };
+                }
+
+                knownTemplates[dirName].templates.push({
+                    file: path.basename(file),
+                    fullPath: file
+                });
+
                 if (template["$sampleData"]) {
                     let properties = Object.getOwnPropertyNames(template["$sampleData"]);
                     knownSamples.push({
@@ -27,6 +52,7 @@ export function generate() {
 
         });
 
+        fs.writeFileSync(path.resolve(templatesDir, "templates.json"), JSON.stringify(knownTemplates));
         fs.writeFileSync(path.resolve(templatesDir, "templateFields.json"), JSON.stringify(knownSamples));
     }
     catch (err) {
