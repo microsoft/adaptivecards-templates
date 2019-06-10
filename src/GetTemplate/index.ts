@@ -14,6 +14,25 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
             var dataContext = new ACData.EvaluationContext();
             dataContext.$root = req.body;
 
+            dataContext.registerFunction("format", (params: any[]) => {
+                switch (params[1]) {
+                    case ("%"):
+                        return (<number>params[0] * 100).toFixed(2) + "%"
+    
+                    default:
+                        return `Unknown format: ${params[1]}`
+                }
+            });
+            dataContext.registerFunction("parseDateFromEpoch", (params: any[]) => {
+                try {
+                    let d = new Date(<number>params[0]);
+                    let timeZoneOffset = ("0" + new Date().getTimezoneOffset() / 60).slice(-2);
+                    return `${d.toISOString().substr(0, 19)}-03:00`;
+                } catch {
+                    return "Unable to parse epoch";
+                }
+    
+            });
             body = template.expand(dataContext);
         }
         else { //  return the raw template

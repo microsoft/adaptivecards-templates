@@ -53,29 +53,7 @@
                         },
                         {
                             "type": "TextBlock",
-                            "$when": "{aggregateRating.ratingValue <= 1}",
-                            "text": "{aggregateRating.ratingValue} ★☆☆☆ ({aggregateRating.reviewCount}) · {priceRange}",
-                            "isSubtle": true,
-                            "spacing": "None"
-                        },
-                        {
-                            "type": "TextBlock",
-                            "$when": "{aggregateRating.ratingValue <= 2}",
-                            "text": "{aggregateRating.ratingValue} ★★☆☆ ({aggregateRating.reviewCount}) · {priceRange}",
-                            "isSubtle": true,
-                            "spacing": "None"
-                        },
-                        {
-                            "type": "TextBlock",
-                            "$when": "{aggregateRating.ratingValue <= 3}",
-                            "text": "{aggregateRating.ratingValue} ★★★☆ ({aggregateRating.reviewCount}) · {priceRange}",
-                            "isSubtle": true,
-                            "spacing": "None"
-                        },
-                        {
-                            "type": "TextBlock",
-                            "$when": "{aggregateRating.ratingValue <= 4}",
-                            "text": "{aggregateRating.ratingValue} ★★★★ ({aggregateRating.reviewCount}) · {priceRange}",
+                            "text": "{aggregateRating.ratingValue} {loop(aggregateRating.ratingValue, '★')}{loop(5 - aggregateRating.ratingValue, '☆')} ({aggregateRating.reviewCount}) · {priceRange}",
                             "isSubtle": true,
                             "spacing": "None"
                         },
