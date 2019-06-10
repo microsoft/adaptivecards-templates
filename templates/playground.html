@@ -103,6 +103,11 @@
                         }
                         return response;
                     });
+
+                    dataContext.registerFunction("math.round", function (value) {
+                        return Math.round(value);
+                    });
+
                     // "Expand" the template - this generates the final Adaptive Card,
                     // ready to render
                     var card = template.expand(dataContext);
@@ -124,6 +129,7 @@
                 Object.getOwnPropertyNames(templates).forEach(function (item) {
                     tree.push({
                         "text": item,
+                        "state": { "disabled": true },
                         "children": templates[item].templates.map(function (c) {
                             return {
                                 "text": c.file,

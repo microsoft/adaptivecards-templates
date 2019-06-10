@@ -53,7 +53,7 @@
                         },
                         {
                             "type": "TextBlock",
-                            "text": "{aggregateRating.ratingValue} {loop(aggregateRating.ratingValue, '★')}{loop(5 - aggregateRating.ratingValue, '☆')} ({aggregateRating.reviewCount}) · {priceRange}",
+                            "text": "{aggregateRating.ratingValue} {loop(aggregateRating.ratingValue, '★')}{loop(5 - math.round(aggregateRating.ratingValue), '☆')} ({aggregateRating.reviewCount}) · {priceRange}",
                             "isSubtle": true,
                             "spacing": "None"
                         },
