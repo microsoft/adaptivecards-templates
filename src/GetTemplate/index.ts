@@ -4,6 +4,14 @@ import * as ACData from "adaptivecards-templating"
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest, templateBlob: any, templatesBlob: any): Promise<void> {
     context.log('HTTP trigger function processed a request.');
 
+    if (context.req.url.indexOf("/playground.html") > 0) {
+        context.res = {
+            body: templateBlob,
+            headers: { 'Content-Type': 'text/html' }
+        };
+        return;
+    } 
+
     if (templateBlob) {
 
         let body: string;
@@ -18,7 +26,7 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
                 switch (params[1]) {
                     case ("%"):
                         return (<number>params[0] * 100).toFixed(2) + "%"
-    
+
                     default:
                         return `Unknown format: ${params[1]}`
                 }
@@ -31,7 +39,7 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
                 } catch {
                     return "Unable to parse epoch";
                 }
-    
+
             });
             body = template.expand(dataContext);
         }
@@ -53,9 +61,11 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
 
     } else if (context.req.url.indexOf("/list") > 0) {
         context.res = {
-            body: templatesBlob
+            body: templatesBlob,
+            headers: { 'Content-Type': 'application/json' }
         };
-    } else {
+    } 
+    else {
         context.res = {
             status: 404,
             body: "No template found for " + req.params.name

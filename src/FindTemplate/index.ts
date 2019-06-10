@@ -27,7 +27,7 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
     }
 
     // sort descending
-    final.sort((a, b) => b.propMatchCount - a.propMatchCount);
+    final = final.sort((a, b) => b.confidence - a.confidence);
 
     context.res = {
         body: final,
