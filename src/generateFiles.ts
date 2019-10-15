@@ -23,9 +23,9 @@ export function generate() {
         let templatesDir = path.resolve(__filename, "../../../templates");
         glob.sync("**/*/*.json", { cwd: templatesDir, nocase: false }).map(file => {
             try {
-                const contents = fs.readFileSync(path.resolve(templatesDir, file), "utf8");
+                const fileContent = fs.readFileSync(path.resolve(templatesDir, file), "utf8");
                 const dirName = path.dirname(file);
-                const template = JSON.parse(contents);
+                const template = JSON.parse(fileContent);
                 if (!knownTemplates[dirName]) {
                     knownTemplates[dirName] = {
                         templates: []
@@ -37,15 +37,24 @@ export function generate() {
                     fullPath: file
                 });
 
-                if (template["$sampleData"]) {
-                    let properties = Object.getOwnPropertyNames(template["$sampleData"]);
-                    knownSamples.push({
-                        "templatePath": file,
-                        "properties": properties
-                    })
-                } else {
-                    console.log(`No sample data for ${file}`);
+                let knownSample = {
+                    templatePath: file,
+                    properties: undefined,
+                    odataType: undefined
+                };
+
+                if(template["$odata.type"]) {
+                    knownSample.odataType = template["$odata.type"];
                 }
+
+                if (template["$sampleData"]) {
+                    knownSample.properties = Object.getOwnPropertyNames(template["$sampleData"]);
+                }
+
+                if(knownSample.properties || knownSample.odataType) {
+                    knownSamples.push(knownSample);
+                }
+
             } catch (ex) {
                 console.log(`Failed to read file ${file}`);
             }
