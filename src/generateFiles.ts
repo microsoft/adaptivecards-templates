@@ -44,9 +44,9 @@ export function generate() {
                     typeValue: undefined
                 };
 
-                if(template["$odata.type"]) {
-                    knownSample.typeKey = "$odata.type";
-                    knownSample.typeValue = template["$odata.type"];
+                if(template["@odata.type"]) {
+                    knownSample.typeKey = "@odata.type";
+                    knownSample.typeValue = template["@odata.type"];
                 }
 
                 if (template["$sampleData"]) {

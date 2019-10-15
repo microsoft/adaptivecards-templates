@@ -13,7 +13,7 @@ const httpTrigger: AzureFunction = async function(
       for (let template of templateFieldsBlob) {
         if (
           template.typeKey &&
-          template.typeKey === "$odata.type" &&
+          template.typeKey === "@odata.type" &&
           template.typeValue === odataType
         ) {
           final.push({
