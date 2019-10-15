@@ -40,18 +40,20 @@ export function generate() {
                 let knownSample = {
                     templatePath: file,
                     properties: undefined,
-                    odataType: undefined
+                    typeKey: undefined,
+                    typeValue: undefined
                 };
 
                 if(template["$odata.type"]) {
-                    knownSample.odataType = template["$odata.type"];
+                    knownSample.typeKey = "$odata.type";
+                    knownSample.typeValue = template["$odata.type"];
                 }
 
                 if (template["$sampleData"]) {
                     knownSample.properties = Object.getOwnPropertyNames(template["$sampleData"]);
                 }
 
-                if(knownSample.properties || knownSample.odataType) {
+                if(knownSample.properties || knownSample.typeValue) {
                     knownSamples.push(knownSample);
                 }
 
