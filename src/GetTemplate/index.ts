@@ -53,6 +53,9 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
             delete body["$sampleData"];
         }
 
+        // Remove the odata.type as it's only used for template lookup
+        delete body["$odata.type"];
+
         context.res = {
             body: body,
             headers: { 'Content-Type': 'application/json' }
