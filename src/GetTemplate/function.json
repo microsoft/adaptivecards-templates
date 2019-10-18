@@ -18,8 +18,22 @@
     },
     {
       "type": "blob",
-      "name": "templateBlob",
+      "name": "templateBlobLegacy",
       "path": "templates/{name}",
+      "connection": "AzureWebJobsStorage",
+      "direction": "in"
+    },
+    {
+      "type": "blob",
+      "name": "templateBlob",
+      "path": "templates/{name}.json",
+      "connection": "AzureWebJobsStorage",
+      "direction": "in"
+    },
+    {
+      "type": "blob",
+      "name": "templateBlobData",
+      "path": "templates/{name}.data.json",
       "connection": "AzureWebJobsStorage",
       "direction": "in"
     },

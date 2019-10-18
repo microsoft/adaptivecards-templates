@@ -1,23 +1,29 @@
 import { AzureFunction, Context, HttpRequest } from "@azure/functions"
 import * as ACData from "adaptivecards-templating"
 
-const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest, templateBlob: any, templatesBlob: any): Promise<void> {
+const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest, 
+    templateBlobLegacy: any,
+    templateBlobData: any, 
+    templateBlob: any,  
+    templatesBlob: any): Promise<void> {
     context.log('HTTP trigger function processed a request.');
+
+    var blob = templateBlobLegacy ? templateBlobLegacy : templateBlob ? templateBlob : null;
 
     if (context.req.url.indexOf("/playground.html") > 0) {
         context.res = {
-            body: templateBlob,
+            body: blob,
             headers: { 'Content-Type': 'text/html' }
         };
         return;
     } 
 
-    if (templateBlob) {
+    if (blob) {
 
         let body: string;
 
         if (req.method === 'POST') {  // Populate the template using the POST body
-            var template = new ACData.Template(templateBlob);
+            var template = new ACData.Template(blob);
 
             var dataContext = new ACData.EvaluationContext();
             dataContext.$root = req.body;
@@ -44,11 +50,13 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
             body = template.expand(dataContext);
         }
         else { //  return the raw template
-            body = templateBlob
+            body = blob
         }
 
         if (req.query.sampleData) {
-            //body["$sampleData"] = { "x": "y"}
+            if(templateBlobData){
+                body["$sampleData"] = templateBlobData;
+            }
         } else {
             delete body["$sampleData"];
         }
