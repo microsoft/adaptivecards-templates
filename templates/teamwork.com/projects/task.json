@@ -150,7 +150,7 @@
                   {
                     "$data": "{$root.timeEntries}",
                     "title": "{$data.userFirstName} {$data.userLastName}",
-                    "value": "{$data.date} - {$data.hours}h {$data.minutes}m"
+                    "value": "{$data.dateFormatted} - {$data.hours}h {$data.minutes}m"
                   }
                 ]
               },
