@@ -1,0 +1,9 @@
+{
+    "type": "TextBlock",
+    "$data": "{address}",
+    "text": "{addressLocality}, {addressRegion}",
+    "@context": {
+        "addressLocality": "http://schema.org/addressLocality",
+        "addressRegion": "http://schema.org/addressRegion"
+    }
+}

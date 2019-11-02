@@ -1,8 +1,10 @@
+
 {
     "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
     "$sampleData": {
         "@context": "http://schema.org/",
         "@type": "LocalBusiness",
+        "@card": ""
         "name": "Malt \u0026 Vine",
         "url": "https://www.yelp.com/biz/malt-and-vine-redmond",
         "address": {
@@ -29,11 +31,18 @@
         }],
         "priceRange": "$$"
     },    
+    // At runtime
+    "$data": {
+        "name": "Matt Hidinger"
+    },
+    "$templateId": "https://",
     "type": "AdaptiveCard",
     "version": "1.0",
+    "@context": {
+
+    },
     "body": [
         {
-            "speak": "Tom's Pie is a Pizza restaurant which is rated 9.3 by customers.",
             "type": "ColumnSet",
             "columns": [
                 {
@@ -42,11 +51,17 @@
                     "items": [
                         {
                             "type": "TextBlock",
-                            "text": "{address.addressLocality}, {address.addressRegion}",
+                            "text": "Here are the 3 best **mexican**  restaunrats near you"
                         },
                         {
+                            "$ref": "Address.json",
+                            "constraint": "Excel?"
+                        },
+                        {
+                            "@id": "name",
                             "type": "TextBlock",
-                            "text": "{name}",
+                            "$template.text": "{name}",
+                            "text": "{name} (Matt Hidinger)",
                             "weight": "Bolder",
                             "size": "ExtraLarge",
                             "spacing": "None"
