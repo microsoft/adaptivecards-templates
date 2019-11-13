@@ -1,0 +1,102 @@
+{
+  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+  "$sampleData": {
+    "type": "org.symphonyoss.fin.rfq.request.bond",
+    "version": "0.1",
+    "id": [
+      {
+        "type": "com.factset.portware.ticket.id",
+        "value": "123456789"
+      }
+    ],
+    "side": "BUY",
+    "info": {
+      "description": "IBM 1.25 02/08/2018",
+      "assetType": "Corporate Bond/Note",
+      "accruedInterest": 0,
+      "coupon": 1.25,
+      "maturityDate": "2018-08-02",
+      "currency": "USD",
+      "issuer": [
+        {
+          "type": "com.factset.symbology.id",
+          "value": "ibm-us"
+        }
+      ],
+      "ratings": [
+        {
+          "type": "org.symphonyoss.fin.rating.agent.sandp",
+          "value": "AA-"
+        },
+        {
+          "type": "org.symphonyoss.fin.rating.agent.moody",
+          "value": "Aa3"
+        },
+        {
+          "type": "org.symphonyoss.fin.rating.agent.fitch",
+          "value": "A+"
+        }
+      ]
+    },
+    "tradeDate": "2017-11-12",
+    "settlementDate": "2017-11-14",
+    "faceValue": 1000000,
+    "instrument": [
+      {
+        "type": "org.symphonyoss.fin.security.id.isin",
+        "value": "US459200HK05"
+      },
+      {
+        "type": "org.symphonyoss.fin.security.id.cusip",
+        "value": "459200HK0"
+      },
+      {
+        "type": "org.symphonyoss.fin.security.id.sedol",
+        "value": "B90NK89"
+      }
+    ]
+  },
+  "type": "AdaptiveCard",
+  "version": "1.0",
+  "body": [
+    {
+      "type": "TextBlock",
+      "text": "**Side:** {side.value}"
+    },
+    {
+      "type": "TextBlock",
+      "text": "**Description:** {description.value}"
+    },
+    {
+      "type": "TextBlock",
+      "text": "**Asset Type:** {assetType.value}"
+    },
+    {
+      "type": "TextBlock",
+      "text": "**Trade Date:** {tradeDate.value} *(we need a Unix formatting function)*",
+      "wrap": true
+    },
+    {
+      "type": "TextBlock",
+      "text": "**Face Value:** {faceValue.value} *(we need number formatting functions)*",
+      "wrap": true
+    },
+    {
+      "type": "TextBlock",
+      "spacing": "Medium",
+      "separator": true,
+      "size": "Large",
+      "text": "Ratings"
+    },
+    {
+      "$data": "{ratings}",
+      "type": "Container",
+      "items": [
+        {
+          "type": "TextBlock",
+          "text": "**{institute.name.value}:** {institute.rating.value}"
+        }
+      ]
+    }
+  ]
+}

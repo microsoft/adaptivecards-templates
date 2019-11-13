@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Adaptive Cards Template Playground</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+    <script src="https://unpkg.com/markdown-it@8.4.0/dist/markdown-it.min.js"></script>
+    <!-- <script src="https://unpkg.com/adaptivecards-designer@0.1.1/dist/monaco-editor/min/vs/loader.js"></script> -->
+
+    <script src="https://unpkg.com/adaptivecards-designer@0.1.1/dist/adaptivecards-designer.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
+    <script src="https://unpkg.com/adaptivecards-templating@0.1.0-alpha1/dist/adaptivecards-templating.js"></script>
+    <script src="https://unpkg.com/adaptivecards/dist/adaptivecards.min.js"></script>
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.8/themes/default/style.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.8/jstree.min.js"></script>
+
+    <style>
+        .ac-adaptiveCard {
+            border: solid 2px gray;
+        }
+    </style>
+
+    <script type="text/javascript">
+        function log(message) {
+            $("#log").append("<p>" + message + "</p>");
+        }
+
+        function reset() {
+            $("#log").empty();
+        }
+
+        function makeRequest(url, data, callback) {
+            if (data) {
+                $.post(url, data, function (response) {
+                    log("POST " + url);
+                    callback(response);
+                });
+            } else {
+                $.getJSON(url, function (response) {
+                    log("GET " + url);
+                    callback(response);
+                });
+            }
+        }
+
+        function renderCard(template) {
+
+            var serverRender = $("#serverRender").prop("checked");
+
+            if (serverRender) {
+                makeRequest("https://templates.adaptivecards.io/" + template, $("#data").val(), function (card) {
+                    // Render the card
+                    var adaptiveCard = new AdaptiveCards.AdaptiveCard();
+                    adaptiveCard.parse(card);
+
+                    $("#card").html(adaptiveCard.render());
+
+                });
+
+            } else {
+
+                makeRequest("https://templates.adaptivecards.io/" + template, null, function (templatePayload) {
+                    // Create a Template instamce from the template payload
+                    var template = new ACData.Template(templatePayload);
+
+                    // Create a data binding context, and set its $root property to the
+                    // data object to bind the template to
+                    var dataContext = new ACData.EvaluationContext();
+                    dataContext.$root = JSON.parse($("#data").val());
+                    dataContext.registerFunction("format", function (val, mode) {
+                        switch (mode) {
+                            case ("%"):
+                                return (val * 100).toFixed(2) + "%"
+
+                            default:
+                                return `Unknown format: ${params[1]}`
+                        }
+                    });
+                    dataContext.registerFunction("parseDateFromEpoch", function (date) {
+                        try {
+                            let d = new Date(date);
+                            let timeZoneOffset = ("0" + new Date().getTimezoneOffset() / 60).slice(-2);
+                            return `${d.toISOString().substr(0, 19)}-03:00`;
+                        } catch {
+                            return "Unable to parse epoch";
+                        }
+
+                    });
+
+                    dataContext.registerFunction("loop", function (count, value) {
+                        var response = "";
+                        for(i = 0; i < count; i++) {
+                            response += value
+                        }
+                        return response;
+                    });
+
+                    dataContext.registerFunction("math.round", function (value) {
+                        return Math.round(value);
+                    });
+
+                    // "Expand" the template - this generates the final Adaptive Card,
+                    // ready to render
+                    var card = template.expand(dataContext);
+
+                    // Render the card
+                    var adaptiveCard = new AdaptiveCards.AdaptiveCard();
+                    adaptiveCard.parse(card);
+
+                    $("#card").html(adaptiveCard.render());
+
+                });
+            }
+        }
+
+        $(function () {
+
+            makeRequest("https://templates.adaptivecards.io/list", null, function (templates) {
+                var tree = [];
+                Object.getOwnPropertyNames(templates).forEach(function (item) {
+                    tree.push({
+                        "text": item,
+                        "state": { "disabled": true },
+                        "children": templates[item].templates.map(function (c) {
+                            return {
+                                "text": c.file,
+                                "data": c
+                            }
+                        })
+                    })
+                });
+
+                $("#templateTree").jstree({
+                    "core": {
+                        "data": tree
+                    }
+                });
+
+            });
+
+
+            $("#urlGo").click(function (e) {
+                var url = $("#url").val();
+                makeRequest(url, null, function (data) {
+                    $("#data").val(JSON.stringify(data));
+                });
+            });
+
+            $("#renderButton").click(function (e) {
+                var autoLookup = $("#autoTemplate").prop("checked");
+
+                var selected = $("#templateTree").jstree("get_selected", true)[0];
+
+                if (autoLookup) {
+                    makeRequest("https://templates.adaptivecards.io/find", $("#data").val(), function (found) {
+                        //var found = JSON.parse(response);
+                        if (found.length > 0) {
+                            renderCard(found[0].templateUrl);
+                        }
+
+                    });
+                } else {
+                    renderCard(selected.data.fullPath);
+                }
+            });
+
+        });
+    </script>
+</head>
+
+<body>
+    <div class="w3-container">
+
+        <div class="w3-third">
+            <h2>URL</h2>
+            <input type="text" id="url" value="https://api.iextrading.com/1.0/stock/msft/quote" />
+            <input type="button" id="urlGo" value="Go" />
+
+            <h2>Data</h2>
+            <textarea rows="5" id="data"></textarea>
+
+            <h2>Template</h2>
+            <div>
+                <input type="checkbox" id="autoTemplate" checked="checked" /><label for="autoTemplate">Automatic
+                    template lookup</label>
+            </div>
+            <div id="templateTree">
+
+            </div>
+            <div>
+                <input type="checkbox" id="serverRender" /><label for="serverRender">Render on the
+                    server</label>
+            </div>
+
+            <div>
+                <input type="button" id="renderButton" value="Render" />
+            </div>
+
+        </div>
+
+
+        <div class="w3-third">
+            <h2>Log</h2>
+            <div id="log"></div>
+        </div>
+
+        <div class="w3-third">
+            <h2>Card</h2>
+            <div id="card"></div>
+        </div>
+    </div>
+</body>
+
+</html>

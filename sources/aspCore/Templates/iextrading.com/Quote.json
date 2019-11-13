@@ -1,0 +1,123 @@
+{
+	"$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+	"$sampleData": {
+		"symbol": "MSFT",
+		"companyName": "Microsoft Corporation",
+		"primaryExchange": "Nasdaq Global Select",
+		"sector": "Technology",
+		"calculationPrice": "close",
+		"open": 127.42,
+		"openTime": 1556890200966,
+		"close": 128.9,
+		"closeTime": 1556913600447,
+		"high": 129.43,
+		"low": 127.25,
+		"latestPrice": 128.9,
+		"latestSource": "Close",
+		"latestTime": "May 3, 2019",
+		"latestUpdate": 1556913600447,
+		"latestVolume": 24835154,
+		"iexRealtimePrice": null,
+		"iexRealtimeSize": null,
+		"iexLastUpdated": null,
+		"delayedPrice": 128.9,
+		"delayedPriceTime": 1556913600447,
+		"extendedPrice": 129.04,
+		"extendedChange": 0.14,
+		"extendedChangePercent": 0.00109,
+		"extendedPriceTime": 1556917190214,
+		"previousClose": 126.21,
+		"change": 2.69,
+		"changePercent": 0.02131,
+		"iexMarketPercent": null,
+		"iexVolume": null,
+		"avgTotalVolume": 22183270,
+		"iexBidPrice": null,
+		"iexBidSize": null,
+		"iexAskPrice": null,
+		"iexAskSize": null,
+		"marketCap": 987737229888,
+		"peRatio": 30.84,
+		"week52High": 131.37,
+		"week52Low": 93.96,
+		"ytdChange": 0.30147812013916003
+	},
+	"type": "AdaptiveCard",
+	"version": "1.0",
+	"body": [
+		{
+			"type": "Container",
+			"items": [
+				{
+					"type": "TextBlock",
+					"text": "{companyName}",
+					"size": "Medium",
+					"wrap": true
+				},
+				{
+					"type": "TextBlock",
+					"text": "{primaryExchange}: {symbol}",
+					"size": "Default",
+					"isSubtle": true,
+					"spacing": "small",
+					"wrap": true
+				},
+				{
+					"type": "TextBlock",
+					"text": "{{DATE({parseDateFromEpoch(latestUpdate)}, SHORT)}} {{TIME({parseDateFromEpoch(latestUpdate)})}}"
+				}
+			]
+		},
+		{
+			"type": "Container",
+			"spacing": "None",
+			"items": [
+				{
+					"type": "ColumnSet",
+					"columns": [
+						{
+							"type": "Column",
+							"width": "stretch",
+							"items": [
+								{
+									"type": "TextBlock",
+									"text": "{latestPrice}",
+									"size": "ExtraLarge"
+								},
+								{
+									"type": "TextBlock",
+									"text": "{if(change >= 0, '▲', '▼')} USD {change} ({format(changePercent, '%')})",
+									"color": "{if(change >= 0, 'good', 'attention')}",
+									"spacing": "None"
+								}
+							]
+						},
+						{
+							"type": "Column",
+							"width": "auto",
+							"items": [
+								{
+									"type": "FactSet",
+									"facts": [
+										{
+											"title": "Open",
+											"value": "{open}"
+										},
+										{
+											"title": "High",
+											"value": "{high}"
+										},
+										{
+											"title": "Low",
+											"value": "{low}"
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	]
+}

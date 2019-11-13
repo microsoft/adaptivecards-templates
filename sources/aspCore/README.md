@@ -1,0 +1,1 @@
+# adaptivecards-templates-core

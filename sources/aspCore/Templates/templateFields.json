@@ -1,0 +1,169 @@
+[
+    {
+        "templatePath": "finos.org/Bond.json",
+        "properties": [
+            "type",
+            "version",
+            "id",
+            "side",
+            "info",
+            "tradeDate",
+            "settlementDate",
+            "faceValue",
+            "instrument"
+        ]
+    },
+    {
+        "templatePath": "graph.microsoft.com/DirectReports.json",
+        "odataType": "#microsoft.graph.user"
+    },
+    {
+        "templatePath": "graph.microsoft.com/Files.json",
+        "odataType": "#microsoft.graph.driveItem"
+    },
+    {
+        "templatePath": "graph.microsoft.com/Groups.json",
+        "odataType": "#microsoft.graph.group"
+    },
+    {
+        "templatePath": "graph.microsoft.com/Insights.Trending.json",
+        "odataType": "#microsoft.graph.trending"
+    },
+    {
+        "templatePath": "graph.microsoft.com/Messages.json",
+        "odataType": "#microsoft.graph.message"
+    },
+    {
+        "templatePath": "graph.microsoft.com/Profile.json",
+        "properties": [
+            "@odata.context",
+            "businessPhones",
+            "displayName",
+            "givenName",
+            "jobTitle",
+            "mail",
+            "mobilePhone",
+            "officeLocation",
+            "preferredLanguage",
+            "surname",
+            "userPrincipalName",
+            "id"
+        ],
+        "odataType": "#microsoft.graph.user"
+    },
+    {
+        "templatePath": "graph.microsoft.com/Site.json",
+        "odataType": "#microsoft.graph.site"
+    },
+    {
+        "templatePath": "graph.microsoft.com/Sites.json",
+        "odataType": "#microsoft.graph.site"
+    },
+    {
+        "templatePath": "graph.microsoft.com/User.json",
+        "odataType": "#microsoft.graph.user"
+    },
+    {
+        "templatePath": "graph.microsoft.com/Users.json",
+        "odataType": "#microsoft.graph.user"
+    },
+    {
+        "templatePath": "iextrading.com/Quote.json",
+        "properties": [
+            "symbol",
+            "companyName",
+            "primaryExchange",
+            "sector",
+            "calculationPrice",
+            "open",
+            "openTime",
+            "close",
+            "closeTime",
+            "high",
+            "low",
+            "latestPrice",
+            "latestSource",
+            "latestTime",
+            "latestUpdate",
+            "latestVolume",
+            "iexRealtimePrice",
+            "iexRealtimeSize",
+            "iexLastUpdated",
+            "delayedPrice",
+            "delayedPriceTime",
+            "extendedPrice",
+            "extendedChange",
+            "extendedChangePercent",
+            "extendedPriceTime",
+            "previousClose",
+            "change",
+            "changePercent",
+            "iexMarketPercent",
+            "iexVolume",
+            "avgTotalVolume",
+            "iexBidPrice",
+            "iexBidSize",
+            "iexAskPrice",
+            "iexAskSize",
+            "marketCap",
+            "peRatio",
+            "week52High",
+            "week52Low",
+            "ytdChange"
+        ]
+    },
+    {
+        "templatePath": "openweathermap.org/Forecast.json",
+        "properties": [
+            "cod",
+            "message",
+            "cnt",
+            "list",
+            "city"
+        ]
+    },
+    {
+        "templatePath": "schema.org/FlightUpdate.json",
+        "properties": [
+            "@context",
+            "@type",
+            "reservationId",
+            "reservationStatus",
+            "passengerPriorityStatus",
+            "passengerSequenceNumber",
+            "securityScreening",
+            "underName",
+            "reservationFor"
+        ]
+    },
+    {
+        "templatePath": "schema.org/Restaurant.Loop.json",
+        "properties": [
+            "@context",
+            "@type",
+            "name",
+            "url",
+            "address",
+            "image",
+            "telephone",
+            "aggregateRating",
+            "review",
+            "priceRange"
+        ]
+    },
+    {
+        "templatePath": "schema.org/Thing.ContextMap.json",
+        "properties": [
+            "title",
+            "subtitle",
+            "image"
+        ]
+    },
+    {
+        "templatePath": "wunderground.com/Forecast.json",
+        "properties": [
+            "response",
+            "hourly_forecast"
+        ]
+    }
+]

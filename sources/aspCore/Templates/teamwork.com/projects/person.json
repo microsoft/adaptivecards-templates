@@ -1,0 +1,123 @@
+{
+    "type": "AdaptiveCard",
+    "body": [
+        {
+            "type": "ColumnSet",
+            "columns": [
+                {
+                    "type": "Column",
+                    "items": [
+                        {
+                            "type": "Image",
+                            "style": "Person",
+                            "url": "{$root.person.avatarurl}",
+                            "size": "Small"
+                        }
+                    ],
+                    "width": "auto"
+                },
+                {
+                    "type": "Column",
+                    "items": [
+                        {
+                            "type": "TextBlock",
+                            "weight": "Bolder",
+                            "text": "{$root.person.firstname} {$root.person.lastname}",
+                            "wrap": true
+                        },
+                        {
+                            "type": "TextBlock",
+                            "spacing": "None",
+                            "text": "{$root.person.title}",
+                            "isSubtle": true,
+                            "wrap": true
+                        }
+                    ],
+                    "width": "stretch"
+                }
+            ]
+        },
+        {
+            "type": "FactSet",
+            "facts": [
+                {
+                    "title": "Phone:",
+                    "value": "{$root.person.phonenumberoffice}"
+                },
+                {
+                    "title": "Mobile:",
+                    "value": "{$root.person.phonenumbermobile}"
+                },
+                {
+                    "title": "Email",
+                    "value": "{$root.person.imhandle}"
+                },
+                {
+                    "title": "Address",
+                    "value": "{$root.person.address.line}, {$root.person.address.zipcode} {$root.person.address.city}"
+                }
+            ]
+        },
+        {
+            "type": "ColumnSet",
+            "columns": [
+                {
+                    "type": "Column",
+                    "items": [
+                        {
+                            "type": "Image",
+                            "altText": "",
+                            "url": "https://i0.wp.com/www.vectorico.com/wp-content/uploads/2018/02/Twitter-Logo.png?resize=300%2C244",
+                            "size": "Small",
+                            "width": "32px"
+                        }
+                    ],
+                    "width": "auto"
+                },
+                {
+                    "type": "Column",
+                    "width": "stretch",
+                    "items": [
+                        {
+                            "type": "TextBlock",
+                            "text": "@{$root.person.twitter}",
+                            "horizontalAlignment": "Center",
+                            "spacing": "Medium"
+                        }
+                    ],
+                    "verticalContentAlignment": "Center"
+                },
+                {
+                    "type": "Column",
+                    "items": [
+                        {
+                            "type": "Image",
+                            "altText": "",
+                            "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Skype_logo_%282019%E2%80%93present%29.svg/1200px-Skype_logo_%282019%E2%80%93present%29.svg.png",
+                            "size": "Small"
+                        }
+                    ],
+                    "width": "auto"
+                },
+                {
+                    "type": "Column",
+                    "width": "stretch",
+                    "items": [
+                        {
+                            "type": "TextBlock",
+                            "text": "{$root.person.imhandle}",
+                            "horizontalAlignment": "Center",
+                            "spacing": "Large"
+                        }
+                    ],
+                    "horizontalAlignment": "Center",
+                    "spacing": "None",
+                    "height": "stretch",
+                    "verticalContentAlignment": "Center"
+                }
+            ]
+        }
+    ],
+    "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+    "version": "1.0"
+}
