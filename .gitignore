@@ -59,3 +59,8 @@ typings/
 
 # next.js build output
 .next
+local.settings.json
+
+# .NET build
+bin/
+obj/

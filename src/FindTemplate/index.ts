@@ -43,7 +43,7 @@ const httpTrigger: AzureFunction = async function(
       };
 
       for (let dataProp of dataProperties) {
-        for (let templateProp of template.properties) {
+        for (let templateProp of template.properties || []) {
           if (dataProp === templateProp) {
             match.propMatchCount++;
           }
