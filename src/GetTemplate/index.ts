@@ -34,6 +34,7 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
                         return `Unknown format: ${params[1]}`
                 }
             });
+            
             dataContext.registerFunction("parseDateFromEpoch", (params: any[]) => {
                 try {
                     let d = new Date(<number>params[0]);
@@ -50,8 +51,7 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
             body = templateBlob
         }
 
-        if (req.query.sampleData) {
-            //body["$sampleData"] = { "x": "y"}
+        if (req.query.sampleData === "true") {
         } else {
             delete body["$sampleData"];
         }

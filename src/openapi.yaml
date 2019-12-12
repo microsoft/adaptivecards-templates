@@ -1,0 +1,124 @@
+swagger: '2.0'
+host: templates.adaptivecards.io
+info:
+  description: The Adaptive Cards Template Service is a proof-of-concept service that allows anyone to find, contribute to, and share a set of well-known templates.
+  version: '0.1'
+  title: Adaptive Cards Template Service
+  contact:
+    name: Adaptive Cards
+    url: https://github.com/Microsoft/AdaptiveCards
+paths:
+  /list:
+    get:
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Get all known Adaptive Card templates
+      summary: All available templates
+  /find:
+    get:
+      parameters:
+        - in: query
+          name: odata.type
+          description: Search for templates by odata.type
+          type: string
+          required: false
+          x-example: '%23microsoft.graph.driveItem'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Template search results
+          schema:
+            $ref: '#/definitions/FoundTemplates'
+      summary: Find a template by type name
+    post:
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: data
+          description: The data to use in the search
+          required: true
+          schema:
+            type: object
+          x-examples:
+            application/json: |-
+              {
+                  "symbol": "MSFT"
+              }
+      responses:
+        '200':
+          description: Template search results
+          schema: 
+            $ref: '#/definitions/FoundTemplates'
+      summary: Find templates for a data type
+
+  /{template}:
+    parameters:
+      - name: template
+        in: path
+        required: true
+        type: string
+        description: The template to retrieve
+        x-example: 'schema.org/Restaurant.json'
+      - name: sampleData
+        in: query
+        required: false
+        description: Whether or not to include sample data in the response
+        default: false
+        type: boolean
+        x-example: true
+    get:
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Adaptive Card Template
+          schema:
+            $ref: 'https://adaptivecards.io/schemas/adaptive-card.json'
+      summary: Retrieve a raw template for client-side data binding
+    post:
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: data
+          description: The data object that will be data-bound to the template
+          required: true
+          schema:
+            type: object
+          x-examples:
+            application/json: |-
+              {
+                  "symbol": "MSFT"
+              }
+      responses:
+        '200':
+          description: Adaptive Card Template
+          schema:
+            $ref: 'https://adaptivecards.io/schemas/adaptive-card.json'
+      summary: Retrieve an Adaptive Card based on the template
+      description: Pass your data in the POST body and it will be data-bound on the server
+definitions:
+  FoundTemplate:
+    properties:
+      templateUrl:
+        type: string
+      confidence:
+        type: integer
+        format: int32
+  FoundTemplates:
+    type: array
+    items:
+      $ref: '#/definitions/FoundTemplate'
+externalDocs:
+  description: Documentation
+  url: https://docs.microsoft.com/en-us/adaptive-cards/templating/service
+tags:
+  - name: adaptive-cards
