@@ -66,10 +66,28 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
 
 
     } else if (context.req.url.indexOf("/list") > 0) {
-        context.res = {
-            body: templatesBlob,
-            headers: { 'Content-Type': 'application/json' }
-        };
+        if(req.query.flat === "true") {
+            let groupedTemplates = Object.getOwnPropertyNames(templatesBlob)
+            .map(propName => templatesBlob[propName].templates)
+            
+            let flat = [];
+            for(let grp of groupedTemplates)
+                for(let template of grp)
+                    flat.push(template.fullPath);
+            
+
+            context.res = {
+                body: flat,
+                headers: { 'Content-Type': 'application/json' }
+            };
+    
+        } else {
+            context.res = {
+                body: templatesBlob,
+                headers: { 'Content-Type': 'application/json' }
+            };
+    
+        }         
     } 
     else {
         context.res = {
