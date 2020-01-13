@@ -19,6 +19,7 @@
   },
   "bin": "generate",
   "dependencies": {
+    "@wmfs/tymly-data-types": "^1.5.0",
     "adaptivecards-templating": "0.1.0-alpha1",
     "lodash": "^4.17.15",
     "lodash-inflection": "^1.5.0"
@@ -27,7 +28,6 @@
     "@azure/functions": "^1.0.2-beta2",
     "@types/glob": "^7.1.1",
     "@types/jest": "^24.0.13",
-    "@wmfs/tymly-data-types": "^1.5.0",
     "glob": "^7.1.4",
     "jest": "^24.8.0",
     "ts-jest": "^24.0.2",
