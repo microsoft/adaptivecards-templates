@@ -62,5 +62,5 @@ typings/
 local.settings.json
 
 # .NET build
-bin/
+/bin/
 obj/
