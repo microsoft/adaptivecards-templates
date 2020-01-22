@@ -1,4 +1,4 @@
-# WSL Setup
+# Nodejs download on WSL
 
 1. To download compatable nodejs, npm
 
@@ -25,3 +25,4 @@ npm install
 ```
 
 At this point, ESLint and Prettier should work in conjuction to auto-format all files on save.
+A restart of VScode may be required.
