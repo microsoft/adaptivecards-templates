@@ -15,7 +15,7 @@ on:
 
 env:
   AZURE_WEBAPP_NAME: adaptivecms    # set this to your application's name
-  AZURE_WEBAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
+  AZURE_WEBAPP_PACKAGE_PATH: 'private-templates-service/client'      # set this to the path to your web app project, defaults to the repository root
   NODE_VERSION: '12.x'                # set this to the node version to use
 
 jobs:
@@ -33,11 +33,13 @@ jobs:
         # Build and test the project, then
         # deploy to Azure Web App.
         npm install
+        npm start --if-present
         npm run build --if-present
         npm run test --if-present
+        
     - name: 'Deploy to Azure WebApp'
       uses: azure/webapps-deploy@v1
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+        publish-profile: ${{ secrets.AZURE_ADAPTIVECMS }}
         package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
