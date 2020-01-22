@@ -6,7 +6,6 @@
 		"@fortawesome/fontawesome-free": "^5.11.2",
 		"@microsoft/microsoft-graph-client": "^2.0.0",
 		"bootstrap": "^4.4.1",
-		"flow-bin": "^0.116.1",
 		"moment": "^2.24.0",
 		"msal": "^1.1.3",
 		"prettier": "^1.19.1",
@@ -20,12 +19,7 @@
 		"start": "react-scripts start",
 		"build": "react-scripts build",
 		"test": "react-scripts test",
-		"eject": "react-scripts eject",
-		"flow": "flow",
-		"flow start": "flow start",
-		"flow stop": "flow stop",
-		"flow status": "flow status",
-		"flow coverage": "flow coverage"
+		"eject": "react-scripts eject"
 	},
 	"eslintConfig": {
 		"extends": "react-app"

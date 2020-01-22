@@ -9,8 +9,8 @@
 	"javascript.validate.enable": false,
 	"prettier.useTabs": true,
 	"prettier.tabWidth": 4,
-	"flow.useNPMPackagedFlow": true,
 	"editor.codeActionsOnSave": {
 		"source.fixAll.eslint": true
-	}
+	},
+	"eslint.format.enable": true
 }
