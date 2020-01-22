@@ -17,6 +17,7 @@ env:
   AZURE_WEBAPP_NAME: adaptivecms    # set this to your application's name
   AZURE_WEBAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
   NODE_VERSION: '12.x'                # set this to the node version to use
+  GITHUB_WORKSPACE: '/home/runner/work/adaptivecards-templates/adaptivecards-templates/private-templates-service/client'
 
 jobs:
   build-and-deploy:
