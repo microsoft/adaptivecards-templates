@@ -23,9 +23,10 @@ jobs:
     name: Build and Deploy
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    with:
-      ref: dev
+    - name: Checkout
+      uses: actions/checkout@v2.0.0
+      with:
+        ref: dev
     - name: Use Node.js ${{ env.NODE_VERSION }}
       uses: actions/setup-node@v1
       with:
