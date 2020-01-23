@@ -1,0 +1,30 @@
+{
+	"env": {
+		"browser": true,
+		"es6": true,
+		"node": true
+	},
+	"extends": [
+		"plugin:react/recommended",
+		"airbnb",
+		"airbnb/hooks",
+		"prettier",
+		"plugin:prettier/recommended"
+	],
+	"globals": {
+		"Atomics": "readonly",
+		"SharedArrayBuffer": "readonly"
+	},
+	"parser": "babel-eslint",
+	"parserOptions": {
+		"ecmaFeatures": {
+			"jsx": true
+		},
+		"ecmaVersion": 2020,
+		"sourceType": "module"
+	},
+	"plugins": ["react", "jsx-ally", "import", "prettier"],
+	"rules": {
+		"prettier/prettier": "error"
+	}
+}

@@ -1,4 +1,4 @@
-# This workflow will build and push a node.js application to an Azure Web App on every push to the master branch.
+# This workflow will build and push a node.js application to an Azure Web App on every push to the dev branch.
 #
 # To configure this workflow:
 #
@@ -15,7 +15,11 @@ on:
 
 env:
   AZURE_WEBAPP_NAME: adaptivecms    # set this to your application's name
+<<<<<<< HEAD
   AZURE_WEBAPP_PACKAGE_PATH: './private-templates-service/client'      # set this to the path to your web app project, defaults to the repository root
+=======
+  AZURE_WEBAPP_PACKAGE_PATH: 'private-templates-service/client/build/'      # set this to the path to your web app project, defaults to the repository root
+>>>>>>> f54ef8eb9bad2ca3901c9acd1903957296e13279
   NODE_VERSION: '12.x'                # set this to the node version to use
 
 jobs:
