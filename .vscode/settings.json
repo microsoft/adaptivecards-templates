@@ -1,7 +1,16 @@
 {
-    "azureFunctions.deploySubpath": "src",
-    "azureFunctions.projectLanguage": "TypeScript",
-    "azureFunctions.projectRuntime": "~2",
-    "debug.internalConsoleOptions": "neverOpen",
-    "azureFunctions.preDeployTask": "npm prune"
+	"azureFunctions.deploySubpath": "src",
+	"azureFunctions.projectLanguage": "TypeScript",
+	"azureFunctions.projectRuntime": "~2",
+	"debug.internalConsoleOptions": "neverOpen",
+	"azureFunctions.preDeployTask": "npm prune",
+	"editor.formatOnSave": true,
+	"javascript.format.enable": false,
+	"javascript.validate.enable": false,
+	"prettier.useTabs": true,
+	"prettier.tabWidth": 4,
+	"editor.codeActionsOnSave": {
+		"source.fixAll.eslint": true
+	},
+	"eslint.format.enable": true
 }
