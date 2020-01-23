@@ -36,7 +36,10 @@ jobs:
       run: |
         # Build and test the project, then
         # deploy to Azure Web App.
-        cd private-templates-service/client
+        cd private-templates-service
+        npm install
+        npm run start --if-present
+        cd client
         npm install
         npm run build --if-present
     - name: 'Deploy to Azure WebApp'
