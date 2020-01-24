@@ -4,7 +4,7 @@
 # More about blobxfer here: https://blobxfer.readthedocs.io/en/latest/
 
 trigger:
-- master
+- stage
 
 # no PR builds
 pr: none
@@ -16,7 +16,7 @@ pool:
 steps:
 
 - script: |
-    cd src
+    cd public-templates-service/src
     dotnet build extensions.csproj --output ./bin
     npm install 
     npm run generate
@@ -25,7 +25,7 @@ steps:
 - task: ArchiveFiles@2
   displayName: 'Archive the function source code'
   inputs:
-    rootFolderOrFile: '$(system.defaultworkingdirectory)/src'
+    rootFolderOrFile: '$(system.defaultworkingdirectory)/public-templates-service/src'
     includeRootFolder: false
     archiveType: 'zip'
     archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
@@ -41,7 +41,7 @@ steps:
     ConnectionType: 'AzureRM'
     azureSubscription: 'Adaptive Cards (47c80630-3d74-4b3e-a2f4-57e6368cd8c6)'
     appType: 'functionApp'
-    WebAppName: 'adaptivecardstemplates'
+    WebAppName: 'adaptivecardsstage'
     packageForLinux: '$(Build.ArtifactStagingDirectory)/**/*.zip'
     enableCustomDeployment: true
     DeploymentType: runFromZip    
@@ -56,6 +56,6 @@ steps:
     sudo python3 -m pip install --upgrade pip
     sudo pip3 install setuptools wheel
     sudo pip3 install blobxfer
-    blobxfer upload --storage-account adaptivecardstemplates --sas "$(storage_sas)" --local-path ./templates --remote-path templates --skip-on-lmt-ge
+    blobxfer upload --storage-account adaptivecardsstage --sas "$(storage_sas)" --local-path ./public-templates-service/templates --remote-path templates --skip-on-lmt-ge
   displayName: 'Copy templates directory to Blob storage using blobxfer'
 
