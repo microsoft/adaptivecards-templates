@@ -42,6 +42,7 @@
 
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
+import { Switch } from "react-router-dom";
 import { Container } from "reactstrap";
 import { UserAgentApplication } from "msal";
 import NavBar from "./NavBar";
@@ -50,6 +51,7 @@ import Welcome from "./Welcome";
 import config from "./Config";
 import { getUserDetails, getOrgDetails } from "./GraphService";
 import "bootstrap/dist/css/bootstrap.css";
+import Dashboard from "./Dashboard";
 
 class App extends Component {
 	constructor(props) {
@@ -92,9 +94,12 @@ class App extends Component {
 				/>
 			);
 		}
-
-		return (
-			<Router>
+		const renderDashboard = ()=>{
+			if(this.state.isAuthenticated){
+				return <Dashboard/>
+			}
+			else{
+				return <Router>
 				<div>
 					<NavBar
 						isAuthenticated={this.state.isAuthenticated}
@@ -123,6 +128,11 @@ class App extends Component {
 					</Container>{" "}
 				</div>{" "}
 			</Router>
+			}
+		}
+
+		return (
+			renderDashboard()
 		);
 	}
 

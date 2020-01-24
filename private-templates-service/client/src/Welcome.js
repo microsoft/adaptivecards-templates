@@ -5,6 +5,7 @@ import {
 
 function WelcomeContent(props) {
   // If authenticated, greet the user
+  console.log(props.isAuthenticated);
   if (props.isAuthenticated) {
     if (props.user.organization) {
       return (
