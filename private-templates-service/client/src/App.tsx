@@ -1,45 +1,3 @@
-// import React, { Component } from 'react';
-// import logo from './logo.svg';
-
-// class App extends Component {
-// state = {
-//     data: null
-//   };
-
-//   componentDidMount() {
-//       // Call our fetch function below once the component mounts
-//     this.callBackendAPI()
-//       .then(res => this.setState({ data: res.express }))
-//       .catch(err => console.log(err));
-//   }
-//     // Fetches our GET route from the Express server. (Note the route we are fetching matches the GET route from server.js
-//   callBackendAPI = async () => {
-//     const response = await fetch('/express_backend');
-//     const body = await response.json();
-
-//     if (response.status !== 200) {
-//       throw Error(body.message) 
-//     }
-//     return body;
-//   };
-
-//   render() {
-//     return (
-//       <div className="App">
-//         <header className="App-header">
-//           <img src={logo} className="App-logo" alt="logo" />
-//           <h1 className="App-title">Welcome to React</h1>
-//         </header>
-//         // Render the newly fetched data inside of this.state.data 
-//         <p className="App-intro">{this.state.data}</p>
-//       </div>
-//     );
-//   }
-// }
-
-// export default App;
-
-
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { Container } from "reactstrap";
@@ -51,8 +9,16 @@ import config from "./Config";
 import { getUserDetails, getOrgDetails } from "./GraphService";
 import "bootstrap/dist/css/bootstrap.css";
 
-class App extends Component {
-	constructor(props) {
+interface State {
+	isAuthenticated: boolean;
+	user: object;
+	error: any;
+}
+
+class App extends Component<any, State> {
+	userAgentApplication: UserAgentApplication;
+
+	constructor(props: any) {
 		super(props);
 
 		console.log(JSON.stringify(props));
@@ -126,7 +92,7 @@ class App extends Component {
 		);
 	}
 
-	setErrorMessage(message, debug) {
+	setErrorMessage(message: any, debug: any) {
 		this.setState({
 			error: {
 				message: message,
@@ -192,7 +158,7 @@ class App extends Component {
 				// Get the user's profile from Graph
 				var user = await getUserDetails(accessToken);
 				var org = await getOrgDetails(accessToken);
-				if (org.value.length == 0) {
+				if (org.value.length === 0) {
 					org = null;
 				} else {
 					org = org.value[0].displayName;
@@ -201,8 +167,6 @@ class App extends Component {
 					isAuthenticated: true,
 					user: {
 						displayName: user.displayName,
-						email: user.mail || user.userPrincipalName,
-						email: user.mail || user.userPrincipalName,
 						email: user.mail || user.userPrincipalName,
 						organization: org
 					},
