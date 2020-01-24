@@ -38,6 +38,8 @@ jobs:
         cd private-templates-service/client
         npm install
         npm run build --if-present
+        cd ..
+        npm install
     - name: 'Deploy to Azure WebApp'
       uses: azure/webapps-deploy@v1
       with:
