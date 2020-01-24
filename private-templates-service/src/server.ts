@@ -2,7 +2,7 @@ import express from 'express';
 import path from 'path';
 import passport from 'passport';
 import passportAD from 'passport-azure-ad';
-import config from "./config.json";
+import config from "./config";
 import bunyan from 'bunyan';
 
 enum LoggingLevels {
@@ -38,7 +38,7 @@ app.use(passport.session());
 
 var OIDCBearerStrategy = passportAD.BearerStrategy;
 var bearerStrategy = new OIDCBearerStrategy(options,
-    function(token: any, done: any) {
+    function(token: any, done: Function) {
         log.info(token, 'was the token retreived');
         if (!token.oid)
             done(new Error('oid is not found in token'));
