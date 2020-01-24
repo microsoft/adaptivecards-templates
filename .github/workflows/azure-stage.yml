@@ -11,12 +11,21 @@
 on:
   push:
     branches:
+      - dev
+  pull_request:
+    branches:
       - stage
 
 env:
   AZURE_WEBAPP_NAME: adaptivecms    # set this to your application's name
   AZURE_WEBAPP_PACKAGE_PATH: 'private-templates-service/'      # set this to the path to your web app project, defaults to the repository root
   NODE_VERSION: '12.x'                # set this to the node version to use
+  AZURE_ADAPTIVE_CMS_PROFILE: ${{ secrets.AZURE_ADAPTIVECMS }}
+  BRANCH: dev
+  if: github.ref == 'refs/heads/stage'
+    AZURE_ADAPTIVE_CMS_PROFILE: ${{ secrets.AZURE_ADAPTIVECMS_STAGE }}
+    BRANCH: stage
+  
 
 jobs:
   build-and-deploy:
@@ -44,5 +53,5 @@ jobs:
       uses: azure/webapps-deploy@v1
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        publish-profile: ${{ secrets.AZURE_ADAPTIVECMS_STAGE }}
+        publish-profile: ${{ env.AZURE_ADAPTIVE_CMS_PROFILE }}
         package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
