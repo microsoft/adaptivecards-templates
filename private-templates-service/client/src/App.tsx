@@ -70,10 +70,9 @@ class App extends Component<any, State> {
                 : this.login.bind(this)
             }
             user={this.state.user}
-          />{" "}
+          />
           <Container>
-            {" "}
-            {error}{" "}
+            {error}
             <Route
               exact
               path="/"
@@ -85,9 +84,9 @@ class App extends Component<any, State> {
                   authButtonMethod={this.login.bind(this)}
                 />
               )}
-            />{" "}
-          </Container>{" "}
-        </div>{" "}
+            />
+          </Container>
+        </div>
       </Router>
     );
   }
