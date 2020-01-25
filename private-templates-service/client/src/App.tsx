@@ -49,7 +49,7 @@ class App extends Component<any, State> {
   }
 
   render() {
-    let error = null;
+    let error: any = null;
     if (this.state.error) {
       error = (
         <ErrorMessage
@@ -71,21 +71,30 @@ class App extends Component<any, State> {
             }
             user={this.state.user}
           />
-          <Container>
-            {error}
-            <Route
-              exact
-              path="/"
-              render={props => (
+          <Route
+            exact
+            path="/"
+            render={props => (
+              <Container>
+                {error}
                 <Welcome
                   {...props}
                   isAuthenticated={this.state.isAuthenticated}
                   user={this.state.user}
                   authButtonMethod={this.login.bind(this)}
                 />
-              )}
-            />
-          </Container>
+              </Container>
+            )}
+          />
+          <Route
+            exact
+            path="/designer"
+            render={props => (
+              <div>
+                DESIGNER PAGE
+              </div>
+            )}
+          />
         </div>
       </Router>
     );
