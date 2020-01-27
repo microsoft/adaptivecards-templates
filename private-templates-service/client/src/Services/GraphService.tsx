@@ -1,8 +1,11 @@
-var graph = require("@microsoft/microsoft-graph-client");
 
-function getAuthenticatedClient(accessToken: any) {
+import { Client } from '@microsoft/microsoft-graph-client';
+import { AuthResponse } from 'msal';
+// var graph = require("@microsoft/microsoft-graph-client");
+
+function getAuthenticatedClient(accessToken: AuthResponse): Client {
   // Initialize Graph client
-  const client = graph.Client.init({
+  const client = Client.init({
     // Use the provided access token to authenticate
     // requests
     authProvider: (done: any) => {
@@ -13,14 +16,14 @@ function getAuthenticatedClient(accessToken: any) {
   return client;
 }
 
-export async function getUserDetails(accessToken: any) {
+export async function getUserDetails(accessToken: AuthResponse) {
   console.log(accessToken);
   const client = getAuthenticatedClient(accessToken);
   const user = await client.api("/me").get();
   return user;
 }
 
-export async function getOrgDetails(accessToken: any) {
+export async function getOrgDetails(accessToken: AuthResponse) {
   const client = getAuthenticatedClient(accessToken);
   const org = await client.api("/organization").get();
   return org;

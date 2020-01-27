@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactElement } from "react";
 import {
   Collapse,
   Container,
@@ -13,31 +13,37 @@ import {
   DropdownMenu,
   DropdownItem
 } from "reactstrap";
-import "@fortawesome/fontawesome-free/css/all.css";
 
-function UserAvatar(props: any) {
+// Components
+import { UserType } from '../../App';
+
+// Styles
+import "@fortawesome/fontawesome-free/css/all.css";
+import { AvatarIcon, DefaultAvatarIcon } from './styled';
+
+function UserAvatar(props: { user: UserType }): ReactElement {
   // If a user avatar is available, return an img tag with the pic
   if (props.user.avatar) {
     return (
-      <img
+      <AvatarIcon
         src={props.user.avatar}
         alt="user"
         className="rounded-circle align-self-center mr-2"
         style={{ width: "32px" }}
-      ></img>
+      ></AvatarIcon>
     );
   }
 
   // No avatar available, return a default icon
   return (
-    <i
+    <DefaultAvatarIcon
       className="far fa-user-circle fa-lg rounded-circle align-self-center mr-2"
       style={{ width: "32px" }}
-    ></i>
+    ></DefaultAvatarIcon>
   );
 }
 
-function AuthNavItem(props: any) {
+function AuthNavItem(props: NavBarProps): ReactElement {
   // If authenticated, return a dropdown with the user's info and a
   // sign out button
   if (props.isAuthenticated) {
@@ -70,17 +76,26 @@ function AuthNavItem(props: any) {
   );
 }
 
-export default class NavBar extends React.Component<any, any> {
+export interface NavBarProps {
+  isAuthenticated: boolean,
+  authButtonMethod: () => void,
+  user: UserType,
+}
+
+interface State {
+  isOpen: boolean
+}
+
+export default class NavBar extends React.Component<NavBarProps, State> {
   constructor(props: any) {
     super(props);
 
-    this.toggle = this.toggle.bind(this);
     this.state = {
       isOpen: false
     };
   }
 
-  toggle() {
+  toggle = () => {
     this.setState({
       isOpen: !this.state.isOpen
     });

@@ -1,24 +1,36 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { Container } from "reactstrap";
-import { UserAgentApplication } from "msal";
-import NavBar from "./NavBar";
-import ErrorMessage from "./ErrorMessage";
-import Welcome from "./Welcome";
+
+import { UserAgentApplication, ClientAuthError } from "msal";
+
+import NavBar from "./components/NavBar/NavBar";
+import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
+import Welcome from "./components/Welcome/Welcome";
 import config from "./Config";
-import { getUserDetails, getOrgDetails } from "./GraphService";
+import { getUserDetails, getOrgDetails } from "./Services/GraphService";
+import { ErrorMessageProps } from "./components/ErrorMessage/ErrorMessage";
+
 import "bootstrap/dist/css/bootstrap.css";
 
+export interface UserType {
+  displayName?: string;
+  email?: string;
+  organization?: string;
+  avatar?: string;
+}
+
+// TODO: use react-redux
 interface State {
   isAuthenticated: boolean;
-  user: object;
-  error: any;
+  user: UserType;
+  error: ErrorMessageProps | null;
 }
 
 class App extends Component<any, State> {
   userAgentApplication: UserAgentApplication;
 
-  constructor(props: any) {
+  constructor(props: object) {
     super(props);
 
     console.log(JSON.stringify(props));
@@ -66,14 +78,13 @@ class App extends Component<any, State> {
             isAuthenticated={this.state.isAuthenticated}
             authButtonMethod={
               this.state.isAuthenticated
-                ? this.logout.bind(this)
-                : this.login.bind(this)
+                ? this.logout
+                : this.login
             }
             user={this.state.user}
-          />{" "}
+          />
           <Container>
-            {" "}
-            {error}{" "}
+            {error}
             <Route
               exact
               path="/"
@@ -82,12 +93,12 @@ class App extends Component<any, State> {
                   {...props}
                   isAuthenticated={this.state.isAuthenticated}
                   user={this.state.user}
-                  authButtonMethod={this.login.bind(this)}
+                  authButtonMethod={this.login}
                 />
               )}
-            />{" "}
-          </Container>{" "}
-        </div>{" "}
+            />
+          </Container>
+        </div>
       </Router>
     );
   }
@@ -101,7 +112,7 @@ class App extends Component<any, State> {
     });
   }
 
-  async login() {
+  login = async () => {
     try {
       await this.userAgentApplication.loginPopup({
         scopes: config.scopes,
@@ -111,22 +122,27 @@ class App extends Component<any, State> {
     } catch (err) {
       var error = {};
 
-      if (typeof err === "string") {
-        var errParts = err.split("|");
-        error =
-          errParts.length > 1
-            ? {
-              message: errParts[1],
-              debug: errParts[0]
-            }
-            : {
-              message: err
-            };
-      } else {
-        error = {
-          message: err.message,
-          debug: JSON.stringify(err)
-        };
+      switch (true) {
+        case (typeof err === "string"):
+          var errParts = err.split("|");
+          error =
+            errParts.length > 1
+              ? {
+                message: errParts[1],
+                debug: errParts[0]
+              }
+              : {
+                message: err
+              };
+          break;
+        case (err instanceof ClientAuthError):
+          error = {
+            message: err.message,
+            debug: JSON.stringify(err)
+          };
+          break;
+        default:
+          console.log("Unexpected authentication error: ", err);
       }
 
       this.setState({
@@ -137,7 +153,7 @@ class App extends Component<any, State> {
     }
   }
 
-  logout() {
+  logout = () => {
     this.userAgentApplication.logout();
   }
 
