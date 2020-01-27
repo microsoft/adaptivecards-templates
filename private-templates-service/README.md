@@ -12,7 +12,7 @@ To run this web application locally, you must have the following installed on yo
 **3. Modify the `Config.tsx` file.**
 
 The Adaptive Cards Admin Portal lives under `adaptivecards-templates/private-templates-service`.
-Modify the file `adaptivecards-templates/private-templates-service/client/Config.tsx` such that the redirectUri points to localhost:3000.
+Modify the file `adaptivecards-templates/private-templates-service/client/Config.tsx` such that the redirectUri points to `http:\\localhost:3000`.
 
 **4. Inside of `adaptivecards-templates/private-templates-service/client` run `npm install`.**
 
