@@ -1,5 +1,5 @@
-import passport, { Strategy } from 'passport';
-import passportAD from 'passport-azure-ad';
+import passport from 'passport';
+import passportAD, { ITokenPayload, VerifyCallback } from 'passport-azure-ad';
 import config from './config';
 import logger from '../util/logger';
 
@@ -24,7 +24,7 @@ var options = {
 };
 
 var bearerStrategy = new passportAD.BearerStrategy(options,
-    function(token: any, done: Function) {
+    function(token: ITokenPayload, done: VerifyCallback) {
         logger.info(token, 'was the token retreived');
         if (!token.oid)
             done(new Error('oid is not found in token'));
