@@ -1,12 +1,12 @@
 import passport from 'passport';
 import passportAD from 'passport-azure-ad';
-import config from "./config";
-import logger from "../util/logger";
+import config from './config';
+import logger from '../util/logger';
 
 enum LoggingLevels {
-	Info = 'info',
-	Warn = 'warn',
-	Error = 'error'
+    Info = 'info',
+    Warn = 'warn',
+    Error = 'error'
 }
 
 var options = {

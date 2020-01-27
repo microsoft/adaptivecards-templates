@@ -1,4 +1,4 @@
-import app from "./app"
+import app from './app'
 
 // Start express server
 const port = process.env.PORT || 5000;

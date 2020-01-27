@@ -1,7 +1,7 @@
 import express from 'express';
 import path from 'path';
 import mongoose from 'mongoose';
-import passport from "./config/passport";
+import passport from './config/passport';
 
 // import controllers
 import templateRouter from './controllers/template';
