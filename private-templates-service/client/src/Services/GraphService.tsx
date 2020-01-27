@@ -16,6 +16,7 @@ function getAuthenticatedClient(accessToken: AuthResponse): Client {
   return client;
 }
 
+// TODO: Refactor into a class, store this in state to eliminate unneccesary retrievals
 export async function getUserDetails(accessToken: AuthResponse) {
   const client = getAuthenticatedClient(accessToken);
   const user = await client.api("/me").get();
