@@ -148,7 +148,7 @@ class App extends Component<any, State> {
     this.userAgentApplication.logout();
   }
 
-  async getUserProfile() {
+  getUserProfile = async () => {
     try {
       // Get the access token silently
       // If the cache contains a non-expired token, this function
