@@ -1,3 +1,27 @@
+# Running the Adaptive Cards Admin Portal Locally
+
+To run this web application locally, you must have the following installed on your system:
+
+-   Git
+-   [Node](https://nodejs.org/en/download/)
+
+**1. Clone the repository.**
+
+**2. Depending on what environment you would like to run locally (master, stage or dev), switch to the appropriate branch.**
+
+**3. Modify the `Config.tsx` file.**
+
+The Adaptive Cards Admin Portal lives under `adaptivecards-templates/private-templates-service`.
+Modify the file `adaptivecards-templates/private-templates-service/client/Config.tsx` such that the redirectUri points to localhost:3000.
+
+**4. Inside of `adaptivecards-templates/private-templates-service/client` run `npm install`.**
+
+**5. Finally, run ``npm start` to launch the application in your default browser.**
+
+## Troubleshooting
+
+-   When running `npm start`, confirm in your shell that the localhost port matches the port in the `Config.tsx` redirectUri. It should be port 3000 but it can be different.
+
 # Nodejs download on WSL
 
 1. To download compatable nodejs, npm
