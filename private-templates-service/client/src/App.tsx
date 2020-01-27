@@ -103,15 +103,6 @@ class App extends Component<any, State> {
     );
   }
 
-  setErrorMessage(message: any, debug: any) {
-    this.setState({
-      error: {
-        message: message,
-        debug: debug
-      }
-    });
-  }
-
   login = async () => {
     try {
       await this.userAgentApplication.loginPopup({
