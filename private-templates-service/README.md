@@ -3,7 +3,7 @@
 To run this web application locally, you must have the following installed on your system:
 
 -   Git
--   [Node](https://nodejs.org/en/download/)
+-   [Node v12.14.1](https://nodejs.org/en/download/)
 
 **1. Clone the repository.**
 
@@ -12,11 +12,13 @@ To run this web application locally, you must have the following installed on yo
 **3. Modify the `Config.tsx` file.**
 
 The Adaptive Cards Admin Portal lives under `adaptivecards-templates/private-templates-service`.
-Modify the file `adaptivecards-templates/private-templates-service/client/Config.tsx` such that the redirectUri points to `http:\\localhost:3000`.
+Modify the file `adaptivecards-templates/private-templates-service/client/src/Config.tsx` such that the redirectUri points to `http:\\localhost:3000`.
 
 **4. Inside of `adaptivecards-templates/private-templates-service/client` run `npm install`.**
 
 **5. Finally, run ``npm start` to launch the application in your default browser.**
+
+**You're good to go!**
 
 ## Troubleshooting
 
