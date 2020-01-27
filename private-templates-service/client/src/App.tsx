@@ -27,10 +27,10 @@ interface State {
   error: ErrorMessageProps | null;
 }
 
-class App extends Component<any, State> {
+class App extends Component<{}, State> {
   userAgentApplication: UserAgentApplication;
 
-  constructor(props: object) {
+  constructor(props: {}) {
     super(props);
 
     console.log(JSON.stringify(props));
