@@ -17,7 +17,6 @@ function getAuthenticatedClient(accessToken: AuthResponse): Client {
 }
 
 export async function getUserDetails(accessToken: AuthResponse) {
-  console.log(accessToken);
   const client = getAuthenticatedClient(accessToken);
   const user = await client.api("/me").get();
   return user;
