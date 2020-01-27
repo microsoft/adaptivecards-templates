@@ -3,7 +3,7 @@
 To run this web application locally, you must have the following installed on your system:
 
 -   Git
--   [Node v12.14.1](https://nodejs.org/en/download/)
+-   [Node v12](https://nodejs.org/en/download/)
 
 **1. Clone the repository.**
 
