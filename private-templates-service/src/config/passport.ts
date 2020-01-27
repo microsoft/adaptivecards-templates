@@ -1,8 +1,9 @@
-import passport from 'passport';
+import passport, { Strategy } from 'passport';
 import passportAD from 'passport-azure-ad';
 import config from './config';
 import logger from '../util/logger';
 
+// Logging levels for passport
 enum LoggingLevels {
     Info = 'info',
     Warn = 'warn',
@@ -22,8 +23,7 @@ var options = {
     loggingLevel: LoggingLevels.Info
 };
 
-var OIDCBearerStrategy = passportAD.BearerStrategy;
-var bearerStrategy = new OIDCBearerStrategy(options,
+var bearerStrategy = new passportAD.BearerStrategy(options,
     function(token: any, done: Function) {
         logger.info(token, 'was the token retreived');
         if (!token.oid)
