@@ -1,13 +1,15 @@
-import React from "react";
+import React, { ReactElement } from "react";
 import { Button, Jumbotron } from "reactstrap";
 
-interface Props {
+import { UserType } from '../../App';
+
+interface WelcomeProps {
   isAuthenticated: boolean;
-  user: any;
-  authButtonMethod: any;
+  user: UserType;
+  authButtonMethod: () => Promise<void>;
 }
 
-function WelcomeContent(props: any) {
+const WelcomeContent = (props: WelcomeProps): ReactElement => {
   // If authenticated, greet the user
   if (props.isAuthenticated) {
     if (props.user.organization) {
@@ -16,7 +18,7 @@ function WelcomeContent(props: any) {
           <h4>
             Welcome {props.user.displayName} from{" "}
             {props.user.organization}!
-					</h4>
+          </h4>
         </div>
       );
     }
@@ -35,7 +37,7 @@ function WelcomeContent(props: any) {
   );
 }
 
-export default class Welcome extends React.Component<Props> {
+export default class Welcome extends React.Component<WelcomeProps> {
   render() {
     return (
       <Jumbotron>
