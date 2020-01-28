@@ -1,5 +1,5 @@
 
-import { Client } from '@microsoft/microsoft-graph-client';
+import { Client, AuthProviderCallback } from '@microsoft/microsoft-graph-client';
 import { AuthResponse } from 'msal';
 // var graph = require("@microsoft/microsoft-graph-client");
 
@@ -8,7 +8,7 @@ function getAuthenticatedClient(accessToken: AuthResponse): Client {
   const client = Client.init({
     // Use the provided access token to authenticate
     // requests
-    authProvider: (done: any) => {
+    authProvider: (done: AuthProviderCallback): void => {
       done(null, accessToken.accessToken);
     }
   });

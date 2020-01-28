@@ -85,7 +85,7 @@ interface State {
 }
 
 export default class NavBar extends React.Component<NavBarProps, State> {
-  constructor(props: any) {
+  constructor(props: NavBarProps) {
     super(props);
 
     this.state = {
