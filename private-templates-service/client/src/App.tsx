@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route, useHistory } from "react-router-dom";
+
 import { Container } from "reactstrap";
 
 import { UserAgentApplication, ClientAuthError } from "msal";
@@ -13,6 +14,7 @@ import { getUserDetails, getOrgDetails } from "./Services/GraphService";
 import { ErrorMessageProps } from "./components/ErrorMessage/ErrorMessage";
 
 import "bootstrap/dist/css/bootstrap.css";
+import Dashboard from "./Dashboard";
 
 export interface UserType {
 	displayName?: string;
@@ -71,47 +73,56 @@ class App extends Component<{}, State> {
 				/>
 			);
 		}
+		const renderDashboard = () => {
+			if (this.state.isAuthenticated) {
+				return <Dashboard />;
+			} else {
+				return (
+					<Router>
+						<div>
+							<NavBar
+								isAuthenticated={this.state.isAuthenticated}
+								authButtonMethod={
+									this.state.isAuthenticated
+										? this.logout
+										: this.login
+								}
+								user={this.state.user}
+							/>
+							<Route
+								exact
+								path="/"
+								render={props => (
+									<Container>
+										{error}
+										<Welcome
+											{...props}
+											isAuthenticated={
+												this.state.isAuthenticated
+											}
+											user={this.state.user}
+											authButtonMethod={this.login}
+										/>
+									</Container>
+								)}
+							/>
+							<Route
+								exact
+								path="/designer"
+								render={props => <div>DESIGNER PAGE</div>}
+							/>
+							<Route
+								exact
+								path="/dashboard"
+								render={props => <Dashboard></Dashboard>}
+							/>
+						</div>
+					</Router>
+				);
+			}
+		};
 
-		return (
-			<Router>
-				<div>
-					<NavBar
-						isAuthenticated={this.state.isAuthenticated}
-						authButtonMethod={
-							this.state.isAuthenticated
-								? this.logout
-								: this.login
-						}
-						user={this.state.user}
-					/>
-					<Route
-						exact
-						path="/"
-						render={props => (
-							<Container>
-								{error}
-								<Welcome
-									{...props}
-									isAuthenticated={this.state.isAuthenticated}
-									user={this.state.user}
-									authButtonMethod={this.login}
-								/>
-							</Container>
-						)}
-					/>
-					<Route
-						exact
-						path="/designer"
-						render={props => <div>DESIGNER PAGE</div>}
-					/>
-					<Route
-						exact
-						path="/dashboard"
-						render={props => <Dashboard></Dashboard>}
-					/>
-				</div>
-			</Router>
-		);
+		return renderDashboard();
 	}
 
 	login = async () => {
