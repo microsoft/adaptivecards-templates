@@ -80,11 +80,11 @@ export interface NavBarProps {
   user?: UserType,
 }
 
-interface NavBarState {
+interface State {
   isOpen: boolean
 }
 
-export default class NavBar extends React.Component<NavBarProps, NavBarState> {
+export default class NavBar extends React.Component<NavBarProps, State> {
   constructor(props: any) {
     super(props);
 
