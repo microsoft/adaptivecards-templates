@@ -23,7 +23,7 @@ export interface UserType {
 // TODO: use react-redux
 interface State {
   isAuthenticated: boolean;
-  user: UserType;
+  user: UserType | {};
   error: ErrorMessageProps | null;
 }
 
