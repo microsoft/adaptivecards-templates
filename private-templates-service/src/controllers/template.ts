@@ -15,9 +15,26 @@ templateRouter.all('/', passport.authenticate('oauth-bearer', {
     next();
 });
 
+// GET templates route
+const getTemplates = (req: Request, res: Response, next: NextFunction) => {
+    Template.find((err, templates) => {
+        if (err) return next(err);
+        res.json(templates);
+    });
+}
+
+const getTemplateById = (req: Request, res: Response, next: NextFunction) => {
+    const templateId = req.params.id;
+    Template.findById(templateId, (err, template) => {
+        if (err) return res.status(404).send('Template does not exist.');
+        res.json(template);
+    })
+}
+
+// POST templates route
 const postTemplates = async(req: Request, res: Response, next: NextFunction) => {
     // TODO: add more checks to validate template
-    await check("template", "Template is not valid JSON").isJSON().run(req);
+    await check('template', 'Template is not valid JSON.').isJSON().run(req);
 
     const errors = validationResult(req);
 
@@ -27,17 +44,17 @@ const postTemplates = async(req: Request, res: Response, next: NextFunction) => 
     }
 
     // Retrieve bearer token & decode oid
-    var token = req.body.token || req.query.token || req.headers['x-access-token']
-    if (!token){
-        var bearer = req.get('Authorization');
-        if (!bearer) {
-            return res.status(400);
-        }
-        token = bearer.split(/[ ]+/).pop();
+    var bearer = req.get('Authorization');
+    if (!bearer) {
+        return res.status(400).send('No access token was found.');
+    }
+    bearer = bearer.split(/[ ]+/).pop();
+    if (!bearer) {
+        return res.status(400).send('Malformatted access token.');
     }
 
-    var decodedTokenOid = jws.decode(token).payload.oid;
-    logger.info("Owner is: " + decodedTokenOid);
+    var decodedTokenOid = jws.decode(bearer).payload.oid;
+    logger.info('Owner is: ' + decodedTokenOid);
 
     const template = new Template({
         _id: mongoose.Types.ObjectId(),
@@ -54,16 +71,8 @@ const postTemplates = async(req: Request, res: Response, next: NextFunction) => 
     })
 }
 
-templateRouter.post('/', postTemplates);
-
-// create a GET route
-const getTemplates = (req: Request, res: Response, next: NextFunction) => {
-    Template.find({}).exec((err, templates) => {
-        if (err) return next(err);
-        res.json(templates);
-    });
-}
-
 templateRouter.get('/', getTemplates);
+templateRouter.get('/:id', getTemplateById);
+templateRouter.post('/', postTemplates);
 
 export default templateRouter;

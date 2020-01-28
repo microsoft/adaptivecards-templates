@@ -6,14 +6,14 @@ import bodyParser from 'body-parser';
 import mongo from 'connect-mongo';
 import session from 'express-session';
 import bluebird from 'bluebird';
+import logger from './util/logger';
 
 // import controllers
 import templateRouter from './controllers/template';
-import logger from './util/logger';
 
 const app = express();
 
-// connect to temp mongoDB
+// connect to temp mongoDB (will be replaced by adapter)
 const MongoStore = mongo(session);
 mongoose.Promise = bluebird;
 
@@ -34,9 +34,9 @@ app.use(passport.session());
 app.use(session({
     resave: true,
     saveUninitialized: true,
-    secret: "secret",
+    secret: "test",
     store: new MongoStore({
-        url: 'mongodb://localhost/card',
+        url: 'mongodb://localhost/adaptivecard',
         autoReconnect: true
     })
 }));
