@@ -5,13 +5,13 @@ import { UserType } from '../../App';
 
 interface WelcomeProps {
   isAuthenticated: boolean;
-  user: UserType;
+  user?: UserType;
   authButtonMethod: () => Promise<void>;
 }
 
 const WelcomeContent = (props: WelcomeProps): ReactElement => {
   // If authenticated, greet the user
-  if (props.isAuthenticated) {
+  if (props.isAuthenticated && props.user) {
     if (props.user.organization) {
       return (
         <div>

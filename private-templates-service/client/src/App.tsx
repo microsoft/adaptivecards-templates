@@ -14,16 +14,16 @@ import { ErrorMessageProps } from "./components/ErrorMessage/ErrorMessage";
 import "bootstrap/dist/css/bootstrap.css";
 
 export interface UserType {
-  displayName?: string;
-  email?: string;
-  organization?: string;
+  displayName: string;
+  email: string;
+  organization: string;
   avatar?: string;
 }
 
 // TODO: use react-redux
 interface State {
   isAuthenticated: boolean;
-  user: UserType | {};
+  user?: UserType;
   error: ErrorMessageProps | null;
 }
 
@@ -50,7 +50,7 @@ class App extends Component<{}, State> {
 
     this.state = {
       isAuthenticated: user !== null,
-      user: {},
+      user: undefined,
       error: null
     };
 
@@ -138,7 +138,7 @@ class App extends Component<{}, State> {
 
       this.setState({
         isAuthenticated: false,
-        user: {},
+        user: undefined,
         error: error
       });
     }
@@ -202,7 +202,7 @@ class App extends Component<{}, State> {
 
       this.setState({
         isAuthenticated: false,
-        user: {},
+        user: undefined,
         error: error
       });
     }

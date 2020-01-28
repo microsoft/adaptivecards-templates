@@ -21,9 +21,9 @@ import { UserType } from '../../App';
 import "@fortawesome/fontawesome-free/css/all.css";
 import { AvatarIcon, DefaultAvatarIcon } from './styled';
 
-function UserAvatar(props: { user: UserType }): ReactElement {
+function UserAvatar(props: { user?: UserType }): ReactElement {
   // If a user avatar is available, return an img tag with the pic
-  if (props.user.avatar) {
+  if (props.user && props.user.avatar) {
     return (
       <AvatarIcon
         src={props.user.avatar}
@@ -46,7 +46,7 @@ function UserAvatar(props: { user: UserType }): ReactElement {
 function AuthNavItem(props: NavBarProps): ReactElement {
   // If authenticated, return a dropdown with the user's info and a
   // sign out button
-  if (props.isAuthenticated) {
+  if (props.isAuthenticated && props.user) {
     return (
       <UncontrolledDropdown>
         <DropdownToggle nav caret>
@@ -79,7 +79,7 @@ function AuthNavItem(props: NavBarProps): ReactElement {
 export interface NavBarProps {
   isAuthenticated: boolean,
   authButtonMethod: () => void,
-  user: UserType,
+  user?: UserType,
 }
 
 interface State {
