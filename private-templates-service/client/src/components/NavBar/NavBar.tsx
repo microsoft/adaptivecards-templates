@@ -29,7 +29,6 @@ function UserAvatar(props: { user?: UserType }): ReactElement {
         src={props.user.avatar}
         alt="user"
         className="rounded-circle align-self-center mr-2"
-        style={{ width: "32px" }}
       ></AvatarIcon>
     );
   }
@@ -38,7 +37,6 @@ function UserAvatar(props: { user?: UserType }): ReactElement {
   return (
     <DefaultAvatarIcon
       className="far fa-user-circle fa-lg rounded-circle align-self-center mr-2"
-      style={{ width: "32px" }}
     ></DefaultAvatarIcon>
   );
 }
@@ -82,11 +80,11 @@ export interface NavBarProps {
   user?: UserType,
 }
 
-interface State {
+interface NavBarState {
   isOpen: boolean
 }
 
-export default class NavBar extends React.Component<NavBarProps, State> {
+export default class NavBar extends React.Component<NavBarProps, NavBarState> {
   constructor(props: any) {
     super(props);
 

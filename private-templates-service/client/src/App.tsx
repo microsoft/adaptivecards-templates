@@ -46,7 +46,7 @@ class App extends Component<{}, State> {
       }
     });
 
-    var user = this.userAgentApplication.getAccount();
+    let user = this.userAgentApplication.getAccount();
 
     this.state = {
       isAuthenticated: user !== null,
@@ -111,11 +111,11 @@ class App extends Component<{}, State> {
       });
       await this.getUserProfile();
     } catch (err) {
-      var error = {};
+      let error = {};
 
       switch (true) {
         case (typeof err === "string"):
-          var errParts = err.split("|");
+          let errParts = err.split("|");
           error =
             errParts.length > 1
               ? {
@@ -155,7 +155,7 @@ class App extends Component<{}, State> {
       // will just return the cached token. Otherwise, it will
       // make a request to the Azure OAuth endpoint to get a token
 
-      var accessToken = await this.userAgentApplication.acquireTokenSilent(
+      let accessToken = await this.userAgentApplication.acquireTokenSilent(
         {
           scopes: config.scopes
         }
@@ -163,8 +163,8 @@ class App extends Component<{}, State> {
 
       if (accessToken) {
         // Get the user's profile from Graph
-        var user = await getUserDetails(accessToken);
-        var org = await getOrgDetails(accessToken);
+        let user = await getUserDetails(accessToken);
+        let org = await getOrgDetails(accessToken);
         if (org.value.length === 0) {
           org = null;
         } else {
@@ -181,9 +181,9 @@ class App extends Component<{}, State> {
         });
       }
     } catch (err) {
-      var error = {};
+      let error: ErrorMessageProps;
       if (typeof err === "string") {
-        var errParts = err.split("|");
+        let errParts = err.split("|");
         error =
           errParts.length > 1
             ? {
