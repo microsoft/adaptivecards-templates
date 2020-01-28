@@ -17,6 +17,7 @@ const app = express();
 const MongoStore = mongo(session);
 mongoose.Promise = bluebird;
 
+// TODO: Move connection parameters to config once adapter is set up
 mongoose
   .connect("mongodb://localhost/card", {
     useNewUrlParser: true,
