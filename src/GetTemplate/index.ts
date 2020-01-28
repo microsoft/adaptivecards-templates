@@ -6,7 +6,7 @@ import * as ACData from "adaptivecards-templating"
 
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest, templateBlob: any, templatesBlob: any): Promise<void> {
     context.log('HTTP trigger function processed a request.');
-
+    
     if (context.req.url.indexOf("/playground.html") > 0) {
         context.res = {
             body: templateBlob,
