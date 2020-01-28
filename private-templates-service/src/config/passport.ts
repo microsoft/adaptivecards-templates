@@ -3,6 +3,7 @@ import passportAD, { ITokenPayload, VerifyCallback } from 'passport-azure-ad';
 import config from './config';
 import logger from '../util/logger';
 
+// Logging levels for passport
 enum LoggingLevels {
     Info = 'info',
     Warn = 'warn',
