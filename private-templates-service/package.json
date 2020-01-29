@@ -35,9 +35,12 @@
   },
   "devDependencies": {
     "@types/express": "^4.17.2",
+    "@types/jest": "^25.1.0",
     "@types/passport": "^1.0.2",
     "@types/passport-azure-ad": "^4.0.3",
+    "jest": "^25.1.0",
     "office-ui-fabric-react": "^7.85.0",
+    "ts-jest": "^25.0.0",
     "typescript": "^3.7.5"
   }
 }
