@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route, useHistory} from "react-router-dom";
+import { BrowserRouter as Router, Route, Redirect, Switch} from "react-router-dom";
 import { Container } from "reactstrap";
 
 import { UserAgentApplication, ClientAuthError } from "msal";
@@ -86,25 +86,21 @@ class App extends Component<{}, State> {
           />
           <Container>
             {error}
-            <Route
-              exact
-              path="/"
-              render={props => (
+            <Switch>
+              <Route exact path="/">
+                {this.state.isAuthenticated ? <Redirect to="/dashboard"/> : props => (
                 <Welcome
                   {...props}
                   isAuthenticated={this.state.isAuthenticated}
                   user={this.state.user}
                   authButtonMethod={this.login}
                 />
-              )}
-            />
-            <Route
-              exact
-              path="/dashboard"
-              render={props => (
-                <Dashboard/>
-              )}
-            />
+                )}
+              </Route>
+              <Route path="/dashboard">
+                {this.state.isAuthenticated ? <Dashboard/> : <Redirect to="/"/>}
+              </Route>
+            </Switch>
           </Container>
         </div>
       </Router>
@@ -187,7 +183,6 @@ class App extends Component<{}, State> {
           },
           error: null
         });
-        window.history.pushState("","","/dashboard");
       }
     } catch (err) {
       let error: ErrorMessageProps;
