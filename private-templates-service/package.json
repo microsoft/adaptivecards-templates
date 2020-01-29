@@ -8,7 +8,7 @@
     "start": "tsc && node dist/server.js | bunyan",
     "build": "tsc",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "server": "nodemon --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' --exec 'ts-node' src/server.ts | bunyan",
+    "server": "nodemon --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' --exec ts-node src/server.ts | bunyan",
     "client": "cd client && npm start"
   },
   "author": "",
