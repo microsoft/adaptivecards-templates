@@ -1,7 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# Tracking since dist moved into the server folder 
-#dist
+ 
+dist
 
 # dependencies
 node_modules/
