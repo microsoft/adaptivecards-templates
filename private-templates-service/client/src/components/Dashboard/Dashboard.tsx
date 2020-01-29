@@ -5,6 +5,7 @@ interface State {}
 
 interface DashboardProps {
 	isAuthenticated: boolean
+	authButtonMethod: () => Promise<void>;
 }
 
 class Dashboard extends React.Component<DashboardProps, State> {

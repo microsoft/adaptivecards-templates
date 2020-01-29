@@ -88,20 +88,16 @@ class App extends Component<{}, State> {
             {error}
             <Switch>
               <Route exact path="/">
-                {this.state.isAuthenticated ? <Redirect to="/dashboard"/> : props => (
-                <Welcome
-                  {...props}
+                <Dashboard
                   isAuthenticated={this.state.isAuthenticated}
-                  user={this.state.user}
                   authButtonMethod={this.login}
                 />
-                )}
               </Route>
-              <Route exact path="/dashboard">
+              {/* <Route exact path="/dashboard">
                 <Dashboard
                   isAuthenticated={this.state.isAuthenticated}
                 />
-              </Route>
+              </Route> */}
             </Switch>
           </Container>
         </div>
