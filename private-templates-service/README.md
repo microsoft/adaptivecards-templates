@@ -20,6 +20,10 @@ Modify the file `adaptivecards-templates/private-templates-service/client/src/Co
 
 **You're good to go!**
 
+## Development
+
+Assuming you have performed `npm install` for both directories, run `npm run dev` in `adaptivecards-templates/private-templates-service/` to have both client and server running in a single terminal. It performs autoloading for both environments. Open `localhost:3000` in your browser.
+
 ## Troubleshooting
 
 -   When running `npm start`, confirm in your shell that the localhost port matches the port in the `Config.tsx` redirectUri. It should be port 3000 but it can be different.
