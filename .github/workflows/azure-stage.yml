@@ -9,40 +9,51 @@
 # For more information on GitHub Actions for Azure, refer to https://github.com/Azure/Actions
 # For more samples to get started with GitHub Action workflows to deploy to Azure, refer to https://github.com/Azure/actions-workflow-samples
 on:
-  push:
-    branches:
-      - stage
+    push:
+        branches:
+            - users/daniellemott/tsx_backend_testing
 
 env:
-  AZURE_WEBAPP_NAME: adaptivecms    # set this to your application's name
-  AZURE_WEBAPP_PACKAGE_PATH: 'private-templates-service/'      # set this to the path to your web app project, defaults to the repository root
-  NODE_VERSION: '12.x'                # set this to the node version to use
+    AZURE_WEBAPP_NAME: adaptivecms # set this to your application's name
+    AZURE_WEBAPP_PACKAGE_PATH: "private-templates-service/" # set this to the path to your web app project, defaults to the repository root
+    NODE_VERSION: "12.x" # set this to the node version to use
 
 jobs:
-  build-and-deploy:
-    name: Build and Deploy
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v2.0.0
-      with:
-        ref: stage
-    - name: Use Node.js ${{ env.NODE_VERSION }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ env.NODE_VERSION }}
-    - name: npm install, build, and test
-      run: |
-        # Build and test the project, then
-        # deploy to Azure Web App.
-        cd private-templates-service/client
-        npm install
-        npm run build --if-present
-        cd ..
-        npm install
-    - name: 'Deploy to Azure WebApp'
-      uses: azure/webapps-deploy@v1
-      with:
-        app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        publish-profile: ${{ secrets.AZURE_ADAPTIVECMS_STAGE }}
-        package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+    build-test-and-deploy:
+        name: Build Test and Deploy
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2.0.0
+              with:
+                  ref: users/daniellemott/tsx_backend_testing
+            - name: Use Node.js ${{ env.NODE_VERSION }}
+              uses: actions/setup-node@v1
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
+            - name: Backend Jest Test
+              if: success()
+              run: |
+                  cd private-templates-service/server
+                  npm install
+                  npm run test
+                  cd ..
+
+            - name: npm install and npm build
+              if: success()
+              run: |
+                  # Build and test the project, then
+                  # deploy to Azure Web App.
+                  cd private-templates-service/client
+                  npm install
+                  npm run build --if-present
+                  cd ..
+                  cd private-templates-service/server
+                  npm install
+            - name: "Deploy to Azure WebApp"
+              if: success()
+              uses: azure/webapps-deploy@v1
+              with:
+                  app-name: ${{ env.AZURE_WEBAPP_NAME }}
+                  publish-profile: ${{ secrets.AZURE_ADAPTIVECMS_STAGE }}
+                  package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}

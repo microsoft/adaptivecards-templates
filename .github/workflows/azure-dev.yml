@@ -31,7 +31,7 @@ jobs:
               uses: actions/setup-node@v1
               with:
                   node-version: ${{ env.NODE_VERSION }}
-            - name: jest-test
+            - name: Backend Jest Test
               if: success()
               run: |
                   cd private-templates-service/server
@@ -39,7 +39,7 @@ jobs:
                   npm run test
                   cd ..
 
-            - name: npm install, test and build
+            - name: npm install and npm build
               if: success()
               run: |
                   # Build and test the project, then
