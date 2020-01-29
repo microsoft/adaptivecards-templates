@@ -32,24 +32,26 @@ jobs:
               with:
                   node-version: ${{ env.NODE_VERSION }}
             - name: Backend Jest Test
-              if: success()
               run: |
                   cd private-templates-service/server
                   npm install
                   npm run test
                   cd ..
-
+            - name: Frontend Jest Test
+              run : | 
+                  cd private-templates-service/client
+                  npm install
+                  npm run test
+                  cd ..        
             - name: npm install and npm build
               if: success()
               run: |
                   # Build and test the project, then
                   # deploy to Azure Web App.
                   cd private-templates-service/client
-                  npm install
                   npm run build --if-present
                   cd ..
                   cd private-templates-service/server
-                  npm install
             - name: "Deploy to Azure WebApp"
               if: success()
               uses: azure/webapps-deploy@v1
