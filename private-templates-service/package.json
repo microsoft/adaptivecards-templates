@@ -40,8 +40,9 @@
     "@types/passport": "^1.0.2",
     "@types/passport-azure-ad": "^4.0.3",
     "concurrently": "^5.1.0",
-    "ts-node-dev": "^1.0.0-pre.44",
+    "nodemon": "^2.0.2",
     "office-ui-fabric-react": "^7.85.0",
+    "ts-node-dev": "^1.0.0-pre.44",
     "typescript": "^3.7.5"
   }
 }
