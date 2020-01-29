@@ -13,6 +13,8 @@
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
+		"@testing-library/jest-dom": "^5.0.2",
+		"@testing-library/react": "^9.4.0",
 		"@types/async": "^3.0.5",
 		"@types/bluebird": "^3.5.29",
 		"@types/body-parser": "^1.17.1",
@@ -40,6 +42,7 @@
 		"@types/passport": "^1.0.2",
 		"@types/passport-azure-ad": "^4.0.3",
 		"jest": "^25.1.0",
+		"jest-dom": "^4.0.0",
 		"office-ui-fabric-react": "^7.85.0",
 		"ts-jest": "^25.0.0",
 		"typescript": "^3.7.5"
