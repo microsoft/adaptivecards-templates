@@ -22,9 +22,14 @@ mongoose
   .connect("mongodb://localhost/card", {
     useNewUrlParser: true,
     useCreateIndex: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    server: {
+      socketOptions: {
+        connectTimeoutMS: 0,
+      }
+    }
   })
-  .then(() => {})
+  .then(() => { })
   .catch(err => {
     logger.error("Mongodb connection error " + err);
   });
