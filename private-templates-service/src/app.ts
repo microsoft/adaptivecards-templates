@@ -18,4 +18,8 @@ app.use(passport.session());
 // Add routers 
 app.use("/template", templateRouter);
 
+app.get('/api/status', (req, res) => {
+  res.status(200).send("Hello World");
+})
+
 export default app;
