@@ -38,11 +38,11 @@ jobs:
                   npm run test
                   cd ..
             - name: Frontend Jest Test
-              run : | 
+              run: |
                   cd private-templates-service/client
                   npm install
                   npm run test
-                  cd ..        
+                  cd ..
             - name: npm install and npm build
               if: success()
               run: |
@@ -51,7 +51,7 @@ jobs:
                   cd private-templates-service/client
                   npm run build --if-present
                   cd ..
-                  cd private-templates-service/server
+                  cd server
             - name: "Deploy to Azure WebApp"
               if: success()
               uses: azure/webapps-deploy@v1
