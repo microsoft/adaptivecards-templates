@@ -97,7 +97,7 @@ class App extends Component<{}, State> {
                 />
                 )}
               </Route>
-              <Route path="/dashboard">
+              <Route exact path="/dashboard">
                 {this.state.isAuthenticated ? <Dashboard/> : <Redirect to="/"/>}
               </Route>
             </Switch>
