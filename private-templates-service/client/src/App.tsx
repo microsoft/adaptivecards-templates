@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, useHistory} from "react-router-dom";
 import { Container } from "reactstrap";
 
 import { UserAgentApplication, ClientAuthError } from "msal";
@@ -12,6 +12,7 @@ import { getUserDetails, getOrgDetails } from "./Services/GraphService";
 import { ErrorMessageProps } from "./components/ErrorMessage/ErrorMessage";
 
 import "bootstrap/dist/css/bootstrap.css";
+import Dashboard from "./components/Dashboard/Dashboard";
 
 export interface UserType {
   displayName: string;
@@ -97,6 +98,13 @@ class App extends Component<{}, State> {
                 />
               )}
             />
+            <Route
+              exact
+              path="/dashboard"
+              render={props => (
+                <Dashboard/>
+              )}
+            />
           </Container>
         </div>
       </Router>
@@ -179,6 +187,7 @@ class App extends Component<{}, State> {
           },
           error: null
         });
+        window.history.pushState("","","/dashboard");
       }
     } catch (err) {
       let error: ErrorMessageProps;
