@@ -216,6 +216,4 @@ class App extends Component<Props, State> {
   };
 }
 
-const VisibleApp = connect(mapStateToProps, mapDispatchToProps)(App);
-
-export default VisibleApp;
+export default connect(mapStateToProps, mapDispatchToProps)(App);

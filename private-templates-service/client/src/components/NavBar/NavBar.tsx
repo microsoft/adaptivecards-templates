@@ -19,14 +19,7 @@ import AuthNavItem from "./AuthNavItem";
 // Styles
 import "@fortawesome/fontawesome-free/css/all.css";
 
-const mapStateToProps = (state: RootState) => {
-  return {
-    isAuthenticated: state.auth.isAuthenticated,
-    user: state.auth.user
-  };
-};
-
-export interface NavBarProps {
+interface NavBarProps {
   authButtonMethod: () => void;
   isAuthenticated: boolean;
   user?: UserType;
@@ -35,6 +28,13 @@ export interface NavBarProps {
 interface State {
   isOpen: boolean;
 }
+
+const mapStateToProps = (state: RootState) => {
+  return {
+    isAuthenticated: state.auth.isAuthenticated,
+    user: state.auth.user
+  };
+};
 
 class NavBar extends React.Component<NavBarProps, State> {
   constructor(props: NavBarProps) {
@@ -49,7 +49,7 @@ class NavBar extends React.Component<NavBarProps, State> {
     this.setState({
       isOpen: !this.state.isOpen
     });
-  };
+  }
 
   render() {
     return (
@@ -74,6 +74,4 @@ class NavBar extends React.Component<NavBarProps, State> {
   }
 }
 
-const VisibleNavBar = connect(mapStateToProps)(NavBar);
-
-export default VisibleNavBar;
+export default connect(mapStateToProps)(NavBar);

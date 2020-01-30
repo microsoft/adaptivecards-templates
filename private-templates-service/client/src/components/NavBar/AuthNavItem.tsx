@@ -10,9 +10,15 @@ import {
   DropdownItem
 } from "reactstrap";
 import UserAvatar from "./UserAvatar";
-import { NavBarProps } from "./NavBar";
 
+import { UserType } from "../../store/auth/types";
 import { RootState } from "../../store/rootReducer";
+
+interface AuthNavItemProps {
+  authButtonMethod: () => void;
+  isAuthenticated: boolean;
+  user?: UserType;
+}
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -21,10 +27,10 @@ const mapStateToProps = (state: RootState) => {
   };
 };
 
-function AuthNavItem(props: NavBarProps): ReactElement {
+function AuthNavItem(props: AuthNavItemProps): ReactElement {
   // If authenticated, return a dropdown with the user's info and a
   // sign out button
-  if (props.isAuthenticated && props.user) {
+  if (props.user) {
     return (
       <UncontrolledDropdown>
         <DropdownToggle nav caret>
@@ -53,6 +59,4 @@ function AuthNavItem(props: NavBarProps): ReactElement {
   );
 }
 
-const VisibleAuthNavItem = connect(mapStateToProps)(AuthNavItem);
-
-export default VisibleAuthNavItem;
+export default connect(mapStateToProps)(AuthNavItem);

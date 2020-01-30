@@ -4,15 +4,19 @@ import { RootState } from "../../store/rootReducer";
 import { UserType } from "../../store/auth/types";
 import { AvatarIcon, DefaultAvatarIcon } from "./styled";
 
+interface UserAvatarProps {
+  user?: UserType;
+}
+
 const mapStateToProps = (state: RootState) => {
   return {
     user: state.auth.user
   };
 };
 
-export function UserAvatar(props: { user?: UserType }): ReactElement {
+export function UserAvatar(props: UserAvatarProps): ReactElement {
   // If a user avatar is available, return an img tag with the pic
-  if (props.user && "avatar" in props.user) {
+  if (props.user && props.user.avatar) {
     return (
       <AvatarIcon
         src={props.user.avatar}
@@ -27,6 +31,4 @@ export function UserAvatar(props: { user?: UserType }): ReactElement {
   );
 }
 
-const VisibleUserAvatar = connect(mapStateToProps)(UserAvatar);
-
-export default VisibleUserAvatar;
+export default connect(mapStateToProps)(UserAvatar);

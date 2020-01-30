@@ -11,6 +11,6 @@ export function login(user: UserType): AuthAction {
 export function logout(): AuthAction {
   return {
     type: LOGOUT,
-    text: 'User Logout'
+    text: 'User logout'
   }
 }
