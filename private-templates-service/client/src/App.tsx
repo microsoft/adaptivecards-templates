@@ -81,10 +81,6 @@ class App extends Component<Props, State> {
     }
   }
 
-  componentDidUpdate(prevProps: Props) {
-    console.log("New App.tsx Props", this.props);
-  }
-
   render() {
     let error = null;
     if (this.state.error) {

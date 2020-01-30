@@ -28,7 +28,7 @@ const WelcomeContent = (props: WelcomeProps): ReactElement => {
           <h4>
             Welcome {props.user.displayName} from{" "}
             {props.user.organization}!
-					</h4>
+          </h4>
         </div>
       );
     }
@@ -44,7 +44,7 @@ const WelcomeContent = (props: WelcomeProps): ReactElement => {
     <React.Fragment>
       <Button color="primary" onClick={props.authButtonMethod}>
         Click here to sign in
-			</Button>
+      </Button>
     </React.Fragment>
   );
 };
