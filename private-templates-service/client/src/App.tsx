@@ -12,7 +12,7 @@ import { getUserDetails, getOrgDetails } from "./Services/GraphService";
 import { ErrorMessageProps } from "./components/ErrorMessage/ErrorMessage";
 
 import "bootstrap/dist/css/bootstrap.css";
-import Dashboard from "./components/Dashboard/Dashboard";
+import Dashboard from "./components/Dashboard";
 
 export interface UserType {
   displayName: string;
@@ -91,13 +91,9 @@ class App extends Component<{}, State> {
                 <Dashboard
                   isAuthenticated={this.state.isAuthenticated}
                   authButtonMethod={this.login}
+                  user={this.state.user}
                 />
               </Route>
-              {/* <Route exact path="/dashboard">
-                <Dashboard
-                  isAuthenticated={this.state.isAuthenticated}
-                />
-              </Route> */}
             </Switch>
           </Container>
         </div>

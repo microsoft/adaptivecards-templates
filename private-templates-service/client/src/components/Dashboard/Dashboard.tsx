@@ -1,5 +1,5 @@
 import React from "react";
-import { requireAuthentication } from "../../AuthenticatedComponent";
+import requireAuthentication from "../../requireAuthentication";
 
 interface State {}
 
