@@ -1,9 +1,15 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { Container } from "reactstrap";
-
 import { UserAgentApplication, ClientAuthError } from "msal";
 
+// Redux
+import { connect } from "react-redux";
+import { login, logout } from "./store/auth/actions";
+import { UserType } from "./store/auth/types";
+import { RootState } from "./store/rootReducer";
+
+// Components
 import NavBar from "./components/NavBar/NavBar";
 import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
 import Welcome from "./components/Welcome/Welcome";
@@ -11,30 +17,43 @@ import config from "./Config";
 import { getUserDetails, getOrgDetails } from "./Services/GraphService";
 import { ErrorMessageProps } from "./components/ErrorMessage/ErrorMessage";
 
+// CSS
 import "bootstrap/dist/css/bootstrap.css";
 
-export interface UserType {
-  displayName: string;
-  email: string;
-  organization: string;
-  avatar?: string;
-}
-
-// TODO: use react-redux
 interface State {
-  isAuthenticated: boolean;
-  user?: UserType;
   error: ErrorMessageProps | null;
 }
 
-class App extends Component<{}, State> {
+const mapStateToProps = (state: RootState) => {
+  return {
+    isAuthenticated: state.auth.isAuthenticated,
+    user: state.auth.user
+  };
+};
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    userLogin: (user: UserType) => {
+      dispatch(login(user));
+    },
+    userLogout: () => {
+      dispatch(logout());
+    }
+  };
+};
+
+interface Props {
+  userLogin: (user: UserType) => void;
+  userLogout: () => void;
+  isAuthenticated: boolean;
+  user?: UserType;
+}
+
+class App extends Component<Props, State> {
   userAgentApplication: UserAgentApplication;
 
-  constructor(props: {}) {
+  constructor(props: Props) {
     super(props);
-
-    console.log(JSON.stringify(props));
-
     this.userAgentApplication = new UserAgentApplication({
       auth: {
         clientId: config.appId,
@@ -49,8 +68,6 @@ class App extends Component<{}, State> {
     let user = this.userAgentApplication.getAccount();
 
     this.state = {
-      isAuthenticated: user !== null,
-      user: undefined,
       error: null
     };
 
@@ -75,13 +92,11 @@ class App extends Component<{}, State> {
       <Router>
         <div>
           <NavBar
-            isAuthenticated={this.state.isAuthenticated}
             authButtonMethod={
-              this.state.isAuthenticated
+              this.props.isAuthenticated
                 ? this.logout
                 : this.login
             }
-            user={this.state.user}
           />
           <Container>
             {error}
@@ -91,8 +106,6 @@ class App extends Component<{}, State> {
               render={props => (
                 <Welcome
                   {...props}
-                  isAuthenticated={this.state.isAuthenticated}
-                  user={this.state.user}
                   authButtonMethod={this.login}
                 />
               )}
@@ -114,7 +127,7 @@ class App extends Component<{}, State> {
       let error = {};
 
       switch (true) {
-        case (typeof err === "string"):
+        case typeof err === "string":
           let errParts = err.split("|");
           error =
             errParts.length > 1
@@ -126,7 +139,7 @@ class App extends Component<{}, State> {
                 message: err
               };
           break;
-        case (err instanceof ClientAuthError):
+        case err instanceof ClientAuthError:
           error = {
             message: err.message,
             debug: JSON.stringify(err)
@@ -137,16 +150,15 @@ class App extends Component<{}, State> {
       }
 
       this.setState({
-        isAuthenticated: false,
-        user: undefined,
         error: error
       });
     }
-  }
+  };
 
   logout = () => {
     this.userAgentApplication.logout();
-  }
+    this.props.userLogout();
+  };
 
   getUserProfile = async () => {
     try {
@@ -170,14 +182,11 @@ class App extends Component<{}, State> {
         } else {
           org = org.value[0].displayName;
         }
-        this.setState({
-          isAuthenticated: true,
-          user: {
-            displayName: user.displayName,
-            email: user.mail || user.userPrincipalName,
-            organization: org
-          },
-          error: null
+
+        this.props.userLogin({
+          displayName: user.displayName,
+          email: user.mail || user.userPrincipalName,
+          organization: org
         });
       }
     } catch (err) {
@@ -201,12 +210,10 @@ class App extends Component<{}, State> {
       }
 
       this.setState({
-        isAuthenticated: false,
-        user: undefined,
         error: error
       });
     }
-  }
+  };
 }
 
-export default App;
+export default connect(mapStateToProps, mapDispatchToProps)(App);
