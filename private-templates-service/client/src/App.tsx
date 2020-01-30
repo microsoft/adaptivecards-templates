@@ -1,12 +1,11 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route, Redirect, Switch} from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import { Container } from "reactstrap";
 
 import { UserAgentApplication, ClientAuthError } from "msal";
 
 import NavBar from "./components/NavBar/NavBar";
 import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
-import Welcome from "./components/Welcome/Welcome";
 import config from "./Config";
 import { getUserDetails, getOrgDetails } from "./Services/GraphService";
 import { ErrorMessageProps } from "./components/ErrorMessage/ErrorMessage";
