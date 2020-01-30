@@ -6,13 +6,13 @@ import { AvatarIcon, DefaultAvatarIcon } from "./styled";
 
 const mapStateToProps = (state: RootState) => {
   return {
-    user: state.user
+    user: state.auth.user
   };
 };
 
-export function UserAvatar(props: { user: UserType | {} }): ReactElement {
+export function UserAvatar(props: { user?: UserType }): ReactElement {
   // If a user avatar is available, return an img tag with the pic
-  if ("avatar" in props.user) {
+  if (props.user && "avatar" in props.user) {
     return (
       <AvatarIcon
         src={props.user.avatar}

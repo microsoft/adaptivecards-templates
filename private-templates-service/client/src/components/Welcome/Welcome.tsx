@@ -8,33 +8,25 @@ import { connect } from "react-redux";
 
 interface WelcomeProps {
   isAuthenticated: boolean;
-  user: UserType | {};
+  user?: UserType;
   authButtonMethod: () => Promise<void>;
 }
 
 const mapStateToProps = (state: RootState) => {
   return {
-    isAuthenticated: state.isAuthenticated,
-    user: state.user
+    isAuthenticated: state.auth.isAuthenticated,
+    user: state.auth.user,
   };
 };
 
 const WelcomeContent = (props: WelcomeProps): ReactElement => {
   // If authenticated, greet the user
-  if (props.isAuthenticated && "displayName" in props.user) {
-    if ("organization" in props.user) {
-      return (
-        <div>
-          <h4>
-            Welcome {props.user.displayName} from{" "}
-            {props.user.organization}!
-          </h4>
-        </div>
-      );
-    }
+  if (props.isAuthenticated && props.user && "displayName" in props.user) {
     return (
       <div>
-        <h4>Welcome {props.user.displayName}!</h4>
+        <h4>
+          Welcome {props.user.displayName}{props.user.organization && " from " + props.user.organization}!
+        </h4>
       </div>
     );
   }

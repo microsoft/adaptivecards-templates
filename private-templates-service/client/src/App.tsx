@@ -20,21 +20,20 @@ import { ErrorMessageProps } from "./components/ErrorMessage/ErrorMessage";
 // CSS
 import "bootstrap/dist/css/bootstrap.css";
 
-// TODO: use react-redux
 interface State {
   error: ErrorMessageProps | null;
 }
 
 const mapStateToProps = (state: RootState) => {
   return {
-    isAuthenticated: state.isAuthenticated,
-    user: state.user
+    isAuthenticated: state.auth.isAuthenticated,
+    user: state.auth.user
   };
 };
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    userLogin: (user: any) => {
+    userLogin: (user: UserType) => {
       dispatch(login(user));
     },
     userLogout: () => {
@@ -44,10 +43,10 @@ const mapDispatchToProps = (dispatch: any) => {
 };
 
 interface Props {
-  userLogin: (user: any) => void;
+  userLogin: (user: UserType) => void;
   userLogout: () => void;
-  user: UserType | {};
   isAuthenticated: boolean;
+  user?: UserType;
 }
 
 class App extends Component<Props, State> {
@@ -55,9 +54,6 @@ class App extends Component<Props, State> {
 
   constructor(props: Props) {
     super(props);
-
-    console.log(JSON.stringify(props));
-
     this.userAgentApplication = new UserAgentApplication({
       auth: {
         clientId: config.appId,

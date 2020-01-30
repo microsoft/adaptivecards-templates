@@ -21,15 +21,15 @@ import "@fortawesome/fontawesome-free/css/all.css";
 
 const mapStateToProps = (state: RootState) => {
   return {
-    isAuthenticated: state.isAuthenticated,
-    user: state.user
+    isAuthenticated: state.auth.isAuthenticated,
+    user: state.auth.user
   };
 };
 
 export interface NavBarProps {
-  isAuthenticated: boolean;
   authButtonMethod: () => void;
-  user: UserType | {};
+  isAuthenticated: boolean;
+  user?: UserType;
 }
 
 interface State {

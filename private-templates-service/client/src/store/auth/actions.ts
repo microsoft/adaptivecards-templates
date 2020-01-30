@@ -1,6 +1,6 @@
-import { LOGIN, LOGOUT, AuthTypes } from './types';
+import { LOGIN, LOGOUT, UserType, AuthAction } from './types';
 
-export function login(user: any): AuthTypes {
+export function login(user: UserType): AuthAction {
   return {
     type: LOGIN,
     text: 'User login',
@@ -8,7 +8,7 @@ export function login(user: any): AuthTypes {
   }
 }
 
-export function logout(): AuthTypes {
+export function logout(): AuthAction {
   return {
     type: LOGOUT,
     text: 'User Logout'

@@ -1,3 +1,8 @@
+export interface AuthState {
+  isAuthenticated: boolean;
+  user?: UserType;
+}
+
 export interface UserType {
   displayName: string;
   email: string;
@@ -10,15 +15,8 @@ export const LOGIN = 'LOGIN';
 export const LOGOUT = 'LOGOUT';
 
 // Actions
-interface LoginAction {
-  type: typeof LOGIN;
+export interface AuthAction {
+  type: typeof LOGIN | typeof LOGOUT;
   text: string;
-  user: UserType;
+  user?: UserType;
 }
-
-interface LogoutAction {
-  type: typeof LOGOUT;
-  text: string;
-}
-
-export type AuthTypes = LoginAction | LogoutAction;

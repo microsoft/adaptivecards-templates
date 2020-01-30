@@ -16,15 +16,15 @@ import { RootState } from "../../store/rootReducer";
 
 const mapStateToProps = (state: RootState) => {
   return {
-    isAuthenticated: state.isAuthenticated,
-    user: state.user
+    isAuthenticated: state.auth.isAuthenticated,
+    user: state.auth.user
   };
 };
 
 function AuthNavItem(props: NavBarProps): ReactElement {
   // If authenticated, return a dropdown with the user's info and a
   // sign out button
-  if (props.isAuthenticated && "displayName" in props.user) {
+  if (props.isAuthenticated && props.user) {
     return (
       <UncontrolledDropdown>
         <DropdownToggle nav caret>

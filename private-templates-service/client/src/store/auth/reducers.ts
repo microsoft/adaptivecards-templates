@@ -1,29 +1,30 @@
-import { UserType } from './types';
-
 import {
-  AuthTypes,
+  AuthState,
+  AuthAction,
   LOGIN,
   LOGOUT,
 } from './types';
 
-export function isAuthenticatedReducer(state = false, action: AuthTypes): Boolean {
-  switch (action.type) {
-    case LOGIN:
-      return true;
-    case LOGOUT:
-      return false;
-    default:
-      return state;
-  }
+const initialState: AuthState = {
+  isAuthenticated: false,
+  user: undefined,
 }
 
-export function userReducer(state = {}, action: AuthTypes): UserType | {} {
-  console.log("user", state, action);
+export function authReducer(state = initialState, action: AuthAction): AuthState {
   switch (action.type) {
     case LOGIN:
-      return action.user;
+      return {
+        ...state,
+        isAuthenticated: true,
+        user: action.user
+      }
+
     case LOGOUT:
-      return {}
+      return {
+        ...state,
+        isAuthenticated: false,
+        user: undefined
+      }
     default:
       return state;
   }
