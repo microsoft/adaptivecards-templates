@@ -22,206 +22,206 @@ import "bootstrap/dist/css/bootstrap.css";
 
 // TODO: use react-redux
 interface State {
-	error: ErrorMessageProps | null;
+  error: ErrorMessageProps | null;
 }
 
 const mapStateToProps = (state: RootState) => {
-	return {
-		isAuthenticated: state.isAuthenticated,
-		user: state.user
-	};
+  return {
+    isAuthenticated: state.isAuthenticated,
+    user: state.user
+  };
 };
 
 const mapDispatchToProps = (dispatch: any) => {
-	return {
-		userLogin: (user: any) => {
-			dispatch(login(user));
-		},
-		userLogout: () => {
-			dispatch(logout());
-		}
-	};
+  return {
+    userLogin: (user: any) => {
+      dispatch(login(user));
+    },
+    userLogout: () => {
+      dispatch(logout());
+    }
+  };
 };
 
 interface Props {
-	userLogin: (user: any) => void;
-	userLogout: () => void;
-	user: UserType | {};
-	isAuthenticated: boolean;
+  userLogin: (user: any) => void;
+  userLogout: () => void;
+  user: UserType | {};
+  isAuthenticated: boolean;
 }
 
 class App extends Component<Props, State> {
-	userAgentApplication: UserAgentApplication;
+  userAgentApplication: UserAgentApplication;
 
-	constructor(props: Props) {
-		super(props);
+  constructor(props: Props) {
+    super(props);
 
-		console.log(JSON.stringify(props));
+    console.log(JSON.stringify(props));
 
-		this.userAgentApplication = new UserAgentApplication({
-			auth: {
-				clientId: config.appId,
-				redirectUri: config.redirectUri
-			},
-			cache: {
-				cacheLocation: "localStorage",
-				storeAuthStateInCookie: true
-			}
-		});
+    this.userAgentApplication = new UserAgentApplication({
+      auth: {
+        clientId: config.appId,
+        redirectUri: config.redirectUri
+      },
+      cache: {
+        cacheLocation: "localStorage",
+        storeAuthStateInCookie: true
+      }
+    });
 
-		let user = this.userAgentApplication.getAccount();
+    let user = this.userAgentApplication.getAccount();
 
-		this.state = {
-			error: null
-		};
+    this.state = {
+      error: null
+    };
 
-		if (user) {
-			// Enhance user object with data from Graph
-			this.getUserProfile();
-		}
-	}
+    if (user) {
+      // Enhance user object with data from Graph
+      this.getUserProfile();
+    }
+  }
 
-	componentDidUpdate(prevProps: Props) {
-		console.log("New App.tsx Props", this.props);
-	}
+  componentDidUpdate(prevProps: Props) {
+    console.log("New App.tsx Props", this.props);
+  }
 
-	render() {
-		let error = null;
-		if (this.state.error) {
-			error = (
-				<ErrorMessage
-					message={this.state.error.message}
-					debug={this.state.error.debug}
-				/>
-			);
-		}
+  render() {
+    let error = null;
+    if (this.state.error) {
+      error = (
+        <ErrorMessage
+          message={this.state.error.message}
+          debug={this.state.error.debug}
+        />
+      );
+    }
 
-		return (
-			<Router>
-				<div>
-					<NavBar
-						authButtonMethod={
-							this.props.isAuthenticated
-								? this.logout
-								: this.login
-						}
-					/>
-					<Container>
-						{error}
-						<Route
-							exact
-							path="/"
-							render={props => (
-								<Welcome
-									{...props}
-									authButtonMethod={this.login}
-								/>
-							)}
-						/>
-					</Container>
-				</div>
-			</Router>
-		);
-	}
+    return (
+      <Router>
+        <div>
+          <NavBar
+            authButtonMethod={
+              this.props.isAuthenticated
+                ? this.logout
+                : this.login
+            }
+          />
+          <Container>
+            {error}
+            <Route
+              exact
+              path="/"
+              render={props => (
+                <Welcome
+                  {...props}
+                  authButtonMethod={this.login}
+                />
+              )}
+            />
+          </Container>
+        </div>
+      </Router>
+    );
+  }
 
-	login = async () => {
-		try {
-			await this.userAgentApplication.loginPopup({
-				scopes: config.scopes,
-				prompt: "select_account"
-			});
-			await this.getUserProfile();
-		} catch (err) {
-			let error = {};
+  login = async () => {
+    try {
+      await this.userAgentApplication.loginPopup({
+        scopes: config.scopes,
+        prompt: "select_account"
+      });
+      await this.getUserProfile();
+    } catch (err) {
+      let error = {};
 
-			switch (true) {
-				case typeof err === "string":
-					let errParts = err.split("|");
-					error =
-						errParts.length > 1
-							? {
-									message: errParts[1],
-									debug: errParts[0]
-							  }
-							: {
-									message: err
-							  };
-					break;
-				case err instanceof ClientAuthError:
-					error = {
-						message: err.message,
-						debug: JSON.stringify(err)
-					};
-					break;
-				default:
-					console.log("Unexpected authentication error: ", err);
-			}
+      switch (true) {
+        case typeof err === "string":
+          let errParts = err.split("|");
+          error =
+            errParts.length > 1
+              ? {
+                message: errParts[1],
+                debug: errParts[0]
+              }
+              : {
+                message: err
+              };
+          break;
+        case err instanceof ClientAuthError:
+          error = {
+            message: err.message,
+            debug: JSON.stringify(err)
+          };
+          break;
+        default:
+          console.log("Unexpected authentication error: ", err);
+      }
 
-			this.setState({
-				error: error
-			});
-		}
-	};
+      this.setState({
+        error: error
+      });
+    }
+  };
 
-	logout = () => {
-		this.userAgentApplication.logout();
-		this.props.userLogout();
-	};
+  logout = () => {
+    this.userAgentApplication.logout();
+    this.props.userLogout();
+  };
 
-	getUserProfile = async () => {
-		try {
-			// Get the access token silently
-			// If the cache contains a non-expired token, this function
-			// will just return the cached token. Otherwise, it will
-			// make a request to the Azure OAuth endpoint to get a token
+  getUserProfile = async () => {
+    try {
+      // Get the access token silently
+      // If the cache contains a non-expired token, this function
+      // will just return the cached token. Otherwise, it will
+      // make a request to the Azure OAuth endpoint to get a token
 
-			let accessToken = await this.userAgentApplication.acquireTokenSilent(
-				{
-					scopes: config.scopes
-				}
-			);
+      let accessToken = await this.userAgentApplication.acquireTokenSilent(
+        {
+          scopes: config.scopes
+        }
+      );
 
-			if (accessToken) {
-				// Get the user's profile from Graph
-				let user = await getUserDetails(accessToken);
-				let org = await getOrgDetails(accessToken);
-				if (org.value.length === 0) {
-					org = null;
-				} else {
-					org = org.value[0].displayName;
-				}
+      if (accessToken) {
+        // Get the user's profile from Graph
+        let user = await getUserDetails(accessToken);
+        let org = await getOrgDetails(accessToken);
+        if (org.value.length === 0) {
+          org = null;
+        } else {
+          org = org.value[0].displayName;
+        }
 
-				this.props.userLogin({
-					displayName: user.displayName,
-					email: user.mail || user.userPrincipalName,
-					organization: org
-				});
-			}
-		} catch (err) {
-			let error: ErrorMessageProps;
-			if (typeof err === "string") {
-				let errParts = err.split("|");
-				error =
-					errParts.length > 1
-						? {
-								message: errParts[1],
-								debug: errParts[0]
-						  }
-						: {
-								message: err
-						  };
-			} else {
-				error = {
-					message: err.message,
-					debug: JSON.stringify(err)
-				};
-			}
+        this.props.userLogin({
+          displayName: user.displayName,
+          email: user.mail || user.userPrincipalName,
+          organization: org
+        });
+      }
+    } catch (err) {
+      let error: ErrorMessageProps;
+      if (typeof err === "string") {
+        let errParts = err.split("|");
+        error =
+          errParts.length > 1
+            ? {
+              message: errParts[1],
+              debug: errParts[0]
+            }
+            : {
+              message: err
+            };
+      } else {
+        error = {
+          message: err.message,
+          debug: JSON.stringify(err)
+        };
+      }
 
-			this.setState({
-				error: error
-			});
-		}
-	};
+      this.setState({
+        error: error
+      });
+    }
+  };
 }
 
 const VisibleApp = connect(mapStateToProps, mapDispatchToProps)(App);
