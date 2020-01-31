@@ -101,9 +101,7 @@ class App extends Component<Props, State> {
             {error}
             <Switch>
               <Route exact path="/">
-                <Dashboard
-                  authButtonMethod={this.login}
-                />
+                <Dashboard authButtonMethod={this.login} />
               </Route>
             </Switch>
           </Container>

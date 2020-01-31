@@ -1,10 +1,10 @@
 import React from "react";
-import requireAuthentication from "../../utils/requireAuthentication";
 
 import { RootState } from "../../store/rootReducer";
 import { UserType } from "../../store/auth/types";
 import { connect } from "react-redux";
 import { ErrorMessageProps } from "../ErrorMessage/ErrorMessage";
+import requireAuthentication from "../../utils/requireAuthentication";
 
 const mapStateToProps = (state: RootState) => {
 	return {
@@ -29,4 +29,4 @@ class Dashboard extends React.Component<DashboardProps, DashboardStates> {
 	}
 }
 
-export default requireAuthentication(connect(mapStateToProps)(Dashboard));
+export default connect(mapStateToProps)(requireAuthentication(Dashboard));

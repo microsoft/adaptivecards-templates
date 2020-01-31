@@ -18,12 +18,6 @@ interface WelcomeProps {
   authButtonMethod: () => Promise<void>;
 }
 
-const mapStateToProps = (state: RootState) => {
-  return {
-    user: state.auth.user,
-  };
-}
-
 const WelcomeContent = (props: WelcomeProps): ReactElement => {
   // If authenticated, greet the user
   if (props.user && props.user.displayName) {
@@ -61,4 +55,4 @@ class Welcome extends React.Component<WelcomeProps> {
   }
 }
 
-export default connect(mapStateToProps)(Welcome);
+export default connect(mapStateToPropsWelcome, null)(Welcome);

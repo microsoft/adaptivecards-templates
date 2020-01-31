@@ -35,4 +35,4 @@ const requireAuthentication = <P extends object>(Component: React.ComponentType<
   };
 }
 
-export default connect(mapStateToProps)(requireAuthentication);
+export default (c: any) => connect(mapStateToProps)(requireAuthentication(c));
