@@ -19,6 +19,8 @@ import { ErrorMessageProps } from "./components/ErrorMessage/ErrorMessage";
 
 // CSS
 import "bootstrap/dist/css/bootstrap.css";
+import { OuterAppWrapper, MainAppWrapper, MainApp } from "./styled";
+import SideBar from "./components/SideBar/SideBar";
 
 interface State {
   error: ErrorMessageProps | null;
@@ -90,28 +92,38 @@ class App extends Component<Props, State> {
 
     return (
       <Router>
-        <div>
-          <NavBar
+        <OuterAppWrapper>
+          <SideBar
             authButtonMethod={
               this.props.isAuthenticated
                 ? this.logout
                 : this.login
             }
           />
-          <Container>
-            {error}
-            <Route
-              exact
-              path="/"
-              render={props => (
-                <Welcome
-                  {...props}
-                  authButtonMethod={this.login}
-                />
-              )}
+
+          <MainAppWrapper>
+            <NavBar
+              authButtonMethod={
+                this.props.isAuthenticated
+                  ? this.logout
+                  : this.login
+              }
             />
-          </Container>
-        </div>
+            <MainApp>
+              {error}
+              <Route
+                exact
+                path="/"
+                render={props => (
+                  <Welcome
+                    {...props}
+                    authButtonMethod={this.login}
+                  />
+                )}
+              />
+            </MainApp>
+          </MainAppWrapper>
+        </OuterAppWrapper>
       </Router>
     );
   }

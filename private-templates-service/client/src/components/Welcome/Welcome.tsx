@@ -5,6 +5,8 @@ import { RootState } from "../../store/rootReducer";
 
 import { Button, Jumbotron } from "reactstrap";
 import { connect } from "react-redux";
+import { OuterSideBarWrapper } from "../SideBar/styled";
+import { OuterWrapper } from "./styled";
 
 interface WelcomeProps {
   user?: UserType;
@@ -42,14 +44,14 @@ const WelcomeContent = (props: WelcomeProps): ReactElement => {
 class Welcome extends React.Component<WelcomeProps> {
   render() {
     return (
-      <Jumbotron>
+      <OuterWrapper>
         <h1>Admin Portal</h1>
         <p className="lead">Basic authentication test.</p>
         <WelcomeContent
           user={this.props.user}
           authButtonMethod={this.props.authButtonMethod}
         />
-      </Jumbotron>
+      </OuterWrapper>
     );
   }
 }
