@@ -6,6 +6,13 @@ import { RootState } from "../../store/rootReducer";
 import { Button, Jumbotron } from "reactstrap";
 import { connect } from "react-redux";
 
+const mapStateToPropsWelcome = (state: RootState) => {
+  return {
+    isAuthenticated: state.auth.isAuthenticated,
+    user: state.auth.user
+  };
+};
+
 interface WelcomeProps {
   user?: UserType;
   authButtonMethod: () => Promise<void>;

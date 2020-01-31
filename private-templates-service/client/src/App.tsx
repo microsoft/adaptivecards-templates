@@ -102,9 +102,7 @@ class App extends Component<Props, State> {
             <Switch>
               <Route exact path="/">
                 <Dashboard
-                  isAuthenticated={this.state.isAuthenticated}
                   authButtonMethod={this.login}
-                  user={this.state.user}
                 />
               </Route>
             </Switch>

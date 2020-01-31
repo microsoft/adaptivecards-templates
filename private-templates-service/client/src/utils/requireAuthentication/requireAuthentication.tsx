@@ -1,12 +1,22 @@
 import React from "react";
-import { UserType } from "../App";
-import Welcome from "../components/Welcome/Welcome";
+import Welcome from "../../components/Welcome/Welcome";
+
+import { UserType } from '../../store/auth/types';
+import { RootState } from "../../store/rootReducer";
+import { connect } from "react-redux";
 
 interface AuthProps {
   isAuthenticated: boolean,
   user?: UserType,
   authButtonMethod: () => Promise<void>
 }
+
+const mapStateToProps = (state: RootState) => {
+  return {
+    isAuthenticated: state.auth.isAuthenticated,
+    user: state.auth.user
+  };
+};
 
 const requireAuthentication = <P extends object>(Component: React.ComponentType<P>) => {
   return class AuthenticatedComponent extends React.Component<P & AuthProps> {
@@ -25,4 +35,4 @@ const requireAuthentication = <P extends object>(Component: React.ComponentType<
   };
 }
 
-export default requireAuthentication;
+export default connect(mapStateToProps)(requireAuthentication);
