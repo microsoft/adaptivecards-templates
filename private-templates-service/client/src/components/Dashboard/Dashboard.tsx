@@ -18,8 +18,8 @@ interface DashboardStates {
 }
 
 interface DashboardProps {
-	isAuthenticated: boolean
-	user?: UserType
+	isAuthenticated: boolean;
+	user?: UserType;
 	authButtonMethod: () => Promise<void>;
 }
 

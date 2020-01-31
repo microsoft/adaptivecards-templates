@@ -19,17 +19,6 @@ interface WelcomeProps {
 }
 
 const WelcomeContent = (props: WelcomeProps): ReactElement => {
-  // If authenticated, greet the user
-  if (props.user && props.user.displayName) {
-    return (
-      <div>
-        <h4>
-          Welcome {props.user.displayName}{props.user.organization && " from " + props.user.organization}!
-        </h4>
-      </div>
-    );
-  }
-
   // Not authenticated, present a sign in button
   return (
     <React.Fragment>
@@ -55,4 +44,4 @@ class Welcome extends React.Component<WelcomeProps> {
   }
 }
 
-export default connect(mapStateToPropsWelcome, null)(Welcome);
+export default connect(mapStateToPropsWelcome)(Welcome);

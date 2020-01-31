@@ -11,13 +11,13 @@ import { RootState } from "./store/rootReducer";
 
 // Components
 import NavBar from "./components/NavBar/NavBar";
-import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
+import Dashboard from "./components/Dashboard";
+import ErrorMessage, { ErrorMessageProps } from "./components/ErrorMessage/ErrorMessage";
 import config from "./Config";
 import { getUserDetails, getOrgDetails } from "./Services/GraphService";
-import { ErrorMessageProps } from "./components/ErrorMessage/ErrorMessage";
+
 // CSS
 import "bootstrap/dist/css/bootstrap.css";
-import Dashboard from "./components/Dashboard";
 
 interface State {
   error: ErrorMessageProps | null;
