@@ -6,29 +6,19 @@ import { RootState } from "../../store/rootReducer";
 import { Button, Jumbotron } from "reactstrap";
 import { connect } from "react-redux";
 
+const mapStateToPropsWelcome = (state: RootState) => {
+  return {
+    isAuthenticated: state.auth.isAuthenticated,
+    user: state.auth.user
+  };
+};
+
 interface WelcomeProps {
   user?: UserType;
   authButtonMethod: () => Promise<void>;
 }
 
-const mapStateToProps = (state: RootState) => {
-  return {
-    user: state.auth.user,
-  };
-}
-
 const WelcomeContent = (props: WelcomeProps): ReactElement => {
-  // If authenticated, greet the user
-  if (props.user && props.user.displayName) {
-    return (
-      <div>
-        <h4>
-          Welcome {props.user.displayName}{props.user.organization && " from " + props.user.organization}!
-        </h4>
-      </div>
-    );
-  }
-
   // Not authenticated, present a sign in button
   return (
     <React.Fragment>
@@ -54,4 +44,4 @@ class Welcome extends React.Component<WelcomeProps> {
   }
 }
 
-export default connect(mapStateToProps)(Welcome);
+export default connect(mapStateToPropsWelcome)(Welcome);
