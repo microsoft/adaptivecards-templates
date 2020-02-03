@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Container } from "reactstrap";
 import { UserAgentApplication, ClientAuthError } from "msal";
 
@@ -11,11 +11,10 @@ import { RootState } from "./store/rootReducer";
 
 // Components
 import NavBar from "./components/NavBar/NavBar";
-import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
-import Welcome from "./components/Welcome/Welcome";
+import Dashboard from "./components/Dashboard";
+import ErrorMessage, { ErrorMessageProps } from "./components/ErrorMessage/ErrorMessage";
 import config from "./Config";
 import { getUserDetails, getOrgDetails } from "./Services/GraphService";
-import { ErrorMessageProps } from "./components/ErrorMessage/ErrorMessage";
 
 // CSS
 import "bootstrap/dist/css/bootstrap.css";
@@ -111,20 +110,15 @@ class App extends Component<Props, State> {
             />
             <MainApp>
               {error}
-              <Route
-                exact
-                path="/"
-                render={props => (
-                  <Welcome
-                    {...props}
-                    authButtonMethod={this.login}
-                  />
-                )}
-              />
+              <Switch>
+                <Route exact path="/">
+                  <Dashboard authButtonMethod={this.login} />
+                </Route>
+              </Switch>
             </MainApp>
           </MainAppWrapper>
         </OuterAppWrapper>
-      </Router>
+      </Router >
     );
   }
 
