@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { Nav } from 'office-ui-fabric-react/lib/Nav';
 import { ActionButton } from 'office-ui-fabric-react';
 
+import { COLORS, BREAK } from '../../globalStyles';
+
 export const OuterSideBarWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -13,6 +15,10 @@ export const OuterSideBarWrapper = styled.div`
   -webkit-box-shadow: 3px 0px 3px 0px rgba(228,228,228,1);
   -moz-box-shadow: 3px 0px 3px 0px rgba(228,228,228,1);
   box-shadow: 3px 0px 3px 0px rgba(228,228,228,1);
+
+  @media only screen and (max-width: ${BREAK.SM}) {
+    display: none;
+  }
 `;
 
 export const MainItems = styled.div``;
@@ -40,7 +46,7 @@ export const Name = styled.div`
   flex-direction: column;
   align-self: center;
   
-  color: #606060;
+  color: ${COLORS.SECONDARY};
 
   font-weight: 600;
 `;
