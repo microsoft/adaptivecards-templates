@@ -33,7 +33,7 @@ const navMenuLinks = [{
       key: 'key1',
     }, {
       name: 'New Template',
-      url: '/dashboard/new',
+      url: '/designer',
       key: 'key2',
     }, {
       name: 'All Templates',

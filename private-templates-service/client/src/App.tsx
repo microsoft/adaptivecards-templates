@@ -21,6 +21,7 @@ import { ErrorMessageProps } from "./components/ErrorMessage/ErrorMessage";
 import "bootstrap/dist/css/bootstrap.css";
 import { OuterAppWrapper, MainAppWrapper, MainApp } from "./styled";
 import SideBar from "./components/SideBar/SideBar";
+import Designer from "./components/Designer";
 
 interface State {
   error: ErrorMessageProps | null;
@@ -121,6 +122,9 @@ class App extends Component<Props, State> {
                   />
                 )}
               />
+              <Route exact path="/designer">
+                <Designer />
+              </Route>
             </MainApp>
           </MainAppWrapper>
         </OuterAppWrapper>
