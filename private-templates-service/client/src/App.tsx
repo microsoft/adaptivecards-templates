@@ -11,6 +11,7 @@ import { RootState } from "./store/rootReducer";
 
 // Components
 import NavBar from "./components/NavBar/NavBar";
+import SideBar from "./components/SideBar";
 import Dashboard from "./components/Dashboard";
 import ErrorMessage, { ErrorMessageProps } from "./components/ErrorMessage/ErrorMessage";
 import config from "./Config";
@@ -19,7 +20,6 @@ import { getUserDetails, getOrgDetails } from "./Services/GraphService";
 // CSS
 import "bootstrap/dist/css/bootstrap.css";
 import { OuterAppWrapper, MainAppWrapper, MainApp } from "./styled";
-import SideBar from "./components/SideBar/SideBar";
 
 interface State {
   error: ErrorMessageProps | null;

@@ -7,9 +7,20 @@ import { UserAvatar } from './UserAvatar';
 import mainLogo from '../../assets/adaptive-cards-100-logo.png';
 
 // CSS
-import { OuterSideBarWrapper, LogoWrapper, UserWrapper, Name, Title, NavMenu, MainItems, SignOut, Logo, LogoTextWrapper, LogoTextHeader, LogoTextSubHeader } from './styled';
-
-
+import {
+  OuterSideBarWrapper,
+  LogoWrapper,
+  UserWrapper,
+  Name,
+  Title,
+  NavMenu,
+  MainItems,
+  SignOut,
+  Logo,
+  LogoTextWrapper,
+  LogoTextHeader,
+  LogoTextSubHeader
+} from './styled';
 
 interface Props {
   authButtonMethod: () => void;
@@ -29,23 +40,18 @@ const navMenuLinks = [{
     {
       name: 'Dashboard',
       url: '/',
-      key: 'key1',
     }, {
       name: 'New Template',
       url: '/dashboard/new',
-      key: 'key2',
     }, {
       name: 'All Templates',
       url: '/dashboard/all',
-      key: 'key3',
     }, {
       name: 'Drafts',
       url: '/drafts',
-      key: 'key4',
     }, {
       name: 'Published',
       url: '/published',
-      key: 'key5',
     }
   ]
 }]
