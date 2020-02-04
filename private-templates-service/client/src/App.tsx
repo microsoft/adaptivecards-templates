@@ -184,7 +184,6 @@ class App extends Component<Props, State> {
         // Get the user's profile from Graph
         let user = await getUserDetails(accessToken);
         let org = await getOrgDetails(accessToken);
-        console.log("User information: ", user, org);
         if (org.value.length === 0) {
           org = null;
         } else {
