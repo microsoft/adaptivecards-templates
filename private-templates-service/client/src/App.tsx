@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { UserAgentApplication, ClientAuthError } from "msal";
+import { initializeIcons } from '@uifabric/icons';
 
 // Redux
 import { connect } from "react-redux";
@@ -54,6 +55,7 @@ class App extends Component<Props, State> {
 
   constructor(props: Props) {
     super(props);
+    initializeIcons();
     this.userAgentApplication = new UserAgentApplication({
       auth: {
         clientId: config.appId,
@@ -182,6 +184,7 @@ class App extends Component<Props, State> {
         // Get the user's profile from Graph
         let user = await getUserDetails(accessToken);
         let org = await getOrgDetails(accessToken);
+        console.log("User information: ", user, org);
         if (org.value.length === 0) {
           org = null;
         } else {

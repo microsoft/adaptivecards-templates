@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 import { Nav } from 'office-ui-fabric-react/lib/Nav';
+import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { ActionButton } from 'office-ui-fabric-react';
 
 import { COLORS, BREAK } from '../../globalStyles';
@@ -37,8 +38,9 @@ export const AvatarIcon = styled.img`
   width: 32px;
 `;
 
-export const DefaultAvatarIcon = styled.i`
-  width: 32px;
+export const DefaultAvatarIcon = styled(Icon) <{ size?: string }>`
+  font-size: ${props => props.size || "1rem"};
+  align-self: center;
 `;
 
 export const Name = styled.div`

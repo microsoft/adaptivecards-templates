@@ -61,15 +61,15 @@ class SideBar extends React.Component<Props, {}> {
             LOGO GOES HERE
           </LogoWrapper>
           <UserWrapper>
-            <UserAvatar />
+            {this.props.user && <UserAvatar iconSize="3rem" />}
             <Name>
               {this.props.user && this.props.user.displayName}
               <Title>{this.props.user && this.props.user.organization}</Title>
             </Name>
           </UserWrapper>
-          <NavMenu
+          {this.props.isAuthenticated && <NavMenu
             groups={navMenuLinks}
-          />
+          />}
         </MainItems>
 
         <SignOut onClick={this.props.authButtonMethod}>Sign {this.props.isAuthenticated ? 'Out' : 'In'}</SignOut>
