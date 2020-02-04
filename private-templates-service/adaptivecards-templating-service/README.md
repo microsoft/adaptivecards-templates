@@ -46,3 +46,8 @@ In `adaptivecards-templating-service` run `tsc`.
 The web server will now be able to access the newest version of the package.
 
 In `server` run `npm run start`.
+
+#### Troubleshooting
+##### Missing declaration (d.ts) file for adaptivecards-templating-service
+Go to `types/adaptivecards-templating-service` and copy `index.d.ts` into `server/src/index.d.ts`.
+In `server` run `npm run start`.

@@ -1,4 +1,4 @@
-import mongoose, { version } from "mongoose";
+import mongoose from "mongoose";
 import { Template as mTemplate } from "./models/Template" 
 import { ClientOptions } from "./IClientOptions";
 import express, { Request, Response, NextFunction, Router } from "express";
