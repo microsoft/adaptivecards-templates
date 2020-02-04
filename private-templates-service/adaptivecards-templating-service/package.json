@@ -8,7 +8,6 @@
     "build": "tsc",
     "start": "tsc && npm start"
   },
-  "author": "Grace Zhang <t-grzhan@microsoft.com>",
   "license": "ISC",
   "dependencies": {
     "@types/axios": "^0.14.0",

@@ -36,18 +36,18 @@ TemplateServiceClient.getTemplates(templateId, templateName, version);
 TemplateServiceClient.postTemplates(template, templateId, version);
 ```
 
-### Developer Instructions
+## Developer Instructions
 
 In `adaptivecards-templating-service`, run `npm link`.
 In `server`, run `npm link adaptivecards-templating-service`.
 
-##### After making changes to adaptivecards-templating-service
+#### After making changes to adaptivecards-templating-service
 In `adaptivecards-templating-service` run `tsc`.
 The web server will now be able to access the newest version of the package.
 
 In `server` run `npm run start`.
 
-#### Troubleshooting
+### Troubleshooting
 ##### Missing declaration (d.ts) file for adaptivecards-templating-service
 Go to `types/adaptivecards-templating-service` and copy `index.d.ts` into `server/src/index.d.ts`.
 In `server` run `npm run start`.
