@@ -3,21 +3,20 @@ import styled from 'styled-components';
 export const Banner = styled.div`
   background-color: #6F6F6F;
   display: flex;
-  justify-content: space-around;
+  flex-direction:row;
+  justify-content: space-between;
   width: 100%;
   align-items: center;
-  height:75px;
+  padding: 8px 64px;
 `;
 
-export const Styledh1 = styled.h1`
-
-  padding-left:362px;
-  height: 43px;
+export const Styledh1 = styled.div`
+  
   color:#FFFFFF;
   letter-spacing: 0;
   opacity:1;
-  font-family: "Segoe UI Semibold";
   font-size: 32px;
   margin-bottom:0;
+  font-weight:600;
 
 `;
