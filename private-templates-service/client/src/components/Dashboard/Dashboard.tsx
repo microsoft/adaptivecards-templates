@@ -5,6 +5,8 @@ import { UserType } from "../../store/auth/types";
 import { connect } from "react-redux";
 import { ErrorMessageProps } from "../ErrorMessage/ErrorMessage";
 import requireAuthentication from "../../utils/requireAuthentication";
+import Gallery from "../Gallery";
+import { Title, DashboardContainer } from "../Dashboard/styled";
 
 const mapStateToProps = (state: RootState) => {
 	return {
@@ -25,7 +27,14 @@ interface DashboardProps {
 
 class Dashboard extends React.Component<DashboardProps, DashboardStates> {
 	render() {
-		return <React.Fragment>DASHBOARD</React.Fragment>;
+		return (
+			<DashboardContainer>
+				<Title>Recent</Title>
+				<Gallery></Gallery>
+				<Title>Drafts</Title>
+				<Gallery></Gallery>
+			</DashboardContainer>
+		);
 	}
 }
 
