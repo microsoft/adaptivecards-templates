@@ -1,17 +1,17 @@
 import styled from 'styled-components';
 import { SearchBox,} from 'office-ui-fabric-react';
+import {BREAK} from '../../../globalStyles';
 
 export const StyledSearchBox = styled(SearchBox)`
-
-  background-color:#5C5C5C;
   width: 50%;
-  color:white;
+  border-color: #5c5c5c;
 
-  :hover{
-    border-color: #5C5C5C;
+  @media only screen and (max-width: ${BREAK.SM}px){
+    border-radius: 16px;
+    width: 33%;
+    
+    :hover {
+      border-radius: 0px;
+    }
   }
-  active:{
-    border-color: white;
-  }
-
 `;

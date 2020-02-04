@@ -1,9 +1,7 @@
 import styled from 'styled-components';
-
 import { Nav } from 'office-ui-fabric-react/lib/Nav';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { ActionButton } from 'office-ui-fabric-react';
-
 import { COLORS, BREAK } from '../../globalStyles';
 
 export const OuterSideBarWrapper = styled.div`
@@ -17,7 +15,7 @@ export const OuterSideBarWrapper = styled.div`
   -moz-box-shadow: 3px 0px 3px 0px rgba(228,228,228,1);
   box-shadow: 3px 0px 3px 0px rgba(228,228,228,1);
 
-  @media only screen and (max-width: ${BREAK.SM}) {
+  @media only screen and (max-width: ${BREAK.SM}px) {
     display: none;
   }
 `;

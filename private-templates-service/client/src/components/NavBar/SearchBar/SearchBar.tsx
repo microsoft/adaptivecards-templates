@@ -1,15 +1,15 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {StyledSearchBox} from './styled';
 import { RootState } from '../../../store/rootReducer';
 import { connect } from 'react-redux';
 import { search, clearSearch } from '../../../store/search/actions';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
+import {THEME, BREAK} from '../../../globalStyles';
 
 initializeIcons(); // to initilize the icons being used
 
 const mapStateToProps = (state:RootState) => {
-
-  return{
+  return {
     isSearch: state.search.isSearch,
     searchValue: state.search.searchValue,
     isAuthenticated :state.auth.isAuthenticated
@@ -34,43 +34,59 @@ interface Props {
   search: (searchValue: string) => void,
   clearSearch: () => void,
 }
-function SearchBar(props: Props) {
 
+interface State {
+  isMobile: boolean;
+}
 
-  const onClear = () => {
-    console.log("clear is triggered");
-    props.clearSearch();
+class SearchBar extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+    this.state = {isMobile: window.screen.width < BREAK.SM}
   }
 
-  const onSearch = (searchValue: string) => {
-    
-    console.log("search is querieid");
-    if(searchValue === ""){
-      props.clearSearch();
-    } 
-    else{
-      props.search(searchValue);
+  componentDidMount() {
+    window.addEventListener('resize', this.dimentionsUpdate.bind(this));
+  }
+
+  dimentionsUpdate = (e: Event) => {
+    if(!this.state.isMobile && window.innerWidth < BREAK.SM) {
+      this.setState({isMobile: true});
+    }
+    else if(this.state.isMobile && window.innerWidth >= BREAK.SM) {
+      this.setState({isMobile: false});
     }
   }
 
-  if(props.isAuthenticated){
-  return( 
- 
-      <StyledSearchBox
-        placeholder = " Search Adaptive Cards"
-        onSearch = {onSearch} // will trigger when "Enter" is pressed
-
-        onFocus={() => console.log('onFocus called')}
-        onChange={() => console.log('onChange called')}
-        onClear = {onClear} // will trigger when "Esc" or "X" is pressed
-      />
-    );
+  onClear = () => {
+    this.props.clearSearch();
   }
-  
-  else{
-    return (<React.Fragment/>)
-  }// return empty
 
+  onSearch = (searchValue: string) => {
+    if(searchValue === "") {
+      this.props.clearSearch();
+    } 
+    else {
+      this.props.search(searchValue);
+    }
+  }
+
+  render() {
+    if(this.props.isAuthenticated) {
+      return( 
+        <StyledSearchBox
+          placeholder = {"search" + (this.state.isMobile ? "" : " templates")}
+          onSearch = {this.onSearch} // will trigger when "Enter" is pressed
+          onClear = {this.onClear} // will trigger when "Esc" or "X" is pressed
+          theme = {THEME.DARK}
+        />
+      );
+    }
+      
+    else {
+      return (<React.Fragment/>)
+    }// return empty
+  }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchBar);
