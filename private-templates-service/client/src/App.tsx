@@ -18,6 +18,7 @@ import { getUserDetails, getOrgDetails } from "./Services/GraphService";
 
 // CSS
 import "bootstrap/dist/css/bootstrap.css";
+import Designer from "./components/Designer";
 
 interface State {
   error: ErrorMessageProps | null;
@@ -101,7 +102,7 @@ class App extends Component<Props, State> {
             {error}
             <Switch>
               <Route exact path="/">
-                <Dashboard authButtonMethod={this.login} />
+                <Designer authButtonMethod={this.login} />
               </Route>
             </Switch>
           </Container>
