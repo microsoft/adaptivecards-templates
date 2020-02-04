@@ -3,6 +3,7 @@ import * as AdaptiveCards from "adaptivecards";
 import { Card, Container, TemplateName } from "../AdaptiveCard/styled";
 
 function getCard() {
+	// Hard coded, will remove and connect to backend in future PR
 	var card = {
 		type: "AdaptiveCard",
 		version: "1.0",
@@ -41,10 +42,6 @@ function GetRenderedCard() {
 		fontFamily: "Segoe UI, Helvetica Neue, sans-serif"
 	});
 
-	adaptiveCard.onExecuteAction = function(action) {
-		alert("Ow!");
-	};
-
 	var cardTemplate = getCard();
 	// Parse the card payload
 	adaptiveCard.parse(cardTemplate);
@@ -55,12 +52,9 @@ function GetRenderedCard() {
 }
 
 class AdaptiveCard extends React.Component {
-	handleClick() {
-		alert("Redirect to another page");
-	}
 	render() {
 		return (
-			<Container onClick={this.handleClick}>
+			<Container>
 				<Card
 					ref={n => {
 						// Work around for known issue: https://github.com/gatewayapps/react-adaptivecards/issues/10

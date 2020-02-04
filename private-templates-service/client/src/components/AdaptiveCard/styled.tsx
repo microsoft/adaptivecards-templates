@@ -22,8 +22,8 @@ export const Container = styled.div`
 	-moz-box-shadow: 0px 1px 5px -3px rgba(189, 187, 189, 1);
 	box-shadow: 0px 1px 5px -3px rgba(189, 187, 189, 1);
 
-	@media only screen and (max-width: 1200px) {
-		margin-bottom: 25px;
+	@media only screen and (max-width: 1399px) {
+		margin-bottom: 20px;
 	}
 `;
 
