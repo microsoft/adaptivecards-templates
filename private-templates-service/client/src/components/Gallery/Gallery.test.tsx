@@ -7,14 +7,17 @@ import { rootReducer } from "../../store/rootReducer";
 import Gallery from "./Gallery";
 
 it("Renders without crashing", () => {
-	const div = document.createElement("div");
-	const store = createStore(rootReducer, {});
-	ReactDOM.render(
-		<Provider store={store}>
-			<Gallery />
-		</Provider>,
-		div
-	);
+  const div = document.createElement("div");
+  const store = createStore(rootReducer, {});
+  ReactDOM.render(
+    <Provider store={store}>
+      <Gallery />
+    </Provider>,
+    div
+  );
 
-	ReactDOM.unmountComponentAtNode(div);
+
+
+
+  ReactDOM.unmountComponentAtNode(div);
 });

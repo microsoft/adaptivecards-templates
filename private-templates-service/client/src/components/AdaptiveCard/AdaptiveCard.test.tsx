@@ -7,14 +7,14 @@ import { rootReducer } from "../../store/rootReducer";
 import AdaptiveCard from "./AdaptiveCard";
 
 it("Renders without crashing", () => {
-	const div = document.createElement("div");
-	const store = createStore(rootReducer, {});
-	ReactDOM.render(
-		<Provider store={store}>
-			<AdaptiveCard />
-		</Provider>,
-		div
-	);
+  const div = document.createElement("div");
+  const store = createStore(rootReducer, {});
+  ReactDOM.render(
+    <Provider store={store}>
+      <AdaptiveCard />
+    </Provider>,
+    div
+  );
 
-	ReactDOM.unmountComponentAtNode(div);
+  ReactDOM.unmountComponentAtNode(div);
 });
