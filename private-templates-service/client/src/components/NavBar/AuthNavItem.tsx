@@ -9,7 +9,7 @@ import {
   DropdownMenu,
   DropdownItem
 } from "reactstrap";
-import UserAvatar from "./UserAvatar";
+import UserAvatar from "../SideBar/UserAvatar";
 
 import { UserType } from "../../store/auth/types";
 import { RootState } from "../../store/rootReducer";

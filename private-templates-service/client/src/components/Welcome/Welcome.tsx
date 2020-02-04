@@ -3,8 +3,9 @@ import React, { ReactElement } from "react";
 import { UserType } from "../../store/auth/types";
 import { RootState } from "../../store/rootReducer";
 
-import { Button, Jumbotron } from "reactstrap";
+import { Button } from "reactstrap";
 import { connect } from "react-redux";
+import { OuterWrapper } from "./styled";
 
 const mapStateToPropsWelcome = (state: RootState) => {
   return {
@@ -32,14 +33,14 @@ const WelcomeContent = (props: WelcomeProps): ReactElement => {
 class Welcome extends React.Component<WelcomeProps> {
   render() {
     return (
-      <Jumbotron>
+      <OuterWrapper>
         <h1>Admin Portal</h1>
         <p className="lead">Basic authentication test.</p>
         <WelcomeContent
           user={this.props.user}
           authButtonMethod={this.props.authButtonMethod}
         />
-      </Jumbotron>
+      </OuterWrapper>
     );
   }
 }

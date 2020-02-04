@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { Container } from "reactstrap";
 import { UserAgentApplication, ClientAuthError } from "msal";
+import { initializeIcons } from '@uifabric/icons';
 
 // Redux
 import { connect } from "react-redux";
@@ -10,7 +10,9 @@ import { UserType } from "./store/auth/types";
 import { RootState } from "./store/rootReducer";
 
 // Components
+import Designer from "./components/Designer";
 import NavBar from "./components/NavBar/NavBar";
+import SideBar from "./components/SideBar";
 import Dashboard from "./components/Dashboard";
 import ErrorMessage, { ErrorMessageProps } from "./components/ErrorMessage/ErrorMessage";
 import config from "./Config";
@@ -18,7 +20,8 @@ import { getUserDetails, getOrgDetails } from "./Services/GraphService";
 
 // CSS
 import "bootstrap/dist/css/bootstrap.css";
-import Designer from "./components/Designer";
+
+import { OuterAppWrapper, MainAppWrapper, MainApp } from "./styled";
 
 interface State {
   error: ErrorMessageProps | null;
@@ -54,6 +57,7 @@ class App extends Component<Props, State> {
 
   constructor(props: Props) {
     super(props);
+    initializeIcons();
     this.userAgentApplication = new UserAgentApplication({
       auth: {
         clientId: config.appId,
@@ -90,24 +94,34 @@ class App extends Component<Props, State> {
 
     return (
       <Router>
-        <div>
-          <NavBar
+        <OuterAppWrapper>
+          <SideBar
             authButtonMethod={
               this.props.isAuthenticated
                 ? this.logout
                 : this.login
             }
           />
-          <Container>
-            {error}
-            <Switch>
-              <Route exact path="/">
-                <Designer authButtonMethod={this.login} />
-              </Route>
-            </Switch>
-          </Container>
-        </div>
-      </Router>
+
+          <MainAppWrapper>
+            <NavBar
+              authButtonMethod={
+                this.props.isAuthenticated
+                  ? this.logout
+                  : this.login
+              }
+            />
+            <MainApp>
+              {error}
+              <Switch>
+                <Route exact path="/">
+                  <Designer authButtonMethod={this.login} />
+                </Route>
+              </Switch>
+            </MainApp>
+          </MainAppWrapper>
+        </OuterAppWrapper>
+      </Router >
     );
   }
 
