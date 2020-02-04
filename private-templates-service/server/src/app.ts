@@ -9,7 +9,7 @@ import bluebird from "bluebird";
 import logger from "./util/logger";
 
 // import controllers
-import templateRouter from "./controllers/template";
+import { TemplateServiceClient, ClientOptions, AzureADProvider, AuthenticationProvider } from 'adaptivecards-templating-service';
 
 const app = express();
 
@@ -52,8 +52,15 @@ app.use(
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Add routers
-app.use("/template", templateRouter);
+const clientOptions : ClientOptions = {
+    authenticationProvider: new AzureADProvider(),
+}
+
+TemplateServiceClient.init(clientOptions).then(
+    (client : TemplateServiceClient) => {
+        app.use("/template", client.expressMiddleware());
+    }
+)
 
 app.get('/api/status', (req, res) => {
   res.status(200).send("Hello World");

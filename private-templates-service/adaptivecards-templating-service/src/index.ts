@@ -1,18 +1,21 @@
-import mongoose from "mongoose";
+import mongoose, { version } from "mongoose";
 import { Template as mTemplate } from "./models/Template" 
 import { ClientOptions } from "./IClientOptions";
-import express, { Request, Response, NextFunction } from "express";
+import express, { Request, Response, NextFunction, Router } from "express";
 import { check, validationResult } from "express-validator";
+import { AuthenticationProvider } from './authproviders/IAuthenticationProvider'; 
 
 export class TemplateServiceClient {
 
-    //private provider : StorageProvider;
-    private static owner : string = "";
+    //private static provider : StorageProvider;
+    private static authProvider : AuthenticationProvider;
 
-    private static async run() : Promise<void> {
+    // Temporary until storage provider is up
+    private static async _run() : Promise<void> {
         // TODO: move db initialization to a separate class once adapter done
         const url = "mongodb://localhost:27017/test";
         mongoose.connect(url);
+        // await mongoose.connection.dropDatabase();
     }
 
     /**
@@ -29,7 +32,7 @@ export class TemplateServiceClient {
         //     error.message = "Please provide a storage provider.";
         //     throw error;
         // }
-        await this.run()
+        await this._run()
 
         if (clientOptions.authenticationProvider === undefined) {
             const error = new Error();
@@ -38,53 +41,62 @@ export class TemplateServiceClient {
             throw error;
         }
 
-        TemplateServiceClient.owner = clientOptions.authenticationProvider.getOwner();
+        TemplateServiceClient.authProvider = clientOptions.authenticationProvider;
 
         // Authenticate
         return new TemplateServiceClient();
     }
 
-    public portal() {
-        // Returns react frontend
-    }
-
-    public async publishTemplate(templateId : string) : Promise<any> {
-        // post with isPublished to true
-    }
-
     /**
      * @public
      * Post templates
+     * @param {JSON} template 
+     * @param {string} templateId - unique template id
+     * @param {string} version - version number
      * @returns Promise as valid json 
      */
-    public async postTemplates(template: string) : Promise<any> {
-        if (!TemplateServiceClient.owner){
+    public async postTemplates(template: JSON, templateId?: string, version?: string) : Promise<any> {
+        let owner = TemplateServiceClient.authProvider.getOwner();
+        if (!owner){
             return new Error("No owner specified, please authenticate.");
         }
-        return await mTemplate.create({
-            _id: mongoose.Types.ObjectId(),
-            template: template,
-            owner: TemplateServiceClient.owner,
-            isPublished: false,
-        });
+
+        let ver = version;
+        if (!version) {
+            ver = '1.0';
+        }
+
+        return mTemplate.create({
+                _id: mongoose.Types.ObjectId(),
+                template: template,
+                ownerOID: owner,
+                isPublished: false,
+                version: ver,
+        })
     }
 
     /**
      * @public
      * Get entry point. 
+     * @param {string} templateId - unique template id
+     * @param {string} templateName - name to query for
+     * @param {string} version - version number
      * @returns Promise as valid json 
      */
-    public async getTemplates(templateId?: string, templateName?: string) : Promise<any> {
-        // Generate query from passed params
-        // provider.getTemplate(query);
-        if (templateId) {
-            await mTemplate.findById(templateId, (err, template) => {
+    public async getTemplates(templateId?: string, templateName?: string, version?: number) : Promise<any> {
+        if (!templateId) {
+            return await mTemplate.find();
+        }
+
+        if (!version) {
+            return mTemplate.findById(templateId, (err, template) => {
                 if (err || !template) return new Error("No template with such id.");
                 return template;
             });
-        } else {
-            return await mTemplate.find();
-        }
+        } 
+
+        // TODO: add search by version case
+        // TODO: add search by template name
     }
 
     /**
@@ -93,36 +105,47 @@ export class TemplateServiceClient {
      * Use as app.use("/template", TemplateServiceClient.expressMiddleware())
      * @returns express router 
      */
-    public expressMiddleware() : Function {
+    public expressMiddleware() : Router {
         var router = express.Router();
-        router.get("/", (req : Request, res : Response, next : NextFunction) => {
+
+        // Verify signature of access token before requests.
+        router.all("/", async (req : Request, res: Response, next: NextFunction) => {
+            if (!req.headers.authorization) {
+                return res.status(401).json({ error: "Missing credentials." });
+            }
+            
+            let valid = await TemplateServiceClient.authProvider.isValid(req.headers.authorization);
+
+            if (!valid){
+                const err = new Error();
+                err.name = "Invalid access token";
+                err.message = "Please pass a valid access token issued by Azure Active Directory.";
+                throw err;      
+            }
+            next();
+        })
+
+        router.get("/", (req : Request, res : Response, _next : NextFunction) => {
             if (req.params.name) {
-                this.getTemplates(undefined, req.params.name).then(
-                    (templates) => {
-                        res.json(templates);
-                        next();
-                    }
-                )
+                return res.status(501);
             }
 
             this.getTemplates().then(
                 (templates) => {
-                    res.json(templates); 
-                    next();
+                    res.status(200).json(templates); 
                 })
         })
-
-        router.get("/:id", (req : Request, res : Response, next : NextFunction) => {
-            this.getTemplates(req.params.id).then(
+        
+        router.get("/:id?", (req : Request, res : Response, _next : NextFunction) => {
+            this.getTemplates(req.params.id, undefined).then(
                 (template) => {
                     if (!template) return res.status(404).send("Template does not exist.");
                     res.json(template);
-                    next();
                 }
             )
         })
 
-        router.post("/", async (req : Request, res : Response, next: NextFunction) => {
+        router.post("/", async (req : Request, res : Response, _next: NextFunction) => {
             await check("template", "Template is not valid JSON.").isJSON().run(req);
             const errors = validationResult(req);
 
@@ -130,15 +153,13 @@ export class TemplateServiceClient {
                 return res.status(400).json(errors);
             }
 
-            this.postTemplates(req.body.template).then(
-                (template) => {
-                    res.status(201).json(template);
-                    next();
-                }
-            ).catch(() => {
-                res.status(400).send("Failed to create template.");
-            });
+            let template = await this.postTemplates(req.body.template, undefined, undefined);
+            if (template){
+                return res.status(201).json(template);
+            }
+            res.status(500).send("Failed to create template.");
         })
+
         return router;
     }
 

@@ -9,7 +9,8 @@ const templateSchema = new mongoose.Schema({
   created: {
     type: Date,
     default: Date.now
-  }
+  },
+  version: String,
 });
 
 export const Template = mongoose.model("Template", templateSchema);
