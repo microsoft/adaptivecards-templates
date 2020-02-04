@@ -4,7 +4,7 @@ import { ClientOptions } from "./IClientOptions";
 import express, { Request, Response, NextFunction, Router } from "express";
 import { check, validationResult } from "express-validator";
 import { AuthenticationProvider } from './authproviders/IAuthenticationProvider'; 
-import { TemplateError } from './api/TemplateError';
+import { TemplateError, ApiError } from './api/TemplateError';
 
 export class TemplateServiceClient {
 
@@ -112,14 +112,14 @@ export class TemplateServiceClient {
         // Verify signature of access token before requests.
         router.all("/", async (req : Request, res: Response, next: NextFunction) => {
             if (!req.headers.authorization) {
-                const err = new TemplateError("InvalidAuthenticationToken", "Missing credentials.");
+                const err = new TemplateError(ApiError.InvalidAuthenticationToken, "Missing credentials.");
                 return res.status(401).json({ error: err });
             }
             
             let valid = await TemplateServiceClient.authProvider.isValid(req.headers.authorization);
 
             if (!valid){
-                const err = new TemplateError("InvalidAuthenticationToken", "Token given is not a valid access token issued by Azure Active Directory.");
+                const err = new TemplateError(ApiError.InvalidAuthenticationToken, "Token given is not a valid access token issued by Azure Active Directory.");
                 return res.status(401).json({ error: err });
             }
             next();
@@ -140,7 +140,7 @@ export class TemplateServiceClient {
             this.getTemplates(req.params.id, undefined).then(
                 (template) => {
                     if (!template) {
-                        const err = new TemplateError("TemplateNotFound", `Template with id ${req.params.id} does not exist.`);
+                        const err = new TemplateError(ApiError.TemplateNotFound, `Template with id ${req.params.id} does not exist.`);
                         return res.status(404).json({ error: err });
                     }
                     res.json(template);
@@ -153,14 +153,15 @@ export class TemplateServiceClient {
             const errors = validationResult(req);
 
             if (!errors.isEmpty()) {
-                return res.status(400).json(errors);
+                const err = new TemplateError(ApiError.InvalidTemplate, "Template is incorrectly formatted.");
+                return res.status(400).json({ error: err });
             }
 
             let template = await this.postTemplates(req.body.template, undefined, undefined);
             if (template){
                 return res.status(201).json(template);
             }
-            const err = new TemplateError("InvalidTemplate", "Failed to create template.");
+            const err = new TemplateError(ApiError.InvalidTemplate, "Failed to create template.");
             res.status(400).json({ error: err });
         })
 
