@@ -4,6 +4,7 @@ import { ClientOptions } from "./IClientOptions";
 import express, { Request, Response, NextFunction, Router } from "express";
 import { check, validationResult } from "express-validator";
 import { AuthenticationProvider } from './authproviders/IAuthenticationProvider'; 
+import { TemplateError } from './api/TemplateError';
 
 export class TemplateServiceClient {
 
@@ -111,16 +112,15 @@ export class TemplateServiceClient {
         // Verify signature of access token before requests.
         router.all("/", async (req : Request, res: Response, next: NextFunction) => {
             if (!req.headers.authorization) {
-                return res.status(401).json({ error: "Missing credentials." });
+                const err = new TemplateError("InvalidAuthenticationToken", "Missing credentials.");
+                return res.status(401).json({ error: err });
             }
             
             let valid = await TemplateServiceClient.authProvider.isValid(req.headers.authorization);
 
             if (!valid){
-                const err = new Error();
-                err.name = "Invalid access token";
-                err.message = "Please pass a valid access token issued by Azure Active Directory.";
-                throw err;      
+                const err = new TemplateError("InvalidAuthenticationToken", "Token given is not a valid access token issued by Azure Active Directory.");
+                return res.status(401).json({ error: err });
             }
             next();
         })
@@ -139,7 +139,10 @@ export class TemplateServiceClient {
         router.get("/:id?", (req : Request, res : Response, _next : NextFunction) => {
             this.getTemplates(req.params.id, undefined).then(
                 (template) => {
-                    if (!template) return res.status(404).send("Template does not exist.");
+                    if (!template) {
+                        const err = new TemplateError("TemplateNotFound", `Template with id ${req.params.id} does not exist.`);
+                        return res.status(404).json({ error: err });
+                    }
                     res.json(template);
                 }
             )
@@ -157,7 +160,8 @@ export class TemplateServiceClient {
             if (template){
                 return res.status(201).json(template);
             }
-            res.status(500).send("Failed to create template.");
+            const err = new TemplateError("InvalidTemplate", "Failed to create template.");
+            res.status(400).json({ error: err });
         })
 
         return router;

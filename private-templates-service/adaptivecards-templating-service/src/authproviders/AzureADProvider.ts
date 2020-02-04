@@ -20,6 +20,10 @@ export class AzureADProvider implements AuthenticationProvider {
         }
 
         let decodedToken : Signature = jws.decode(accessToken);
+        if (!decodedToken) {
+            return false;
+        }
+
         let algorithm : Algorithm = decodedToken.header.alg;
         let kid : string | undefined = decodedToken.header.kid;
 
