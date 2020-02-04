@@ -22,10 +22,37 @@ export const OuterSideBarWrapper = styled.div`
   }
 `;
 
-export const MainItems = styled.div``;
+export const MainItems = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 
 export const LogoWrapper = styled.div`
-  height: 30px;
+  display: flex;
+  flex-direction: row;
+  align-self: center;
+  align-items: center;
+  margin-top: 32px;
+  padding-right: 48px;
+`;
+
+export const Logo = styled.img`
+  width: 32px;
+  margin-right: 12px;
+`;
+
+export const LogoTextWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  font-size: 12px;
+  line-height: 1rem;
+`;
+
+export const LogoTextHeader = styled.div`
+  font-weight: 500;
+`;
+export const LogoTextSubHeader = styled.div`
+  font-weight: 300;
 `;
 
 export const UserWrapper = styled.div`
@@ -47,7 +74,8 @@ export const Name = styled.div`
   display: flex;
   flex-direction: column;
   align-self: center;
-  
+  font-size: 18px;
+
   color: ${COLORS.SECONDARY};
 
   font-weight: 600;
@@ -57,7 +85,7 @@ export const Title = styled.div`
   align-self: flex-start;
 
   font-weight: 400;
-  font-size: 11px;
+  font-size: 12px;
 `;
 
 export const NavMenu = styled(Nav)`

@@ -2,13 +2,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { RootState } from '../../store/rootReducer';
-
 import { UserType } from '../../store/auth/types';
-
 import { UserAvatar } from './UserAvatar';
+import mainLogo from '../../assets/adaptive-cards-100-logo.png';
 
 // CSS
-import { OuterSideBarWrapper, LogoWrapper, UserWrapper, Name, Title, NavMenu, MainItems, SignOut } from './styled';
+import { OuterSideBarWrapper, LogoWrapper, UserWrapper, Name, Title, NavMenu, MainItems, SignOut, Logo, LogoTextWrapper, LogoTextHeader, LogoTextSubHeader } from './styled';
 
 
 
@@ -58,7 +57,11 @@ class SideBar extends React.Component<Props, {}> {
       <OuterSideBarWrapper>
         <MainItems>
           <LogoWrapper>
-            LOGO GOES HERE
+            <Logo src={mainLogo} />
+            <LogoTextWrapper>
+              <LogoTextHeader>Adaptive Cards</LogoTextHeader>
+              <LogoTextSubHeader>Portal</LogoTextSubHeader>
+            </LogoTextWrapper>
           </LogoWrapper>
           <UserWrapper>
             {this.props.user && <UserAvatar iconSize="3rem" />}
