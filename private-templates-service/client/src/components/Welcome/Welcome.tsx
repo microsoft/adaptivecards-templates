@@ -3,9 +3,8 @@ import React, { ReactElement } from "react";
 import { UserType } from "../../store/auth/types";
 import { RootState } from "../../store/rootReducer";
 
-import { Button, Jumbotron } from "reactstrap";
+import { Button } from "reactstrap";
 import { connect } from "react-redux";
-import { OuterSideBarWrapper } from "../SideBar/styled";
 import { OuterWrapper } from "./styled";
 
 const mapStateToPropsWelcome = (state: RootState) => {
