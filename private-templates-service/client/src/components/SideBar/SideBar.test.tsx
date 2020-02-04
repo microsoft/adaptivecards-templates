@@ -5,7 +5,6 @@ import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import { rootReducer } from '../../store/rootReducer';
 
-import { reduxify, makeMountRender } from '../../testUtils';
 import SideBar from './SideBar';
 
 it('Renders without crashing', () => {
