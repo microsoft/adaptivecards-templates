@@ -11,18 +11,16 @@ import { RootState } from "./store/rootReducer";
 
 // Components
 import NavBar from "./components/NavBar/NavBar";
-import Designer from "./components/Designer";
 import SideBar from "./components/SideBar";
 import Dashboard from "./components/Dashboard";
 import ErrorMessage, { ErrorMessageProps } from "./components/ErrorMessage/ErrorMessage";
-import Welcome from "./components/Welcome/Welcome";
 import config from "./Config";
 import { getUserDetails, getOrgDetails } from "./Services/GraphService";
-import { ErrorMessageProps } from "./components/ErrorMessage/ErrorMessage";
 
 // CSS
 import "bootstrap/dist/css/bootstrap.css";
 import { OuterAppWrapper, MainAppWrapper, MainApp } from "./styled";
+import Designer from "./components/Designer";
 
 interface State {
   error: ErrorMessageProps | null;
@@ -117,6 +115,9 @@ class App extends Component<Props, State> {
               <Switch>
                 <Route exact path="/">
                   <Dashboard authButtonMethod={this.login} />
+                </Route>
+                <Route exact path="/designer">
+                  <Designer />
                 </Route>
               </Switch>
             </MainApp>
