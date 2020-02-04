@@ -2,15 +2,25 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { RootState } from '../../store/rootReducer';
-
 import { UserType } from '../../store/auth/types';
-
 import { UserAvatar } from './UserAvatar';
+import mainLogo from '../../assets/adaptive-cards-100-logo.png';
 
 // CSS
-import { OuterSideBarWrapper, LogoWrapper, UserWrapper, Name, Title, NavMenu, MainItems, SignOut } from './styled';
-
-
+import {
+  OuterSideBarWrapper,
+  LogoWrapper,
+  UserWrapper,
+  Name,
+  Title,
+  NavMenu,
+  MainItems,
+  SignOut,
+  Logo,
+  LogoTextWrapper,
+  LogoTextHeader,
+  LogoTextSubHeader
+} from './styled';
 
 interface Props {
   authButtonMethod: () => void;
@@ -30,23 +40,18 @@ const navMenuLinks = [{
     {
       name: 'Dashboard',
       url: '/',
-      key: 'key1',
     }, {
       name: 'New Template',
-      url: '/designer',
-      key: 'key2',
+      url: '/dashboard/new',
     }, {
       name: 'All Templates',
       url: '/dashboard/all',
-      key: 'key3',
     }, {
       name: 'Drafts',
       url: '/drafts',
-      key: 'key4',
     }, {
       name: 'Published',
       url: '/published',
-      key: 'key5',
     }
   ]
 }]
@@ -58,18 +63,22 @@ class SideBar extends React.Component<Props, {}> {
       <OuterSideBarWrapper>
         <MainItems>
           <LogoWrapper>
-            LOGO GOES HERE
+            <Logo src={mainLogo} />
+            <LogoTextWrapper>
+              <LogoTextHeader>Adaptive Cards</LogoTextHeader>
+              <LogoTextSubHeader>Portal</LogoTextSubHeader>
+            </LogoTextWrapper>
           </LogoWrapper>
           <UserWrapper>
-            <UserAvatar />
+            {this.props.user && <UserAvatar iconSize="3rem" />}
             <Name>
               {this.props.user && this.props.user.displayName}
               <Title>{this.props.user && this.props.user.organization}</Title>
             </Name>
           </UserWrapper>
-          <NavMenu
+          {this.props.isAuthenticated && <NavMenu
             groups={navMenuLinks}
-          />
+          />}
         </MainItems>
 
         <SignOut onClick={this.props.authButtonMethod}>Sign {this.props.isAuthenticated ? 'Out' : 'In'}</SignOut>

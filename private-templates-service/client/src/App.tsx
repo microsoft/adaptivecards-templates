@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
-import { Container } from "reactstrap";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { UserAgentApplication, ClientAuthError } from "msal";
+import { initializeIcons } from '@uifabric/icons';
 
 // Redux
 import { connect } from "react-redux";
@@ -11,7 +11,10 @@ import { RootState } from "./store/rootReducer";
 
 // Components
 import NavBar from "./components/NavBar/NavBar";
-import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
+import Designer from "./components/Designer";
+import SideBar from "./components/SideBar";
+import Dashboard from "./components/Dashboard";
+import ErrorMessage, { ErrorMessageProps } from "./components/ErrorMessage/ErrorMessage";
 import Welcome from "./components/Welcome/Welcome";
 import config from "./Config";
 import { getUserDetails, getOrgDetails } from "./Services/GraphService";
@@ -20,8 +23,6 @@ import { ErrorMessageProps } from "./components/ErrorMessage/ErrorMessage";
 // CSS
 import "bootstrap/dist/css/bootstrap.css";
 import { OuterAppWrapper, MainAppWrapper, MainApp } from "./styled";
-import SideBar from "./components/SideBar/SideBar";
-import Designer from "./components/Designer";
 
 interface State {
   error: ErrorMessageProps | null;
@@ -57,6 +58,7 @@ class App extends Component<Props, State> {
 
   constructor(props: Props) {
     super(props);
+    initializeIcons();
     this.userAgentApplication = new UserAgentApplication({
       auth: {
         clientId: config.appId,
@@ -112,23 +114,15 @@ class App extends Component<Props, State> {
             />
             <MainApp>
               {error}
-              <Route
-                exact
-                path="/"
-                render={props => (
-                  <Welcome
-                    {...props}
-                    authButtonMethod={this.login}
-                  />
-                )}
-              />
-              <Route exact path="/designer">
-                <Designer />
-              </Route>
+              <Switch>
+                <Route exact path="/">
+                  <Dashboard authButtonMethod={this.login} />
+                </Route>
+              </Switch>
             </MainApp>
           </MainAppWrapper>
         </OuterAppWrapper>
-      </Router>
+      </Router >
     );
   }
 
