@@ -23,11 +23,11 @@ export const makeStore = (customState = {}) => {
 }
 
 export const reduxify = (Component: any, props = {}, state = {}) => {
-  return function reduxWrap() {
-    return (
-      <Provider store={makeStore(state)}>
-        <Component {...props} />
-      </Provider>
-    );
-  }
+  // return function reduxWrap() {
+  return (
+    <Provider store={makeStore(state)}>
+      <Component {...props} />
+    </Provider>
+  );
+  // }
 }

@@ -65,5 +65,10 @@
 		"eslint-plugin-react": "^7.14.3",
 		"eslint-plugin-react-hooks": "^1.7.0"
 	},
-	"proxy": "http://localhost:5000/"
+	"proxy": "http://localhost:5000/",
+	"jest": {
+		"transformIgnorePatterns": [
+			"node_modules/?!(@fontawesome|@fortawesome|office-ui-fabric-react)"
+		]
+	}
 }
