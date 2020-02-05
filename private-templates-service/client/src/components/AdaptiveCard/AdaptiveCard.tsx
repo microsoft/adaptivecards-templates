@@ -2,7 +2,7 @@ import * as React from "react";
 import * as AdaptiveCards from "adaptivecards";
 import { Card, Container, TemplateName } from "../AdaptiveCard/styled";
 
-function getCard() {
+function getCard(): any {
   // Hard coded, will remove and connect to backend in future PR
   var card = {
     type: "AdaptiveCard",
@@ -33,8 +33,8 @@ function getCard() {
   return card;
 }
 
-function GetRenderedCard() {
-  var adaptiveCard = new AdaptiveCards.AdaptiveCard();
+function renderingSetup(): AdaptiveCards.AdaptiveCard {
+  let adaptiveCard = new AdaptiveCards.AdaptiveCard();
 
   // Set its hostConfig property unless you want to use the default Host Config
   // Host Config defines the style and behavior of a card
@@ -42,13 +42,40 @@ function GetRenderedCard() {
     fontFamily: "Segoe UI, Helvetica Neue, sans-serif"
   });
 
-  var cardTemplate = getCard();
-  // Parse the card payload
-  adaptiveCard.parse(cardTemplate);
+  return adaptiveCard
 
-  // Render the card to an HTML element
-  const renderedCard = adaptiveCard.render();
-  return renderedCard;
+}
+
+function parseCardTemplate(): AdaptiveCards.AdaptiveCard {
+
+  let adaptiveCard = renderingSetup();
+  try {
+    var cardTemplate = getCard();
+    // Parse the card payload
+    adaptiveCard.parse(cardTemplate);
+    return adaptiveCard;
+  }
+  catch (e) {
+    return new AdaptiveCards.AdaptiveCard;
+  }
+
+
+
+
+}
+
+function renderAdaptiveCard(): any {
+  let adaptiveCard = parseCardTemplate();
+  try {
+    // Render the card to an HTML element
+    let renderedCard = adaptiveCard.render();
+    return renderedCard;
+
+  }
+  catch (e) {
+    return <div>Error</div>
+
+  }
 }
 
 class AdaptiveCard extends React.Component {
@@ -59,7 +86,7 @@ class AdaptiveCard extends React.Component {
           ref={n => {
             // Work around for known issue: https://github.com/gatewayapps/react-adaptivecards/issues/10
             n && n.firstChild && n.removeChild(n.firstChild);
-            n && n.appendChild(GetRenderedCard());
+            n && n.appendChild(renderAdaptiveCard());
           }}
         />
         <TemplateName>Template Name</TemplateName>
