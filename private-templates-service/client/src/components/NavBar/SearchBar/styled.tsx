@@ -5,6 +5,7 @@ import { BREAK, COLORS } from '../../../globalStyles';
 export const StyledSearchBox = styled(SearchBox)`
   width: 50%;
   border-color: ${COLORS.GREY4};
+  border-radius: 4px;
 
   @media only screen and (max-width: ${BREAK.SM}px){
     border-radius: 16px;
