@@ -1,33 +1,85 @@
-import { Queries, Collections, StorageProvider, Interface } from "./StorageProvider";
+import { UserQuery, TemplateQuery, JSONResponse, IUser, ITemplate, ITemplateInstance } from "../models/models";
+import { StorageProvider } from "../models/StorageProvider";
 import logger from "../../util/logger";
 import uuidv4 from "uuid/v4";
 
-export class InMemoryDBProvider extends StorageProvider {
-  users: Map<string, Collections.User> = new Map();
-  templates: Map<string, Collections.Template> = new Map();
+export class InMemoryDBProvider implements StorageProvider {
+  users: Map<string, IUser> = new Map();
+  templates: Map<string, ITemplate> = new Map();
 
-  constructor() {
-    super("");
+  constructor() {}
+
+  private _updateUser(user: IUser, updateQuery: UserQuery): void {
+    if (updateQuery.email != undefined) {
+      user.email = updateQuery.email;
+    }
+    if (updateQuery.orgID != undefined) {
+      user.org = updateQuery.orgID;
+    }
+    if (updateQuery.teamID != undefined) {
+      user.team = updateQuery.teamID;
+    }
+    this.users.set(user._id!, user);
   }
 
-  async insertUser(doc: Collections.User): Promise<void> {
+  private _updateTemplate(template: ITemplate, updateQuery: TemplateQuery): void {
+    if (updateQuery.isPublished != undefined) {
+      template.isPublished = updateQuery.isPublished;
+    }
+    if (updateQuery.owner != undefined) {
+      template.owner = updateQuery.owner;
+    }
+    if (updateQuery.tags != undefined) {
+      template.tags = updateQuery.tags;
+    }
+    if (updateQuery.instances != undefined) {
+      template.instances = this._clone(updateQuery.instances);
+    }
+    this.templates.set(template._id!, template);
+  }
+
+  async updateUser(query: UserQuery, updateQuery: UserQuery): Promise<JSONResponse<Number>> {
+    let updateCount: number = 0;
+    this._matchUsers(query).then(users => {
+      users.forEach(user => {
+        updateCount += 1;
+        this._updateUser(user, updateQuery);
+      });
+    });
+    return Promise.resolve({ success: true, result: updateCount });
+  }
+  async updateTemplate(query: TemplateQuery, updateQuery: TemplateQuery): Promise<JSONResponse<Number>> {
+    let updateCount: number = 0;
+    this._matchTemplates(query).then(templates => {
+      templates.forEach(template => {
+        updateCount += 1;
+        this._updateTemplate(template, updateQuery);
+      });
+    });
+    return Promise.resolve({ success: true, result: updateCount });
+  }
+
+  async insertUser(doc: IUser): Promise<void> {
+    if (this._clone(doc).org === doc.org) {
+      console.log("fuck");
+    }
     return this._insert(doc, this.users);
   }
-  async insertTemplate(doc: Collections.Template): Promise<void> {
+  async insertTemplate(doc: ITemplate): Promise<void> {
     this._setTimestamps(doc);
     return this._insert(doc, this.templates);
   }
 
-  async getUser(query: Queries.UserQuery): Promise<Collections.User[]> {
+  async getUser(query: UserQuery): Promise<IUser[]> {
     return this._matchUsers(query);
   }
 
-  async getTemplate(query: Queries.TemplateQuery): Promise<Collections.Template[]> {
+  async getTemplate(query: TemplateQuery): Promise<ITemplate[]> {
     return this._matchTemplates(query);
   }
 
   // Will be fixed in a while to use JSONResponse
-  async removeUser(query: Queries.UserQuery): Promise<boolean> {
+  async removeUser(query: UserQuery): Promise<boolean> {
     await this._matchUsers(query).then(users => {
       users.forEach(user => {
         this.users.delete(user._id!);
@@ -35,7 +87,7 @@ export class InMemoryDBProvider extends StorageProvider {
     });
     return Promise.resolve(true);
   }
-  async removeTemplate(query: Queries.TemplateQuery): Promise<boolean> {
+  async removeTemplate(query: TemplateQuery): Promise<boolean> {
     await this._matchTemplates(query).then(templates => {
       templates.forEach(template => {
         this.templates.delete(template._id!);
@@ -44,47 +96,53 @@ export class InMemoryDBProvider extends StorageProvider {
     return Promise.resolve(true);
   }
 
-  private async _matchUsers(query: Queries.UserQuery): Promise<Collections.User[]> {
-    let res: Collections.User[] = new Array();
+  protected async _matchUsers(query: UserQuery): Promise<IUser[]> {
+    let res: IUser[] = new Array();
     this.users.forEach(user => {
       if (this._matchUser(query, user)) {
-        res.push(user);
+        res.push(this._clone(user));
       }
     });
     return Promise.resolve(res);
   }
 
-  private async _matchTemplates(query: Queries.TemplateQuery): Promise<Collections.Template[]> {
-    let res: Collections.Template[] = new Array();
+  protected async _matchTemplates(query: TemplateQuery): Promise<ITemplate[]> {
+    let res: ITemplate[] = new Array();
     this.templates.forEach(template => {
       if (this._matchTemplate(query, template)) {
-        res.push(template);
+        res.push(this._clone(template));
       }
     });
     return Promise.resolve(res);
   }
 
-  private async _insert<T extends Collections.Template | Collections.User>(doc: T, collection: Map<String, T>): Promise<void> {
-    this._checkID(doc);
-    if (!collection.has(doc._id!)) {
-      collection.set(doc._id!, doc);
+  protected _clone<T>(obj: T): T {
+    let cloned: T = JSON.parse(JSON.stringify(obj));
+    return cloned;
+  }
+
+  protected async _insert<T extends ITemplate | IUser>(doc: T, collection: Map<String, T>): Promise<void> {
+    let docToInsert: T = this._clone(doc);
+    this._checkID(docToInsert);
+    if (!collection.has(docToInsert._id!)) {
+      collection.set(docToInsert._id!, docToInsert);
     } else {
-      logger.error("Object with id: " + doc._id + " already exists. Insertion failed");
+      logger.error("Object with id: %s already exists. Insertion failed", doc._id!);
     }
   }
 
   // Makes sure that id of the object is set
-  private _checkID<T extends Interface.ITemplate | Interface.IUser>(doc: T) {
+  protected _checkID<T extends ITemplate | IUser>(doc: T) {
     if (!doc._id) {
       doc._id = uuidv4();
     }
   }
 
-  private _setTimestamps(doc: Collections.Template): void {
+  protected _setTimestamps(doc: ITemplate): void {
     doc.createdAt = new Date(Date.now());
   }
 
-  private _matchUser(query: Queries.UserQuery, user: Collections.User): boolean {
+  protected _matchUser(query: UserQuery, user: IUser): boolean {
     if (query.userID && !(query.userID === user._id)) {
       return false;
     }
@@ -110,7 +168,7 @@ export class InMemoryDBProvider extends StorageProvider {
     return true;
   }
 
-  private _matchTemplate(query: Queries.TemplateQuery, template: Collections.Template): boolean {
+  protected _matchTemplate(query: TemplateQuery, template: ITemplate): boolean {
     if (query.owner && !(query.owner === template.owner)) {
       return false;
     }
