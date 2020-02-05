@@ -132,7 +132,7 @@ export class TemplateServiceClient {
 
             this.getTemplates().then(
                 (templates) => {
-                    res.status(200).json(templates); 
+                    res.status(200).json({ "templates": templates });
                 })
         })
         
@@ -168,7 +168,6 @@ export class TemplateServiceClient {
         return router;
     }
 
-    private constructor() {}
 }
 
 export * from "./authproviders/IAuthenticationProvider";

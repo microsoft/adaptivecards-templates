@@ -14,7 +14,7 @@ export class TemplateError {
 
 /**
  * @enum
- * Errors returned by TemplateServiceClient's express router.
+ * Errors types returned by TemplateServiceClient's express router.
  */
 export enum ApiError {
     InvalidTemplate = "InvalidTemplate",

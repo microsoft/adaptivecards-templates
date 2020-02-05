@@ -11,8 +11,6 @@ export class AzureADProvider implements AuthenticationProvider {
     private user : string = "";
     private static CERT_URL : string = "https://login.microsoftonline.com/common/discovery/keys";
 
-    public constructor() {}
-
     async isValid(accessToken: string) : Promise<boolean> {
         let bearer = accessToken.split(/[ ]+/).pop();
         if (bearer){

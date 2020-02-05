@@ -4,9 +4,15 @@
   "description": "Backend library for the adaptive cards templating service.",
   "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "build": "tsc",
     "start": "tsc && npm start"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ]
   },
   "license": "ISC",
   "dependencies": {
@@ -24,5 +30,13 @@
     "mongoose": "^5.8.10",
     "passport": "^0.4.1",
     "passport-azure-ad": "^4.2.1"
+  },
+  "devDependencies": {
+    "@types/jest": "^25.1.1",
+    "@types/supertest": "^2.0.8",
+    "jest": "^25.1.0",
+    "supertest": "^4.0.2",
+    "ts-jest": "^25.2.0",
+    "typescript": "^3.7.5"
   }
 }
