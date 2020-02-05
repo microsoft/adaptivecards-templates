@@ -79,21 +79,25 @@ export class InMemoryDBProvider implements StorageProvider {
   }
 
   // Will be fixed in a while to use JSONResponse
-  async removeUser(query: UserQuery): Promise<boolean> {
+  async removeUser(query: UserQuery): Promise<JSONResponse<Number>> {
+    let removeCount: number = 0;
     await this._matchUsers(query).then(users => {
       users.forEach(user => {
+        removeCount += 1;
         this.users.delete(user._id!);
       });
     });
-    return Promise.resolve(true);
+    return Promise.resolve({ success: true, result: removeCount });
   }
-  async removeTemplate(query: TemplateQuery): Promise<boolean> {
+  async removeTemplate(query: TemplateQuery): Promise<JSONResponse<Number>> {
+    let removeCount: number = 0;
     await this._matchTemplates(query).then(templates => {
       templates.forEach(template => {
+        removeCount += 1;
         this.templates.delete(template._id!);
       });
     });
-    return Promise.resolve(true);
+    return Promise.resolve({ success: true, result: removeCount });
   }
 
   protected async _matchUsers(query: UserQuery): Promise<IUser[]> {

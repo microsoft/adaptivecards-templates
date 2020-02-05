@@ -7,6 +7,6 @@ export interface StorageProvider {
   updateTemplate(query: TemplateQuery, updateQuery: TemplateQuery): Promise<JSONResponse<Number>>;
   insertUser(user: IUser): Promise<void>;
   insertTemplate(user: ITemplate): Promise<void>;
-  removeUser(query: UserQuery): Promise<boolean>;
-  removeTemplate(query: TemplateQuery): Promise<boolean>;
+  removeUser(query: UserQuery): Promise<JSONResponse<Number>>;
+  removeTemplate(query: TemplateQuery): Promise<JSONResponse<Number>>;
 }
