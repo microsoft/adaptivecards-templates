@@ -1,4 +1,4 @@
-import { NestedPartial, JSONResponse, IUser, ITemplate, ITemplateInstance } from "../models/models";
+import { JSONResponse, IUser, ITemplate, ITemplateInstance } from "../models/models";
 import { StorageProvider } from "../models/StorageProvider";
 import logger from "../../util/logger";
 import uuidv4 from "uuid/v4";
