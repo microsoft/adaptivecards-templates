@@ -5,11 +5,9 @@ import { connect } from 'react-redux';
 import { UserType } from '../../store/auth/types';
 
 //ACDesigner
-import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
+import * as monaco from 'monaco-editor';
 import markdownit from 'markdown-it';
 import * as ACDesigner from 'adaptivecards-designer';
-
-require("adaptivecards-designer/dist/adaptivecards-designer.css");
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -30,6 +28,7 @@ class Designer extends React.Component<DesignerProps>{
 
   componentDidMount(): void {
     ACDesigner.GlobalSettings.enableDataBindingSupport = true;
+    ACDesigner.GlobalSettings.showSampleDataEditorToolbox = true;
 
     ACDesigner.CardDesigner.onProcessMarkdown = (text: string, result: { didProcess: boolean, outputHtml?: string }) => {
       result.outputHtml = new markdownit().render(text);
@@ -46,16 +45,19 @@ class Designer extends React.Component<DesignerProps>{
     hostContainers.push(new ACDesigner.BotFrameworkContainer("Bot Framework Other Channels (Image render)", "containers/bf-image-container.css"));
     hostContainers.push(new ACDesigner.ToastContainer("Windows Notifications (Preview)", "containers/toast-container.css"));
 
-    let designer = new ACDesigner.CardDesigner(hostContainers);
-    designer.sampleCatalogueUrl = window.location.origin + "/res/sample-catalogue.json";
 
     this.designer = new ACDesigner.CardDesigner(hostContainers);
+    this.designer.sampleCatalogueUrl = window.location.origin;
+    this.designer.assetPath = window.location.origin;
     const element = document.getElementById("root");
     if (element) {
       this.designer.attachTo(element);
     }
 
-    //part of basic designer properties
+    //Example of how to export data from designer
+    console.log("Adaptive Card Template: " + this.designer.getCard());
+    console.log("Adaptive Card Sample Data: " + this.designer.sampleData);
+
     this.designer.monacoModuleLoaded(monaco);
   }
 

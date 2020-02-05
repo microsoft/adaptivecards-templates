@@ -42,7 +42,7 @@ const navMenuLinks = [{
       url: '/',
     }, {
       name: 'New Template',
-      url: '/dashboard/new',
+      url: '/designer',
     }, {
       name: 'All Templates',
       url: '/dashboard/all',

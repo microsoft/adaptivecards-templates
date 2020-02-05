@@ -39,26 +39,24 @@ module.exports = (env, argv) => {
 				{
 					test: /\.(jpg|png|woff|eot|ttf|svg|gif)$/,
 					use: [
-						'file-loader'
+						"file-loader"
 			        ]
 				  }
 			]
 		},
 		plugins: [
-			new CleanWebpackPlugin(),
-			new HtmlWebpackPlugin({
-				title: "Adaptive Office UI Fabric",
-				template: "./index.html"
-			}),
-			new MiniCssExtractPlugin({
-				filename: '[name].css'
-			}),
+			new CopyPlugin([{
+				from: "node_modules/adaptivecards-designer/dist/*",
+				to: "ACDesigner/",
+				flatten: true
+			}]),
 			new MonacoWebpackPlugin({
 				languages: ['json']
 			})
 		],
 		devServer: {
-			port: 9001,
+			contentBase: path.join(__dirname, 'dist'),
+			port: 5000,
 			historyApiFallback: true
 		},
 	}

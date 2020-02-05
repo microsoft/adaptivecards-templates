@@ -115,8 +115,12 @@ class App extends Component<Props, State> {
               {error}
               <Switch>
                 <Route exact path="/">
+                  <Dashboard authButtonMethod={this.login} />
+                </Route>
+                <Route exact path="/designer">
                   <Designer authButtonMethod={this.login} />
                 </Route>
+
               </Switch>
             </MainApp>
           </MainAppWrapper>
