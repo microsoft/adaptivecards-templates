@@ -1,0 +1,12 @@
+// Base class for all the StorageProviders.
+import { NestedPartial, JSONResponse, IUser, ITemplate, ITemplateInstance } from "./models";
+export interface StorageProvider {
+  getUser(query: Partial<IUser>): Promise<JSONResponse<IUser[]>>;
+  getTemplate(query: NestedPartial<ITemplate>): Promise<JSONResponse<ITemplate[]>>;
+  updateUser(query: Partial<IUser>, updateQuery: Partial<IUser>): Promise<JSONResponse<Number>>;
+  updateTemplate(query: NestedPartial<ITemplate>, updateQuery: Partial<ITemplate>): Promise<JSONResponse<Number>>;
+  insertUser(user: IUser): Promise<JSONResponse<Number>>;
+  insertTemplate(user: ITemplate): Promise<JSONResponse<Number>>;
+  removeUser(query: Partial<IUser>): Promise<JSONResponse<Number>>;
+  removeTemplate(query: NestedPartial<ITemplate>): Promise<JSONResponse<Number>>;
+}
