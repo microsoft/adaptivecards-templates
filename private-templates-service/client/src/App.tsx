@@ -30,7 +30,8 @@ interface State {
 const mapStateToProps = (state: RootState) => {
   return {
     isAuthenticated: state.auth.isAuthenticated,
-    user: state.auth.user
+    user: state.auth.user,
+    searchValue: state.search.searchValue
   };
 };
 
@@ -50,6 +51,7 @@ interface Props {
   userLogout: () => void;
   isAuthenticated: boolean;
   user?: UserType;
+  searchValue: string,
 }
 
 class App extends Component<Props, State> {
@@ -102,14 +104,8 @@ class App extends Component<Props, State> {
                 : this.login
             }
           />
-
           <MainAppWrapper>
             <NavBar
-              authButtonMethod={
-                this.props.isAuthenticated
-                  ? this.logout
-                  : this.login
-              }
             />
             <MainApp>
               {error}
