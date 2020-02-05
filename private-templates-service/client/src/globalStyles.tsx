@@ -10,6 +10,7 @@ export const COLORS = {
   GREEN: '#00D610',
   YELLOW: '#FFBD53',
   BLUE: '#016FC4',
+  BORDER: '#C3C3C3',
 }
 
 export const BREAK = {
@@ -19,7 +20,7 @@ export const BREAK = {
 }
 
 export const THEME = {
-  DARK : createTheme({
+  DARK: createTheme({
     palette: {
       themePrimary: '#ffffff',
       themeLighterAlt: '#767676',

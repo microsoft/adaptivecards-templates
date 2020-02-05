@@ -7,6 +7,7 @@ import { ErrorMessageProps } from "../ErrorMessage/ErrorMessage";
 import requireAuthentication from "../../utils/requireAuthentication";
 import Gallery from "../Gallery";
 import { Title, DashboardContainer } from "../Dashboard/styled";
+import PreviewModal from "./PreviewModal";
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -17,6 +18,7 @@ const mapStateToProps = (state: RootState) => {
 
 interface DashboardStates {
   error: ErrorMessageProps | null;
+  isPreviewOpen: boolean;
 }
 
 interface DashboardProps {
@@ -26,13 +28,23 @@ interface DashboardProps {
 }
 
 class Dashboard extends React.Component<DashboardProps, DashboardStates> {
+  constructor(props: DashboardProps) {
+    super(props);
+    this.state = { error: null, isPreviewOpen: false };
+  }
+
+  toggleModal = () => {
+    this.setState({ isPreviewOpen: !this.state.isPreviewOpen });
+  }
+
   render() {
     return (
       <DashboardContainer>
         <Title>Recent</Title>
-        <Gallery></Gallery>
+        <Gallery toggleModal={this.toggleModal}></Gallery>
         <Title>Drafts</Title>
-        <Gallery></Gallery>
+        <Gallery toggleModal={this.toggleModal}></Gallery>
+        <PreviewModal show={this.state.isPreviewOpen} toggleModal={this.toggleModal} />
       </DashboardContainer>
     );
   }

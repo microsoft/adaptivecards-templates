@@ -1,6 +1,8 @@
-import * as React from "react";
+import React from 'react';
+
 import * as AdaptiveCards from "adaptivecards";
-import { Card, Container, TemplateName } from "../AdaptiveCard/styled";
+
+import { Card } from './styled';
 
 function getCard(): any {
   // Hard coded, will remove and connect to backend in future PR
@@ -32,7 +34,6 @@ function getCard(): any {
   };
   return card;
 }
-
 function renderingSetup(): AdaptiveCards.AdaptiveCard {
   let adaptiveCard = new AdaptiveCards.AdaptiveCard();
   // Set its hostConfig property unless you want to use the default Host Config
@@ -40,9 +41,8 @@ function renderingSetup(): AdaptiveCards.AdaptiveCard {
   adaptiveCard.hostConfig = new AdaptiveCards.HostConfig({
     fontFamily: "Segoe UI, Helvetica Neue, sans-serif"
   });
-  return adaptiveCard
+  return adaptiveCard;
 }
-
 function parseCardTemplate(): AdaptiveCards.AdaptiveCard {
   let adaptiveCard = renderingSetup();
   try {
@@ -55,8 +55,7 @@ function parseCardTemplate(): AdaptiveCards.AdaptiveCard {
     return new AdaptiveCards.AdaptiveCard;
   }
 }
-
-function renderAdaptiveCard(): any {
+export function renderAdaptiveCard(): any {
   let adaptiveCard = parseCardTemplate();
   try {
     // Render the card to an HTML element
@@ -64,24 +63,22 @@ function renderAdaptiveCard(): any {
     return renderedCard;
   }
   catch (e) {
-    return <div>Error</div>
+    return <div>Error</div>;
   }
 }
+
 
 class AdaptiveCard extends React.Component {
   render() {
     return (
-      <Container>
-        <Card
-          ref={n => {
-            // Work around for known issue: https://github.com/gatewayapps/react-adaptivecards/issues/10
-            n && n.firstChild && n.removeChild(n.firstChild);
-            n && n.appendChild(renderAdaptiveCard());
-          }}
-        />
-        <TemplateName>Template Name</TemplateName>
-      </Container>
-    );
+      <Card
+        ref={n => {
+          // Work around for known issue: https://github.com/gatewayapps/react-adaptivecards/issues/10
+          n && n.firstChild && n.removeChild(n.firstChild);
+          n && n.appendChild(renderAdaptiveCard());
+        }}
+      />
+    )
   }
 }
 

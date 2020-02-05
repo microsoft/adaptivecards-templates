@@ -1,13 +1,5 @@
 import styled from "styled-components";
-
-export const Card = styled.div`
-	/* Disables buttons on adaptive card */
-	pointer-events: none;
-	background: #d3d3d3;
-	border-top: 5px;
-	border-top-color: grey;
-	border-radius: 5px 5px 0 0px;
-`;
+import { COLORS } from '../../globalStyles';
 
 export const Container = styled.div`
 	display: flex;
@@ -16,20 +8,25 @@ export const Container = styled.div`
 
 	background: white;
 	border-radius: 5px;
-	width: 350px;
+  width: 350px;
 
-	--webkit-box-shadow: 0px 1px 5px -3px rgba(189, 187, 189, 1);
-	-moz-box-shadow: 0px 1px 5px -3px rgba(189, 187, 189, 1);
-	box-shadow: 0px 1px 5px -3px rgba(189, 187, 189, 1);
+  -webkit-box-shadow: 0px 2px 6px 0px rgba(111,111,111,0.4);
+  -moz-box-shadow: 0px 2px 6px 0px rgba(111,111,111,0.4);
+  box-shadow: 0px 2px 6px 0px rgba(111,111,111,0.4);
 
 	@media only screen and (max-width: 1399px) {
 		margin-bottom: 20px;
 	}
 `;
 
+export const ACWrapper = styled.div`
+  padding: 16px 16px 0;
+  border-radius: 5px 5px 0 0;
+`;
+
 export const TemplateName = styled.h2`
 	border-top-style: solid;
-	border-top-color: grey;
+	border-top-color: ${COLORS.BORDER};
 	border-width: 1px;
 	padding: 10px 0 5px 10px;
 	font-size: 0.75rem;
