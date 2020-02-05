@@ -1,4 +1,4 @@
-import {createTheme} from 'office-ui-fabric-react';
+import { createTheme } from 'office-ui-fabric-react';
 export const COLORS = {
   PRIMARY: '#6F6F6F',
   SECONDARY: '#707070',

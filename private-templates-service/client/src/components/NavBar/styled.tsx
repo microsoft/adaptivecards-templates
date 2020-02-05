@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import {BREAK} from '../../globalStyles';
+import { BREAK, COLORS } from '../../globalStyles';
 
 export const Banner = styled.div`
-  background-color: #6F6F6F;
+  background-color: ${COLORS.GREY3};
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -23,18 +23,17 @@ export const MobileBanner = styled.div`
   align-items: center;
 `;
 
-export const Logo = styled.img`
-  display: none;
+export const StyledLogo = styled.img`
+  width: 32px;
+  margin-right: 10px;
 
-  @media only screen and (max-width: ${BREAK.SM}px){
-    width: 32px;
-    display: block;
-    margin-right: 10px;
+  @media only screen and (min-width: ${BREAK.SM}px){
+    display: none;
   }
 `;
 
 export const Styledh1 = styled.div`
-  color: #FFFFFF;
+  color: ${COLORS.WHITE};
   letter-spacing: 0;
   opacity: 1;
   font-size: 32px;

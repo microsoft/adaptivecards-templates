@@ -1,12 +1,10 @@
-import React, {useState, useEffect} from 'react';
-import {StyledSearchBox} from './styled';
+import React, { useState, useEffect } from 'react';
+import { StyledSearchBox } from './styled';
 import { RootState } from '../../../store/rootReducer';
 import { connect } from 'react-redux';
 import { search, clearSearch } from '../../../store/search/actions';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
-import {THEME, BREAK} from '../../../globalStyles';
-
-initializeIcons(); // to initilize the icons being used
+import { THEME, BREAK } from '../../../globalStyles';
 
 const mapStateToProps = (state:RootState) => {
   return {
@@ -42,7 +40,8 @@ interface State {
 class SearchBar extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = {isMobile: window.screen.width < BREAK.SM}
+    this.state = {isMobile: window.screen.width < BREAK.SM};
+    initializeIcons(); // to initilize the icons being used
   }
 
   componentDidMount() {
@@ -83,9 +82,9 @@ class SearchBar extends React.Component<Props, State> {
       );
     }
       
-    else {
-      return (<React.Fragment/>)
-    }// return empty
+    // return empty 
+    return (<React.Fragment/>);
+   
   }
 }
 

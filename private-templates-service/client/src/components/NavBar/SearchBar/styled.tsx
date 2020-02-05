@@ -1,10 +1,10 @@
 import styled from 'styled-components';
-import { SearchBox,} from 'office-ui-fabric-react';
-import {BREAK} from '../../../globalStyles';
+import { SearchBox } from 'office-ui-fabric-react';
+import { BREAK, COLORS } from '../../../globalStyles';
 
 export const StyledSearchBox = styled(SearchBox)`
   width: 50%;
-  border-color: #5c5c5c;
+  border-color: ${COLORS.GREY4};
 
   @media only screen and (max-width: ${BREAK.SM}px){
     border-radius: 16px;

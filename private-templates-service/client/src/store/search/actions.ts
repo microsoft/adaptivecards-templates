@@ -1,4 +1,4 @@
-import {SEARCH,SearchAction,CLEAR_SEARCH} from './types';
+import { SEARCH, SearchAction, CLEAR_SEARCH } from './types';
 
 export function search(searchValue: string): SearchAction{
   return{
