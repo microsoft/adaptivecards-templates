@@ -17,6 +17,7 @@ module.exports = (env, argv) => {
 			filename: "[name].js"
 		},
 		resolve: {
+			root: [__dirname, "/src/"],
 			extensions: [".ts", ".tsx", ".js"]
 		},
 		module: {
