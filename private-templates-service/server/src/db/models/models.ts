@@ -1,5 +1,5 @@
 export interface IUser {
-  _id?: string;
+  id?: string;
   team: string[];
   org: string[];
   email: string;
@@ -11,7 +11,7 @@ export interface ITemplateInstance {
 }
 
 export interface ITemplate {
-  _id?: string;
+  id?: string;
   instances: ITemplateInstance[];
   tags: string[];
   owner: string;
@@ -24,20 +24,4 @@ export interface JSONResponse<T> {
   success: boolean;
   errorMessage?: string;
   result?: T;
-}
-
-export interface TemplateQuery {
-  templateID?: string;
-  version?: string;
-  tags?: string[];
-  owner?: string;
-  isPublished?: boolean;
-  instances?: ITemplateInstance[];
-}
-
-export interface UserQuery {
-  userID?: string;
-  teamID?: string[];
-  orgID?: string[];
-  email?: string;
 }

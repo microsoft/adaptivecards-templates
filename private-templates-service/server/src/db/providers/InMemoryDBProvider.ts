@@ -1,4 +1,4 @@
-import { UserQuery, TemplateQuery, JSONResponse, IUser, ITemplate, ITemplateInstance } from "../models/models";
+import { NestedPartial, JSONResponse, IUser, ITemplate, ITemplateInstance } from "../models/models";
 import { StorageProvider } from "../models/StorageProvider";
 import logger from "../../util/logger";
 import uuidv4 from "uuid/v4";
@@ -9,115 +9,91 @@ export class InMemoryDBProvider implements StorageProvider {
 
   constructor() {}
 
-  private _updateUser(user: IUser, updateQuery: UserQuery): void {
-    if (updateQuery.email != undefined) {
-      user.email = updateQuery.email;
-    }
-    if (updateQuery.orgID != undefined) {
-      user.org = updateQuery.orgID;
-    }
-    if (updateQuery.teamID != undefined) {
-      user.team = updateQuery.teamID;
-    }
-    this.users.set(user._id!, user);
+  private _updateUser(user: IUser, updateQuery: Partial<IUser>): void {
+    this.users.set(user.id!, { ...user, ...updateQuery });
   }
 
-  private _updateTemplate(template: ITemplate, updateQuery: TemplateQuery): void {
-    if (updateQuery.isPublished != undefined) {
-      template.isPublished = updateQuery.isPublished;
-    }
-    if (updateQuery.owner != undefined) {
-      template.owner = updateQuery.owner;
-    }
-    if (updateQuery.tags != undefined) {
-      template.tags = updateQuery.tags;
-    }
-    if (updateQuery.instances != undefined) {
-      template.instances = this._clone(updateQuery.instances);
-    }
-    this.templates.set(template._id!, template);
+  private _updateTemplate(template: ITemplate, updateQuery: Partial<ITemplate>): void {
+    this.templates.set(template.id!, { ...template, ...updateQuery });
   }
 
-  async updateUser(query: UserQuery, updateQuery: UserQuery): Promise<JSONResponse<Number>> {
+  async updateUser(query: Partial<IUser>, updateQuery: Partial<IUser>): Promise<JSONResponse<Number>> {
     let updateCount: number = 0;
-    this._matchUsers(query).then(users => {
-      users.forEach(user => {
+    this._matchUsers(query).then(response => {
+      response.result!.forEach(user => {
         updateCount += 1;
-        this._updateUser(user, updateQuery);
+        this._updateUser(user, this._clone(updateQuery));
       });
     });
     return Promise.resolve({ success: true, result: updateCount });
   }
-  async updateTemplate(query: TemplateQuery, updateQuery: TemplateQuery): Promise<JSONResponse<Number>> {
+  async updateTemplate(query: Partial<ITemplate>, updateQuery: Partial<ITemplate>): Promise<JSONResponse<Number>> {
     let updateCount: number = 0;
-    this._matchTemplates(query).then(templates => {
-      templates.forEach(template => {
+    this._matchTemplates(query).then(response => {
+      response.result!.forEach(template => {
         updateCount += 1;
-        this._updateTemplate(template, updateQuery);
+        this._updateTemplate(template, this._clone(updateQuery));
       });
     });
     return Promise.resolve({ success: true, result: updateCount });
   }
 
-  async insertUser(doc: IUser): Promise<void> {
-    if (this._clone(doc).org === doc.org) {
-      console.log("fuck");
-    }
+  async insertUser(doc: IUser): Promise<JSONResponse<Number>> {
     return this._insert(doc, this.users);
   }
-  async insertTemplate(doc: ITemplate): Promise<void> {
+  async insertTemplate(doc: ITemplate): Promise<JSONResponse<Number>> {
     this._setTimestamps(doc);
     return this._insert(doc, this.templates);
   }
 
-  async getUser(query: UserQuery): Promise<IUser[]> {
+  async getUser(query: Partial<IUser>): Promise<JSONResponse<IUser[]>> {
     return this._matchUsers(query);
   }
 
-  async getTemplate(query: TemplateQuery): Promise<ITemplate[]> {
+  async getTemplate(query: Partial<ITemplate>): Promise<JSONResponse<ITemplate[]>> {
     return this._matchTemplates(query);
   }
 
   // Will be fixed in a while to use JSONResponse
-  async removeUser(query: UserQuery): Promise<JSONResponse<Number>> {
+  async removeUser(query: Partial<ITemplate>): Promise<JSONResponse<Number>> {
     let removeCount: number = 0;
-    await this._matchUsers(query).then(users => {
-      users.forEach(user => {
+    await this._matchUsers(query).then(response => {
+      response.result!.forEach(user => {
         removeCount += 1;
-        this.users.delete(user._id!);
+        this.users.delete(user.id!);
       });
     });
     return Promise.resolve({ success: true, result: removeCount });
   }
-  async removeTemplate(query: TemplateQuery): Promise<JSONResponse<Number>> {
+  async removeTemplate(query: Partial<ITemplate>): Promise<JSONResponse<Number>> {
     let removeCount: number = 0;
-    await this._matchTemplates(query).then(templates => {
-      templates.forEach(template => {
+    await this._matchTemplates(query).then(response => {
+      response.result!.forEach(template => {
         removeCount += 1;
-        this.templates.delete(template._id!);
+        this.templates.delete(template.id!);
       });
     });
     return Promise.resolve({ success: true, result: removeCount });
   }
 
-  protected async _matchUsers(query: UserQuery): Promise<IUser[]> {
+  protected async _matchUsers(query: Partial<ITemplate>): Promise<JSONResponse<IUser[]>> {
     let res: IUser[] = new Array();
     this.users.forEach(user => {
       if (this._matchUser(query, user)) {
         res.push(this._clone(user));
       }
     });
-    return Promise.resolve(res);
+    return Promise.resolve({ success: true, result: res });
   }
 
-  protected async _matchTemplates(query: TemplateQuery): Promise<ITemplate[]> {
+  protected async _matchTemplates(query: Partial<ITemplate>): Promise<JSONResponse<ITemplate[]>> {
     let res: ITemplate[] = new Array();
     this.templates.forEach(template => {
       if (this._matchTemplate(query, template)) {
         res.push(this._clone(template));
       }
     });
-    return Promise.resolve(res);
+    return Promise.resolve({ success: true, result: res });
   }
 
   protected _clone<T>(obj: T): T {
@@ -125,20 +101,22 @@ export class InMemoryDBProvider implements StorageProvider {
     return cloned;
   }
 
-  protected async _insert<T extends ITemplate | IUser>(doc: T, collection: Map<String, T>): Promise<void> {
+  protected async _insert<T extends ITemplate | IUser>(doc: T, collection: Map<String, T>): Promise<JSONResponse<Number>> {
     let docToInsert: T = this._clone(doc);
-    this._checkID(docToInsert);
-    if (!collection.has(docToInsert._id!)) {
-      collection.set(docToInsert._id!, docToInsert);
+    this._setID(docToInsert);
+    if (!collection.has(docToInsert.id!)) {
+      collection.set(docToInsert.id!, docToInsert);
+      return Promise.resolve({ success: true, result: 1 });
     } else {
-      logger.error("Object with id: %s already exists. Insertion failed", doc._id!);
+      logger.error("Object with id: %s already exists. Insertion failed", doc.id!);
+      return Promise.resolve({ success: false, result: 0, errorMessage: "Object with id: " + doc.id! + "already exists. Insertion failed" });
     }
   }
 
   // Makes sure that id of the object is set
-  protected _checkID<T extends ITemplate | IUser>(doc: T) {
-    if (!doc._id) {
-      doc._id = uuidv4();
+  protected _setID<T extends ITemplate | IUser>(doc: T) {
+    if (!doc.id) {
+      doc.id = uuidv4();
     }
   }
 
@@ -146,65 +124,38 @@ export class InMemoryDBProvider implements StorageProvider {
     doc.createdAt = new Date(Date.now());
   }
 
-  protected _matchUser(query: UserQuery, user: IUser): boolean {
-    if (query.userID && !(query.userID === user._id)) {
+  protected _matchUser(query: Partial<IUser>, user: IUser): boolean {
+    if (
+      (query.id && !(query.id === user.id)) ||
+      (query.email && !(query.email === user.email)) ||
+      (query.org && !this._ifContainsList(user.org, query.org)) ||
+      (query.team && !this._ifContainsList(user.team, query.team))
+    ) {
       return false;
-    }
-    if (query.email && !(query.email === user.email)) {
-      return false;
-    }
-
-    if (query.orgID) {
-      for (let org of query.orgID) {
-        if (!user.org.includes(org)) {
-          return false;
-        }
-      }
-    }
-
-    if (query.teamID) {
-      for (let team of query.teamID) {
-        if (!user.team.includes(team)) {
-          return false;
-        }
-      }
     }
     return true;
   }
 
-  protected _matchTemplate(query: TemplateQuery, template: ITemplate): boolean {
-    if (query.owner && !(query.owner === template.owner)) {
-      return false;
-    }
-    if (query.templateID && !(query.templateID === template._id)) {
-      return false;
-    }
-
-    if (query.isPublished && !(query.isPublished === template.isPublished)) {
-      return false;
-    }
-
-    if (query.tags) {
-      for (let tag of query.tags) {
-        if (!template.tags.includes(tag)) {
-          return false;
-        }
-      }
-    }
-
-    if (query.version) {
-      let ifVersion: boolean = false;
-      for (let instance of template.instances) {
-        if (instance.version === query.version) {
-          ifVersion = true;
-          break;
-        }
-      }
-      if (!ifVersion) {
+  protected _ifContainsList<T>(toVerify: T[], list: T[]): boolean {
+    list.forEach(obj => {
+      if (!toVerify.includes(obj)) {
         return false;
       }
-    }
+    });
+    return true;
+  }
 
+  // Omitted version search for now
+  protected _matchTemplate(query: Partial<ITemplate>, template: ITemplate): boolean {
+    if (
+      (query.owner && !(query.owner === template.owner)) ||
+      (query.id && !(query.id === template.id)) ||
+      (query.isPublished && !(query.isPublished === template.isPublished)) ||
+      (query.tags && !this._ifContainsList(template.tags, query.tags))
+    ) {
+      console.log("false");
+      return false;
+    }
     return true;
   }
 }

@@ -1,12 +1,12 @@
 // Base class for all the StorageProviders.
-import { UserQuery, TemplateQuery, JSONResponse, IUser, ITemplate, ITemplateInstance } from "./models";
+import { NestedPartial, JSONResponse, IUser, ITemplate, ITemplateInstance } from "./models";
 export interface StorageProvider {
-  getUser(query: UserQuery): Promise<IUser[]>;
-  getTemplate(query: TemplateQuery): Promise<ITemplate[]>;
-  updateUser(query: UserQuery, updateQuery: UserQuery): Promise<JSONResponse<Number>>;
-  updateTemplate(query: TemplateQuery, updateQuery: TemplateQuery): Promise<JSONResponse<Number>>;
-  insertUser(user: IUser): Promise<void>;
-  insertTemplate(user: ITemplate): Promise<void>;
-  removeUser(query: UserQuery): Promise<JSONResponse<Number>>;
-  removeTemplate(query: TemplateQuery): Promise<JSONResponse<Number>>;
+  getUser(query: Partial<IUser>): Promise<JSONResponse<IUser[]>>;
+  getTemplate(query: NestedPartial<ITemplate>): Promise<JSONResponse<ITemplate[]>>;
+  updateUser(query: Partial<IUser>, updateQuery: Partial<IUser>): Promise<JSONResponse<Number>>;
+  updateTemplate(query: NestedPartial<ITemplate>, updateQuery: Partial<ITemplate>): Promise<JSONResponse<Number>>;
+  insertUser(user: IUser): Promise<JSONResponse<Number>>;
+  insertTemplate(user: ITemplate): Promise<JSONResponse<Number>>;
+  removeUser(query: Partial<IUser>): Promise<JSONResponse<Number>>;
+  removeTemplate(query: NestedPartial<ITemplate>): Promise<JSONResponse<Number>>;
 }
