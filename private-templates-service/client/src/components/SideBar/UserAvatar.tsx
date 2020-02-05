@@ -6,6 +6,7 @@ import { AvatarIcon, DefaultAvatarIcon } from "./styled";
 
 interface UserAvatarProps {
   user?: UserType;
+  iconSize?: string;
 }
 
 const mapStateToProps = (state: RootState) => {
@@ -21,13 +22,13 @@ export function UserAvatar(props: UserAvatarProps): ReactElement {
       <AvatarIcon
         src={props.user.avatar}
         alt="user"
-        className="rounded-circle align-self-center mr-2"
+        className="rounded-circle align-self-center"
       ></AvatarIcon>
     );
   }
   // No avatar available, return a default icon
   return (
-    <DefaultAvatarIcon className="far fa-user-circle fa-lg rounded-circle align-self-center mr-2"></DefaultAvatarIcon>
+    <DefaultAvatarIcon iconName="contact" size={props.iconSize} ></DefaultAvatarIcon>
   );
 }
 

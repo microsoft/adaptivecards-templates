@@ -3,32 +3,23 @@ import React, { ReactElement } from "react";
 import { UserType } from "../../store/auth/types";
 import { RootState } from "../../store/rootReducer";
 
-import { Button, Jumbotron } from "reactstrap";
+import { Button } from "reactstrap";
 import { connect } from "react-redux";
+import { OuterWrapper } from "./styled";
+
+const mapStateToPropsWelcome = (state: RootState) => {
+  return {
+    isAuthenticated: state.auth.isAuthenticated,
+    user: state.auth.user
+  };
+};
 
 interface WelcomeProps {
   user?: UserType;
   authButtonMethod: () => Promise<void>;
 }
 
-const mapStateToProps = (state: RootState) => {
-  return {
-    user: state.auth.user,
-  };
-}
-
 const WelcomeContent = (props: WelcomeProps): ReactElement => {
-  // If authenticated, greet the user
-  if (props.user && props.user.displayName) {
-    return (
-      <div>
-        <h4>
-          Welcome {props.user.displayName}{props.user.organization && " from " + props.user.organization}!
-        </h4>
-      </div>
-    );
-  }
-
   // Not authenticated, present a sign in button
   return (
     <React.Fragment>
@@ -42,16 +33,16 @@ const WelcomeContent = (props: WelcomeProps): ReactElement => {
 class Welcome extends React.Component<WelcomeProps> {
   render() {
     return (
-      <Jumbotron>
+      <OuterWrapper>
         <h1>Admin Portal</h1>
         <p className="lead">Basic authentication test.</p>
         <WelcomeContent
           user={this.props.user}
           authButtonMethod={this.props.authButtonMethod}
         />
-      </Jumbotron>
+      </OuterWrapper>
     );
   }
 }
 
-export default connect(mapStateToProps)(Welcome);
+export default connect(mapStateToPropsWelcome)(Welcome);

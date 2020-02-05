@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
-import { Container } from "reactstrap";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { UserAgentApplication, ClientAuthError } from "msal";
+import { initializeIcons } from '@uifabric/icons';
 
 // Redux
 import { connect } from "react-redux";
@@ -11,14 +11,15 @@ import { RootState } from "./store/rootReducer";
 
 // Components
 import NavBar from "./components/NavBar/NavBar";
-import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
-import Welcome from "./components/Welcome/Welcome";
+import SideBar from "./components/SideBar";
+import Dashboard from "./components/Dashboard";
+import ErrorMessage, { ErrorMessageProps } from "./components/ErrorMessage/ErrorMessage";
 import config from "./Config";
 import { getUserDetails, getOrgDetails } from "./Services/GraphService";
-import { ErrorMessageProps } from "./components/ErrorMessage/ErrorMessage";
 
 // CSS
 import "bootstrap/dist/css/bootstrap.css";
+import { OuterAppWrapper, MainAppWrapper, MainApp } from "./styled";
 
 interface State {
   error: ErrorMessageProps | null;
@@ -27,7 +28,8 @@ interface State {
 const mapStateToProps = (state: RootState) => {
   return {
     isAuthenticated: state.auth.isAuthenticated,
-    user: state.auth.user
+    user: state.auth.user,
+    searchValue: state.search.searchValue
   };
 };
 
@@ -47,6 +49,7 @@ interface Props {
   userLogout: () => void;
   isAuthenticated: boolean;
   user?: UserType;
+  searchValue: string,
 }
 
 class App extends Component<Props, State> {
@@ -54,6 +57,7 @@ class App extends Component<Props, State> {
 
   constructor(props: Props) {
     super(props);
+    initializeIcons();
     this.userAgentApplication = new UserAgentApplication({
       auth: {
         clientId: config.appId,
@@ -90,29 +94,28 @@ class App extends Component<Props, State> {
 
     return (
       <Router>
-        <div>
-          <NavBar
+        <OuterAppWrapper>
+          <SideBar
             authButtonMethod={
               this.props.isAuthenticated
                 ? this.logout
                 : this.login
             }
           />
-          <Container>
-            {error}
-            <Route
-              exact
-              path="/"
-              render={props => (
-                <Welcome
-                  {...props}
-                  authButtonMethod={this.login}
-                />
-              )}
+          <MainAppWrapper>
+            <NavBar
             />
-          </Container>
-        </div>
-      </Router>
+            <MainApp>
+              {error}
+              <Switch>
+                <Route exact path="/">
+                  <Dashboard authButtonMethod={this.login} />
+                </Route>
+              </Switch>
+            </MainApp>
+          </MainAppWrapper>
+        </OuterAppWrapper>
+      </Router >
     );
   }
 

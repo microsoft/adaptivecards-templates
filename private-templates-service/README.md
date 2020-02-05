@@ -1,4 +1,4 @@
-# Running the Adaptive Cards Admin Portal Locally
+# Running the Adaptive Cards CMS Client Locally
 
 To run this web application locally, you must have the following installed on your system:
 
@@ -7,7 +7,7 @@ To run this web application locally, you must have the following installed on yo
 
 **1. Clone the repository.**
 
-**2. Depending on what environment you would like to run locally (master, stage or dev), switch to the appropriate branch.**
+**2. Switch to the appropriate branch.**
 
 **3. Modify the `Config.tsx` file.**
 
