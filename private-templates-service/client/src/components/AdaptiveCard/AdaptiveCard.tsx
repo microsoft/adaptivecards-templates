@@ -35,19 +35,15 @@ function getCard(): any {
 
 function renderingSetup(): AdaptiveCards.AdaptiveCard {
   let adaptiveCard = new AdaptiveCards.AdaptiveCard();
-
   // Set its hostConfig property unless you want to use the default Host Config
   // Host Config defines the style and behavior of a card
   adaptiveCard.hostConfig = new AdaptiveCards.HostConfig({
     fontFamily: "Segoe UI, Helvetica Neue, sans-serif"
   });
-
   return adaptiveCard
-
 }
 
 function parseCardTemplate(): AdaptiveCards.AdaptiveCard {
-
   let adaptiveCard = renderingSetup();
   try {
     var cardTemplate = getCard();
@@ -58,10 +54,6 @@ function parseCardTemplate(): AdaptiveCards.AdaptiveCard {
   catch (e) {
     return new AdaptiveCards.AdaptiveCard;
   }
-
-
-
-
 }
 
 function renderAdaptiveCard(): any {
@@ -70,11 +62,9 @@ function renderAdaptiveCard(): any {
     // Render the card to an HTML element
     let renderedCard = adaptiveCard.render();
     return renderedCard;
-
   }
   catch (e) {
     return <div>Error</div>
-
   }
 }
 
