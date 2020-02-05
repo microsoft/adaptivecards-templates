@@ -4,7 +4,7 @@ import { Card, Container, TemplateName } from "../AdaptiveCard/styled";
 
 function getCard(): any {
   // Hard coded, will remove and connect to backend in future PR
-  var card = {
+  let card = {
     type: "AdaptiveCard",
     version: "1.0",
     body: [
@@ -46,7 +46,7 @@ function renderingSetup(): AdaptiveCards.AdaptiveCard {
 function parseCardTemplate(): AdaptiveCards.AdaptiveCard {
   let adaptiveCard = renderingSetup();
   try {
-    var cardTemplate = getCard();
+    let cardTemplate = getCard();
     // Parse the card payload
     adaptiveCard.parse(cardTemplate);
     return adaptiveCard;
