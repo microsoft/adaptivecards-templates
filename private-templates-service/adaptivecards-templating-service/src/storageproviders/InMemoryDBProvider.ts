@@ -151,7 +151,6 @@ export class InMemoryDBProvider implements StorageProvider {
       (query.isPublished && !(query.isPublished === template.isPublished)) ||
       (query.tags && !this._ifContainsList(template.tags, query.tags))
     ) {
-      console.log("false");
       return false;
     }
     return true;
