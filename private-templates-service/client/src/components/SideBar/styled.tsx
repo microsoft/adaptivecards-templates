@@ -30,7 +30,7 @@ export const LogoWrapper = styled.div`
   flex-direction: row;
   align-self: center;
   align-items: center;
-  margin-top: 32px;
+  margin-top: 20px;
   padding-right: 48px;
 `;
 
