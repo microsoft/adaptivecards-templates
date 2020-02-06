@@ -17,11 +17,8 @@ const clientOptions : ClientOptions = {
 }
 
 // Intiatiate instance of template service client
-TemplateServiceClient.init(clientOptions).then(
-	(client) => { 
-		app.use("/template", client.expressMiddleware());
-	}
-)
+const client = TemplateServiceClient.init(clientOptions);
+app.use("/template", client.expressMiddleware());
 ```
 
 Using TemplateServiceClient's expressMiddleware sets up basic GET, POST endpoints and will allow searching for template names, by version, etc.
@@ -29,7 +26,7 @@ Using TemplateServiceClient's expressMiddleware sets up basic GET, POST endpoint
 ### Using Template Service Client without Express
 
 ```
-let client : TemplateServiceClient = await TemplateServiceClient.init(clientOptions);
+let client : TemplateServiceClient = TemplateServiceClient.init(clientOptions);
 
 TemplateServiceClient.getTemplates(templateId, templateName, version);
 

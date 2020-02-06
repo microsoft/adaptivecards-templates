@@ -16,7 +16,7 @@ export class TemplateServiceClient {
      * Initialize database if not already running
      * @param {ClientOptions} clientOptions - storage provider and auth provider options
      */
-    public static async init(clientOptions : ClientOptions) : Promise<TemplateServiceClient> {
+    public static init(clientOptions : ClientOptions) : TemplateServiceClient {
         // TODO: add db setup step once mongo adapter is added
 
         if (clientOptions.storageProvider === undefined) {

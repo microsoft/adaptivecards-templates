@@ -20,11 +20,8 @@ const clientOptions : ClientOptions = {
     storageProvider: new InMemoryDBProvider(),
 }
 
-TemplateServiceClient.init(clientOptions).then(
-    (client : TemplateServiceClient) => {
-        app.use("/template", client.expressMiddleware());
-    }
-)
+const client : TemplateServiceClient = TemplateServiceClient.init(clientOptions);
+app.use("/template", client.expressMiddleware());
 
 app.get('/api/status', (req, res) => {
   res.status(200).send("Hello World");
