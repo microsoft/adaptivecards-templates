@@ -24,9 +24,7 @@
     "express-validator": "^6.3.1",
     "jws": "^4.0.0",
     "passport": "^0.4.1",
-    "passport-azure-ad": "^4.2.1",
-    "sprintf-js": "^1.1.2",
-    "uuid": "^3.4.0"
+    "passport-azure-ad": "^4.2.1"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.0.2",
@@ -40,8 +38,6 @@
     "@types/jws": "^3.2.1",
     "@types/passport": "^1.0.2",
     "@types/passport-azure-ad": "^4.0.3",
-    "@types/sprintf-js": "^1.1.2",
-    "@types/uuid": "^3.4.7",
     "concurrently": "^5.1.0",
     "jest": "^25.1.0",
     "jest-dom": "^4.0.0",

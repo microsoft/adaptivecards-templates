@@ -5,9 +5,11 @@ import { AzureADProvider } from "../authproviders/AzureADProvider";
 import express, { Router } from "express";
 import mongoose from "mongoose";
 import bodyParser from 'body-parser';
+import { InMemoryDBProvider } from "../storageproviders/InMemoryDBProvider";
 
 let options : ClientOptions = {
     authenticationProvider: new AzureADProvider(),
+    storageProvider: new InMemoryDBProvider(),
 }
 
 describe('Get endpoints', () => {

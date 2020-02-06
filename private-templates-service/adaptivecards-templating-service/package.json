@@ -23,13 +23,15 @@
     "@types/mongoose": "^5.7.0",
     "@types/passport": "^1.0.2",
     "@types/passport-azure-ad": "^4.0.3",
+    "@types/uuid": "^3.4.7",
     "axios": "^0.19.2",
     "express": "^4.17.1",
     "express-validator": "^6.4.0",
     "jws": "^4.0.0",
     "mongoose": "^5.8.10",
     "passport": "^0.4.1",
-    "passport-azure-ad": "^4.2.1"
+    "passport-azure-ad": "^4.2.1",
+    "uuid": "^3.4.0"
   },
   "devDependencies": {
     "@types/jest": "^25.1.1",

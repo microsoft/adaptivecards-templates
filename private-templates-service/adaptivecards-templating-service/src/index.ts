@@ -1,23 +1,15 @@
-import mongoose from "mongoose";
-import { Template as mTemplate } from "./models/Template" 
 import { ClientOptions } from "./IClientOptions";
 import express, { Request, Response, NextFunction, Router } from "express";
 import { check, validationResult } from "express-validator";
-import { AuthenticationProvider } from './authproviders/IAuthenticationProvider'; 
-import { TemplateError, ApiError } from './api/TemplateError';
+import { AuthenticationProvider } from "./authproviders/IAuthenticationProvider"; 
+import { TemplateError, ApiError } from "./api/TemplateError";
+import { StorageProvider } from "./storageproviders/IStorageProvider";
+import { ITemplate, JSONResponse, ITemplateInstance } from "./models/models";
 
 export class TemplateServiceClient {
 
-    //private static provider : StorageProvider;
+    private static storageProvider : StorageProvider;
     private static authProvider : AuthenticationProvider;
-
-    // Temporary until storage provider is up
-    private static async _run() : Promise<void> {
-        // TODO: move db initialization to a separate class once adapter done
-        const url = "mongodb://localhost:27017/test";
-        mongoose.connect(url);
-        // await mongoose.connection.dropDatabase();
-    }
 
     /**
      * @public
@@ -25,15 +17,14 @@ export class TemplateServiceClient {
      * @param {ClientOptions} clientOptions - storage provider and auth provider options
      */
     public static async init(clientOptions : ClientOptions) : Promise<TemplateServiceClient> {
-        // Initialize db / check if initialized and documents are valid
-        // Check storage provider is valid
-        // if (options.storageProvider === undefined) {
-        //     const error = new Error();
-        //     error.name = "Invalid Storage Provider";
-        //     error.message = "Please provide a storage provider.";
-        //     throw error;
-        // }
-        await this._run()
+        // TODO: add db setup step once mongo adapter is added
+
+        if (clientOptions.storageProvider === undefined) {
+            const error = new Error();
+            error.name = "Missing Storage Provider";
+            error.message = "Please provide a storage provider.";
+            throw error;
+        }
 
         if (clientOptions.authenticationProvider === undefined) {
             const error = new Error();
@@ -42,9 +33,9 @@ export class TemplateServiceClient {
             throw error;
         }
 
+        TemplateServiceClient.storageProvider = clientOptions.storageProvider;
         TemplateServiceClient.authProvider = clientOptions.authenticationProvider;
 
-        // Authenticate
         return new TemplateServiceClient();
     }
 
@@ -56,24 +47,25 @@ export class TemplateServiceClient {
      * @param {string} version - version number
      * @returns Promise as valid json 
      */
-    public async postTemplates(template: JSON, templateId?: string, version?: string) : Promise<any> {
+    public async postTemplates(template: JSON, templateId?: string, version?: string) : Promise<JSONResponse<Number>> {
         let owner = TemplateServiceClient.authProvider.getOwner();
         if (!owner){
-            return new Error("No owner specified, please authenticate.");
+            return { success: false, errorMessage: "No owner specified, please authenticate." };
         }
 
-        let ver = version;
-        if (!version) {
-            ver = '1.0';
+        const templateInstance : ITemplateInstance = {
+            json: JSON.stringify(template),
+            version: version || "1.0" 
         }
 
-        return mTemplate.create({
-                _id: mongoose.Types.ObjectId(),
-                template: template,
-                ownerOID: owner,
-                isPublished: false,
-                version: ver,
-        })
+        const newTemplate : ITemplate = {
+            instances: [templateInstance],
+            tags: [],
+            owner: owner,
+            isPublished: false
+        }
+
+        return TemplateServiceClient.storageProvider.insertTemplate(newTemplate);
     }
 
     /**
@@ -84,20 +76,21 @@ export class TemplateServiceClient {
      * @param {string} version - version number
      * @returns Promise as valid json 
      */
-    public async getTemplates(templateId?: string, templateName?: string, version?: number) : Promise<any> {
-        if (!templateId) {
-            return await mTemplate.find();
+    public async getTemplates(templateId?: string, isPublished?: boolean, templateName?: string, version?: number) : Promise<JSONResponse<ITemplate[]>> {
+        let owner = TemplateServiceClient.authProvider.getOwner();
+        if (!owner){
+            return { success: false, errorMessage: "No owner specified, please authenticate." };
         }
 
-        if (!version) {
-            return mTemplate.findById(templateId, (err, template) => {
-                if (err || !template) return new Error("No template with such id.");
-                return template;
-            });
-        } 
+        const templateQuery : ITemplate = {
+            id : templateId,
+            instances: [],
+            tags: [],
+            owner: owner,
+            isPublished: isPublished,
+        }
 
-        // TODO: add search by version case
-        // TODO: add search by template name
+        return TemplateServiceClient.storageProvider.getTemplate(templateQuery);        
     }
 
     /**
@@ -131,19 +124,23 @@ export class TemplateServiceClient {
             }
 
             this.getTemplates().then(
-                (templates) => {
-                    res.status(200).json({ "templates": templates });
+                (response) => {
+                    if (!response.success) {
+                        const err = new TemplateError(ApiError.TemplateNotFound, "Unable to find any templates.");
+                        return res.status(404).json({ error: err });
+                    } 
+                    res.status(200).json({ "templates": response.result });
                 })
         })
         
         router.get("/:id?", (req : Request, res : Response, _next : NextFunction) => {
             this.getTemplates(req.params.id, undefined).then(
-                (template) => {
-                    if (!template) {
+                (response) => {
+                    if (!response.success) {
                         const err = new TemplateError(ApiError.TemplateNotFound, `Template with id ${req.params.id} does not exist.`);
                         return res.status(404).json({ error: err });
                     }
-                    res.json(template);
+                    res.status(200).json({ "templates": response.result });
                 }
             )
         })
@@ -157,12 +154,13 @@ export class TemplateServiceClient {
                 return res.status(400).json({ error: err });
             }
 
-            let template = await this.postTemplates(req.body.template, undefined, undefined);
-            if (template){
-                return res.status(201).json(template);
+            let response = await this.postTemplates(req.body.template, undefined, undefined);
+            if (!response.success){
+                const err = new TemplateError(ApiError.InvalidTemplate, "Unable to create given template.");
+                return res.status(400).json({ error: err })
             }
-            const err = new TemplateError(ApiError.InvalidTemplate, "Failed to create template.");
-            res.status(400).json({ error: err });
+            
+            return res.status(201).json(response.result);
         })
 
         return router;
@@ -172,3 +170,6 @@ export class TemplateServiceClient {
 
 export * from "./authproviders/IAuthenticationProvider";
 export * from "./authproviders/AzureADProvider";
+export * from "./storageproviders/IStorageProvider";
+export * from "./storageproviders/InMemoryDBProvider";
+export * from "./models/models";

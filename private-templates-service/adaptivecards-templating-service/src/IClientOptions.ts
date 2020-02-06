@@ -1,5 +1,5 @@
 import { AuthenticationProvider } from "./authproviders/IAuthenticationProvider";
-
+import { StorageProvider } from "./storageproviders/IStorageProvider";
 /**
  * @interface
  * Options for initializing the Template Service Client
@@ -7,6 +7,6 @@ import { AuthenticationProvider } from "./authproviders/IAuthenticationProvider"
  * @property {Function} [authenticationProvider] - The authentication provider instance
  */
 export interface ClientOptions {
-    // storageProvider : StorageProvider;
+    storageProvider : StorageProvider;
     authenticationProvider : AuthenticationProvider;
 }
