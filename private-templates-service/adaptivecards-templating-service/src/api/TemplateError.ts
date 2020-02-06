@@ -3,10 +3,10 @@
  * Class representing error returned by api endpoints.
  */
 export class TemplateError {
-    public code : ApiError;
-    public message : string;
+    public code: ApiError;
+    public message: string;
 
-    public constructor(code : ApiError, message: string) {
+    public constructor(code: ApiError, message: string) {
         this.code = code;
         this.message = message;
     }

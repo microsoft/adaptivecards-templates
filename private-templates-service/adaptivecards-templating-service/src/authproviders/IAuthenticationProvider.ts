@@ -8,12 +8,12 @@ export interface AuthenticationProvider {
      * the access token
      * @returns string or undefined if client is not authenticated
      */
-    getOwner: () => string | undefined;
+    getOwner:() => string | undefined;
 
     /**
      * Validate signature of access token and assigns owner. 
      * @throws error - invalid signature 
      */
-    isValid(accessToken: string) : Promise<boolean>; 
+    isValid(accessToken: string): Promise<boolean>; 
 }
 

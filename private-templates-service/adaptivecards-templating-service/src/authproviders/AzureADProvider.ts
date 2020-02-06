@@ -8,22 +8,22 @@ import axios from "axios";
  * @extends AuthenticationProvider
  */
 export class AzureADProvider implements AuthenticationProvider {
-    private user : string = "";
-    private static CERT_URL : string = "https://login.microsoftonline.com/common/discovery/keys";
+    private user: string = "";
+    private static CERT_URL: string = "https://login.microsoftonline.com/common/discovery/keys";
 
-    async isValid(accessToken: string) : Promise<boolean> {
+    async isValid(accessToken: string): Promise<boolean> {
         let bearer = accessToken.split(/[ ]+/).pop();
         if (bearer){
             accessToken = bearer;
         }
 
-        let decodedToken : Signature = jws.decode(accessToken);
+        let decodedToken: Signature = jws.decode(accessToken);
         if (!decodedToken) {
             return false;
         }
 
-        let algorithm : Algorithm = decodedToken.header.alg;
-        let kid : string | undefined = decodedToken.header.kid;
+        let algorithm: Algorithm = decodedToken.header.alg;
+        let kid: string | undefined = decodedToken.header.kid;
 
         if (!kid) {
             return false;
@@ -48,7 +48,7 @@ export class AzureADProvider implements AuthenticationProvider {
         return result;
     }
 
-    public getOwner () : string | undefined {
+    public getOwner(): string | undefined {
         if (this.user.length === 0){
             return undefined;
         }

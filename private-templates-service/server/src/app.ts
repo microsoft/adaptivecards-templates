@@ -15,12 +15,12 @@ app.use(passport.session());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const clientOptions : ClientOptions = {
+const clientOptions: ClientOptions = {
     authenticationProvider: new AzureADProvider(),
     storageProvider: new InMemoryDBProvider(),
 }
 
-const client : TemplateServiceClient = TemplateServiceClient.init(clientOptions);
+const client: TemplateServiceClient = TemplateServiceClient.init(clientOptions);
 app.use("/template", client.expressMiddleware());
 
 app.get('/api/status', (req, res) => {

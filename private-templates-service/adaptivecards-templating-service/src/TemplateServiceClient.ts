@@ -8,15 +8,15 @@ import { ITemplate, JSONResponse, ITemplateInstance } from ".";
 
 export class TemplateServiceClient {
 
-    private static storageProvider : StorageProvider;
-    private static authProvider : AuthenticationProvider;
+    private static storageProvider: StorageProvider;
+    private static authProvider: AuthenticationProvider;
 
     /**
      * @public
      * Initialize database if not already running
      * @param {ClientOptions} clientOptions - storage provider and auth provider options
      */
-    public static init(clientOptions : ClientOptions) : TemplateServiceClient {
+    public static init(clientOptions: ClientOptions): TemplateServiceClient {
         // TODO: add db setup step once mongo adapter is added
 
         if (clientOptions.storageProvider === undefined) {
@@ -47,18 +47,18 @@ export class TemplateServiceClient {
      * @param {string} version - version number
      * @returns Promise as valid json 
      */
-    public async postTemplates(template: JSON, templateId?: string, version?: string) : Promise<JSONResponse<Number>> {
+    public async postTemplates(template: JSON, templateId?: string, version?: string): Promise<JSONResponse<Number>> {
         let owner = TemplateServiceClient.authProvider.getOwner();
         if (!owner){
             return { success: false, errorMessage: "No owner specified, please authenticate." };
         }
 
-        const templateInstance : ITemplateInstance = {
+        const templateInstance: ITemplateInstance = {
             json: JSON.stringify(template),
             version: version || "1.0" 
         }
 
-        const newTemplate : ITemplate = {
+        const newTemplate: ITemplate = {
             instances: [templateInstance],
             tags: [],
             owner: owner,
@@ -77,13 +77,13 @@ export class TemplateServiceClient {
      * @param {string} version - version number
      * @returns Promise as valid json 
      */
-    public async getTemplates(templateId?: string, isPublished?: boolean, templateName?: string, version?: number) : Promise<JSONResponse<ITemplate[]>> {
+    public async getTemplates(templateId?: string, isPublished?: boolean, templateName?: string, version?: number): Promise<JSONResponse<ITemplate[]>> {
         let owner = TemplateServiceClient.authProvider.getOwner();
         if (!owner){
             return { success: false, errorMessage: "No owner specified, please authenticate." };
         }
 
-        const templateQuery : ITemplate = {
+        const templateQuery: ITemplate = {
             id : templateId,
             instances: [],
             tags: [],
@@ -100,11 +100,11 @@ export class TemplateServiceClient {
      * Use as app.use("/template", TemplateServiceClient.expressMiddleware())
      * @returns express router 
      */
-    public expressMiddleware() : Router {
+    public expressMiddleware(): Router {
         var router = express.Router();
 
         // Verify signature of access token before requests.
-        router.all("/", async (req : Request, res: Response, next: NextFunction) => {
+        router.all("/", async (req: Request, res: Response, next: NextFunction) => {
             if (!req.headers.authorization) {
                 const err = new TemplateError(ApiError.InvalidAuthenticationToken, "Missing credentials.");
                 return res.status(401).json({ error: err });
@@ -119,7 +119,7 @@ export class TemplateServiceClient {
             next();
         })
 
-        router.get("/", (req : Request, res : Response, _next : NextFunction) => {
+        router.get("/", (req: Request, res: Response, _next: NextFunction) => {
             if (req.params.name) {
                 return res.status(501);
             }
@@ -134,7 +134,7 @@ export class TemplateServiceClient {
                 })
         })
         
-        router.get("/:id?", (req : Request, res : Response, _next : NextFunction) => {
+        router.get("/:id?", (req: Request, res: Response, _next: NextFunction) => {
             this.getTemplates(req.params.id).then(
                 (response) => {
                     if (!response.success || response.result && response.result.length === 0 ) {
@@ -146,7 +146,7 @@ export class TemplateServiceClient {
             )
         })
 
-        router.post("/", async (req : Request, res : Response, _next: NextFunction) => {
+        router.post("/", async (req: Request, res: Response, _next: NextFunction) => {
             await check("template", "Template is not valid JSON.").isJSON().run(req);
             const errors = validationResult(req);
 

@@ -7,20 +7,20 @@ import mongoose from "mongoose";
 import bodyParser from 'body-parser';
 import { InMemoryDBProvider } from "../storageproviders/InMemoryDBProvider";
 
-let options : ClientOptions = {
+let options: ClientOptions = {
     authenticationProvider: new AzureADProvider(),
     storageProvider: new InMemoryDBProvider(),
 }
 
 describe('Get endpoints', () => {
-    let token : string;
+    let token: string;
     const app = express();
 
     beforeAll(async() => {
         // TODO: request access token for registered AD app
         token = "<INSERT_APP_TOKEN_HERE>"
         let templateClient = await TemplateServiceClient.init(options);
-        let middleware : Router = templateClient.expressMiddleware();
+        let middleware: Router = templateClient.expressMiddleware();
         app.use(middleware);
     })
 
@@ -46,14 +46,14 @@ describe('Get endpoints', () => {
 })
 
 describe('Post Templates', () => {
-    let token : string;
+    let token: string;
     const app = express();
 
     beforeAll(async() => {
         // TODO: request access token for registered AD app
         token = "<INSERT_APP_TOKEN_HERE>"
         let templateClient = await TemplateServiceClient.init(options);
-        let middleware : Router = templateClient.expressMiddleware();
+        let middleware: Router = templateClient.expressMiddleware();
         app.use(bodyParser.json());
         app.use(middleware);
     })

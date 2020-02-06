@@ -7,6 +7,6 @@ import { StorageProvider } from ".";
  * @property {Function} [authenticationProvider] - The authentication provider instance
  */
 export interface ClientOptions {
-    storageProvider : StorageProvider;
-    authenticationProvider : AuthenticationProvider;
+    storageProvider: StorageProvider;
+    authenticationProvider: AuthenticationProvider;
 }
