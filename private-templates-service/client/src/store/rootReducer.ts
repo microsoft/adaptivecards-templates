@@ -6,7 +6,7 @@ import { combineReducers } from 'redux';
 export const rootReducer = combineReducers({
   auth: authReducer,
   search: searchReducer,
-  page: pageReducer
+  page: pageReducer,
 })
 
 export type RootState = ReturnType<typeof rootReducer>;

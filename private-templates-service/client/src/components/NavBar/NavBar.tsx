@@ -21,7 +21,7 @@ class NavBar extends React.Component<NavBarProps, {}> {
       <Banner>
         <MobileBanner>
           <StyledLogo src = {Logo}/>
-          <Styledh1> {this.props.currentPage} </Styledh1> 
+          <Styledh1>{this.props.currentPage}</Styledh1> 
         </MobileBanner>
         <SearchBar/>
       </Banner>
