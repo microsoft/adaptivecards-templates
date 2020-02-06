@@ -6,5 +6,5 @@ export const Title = styled.h1`
 `;
 
 export const DashboardContainer = styled.div`
-	margin-left: 30px;
+	margin: 0 40px;
 `;

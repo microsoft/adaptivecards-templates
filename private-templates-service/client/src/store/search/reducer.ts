@@ -6,7 +6,7 @@ import {
 } from './types';
 
 const initalState: SearchState = {
-  isSearch : false,
+  isSearch: false,
   searchValue: "",
 }
 

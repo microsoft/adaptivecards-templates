@@ -11,6 +11,7 @@ export const COLORS = {
   YELLOW: '#FFBD53',
   BLUE: '#016FC4',
   BORDER: '#C3C3C3',
+  BLUE2: '#02599C',
 }
 
 export const BREAK = {
@@ -31,19 +32,19 @@ export const THEME = {
       themeDarkAlt: '#eaeaea',
       themeDark: '#f4f4f4',
       themeDarker: '#f8f8f8',
-      neutralLighterAlt: '#595959',
-      neutralLighter: '#585858',
-      neutralLight: '#545454',
-      neutralQuaternaryAlt: '#4e4e4e',
-      neutralQuaternary: '#4b4b4b',
-      neutralTertiaryAlt: '#484848',
+      neutralLighterAlt: '#025697',
+      neutralLighter: '#015595',
+      neutralLight: '#01528f',
+      neutralQuaternaryAlt: '#014c85',
+      neutralQuaternary: '#01487f',
+      neutralTertiaryAlt: '#01467a',
       neutralTertiary: '#c8c8c8',
       neutralSecondary: '#d0d0d0',
       neutralPrimaryAlt: '#dadada',
       neutralPrimary: '#ffffff',
       neutralDark: '#f4f4f4',
       black: '#f8f8f8',
-      white: '#5c5c5c',
+      white: '#02599c',
     }
   })
 }

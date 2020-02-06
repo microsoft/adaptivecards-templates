@@ -10,6 +10,7 @@ import { UserType } from "./store/auth/types";
 import { RootState } from "./store/rootReducer";
 
 // Components
+import Designer from "./components/Designer";
 import NavBar from "./components/NavBar/NavBar";
 import SideBar from "./components/SideBar";
 import Dashboard from "./components/Dashboard";
@@ -19,6 +20,7 @@ import { getUserDetails, getOrgDetails } from "./Services/GraphService";
 
 // CSS
 import "bootstrap/dist/css/bootstrap.css";
+
 import { OuterAppWrapper, MainAppWrapper, MainApp } from "./styled";
 
 interface State {
@@ -111,6 +113,10 @@ class App extends Component<Props, State> {
                 <Route exact path="/">
                   <Dashboard authButtonMethod={this.login} />
                 </Route>
+                <Route exact path="/designer">
+                  <Designer authButtonMethod={this.login} />
+                </Route>
+
               </Switch>
             </MainApp>
           </MainAppWrapper>

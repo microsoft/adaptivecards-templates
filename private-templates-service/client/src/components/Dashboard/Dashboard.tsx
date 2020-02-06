@@ -3,7 +3,8 @@ import React from "react";
 import { RootState } from "../../store/rootReducer";
 import { UserType } from "../../store/auth/types";
 import { connect } from "react-redux";
-import { ErrorMessageProps } from "../ErrorMessage/ErrorMessage";
+import { setPage } from "../../store/page/actions";
+
 import requireAuthentication from "../../utils/requireAuthentication";
 import Gallery from "../Gallery";
 import { Title, DashboardContainer } from "../Dashboard/styled";
@@ -16,8 +17,15 @@ const mapStateToProps = (state: RootState) => {
   };
 };
 
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    setPage: (currentPageTitle: string) => {
+      dispatch(setPage(currentPageTitle));
+    }
+  }
+}
+
 interface State {
-  error: ErrorMessageProps | null;
   isPreviewOpen: boolean;
 }
 
@@ -25,12 +33,15 @@ interface Props {
   isAuthenticated: boolean;
   user?: UserType;
   authButtonMethod: () => Promise<void>;
+  setPage: (currentPageTitle: string) => void;
 }
 
 class Dashboard extends React.Component<Props, State> {
+
   constructor(props: Props) {
     super(props);
-    this.state = { error: null, isPreviewOpen: false };
+    this.state = { isPreviewOpen: false };
+    props.setPage("Dashboard");
   }
 
   toggleModal = () => {
@@ -50,4 +61,4 @@ class Dashboard extends React.Component<Props, State> {
   }
 }
 
-export default connect(mapStateToProps)(requireAuthentication(Dashboard));
+export default connect(mapStateToProps, mapDispatchToProps)(requireAuthentication(Dashboard));

@@ -1,6 +1,6 @@
 import React from 'react';
 import { ModalBackdrop, ModalWrapper, ACPanel, ACWrapper, DescriptorWrapper } from './styled';
-import AdaptiveCard from '../../Common/AdaptiveCard';
+import AdaptiveCard from '../../Common/AdaptiveCard'
 
 
 interface Props {
