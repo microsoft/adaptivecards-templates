@@ -1,5 +1,5 @@
 export interface PageState {
-  currentPage: string;
+  currentPageTitle: string;
 }
 
 // Action Types
@@ -9,5 +9,5 @@ export const NAVIGATION = "NAVIGATION";
 export interface PageAction{
   type: typeof NAVIGATION;
   text: string;
-  currentPage: string;
+  currentPageTitle: string;
 }

@@ -5,7 +5,7 @@ import {
 } from './types';
 
 const initalState: PageState = {
-  currentPage: ""
+  currentPageTitle: ""
 }
 
 export function pageReducer( state = initalState, action: PageAction): PageState{
@@ -13,7 +13,7 @@ export function pageReducer( state = initalState, action: PageAction): PageState
     case NAVIGATION:
       return{
       ...state,
-      currentPage: action.currentPage
+      currentPageTitle: action.currentPageTitle
     }
     default:
       return state;

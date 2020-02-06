@@ -7,12 +7,12 @@ import Logo from '../../assets/adaptive-cards-100-logo.png'
 
 const mapStateToProps = (state: RootState) => {
   return{
-    currentPage: state.page.currentPage
+    currentPageTitle: state.page.currentPageTitle
   }
 }
 
 interface NavBarProps { 
-  currentPage: string;
+  currentPageTitle: string;
 }
 
 class NavBar extends React.Component<NavBarProps, {}> {
@@ -21,7 +21,7 @@ class NavBar extends React.Component<NavBarProps, {}> {
       <Banner>
         <MobileBanner>
           <StyledLogo src={Logo}/>
-          <Styledh1>{this.props.currentPage}</Styledh1> 
+          <Styledh1>{this.props.currentPageTitle}</Styledh1> 
         </MobileBanner>
         <SearchBar/>
       </Banner>

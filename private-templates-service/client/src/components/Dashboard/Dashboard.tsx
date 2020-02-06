@@ -19,13 +19,13 @@ interface DashboardProps {
   isAuthenticated: boolean;
   user?: UserType;
   authButtonMethod: () => Promise<void>;
-  setPage: (currentPage: string) => void;
+  setPage: (currentPageTitle: string) => void;
 }
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    setPage: (currentPage: string) => {
-      dispatch(setPage(currentPage));
+    setPage: (currentPageTitle: string) => {
+      dispatch(setPage(currentPageTitle));
     }
   }
 }
