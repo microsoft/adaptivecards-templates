@@ -33,8 +33,8 @@ export class TemplateServiceClient {
             throw error;
         }
 
-        TemplateServiceClient.storageProvider = clientOptions.storageProvider;
-        TemplateServiceClient.authProvider = clientOptions.authenticationProvider;
+        this.storageProvider = clientOptions.storageProvider;
+        this.authProvider = clientOptions.authenticationProvider;
 
         return new TemplateServiceClient();
     }
@@ -166,5 +166,7 @@ export class TemplateServiceClient {
 
         return router;
     }
+
+    private constructor() {}
 
 }
