@@ -2,13 +2,13 @@ import styled from 'styled-components';
 import { BREAK, COLORS } from '../../globalStyles';
 
 export const Banner = styled.div`
-  background-color: ${COLORS.GREY3};
+  background-color: ${COLORS.BLUE};
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   width: 100%;
   align-items: center;
-  padding: 8px 64px;
+  padding: 8px 40px;
   z-index: 1;
 
   @media only screen and (max-width: ${BREAK.SM}px){
@@ -36,7 +36,7 @@ export const Styledh1 = styled.div`
   color: ${COLORS.WHITE};
   letter-spacing: 0;
   opacity: 1;
-  font-size: 32px;
+  font-size: 26px;
   margin-bottom: 0;
   font-weight: 600;
 
