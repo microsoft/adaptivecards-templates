@@ -19,10 +19,9 @@ const mapStateToProps = (state: RootState) => {
 interface DesignerProps {
   isAuthenticated: boolean;
   user?: UserType;
-  authButtonMethod: () => Promise<void>;
 }
 
-const Designer = () => {
+const Designer = (props: DesignerProps) => {
 
   let history = useHistory();
 
