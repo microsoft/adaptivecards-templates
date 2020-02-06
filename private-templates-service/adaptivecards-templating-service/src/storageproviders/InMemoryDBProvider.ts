@@ -1,6 +1,5 @@
-import { JSONResponse, IUser, ITemplate, ITemplateInstance } from "../models/models";
-import { StorageProvider } from "../models/StorageProvider";
-import logger from "../../util/logger";
+import { JSONResponse, IUser, ITemplate } from "../models/models";
+import { StorageProvider } from "./IStorageProvider";
 import uuidv4 from "uuid/v4";
 
 export class InMemoryDBProvider implements StorageProvider {
@@ -108,7 +107,6 @@ export class InMemoryDBProvider implements StorageProvider {
       collection.set(docToInsert.id!, docToInsert);
       return Promise.resolve({ success: true, result: 1 });
     } else {
-      logger.error("Object with id: %s already exists. Insertion failed", doc.id!);
       return Promise.resolve({ success: false, result: 0, errorMessage: "Object with id: " + doc.id! + "already exists. Insertion failed" });
     }
   }
@@ -153,7 +151,6 @@ export class InMemoryDBProvider implements StorageProvider {
       (query.isPublished && !(query.isPublished === template.isPublished)) ||
       (query.tags && !this._ifContainsList(template.tags, query.tags))
     ) {
-      console.log("false");
       return false;
     }
     return true;
