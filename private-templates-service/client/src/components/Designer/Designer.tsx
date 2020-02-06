@@ -64,8 +64,8 @@ function initDesigner(): ACDesigner.CardDesigner {
   hostContainers.push(new ACDesigner.ToastContainer("Windows Notifications (Preview)", "containers/toast-container.css"));
 
   let designer = new ACDesigner.CardDesigner(hostContainers);
-  designer.sampleCatalogueUrl = window.location.origin;
-  designer.assetPath = window.location.origin;
+  designer.sampleCatalogueUrl = window.location.origin + "/ACDesigner";
+  designer.assetPath = window.location.origin + "/ACDesigner";
 
   return designer;
 }
