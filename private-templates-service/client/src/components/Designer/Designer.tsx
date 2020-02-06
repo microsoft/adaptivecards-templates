@@ -24,7 +24,8 @@ interface DesignerProps {
 
 const Designer = () => {
 
-  //useEffect(() => {
+  let history = useHistory();
+
   ACDesigner.GlobalSettings.enableDataBindingSupport = true;
   ACDesigner.GlobalSettings.showSampleDataEditorToolbox = true;
 
@@ -33,15 +34,9 @@ const Designer = () => {
     result.didProcess = true;
   }
 
-  let hostContainers: Array<ACDesigner.HostContainer> = initHostContainers();
+  let designer = initDesigner();
 
-  let designer = new ACDesigner.CardDesigner(hostContainers);
-  designer.sampleCatalogueUrl = window.location.origin;
-  designer.assetPath = window.location.origin;
-
-  let history = useHistory();
   let closeButton = new ACDesigner.ToolbarButton("closeButton", "Close", "", (sender) => (history.goBack()));
-
   closeButton.separator = true;
   designer.toolbar.insertElementAfter(closeButton, ACDesigner.CardDesigner.ToolbarCommands.TogglePreview);
 
@@ -50,19 +45,14 @@ const Designer = () => {
     designer.attachTo(element);
   }
 
-  //Example of how to export data from designer
-  console.log("Adaptive Card Template: " + designer.getCard());
-  console.log("Adaptive Card Sample Data: " + designer.sampleData);
-
   designer.monacoModuleLoaded(monaco);
-  // }, []);
 
-
+  getCardData(designer);
 
   return <div id="root" dangerouslySetInnerHTML={{ __html: "dangerouslySetACDesigner" }}></div>;
 }
 
-function initHostContainers(): Array<ACDesigner.HostContainer> {
+function initDesigner(): ACDesigner.CardDesigner {
   let hostContainers: Array<ACDesigner.HostContainer> = [];
 
   hostContainers.push(new ACDesigner.WebChatContainer("Bot Framework WebChat", "containers/webchat-container.css"));
@@ -74,6 +64,17 @@ function initHostContainers(): Array<ACDesigner.HostContainer> {
   hostContainers.push(new ACDesigner.BotFrameworkContainer("Bot Framework Other Channels (Image render)", "containers/bf-image-container.css"));
   hostContainers.push(new ACDesigner.ToastContainer("Windows Notifications (Preview)", "containers/toast-container.css"));
 
-  return hostContainers;
+  let designer = new ACDesigner.CardDesigner(hostContainers);
+  designer.sampleCatalogueUrl = window.location.origin;
+  designer.assetPath = window.location.origin;
+
+  return designer;
 }
+
+function getCardData(designer: ACDesigner.CardDesigner): void {
+  //Example of how to export data from designer
+  console.log("Adaptive Card Template: " + designer.getCard());
+  console.log("Adaptive Card Sample Data: " + designer.sampleData);
+}
+
 export default connect(mapStateToProps)(requireAuthentication(Designer));
