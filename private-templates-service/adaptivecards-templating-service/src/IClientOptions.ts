@@ -1,5 +1,5 @@
-import { AuthenticationProvider } from "./authproviders/IAuthenticationProvider";
-import { StorageProvider } from "./storageproviders/IStorageProvider";
+import { AuthenticationProvider } from ".";
+import { StorageProvider } from ".";
 /**
  * @interface
  * Options for initializing the Template Service Client

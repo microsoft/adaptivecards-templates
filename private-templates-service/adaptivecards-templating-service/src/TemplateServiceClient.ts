@@ -1,10 +1,10 @@
 import { ClientOptions } from "./IClientOptions";
 import express, { Request, Response, NextFunction, Router } from "express";
 import { check, validationResult } from "express-validator";
-import { AuthenticationProvider } from "./authproviders/IAuthenticationProvider"; 
+import { AuthenticationProvider } from "."; 
 import { TemplateError, ApiError } from "./api/TemplateError";
-import { StorageProvider } from "./storageproviders/IStorageProvider";
-import { ITemplate, JSONResponse, ITemplateInstance } from "./models/models";
+import { StorageProvider } from ".";
+import { ITemplate, JSONResponse, ITemplateInstance } from ".";
 
 export class TemplateServiceClient {
 
