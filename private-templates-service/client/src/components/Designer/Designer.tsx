@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { RootState } from '../../store/rootReducer';
 import requireAuthentication from '../../utils/requireAuthentication';
 import { connect } from 'react-redux';
