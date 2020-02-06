@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { COLORS } from '../../../globalStyles';
+import { COLORS, BREAK } from '../../../globalStyles';
 
 export const ModalBackdrop = styled.div`
   position: fixed;
@@ -10,6 +10,11 @@ export const ModalBackdrop = styled.div`
   right: 0;
   background-color: ${COLORS.GREY1};
   z-index: 1;
+
+  @media only screen and (max-width: ${BREAK.SM}px) {
+    left: 0;
+    top: 48px;
+  }
 `;
 
 export const ModalWrapper = styled.div`

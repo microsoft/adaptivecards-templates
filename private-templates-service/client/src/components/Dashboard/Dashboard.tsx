@@ -16,19 +16,19 @@ const mapStateToProps = (state: RootState) => {
   };
 };
 
-interface DashboardStates {
+interface State {
   error: ErrorMessageProps | null;
   isPreviewOpen: boolean;
 }
 
-interface DashboardProps {
+interface Props {
   isAuthenticated: boolean;
   user?: UserType;
   authButtonMethod: () => Promise<void>;
 }
 
-class Dashboard extends React.Component<DashboardProps, DashboardStates> {
-  constructor(props: DashboardProps) {
+class Dashboard extends React.Component<Props, State> {
+  constructor(props: Props) {
     super(props);
     this.state = { error: null, isPreviewOpen: false };
   }
