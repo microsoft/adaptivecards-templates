@@ -4,7 +4,6 @@ import { IUser, ITemplate, JSONResponse } from "../models/models";
 import { IUserModel, UserSchema } from "../models/mongo/UserModel";
 import { ITemplateModel, TemplateSchema } from "../models/mongo/TemplateModel";
 import { Mongo } from "../util/mongoutils";
-import { Result } from "express-validator";
 
 const USERS_COLLECTION_NAME_SINGULAR: string = "User";
 const TEMPLATES_COLLECTION_NAME_SINGULAR: string = "Template";
