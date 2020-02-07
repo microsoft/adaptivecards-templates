@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
-import { StorageProvider } from "../models/StorageProvider";
+import { StorageProvider } from "./IStorageProvider";
 import { IUser, ITemplate, JSONResponse } from "../models/models";
 import { IUserModel, UserSchema } from "../models/mongo/UserModel";
 import { ITemplateModel, TemplateSchema } from "../models/mongo/TemplateModel";
-import { Mongo } from "../../util/mongoutils";
-import MONGO_CONFIG from "../../config/mongo.json";
+import { Mongo } from "../util/mongoutils";
+import { Result } from "express-validator";
 
 const USERS_COLLECTION_NAME_SINGULAR: string = "User";
 const TEMPLATES_COLLECTION_NAME_SINGULAR: string = "Template";
@@ -12,8 +12,9 @@ const TEMPLATES_COLLECTION_NAME_SINGULAR: string = "Template";
 export class MongoDBProvider implements StorageProvider {
 	Template!: mongoose.Model<ITemplateModel>;
 	User!: mongoose.Model<IUserModel>;
-	db!: mongoose.Connection; // ! - for definite assignment
+	db!: mongoose.Connection;
 	connectionString: string;
+	options: any;
 	async getUser(query: Partial<IUser>): Promise<JSONResponse<IUser[]>> {
 		return await this.User.find(query)
 			.then(users => {
@@ -41,8 +42,8 @@ export class MongoDBProvider implements StorageProvider {
 				}
 				return Promise.resolve({
 					success: false,
-					result: []
-					// errorMessage: "No templates found matching given criteria"
+					result: [],
+					errorMessage: "No templates found matching given criteria"
 				});
 			})
 			.catch(e => {
@@ -119,9 +120,16 @@ export class MongoDBProvider implements StorageProvider {
 	async removeUser(query: Partial<IUser>): Promise<JSONResponse<Number>> {
 		return await this.User.deleteOne(query)
 			.then(result => {
+				if (result.deletedCount) {
+					return Promise.resolve({
+						success: true,
+						result: result.deletedCount
+					});
+				}
 				return Promise.resolve({
-					success: true,
-					result: result.deletedCount
+					success: false,
+					result: 0,
+					errorMessage: "No users found matching given criteria"
 				});
 			})
 			.catch(e => {
@@ -135,9 +143,16 @@ export class MongoDBProvider implements StorageProvider {
 	async removeTemplate(query: Partial<ITemplate>): Promise<JSONResponse<Number>> {
 		return await this.Template.deleteOne(query)
 			.then(result => {
+				if (result.deletedCount) {
+					return Promise.resolve({
+						success: true,
+						result: result.deletedCount
+					});
+				}
 				return Promise.resolve({
-					success: true,
-					result: result.deletedCount
+					success: false,
+					result: 0,
+					errorMessage: "No templates found matching given criteria"
 				});
 			})
 			.catch(e => {
@@ -162,7 +177,7 @@ export class MongoDBProvider implements StorageProvider {
 
 	async initializeDB(): Promise<JSONResponse<Boolean>> {
 		return await mongoose
-			.createConnection(this.connectionString, MONGO_CONFIG)
+			.createConnection(this.connectionString, this.options)
 			.then(connection => {
 				this.db = connection;
 				return this.setUpCollections();
@@ -187,7 +202,8 @@ export class MongoDBProvider implements StorageProvider {
 			});
 	}
 
-	constructor(connectionString: string) {
+	constructor(connectionString: string, options: any) {
 		this.connectionString = connectionString;
+		this.options = options;
 	}
 }
