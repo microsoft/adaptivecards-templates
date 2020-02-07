@@ -1,8 +1,0 @@
-{
-  "useNewUrlParser": true,
-  "useCreateIndex": true,
-  "useUnifiedTopology": true,
-  "connectTimeoutMS": 5000,
-  "socketTimeoutMS": 30000,
-  "useFindAndModify": false
-}
