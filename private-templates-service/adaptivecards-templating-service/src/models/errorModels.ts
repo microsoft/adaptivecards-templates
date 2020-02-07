@@ -21,3 +21,12 @@ export enum ApiError {
     TemplateNotFound = "TemplateNotFound",
     InvalidAuthenticationToken = "InvalidAuthenticationToken"
 }
+
+/**
+ * @enum
+ * Error messages returned by TemplateServiceClient's JSONResponses
+ */
+export enum LibraryErrorMessage {
+    AuthFailureResponse = "No owner specified, please authenticate.",
+    InvalidUser = "Failed to create user."
+}

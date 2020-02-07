@@ -2,14 +2,17 @@ import { ClientOptions } from "./IClientOptions";
 import express, { Request, Response, NextFunction, Router } from "express";
 import { check, validationResult } from "express-validator";
 import { AuthenticationProvider } from "."; 
-import { TemplateError, ApiError } from "./api/TemplateError";
+import { TemplateError, ApiError, LibraryErrorMessage } from "./models/errorModels";
 import { StorageProvider } from ".";
-import { ITemplate, JSONResponse, ITemplateInstance } from ".";
+import { ITemplate, JSONResponse, ITemplateInstance, IUser } from ".";
+import { Issuer } from "./models/models";
 
 export class TemplateServiceClient {
 
     private static storageProvider: StorageProvider;
     private static authProvider: AuthenticationProvider;
+
+    private ownerID: string = "";
 
     /**
      * @public
@@ -40,17 +43,71 @@ export class TemplateServiceClient {
     }
 
     /**
+     * @private
+     * Get user
+     * @param {string} authId - unique ID from access token, eg. oid for AAD
+     * @param {Issuer} issuer - auth provider
+     */
+    private async _getUser(authId: string, issuer: Issuer): Promise<JSONResponse<IUser[]>> {
+        let owner = TemplateServiceClient.authProvider.getOwner();
+        if (!owner){
+            return { success: false, errorMessage: LibraryErrorMessage.AuthFailureResponse };
+        }
+
+        const user: IUser = {
+            authId: authId,
+            issuer: issuer
+        }
+
+        return TemplateServiceClient.storageProvider.getUser(user);
+    }
+
+    /**
+     * @private
+     * @param {string} id - unique ID from access token, eg. oid for AAD
+     * @param {Issuer} issuer - auth provider
+     * @param {string} team - user's team within org
+     * @param {string} org - user's organization
+     */
+    private async _postUser(issuer: Issuer, team?: string, org?: string): Promise<JSONResponse<string>> {
+        let owner = TemplateServiceClient.authProvider.getOwner();
+        if (!owner){
+            return { success: false, errorMessage: LibraryErrorMessage.AuthFailureResponse };
+        }
+
+        const user: IUser = {
+            authId: owner,
+            issuer: issuer,
+            team: team && [team] || [],
+            org: org && [org] || []
+        }
+
+        return TemplateServiceClient.storageProvider.insertUser(user);
+    }
+
+    /**
      * @public
      * Post templates
+     * Checks if user is already created
      * @param {JSON} template 
      * @param {string} templateId - unique template id
      * @param {string} version - version number
      * @returns Promise as valid json 
      */
-    public async postTemplates(template: JSON, templateId?: string, version?: string): Promise<JSONResponse<Number>> {
+    public async postTemplates(template: JSON, templateId?: string, version?: string): Promise<JSONResponse<string>> {
         let owner = TemplateServiceClient.authProvider.getOwner();
         if (!owner){
-            return { success: false, errorMessage: "No owner specified, please authenticate." };
+            return { success: false, errorMessage: LibraryErrorMessage.AuthFailureResponse };
+        }
+
+        // Check if user exists, if not, create new user
+        let userResponse = await this._getUser(owner, TemplateServiceClient.authProvider.issuer);
+        if (!userResponse.success) {
+            let newUser = await this._postUser(TemplateServiceClient.authProvider.issuer);
+            if (!newUser.success || !newUser.result) {
+                return { success: false, errorMessage: LibraryErrorMessage.InvalidUser };
+            }
+            this.ownerID = newUser.result;
         }
 
         const templateInstance: ITemplateInstance = {
@@ -61,7 +118,7 @@ export class TemplateServiceClient {
         const newTemplate: ITemplate = {
             instances: [templateInstance],
             tags: [],
-            owner: owner,
+            owner: this.ownerID,
             isPublished: false
         }
 
@@ -80,7 +137,7 @@ export class TemplateServiceClient {
     public async getTemplates(templateId?: string, isPublished?: boolean, templateName?: string, version?: number): Promise<JSONResponse<ITemplate[]>> {
         let owner = TemplateServiceClient.authProvider.getOwner();
         if (!owner){
-            return { success: false, errorMessage: "No owner specified, please authenticate." };
+            return { success: false, errorMessage: LibraryErrorMessage.AuthFailureResponse };
         }
 
         const templateQuery: ITemplate = {

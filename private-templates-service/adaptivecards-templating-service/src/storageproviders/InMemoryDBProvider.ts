@@ -37,10 +37,10 @@ export class InMemoryDBProvider implements StorageProvider {
     return Promise.resolve({ success: true, result: updateCount });
   }
 
-  async insertUser(doc: IUser): Promise<JSONResponse<Number>> {
+  async insertUser(doc: IUser): Promise<JSONResponse<string>> {
     return this._insert(doc, this.users);
   }
-  async insertTemplate(doc: ITemplate): Promise<JSONResponse<Number>> {
+  async insertTemplate(doc: ITemplate): Promise<JSONResponse<string>> {
     this._setTimestamps(doc);
     return this._insert(doc, this.templates);
   }
@@ -100,14 +100,14 @@ export class InMemoryDBProvider implements StorageProvider {
     return cloned;
   }
 
-  protected async _insert<T extends ITemplate | IUser>(doc: T, collection: Map<String, T>): Promise<JSONResponse<Number>> {
+  protected async _insert<T extends ITemplate | IUser>(doc: T, collection: Map<String, T>): Promise<JSONResponse<string>> {
     let docToInsert: T = this._clone(doc);
     this._setID(docToInsert);
     if (!collection.has(docToInsert.id!)) {
       collection.set(docToInsert.id!, docToInsert);
-      return Promise.resolve({ success: true, result: 1 });
+      return Promise.resolve({ success: true, result: doc.id });
     } else {
-      return Promise.resolve({ success: false, result: 0, errorMessage: "Object with id: " + doc.id! + "already exists. Insertion failed" });
+      return Promise.resolve({ success: false, result: "", errorMessage: "Object with id: " + doc.id! + "already exists. Insertion failed" });
     }
   }
 
@@ -125,9 +125,10 @@ export class InMemoryDBProvider implements StorageProvider {
   protected _matchUser(query: Partial<IUser>, user: IUser): boolean {
     if (
       (query.id && !(query.id === user.id)) ||
-      (query.email && !(query.email === user.email)) ||
-      (query.org && !this._ifContainsList(user.org, query.org)) ||
-      (query.team && !this._ifContainsList(user.team, query.team))
+      (query.authId && !(query.authId === user.authId)) ||
+      (query.issuer && !(query.issuer === user.issuer)) ||
+      (query.org && user.org && !this._ifContainsList(user.org, query.org)) ||
+      (query.team && user.team && !this._ifContainsList(user.team, query.team))
     ) {
       return false;
     }
