@@ -26,7 +26,7 @@ export enum ApiError {
  * @enum
  * Error messages returned by TemplateServiceClient's JSONResponses
  */
-export enum LibraryErrorMessage {
+export enum ServiceErrorMessage {
     AuthFailureResponse = "No owner specified, please authenticate.",
     InvalidUser = "Failed to create user."
 }

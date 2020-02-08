@@ -6,11 +6,12 @@ declare module 'adaptivecards-templating-service' {
 
     export interface IUser {
         id?: string;
-        team: string[];
-        org: string[];
-        email: string;
+        authId: string,
+        issuer: string;
+        team?: string[];
+        org?: string[];
       }
-      
+
     export interface ITemplateInstance {
         json: string;
         version: string;
@@ -54,8 +55,8 @@ declare module 'adaptivecards-templating-service' {
         getTemplate(query: Partial<ITemplate>): Promise<JSONResponse<ITemplate[]>>;
         updateUser(query: Partial<IUser>, updateQuery: Partial<IUser>): Promise<JSONResponse<Number>>;
         updateTemplate(query: Partial<ITemplate>, updateQuery: Partial<ITemplate>): Promise<JSONResponse<Number>>;
-        insertUser(user: IUser): Promise<JSONResponse<Number>>;
-        insertTemplate(template: ITemplate): Promise<JSONResponse<Number>>;
+        insertUser(user: IUser): Promise<JSONResponse<string>>;
+        insertTemplate(template: ITemplate): Promise<JSONResponse<string>>;
         removeUser(query: Partial<IUser>): Promise<JSONResponse<Number>>;
         removeTemplate(query: Partial<ITemplate>): Promise<JSONResponse<Number>>;
     }
@@ -65,8 +66,8 @@ declare module 'adaptivecards-templating-service' {
         getTemplate(query: Partial<ITemplate>): Promise<JSONResponse<ITemplate[]>>;
         updateUser(query: Partial<IUser>, updateQuery: Partial<IUser>): Promise<JSONResponse<Number>>;
         updateTemplate(query: Partial<ITemplate>, updateQuery: Partial<ITemplate>): Promise<JSONResponse<Number>>;
-        insertUser(user: IUser): Promise<JSONResponse<Number>>;
-        insertTemplate(template: ITemplate): Promise<JSONResponse<Number>>;
+        insertUser(user: IUser): Promise<JSONResponse<string>>;
+        insertTemplate(template: ITemplate): Promise<JSONResponse<string>>;
         removeUser(query: Partial<IUser>): Promise<JSONResponse<Number>>;
         removeTemplate(query: Partial<ITemplate>): Promise<JSONResponse<Number>>;
       }
