@@ -14,6 +14,12 @@ export class MongoDBProvider implements StorageProvider {
   db!: mongoose.Connection;
   connectionString: string;
   options: any;
+
+  constructor(connectionString: string, options: any) {
+    this.connectionString = connectionString;
+    this.options = options;
+  }
+
   async getUser(query: Partial<IUser>): Promise<JSONResponse<IUser[]>> {
     return await this.User.find(query)
       .then(users => {
@@ -199,10 +205,5 @@ export class MongoDBProvider implements StorageProvider {
       .catch(e => {
         return Promise.resolve({ success: false, errorMessage: e });
       });
-  }
-
-  constructor(connectionString: string, options: any) {
-    this.connectionString = connectionString;
-    this.options = options;
   }
 }

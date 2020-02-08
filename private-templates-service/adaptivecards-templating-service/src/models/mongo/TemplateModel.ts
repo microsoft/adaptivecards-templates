@@ -14,7 +14,7 @@ export const TemplateInstanceSchema: Schema = new Schema(
   },
   {
     versionKey: false,
-    timestamps: false
+    timestamps: true
   }
 );
 
@@ -22,8 +22,8 @@ export const TemplateSchema: Schema = new Schema(
   {
     instances: { type: [TemplateInstanceSchema], required: true, default: [TemplateInstanceSchema] },
     tags: { type: [String], default: [String] },
-    owner: { type: Schema.Types.String, required: true }, // add ref: "User" so it checks if owner exists and make type ObjectID
-    isPublished: { type: Schema.Types.Boolean, required: true }
+    owner: { type: String, required: true }, // add ref: "User" so it checks if owner exists and make type ObjectID
+    isPublished: { type: String, required: true }
 
     // permissions
   },
