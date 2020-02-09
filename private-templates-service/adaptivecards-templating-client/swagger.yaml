@@ -2,11 +2,11 @@ swagger: "2.0"
 info:
   description: "Adaptive Cards Templating Service API definition."
   version: "1.0.0"
-  title: "Adaptive Cards Templating Service Client SDK"
+  title: "adaptivecards-templating-service-javascript-sdk"
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "localhost:5000"
+host: "https://adaptivecms.azurewebsites.net"
 tags:
 - name: "template"
   description: "Adaptive Cards Template"

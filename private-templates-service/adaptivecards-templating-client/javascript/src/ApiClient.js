@@ -1,5 +1,5 @@
 /*
- * Adaptive Cards Templating Service Client SDK
+ * adaptivecards-templating-service-javascript-sdk
  * Adaptive Cards Templating Service API definition.
  *
  * OpenAPI spec version: 1.0.0
@@ -22,10 +22,10 @@
     module.exports = factory(require('superagent'), require('querystring'));
   } else {
     // Browser globals (root is window)
-    if (!root.AdaptiveCardsTemplatingServiceClientSdk) {
-      root.AdaptiveCardsTemplatingServiceClientSdk = {};
+    if (!root.AdaptivecardsTemplatingServiceJavascriptSdk) {
+      root.AdaptivecardsTemplatingServiceJavascriptSdk = {};
     }
-    root.AdaptiveCardsTemplatingServiceClientSdk.ApiClient = factory(root.superagent, root.querystring);
+    root.AdaptivecardsTemplatingServiceJavascriptSdk.ApiClient = factory(root.superagent, root.querystring);
   }
 }(this, function(superagent, querystring) {
   'use strict';
@@ -46,9 +46,9 @@
     /**
      * The base URL against which to resolve every API call's (relative) path.
      * @type {String}
-     * @default https://localhost:5000
+     * @default https://https://adaptivecms.azurewebsites.net
      */
-    this.basePath = 'https://localhost:5000'.replace(/\/+$/, '');
+    this.basePath = 'https://https://adaptivecms.azurewebsites.net'.replace(/\/+$/, '');
 
     /**
      * The authentication methods to be included for all API calls.

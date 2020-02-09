@@ -1,6 +1,6 @@
-# AdaptiveCardsTemplatingServiceClientSdk.TemplateApi
+# AdaptivecardsTemplatingServiceJavascriptSdk.TemplateApi
 
-All URIs are relative to *https://localhost:5000*
+All URIs are relative to *https://https://adaptivecms.azurewebsites.net*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -19,8 +19,8 @@ Returns a single template
 
 ### Example
 ```javascript
-var AdaptiveCardsTemplatingServiceClientSdk = require('adaptive_cards_templating_service_client_sdk');
-var defaultClient = AdaptiveCardsTemplatingServiceClientSdk.ApiClient.instance;
+var AdaptivecardsTemplatingServiceJavascriptSdk = require('adaptivecards_templating_service_javascript_sdk');
+var defaultClient = AdaptivecardsTemplatingServiceJavascriptSdk.ApiClient.instance;
 
 // Configure API key authorization: bearer_auth
 var bearer_auth = defaultClient.authentications['bearer_auth'];
@@ -28,7 +28,7 @@ bearer_auth.apiKey = 'YOUR API KEY';
 // Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
 //bearer_auth.apiKeyPrefix = 'Token';
 
-var apiInstance = new AdaptiveCardsTemplatingServiceClientSdk.TemplateApi();
+var apiInstance = new AdaptivecardsTemplatingServiceJavascriptSdk.TemplateApi();
 
 var templateId = "templateId_example"; // String | ID of template to return
 
@@ -72,8 +72,8 @@ Returns all public templates and owned templates
 
 ### Example
 ```javascript
-var AdaptiveCardsTemplatingServiceClientSdk = require('adaptive_cards_templating_service_client_sdk');
-var defaultClient = AdaptiveCardsTemplatingServiceClientSdk.ApiClient.instance;
+var AdaptivecardsTemplatingServiceJavascriptSdk = require('adaptivecards_templating_service_javascript_sdk');
+var defaultClient = AdaptivecardsTemplatingServiceJavascriptSdk.ApiClient.instance;
 
 // Configure API key authorization: bearer_auth
 var bearer_auth = defaultClient.authentications['bearer_auth'];
@@ -81,7 +81,7 @@ bearer_auth.apiKey = 'YOUR API KEY';
 // Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
 //bearer_auth.apiKeyPrefix = 'Token';
 
-var apiInstance = new AdaptiveCardsTemplatingServiceClientSdk.TemplateApi();
+var apiInstance = new AdaptivecardsTemplatingServiceJavascriptSdk.TemplateApi();
 
 var callback = function(error, data, response) {
   if (error) {
@@ -119,8 +119,8 @@ Add a new template
 
 ### Example
 ```javascript
-var AdaptiveCardsTemplatingServiceClientSdk = require('adaptive_cards_templating_service_client_sdk');
-var defaultClient = AdaptiveCardsTemplatingServiceClientSdk.ApiClient.instance;
+var AdaptivecardsTemplatingServiceJavascriptSdk = require('adaptivecards_templating_service_javascript_sdk');
+var defaultClient = AdaptivecardsTemplatingServiceJavascriptSdk.ApiClient.instance;
 
 // Configure API key authorization: bearer_auth
 var bearer_auth = defaultClient.authentications['bearer_auth'];
@@ -128,9 +128,9 @@ bearer_auth.apiKey = 'YOUR API KEY';
 // Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
 //bearer_auth.apiKeyPrefix = 'Token';
 
-var apiInstance = new AdaptiveCardsTemplatingServiceClientSdk.TemplateApi();
+var apiInstance = new AdaptivecardsTemplatingServiceJavascriptSdk.TemplateApi();
 
-var body = new AdaptiveCardsTemplatingServiceClientSdk.NewTemplate(); // NewTemplate | Template object to be added
+var body = new AdaptivecardsTemplatingServiceJavascriptSdk.NewTemplate(); // NewTemplate | Template object to be added
 
 
 var callback = function(error, data, response) {

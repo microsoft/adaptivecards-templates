@@ -1,5 +1,5 @@
 /*
- * Adaptive Cards Templating Service Client SDK
+ * adaptivecards-templating-service-javascript-sdk
  * Adaptive Cards Templating Service API definition.
  *
  * OpenAPI spec version: 1.0.0
@@ -30,9 +30,9 @@
    * <p>
    * An AMD (recommended!) or CommonJS application will generally do something equivalent to the following:
    * <pre>
-   * var AdaptiveCardsTemplatingServiceClientSdk = require('index'); // See note below*.
-   * var xxxSvc = new AdaptiveCardsTemplatingServiceClientSdk.XxxApi(); // Allocate the API class we're going to use.
-   * var yyyModel = new AdaptiveCardsTemplatingServiceClientSdk.Yyy(); // Construct a model instance.
+   * var AdaptivecardsTemplatingServiceJavascriptSdk = require('index'); // See note below*.
+   * var xxxSvc = new AdaptivecardsTemplatingServiceJavascriptSdk.XxxApi(); // Allocate the API class we're going to use.
+   * var yyyModel = new AdaptivecardsTemplatingServiceJavascriptSdk.Yyy(); // Construct a model instance.
    * yyyModel.someProperty = 'someValue';
    * ...
    * var zzz = xxxSvc.doSomething(yyyModel); // Invoke the service.
@@ -44,8 +44,8 @@
    * <p>
    * A non-AMD browser application (discouraged) might do something like this:
    * <pre>
-   * var xxxSvc = new AdaptiveCardsTemplatingServiceClientSdk.XxxApi(); // Allocate the API class we're going to use.
-   * var yyy = new AdaptiveCardsTemplatingServiceClientSdk.Yyy(); // Construct a model instance.
+   * var xxxSvc = new AdaptivecardsTemplatingServiceJavascriptSdk.XxxApi(); // Allocate the API class we're going to use.
+   * var yyy = new AdaptivecardsTemplatingServiceJavascriptSdk.Yyy(); // Construct a model instance.
    * yyyModel.someProperty = 'someValue';
    * ...
    * var zzz = xxxSvc.doSomething(yyyModel); // Invoke the service.

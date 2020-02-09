@@ -1,5 +1,5 @@
 /*
- * Adaptive Cards Templating Service Client SDK
+ * adaptivecards-templating-service-javascript-sdk
  * Adaptive Cards Templating Service API definition.
  *
  * OpenAPI spec version: 1.0.0
@@ -22,9 +22,9 @@
     factory(require('expect.js'), require('../../src/index'));
   } else {
     // Browser globals (root is window)
-    factory(root.expect, root.AdaptiveCardsTemplatingServiceClientSdk);
+    factory(root.expect, root.AdaptivecardsTemplatingServiceJavascriptSdk);
   }
-}(this, function(expect, AdaptiveCardsTemplatingServiceClientSdk) {
+}(this, function(expect, AdaptivecardsTemplatingServiceJavascriptSdk) {
   'use strict';
 
   var instance;
@@ -32,12 +32,12 @@
   describe('(package)', function() {
     describe('TemplateList', function() {
       beforeEach(function() {
-        instance = new AdaptiveCardsTemplatingServiceClientSdk.TemplateList();
+        instance = new AdaptivecardsTemplatingServiceJavascriptSdk.TemplateList();
       });
 
       it('should create an instance of TemplateList', function() {
         // TODO: update the code to test TemplateList
-        expect(instance).to.be.a(AdaptiveCardsTemplatingServiceClientSdk.TemplateList);
+        expect(instance).to.be.a(AdaptivecardsTemplatingServiceJavascriptSdk.TemplateList);
       });
 
     });

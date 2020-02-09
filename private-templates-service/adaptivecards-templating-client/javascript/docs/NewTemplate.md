@@ -1,4 +1,4 @@
-# AdaptiveCardsTemplatingServiceClientSdk.NewTemplate
+# AdaptivecardsTemplatingServiceJavascriptSdk.NewTemplate
 
 ## Properties
 Name | Type | Description | Notes

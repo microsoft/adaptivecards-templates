@@ -1,5 +1,5 @@
 /*
- * Adaptive Cards Templating Service Client SDK
+ * adaptivecards-templating-service-javascript-sdk
  * Adaptive Cards Templating Service API definition.
  *
  * OpenAPI spec version: 1.0.0
@@ -22,15 +22,15 @@
     factory(require('expect.js'), require('../../src/index'));
   } else {
     // Browser globals (root is window)
-    factory(root.expect, root.AdaptiveCardsTemplatingServiceClientSdk);
+    factory(root.expect, root.AdaptivecardsTemplatingServiceJavascriptSdk);
   }
-}(this, function(expect, AdaptiveCardsTemplatingServiceClientSdk) {
+}(this, function(expect, AdaptivecardsTemplatingServiceJavascriptSdk) {
   'use strict';
 
   var instance;
 
   beforeEach(function() {
-    instance = new AdaptiveCardsTemplatingServiceClientSdk.TemplateApi();
+    instance = new AdaptivecardsTemplatingServiceJavascriptSdk.TemplateApi();
   });
 
   describe('(package)', function() {
@@ -47,7 +47,7 @@
               return;
             }
             // TODO: update response assertions
-            expect(data).to.be.a(AdaptiveCardsTemplatingServiceClientSdk.Template);
+            expect(data).to.be.a(AdaptivecardsTemplatingServiceJavascriptSdk.Template);
             expect(data.id).to.be.a('string');
             expect(data.id).to.be("");
             expect(data.template).to.be.a('string');
@@ -87,7 +87,7 @@
               return;
             }
             // TODO: update response assertions
-            expect(data).to.be.a(AdaptiveCardsTemplatingServiceClientSdk.TemplateList);
+            expect(data).to.be.a(AdaptivecardsTemplatingServiceJavascriptSdk.TemplateList);
 
             done();
           });
@@ -100,7 +100,7 @@
         it('should call templatePost successfully', function(done) {
           // TODO: uncomment, update parameter values for templatePost call
           /*
-          var body = new AdaptiveCardsTemplatingServiceClientSdk.NewTemplate();
+          var body = new AdaptivecardsTemplatingServiceJavascriptSdk.NewTemplate();
           body.template = "";
           body.isPublished = false;
 

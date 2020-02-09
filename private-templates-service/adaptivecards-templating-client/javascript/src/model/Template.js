@@ -1,5 +1,5 @@
 /*
- * Adaptive Cards Templating Service Client SDK
+ * adaptivecards-templating-service-javascript-sdk
  * Adaptive Cards Templating Service API definition.
  *
  * OpenAPI spec version: 1.0.0
@@ -22,10 +22,10 @@
     module.exports = factory(require('../ApiClient'));
   } else {
     // Browser globals (root is window)
-    if (!root.AdaptiveCardsTemplatingServiceClientSdk) {
-      root.AdaptiveCardsTemplatingServiceClientSdk = {};
+    if (!root.AdaptivecardsTemplatingServiceJavascriptSdk) {
+      root.AdaptivecardsTemplatingServiceJavascriptSdk = {};
     }
-    root.AdaptiveCardsTemplatingServiceClientSdk.Template = factory(root.AdaptiveCardsTemplatingServiceClientSdk.ApiClient);
+    root.AdaptivecardsTemplatingServiceJavascriptSdk.Template = factory(root.AdaptivecardsTemplatingServiceJavascriptSdk.ApiClient);
   }
 }(this, function(ApiClient) {
   'use strict';
