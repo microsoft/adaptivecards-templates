@@ -39,23 +39,44 @@ export class TemplateServiceClient {
 
         return new TemplateServiceClient();
     }
-
-    // TODO: add remove user
     
     /**
-     * @private
-     * Get user
+     * @public
+     * Deletes user info - can only delete own user
      * @param {string} authId - unique ID from access token, eg. oid for AAD
      * @param {Issuer} issuer - auth provider
      */
-    private async _getUser(authId: string, issuer: Issuer): Promise<JSONResponse<IUser[]>> {
+    public async removeUser(authId: string, issuer: Issuer) : Promise<JSONResponse<Number>> {
+        let owner = TemplateServiceClient.authProvider.getOwner();
+        if (!owner){
+            return { success: false, errorMessage: ServiceErrorMessage.AuthFailureResponse };
+        }
+        
+        if (authId !== owner) {
+            return { success: false, errorMessage: ServiceErrorMessage.UnauthorizedUser };
+        }
+
+        const user : IUser = {
+            authId: authId,
+            issuer: issuer,
+        }
+
+        return TemplateServiceClient.storageProvider.removeUser(user);
+    }
+
+    /**
+     * @private
+     * Get user
+     * @param {Issuer} issuer - auth provider
+     */
+    private async _getUser(issuer: Issuer): Promise<JSONResponse<IUser[]>> {
         let owner = TemplateServiceClient.authProvider.getOwner();
         if (!owner){
             return { success: false, errorMessage: ServiceErrorMessage.AuthFailureResponse };
         }
 
         const user: IUser = {
-            authId: authId,
+            authId: owner,
             issuer: issuer
         }
 
@@ -102,14 +123,22 @@ export class TemplateServiceClient {
         let ownerID = "";
 
         // Check if user exists, if not, create new user
-        let userResponse = await this._getUser(owner, TemplateServiceClient.authProvider.issuer);
-        if (!userResponse.success) {
+        let userResponse = await this._getUser(TemplateServiceClient.authProvider.issuer);
+        if (!userResponse.success || userResponse.result && userResponse.result.length === 0) {
             let newUser = await this._postUser(TemplateServiceClient.authProvider.issuer);
             if (!newUser.success || !newUser.result) {
                 return { success: false, errorMessage: ServiceErrorMessage.InvalidUser };
             }
             ownerID = newUser.result;
+        } else {
+            if (userResponse.result && userResponse.result[0].id) {
+                ownerID = userResponse.result[0].id;
+            } else {
+                return { success: false, errorMessage: ServiceErrorMessage.InvalidUser };
+            }
         }
+
+        console.log(ownerID);
 
         const templateInstance: ITemplateInstance = {
             json: JSON.stringify(template),
@@ -119,7 +148,7 @@ export class TemplateServiceClient {
         const newTemplate: ITemplate = {
             instances: [templateInstance],
             tags: [],
-            owner: ownerID,
+            owner: owner,
             isPublished: false
         }
 
@@ -141,11 +170,16 @@ export class TemplateServiceClient {
             return { success: false, errorMessage: ServiceErrorMessage.AuthFailureResponse };
         }
 
+        let user = await this._getUser(TemplateServiceClient.authProvider.issuer);
+        if (!user.success || user.result.length === 0) {
+            return { success: false, errorMessage: ServiceErrorMessage.InvalidUser };
+        }
+
         const templateQuery: ITemplate = {
             id : templateId,
             instances: [],
             tags: [],
-            owner: owner,
+            owner: user[0].id,
             isPublished: isPublished,
         }
 
@@ -220,6 +254,39 @@ export class TemplateServiceClient {
             }
             
             return res.status(201).json(response.result);
+        })
+
+        return router;
+    }
+
+    public userExpressMiddleware() : Router {
+        var router = express.Router();
+
+        // Verify signature of access token before requests.
+        router.all("/", async (req: Request, res: Response, next: NextFunction) => {
+            if (!req.headers.authorization) {
+                const err = new TemplateError(ApiError.InvalidAuthenticationToken, "Missing credentials.");
+                return res.status(401).json({ error: err });
+            }
+            
+            let valid = await TemplateServiceClient.authProvider.isValid(req.headers.authorization);
+
+            if (!valid){
+                const err = new TemplateError(ApiError.InvalidAuthenticationToken, "Token given is not a valid access token issued by Azure Active Directory.");
+                return res.status(401).json({ error: err });
+            }
+            next();
+        })
+
+        router.get("/", (req: Request, res: Response, _next: NextFunction) => {
+            this._getUser(TemplateServiceClient.authProvider.issuer).then(
+                (response) => {
+                    if (!response.success) {
+                        const err = new TemplateError(ApiError.UserNotFound, "Unable to find user information.");
+                        return res.status(404).json({ error: err });
+                    } 
+                    res.status(200).json({ "user": response.result });
+                })
         })
 
         return router;

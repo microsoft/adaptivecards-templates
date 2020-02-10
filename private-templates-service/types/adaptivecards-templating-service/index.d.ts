@@ -77,5 +77,6 @@ declare module 'adaptivecards-templating-service' {
         postTemplates(template: JSON, templateId?: string, version?: string) : Promise<any>;
         getTemplates(templateId?: string, templateName?: string, version?: number) : Promise<any>;
         expressMiddleware() : Router;
+        userExpressMiddleware() : Router;
     }
 }

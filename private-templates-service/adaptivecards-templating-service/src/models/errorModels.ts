@@ -19,7 +19,8 @@ export class TemplateError {
 export enum ApiError {
     InvalidTemplate = "InvalidTemplate",
     TemplateNotFound = "TemplateNotFound",
-    InvalidAuthenticationToken = "InvalidAuthenticationToken"
+    InvalidAuthenticationToken = "InvalidAuthenticationToken",
+    UserNotFound = "UserNotFound",
 }
 
 /**
@@ -28,5 +29,6 @@ export enum ApiError {
  */
 export enum ServiceErrorMessage {
     AuthFailureResponse = "No owner specified, please authenticate.",
-    InvalidUser = "Failed to create user."
+    InvalidUser = "Failed to create user.",
+    UnauthorizedUser = "UnauthorizedUser",
 }

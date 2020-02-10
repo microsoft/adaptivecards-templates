@@ -105,7 +105,7 @@ export class InMemoryDBProvider implements StorageProvider {
     this._setID(docToInsert);
     if (!collection.has(docToInsert.id!)) {
       collection.set(docToInsert.id!, docToInsert);
-      return Promise.resolve({ success: true, result: doc.id });
+      return Promise.resolve({ success: true, result: docToInsert.id });
     } else {
       return Promise.resolve({ success: false, result: "", errorMessage: "Object with id: " + doc.id! + "already exists. Insertion failed" });
     }
