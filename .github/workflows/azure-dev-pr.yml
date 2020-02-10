@@ -1,14 +1,13 @@
 name: run-test-suites
 
 on:
-    push:
+    pull_request:
         branches:
             - users/daniellemott/must_pass_tests
 
-
 jobs:
     run-test-suites:
-    name: run-test-suites
+        name: run-test-suites
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
