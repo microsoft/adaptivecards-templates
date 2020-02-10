@@ -6,14 +6,33 @@ on:
             - users/daniellemott/must_pass_tests
 
 jobs:
-    build2:
+    run-test-suites:
         runs-on: ubuntu-latest
-
         steps:
-            - uses: actions/checkout@v2
-            - name: Run a one-line script
-              run: echo Hello, world!
-            - name: Run a multi-line script
+            - name: Checkout
+              uses: actions/checkout@v2.0.0
+              with:
+                  ref: users/daniellemott/must_pass_tests
+            - name: Use Node.js ${{ env.NODE_VERSION }}
+              uses: actions/setup-node@v1
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
+            - name: Backend Jest Test
               run: |
-                  echo Add other actions to build,
-                  echo test, and deploy your project.
+                  cd private-templates-service/server
+                  npm install
+                  npm run test
+                  cd ..
+            - name: Frontend Jest Test
+              run: |
+                  cd private-templates-service/client
+                  npm install
+                  npm run test
+                  cd ..
+            - name: npm install and npm build
+              if: success()
+              run: |
+                  # Build and test the project, then
+                  # deploy to Azure Web App.
+                  cd private-templates-service/client
+                  npm run build:dev --if-present
