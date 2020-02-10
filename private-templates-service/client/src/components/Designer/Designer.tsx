@@ -39,6 +39,10 @@ const Designer = (props: DesignerProps) => {
   closeButton.separator = true;
   designer.toolbar.insertElementAfter(closeButton, ACDesigner.CardDesigner.ToolbarCommands.TogglePreview);
 
+  let saveButton = new ACDesigner.ToolbarButton("saveButton", "Save", "", (sender) => (alert("Saving...")));
+  saveButton.separator = true;
+  designer.toolbar.insertElementAfter(saveButton, ACDesigner.CardDesigner.ToolbarCommands.TogglePreview);
+
   const element = document.getElementById("root");
   if (element) {
     designer.attachTo(element);
