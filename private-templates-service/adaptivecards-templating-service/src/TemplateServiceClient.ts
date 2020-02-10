@@ -39,25 +39,38 @@ export class TemplateServiceClient {
     
     /**
      * @public
-     * Deletes user info - can only delete own user
+     * Deletes user info - can only delete own user and all templates created by that user
      */
-    public async removeUser() : Promise<JSONResponse<Number>> {
+    public async removeUser(): Promise<JSONResponse<Number>> {
         let owner = this.authProvider.getOwner();
         if (!owner){
             return { success: false, errorMessage: ServiceErrorMessage.AuthFailureResponse };
         }
+
+        // Remove all templates under user 
+        const template : ITemplate = {
+            instances: [],
+            tags: [],
+            owner: this.ownerID,
+        }
+
+        let deleteTemplateResponse = await this.storageProvider.removeTemplate(template);
 
         const user : IUser = {
             authId: owner,
             issuer: this.authProvider.issuer,
         }
 
-        let response = await this.storageProvider.removeUser(user);
-        if (response.success) {
+        let removeUserResponse = await this.storageProvider.removeUser(user);
+        if (removeUserResponse.success) {
             this.ownerID = undefined;
         }
 
-        return response;
+        if (!deleteTemplateResponse.success || !removeUserResponse.success) {
+            return { success: false, errorMessage: ServiceErrorMessage.DeleteUserInfoFailed };
+        }
+
+        return removeUserResponse;
     }
 
     /**
@@ -126,6 +139,29 @@ export class TemplateServiceClient {
         return { success: true };
     }
 
+    private async _updateTemplate(templateId: string, template?: JSON, version?: string) : Promise<JSONResponse<Number>> {
+
+        const queryTemplate: ITemplate = {
+            id: templateId,
+            instances: [],
+            tags: []
+        }
+
+        const templateInstance: ITemplateInstance = {
+            json: JSON.stringify(template),
+            version: version || "1.0"
+        }
+
+        const newTemplate: ITemplate = {
+            instances: [templateInstance],
+            tags: [],
+            owner: this.ownerID!,
+            isPublished: false
+        }
+
+        return this.storageProvider.updateTemplate(queryTemplate, newTemplate);
+    }
+
     /**
      * @public
      * Post templates and checks if user exists
@@ -143,6 +179,16 @@ export class TemplateServiceClient {
         if (!this.ownerID) {
             let response = await this._createUser();
             if (!response.success) return response;
+        }
+
+        // Check if template already exists
+        let existingTemplate = await this.getTemplates(templateId);
+        if (existingTemplate.success && existingTemplate.result && existingTemplate.result.length > 0 && templateId) {
+            let updatedTemplate = await this._updateTemplate(templateId, template, version);
+            if (updatedTemplate.success) {
+                return { success: true };
+            }
+            return { success: false, errorMessage: ServiceErrorMessage.InvalidTemplate };
         }
 
         const templateInstance: ITemplateInstance = {
@@ -235,7 +281,13 @@ export class TemplateServiceClient {
                 return res.status(501);
             }
 
-            this.getTemplates().then(
+            let getTemplateFunction = this.getTemplates();
+            let isPublished = req.params.isPublished === "True" || req.params.isPublished === "true";
+            if (isPublished){
+                getTemplateFunction = this.getTemplates(undefined, isPublished);
+            }
+
+            getTemplateFunction.then(
                 (response) => {
                     if (!response.success) {
                         const err = new TemplateError(ApiError.TemplateNotFound, "Unable to find any templates.");
@@ -257,7 +309,7 @@ export class TemplateServiceClient {
             )
         })
 
-        router.post("/", async (req: Request, res: Response, _next: NextFunction) => {
+        router.post("/:id*?", async (req: Request, res: Response, _next: NextFunction) => {
             await check("template", "Template is not valid JSON.").isJSON().run(req);
             const errors = validationResult(req);
 
@@ -266,7 +318,10 @@ export class TemplateServiceClient {
                 return res.status(400).json({ error: err });
             }
 
-            let response = await this.postTemplates(req.body.template);
+            let response = req.params.id?
+                await this.postTemplates(req.body.template, req.params.id) : 
+                await this.postTemplates(req.body.template);
+
             if (!response.success){
                 const err = new TemplateError(ApiError.InvalidTemplate, "Unable to create given template.");
                 return res.status(400).json({ error: err })
@@ -297,7 +352,7 @@ export class TemplateServiceClient {
             next();
         })
 
-        router.get("/", (req: Request, res: Response, _next: NextFunction) => {
+        router.get("/", (_req: Request, res: Response, _next: NextFunction) => {
             this._getUser().then(
                 (response) => {
                     if (!response.success) {
@@ -306,6 +361,18 @@ export class TemplateServiceClient {
                     } 
                     res.status(200).json({ "user": response.result });
                 })
+        })
+
+        router.delete("/", (_req: Request, res: Response, _next: NextFunction) => {
+            this.removeUser().then(
+                (response) => {
+                    if (!response.success){
+                        const err = new TemplateError(ApiError.FailedToDeleteUser, "Failed to delete user.");
+                        return res.status(500).json({ error: err });
+                    }
+                    res.status(204).send();
+                }
+            )
         })
 
         return router;

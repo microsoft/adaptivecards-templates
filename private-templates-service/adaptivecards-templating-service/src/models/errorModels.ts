@@ -21,6 +21,7 @@ export enum ApiError {
     TemplateNotFound = "TemplateNotFound",
     InvalidAuthenticationToken = "InvalidAuthenticationToken",
     UserNotFound = "UserNotFound",
+    FailedToDeleteUser = "FailedToDeleteUser"
 }
 
 /**
@@ -30,4 +31,6 @@ export enum ApiError {
 export enum ServiceErrorMessage {
     AuthFailureResponse = "No owner specified, please authenticate.",
     InvalidUser = "Failed to create user.",
+    InvalidTemplate = "Invalid template.",
+    DeleteUserInfoFailed = "Failed to delete all user info.",
 }
