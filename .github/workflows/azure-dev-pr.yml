@@ -1,4 +1,4 @@
-name: CI
+name: run-test-suites
 
 on:
     push:
