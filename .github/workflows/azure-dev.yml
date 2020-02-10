@@ -60,3 +60,4 @@ jobs:
                   app-name: ${{ env.AZURE_WEBAPP_NAME }}
                   publish-profile: ${{ secrets.AZURE_ADAPTIVECMS }}
                   package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+                  startup-command: "cd server && npm start"
