@@ -18,7 +18,7 @@ describe('Get endpoints', () => {
 
     beforeAll(async() => {
         // TODO: request access token for registered AD app
-        token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IkhsQzBSMTJza3hOWjFXUXdtak9GXzZ0X3RERSJ9.eyJhdWQiOiI0ODAzZjY2YS0xMzZkLTQxNTUtYTUxZS02ZDk4NDAwZDU1MDYiLCJpc3MiOiJodHRwczovL2xvZ2luLm1pY3Jvc29mdG9ubGluZS5jb20vNzJmOTg4YmYtODZmMS00MWFmLTkxYWItMmQ3Y2QwMTFkYjQ3L3YyLjAiLCJpYXQiOjE1ODEzNzM0ODIsIm5iZiI6MTU4MTM3MzQ4MiwiZXhwIjoxNTgxMzc3MzgyLCJhaW8iOiI0Mk5nWUFqWHVIVmhmK1RhdmJ5NldzNnRIQ3R0QUE9PSIsImF6cCI6IjJlN2FjM2ZhLWUxOTgtNDhiZC1iYjY3LTJlNDNhZTdlZWIzMCIsImF6cGFjciI6IjEiLCJvaWQiOiIyOGVkOGFmYy04ODNiLTRmZDAtYmZjOC1kYWU3NGZkOGFiYjciLCJzdWIiOiIyOGVkOGFmYy04ODNiLTRmZDAtYmZjOC1kYWU3NGZkOGFiYjciLCJ0aWQiOiI3MmY5ODhiZi04NmYxLTQxYWYtOTFhYi0yZDdjZDAxMWRiNDciLCJ1dGkiOiIzaUY4NktoeVlFV1Z4d2lpLTg4RUFBIiwidmVyIjoiMi4wIn0.FfLhdvgLW013TTzajuCUlmpy57c4gNmSN2iKnHiwDryoCqzs0LFg3-sjG-qEGuNrmL6zKHdx50gaTkwf5cyqkVGmE9u_hmVkVGIIrR3l_AyUHoga5qzS9qyu3mNogRf841HydRGIOhWoaU6F7PaByge1LrBlsR4kHyRp7WM9nSSd-Nzd2XYaJQYnzjhUuzKphyoZdS-kYqGk0c3KKMa1idJXpbQ_xSYoMrzry08rc-ZW7bNABen6WZJw4H-LixK7SKrrj-UNur8-T5xbLVnu3XrCbYrDmPQFo3iNeMirnkYDYJcLf5fVuN1YWiuF3fHag2iWU-xvZIXPlzi5iVGMiw";
+        token = "<INSERT_APP_TOKEN_HERE>";
         let templateClient = await TemplateServiceClient.init(options);
         let middleware: Router = templateClient.expressMiddleware();
         app.use(middleware);
@@ -51,7 +51,7 @@ describe('Post Templates', () => {
 
     beforeAll(async() => {
         // TODO: request access token for registered AD app
-        token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IkhsQzBSMTJza3hOWjFXUXdtak9GXzZ0X3RERSJ9.eyJhdWQiOiI0ODAzZjY2YS0xMzZkLTQxNTUtYTUxZS02ZDk4NDAwZDU1MDYiLCJpc3MiOiJodHRwczovL2xvZ2luLm1pY3Jvc29mdG9ubGluZS5jb20vNzJmOTg4YmYtODZmMS00MWFmLTkxYWItMmQ3Y2QwMTFkYjQ3L3YyLjAiLCJpYXQiOjE1ODEzNzM0ODIsIm5iZiI6MTU4MTM3MzQ4MiwiZXhwIjoxNTgxMzc3MzgyLCJhaW8iOiI0Mk5nWUFqWHVIVmhmK1RhdmJ5NldzNnRIQ3R0QUE9PSIsImF6cCI6IjJlN2FjM2ZhLWUxOTgtNDhiZC1iYjY3LTJlNDNhZTdlZWIzMCIsImF6cGFjciI6IjEiLCJvaWQiOiIyOGVkOGFmYy04ODNiLTRmZDAtYmZjOC1kYWU3NGZkOGFiYjciLCJzdWIiOiIyOGVkOGFmYy04ODNiLTRmZDAtYmZjOC1kYWU3NGZkOGFiYjciLCJ0aWQiOiI3MmY5ODhiZi04NmYxLTQxYWYtOTFhYi0yZDdjZDAxMWRiNDciLCJ1dGkiOiIzaUY4NktoeVlFV1Z4d2lpLTg4RUFBIiwidmVyIjoiMi4wIn0.FfLhdvgLW013TTzajuCUlmpy57c4gNmSN2iKnHiwDryoCqzs0LFg3-sjG-qEGuNrmL6zKHdx50gaTkwf5cyqkVGmE9u_hmVkVGIIrR3l_AyUHoga5qzS9qyu3mNogRf841HydRGIOhWoaU6F7PaByge1LrBlsR4kHyRp7WM9nSSd-Nzd2XYaJQYnzjhUuzKphyoZdS-kYqGk0c3KKMa1idJXpbQ_xSYoMrzry08rc-ZW7bNABen6WZJw4H-LixK7SKrrj-UNur8-T5xbLVnu3XrCbYrDmPQFo3iNeMirnkYDYJcLf5fVuN1YWiuF3fHag2iWU-xvZIXPlzi5iVGMiw";
+        token = "<INSERT_APP_TOKEN_HERE>";
         let templateClient = await TemplateServiceClient.init(options);
         let middleware: Router = templateClient.expressMiddleware();
         let userMiddleware : Router = templateClient.userExpressMiddleware();
