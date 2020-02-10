@@ -47,6 +47,8 @@ export class TemplateServiceClient {
             return { success: false, errorMessage: ServiceErrorMessage.AuthFailureResponse };
         }
 
+        if (!this.ownerID) return { success: true };
+        
         // Remove all templates under user 
         const template : ITemplate = {
             instances: [],
@@ -114,13 +116,12 @@ export class TemplateServiceClient {
         if (response.success){
             this.ownerID = response.result;
         }
-
         return response;
     }
 
     /**
      * @private
-     * Helper function to check if user exists and create a new user.
+     * Helper function to check if user exists and create a new user if not.
      */
     private async _createUser() : Promise<JSONResponse<string>> {
         // Check if user exists, if not, create new user
@@ -130,7 +131,6 @@ export class TemplateServiceClient {
             if (!newUser.success || !newUser.result) {
                 return { success: false, errorMessage: ServiceErrorMessage.InvalidUser };
             }
-            this.ownerID = newUser.result;
         } else if (userResponse.success && userResponse.result && userResponse.result[0].id) {
             this.ownerID = userResponse.result[0].id;
         } else {
@@ -139,7 +139,14 @@ export class TemplateServiceClient {
         return { success: true };
     }
 
-    private async _updateTemplate(templateId: string, template?: JSON, version?: string) : Promise<JSONResponse<Number>> {
+    /**
+     * @private
+     * Updates existing template, assumes that owner user exists/has already been created.
+     * @param templateId - template id to update
+     * @param template - updated template json
+     * @param version - updated version number
+     */
+    private async _updateTemplate(templateId: string, template?: JSON, version?: string, isPublished?: boolean) : Promise<JSONResponse<Number>> {
 
         const queryTemplate: ITemplate = {
             id: templateId,
@@ -156,7 +163,7 @@ export class TemplateServiceClient {
             instances: [templateInstance],
             tags: [],
             owner: this.ownerID!,
-            isPublished: false
+            isPublished: isPublished
         }
 
         return this.storageProvider.updateTemplate(queryTemplate, newTemplate);
@@ -170,7 +177,7 @@ export class TemplateServiceClient {
      * @param {string} version - version number
      * @returns Promise as valid json 
      */
-    public async postTemplates(template: JSON, templateId?: string, version?: string): Promise<JSONResponse<string>> {
+    public async postTemplates(template: JSON, templateId?: string, version?: string, isPublished?: boolean): Promise<JSONResponse<string>> {
         let owner = this.authProvider.getOwner();
         if (!owner){
             return { success: false, errorMessage: ServiceErrorMessage.AuthFailureResponse };
@@ -200,7 +207,7 @@ export class TemplateServiceClient {
             instances: [templateInstance],
             tags: [],
             owner: this.ownerID!,
-            isPublished: false
+            isPublished: isPublished
         }
 
         return this.storageProvider.insertTemplate(newTemplate);
@@ -209,7 +216,7 @@ export class TemplateServiceClient {
     /**
      * @public
      * Get entry point. 
-     * Returns all published templates and user's saved templates.
+     * Returns specified templates
      * @param {string} templateId - unique template id
      * @param {boolean} isPublished 
      * @param {string} templateName - name to query for

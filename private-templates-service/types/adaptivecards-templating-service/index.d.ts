@@ -73,10 +73,11 @@ declare module 'adaptivecards-templating-service' {
       }
 
     export class TemplateServiceClient {
-        static init(clientOptions : ClientOptions) : TemplateServiceClient;
-        postTemplates(template: JSON, templateId?: string, version?: string) : Promise<any>;
-        getTemplates(templateId?: string, templateName?: string, version?: number) : Promise<any>;
-        expressMiddleware() : Router;
-        userExpressMiddleware() : Router;
+        static init(clientOptions : ClientOptions): TemplateServiceClient;
+        postTemplates(template: JSON, templateId?: string, version?: string): Promise<any>;
+        getTemplates(templateId?: string, templateName?: string, version?: number): Promise<any>;
+        expressMiddleware(): Router;
+        userExpressMiddleware(): Router;
+        removeUser(): Promise<JSONResponse<Number>>;
     }
 }
