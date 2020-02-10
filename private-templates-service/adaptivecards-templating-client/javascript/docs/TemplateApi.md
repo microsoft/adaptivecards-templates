@@ -1,6 +1,6 @@
 # AdaptivecardsTemplatingServiceJavascriptSdk.TemplateApi
 
-All URIs are relative to *https://https://adaptivecms.azurewebsites.net*
+All URIs are relative to *https://localhost:5000*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------

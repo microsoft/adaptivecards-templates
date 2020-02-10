@@ -16,12 +16,12 @@
 (function(factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
-    define(['ApiClient', 'model/NewTemplate', 'model/Template', 'model/TemplateList', 'api/TemplateApi'], factory);
+    define(['ApiClient', 'model/BaseError', 'model/BaseErrorError', 'model/NewTemplate', 'model/Template', 'model/TemplateList', 'api/TemplateApi'], factory);
   } else if (typeof module === 'object' && module.exports) {
     // CommonJS-like environments that support module.exports, like Node.
-    module.exports = factory(require('./ApiClient'), require('./model/NewTemplate'), require('./model/Template'), require('./model/TemplateList'), require('./api/TemplateApi'));
+    module.exports = factory(require('./ApiClient'), require('./model/BaseError'), require('./model/BaseErrorError'), require('./model/NewTemplate'), require('./model/Template'), require('./model/TemplateList'), require('./api/TemplateApi'));
   }
-}(function(ApiClient, NewTemplate, Template, TemplateList, TemplateApi) {
+}(function(ApiClient, BaseError, BaseErrorError, NewTemplate, Template, TemplateList, TemplateApi) {
   'use strict';
 
   /**
@@ -61,6 +61,16 @@
      * @property {module:ApiClient}
      */
     ApiClient: ApiClient,
+    /**
+     * The BaseError model constructor.
+     * @property {module:model/BaseError}
+     */
+    BaseError: BaseError,
+    /**
+     * The BaseErrorError model constructor.
+     * @property {module:model/BaseErrorError}
+     */
+    BaseErrorError: BaseErrorError,
     /**
      * The NewTemplate model constructor.
      * @property {module:model/NewTemplate}

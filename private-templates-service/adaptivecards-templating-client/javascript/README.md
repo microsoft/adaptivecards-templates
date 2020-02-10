@@ -121,7 +121,7 @@ api.templateById(templateId, callback);
 
 ## Documentation for API Endpoints
 
-All URIs are relative to *https://https://adaptivecms.azurewebsites.net*
+All URIs are relative to *https://localhost:5000*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
@@ -132,6 +132,8 @@ Class | Method | HTTP request | Description
 
 ## Documentation for Models
 
+ - [AdaptivecardsTemplatingServiceJavascriptSdk.BaseError](docs/BaseError.md)
+ - [AdaptivecardsTemplatingServiceJavascriptSdk.BaseErrorError](docs/BaseErrorError.md)
  - [AdaptivecardsTemplatingServiceJavascriptSdk.NewTemplate](docs/NewTemplate.md)
  - [AdaptivecardsTemplatingServiceJavascriptSdk.Template](docs/Template.md)
  - [AdaptivecardsTemplatingServiceJavascriptSdk.TemplateList](docs/TemplateList.md)

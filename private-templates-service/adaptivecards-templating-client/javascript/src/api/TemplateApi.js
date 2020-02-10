@@ -16,18 +16,18 @@
 (function(root, factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
-    define(['ApiClient', 'model/NewTemplate', 'model/Template', 'model/TemplateList'], factory);
+    define(['ApiClient', 'model/BaseError', 'model/NewTemplate', 'model/Template', 'model/TemplateList'], factory);
   } else if (typeof module === 'object' && module.exports) {
     // CommonJS-like environments that support module.exports, like Node.
-    module.exports = factory(require('../ApiClient'), require('../model/NewTemplate'), require('../model/Template'), require('../model/TemplateList'));
+    module.exports = factory(require('../ApiClient'), require('../model/BaseError'), require('../model/NewTemplate'), require('../model/Template'), require('../model/TemplateList'));
   } else {
     // Browser globals (root is window)
     if (!root.AdaptivecardsTemplatingServiceJavascriptSdk) {
       root.AdaptivecardsTemplatingServiceJavascriptSdk = {};
     }
-    root.AdaptivecardsTemplatingServiceJavascriptSdk.TemplateApi = factory(root.AdaptivecardsTemplatingServiceJavascriptSdk.ApiClient, root.AdaptivecardsTemplatingServiceJavascriptSdk.NewTemplate, root.AdaptivecardsTemplatingServiceJavascriptSdk.Template, root.AdaptivecardsTemplatingServiceJavascriptSdk.TemplateList);
+    root.AdaptivecardsTemplatingServiceJavascriptSdk.TemplateApi = factory(root.AdaptivecardsTemplatingServiceJavascriptSdk.ApiClient, root.AdaptivecardsTemplatingServiceJavascriptSdk.BaseError, root.AdaptivecardsTemplatingServiceJavascriptSdk.NewTemplate, root.AdaptivecardsTemplatingServiceJavascriptSdk.Template, root.AdaptivecardsTemplatingServiceJavascriptSdk.TemplateList);
   }
-}(this, function(ApiClient, NewTemplate, Template, TemplateList) {
+}(this, function(ApiClient, BaseError, NewTemplate, Template, TemplateList) {
   'use strict';
 
   /**
