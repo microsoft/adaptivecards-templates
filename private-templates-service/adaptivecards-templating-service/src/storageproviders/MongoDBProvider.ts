@@ -24,7 +24,10 @@ export class MongoDBProvider implements StorageProvider {
     return await this.User.find(query)
       .then(users => {
         if (users.length) {
-          return Promise.resolve({ success: true, result: users });
+          return Promise.resolve({
+            success: true,
+            result: users
+          });
         }
         return Promise.resolve({
           success: false,
@@ -60,18 +63,18 @@ export class MongoDBProvider implements StorageProvider {
     return await this.User.findOneAndUpdate(query, updateQuery)
       .then(result => {
         if (result) {
-          return Promise.resolve({ success: true, result: 1 });
+          return Promise.resolve({
+            success: true
+          });
         }
         return Promise.resolve({
           success: false,
-          result: 0,
           errorMessage: "No users found matching given criteria."
         });
       })
       .catch(e => {
         return Promise.resolve({
           success: false,
-          result: 0,
           errorMessage: e
         });
       });
@@ -80,18 +83,16 @@ export class MongoDBProvider implements StorageProvider {
     return await this.Template.findOneAndUpdate(query, updateQuery)
       .then(result => {
         if (result) {
-          return Promise.resolve({ success: true, result: 1 });
+          return Promise.resolve({ success: true });
         }
         return Promise.resolve({
           success: false,
-          result: 0,
           errorMessage: "No templates found matching given criteria."
         });
       })
       .catch(e => {
         return Promise.resolve({
           success: false,
-          result: 0,
           errorMessage: e
         });
       });
@@ -104,7 +105,6 @@ export class MongoDBProvider implements StorageProvider {
       .catch(e => {
         return Promise.resolve({
           success: false,
-          number: 0,
           errorMessage: e
         });
       });
@@ -117,7 +117,6 @@ export class MongoDBProvider implements StorageProvider {
       .catch(e => {
         return Promise.resolve({
           success: false,
-          number: 0,
           errorMessage: e
         });
       });
@@ -127,20 +126,17 @@ export class MongoDBProvider implements StorageProvider {
       .then(result => {
         if (result.deletedCount) {
           return Promise.resolve({
-            success: true,
-            result: result.deletedCount
+            success: true
           });
         }
         return Promise.resolve({
           success: false,
-          result: 0,
           errorMessage: "No users found matching given criteria"
         });
       })
       .catch(e => {
         return Promise.resolve({
           success: false,
-          number: 0,
           errorMessage: e
         });
       });
@@ -150,20 +146,17 @@ export class MongoDBProvider implements StorageProvider {
       .then(result => {
         if (result.deletedCount) {
           return Promise.resolve({
-            success: true,
-            result: result.deletedCount
+            success: true
           });
         }
         return Promise.resolve({
           success: false,
-          result: 0,
           errorMessage: "No templates found matching given criteria"
         });
       })
       .catch(e => {
         return Promise.resolve({
           success: false,
-          number: 0,
           errorMessage: e
         });
       });
