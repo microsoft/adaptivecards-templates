@@ -43,6 +43,7 @@ jobs:
                   # Build and test the project, then
                   # deploy to Azure Web App.
                   cd private-templates-service/client
+                  npm install
                   npm run build:dev --if-present
                   cd ..
                   cd server
