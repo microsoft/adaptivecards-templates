@@ -37,12 +37,6 @@ jobs:
                   npm install
                   npm run test
                   cd ..
-            - name: Frontend Jest Test
-              run: |
-                  cd private-templates-service/client
-                  npm install
-                  npm run test
-                  cd ..
             - name: npm install and npm build
               if: success()
               run: |
