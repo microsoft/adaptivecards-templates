@@ -8,13 +8,8 @@ export const Banner = styled.div`
   justify-content: space-between;
   width: 100%;
   align-items: center;
-<<<<<<< HEAD
-  padding: 8px 64px;
-  z-index: 2;
-=======
   padding: 8px 40px;
-  z-index: 1;
->>>>>>> dev
+  z-index: 2;
 
   @media only screen and (max-width: ${BREAK.SM}px){
     padding: 8px 24px;

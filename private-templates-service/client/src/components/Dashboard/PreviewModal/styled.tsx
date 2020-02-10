@@ -4,7 +4,7 @@ import { COLORS, BREAK } from '../../../globalStyles';
 
 export const ModalBackdrop = styled.div`
   position: fixed;
-  top: 64px;
+  top: 55px;
   bottom: 0;
   left: 260px;
   right: 0;

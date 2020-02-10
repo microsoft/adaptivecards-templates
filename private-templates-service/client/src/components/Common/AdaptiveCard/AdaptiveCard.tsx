@@ -3,6 +3,7 @@ import React from 'react';
 import * as AdaptiveCards from "adaptivecards";
 
 import { Card } from './styled';
+import markdownit from "markdown-it";
 
 function getCard(): any {
   // Hard coded, will remove and connect to backend in future PR
@@ -35,6 +36,11 @@ function getCard(): any {
   return card;
 }
 function renderingSetup(): AdaptiveCards.AdaptiveCard {
+  AdaptiveCards.AdaptiveCard.onProcessMarkdown = function (text: string, result: { didProcess: boolean, outputHtml?: string }) {
+    result.outputHtml = new markdownit().render(text);
+    result.didProcess = true;
+  }
+
   let adaptiveCard = new AdaptiveCards.AdaptiveCard();
   // Set its hostConfig property unless you want to use the default Host Config
   // Host Config defines the style and behavior of a card

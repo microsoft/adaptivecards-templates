@@ -104,7 +104,11 @@ export class TemplateServiceClient {
         var router = express.Router();
 
         // Verify signature of access token before requests.
-        router.all("/", async (req: Request, res: Response, next: NextFunction) => {
+        router.all("/*", async (req: Request, res: Response, next: NextFunction) => {
+            if (req.method === "OPTIONS"){
+                next();
+            }
+
             if (!req.headers.authorization) {
                 const err = new TemplateError(ApiError.InvalidAuthenticationToken, "Missing credentials.");
                 return res.status(401).json({ error: err });
