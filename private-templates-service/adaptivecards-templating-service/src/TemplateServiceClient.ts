@@ -5,12 +5,12 @@ import { AuthenticationProvider } from ".";
 import { TemplateError, ApiError, ServiceErrorMessage } from "./models/errorModels";
 import { StorageProvider } from ".";
 import { ITemplate, JSONResponse, ITemplateInstance, IUser } from ".";
-import { Issuer } from "./models/models";
 
 export class TemplateServiceClient {
 
-    private static storageProvider: StorageProvider;
-    private static authProvider: AuthenticationProvider;
+    private storageProvider: StorageProvider;
+    private authProvider: AuthenticationProvider;
+    private ownerID: string | undefined;
 
     /**
      * @public
@@ -34,76 +34,96 @@ export class TemplateServiceClient {
             throw error;
         }
 
-        this.storageProvider = clientOptions.storageProvider;
-        this.authProvider = clientOptions.authenticationProvider;
-
-        return new TemplateServiceClient();
+        return new TemplateServiceClient(clientOptions.storageProvider, clientOptions.authenticationProvider);
     }
     
     /**
      * @public
      * Deletes user info - can only delete own user
-     * @param {string} authId - unique ID from access token, eg. oid for AAD
-     * @param {Issuer} issuer - auth provider
      */
-    public async removeUser(authId: string, issuer: Issuer) : Promise<JSONResponse<Number>> {
-        let owner = TemplateServiceClient.authProvider.getOwner();
+    public async removeUser() : Promise<JSONResponse<Number>> {
+        let owner = this.authProvider.getOwner();
         if (!owner){
             return { success: false, errorMessage: ServiceErrorMessage.AuthFailureResponse };
-        }
-        
-        if (authId !== owner) {
-            return { success: false, errorMessage: ServiceErrorMessage.UnauthorizedUser };
         }
 
         const user : IUser = {
-            authId: authId,
-            issuer: issuer,
+            authId: owner,
+            issuer: this.authProvider.issuer,
         }
 
-        return TemplateServiceClient.storageProvider.removeUser(user);
+        let response = await this.storageProvider.removeUser(user);
+        if (response.success) {
+            this.ownerID = undefined;
+        }
+
+        return response;
     }
 
     /**
      * @private
-     * Get user
-     * @param {Issuer} issuer - auth provider
+     * Get own user info.
+     * Will return success if user does not exist but query is successful.
      */
-    private async _getUser(issuer: Issuer): Promise<JSONResponse<IUser[]>> {
-        let owner = TemplateServiceClient.authProvider.getOwner();
+    private async _getUser(): Promise<JSONResponse<IUser[]>> {
+        let owner = this.authProvider.getOwner();
         if (!owner){
             return { success: false, errorMessage: ServiceErrorMessage.AuthFailureResponse };
         }
 
         const user: IUser = {
             authId: owner,
-            issuer: issuer
+            issuer: this.authProvider.issuer
         }
 
-        return TemplateServiceClient.storageProvider.getUser(user);
+        return this.storageProvider.getUser(user);
     }
 
     /**
      * @private
-     * @param {string} id - unique ID from access token, eg. oid for AAD
-     * @param {Issuer} issuer - auth provider
      * @param {string} team - user's team within org
      * @param {string} org - user's organization
      */
-    private async _postUser(issuer: Issuer, team?: string, org?: string): Promise<JSONResponse<string>> {
-        let owner = TemplateServiceClient.authProvider.getOwner();
+    private async _postUser(team?: string, org?: string): Promise<JSONResponse<string>> {
+        let owner = this.authProvider.getOwner();
         if (!owner){
             return { success: false, errorMessage: ServiceErrorMessage.AuthFailureResponse };
         }
 
         const user: IUser = {
             authId: owner,
-            issuer: issuer,
+            issuer: this.authProvider.issuer,
             team: team? [team] : [],
             org: org? [org] : []
         }
 
-        return TemplateServiceClient.storageProvider.insertUser(user);
+        let response = await this.storageProvider.insertUser(user);
+        if (response.success){
+            this.ownerID = response.result;
+        }
+
+        return response;
+    }
+
+    /**
+     * @private
+     * Helper function to check if user exists and create a new user.
+     */
+    private async _createUser() : Promise<JSONResponse<string>> {
+        // Check if user exists, if not, create new user
+        let userResponse = await this._getUser();
+        if (!userResponse.success || userResponse.result && userResponse.result.length === 0) {
+            let newUser = await this._postUser();
+            if (!newUser.success || !newUser.result) {
+                return { success: false, errorMessage: ServiceErrorMessage.InvalidUser };
+            }
+            this.ownerID = newUser.result;
+        } else if (userResponse.success && userResponse.result && userResponse.result[0].id) {
+            this.ownerID = userResponse.result[0].id;
+        } else {
+            return { success: false, errorMessage: ServiceErrorMessage.InvalidUser };
+        }
+        return { success: true };
     }
 
     /**
@@ -115,30 +135,15 @@ export class TemplateServiceClient {
      * @returns Promise as valid json 
      */
     public async postTemplates(template: JSON, templateId?: string, version?: string): Promise<JSONResponse<string>> {
-        let owner = TemplateServiceClient.authProvider.getOwner();
+        let owner = this.authProvider.getOwner();
         if (!owner){
             return { success: false, errorMessage: ServiceErrorMessage.AuthFailureResponse };
         }
 
-        let ownerID = "";
-
-        // Check if user exists, if not, create new user
-        let userResponse = await this._getUser(TemplateServiceClient.authProvider.issuer);
-        if (!userResponse.success || userResponse.result && userResponse.result.length === 0) {
-            let newUser = await this._postUser(TemplateServiceClient.authProvider.issuer);
-            if (!newUser.success || !newUser.result) {
-                return { success: false, errorMessage: ServiceErrorMessage.InvalidUser };
-            }
-            ownerID = newUser.result;
-        } else {
-            if (userResponse.result && userResponse.result[0].id) {
-                ownerID = userResponse.result[0].id;
-            } else {
-                return { success: false, errorMessage: ServiceErrorMessage.InvalidUser };
-            }
+        if (!this.ownerID) {
+            let response = await this._createUser();
+            if (!response.success) return response;
         }
-
-        console.log(ownerID);
 
         const templateInstance: ITemplateInstance = {
             json: JSON.stringify(template),
@@ -148,42 +153,56 @@ export class TemplateServiceClient {
         const newTemplate: ITemplate = {
             instances: [templateInstance],
             tags: [],
-            owner: owner,
+            owner: this.ownerID!,
             isPublished: false
         }
 
-        return TemplateServiceClient.storageProvider.insertTemplate(newTemplate);
+        return this.storageProvider.insertTemplate(newTemplate);
     }
 
     /**
      * @public
      * Get entry point. 
+     * Returns all published templates and user's saved templates.
      * @param {string} templateId - unique template id
      * @param {boolean} isPublished 
      * @param {string} templateName - name to query for
      * @param {string} version - version number
+     * @param {boolean} owned - If false, will retrieve all public templates regardless of owner
      * @returns Promise as valid json 
      */
-    public async getTemplates(templateId?: string, isPublished?: boolean, templateName?: string, version?: number): Promise<JSONResponse<ITemplate[]>> {
-        let owner = TemplateServiceClient.authProvider.getOwner();
+    public async getTemplates(templateId?: string, isPublished?: boolean, templateName?: string, version?: number, owned?: boolean): Promise<JSONResponse<ITemplate[]>> {
+        let owner = this.authProvider.getOwner();
         if (!owner){
             return { success: false, errorMessage: ServiceErrorMessage.AuthFailureResponse };
         }
 
-        let user = await this._getUser(TemplateServiceClient.authProvider.issuer);
-        if (!user.success || user.result.length === 0) {
-            return { success: false, errorMessage: ServiceErrorMessage.InvalidUser };
-        }
+        if (owned) {
+            if (!this.ownerID) {
+                let response = await this._createUser();
+                if (!response.success) return { success: false, errorMessage: ServiceErrorMessage.InvalidUser };
+            }
 
-        const templateQuery: ITemplate = {
-            id : templateId,
+            const templateQuery: ITemplate = {
+                id : templateId,
+                instances: [],
+                tags: [],
+                owner: this.ownerID,
+                isPublished: isPublished,
+            }
+    
+            return this.storageProvider.getTemplate(templateQuery);  
+        }
+      
+        // Return all published public templates
+        const templateQueryPublished: ITemplate = {
+            id : templateId, 
             instances: [],
             tags: [],
-            owner: user[0].id,
-            isPublished: isPublished,
+            isPublished: isPublished
         }
 
-        return TemplateServiceClient.storageProvider.getTemplate(templateQuery);        
+        return this.storageProvider.getTemplate(templateQueryPublished);  
     }
 
     /**
@@ -202,7 +221,7 @@ export class TemplateServiceClient {
                 return res.status(401).json({ error: err });
             }
             
-            let valid = await TemplateServiceClient.authProvider.isValid(req.headers.authorization);
+            let valid = await this.authProvider.isValid(req.headers.authorization);
 
             if (!valid){
                 const err = new TemplateError(ApiError.InvalidAuthenticationToken, "Token given is not a valid access token issued by Azure Active Directory.");
@@ -253,7 +272,7 @@ export class TemplateServiceClient {
                 return res.status(400).json({ error: err })
             }
             
-            return res.status(201).json(response.result);
+            return res.status(201).json({ "id" : response.result });
         })
 
         return router;
@@ -269,7 +288,7 @@ export class TemplateServiceClient {
                 return res.status(401).json({ error: err });
             }
             
-            let valid = await TemplateServiceClient.authProvider.isValid(req.headers.authorization);
+            let valid = await this.authProvider.isValid(req.headers.authorization);
 
             if (!valid){
                 const err = new TemplateError(ApiError.InvalidAuthenticationToken, "Token given is not a valid access token issued by Azure Active Directory.");
@@ -279,7 +298,7 @@ export class TemplateServiceClient {
         })
 
         router.get("/", (req: Request, res: Response, _next: NextFunction) => {
-            this._getUser(TemplateServiceClient.authProvider.issuer).then(
+            this._getUser().then(
                 (response) => {
                     if (!response.success) {
                         const err = new TemplateError(ApiError.UserNotFound, "Unable to find user information.");
@@ -292,6 +311,9 @@ export class TemplateServiceClient {
         return router;
     }
 
-    private constructor() {}
+    private constructor(storageProvider: StorageProvider, authProvider: AuthenticationProvider) {
+        this.storageProvider = storageProvider;
+        this.authProvider = authProvider;
+    }
 
 }

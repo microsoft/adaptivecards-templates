@@ -30,5 +30,4 @@ export enum ApiError {
 export enum ServiceErrorMessage {
     AuthFailureResponse = "No owner specified, please authenticate.",
     InvalidUser = "Failed to create user.",
-    UnauthorizedUser = "UnauthorizedUser",
 }

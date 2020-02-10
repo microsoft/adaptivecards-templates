@@ -24,7 +24,7 @@ export interface ITemplate {
     id?: string;
     instances: ITemplateInstance[];
     tags: string[];
-    owner: string;
+    owner?: string;
     createdAt?: Date;
     updatedAt?: Date;
     isPublished?: boolean;
