@@ -43,6 +43,12 @@ jobs:
                   npm install
                   npm run test
                   cd ..
+            - name: Adaptive Cards Templating Service
+              run: |
+                  cd private-templates-service/adaptivecards-templating-service
+                  npm install
+                  npm run test
+                  cd ..
             - name: npm install and npm build
               if: success()
               run: |
