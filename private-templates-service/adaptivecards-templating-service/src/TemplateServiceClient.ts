@@ -259,6 +259,25 @@ export class TemplateServiceClient {
     }
 
     /**
+     * @private
+     * Async function for authenticating users before running endpoint code.
+     */
+    private _routerAuthentication = async (req: Request, res: Response, next: NextFunction) => {
+        if (!req.headers.authorization) {
+            const err = new TemplateError(ApiError.InvalidAuthenticationToken, "Missing credentials.");
+            return res.status(401).json({ error: err });
+        }
+
+        let valid = await this.authProvider.isValid(req.headers.authorization);
+
+        if (!valid){
+            const err = new TemplateError(ApiError.InvalidAuthenticationToken, "Token given is not a valid access token issued by Azure Active Directory.");
+            return res.status(401).json({ error: err });
+        }
+        next();
+    };
+
+    /**
      * @public 
      * Sets up endpoints for template service api. 
      * Use as app.use("/template", TemplateServiceClient.expressMiddleware())
@@ -268,20 +287,7 @@ export class TemplateServiceClient {
         var router = express.Router();
 
         // Verify signature of access token before requests.
-        router.all("/", async (req: Request, res: Response, next: NextFunction) => {
-            if (!req.headers.authorization) {
-                const err = new TemplateError(ApiError.InvalidAuthenticationToken, "Missing credentials.");
-                return res.status(401).json({ error: err });
-            }
-            
-            let valid = await this.authProvider.isValid(req.headers.authorization);
-
-            if (!valid){
-                const err = new TemplateError(ApiError.InvalidAuthenticationToken, "Token given is not a valid access token issued by Azure Active Directory.");
-                return res.status(401).json({ error: err });
-            }
-            next();
-        })
+        router.all("/", this._routerAuthentication);
 
         router.get("/", (req: Request, res: Response, _next: NextFunction) => {
             if (req.params.name) {
@@ -340,24 +346,18 @@ export class TemplateServiceClient {
         return router;
     }
 
+
+    /**
+     * @public
+     * Sets up endpoints for template service users api.
+     * Use as app.use("/user", TemplateServiceClient.userExpressMiddleware())
+     * @returns express router
+     */
     public userExpressMiddleware() : Router {
         var router = express.Router();
 
         // Verify signature of access token before requests.
-        router.all("/", async (req: Request, res: Response, next: NextFunction) => {
-            if (!req.headers.authorization) {
-                const err = new TemplateError(ApiError.InvalidAuthenticationToken, "Missing credentials.");
-                return res.status(401).json({ error: err });
-            }
-            
-            let valid = await this.authProvider.isValid(req.headers.authorization);
-
-            if (!valid){
-                const err = new TemplateError(ApiError.InvalidAuthenticationToken, "Token given is not a valid access token issued by Azure Active Directory.");
-                return res.status(401).json({ error: err });
-            }
-            next();
-        })
+        router.all("/", this._routerAuthentication);
 
         router.get("/", (_req: Request, res: Response, _next: NextFunction) => {
             this._getUser().then(
@@ -374,7 +374,7 @@ export class TemplateServiceClient {
             this.removeUser().then(
                 (response) => {
                     if (!response.success){
-                        const err = new TemplateError(ApiError.FailedToDeleteUser, "Failed to delete user.");
+                        const err = new TemplateError(ApiError.DeleteUserInfoFailed, "Failed to delete user.");
                         return res.status(500).json({ error: err });
                     }
                     res.status(204).send();

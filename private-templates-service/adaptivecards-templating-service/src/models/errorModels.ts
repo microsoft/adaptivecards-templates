@@ -21,7 +21,7 @@ export enum ApiError {
     TemplateNotFound = "TemplateNotFound",
     InvalidAuthenticationToken = "InvalidAuthenticationToken",
     UserNotFound = "UserNotFound",
-    FailedToDeleteUser = "FailedToDeleteUser"
+    DeleteUserInfoFailed = "Failed to delete all user info.",
 }
 
 /**
