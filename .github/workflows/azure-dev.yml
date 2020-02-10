@@ -51,6 +51,7 @@ jobs:
                   npm run build:dev --if-present
                   cd ..
                   cd server
+                  npm install
                   npm run build
             - name: "Deploy to Azure WebApp"
               if: success()
