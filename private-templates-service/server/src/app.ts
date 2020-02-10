@@ -4,7 +4,7 @@ import passport from "./config/passport";
 import bodyParser from "body-parser";
 
 // import controllers
-import { TemplateServiceClient, ClientOptions, AzureADProvider, InMemoryDBProvider } from 'adaptivecards-templating-service';
+import { TemplateServiceClient, ClientOptions, AzureADProvider, InMemoryDBProvider } from '../../adaptivecards-templating-service';
 
 const app = express();
 
@@ -16,8 +16,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const clientOptions: ClientOptions = {
-    authenticationProvider: new AzureADProvider(),
-    storageProvider: new InMemoryDBProvider(),
+  authenticationProvider: new AzureADProvider(),
+  storageProvider: new InMemoryDBProvider(),
 }
 
 const client: TemplateServiceClient = TemplateServiceClient.init(clientOptions);
