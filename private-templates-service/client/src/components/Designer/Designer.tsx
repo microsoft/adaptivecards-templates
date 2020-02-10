@@ -22,7 +22,6 @@ interface DesignerProps {
 }
 
 const Designer = (props: DesignerProps) => {
-
   let history = useHistory();
 
   ACDesigner.GlobalSettings.enableDataBindingSupport = true;
