@@ -26,7 +26,7 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v2.0.0
               with:
-                  ref: users/hagupt/save-template
+                  ref: dev
             - name: Use Node.js ${{ env.NODE_VERSION }}
               uses: actions/setup-node@v1
               with:
@@ -37,13 +37,17 @@ jobs:
                   npm install
                   npm run test
                   cd ..
+            - name: Frontend Jest Test
+              run: |
+                  cd private-templates-service/client
+                  npm install
+                  cd ..
             - name: npm install and npm build
               if: success()
               run: |
                   # Build and test the project, then
                   # deploy to Azure Web App.
                   cd private-templates-service/client
-                  npm install
                   npm run build:dev --if-present
                   cd ..
                   cd server
