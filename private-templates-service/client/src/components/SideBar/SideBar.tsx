@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import { useHistory } from 'react-router-dom';
+
 import { RootState } from '../../store/rootReducer';
 import { UserType } from '../../store/auth/types';
 import { UserAvatar } from './UserAvatar';
@@ -56,35 +58,40 @@ const navMenuLinks = [{
   ]
 }]
 
-class SideBar extends React.Component<Props, {}> {
+const SideBar = (props: Props) => {
+  const history = useHistory();
 
-  render() {
-    return (
-      <OuterSideBarWrapper>
-        <MainItems>
-          <LogoWrapper>
-            <Logo src={mainLogo} />
-            <LogoTextWrapper>
-              <LogoTextHeader>Adaptive Cards</LogoTextHeader>
-              <LogoTextSubHeader>Portal</LogoTextSubHeader>
-            </LogoTextWrapper>
-          </LogoWrapper>
-          <UserWrapper>
-            {this.props.user && <UserAvatar iconSize="3rem" />}
-            <Name>
-              {this.props.user && this.props.user.displayName}
-              <Title>{this.props.user && this.props.user.organization}</Title>
-            </Name>
-          </UserWrapper>
-          {this.props.isAuthenticated && <NavMenu
-            groups={navMenuLinks}
-          />}
-        </MainItems>
-
-        <SignOut onClick={this.props.authButtonMethod}>Sign {this.props.isAuthenticated ? 'Out' : 'In'}</SignOut>
-      </OuterSideBarWrapper>
-    )
+  const onNavClick = (event: any, element: any) => {
+    event.preventDefault();
+    history.push(element.url);
   }
+
+  return (
+    <OuterSideBarWrapper>
+      <MainItems>
+        <LogoWrapper>
+          <Logo src={mainLogo} />
+          <LogoTextWrapper>
+            <LogoTextHeader>Adaptive Cards</LogoTextHeader>
+            <LogoTextSubHeader>Portal</LogoTextSubHeader>
+          </LogoTextWrapper>
+        </LogoWrapper>
+        <UserWrapper>
+          {props.user && <UserAvatar iconSize="3rem" />}
+          <Name>
+            {props.user && props.user.displayName}
+            <Title>{props.user && props.user.organization}</Title>
+          </Name>
+        </UserWrapper>
+        {props.isAuthenticated && <NavMenu
+          groups={navMenuLinks}
+          onLinkClick={onNavClick}
+        />}
+      </MainItems>
+
+      <SignOut onClick={props.authButtonMethod}>Sign {props.isAuthenticated ? 'Out' : 'In'}</SignOut>
+    </OuterSideBarWrapper>
+  )
 }
 
 export default connect(mapStateToProps)(SideBar);

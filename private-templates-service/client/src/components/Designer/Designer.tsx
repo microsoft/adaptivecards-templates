@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { RootState } from '../../store/rootReducer';
 import requireAuthentication from '../../utils/requireAuthentication';
 import { connect } from 'react-redux';
@@ -23,6 +23,17 @@ interface DesignerProps {
 
 const Designer = (props: DesignerProps) => {
 
+  useEffect(() => {
+    const element = document.getElementById("designer-container");
+    if (element) {
+      designer.attachTo(element);
+    }
+
+    designer.monacoModuleLoaded(monaco);
+
+    getCardData(designer);
+  }, [])
+
   let history = useHistory();
 
   ACDesigner.GlobalSettings.enableDataBindingSupport = true;
@@ -39,16 +50,7 @@ const Designer = (props: DesignerProps) => {
   closeButton.separator = true;
   designer.toolbar.insertElementAfter(closeButton, ACDesigner.CardDesigner.ToolbarCommands.TogglePreview);
 
-  const element = document.getElementById("root");
-  if (element) {
-    designer.attachTo(element);
-  }
-
-  designer.monacoModuleLoaded(monaco);
-
-  getCardData(designer);
-
-  return <div id="root" dangerouslySetInnerHTML={{ __html: "dangerouslySetACDesigner" }}></div>;
+  return <div id="designer-container" dangerouslySetInnerHTML={{ __html: "dangerouslySetACDesigner" }}></div>;
 }
 
 function initDesigner(): ACDesigner.CardDesigner {
