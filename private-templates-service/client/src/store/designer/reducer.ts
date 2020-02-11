@@ -1,8 +1,9 @@
 import { DesignerState, NEW_TEMPLATE, EDIT_TEMPLATE, DesignerAction } from './types';
 
 const initialState: DesignerState = {
-  isNewTemplate: true,
-  templateID: ""
+  templateID: "",
+  templateJSON: "",
+  sampleDataJSON: ""
 };
 
 export function designerReducer(state = initialState, action: DesignerAction): DesignerState {
@@ -10,14 +11,16 @@ export function designerReducer(state = initialState, action: DesignerAction): D
     case NEW_TEMPLATE:
       return {
         ...state,
-        isNewTemplate: true,
-        templateID: ""
+        templateID: "",
+        templateJSON: "",
+        sampleDataJSON: ""
       }
     case EDIT_TEMPLATE:
       return {
         ...state,
-        isNewTemplate: false,
-        templateID: action.templateID
+        templateID: action.templateID,
+        templateJSON: action.templateJSON,
+        sampleDataJSON: action.sampleDataJSON
       }
     default:
       return state;
