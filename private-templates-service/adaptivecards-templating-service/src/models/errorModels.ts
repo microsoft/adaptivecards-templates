@@ -3,13 +3,13 @@
  * Class representing error returned by api endpoints.
  */
 export class TemplateError {
-    public code: ApiError;
-    public message: string;
+  public code: ApiError;
+  public message: string;
 
-    public constructor(code: ApiError, message: string) {
-        this.code = code;
-        this.message = message;
-    }
+  public constructor(code: ApiError, message: string) {
+    this.code = code;
+    this.message = message;
+  }
 }
 
 /**
@@ -17,11 +17,11 @@ export class TemplateError {
  * Errors types returned by TemplateServiceClient's express router.
  */
 export enum ApiError {
-    InvalidTemplate = "InvalidTemplate",
-    TemplateNotFound = "TemplateNotFound",
-    InvalidAuthenticationToken = "InvalidAuthenticationToken",
-    UserNotFound = "UserNotFound",
-    DeleteUserInfoFailed = "Failed to delete all user info.",
+  InvalidTemplate = "InvalidTemplate",
+  TemplateNotFound = "TemplateNotFound",
+  InvalidAuthenticationToken = "InvalidAuthenticationToken",
+  UserNotFound = "UserNotFound",
+  DeleteUserInfoFailed = "Failed to delete all user info."
 }
 
 /**
@@ -29,8 +29,8 @@ export enum ApiError {
  * Error messages returned by TemplateServiceClient's JSONResponses
  */
 export enum ServiceErrorMessage {
-    AuthFailureResponse = "No owner specified, please authenticate.",
-    InvalidUser = "Failed to create user.",
-    InvalidTemplate = "Invalid template.",
-    DeleteUserInfoFailed = "Failed to delete all user info.",
+  AuthFailureResponse = "No owner specified, please authenticate.",
+  InvalidUser = "Failed to create user.",
+  InvalidTemplate = "Invalid template.",
+  DeleteUserInfoFailed = "Failed to delete all user info."
 }

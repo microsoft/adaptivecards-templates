@@ -1,0 +1,26 @@
+import mongoose, { Schema } from "mongoose";
+import { IUser } from "../models";
+
+// _id instead of id because mongo uses _id for the unique key
+// and it cannot be changed. The only solution is to rename
+// field id to _id when building queries.
+// Another alternative is to define another unique key but
+// then again _id will still be there and we'll end up
+// with two different unique keys. Let me know if you
+// have any other suggestions
+export interface IUserModel extends mongoose.Document, IUser {
+  _id: string;
+}
+
+export const UserSchema: Schema = new Schema(
+  {
+    _id: { type: String, default: mongoose.Types.ObjectId() },
+    team: { type: [String], default: [String] },
+    org: { type: [String], default: [String] },
+    email: { type: String, required: true, default: "" }
+  },
+  {
+    versionKey: false,
+    timestamps: false
+  }
+);
