@@ -8,7 +8,7 @@
     "test:watch": "jest --watch",
     "start:prod": "npm install && node server.js",
     "start": "node dist/server.js",
-    "build": "tsc",
+    "build": "",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "server": "nodemon --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' --exec ts-node src/server.ts | bunyan",
     "client": "cd ../client && npm start"
