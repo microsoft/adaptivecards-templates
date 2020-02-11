@@ -1,4 +1,4 @@
-import mongoose, { Schema, SchemaTypes } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import { ITemplate, ITemplateInstance } from "../models";
 
 export interface ITemplateInstanceModel extends mongoose.Document, ITemplateInstance {}
@@ -14,7 +14,7 @@ export const TemplateInstanceSchema: Schema = new Schema(
   },
   {
     versionKey: false,
-    timestamps: true
+    timestamps: { createdAt: true, updatedAt: true }
   }
 );
 
@@ -22,10 +22,8 @@ export const TemplateSchema: Schema = new Schema(
   {
     instances: { type: [TemplateInstanceSchema], required: true, default: [TemplateInstanceSchema] },
     tags: { type: [String], default: [String] },
-    owner: { type: String, required: true }, // add ref: "User" so it checks if owner exists and make type ObjectID
+    owner: { type: String, required: true }, // todo: add ref: "User" so it checks if owner exists and make type ObjectID
     isPublished: { type: String, required: true }
-
-    // permissions
   },
   {
     versionKey: false,

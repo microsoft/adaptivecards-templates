@@ -45,11 +45,11 @@ export class InMemoryDBProvider implements StorageProvider {
     return this._insert(doc, this.templates);
   }
 
-  async getUser(query: Partial<IUser>): Promise<JSONResponse<IUser[]>> {
+  async getUsers(query: Partial<IUser>): Promise<JSONResponse<IUser[]>> {
     return this._matchUsers(query);
   }
 
-  async getTemplate(query: Partial<ITemplate>): Promise<JSONResponse<ITemplate[]>> {
+  async getTemplates(query: Partial<ITemplate>): Promise<JSONResponse<ITemplate[]>> {
     return this._matchTemplates(query);
   }
 

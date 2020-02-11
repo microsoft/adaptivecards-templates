@@ -12,7 +12,7 @@ export const UserSchema: Schema = new Schema(
     email: { type: Schema.Types.String, required: true, default: "" }
   },
   {
-    versionKey: false, // we don't need version for user
+    versionKey: false,
     timestamps: false
   }
 );
