@@ -9,11 +9,11 @@ export class InMemoryDBProvider implements StorageProvider {
   constructor() {}
 
   private _updateUser(user: IUser, updateQuery: Partial<IUser>): void {
-    this.users.set(user.id!, { ...user, ...updateQuery });
+    this.users.set(user._id!, { ...user, ...updateQuery });
   }
 
   private _updateTemplate(template: ITemplate, updateQuery: Partial<ITemplate>): void {
-    this.templates.set(template.id!, { ...template, ...updateQuery });
+    this.templates.set(template._id!, { ...template, ...updateQuery });
   }
 
   async updateUser(query: Partial<IUser>, updateQuery: Partial<IUser>): Promise<JSONResponse<Number>> {
@@ -59,7 +59,7 @@ export class InMemoryDBProvider implements StorageProvider {
     await this._matchUsers(query).then(response => {
       response.result!.forEach(user => {
         removeCount += 1;
-        this.users.delete(user.id!);
+        this.users.delete(user._id!);
       });
     });
     return Promise.resolve({ success: true, result: removeCount });
@@ -69,7 +69,7 @@ export class InMemoryDBProvider implements StorageProvider {
     await this._matchTemplates(query).then(response => {
       response.result!.forEach(template => {
         removeCount += 1;
-        this.templates.delete(template.id!);
+        this.templates.delete(template._id!);
       });
     });
     return Promise.resolve({ success: true, result: removeCount });
@@ -103,18 +103,18 @@ export class InMemoryDBProvider implements StorageProvider {
   protected async _insert<T extends ITemplate | IUser>(doc: T, collection: Map<String, T>): Promise<JSONResponse<Number>> {
     let docToInsert: T = this._clone(doc);
     this._setID(docToInsert);
-    if (!collection.has(docToInsert.id!)) {
-      collection.set(docToInsert.id!, docToInsert);
+    if (!collection.has(docToInsert._id!)) {
+      collection.set(docToInsert._id!, docToInsert);
       return Promise.resolve({ success: true, result: 1 });
     } else {
-      return Promise.resolve({ success: false, result: 0, errorMessage: "Object with id: " + doc.id! + "already exists. Insertion failed" });
+      return Promise.resolve({ success: false, result: 0, errorMessage: "Object with id: " + doc._id! + "already exists. Insertion failed" });
     }
   }
 
   // Makes sure that id of the object is set
   protected _setID<T extends ITemplate | IUser>(doc: T) {
-    if (!doc.id) {
-      doc.id = uuidv4();
+    if (!doc._id) {
+      doc._id = uuidv4();
     }
   }
 
@@ -124,7 +124,7 @@ export class InMemoryDBProvider implements StorageProvider {
 
   protected _matchUser(query: Partial<IUser>, user: IUser): boolean {
     if (
-      (query.id && !(query.id === user.id)) ||
+      (query._id && !(query._id === user._id)) ||
       (query.email && !(query.email === user.email)) ||
       (query.org && !this._ifContainsList(user.org, query.org)) ||
       (query.team && !this._ifContainsList(user.team, query.team))
@@ -147,7 +147,7 @@ export class InMemoryDBProvider implements StorageProvider {
   protected _matchTemplate(query: Partial<ITemplate>, template: ITemplate): boolean {
     if (
       (query.owner && !(query.owner === template.owner)) ||
-      (query.id && !(query.id === template.id)) ||
+      (query._id && !(query._id === template._id)) ||
       (query.isPublished && !(query.isPublished === template.isPublished)) ||
       (query.tags && !this._ifContainsList(template.tags, query.tags))
     ) {

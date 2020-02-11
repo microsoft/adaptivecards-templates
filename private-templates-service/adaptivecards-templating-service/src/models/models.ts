@@ -1,5 +1,5 @@
 export interface IUser {
-  id?: string;
+  _id?: string;
   team: string[];
   org: string[];
   email: string;
@@ -11,7 +11,7 @@ export interface ITemplateInstance {
 }
 
 export interface ITemplate {
-  id?: string;
+  _id?: string;
   instances: ITemplateInstance[];
   tags: string[];
   owner: string;

@@ -3,12 +3,13 @@ import { ITemplate, ITemplateInstance } from "../models";
 
 export interface ITemplateInstanceModel extends mongoose.Document, ITemplateInstance {}
 export interface ITemplateModel extends mongoose.Document, ITemplate {
-  id: string;
+  _id: string;
   instances: ITemplateInstanceModel[];
 }
 
 export const TemplateInstanceSchema: Schema = new Schema(
   {
+    _id: { type: String, required: true, default: mongoose.Types.ObjectId(), unique: true },
     json: { type: Object, required: true },
     version: { type: String, required: true }
   },
@@ -20,6 +21,7 @@ export const TemplateInstanceSchema: Schema = new Schema(
 
 export const TemplateSchema: Schema = new Schema(
   {
+    _id: { type: String, required: true, default: mongoose.Types.ObjectId(), unique: true },
     instances: { type: [TemplateInstanceSchema], required: true, default: [TemplateInstanceSchema] },
     tags: { type: [String], default: [String] },
     owner: { type: String, required: true }, // todo: add ref: "User" so it checks if owner exists and make type ObjectID

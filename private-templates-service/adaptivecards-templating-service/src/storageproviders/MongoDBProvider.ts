@@ -167,6 +167,7 @@ export class MongoDBProvider implements StorageProvider {
   }
   async removeTemplate(query: Partial<ITemplate>): Promise<JSONResponse<Number>> {
     let templateQuery: any = this._constructTemplateQuery(query);
+    console.log(templateQuery);
     return await this.worker.Template.deleteOne(templateQuery)
       .then(result => {
         if (result.deletedCount) {
