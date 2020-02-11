@@ -44,7 +44,7 @@ jobs:
                   cd ../server
                   npm install
                   npm link adaptivecards-templating-service
-                  tsc
+                  npm run deploy
             - name: "Deploy to Azure WebApp"
               if: success()
               uses: azure/webapps-deploy@v1
