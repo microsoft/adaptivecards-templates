@@ -18,7 +18,7 @@ describe('Get endpoints', () => {
 
     beforeAll(async() => {
         // TODO: request access token for registered AD app
-        token = "<INSERT_APP_TOKEN_HERE>"
+        token = "<INSERT_APP_TOKEN_HERE>";
         let templateClient = await TemplateServiceClient.init(options);
         let middleware: Router = templateClient.expressMiddleware();
         app.use(middleware);
@@ -51,17 +51,19 @@ describe('Post Templates', () => {
 
     beforeAll(async() => {
         // TODO: request access token for registered AD app
-        token = "<INSERT_APP_TOKEN_HERE>"
+        token = "<INSERT_APP_TOKEN_HERE>";
         let templateClient = await TemplateServiceClient.init(options);
         let middleware: Router = templateClient.expressMiddleware();
+        let userMiddleware : Router = templateClient.userExpressMiddleware();
         app.use(bodyParser.json());
-        app.use(middleware);
+        app.use("/template", middleware);
+        app.use("/user", userMiddleware);
     })
 
     // Unauthenticated request
     it('should try to post without authenticating and fail', async () => {
         const res = await request(app)
-            .post('/')
+            .post('/template')
             .send({
                 template: {},
                 isPublished: false,
@@ -72,19 +74,42 @@ describe('Post Templates', () => {
     // Authenticated post request
     it('should try to post with valid template and succeed', async () => {
         const res = await request(app)
-            .post('/')
+            .post('/template')
             .set({ Authorization: 'Bearer ' + token })
             .send({
                 template: '{}',
                 isPublished: false,
             })
         expect(res.status).toEqual(201);
+
+        // User object should also be created
+        const userRes = await request(app)
+            .get('/user')
+            .set({ Authorization: 'Bearer ' + token })
+        expect(userRes.status).toEqual(200);
+    })
+
+    it('should try to delete existing user and succeed', async () => {
+        const res = await request(app)
+            .delete('/user')
+            .set({ Authorization: 'Bearer ' + token })
+        expect(res.status).toEqual(204);
+        expect({ user: [] });
+
+        // No more templates under user
+        const templateRes = await request(app)
+            .get('/template')
+            .set({ Authorization: 'Bearer ' + token })
+            .send({
+                isPublished: false,
+            })
+            .expect({templates: []});
     })
 
     // Authenticated post request with invalid template
     it('should try to post with invalid template and fail', async () => {
         const res = await request(app)
-            .post('/')
+            .post('/template')
             .set({ Authorization: 'Bearer ' + token })
             .send({
                 template: '{',

@@ -10,9 +10,9 @@ export interface StorageProvider {
   
   updateTemplate(query: Partial<ITemplate>, updateQuery: Partial<ITemplate>): Promise<JSONResponse<Number>>;
   
-  insertUser(user: IUser): Promise<JSONResponse<Number>>;
+  insertUser(user: IUser): Promise<JSONResponse<string>>;
   
-  insertTemplate(template: ITemplate): Promise<JSONResponse<Number>>;
+  insertTemplate(template: ITemplate): Promise<JSONResponse<string>>;
   
   removeUser(query: Partial<IUser>): Promise<JSONResponse<Number>>;
   
