@@ -12,13 +12,19 @@ import * as ACDesigner from 'adaptivecards-designer';
 const mapStateToProps = (state: RootState) => {
   return {
     isAuthenticated: state.auth.isAuthenticated,
-    user: state.auth.user
+    user: state.auth.user,
+    templateID: state.designer.templateID,
+    templateJSON: state.designer.templateJSON,
+    sampleDataJSON: state.designer.sampleDataJSON
   };
 };
 
 interface DesignerProps {
   isAuthenticated: boolean;
   user?: UserType;
+  templateID: string;
+  templateJSON: string;
+  sampleDataJSON: string;
 }
 
 const Designer = (props: DesignerProps) => {

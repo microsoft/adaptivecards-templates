@@ -5,6 +5,8 @@ import { useHistory } from 'react-router-dom';
 
 import { RootState } from '../../store/rootReducer';
 import { UserType } from '../../store/auth/types';
+import { newTemplate, editTemplate } from '../../store/designer/actions';
+
 import { UserAvatar } from './UserAvatar';
 import mainLogo from '../../assets/adaptive-cards-100-logo.png';
 
@@ -28,13 +30,22 @@ interface Props {
   authButtonMethod: () => void;
   isAuthenticated: boolean;
   user?: UserType;
+  newTemplate: () => void;
 }
 
 const mapStateToProps = (state: RootState) => {
   return {
     isAuthenticated: state.auth.isAuthenticated,
-    user: state.auth.user,
-  }
+    user: state.auth.user
+  };
+}
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    newTemplate: () => {
+      dispatch(newTemplate());
+    }
+  };
 }
 
 const navMenuLinks = [{
@@ -63,6 +74,9 @@ const SideBar = (props: Props) => {
 
   const onNavClick = (event: any, element: any) => {
     event.preventDefault();
+    if (element.url === "/designer") {
+      props.newTemplate();
+    }
     history.push(element.url);
   }
 
@@ -94,4 +108,4 @@ const SideBar = (props: Props) => {
   )
 }
 
-export default connect(mapStateToProps)(SideBar);
+export default connect(mapStateToProps, mapDispatchToProps)(SideBar);

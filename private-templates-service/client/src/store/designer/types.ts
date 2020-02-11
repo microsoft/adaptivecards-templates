@@ -1,6 +1,7 @@
 export interface DesignerState {
-  isNewTemplate: boolean;
   templateID: string;
+  templateJSON: string;
+  sampleDataJSON: string;
 }
 
 //Action Types
@@ -12,4 +13,6 @@ export interface DesignerAction {
   type: typeof NEW_TEMPLATE | typeof EDIT_TEMPLATE;
   text: string;
   templateID: string;
+  templateJSON: string;
+  sampleDataJSON: string;
 }
