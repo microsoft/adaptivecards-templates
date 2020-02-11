@@ -38,13 +38,25 @@ export class TemplateServiceClient {
     }
     
     /**
+     * @private
+     * Check if user has already been authenticated.
+     */
+    private _checkAuthenticated(): JSONResponse<any> {
+      let owner = this.authProvider.getOwner();
+      if (!owner){
+          return { success: false, errorMessage: ServiceErrorMessage.AuthFailureResponse };
+      }
+      return { success: true }
+    }
+
+    /**
      * @public
      * Deletes user info - can only delete own user and all templates created by that user
      */
     public async removeUser(): Promise<JSONResponse<Number>> {
-        let owner = this.authProvider.getOwner();
-        if (!owner){
-            return { success: false, errorMessage: ServiceErrorMessage.AuthFailureResponse };
+        let checkAuthentication = this._checkAuthenticated();
+        if (!checkAuthentication.success) {
+          return checkAuthentication;
         }
 
         if (!this.ownerID) return { success: true };
@@ -59,7 +71,7 @@ export class TemplateServiceClient {
         let deleteTemplateResponse = await this.storageProvider.removeTemplate(template);
 
         const user : IUser = {
-            authId: owner,
+            authId: this.authProvider.getOwner()!,
             issuer: this.authProvider.issuer,
         }
 
@@ -81,13 +93,13 @@ export class TemplateServiceClient {
      * Will return success if user does not exist but query is successful.
      */
     private async _getUser(): Promise<JSONResponse<IUser[]>> {
-        let owner = this.authProvider.getOwner();
-        if (!owner){
-            return { success: false, errorMessage: ServiceErrorMessage.AuthFailureResponse };
+        let checkAuthentication = this._checkAuthenticated();
+        if (!checkAuthentication.success) {
+          return checkAuthentication;
         }
 
         const user: IUser = {
-            authId: owner,
+            authId: this.authProvider.getOwner()!,
             issuer: this.authProvider.issuer
         }
 
@@ -100,13 +112,13 @@ export class TemplateServiceClient {
      * @param {string} org - user's organization
      */
     private async _postUser(team?: string, org?: string): Promise<JSONResponse<string>> {
-        let owner = this.authProvider.getOwner();
-        if (!owner){
-            return { success: false, errorMessage: ServiceErrorMessage.AuthFailureResponse };
+        let checkAuthentication = this._checkAuthenticated();
+        if (!checkAuthentication.success) {
+          return checkAuthentication;
         }
 
         const user: IUser = {
-            authId: owner,
+            authId: this.authProvider.getOwner()!,
             issuer: this.authProvider.issuer,
             team: team? [team] : [],
             org: org? [org] : []
@@ -178,9 +190,9 @@ export class TemplateServiceClient {
      * @returns Promise as valid json 
      */
     public async postTemplates(template: JSON, templateId?: string, version?: string, isPublished?: boolean): Promise<JSONResponse<string>> {
-        let owner = this.authProvider.getOwner();
-        if (!owner){
-            return { success: false, errorMessage: ServiceErrorMessage.AuthFailureResponse };
+        let checkAuthentication = this._checkAuthenticated();
+        if (!checkAuthentication.success) {
+          return checkAuthentication;
         }
 
         if (!this.ownerID) {
@@ -225,9 +237,9 @@ export class TemplateServiceClient {
      * @returns Promise as valid json 
      */
     public async getTemplates(templateId?: string, isPublished?: boolean, templateName?: string, version?: number, owned?: boolean): Promise<JSONResponse<ITemplate[]>> {
-        let owner = this.authProvider.getOwner();
-        if (!owner){
-            return { success: false, errorMessage: ServiceErrorMessage.AuthFailureResponse };
+        let checkAuthentication = this._checkAuthenticated();
+        if (!checkAuthentication.success) {
+          return checkAuthentication;
         }
 
         if (owned) {
