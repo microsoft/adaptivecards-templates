@@ -116,7 +116,6 @@ class App extends Component<Props, State> {
                 <Route exact path="/designer">
                   <Designer authButtonMethod={this.login} />
                 </Route>
-
               </Switch>
             </MainApp>
           </MainAppWrapper>
