@@ -11,7 +11,7 @@
 on:
     push:
         branches:
-            - stage
+            - users/hagupt/save-template
 
 env:
     AZURE_WEBAPP_NAME: adaptivecms # set this to your application's name
@@ -26,32 +26,25 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v2.0.0
               with:
-                  ref: stage
+                  ref: users/hagupt/save-template
             - name: Use Node.js ${{ env.NODE_VERSION }}
               uses: actions/setup-node@v1
               with:
                   node-version: ${{ env.NODE_VERSION }}
-            - name: Backend Jest Test
-              run: |
-                  cd private-templates-service/server
-                  npm install
-                  npm run test
-                  cd ..
-            - name: Frontend Jest Test
-              run: |
-                  cd private-templates-service/client
-                  npm install
-                  npm run test
-                  cd ..
             - name: npm install and npm build
               if: success()
               run: |
                   # Build and test the project, then
                   # deploy to Azure Web App.
                   cd private-templates-service/client
-                  npm run build:staging --if-present
-                  cd ..
-                  cd server
+                  npm install
+                  npm run build:dev --if-present
+                  cd ../adaptivecards-templating-service
+                  npm link
+                  cd ../server
+                  npm install
+                  npm link adaptivecards-templating-service
+                  npm run deploy
             - name: "Deploy to Azure WebApp"
               if: success()
               uses: azure/webapps-deploy@v1

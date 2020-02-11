@@ -3,6 +3,7 @@ import { searchReducer } from './search/reducer';
 import { pageReducer } from './page/reducer';
 import { designerReducer } from './designer/reducer'
 import { combineReducers } from 'redux';
+import thunk from 'redux-thunk';
 
 export const rootReducer = combineReducers({
   auth: authReducer,

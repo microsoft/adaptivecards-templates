@@ -76,7 +76,8 @@
     "eslint-plugin-react": "^7.14.3",
     "eslint-plugin-react-hooks": "^1.7.0",
     "markdown-it": "^10.0.0",
-    "monaco-editor": "^0.19.3"
+    "monaco-editor": "^0.19.3",
+    "redux-thunk": "^2.3.0"
   },
   "proxy": "http://localhost:5000/",
   "jest": {
