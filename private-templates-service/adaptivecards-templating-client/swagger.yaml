@@ -1,0 +1,149 @@
+swagger: "2.0"
+info:
+  description: "Adaptive Cards Templating Service API definition."
+  version: "1.0.0"
+  title: "adaptivecards-templating-service-javascript-sdk"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "adaptivecms.azurewebsites.net" #"localhost:5000"
+tags:
+- name: "template"
+  description: "Adaptive Cards Template"
+  externalDocs:
+    description: "Adaptive Cards Templating Service"
+    url: "https://github.com/microsoft/adaptivecards-templates/tree/dev/private-templates-service"
+schemes:
+- "https"
+- "http"
+securityDefinitions:
+  bearer_auth:
+    type: apiKey
+    name: Authorization
+    in: header
+paths:
+  '/template':
+    get: 
+      tags: 
+        - "template"
+      summary: "Find all templates"
+      description: "Returns all public templates and owned templates"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema: 
+            $ref: "#/definitions/TemplateList"
+        400: 
+          description: "No templates"
+          schema: 
+            $ref: "#/definitions/BaseError"
+        401: 
+          description: "Unauthorized user"
+          schema: 
+            $ref: "#/definitions/BaseError"
+      security:
+        - bearer_auth: []
+    post: 
+      tags: 
+        - "template"
+      summary: "Add a new template"
+      description: ""
+      consumes:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Template object to be added"
+          required: true
+          schema:
+            $ref: "#/definitions/NewTemplate"
+      responses:
+        201: 
+          description: "Template successfully created"
+        400:
+          description: "Invalid template"
+          schema: 
+            $ref: "#/definitions/BaseError"
+        401:
+          description: "Unauthorized user"
+          schema: 
+            $ref: "#/definitions/BaseError"
+      security:
+        - bearer_auth: []
+  '/template/{templateId}':
+    get: 
+      tags: 
+        - "template"
+      summary: "Find template by id"
+      description: "Returns a single template"
+      operationId: "templateById"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "templateId"
+          in: "path"
+          description: "ID of template to return"
+          required: true
+          type: string
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: '#/definitions/Template'
+        400:
+          description: "Invalid template ID supplied"
+          schema: 
+            $ref: "#/definitions/BaseError"
+        404:
+          description: "Template not found"
+          schema: 
+            $ref: "#/definitions/BaseError"
+        401:
+          description: "Unauthorized user"
+          schema: 
+            $ref: "#/definitions/BaseError"
+      security:
+        - bearer_auth: []
+definitions:
+  BaseError: 
+    type: object
+    properties: 
+      error: 
+        type: object
+        properties: 
+          code:
+            type: string
+          message:
+            type: string
+  TemplateList:
+    type: array
+    items: 
+      $ref: "#/definitions/NewTemplate"
+  Template:
+    type: object
+    properties:
+      id: 
+        type: string
+      template: 
+        type: string
+        format: JSON
+      isPublished:
+        type: boolean
+      createdAt: 
+        type: string
+      owner:
+        type: string
+      tags: 
+        type: array
+        items:
+          type: string
+  NewTemplate:
+    type: object
+    properties:
+      template: 
+        type: string
+        format: JSON
+      isPublished: 
+        type: boolean
