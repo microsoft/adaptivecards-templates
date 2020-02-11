@@ -8,7 +8,7 @@
       "methods": [
         "post"
       ],
-      "route": "generate/{*purpose}"
+      "route": "bind"
     },
     {
       "type": "http",
@@ -16,5 +16,5 @@
       "name": "res"
     }
   ],
-  "scriptFile": "../dist/Generate/index.js"
+  "scriptFile": "../dist/Bind/index.js"
 }
