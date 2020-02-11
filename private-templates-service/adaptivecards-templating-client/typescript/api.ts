@@ -410,7 +410,7 @@ export class TemplateApi {
      * @param templateId ID of template to return
      * @param {*} [options] Override http request options.
      */
-    public templateById (templateId: string, options: any = {}) : Promise<{ response: http.ClientResponse; body: Template;  }> {
+    public templateById (templateId: string, options: any = {}) : Promise<{ response: http.IncomingMessage; body: Template;  }> {
         const localVarPath = this.basePath + '/template/{templateId}'
             .replace('{' + 'templateId' + '}', encodeURIComponent(String(templateId)));
         let localVarQueryParameters: any = {};
@@ -446,7 +446,7 @@ export class TemplateApi {
                 localVarRequestOptions.form = localVarFormParams;
             }
         }
-        return new Promise<{ response: http.ClientResponse; body: Template;  }>((resolve, reject) => {
+        return new Promise<{ response: http.IncomingMessage; body: Template;  }>((resolve, reject) => {
             localVarRequest(localVarRequestOptions, (error, response, body) => {
                 if (error) {
                     reject(error);
@@ -470,7 +470,7 @@ export class TemplateApi {
      * @param owned Display only the templates owned by the user
      * @param {*} [options] Override http request options.
      */
-    public templateGet (isPublished?: boolean, name?: string, version?: string, owned?: boolean, options: any = {}) : Promise<{ response: http.ClientResponse; body: TemplateList;  }> {
+    public templateGet (isPublished?: boolean, name?: string, version?: string, owned?: boolean, options: any = {}) : Promise<{ response: http.IncomingMessage; body: TemplateList;  }> {
         const localVarPath = this.basePath + '/template';
         let localVarQueryParameters: any = {};
         let localVarHeaderParams: any = (<any>Object).assign({}, this.defaultHeaders);
@@ -516,7 +516,7 @@ export class TemplateApi {
                 localVarRequestOptions.form = localVarFormParams;
             }
         }
-        return new Promise<{ response: http.ClientResponse; body: TemplateList;  }>((resolve, reject) => {
+        return new Promise<{ response: http.IncomingMessage; body: TemplateList;  }>((resolve, reject) => {
             localVarRequest(localVarRequestOptions, (error, response, body) => {
                 if (error) {
                     reject(error);
@@ -537,7 +537,7 @@ export class TemplateApi {
      * @param body Template object to be added
      * @param {*} [options] Override http request options.
      */
-    public templatePost (body: NewTemplate, options: any = {}) : Promise<{ response: http.ClientResponse; body?: any;  }> {
+    public templatePost (body: NewTemplate, options: any = {}) : Promise<{ response: http.IncomingMessage; body?: any;  }> {
         const localVarPath = this.basePath + '/template';
         let localVarQueryParameters: any = {};
         let localVarHeaderParams: any = (<any>Object).assign({}, this.defaultHeaders);
@@ -573,7 +573,7 @@ export class TemplateApi {
                 localVarRequestOptions.form = localVarFormParams;
             }
         }
-        return new Promise<{ response: http.ClientResponse; body?: any;  }>((resolve, reject) => {
+        return new Promise<{ response: http.IncomingMessage; body?: any;  }>((resolve, reject) => {
             localVarRequest(localVarRequestOptions, (error, response, body) => {
                 if (error) {
                     reject(error);
@@ -594,7 +594,7 @@ export class TemplateApi {
      * @param body Template object to be added
      * @param {*} [options] Override http request options.
      */
-    public templateTemplateIdPost (templateId: string, body: NewTemplate, options: any = {}) : Promise<{ response: http.ClientResponse; body?: any;  }> {
+    public templateTemplateIdPost (templateId: string, body: NewTemplate, options: any = {}) : Promise<{ response: http.IncomingMessage; body?: any;  }> {
         const localVarPath = this.basePath + '/template/{templateId}'
             .replace('{' + 'templateId' + '}', encodeURIComponent(String(templateId)));
         let localVarQueryParameters: any = {};
@@ -636,7 +636,7 @@ export class TemplateApi {
                 localVarRequestOptions.form = localVarFormParams;
             }
         }
-        return new Promise<{ response: http.ClientResponse; body?: any;  }>((resolve, reject) => {
+        return new Promise<{ response: http.IncomingMessage; body?: any;  }>((resolve, reject) => {
             localVarRequest(localVarRequestOptions, (error, response, body) => {
                 if (error) {
                     reject(error);
@@ -702,7 +702,7 @@ export class UserApi {
      * @summary Delete all user info
      * @param {*} [options] Override http request options.
      */
-    public userDelete (options: any = {}) : Promise<{ response: http.ClientResponse; body: User;  }> {
+    public userDelete (options: any = {}) : Promise<{ response: http.IncomingMessage; body: User;  }> {
         const localVarPath = this.basePath + '/user';
         let localVarQueryParameters: any = {};
         let localVarHeaderParams: any = (<any>Object).assign({}, this.defaultHeaders);
@@ -732,7 +732,7 @@ export class UserApi {
                 localVarRequestOptions.form = localVarFormParams;
             }
         }
-        return new Promise<{ response: http.ClientResponse; body: User;  }>((resolve, reject) => {
+        return new Promise<{ response: http.IncomingMessage; body: User;  }>((resolve, reject) => {
             localVarRequest(localVarRequestOptions, (error, response, body) => {
                 if (error) {
                     reject(error);
@@ -752,7 +752,7 @@ export class UserApi {
      * @summary Get user's info
      * @param {*} [options] Override http request options.
      */
-    public userGet (options: any = {}) : Promise<{ response: http.ClientResponse; body: User;  }> {
+    public userGet (options: any = {}) : Promise<{ response: http.IncomingMessage; body: User;  }> {
         const localVarPath = this.basePath + '/user';
         let localVarQueryParameters: any = {};
         let localVarHeaderParams: any = (<any>Object).assign({}, this.defaultHeaders);
@@ -782,7 +782,7 @@ export class UserApi {
                 localVarRequestOptions.form = localVarFormParams;
             }
         }
-        return new Promise<{ response: http.ClientResponse; body: User;  }>((resolve, reject) => {
+        return new Promise<{ response: http.IncomingMessage; body: User;  }>((resolve, reject) => {
             localVarRequest(localVarRequestOptions, (error, response, body) => {
                 if (error) {
                     reject(error);
