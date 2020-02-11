@@ -1,14 +1,18 @@
 import * as React from "react";
-import AdaptiveCard from "../AdaptiveCard";
+import AdaptiveCardPanel from "../AdaptiveCardPanel";
 import { Container } from "./styled";
 
-class Gallery extends React.Component {
+interface Props {
+  toggleModal: () => void;
+}
+
+class Gallery extends React.Component<Props> {
   render() {
     return (
       <Container>
-        <AdaptiveCard />
-        <AdaptiveCard />
-        <AdaptiveCard />
+        <AdaptiveCardPanel toggleModal={this.props.toggleModal} />
+        <AdaptiveCardPanel toggleModal={this.props.toggleModal} />
+        <AdaptiveCardPanel toggleModal={this.props.toggleModal} />
       </Container>
     );
   }
