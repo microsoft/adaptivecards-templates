@@ -43,15 +43,21 @@ jobs:
                   npm install
                   npm run test
                   cd ..
-            - name: npm install and npm build
+            - name: build frontend
               if: success()
               run: |
                   # Build and test the project, then
                   # deploy to Azure Web App.
                   cd private-templates-service/client
+                  npm install
                   npm run build:dev --if-present
-                  cd ..
-                  cd server
+            - name: build and link backends with package
+                  cd private-templates-service/adaptivecards-templating-service
+                  npm link
+                  cd ../server
+                  npm install
+                  npm link adaptivecards-templating-service
+                  npm run deploy
             - name: "Deploy to Azure WebApp"
               if: success()
               uses: azure/webapps-deploy@v1
