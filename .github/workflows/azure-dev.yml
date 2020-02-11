@@ -52,6 +52,7 @@ jobs:
                   npm install
                   npm run build:dev --if-present
             - name: build and link backends with package
+              run: |
                   cd private-templates-service/adaptivecards-templating-service
                   npm link
                   cd ../server
