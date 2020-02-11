@@ -11,7 +11,7 @@
 on:
     push:
         branches:
-            - users/kodyang/fix-deploy
+            - dev
 
 env:
     AZURE_WEBAPP_NAME: adaptivecms # set this to your application's name
@@ -26,7 +26,7 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v2.0.0
               with:
-                  ref: users/kodyang/fix-deploy
+                  ref: dev
             - name: Use Node.js ${{ env.NODE_VERSION }}
               uses: actions/setup-node@v1
               with:
