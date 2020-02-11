@@ -18,29 +18,39 @@ export class InMemoryDBProvider implements StorageProvider {
 
   async updateUser(query: Partial<IUser>, updateQuery: Partial<IUser>): Promise<JSONResponse<Number>> {
     let updateCount: number = 0;
-    this._matchUsers(query).then(response => {
-      response.result!.forEach(user => {
-        updateCount += 1;
-        this._updateUser(user, this._clone(updateQuery));
-      });
+    await this._matchUsers(query).then(response => {
+      if (response.success) {
+        response.result!.forEach(user => {
+          updateCount += 1;
+          this._updateUser(user, this._clone(updateQuery));
+        });
+      }
     });
-    return Promise.resolve({ success: true, result: updateCount });
+    if (updateCount) {
+      return Promise.resolve({ success: true, result: updateCount });
+    }
+    return Promise.resolve({ success: false, errorMessage: "No users found matching given criteria" });
   }
   async updateTemplate(query: Partial<ITemplate>, updateQuery: Partial<ITemplate>): Promise<JSONResponse<Number>> {
     let updateCount: number = 0;
     this._matchTemplates(query).then(response => {
-      response.result!.forEach(template => {
-        updateCount += 1;
-        this._updateTemplate(template, this._clone(updateQuery));
-      });
+      if (response.success) {
+        response.result!.forEach(template => {
+          updateCount += 1;
+          this._updateTemplate(template, this._clone(updateQuery));
+        });
+      }
     });
-    return Promise.resolve({ success: true, result: updateCount });
+    if (updateCount) {
+      return Promise.resolve({ success: true, result: updateCount });
+    }
+    return Promise.resolve({ success: false, errorMessage: "No templates found matching given criteria" });
   }
 
-  async insertUser(doc: IUser): Promise<JSONResponse<Number>> {
+  async insertUser(doc: IUser): Promise<JSONResponse<String>> {
     return this._insert(doc, this.users);
   }
-  async insertTemplate(doc: ITemplate): Promise<JSONResponse<Number>> {
+  async insertTemplate(doc: ITemplate): Promise<JSONResponse<String>> {
     this._setTimestamps(doc);
     return this._insert(doc, this.templates);
   }
@@ -62,17 +72,26 @@ export class InMemoryDBProvider implements StorageProvider {
         this.users.delete(user._id!);
       });
     });
-    return Promise.resolve({ success: true, result: removeCount });
+    if (removeCount) {
+      return Promise.resolve({ success: true, result: removeCount });
+    }
+    return Promise.resolve({ success: false, errorMessage: "No users found matching given criteria" });
   }
   async removeTemplate(query: Partial<ITemplate>): Promise<JSONResponse<Number>> {
     let removeCount: number = 0;
     await this._matchTemplates(query).then(response => {
-      response.result!.forEach(template => {
-        removeCount += 1;
-        this.templates.delete(template._id!);
-      });
+      if (response.success) {
+        response.result!.forEach(template => {
+          removeCount += 1;
+          this.templates.delete(template._id!);
+        });
+      }
     });
-    return Promise.resolve({ success: true, result: removeCount });
+
+    if (removeCount) {
+      return Promise.resolve({ success: true, result: removeCount });
+    }
+    return Promise.resolve({ success: false, errorMessage: "No users found matching given criteria" });
   }
 
   protected async _matchUsers(query: Partial<ITemplate>): Promise<JSONResponse<IUser[]>> {
@@ -82,7 +101,10 @@ export class InMemoryDBProvider implements StorageProvider {
         res.push(this._clone(user));
       }
     });
-    return Promise.resolve({ success: true, result: res });
+    if (res.length) {
+      return Promise.resolve({ success: true, result: res });
+    }
+    return Promise.resolve({ success: false });
   }
 
   protected async _matchTemplates(query: Partial<ITemplate>): Promise<JSONResponse<ITemplate[]>> {
@@ -92,7 +114,10 @@ export class InMemoryDBProvider implements StorageProvider {
         res.push(this._clone(template));
       }
     });
-    return Promise.resolve({ success: true, result: res });
+    if (res.length) {
+      return Promise.resolve({ success: true, result: res });
+    }
+    return Promise.resolve({ success: false });
   }
 
   protected _clone<T>(obj: T): T {
@@ -100,14 +125,14 @@ export class InMemoryDBProvider implements StorageProvider {
     return cloned;
   }
 
-  protected async _insert<T extends ITemplate | IUser>(doc: T, collection: Map<String, T>): Promise<JSONResponse<Number>> {
+  protected async _insert<T extends ITemplate | IUser>(doc: T, collection: Map<String, T>): Promise<JSONResponse<String>> {
     let docToInsert: T = this._clone(doc);
     this._setID(docToInsert);
     if (!collection.has(docToInsert._id!)) {
       collection.set(docToInsert._id!, docToInsert);
-      return Promise.resolve({ success: true, result: 1 });
+      return Promise.resolve({ success: true, result: docToInsert._id });
     } else {
-      return Promise.resolve({ success: false, result: 0, errorMessage: "Object with id: " + doc._id! + "already exists. Insertion failed" });
+      return Promise.resolve({ success: false, errorMessage: "Object with id: " + doc._id! + "already exists. Insertion failed" });
     }
   }
 
@@ -154,5 +179,12 @@ export class InMemoryDBProvider implements StorageProvider {
       return false;
     }
     return true;
+  }
+
+  async connect(): Promise<JSONResponse<Boolean>> {
+    return Promise.resolve({ success: true });
+  }
+  async close(): Promise<JSONResponse<Boolean>> {
+    return Promise.resolve({ success: true });
   }
 }

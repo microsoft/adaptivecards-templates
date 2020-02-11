@@ -1,22 +1,12 @@
 import { StorageProvider } from "./IStorageProvider";
-import { IUser, ITemplate, JSONResponse, ITemplateInstance } from "../models/models";
-import { MongoUtils } from "../util/mongoutils/mongoutils";
+import { IUser, ITemplate, JSONResponse } from "../models/models";
+import { MongoConnectionParams } from "../models/mongo/MongoConnectionParams";
 import { MongoWorker } from "../util/mongoutils/MongoWorker";
 
-const defaultConnectionOptions = {
-  useNewUrlParser: true,
-  useCreateIndex: true,
-  useUnifiedTopology: true,
-  connectTimeoutMS: 5000,
-  socketTimeoutMS: 30000,
-  useFindAndModify: false
-};
 export class MongoDBProvider implements StorageProvider {
-  worker: MongoWorker;
+  worker!: MongoWorker;
 
-  constructor(connectionString: string, options: any = defaultConnectionOptions) {
-    this.worker = new MongoWorker(connectionString, options);
-  }
+  constructor() {}
 
   // Construct functions are introduced to be able to search by
   // nested objects. For example, if team:["merlin", "morgana"] are
@@ -51,9 +41,8 @@ export class MongoDBProvider implements StorageProvider {
         }
         return Promise.resolve({
           success: false,
-          result: [],
           errorMessage: "No users found matching given criteria"
-        });
+        }) as Promise<JSONResponse<IUser[]>>; // "as" has to be used because TypeScript cannot deduce the type correctly
       })
       .catch(e => {
         return Promise.resolve({ success: false, errorMessage: e });
@@ -71,9 +60,8 @@ export class MongoDBProvider implements StorageProvider {
         }
         return Promise.resolve({
           success: false,
-          result: [],
           errorMessage: "No templates found matching given criteria"
-        });
+        }) as Promise<JSONResponse<ITemplate[]>>; // "as" has to be used because TypeScript cannot deduce the type correctly
       })
       .catch(e => {
         return Promise.resolve({ success: false, errorMessage: e });
@@ -120,10 +108,10 @@ export class MongoDBProvider implements StorageProvider {
         });
       });
   }
-  async insertUser(user: IUser): Promise<JSONResponse<Number>> {
+  async insertUser(user: IUser): Promise<JSONResponse<String>> {
     return await this.worker.User.create(user)
       .then(result => {
-        return Promise.resolve({ success: true, result: 1 });
+        return Promise.resolve({ success: true, result: result.id });
       })
       .catch(e => {
         return Promise.resolve({
@@ -132,10 +120,10 @@ export class MongoDBProvider implements StorageProvider {
         });
       });
   }
-  async insertTemplate(template: ITemplate): Promise<JSONResponse<Number>> {
+  async insertTemplate(template: ITemplate): Promise<JSONResponse<String>> {
     return await this.worker.Template.create(template)
       .then(result => {
-        return Promise.resolve({ success: true, result: 1 });
+        return Promise.resolve({ success: true, result: result.id });
       })
       .catch(e => {
         return Promise.resolve({
@@ -188,11 +176,12 @@ export class MongoDBProvider implements StorageProvider {
       });
   }
 
-  async connect(): Promise<JSONResponse<Boolean>> {
+  async connect(params: MongoConnectionParams): Promise<JSONResponse<Boolean>> {
+    this.worker = new MongoWorker(params);
     return await this.worker.connect();
   }
 
   async close(): Promise<JSONResponse<Boolean>> {
-    return await this.worker.close();
+    return this.worker.close();
   }
 }

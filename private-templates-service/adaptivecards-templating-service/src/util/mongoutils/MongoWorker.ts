@@ -2,6 +2,7 @@ import { JSONResponse } from "../../models/models";
 import { ITemplateModel, TemplateSchema } from "../../models/mongo/TemplateModel";
 import { IUserModel, UserSchema } from "../../models/mongo/UserModel";
 import { MongoUtils } from "./mongoutils";
+import { MongoConnectionParams, mongoDefaultConnectionOptions, mongoDefaultConnectionString } from "../../models/mongo/MongoConnectionParams";
 import mongoose from "mongoose";
 
 const USERS_COLLECTION_NAME_SINGULAR: string = "User";
@@ -13,9 +14,9 @@ export class MongoWorker {
   db!: mongoose.Connection;
   Template!: mongoose.Model<ITemplateModel>;
   User!: mongoose.Model<IUserModel>;
-  constructor(connectionString: string, options: object) {
-    this.connectionString = connectionString;
-    this.options = options;
+  constructor(connectionParams: MongoConnectionParams) {
+    this.connectionString = connectionParams.connectionString ? connectionParams.connectionString : mongoDefaultConnectionString;
+    this.options = connectionParams.options ? connectionParams.options : mongoDefaultConnectionOptions;
   }
 
   async setUpCollections(): Promise<JSONResponse<Boolean>> {
