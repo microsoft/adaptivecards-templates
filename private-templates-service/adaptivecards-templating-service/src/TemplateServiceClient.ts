@@ -294,13 +294,7 @@ export class TemplateServiceClient {
                 return res.status(501);
             }
 
-            let getTemplateFunction = this.getTemplates();
-            let isPublished = req.params.isPublished === "True" || req.params.isPublished === "true";
-            if (isPublished){
-                getTemplateFunction = this.getTemplates(undefined, isPublished);
-            }
-
-            getTemplateFunction.then(
+            this.getTemplates(undefined, req.query.isPublished, undefined, req.query.version, req.query.owned).then(
                 (response) => {
                     if (!response.success) {
                         const err = new TemplateError(ApiError.TemplateNotFound, "Unable to find any templates.");
