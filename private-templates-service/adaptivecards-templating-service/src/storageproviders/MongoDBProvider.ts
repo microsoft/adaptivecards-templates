@@ -145,7 +145,8 @@ export class MongoDBProvider implements StorageProvider {
       });
   }
   async removeUser(query: Partial<IUser>): Promise<JSONResponse<Number>> {
-    return await this.worker.User.deleteOne(query)
+    let userQuery: any = this._constructUserQuery(query);
+    return await this.worker.User.deleteOne(userQuery)
       .then(result => {
         if (result.deletedCount) {
           return Promise.resolve({
@@ -165,7 +166,8 @@ export class MongoDBProvider implements StorageProvider {
       });
   }
   async removeTemplate(query: Partial<ITemplate>): Promise<JSONResponse<Number>> {
-    return await this.worker.Template.deleteOne(query)
+    let templateQuery: any = this._constructTemplateQuery(query);
+    return await this.worker.Template.deleteOne(templateQuery)
       .then(result => {
         if (result.deletedCount) {
           return Promise.resolve({
