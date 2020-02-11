@@ -22,6 +22,7 @@ const clientOptions: ClientOptions = {
 
 const client: TemplateServiceClient = TemplateServiceClient.init(clientOptions);
 app.use("/template", client.expressMiddleware());
+app.use("/user", client.userExpressMiddleware());
 
 app.get('/api/status', (req, res) => {
   res.status(200).send("Hello World");

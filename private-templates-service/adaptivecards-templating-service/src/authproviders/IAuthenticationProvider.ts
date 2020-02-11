@@ -1,8 +1,12 @@
+import { Issuer } from "../models/models";
 /**
  * @interface
  * General authenticator provider
  */
 export interface AuthenticationProvider {
+    // Issuer and owner fields unique identify every user
+    issuer : Issuer;
+
     /**
      * To get an id that uniquely identifies the user from
      * the access token
@@ -16,4 +20,3 @@ export interface AuthenticationProvider {
      */
     isValid(accessToken: string): Promise<boolean>; 
 }
-

@@ -8,9 +8,9 @@ export const OuterSideBarWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 260px;
+  min-width: 260px;
 
-  z-index: 1;
+  z-index: 2;
   -webkit-box-shadow: 3px 0px 3px 0px rgba(228,228,228,1);
   -moz-box-shadow: 3px 0px 3px 0px rgba(228,228,228,1);
   box-shadow: 3px 0px 3px 0px rgba(228,228,228,1);
