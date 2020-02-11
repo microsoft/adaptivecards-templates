@@ -6,13 +6,15 @@ info:
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "adaptivecms.azurewebsites.net" #"localhost:5000"
+host: "adaptivecms.azurewebsites.net"
 tags:
 - name: "template"
   description: "Adaptive Cards Template"
   externalDocs:
     description: "Adaptive Cards Templating Service"
     url: "https://github.com/microsoft/adaptivecards-templates/tree/dev/private-templates-service"
+- name: "user"
+  description: "Adaptive Cards Templating Service users"
 schemes:
 - "https"
 - "http"
@@ -43,6 +45,23 @@ paths:
           description: "Unauthorized user"
           schema: 
             $ref: "#/definitions/BaseError"
+      parameters:
+        - in: query
+          name: isPublished
+          type: boolean
+          description: Query based on if template is published
+        - in: query
+          name: name
+          type: string
+          description: Name of template to query for
+        - in: query
+          name: version
+          type: string
+          description: Version of template
+        - in: query
+          name: owned
+          type: boolean
+          description: Display only the templates owned by the user
       security:
         - bearer_auth: []
     post: 
@@ -106,6 +125,75 @@ paths:
             $ref: "#/definitions/BaseError"
       security:
         - bearer_auth: []
+    post:
+      tags: 
+        - "template"
+      summary: "Update existing template"
+      description: "Update existing template given id"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "templateId"
+          in: "path"
+          description: "ID of template to update"
+          required: true
+          type: string
+        - in: "body"
+          name: "body"
+          description: "Template object to be added"
+          required: true
+          schema:
+            $ref: "#/definitions/NewTemplate"
+      responses:
+        201: 
+          description: "successful operation"
+        400:
+          description: "Unable to create given template"
+          schema: 
+            $ref: "#/definitions/BaseError"
+        401:
+          description: "Unauthorized user"
+          schema: 
+            $ref: "#/definitions/BaseError"        
+      security:
+        - bearer_auth: []
+  '/user':
+    get: 
+      tags:
+        - "user"
+      summary: "Get user's info"
+      description: "Returns user's info"
+      produces:
+        - "application/json"
+      responses:
+        200: 
+          description: "successful operation"
+          schema: 
+            $ref: "#/definitions/User"
+        401: 
+          description: "Unauthorized user"
+          schema: 
+            $ref: "#/definitions/BaseError" 
+      security:
+        - bearer_auth: []
+    delete: 
+      tags: 
+        - "user"
+      summary: "Delete all user info"
+      description: "Delete all user info and user owner templates"
+      produces: 
+        - "application/json"
+      responses:
+        204: 
+          description: "successful operation"
+          schema: 
+            $ref: "#/definitions/User"
+        401: 
+          description: "Unauthorized user"
+          schema: 
+            $ref: "#/definitions/BaseError" 
+      security:
+        - bearer_auth: []
 definitions:
   BaseError: 
     type: object
@@ -147,3 +235,20 @@ definitions:
         format: JSON
       isPublished: 
         type: boolean
+  User: 
+    type: object  
+    properties:
+      id: 
+        type: string
+      authId: 
+        type: string
+      issuer:
+        type: string
+      team: 
+        type: array
+        items: 
+          type: string
+      org: 
+        type: array
+        items: 
+          type: string

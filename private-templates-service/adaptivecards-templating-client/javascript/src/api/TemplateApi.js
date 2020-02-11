@@ -106,16 +106,26 @@
     /**
      * Find all templates
      * Returns all public templates and owned templates
+     * @param {Object} opts Optional parameters
+     * @param {Boolean} opts.isPublished Query based on if template is published
+     * @param {String} opts.name Name of template to query for
+     * @param {String} opts.version Version of template
+     * @param {Boolean} opts.owned Display only the templates owned by the user
      * @param {module:api/TemplateApi~templateGetCallback} callback The callback function, accepting three arguments: error, data, response
      * data is of type: {@link module:model/TemplateList}
      */
-    this.templateGet = function(callback) {
+    this.templateGet = function(opts, callback) {
+      opts = opts || {};
       var postBody = null;
 
 
       var pathParams = {
       };
       var queryParams = {
+        'isPublished': opts['isPublished'],
+        'name': opts['name'],
+        'version': opts['version'],
+        'owned': opts['owned'],
       };
       var collectionQueryParams = {
       };
@@ -177,6 +187,59 @@
 
       return this.apiClient.callApi(
         '/template', 'POST',
+        pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, callback
+      );
+    }
+
+    /**
+     * Callback function to receive the result of the templateTemplateIdPost operation.
+     * @callback module:api/TemplateApi~templateTemplateIdPostCallback
+     * @param {String} error Error message, if any.
+     * @param data This operation does not return a value.
+     * @param {String} response The complete HTTP response.
+     */
+
+    /**
+     * Update existing template
+     * Update existing template given id
+     * @param {String} templateId ID of template to update
+     * @param {module:model/NewTemplate} body Template object to be added
+     * @param {module:api/TemplateApi~templateTemplateIdPostCallback} callback The callback function, accepting three arguments: error, data, response
+     */
+    this.templateTemplateIdPost = function(templateId, body, callback) {
+      var postBody = body;
+
+      // verify the required parameter 'templateId' is set
+      if (templateId === undefined || templateId === null) {
+        throw new Error("Missing the required parameter 'templateId' when calling templateTemplateIdPost");
+      }
+
+      // verify the required parameter 'body' is set
+      if (body === undefined || body === null) {
+        throw new Error("Missing the required parameter 'body' when calling templateTemplateIdPost");
+      }
+
+
+      var pathParams = {
+        'templateId': templateId
+      };
+      var queryParams = {
+      };
+      var collectionQueryParams = {
+      };
+      var headerParams = {
+      };
+      var formParams = {
+      };
+
+      var authNames = ['bearer_auth'];
+      var contentTypes = [];
+      var accepts = ['application/json'];
+      var returnType = null;
+
+      return this.apiClient.callApi(
+        '/template/{templateId}', 'POST',
         pathParams, queryParams, collectionQueryParams, headerParams, formParams, postBody,
         authNames, contentTypes, accepts, returnType, callback
       );

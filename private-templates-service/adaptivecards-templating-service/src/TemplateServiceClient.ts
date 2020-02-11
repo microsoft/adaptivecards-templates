@@ -275,6 +275,10 @@ export class TemplateServiceClient {
      * Async function for authenticating users before running endpoint code.
      */
     private _routerAuthentication = async (req: Request, res: Response, next: NextFunction) => {
+        if (req.method === "OPTIONS") {
+          next();
+        }
+
         if (!req.headers.authorization) {
             const err = new TemplateError(ApiError.InvalidAuthenticationToken, "Missing credentials.");
             return res.status(401).json({ error: err });
@@ -338,8 +342,8 @@ export class TemplateServiceClient {
             }
 
             let response = req.params.id?
-                await this.postTemplates(req.body.template, req.params.id) : 
-                await this.postTemplates(req.body.template);
+                await this.postTemplates(req.body.template, req.params.id, req.body.version, req.body.isPublished) :
+                await this.postTemplates(req.body.template, undefined, req.body.version, req.body.isPublished);
 
             if (!response.success){
                 const err = new TemplateError(ApiError.InvalidTemplate, "Unable to create given template.");
