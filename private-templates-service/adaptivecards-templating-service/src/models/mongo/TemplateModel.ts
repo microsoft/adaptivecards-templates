@@ -22,10 +22,10 @@ export const TemplateInstanceSchema: Schema = new Schema(
 export const TemplateSchema: Schema = new Schema(
   {
     _id: { type: String, default: mongoose.Types.ObjectId() },
-    instances: { type: [TemplateInstanceSchema], required: true, default: [TemplateInstanceSchema] },
-    tags: { type: [String], default: [String] },
-    owner: { type: String, required: true }, // todo: add ref: "User" so it checks if owner exists and make type ObjectID
-    isPublished: { type: String, required: true }
+    instances: { type: [TemplateInstanceSchema], required: true, default: [] },
+    tags: { type: [String], default: [] },
+    owner: { type: String, default: "" }, // todo: add ref: "User" so it checks if owner exists and make type ObjectID
+    isPublished: { type: String, default: false }
   },
   {
     versionKey: false,
