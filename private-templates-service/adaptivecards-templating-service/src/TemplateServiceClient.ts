@@ -169,7 +169,7 @@ export class TemplateServiceClient {
    * @param template - updated template json
    * @param version - updated version number
    */
-  private async _updateTemplate(templateId: string, name: string, template?: JSON, version?: string, isPublished?: boolean): Promise<JSONResponse<Number>> {
+  private async _updateTemplate(templateId: string, name: string, template?: JSON, version?: string, isPublished?: boolean, tags?: string[]): Promise<JSONResponse<Number>> {
     const queryTemplate: Partial<ITemplate> = {
       _id: templateId,
     };
@@ -182,6 +182,7 @@ export class TemplateServiceClient {
     const newTemplate: Partial<ITemplate> = {
       name: name,
       instances: [templateInstance],
+      tags: tags,
       owner: this.ownerID!,
       updatedAt: new Date(Date.now()),
       publishedAt: (isPublished === true)? new Date(Date.now()): undefined,
@@ -199,7 +200,7 @@ export class TemplateServiceClient {
    * @param {string} version - version number
    * @returns Promise as valid json
    */
-  public async postTemplates(template: JSON, templateId?: string, version?: string, isPublished?: boolean, name?: string): Promise<JSONResponse<String>> {
+  public async postTemplates(template: JSON, templateId?: string, version?: string, isPublished?: boolean, name?: string, tags?: string[]): Promise<JSONResponse<String>> {
     let checkAuthentication = this._checkAuthenticated();
     if (!checkAuthentication.success) {
       return checkAuthentication;
@@ -213,8 +214,9 @@ export class TemplateServiceClient {
     // Check if template already exists
     let existingTemplate = await this.getTemplates(templateId);
     if (existingTemplate.success && existingTemplate.result && existingTemplate.result.length > 0 && templateId) {
+      let templateTags = tags? tags: existingTemplate.result[0].tags;
       let templateName = name? name : existingTemplate.result[0].name
-      let updatedTemplate = await this._updateTemplate(templateId, templateName, template, version, isPublished);
+      let updatedTemplate = await this._updateTemplate(templateId, templateName, template, version, isPublished, templateTags);
       if (updatedTemplate.success) {
         return { success: true };
       }
@@ -234,7 +236,7 @@ export class TemplateServiceClient {
     const newTemplate: ITemplate = {
       name: templateName,
       instances: [templateInstance],
-      tags: [],
+      tags: tags,
       owner: this.ownerID!,
       publishedAt: (isPublished === true)? new Date(Date.now()): undefined,
       isPublished: isPublished
@@ -365,9 +367,10 @@ export class TemplateServiceClient {
       }
 
       let isPublished : boolean = req.body.isPublished === "true" || req.body.isPublished === "True";
+      let tags: string[] = req.body.tags;
       let response = req.params.id?
-      await this.postTemplates(req.body.template, req.params.id, req.body.version, isPublished, req.body.name) :
-      await this.postTemplates(req.body.template, undefined, req.body.version, isPublished, req.body.name);
+      await this.postTemplates(req.body.template, req.params.id, req.body.version, isPublished, req.body.name, tags) :
+      await this.postTemplates(req.body.template, undefined, req.body.version, isPublished, req.body.name, tags);
 
       if (!response.success) {
         const err = new TemplateError(ApiError.InvalidTemplate, "Unable to create given template.");
