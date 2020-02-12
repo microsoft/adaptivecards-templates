@@ -179,14 +179,12 @@ export class TemplateServiceClient {
       version: version || "1.0"
     };
 
-    let publishedAt = isPublished === true? new Date(Date.now()): undefined;
-
     const newTemplate: Partial<ITemplate> = {
       name: name,
       instances: [templateInstance],
       owner: this.ownerID!,
       updatedAt: new Date(Date.now()),
-      publishedAt: publishedAt,
+      publishedAt: (isPublished === true)? new Date(Date.now()): undefined,
       isPublished: isPublished
     };
 
@@ -232,14 +230,13 @@ export class TemplateServiceClient {
     };
 
     let templateName = name? name : "Untitled Template";
-    let publishedAt = isPublished === true? new Date(Date.now()): undefined;
 
     const newTemplate: ITemplate = {
       name: templateName,
       instances: [templateInstance],
       tags: [],
       owner: this.ownerID!,
-      publishedAt: publishedAt,
+      publishedAt: (isPublished === true)? new Date(Date.now()): undefined,
       isPublished: isPublished
     };
 
@@ -367,9 +364,10 @@ export class TemplateServiceClient {
         return res.status(400).json({ error: err });
       }
 
+      let isPublished : boolean = req.body.isPublished === "true" || req.body.isPublished === "True";
       let response = req.params.id?
-      await this.postTemplates(req.body.template, req.params.id, req.body.version, req.body.isPublished, req.body.name) :
-      await this.postTemplates(req.body.template, undefined, req.body.version, req.body.isPublished, req.body.name);
+      await this.postTemplates(req.body.template, req.params.id, req.body.version, isPublished, req.body.name) :
+      await this.postTemplates(req.body.template, undefined, req.body.version, isPublished, req.body.name);
 
       if (!response.success) {
         const err = new TemplateError(ApiError.InvalidTemplate, "Unable to create given template.");
