@@ -177,7 +177,7 @@ export class TemplateServiceClient {
     };
 
     const templateInstance: ITemplateInstance = {
-      json: JSON.stringify(template),
+      json: JSON.parse(""),
       version: version || "1.0"
     };
 

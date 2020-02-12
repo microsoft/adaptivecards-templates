@@ -10,7 +10,7 @@ export interface ITemplateModel extends mongoose.Document, ITemplate {
 export const TemplateInstanceSchema: Schema = new Schema(
   {
     _id: { type: String, default: mongoose.Types.ObjectId() },
-    json: { type: Object, required: true },
+    json: { type: String, required: true },
     version: { type: String, required: true }
   },
   {
