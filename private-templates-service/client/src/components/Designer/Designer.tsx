@@ -79,7 +79,7 @@ const Designer = (props: DesignerProps) => {
   closeButton.separator = true;
   designer.toolbar.insertElementAfter(closeButton, ACDesigner.CardDesigner.ToolbarCommands.TogglePreview);
 
-  let saveButton = new ACDesigner.ToolbarButton("saveButton", "Save", "", (sender) => (saveFunction(designer, api)));
+  let saveButton = new ACDesigner.ToolbarButton("saveButton", "Save", "", (sender) => (onSave(designer, props, api)));
   saveButton.separator = true;
   designer.toolbar.insertElementAfter(saveButton, ACDesigner.CardDesigner.ToolbarCommands.TogglePreview);
 
@@ -95,7 +95,7 @@ const Designer = (props: DesignerProps) => {
   return <div id="designer-container" dangerouslySetInnerHTML={{ __html: "dangerouslySetACDesigner" }}></div>;
 }
 
-function saveFunction(designer: ACDesigner.CardDesigner, props: DesignerProps, api: TemplateApi): void {
+function onSave(designer: ACDesigner.CardDesigner, props: DesignerProps, api: TemplateApi): void {
   let newTemplate = new NewTemplate();
   newTemplate.template = JSON.stringify(designer.getCard());
   newTemplate.isPublished = false;
