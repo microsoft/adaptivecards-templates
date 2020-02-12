@@ -30,9 +30,8 @@ export declare class BaseErrorError {
         type: string;
     }[];
 }
-export declare class NewTemplate {
-    'template'?: string;
-    'isPublished'?: boolean;
+export declare class ResourceCreated {
+    'id'?: string;
     static discriminator: string | undefined;
     static attributeTypeMap: Array<{
         name: string;
@@ -47,10 +46,12 @@ export declare class NewTemplate {
 }
 export declare class Template {
     'id'?: string;
-    'template'?: string;
+    'name'?: string;
+    'instances'?: Array<TemplateInstance>;
+    'owner'?: string;
     'isPublished'?: boolean;
     'createdAt'?: string;
-    'owner'?: string;
+    'updatedAt'?: string;
     'tags'?: Array<string>;
     static discriminator: string | undefined;
     static attributeTypeMap: Array<{
@@ -64,8 +65,50 @@ export declare class Template {
         type: string;
     }[];
 }
-export declare class TemplateList extends Array<NewTemplate> {
+export declare class TemplateInstance {
+    'json'?: string;
+    'version'?: string;
     static discriminator: string | undefined;
+    static attributeTypeMap: Array<{
+        name: string;
+        baseName: string;
+        type: string;
+    }>;
+    static getAttributeTypeMap(): {
+        name: string;
+        baseName: string;
+        type: string;
+    }[];
+}
+export declare class TemplateJSON {
+    'template'?: string;
+    'isPublished'?: boolean;
+    'name'?: string;
+    static discriminator: string | undefined;
+    static attributeTypeMap: Array<{
+        name: string;
+        baseName: string;
+        type: string;
+    }>;
+    static getAttributeTypeMap(): {
+        name: string;
+        baseName: string;
+        type: string;
+    }[];
+}
+export declare class TemplateList {
+    'templates'?: Array<Template>;
+    static discriminator: string | undefined;
+    static attributeTypeMap: Array<{
+        name: string;
+        baseName: string;
+        type: string;
+    }>;
+    static getAttributeTypeMap(): {
+        name: string;
+        baseName: string;
+        type: string;
+    }[];
 }
 export declare class User {
     'id'?: string;
@@ -73,6 +116,20 @@ export declare class User {
     'issuer'?: string;
     'team'?: Array<string>;
     'org'?: Array<string>;
+    static discriminator: string | undefined;
+    static attributeTypeMap: Array<{
+        name: string;
+        baseName: string;
+        type: string;
+    }>;
+    static getAttributeTypeMap(): {
+        name: string;
+        baseName: string;
+        type: string;
+    }[];
+}
+export declare class UserList {
+    'user'?: Array<User>;
     static discriminator: string | undefined;
     static attributeTypeMap: Array<{
         name: string;
@@ -127,17 +184,17 @@ export declare class TemplateApi {
     setApiKey(key: TemplateApiApiKeys, value: string): void;
     templateById(templateId: string, options?: any): Promise<{
         response: http.IncomingMessage;
-        body: Template;
+        body: TemplateList;
     }>;
     templateGet(isPublished?: boolean, name?: string, version?: string, owned?: boolean, options?: any): Promise<{
         response: http.IncomingMessage;
         body: TemplateList;
     }>;
-    templatePost(body: NewTemplate, options?: any): Promise<{
+    templatePost(body: TemplateJSON, options?: any): Promise<{
         response: http.IncomingMessage;
-        body?: any;
+        body: ResourceCreated;
     }>;
-    templateTemplateIdPost(templateId: string, body: NewTemplate, options?: any): Promise<{
+    templateTemplateIdPost(templateId: string, body: TemplateJSON, options?: any): Promise<{
         response: http.IncomingMessage;
         body?: any;
     }>;
@@ -160,10 +217,10 @@ export declare class UserApi {
     setApiKey(key: UserApiApiKeys, value: string): void;
     userDelete(options?: any): Promise<{
         response: http.IncomingMessage;
-        body: User;
+        body?: any;
     }>;
     userGet(options?: any): Promise<{
         response: http.IncomingMessage;
-        body: User;
+        body: UserList;
     }>;
 }

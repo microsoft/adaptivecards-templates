@@ -1,18 +1,8 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 Object.defineProperty(exports, "__esModule", { value: true });
 var localVarRequest = require("request");
 var Promise = require("bluebird");
-var defaultBasePath = 'https://adaptivecms.azurewebsites.net';
+var defaultBasePath = 'http://adaptivecms.azurewebsites.net';
 var primitives = [
     "string",
     "boolean",
@@ -171,28 +161,23 @@ var BaseErrorError = (function () {
     return BaseErrorError;
 }());
 exports.BaseErrorError = BaseErrorError;
-var NewTemplate = (function () {
-    function NewTemplate() {
+var ResourceCreated = (function () {
+    function ResourceCreated() {
     }
-    NewTemplate.getAttributeTypeMap = function () {
-        return NewTemplate.attributeTypeMap;
+    ResourceCreated.getAttributeTypeMap = function () {
+        return ResourceCreated.attributeTypeMap;
     };
-    NewTemplate.discriminator = undefined;
-    NewTemplate.attributeTypeMap = [
+    ResourceCreated.discriminator = undefined;
+    ResourceCreated.attributeTypeMap = [
         {
-            "name": "template",
-            "baseName": "template",
+            "name": "id",
+            "baseName": "id",
             "type": "string"
-        },
-        {
-            "name": "isPublished",
-            "baseName": "isPublished",
-            "type": "boolean"
         }
     ];
-    return NewTemplate;
+    return ResourceCreated;
 }());
-exports.NewTemplate = NewTemplate;
+exports.ResourceCreated = ResourceCreated;
 var Template = (function () {
     function Template() {
     }
@@ -203,12 +188,22 @@ var Template = (function () {
     Template.attributeTypeMap = [
         {
             "name": "id",
-            "baseName": "id",
+            "baseName": "_id",
             "type": "string"
         },
         {
-            "name": "template",
-            "baseName": "template",
+            "name": "name",
+            "baseName": "name",
+            "type": "string"
+        },
+        {
+            "name": "instances",
+            "baseName": "instances",
+            "type": "Array<TemplateInstance>"
+        },
+        {
+            "name": "owner",
+            "baseName": "owner",
             "type": "string"
         },
         {
@@ -222,8 +217,8 @@ var Template = (function () {
             "type": "string"
         },
         {
-            "name": "owner",
-            "baseName": "owner",
+            "name": "updatedAt",
+            "baseName": "updatedAt",
             "type": "string"
         },
         {
@@ -235,14 +230,71 @@ var Template = (function () {
     return Template;
 }());
 exports.Template = Template;
-var TemplateList = (function (_super) {
-    __extends(TemplateList, _super);
-    function TemplateList() {
-        return _super !== null && _super.apply(this, arguments) || this;
+var TemplateInstance = (function () {
+    function TemplateInstance() {
     }
+    TemplateInstance.getAttributeTypeMap = function () {
+        return TemplateInstance.attributeTypeMap;
+    };
+    TemplateInstance.discriminator = undefined;
+    TemplateInstance.attributeTypeMap = [
+        {
+            "name": "json",
+            "baseName": "json",
+            "type": "string"
+        },
+        {
+            "name": "version",
+            "baseName": "version",
+            "type": "string"
+        }
+    ];
+    return TemplateInstance;
+}());
+exports.TemplateInstance = TemplateInstance;
+var TemplateJSON = (function () {
+    function TemplateJSON() {
+    }
+    TemplateJSON.getAttributeTypeMap = function () {
+        return TemplateJSON.attributeTypeMap;
+    };
+    TemplateJSON.discriminator = undefined;
+    TemplateJSON.attributeTypeMap = [
+        {
+            "name": "template",
+            "baseName": "template",
+            "type": "string"
+        },
+        {
+            "name": "isPublished",
+            "baseName": "isPublished",
+            "type": "boolean"
+        },
+        {
+            "name": "name",
+            "baseName": "name",
+            "type": "string"
+        }
+    ];
+    return TemplateJSON;
+}());
+exports.TemplateJSON = TemplateJSON;
+var TemplateList = (function () {
+    function TemplateList() {
+    }
+    TemplateList.getAttributeTypeMap = function () {
+        return TemplateList.attributeTypeMap;
+    };
     TemplateList.discriminator = undefined;
+    TemplateList.attributeTypeMap = [
+        {
+            "name": "templates",
+            "baseName": "templates",
+            "type": "Array<Template>"
+        }
+    ];
     return TemplateList;
-}(Array));
+}());
 exports.TemplateList = TemplateList;
 var User = (function () {
     function User() {
@@ -254,7 +306,7 @@ var User = (function () {
     User.attributeTypeMap = [
         {
             "name": "id",
-            "baseName": "id",
+            "baseName": "_id",
             "type": "string"
         },
         {
@@ -281,14 +333,34 @@ var User = (function () {
     return User;
 }());
 exports.User = User;
+var UserList = (function () {
+    function UserList() {
+    }
+    UserList.getAttributeTypeMap = function () {
+        return UserList.attributeTypeMap;
+    };
+    UserList.discriminator = undefined;
+    UserList.attributeTypeMap = [
+        {
+            "name": "user",
+            "baseName": "user",
+            "type": "Array<User>"
+        }
+    ];
+    return UserList;
+}());
+exports.UserList = UserList;
 var enumsMap = {};
 var typeMap = {
     "BaseError": BaseError,
     "BaseErrorError": BaseErrorError,
-    "NewTemplate": NewTemplate,
+    "ResourceCreated": ResourceCreated,
     "Template": Template,
+    "TemplateInstance": TemplateInstance,
+    "TemplateJSON": TemplateJSON,
     "TemplateList": TemplateList,
     "User": User,
+    "UserList": UserList,
 };
 var HttpBasicAuth = (function () {
     function HttpBasicAuth() {
@@ -425,7 +497,7 @@ var TemplateApi = (function () {
                     reject(error);
                 }
                 else {
-                    body = ObjectSerializer.deserialize(body, "Template");
+                    body = ObjectSerializer.deserialize(body, "TemplateList");
                     if (response.statusCode && response.statusCode >= 200 && response.statusCode <= 299) {
                         resolve({ response: response, body: body });
                     }
@@ -509,7 +581,7 @@ var TemplateApi = (function () {
             uri: localVarPath,
             useQuerystring: this._useQuerystring,
             json: true,
-            body: ObjectSerializer.serialize(body, "NewTemplate")
+            body: ObjectSerializer.serialize(body, "TemplateJSON")
         };
         this.authentications.bearer_auth.applyToRequest(localVarRequestOptions);
         this.authentications.default.applyToRequest(localVarRequestOptions);
@@ -527,6 +599,7 @@ var TemplateApi = (function () {
                     reject(error);
                 }
                 else {
+                    body = ObjectSerializer.deserialize(body, "ResourceCreated");
                     if (response.statusCode && response.statusCode >= 200 && response.statusCode <= 299) {
                         resolve({ response: response, body: body });
                     }
@@ -559,7 +632,7 @@ var TemplateApi = (function () {
             uri: localVarPath,
             useQuerystring: this._useQuerystring,
             json: true,
-            body: ObjectSerializer.serialize(body, "NewTemplate")
+            body: ObjectSerializer.serialize(body, "TemplateJSON")
         };
         this.authentications.bearer_auth.applyToRequest(localVarRequestOptions);
         this.authentications.default.applyToRequest(localVarRequestOptions);
@@ -669,7 +742,6 @@ var UserApi = (function () {
                     reject(error);
                 }
                 else {
-                    body = ObjectSerializer.deserialize(body, "User");
                     if (response.statusCode && response.statusCode >= 200 && response.statusCode <= 299) {
                         resolve({ response: response, body: body });
                     }
@@ -712,7 +784,7 @@ var UserApi = (function () {
                     reject(error);
                 }
                 else {
-                    body = ObjectSerializer.deserialize(body, "User");
+                    body = ObjectSerializer.deserialize(body, "UserList");
                     if (response.statusCode && response.statusCode >= 200 && response.statusCode <= 299) {
                         resolve({ response: response, body: body });
                     }
