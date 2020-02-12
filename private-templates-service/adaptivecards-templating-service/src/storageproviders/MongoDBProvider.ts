@@ -26,6 +26,9 @@ export class MongoDBProvider implements StorageProvider {
   }
   private _constructTemplateQuery(query: Partial<ITemplate>): any {
     let templateQuery: any = { ...query };
+    if (query.name) {
+      templateQuery.name = { $regex: query.name, $options: "i" };
+    }
     if (query.tags) {
       templateQuery.tags = { $all: query.tags };
     }
