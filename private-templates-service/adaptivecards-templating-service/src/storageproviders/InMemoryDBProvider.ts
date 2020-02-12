@@ -37,14 +37,13 @@ export class InMemoryDBProvider implements StorageProvider {
   }
   async updateTemplate(query: Partial<ITemplate>, updateQuery: Partial<ITemplate>): Promise<JSONResponse<Number>> {
     let updateCount: number = 0;
-    this._matchTemplates(query).then(response => {
-      if (response.success) {
-        response.result!.forEach(template => {
-          updateCount += 1;
-          this._updateTemplate(template, this._clone(updateQuery));
-        });
-      }
-    });
+    let response = await this._matchTemplates(query);
+    if (response.success) {
+      response.result!.forEach(template => {
+        updateCount += 1;
+        this._updateTemplate(template, this._clone(updateQuery));
+      });
+    }
     if (updateCount) {
       return Promise.resolve({ success: true, result: updateCount });
     }
@@ -162,6 +161,7 @@ export class InMemoryDBProvider implements StorageProvider {
 
   protected _setTimestamps(doc: ITemplate): void {
     doc.createdAt = new Date(Date.now());
+    doc.updatedAt = new Date(Date.now());
   }
 
   protected _matchUser(query: Partial<IUser>, user: IUser): boolean {

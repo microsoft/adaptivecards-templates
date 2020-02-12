@@ -16,12 +16,12 @@
 (function(factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
-    define(['ApiClient', 'model/BaseError', 'model/BaseErrorError', 'model/NewTemplate', 'model/Template', 'model/TemplateList', 'api/TemplateApi'], factory);
+    define(['ApiClient', 'model/BaseError', 'model/BaseErrorError', 'model/NewTemplate', 'model/Template', 'model/TemplateList', 'model/User', 'api/TemplateApi', 'api/UserApi'], factory);
   } else if (typeof module === 'object' && module.exports) {
     // CommonJS-like environments that support module.exports, like Node.
-    module.exports = factory(require('./ApiClient'), require('./model/BaseError'), require('./model/BaseErrorError'), require('./model/NewTemplate'), require('./model/Template'), require('./model/TemplateList'), require('./api/TemplateApi'));
+    module.exports = factory(require('./ApiClient'), require('./model/BaseError'), require('./model/BaseErrorError'), require('./model/NewTemplate'), require('./model/Template'), require('./model/TemplateList'), require('./model/User'), require('./api/TemplateApi'), require('./api/UserApi'));
   }
-}(function(ApiClient, BaseError, BaseErrorError, NewTemplate, Template, TemplateList, TemplateApi) {
+}(function(ApiClient, BaseError, BaseErrorError, NewTemplate, Template, TemplateList, User, TemplateApi, UserApi) {
   'use strict';
 
   /**
@@ -87,10 +87,20 @@
      */
     TemplateList: TemplateList,
     /**
+     * The User model constructor.
+     * @property {module:model/User}
+     */
+    User: User,
+    /**
      * The TemplateApi service constructor.
      * @property {module:api/TemplateApi}
      */
-    TemplateApi: TemplateApi
+    TemplateApi: TemplateApi,
+    /**
+     * The UserApi service constructor.
+     * @property {module:api/UserApi}
+     */
+    UserApi: UserApi
   };
 
   return exports;
