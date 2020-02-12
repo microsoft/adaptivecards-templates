@@ -55,8 +55,6 @@ export class MongoDBProvider implements StorageProvider {
   }
   async getTemplates(query: Partial<ITemplate>): Promise<JSONResponse<ITemplate[]>> {
     let templateQuery: any = this._constructTemplateQuery(query);
-    console.log(templateQuery);
-    this.worker.Template.find({ name: /Alex/i });
     return await this.worker.Template.find(templateQuery)
       .then(templates => {
         if (templates.length) {
