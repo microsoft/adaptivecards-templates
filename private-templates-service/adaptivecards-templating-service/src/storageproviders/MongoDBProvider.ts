@@ -4,9 +4,11 @@ import { MongoConnectionParams } from "../models/mongo/MongoConnectionParams";
 import { MongoWorker } from "../util/mongoutils/MongoWorker";
 
 export class MongoDBProvider implements StorageProvider {
-  worker!: MongoWorker;
+  worker: MongoWorker;
 
-  constructor() {}
+  constructor(params: MongoConnectionParams) {
+    this.worker = new MongoWorker(params);
+  }
 
   // Construct functions are introduced to be able to search by
   // nested objects. For example, if team:["merlin", "morgana"] are
@@ -176,8 +178,7 @@ export class MongoDBProvider implements StorageProvider {
       });
   }
 
-  async connect(params: MongoConnectionParams): Promise<JSONResponse<Boolean>> {
-    this.worker = new MongoWorker(params);
+  async connect(): Promise<JSONResponse<Boolean>> {
     return await this.worker.connect();
   }
 
