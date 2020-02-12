@@ -1,5 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 import { IUser } from "../models";
+import { MongoUtils } from "../../util/mongoutils/mongoutils";
 
 // _id instead of id because mongo uses _id for the unique key
 // and it cannot be changed. The only solution is to rename
@@ -14,7 +15,7 @@ export interface IUserModel extends mongoose.Document, IUser {
 
 export const UserSchema: Schema = new Schema(
   {
-    _id: { type: String, default: mongoose.Types.ObjectId() },
+    _id: { type: String },
     authId: { type: String, required: true },
     issuer: { type: String, required: true },
     team: { type: [String], default: [] },
@@ -25,3 +26,8 @@ export const UserSchema: Schema = new Schema(
     timestamps: false
   }
 );
+
+UserSchema.pre("save", function(next) {
+  this._id = MongoUtils.generateUniqueID().toHexString();
+  next();
+});
