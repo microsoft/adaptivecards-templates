@@ -11,8 +11,6 @@ class Gallery extends React.Component<Props> {
     return (
       <Container>
         <AdaptiveCardPanel toggleModal={this.props.toggleModal} />
-        <AdaptiveCardPanel toggleModal={this.props.toggleModal} />
-        <AdaptiveCardPanel toggleModal={this.props.toggleModal} />
       </Container>
     );
   }

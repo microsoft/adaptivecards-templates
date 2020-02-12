@@ -46,9 +46,30 @@ const Designer = (props: DesignerProps) => {
 
   let designer = initDesigner();
 
+
+
+
+  ////// DO NOT COMMIT THIS, JUST FOR DEMO PURPOSE 
+
+
+
+
+
   let closeButton = new ACDesigner.ToolbarButton("closeButton", "Close", "", (sender) => (history.goBack()));
   closeButton.separator = true;
   designer.toolbar.insertElementAfter(closeButton, ACDesigner.CardDesigner.ToolbarCommands.TogglePreview);
+
+
+  let publishButton = new ACDesigner.ToolbarButton("publishButton", "Publish", "", (sender) => (alert("Published!")));
+  publishButton.separator = true;
+  designer.toolbar.insertElementAfter(publishButton, ACDesigner.CardDesigner.ToolbarCommands.TogglePreview);
+
+  let SaveButton = new ACDesigner.ToolbarButton("publishButton", "Save", "", (sender) => (alert("Saved!")));
+  SaveButton.separator = true;
+  designer.toolbar.insertElementAfter(SaveButton, ACDesigner.CardDesigner.ToolbarCommands.TogglePreview);
+
+
+
 
   return <div id="designer-container" dangerouslySetInnerHTML={{ __html: "dangerouslySetACDesigner" }}></div>;
 }

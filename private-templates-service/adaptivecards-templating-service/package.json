@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest",
     "build": "tsc",
-    "start": "tsc && npm start"
+    "start": "tsc && node dist/src/dbtest.js"
   },
   "jest": {
     "testEnvironment": "node",
