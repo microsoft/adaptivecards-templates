@@ -12,13 +12,19 @@ import * as ACDesigner from 'adaptivecards-designer';
 const mapStateToProps = (state: RootState) => {
   return {
     isAuthenticated: state.auth.isAuthenticated,
-    user: state.auth.user
+    user: state.auth.user,
+    templateID: state.designer.templateID,
+    templateJSON: state.designer.templateID,
+    sampleDataJSON: state.designer.sampleDataJSON
   };
 };
 
 interface DesignerProps {
   isAuthenticated: boolean;
   user?: UserType;
+  templateID: string;
+  templateJSON: string;
+  sampleDataJSON: string;
 }
 
 const Designer = (props: DesignerProps) => {
@@ -49,6 +55,10 @@ const Designer = (props: DesignerProps) => {
   let closeButton = new ACDesigner.ToolbarButton("closeButton", "Close", "", (sender) => (history.goBack()));
   closeButton.separator = true;
   designer.toolbar.insertElementAfter(closeButton, ACDesigner.CardDesigner.ToolbarCommands.TogglePreview);
+
+  let saveButton = new ACDesigner.ToolbarButton("saveButton", "Save", "", (sender) => (alert("Saving...")));
+  saveButton.separator = true;
+  designer.toolbar.insertElementAfter(saveButton, ACDesigner.CardDesigner.ToolbarCommands.TogglePreview);
 
   return <div id="designer-container" dangerouslySetInnerHTML={{ __html: "dangerouslySetACDesigner" }}></div>;
 }
