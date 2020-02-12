@@ -43,7 +43,7 @@ jobs:
                   npm install
                   npm run test
                   cd ..
-            - name: build frontend
+            - name: Create production build
               if: success()
               run: |
                   # Build and test the project, then
