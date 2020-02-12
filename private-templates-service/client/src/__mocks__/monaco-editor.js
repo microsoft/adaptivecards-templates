@@ -4,15 +4,15 @@
 // "Cannot find module 'monaco-editor' from 'Designer.tsx'"
 // The module exists but jest does not recognise it
 const editor = {
-	create: () => {
-		return {
-			dispose: () => {}
-		};
-	}
+  create: () => {
+    return {
+      dispose: () => {}
+    };
+  }
 };
 
 const monaco = {
-	editor
+  editor
 };
 
 module.exports = monaco;
