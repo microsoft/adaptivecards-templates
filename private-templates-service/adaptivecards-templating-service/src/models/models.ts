@@ -28,6 +28,7 @@ export interface ITemplate {
   owner?: string;
   createdAt?: Date;
   updatedAt?: Date;
+  publishedAt?: Date;
   isPublished?: boolean;
 }
 

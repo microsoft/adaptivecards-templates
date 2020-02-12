@@ -179,11 +179,14 @@ export class TemplateServiceClient {
       version: version || "1.0"
     };
 
+    let publishedAt = isPublished === true? new Date(Date.now()): undefined;
+
     const newTemplate: Partial<ITemplate> = {
       name: name,
       instances: [templateInstance],
       owner: this.ownerID!,
       updatedAt: new Date(Date.now()),
+      publishedAt: publishedAt,
       isPublished: isPublished
     };
 
@@ -229,12 +232,14 @@ export class TemplateServiceClient {
     };
 
     let templateName = name? name : "Untitled Template";
+    let publishedAt = isPublished === true? new Date(Date.now()): undefined;
 
     const newTemplate: ITemplate = {
       name: templateName,
       instances: [templateInstance],
       tags: [],
       owner: this.ownerID!,
+      publishedAt: publishedAt,
       isPublished: isPublished
     };
 
