@@ -46,9 +46,9 @@
     /**
      * The base URL against which to resolve every API call's (relative) path.
      * @type {String}
-     * @default https://localhost:5000
+     * @default https://adaptivecms.azurewebsites.net
      */
-    this.basePath = 'https://localhost:5000'.replace(/\/+$/, '');
+    this.basePath = 'https://adaptivecms.azurewebsites.net'.replace(/\/+$/, '');
 
     /**
      * The authentication methods to be included for all API calls.

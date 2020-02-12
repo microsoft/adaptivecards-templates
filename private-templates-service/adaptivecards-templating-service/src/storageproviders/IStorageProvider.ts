@@ -13,6 +13,8 @@ export interface StorageProvider {
   insertTemplate(template: ITemplate): Promise<JSONResponse<string>>;
   removeUser(query: Partial<IUser>): Promise<JSONResponse<Number>>;
   removeTemplate(query: Partial<ITemplate>): Promise<JSONResponse<Number>>;
+  // Params are optional and don't have to be provided at connection time.
+  // They can be provided in the constructor.
   connect<T>(params: T): Promise<JSONResponse<Boolean>>;
   close(): Promise<JSONResponse<Boolean>>;
 }

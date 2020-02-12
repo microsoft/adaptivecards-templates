@@ -1,6 +1,7 @@
 import { JSONResponse, IUser, ITemplate } from "../models/models";
 import { StorageProvider } from "./IStorageProvider";
 import uuidv4 from "uuid/v4";
+import { ITemplateModel } from "../models/mongo/TemplateModel";
 
 export class InMemoryDBProvider implements StorageProvider {
   users: Map<string, IUser> = new Map();
@@ -36,14 +37,13 @@ export class InMemoryDBProvider implements StorageProvider {
   }
   async updateTemplate(query: Partial<ITemplate>, updateQuery: Partial<ITemplate>): Promise<JSONResponse<Number>> {
     let updateCount: number = 0;
-    this._matchTemplates(query).then(response => {
-      if (response.success) {
-        response.result!.forEach(template => {
-          updateCount += 1;
-          this._updateTemplate(template, this._clone(updateQuery));
-        });
-      }
-    });
+    let response = await this._matchTemplates(query);
+    if (response.success) {
+      response.result!.forEach(template => {
+        updateCount += 1;
+        this._updateTemplate(template, this._clone(updateQuery));
+      });
+    }
     if (updateCount) {
       return Promise.resolve({ success: true, result: updateCount });
     }
@@ -161,6 +161,7 @@ export class InMemoryDBProvider implements StorageProvider {
 
   protected _setTimestamps(doc: ITemplate): void {
     doc.createdAt = new Date(Date.now());
+    doc.updatedAt = new Date(Date.now());
   }
 
   protected _matchUser(query: Partial<IUser>, user: IUser): boolean {
@@ -184,14 +185,15 @@ export class InMemoryDBProvider implements StorageProvider {
     });
     return true;
   }
-
   // Omitted version search for now
+  // Add name search
   protected _matchTemplate(query: Partial<ITemplate>, template: ITemplate): boolean {
     if (
+      (query.name && !(template.name.includes(query.name))) ||
       (query.owner && !(query.owner === template.owner)) ||
       (query._id && !(query._id === template._id)) ||
       (query.isPublished && !(query.isPublished === template.isPublished)) ||
-      (query.tags && !this._ifContainsList(template.tags, query.tags))
+      (query.tags && template.tags && !this._ifContainsList(template.tags, query.tags))
     ) {
       return false;
     }

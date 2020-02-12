@@ -22,8 +22,9 @@ export interface ITemplateInstance {
 
 export interface ITemplate {
   _id?: string;
+  name: string;
   instances: ITemplateInstance[];
-  tags: string[];
+  tags?: string[];
   owner?: string;
   createdAt?: Date;
   updatedAt?: Date;
