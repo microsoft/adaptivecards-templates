@@ -1,0 +1,10 @@
+//Action Types
+export const REQUEST_POST_NEW_TEMPLATE = "REQUEST_POST_NEW_TEMPLATE";
+export const FAILURE_POST_NEW_TEMPLATE = "FAILURE_POST_NEW_TEMPLATE";
+export const RECEIVE_POST_NEW_TEMPLATE = "RECEIVE_POST_NEW_TEMPLATE";
+
+//Actions
+export interface PostNewTemplateAction {
+  type: typeof REQUEST_POST_NEW_TEMPLATE | typeof FAILURE_POST_NEW_TEMPLATE | typeof RECEIVE_POST_NEW_TEMPLATE;
+  text: string;
+}

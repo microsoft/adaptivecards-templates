@@ -10,6 +10,6 @@ export const rootReducer = combineReducers({
   search: searchReducer,
   page: pageReducer,
   designer: designerReducer
-})
+});
 
 export type RootState = ReturnType<typeof rootReducer>;
