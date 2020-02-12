@@ -169,22 +169,21 @@ export class TemplateServiceClient {
    * @param template - updated template json
    * @param version - updated version number
    */
-  private async _updateTemplate(templateId: string, template?: JSON, version?: string, isPublished?: boolean): Promise<JSONResponse<Number>> {
+  private async _updateTemplate(templateId: string, name: string, template?: JSON, version?: string, isPublished?: boolean): Promise<JSONResponse<Number>> {
     const queryTemplate: Partial<ITemplate> = {
       _id: templateId,
-      instances: [],
-      tags: []
     };
 
     const templateInstance: ITemplateInstance = {
-      json: "",
+      json: JSON.stringify(template),
       version: version || "1.0"
     };
 
     const newTemplate: Partial<ITemplate> = {
+      name: name,
       instances: [templateInstance],
-      tags: [],
       owner: this.ownerID!,
+      updatedAt: new Date(Date.now()),
       isPublished: isPublished
     };
 
@@ -199,7 +198,7 @@ export class TemplateServiceClient {
    * @param {string} version - version number
    * @returns Promise as valid json
    */
-  public async postTemplates(template: JSON, templateId?: string, version?: string, isPublished?: boolean): Promise<JSONResponse<String>> {
+  public async postTemplates(template: JSON, templateId?: string, version?: string, isPublished?: boolean, name?: string): Promise<JSONResponse<String>> {
     let checkAuthentication = this._checkAuthenticated();
     if (!checkAuthentication.success) {
       return checkAuthentication;
@@ -213,7 +212,8 @@ export class TemplateServiceClient {
     // Check if template already exists
     let existingTemplate = await this.getTemplates(templateId);
     if (existingTemplate.success && existingTemplate.result && existingTemplate.result.length > 0 && templateId) {
-      let updatedTemplate = await this._updateTemplate(templateId, template, version);
+      let templateName = name? name : existingTemplate.result[0].name
+      let updatedTemplate = await this._updateTemplate(templateId, templateName, template, version, isPublished);
       if (updatedTemplate.success) {
         return { success: true };
       }
@@ -228,8 +228,10 @@ export class TemplateServiceClient {
       version: version || "1.0"
     };
 
+    let templateName = name? name : "Untitled Template";
+
     const newTemplate: ITemplate = {
-      name: "", // for Grace: fix
+      name: templateName,
       instances: [templateInstance],
       tags: [],
       owner: this.ownerID!,
@@ -275,6 +277,7 @@ export class TemplateServiceClient {
       const templateQuery: Partial<ITemplate> = {
         _id: templateId,
         instances: [],
+        name: templateName,
         tags: [],
         owner: this.ownerID,
         isPublished: isPublished
@@ -330,14 +333,9 @@ export class TemplateServiceClient {
     router.all("/", this._routerAuthentication);
 
     router.get("/", (req: Request, res: Response, _next: NextFunction) => {
-      if (req.params.name) {
-        return res.status(501);
-      }
-
       this.getTemplates(undefined, req.query.isPublished, req.query.name, req.query.version, req.query.owned).then(response => {
         if (!response.success) {
-          const err = new TemplateError(ApiError.TemplateNotFound, "Unable to find any templates.");
-          return res.status(404).json({ error: err });
+          return res.status(200).json({ templates: [] });
         }
         res.status(200).json({ templates: response.result });
       });
@@ -365,8 +363,8 @@ export class TemplateServiceClient {
       }
 
       let response = req.params.id?
-      await this.postTemplates(req.body.template, req.params.id, req.body.version, req.body.isPublished) :
-      await this.postTemplates(req.body.template, undefined, req.body.version, req.body.isPublished);
+      await this.postTemplates(req.body.template, req.params.id, req.body.version, req.body.isPublished, req.body.name) :
+      await this.postTemplates(req.body.template, undefined, req.body.version, req.body.isPublished, req.body.name);
 
       if (!response.success) {
         const err = new TemplateError(ApiError.InvalidTemplate, "Unable to create given template.");
@@ -394,8 +392,7 @@ export class TemplateServiceClient {
     router.get("/", (_req: Request, res: Response, _next: NextFunction) => {
       this._getUser().then(response => {
         if (!response.success) {
-          const err = new TemplateError(ApiError.UserNotFound, "Unable to find user information.");
-          return res.status(404).json({ error: err });
+          return res.status(200).json({ user: [] });
         }
         res.status(200).json({ user: response.result });
       });
