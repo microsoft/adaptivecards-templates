@@ -189,7 +189,7 @@ export class InMemoryDBProvider implements StorageProvider {
   // Add name search
   protected _matchTemplate(query: Partial<ITemplate>, template: ITemplate): boolean {
     if (
-      (query.name &&  template.name && !(template.name.includes(query.name))) ||
+      (query.name &&  !(template.name.includes(query.name))) ||
       (query.owner && !(query.owner === template.owner)) ||
       (query._id && !(query._id === template._id)) ||
       (query.isPublished && !(query.isPublished === template.isPublished)) ||
