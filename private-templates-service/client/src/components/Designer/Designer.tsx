@@ -10,7 +10,7 @@ import * as monaco from 'monaco-editor';
 import markdownit from 'markdown-it';
 import * as ACDesigner from 'adaptivecards-designer';
 //API
-import { TemplateApi, NewTemplate } from 'adaptive-templating-service-typescript-node';
+import { TemplateApi, TemplateJSON } from 'adaptive-templating-service-typescript-node';
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -22,7 +22,7 @@ const mapStateToProps = (state: RootState) => {
   };
 };
 
-const mapDispatchToProps = (dispatch: any) {
+const mapDispatchToProps = (dispatch: any) => {
   return {
     newTemplate: () => {
       dispatch(newTemplate());
@@ -79,6 +79,10 @@ const Designer = (props: DesignerProps) => {
   closeButton.separator = true;
   designer.toolbar.insertElementAfter(closeButton, ACDesigner.CardDesigner.ToolbarCommands.TogglePreview);
 
+  let publishButton = new ACDesigner.ToolbarButton("publishButton", "Publish", "", (sender) => (alert("Published!")));
+  publishButton.separator = true;
+  designer.toolbar.insertElementAfter(publishButton, ACDesigner.CardDesigner.ToolbarCommands.TogglePreview);
+
   let saveButton = new ACDesigner.ToolbarButton("saveButton", "Save", "", (sender) => (onSave(designer, props, api)));
   saveButton.separator = true;
   designer.toolbar.insertElementAfter(saveButton, ACDesigner.CardDesigner.ToolbarCommands.TogglePreview);
@@ -96,17 +100,17 @@ const Designer = (props: DesignerProps) => {
 }
 
 function onSave(designer: ACDesigner.CardDesigner, props: DesignerProps, api: TemplateApi): void {
-  let newTemplate = new NewTemplate();
-  newTemplate.template = JSON.stringify(designer.getCard());
-  newTemplate.isPublished = false;
+  let currTemplate = new TemplateJSON();
+  currTemplate.template = JSON.stringify(designer.getCard());
+  currTemplate.isPublished = false;
   let sampleDataJSON: string = JSON.stringify(designer.sampleData);
   if (props.templateID != "") {
-    api.templateTemplateIdPost(props.templateID, newTemplate);
-    editTemplate(props.templateID, newTemplate.template, sampleDataJSON)
+    api.templateTemplateIdPost(props.templateID, currTemplate);
+    editTemplate(props.templateID, currTemplate.template, sampleDataJSON)
   }
   else {
-    const newTemplateID = api.templatePost(newTemplate);
-    editTemplate(newTemplateID, newTemplate.template, sampleDataJSON);
+    const newTemplateID = api.templatePost(currTemplate).then((res) => (res.body));
+    //editTemplate(newTemplateID, currTemplate.template, sampleDataJSON);
   }
 }
 
