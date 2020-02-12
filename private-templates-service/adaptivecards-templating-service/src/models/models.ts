@@ -21,6 +21,7 @@ export interface ITemplateInstance {
 }
 
 export interface ITemplate {
+  name?: string;
   _id?: string;
   instances: ITemplateInstance[];
   tags?: string[];
