@@ -15,7 +15,7 @@ export interface IUserModel extends mongoose.Document, IUser {
 
 export const UserSchema: Schema = new Schema(
   {
-    _id: { type: String },
+    _id: { type: String, required: true },
     authId: { type: String, required: true },
     issuer: { type: String, required: true },
     team: { type: [String], default: [] },
@@ -27,7 +27,7 @@ export const UserSchema: Schema = new Schema(
   }
 );
 
-UserSchema.pre("save", function(next) {
+UserSchema.pre("validate", function(next) {
   this._id = MongoUtils.generateUniqueID().toHexString();
   next();
 });

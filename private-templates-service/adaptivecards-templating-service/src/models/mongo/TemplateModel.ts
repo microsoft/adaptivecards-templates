@@ -10,7 +10,7 @@ export interface ITemplateModel extends mongoose.Document, ITemplate {
 
 export const TemplateInstanceSchema: Schema = new Schema(
   {
-    _id: { type: String, default: MongoUtils.generateUniqueID() },
+    _id: { type: String, required: true },
     json: { type: String, required: true },
     version: { type: String, required: true }
   },
@@ -19,14 +19,14 @@ export const TemplateInstanceSchema: Schema = new Schema(
     timestamps: { createdAt: true, updatedAt: true }
   }
 );
-TemplateInstanceSchema.pre("save", function(next) {
+TemplateInstanceSchema.pre("validate", function(next) {
   this._id = MongoUtils.generateUniqueID().toHexString();
   next();
 });
 
 export const TemplateSchema: Schema = new Schema(
   {
-    _id: { type: String },
+    _id: { type: String, required: true },
     name: { type: String, required: true },
     instances: { type: [TemplateInstanceSchema], required: true },
     tags: { type: [String], default: [] },
@@ -38,7 +38,7 @@ export const TemplateSchema: Schema = new Schema(
     timestamps: { createdAt: true, updatedAt: true }
   }
 );
-TemplateSchema.pre("save", function(next) {
+TemplateSchema.pre("validate", function(next) {
   this._id = MongoUtils.generateUniqueID().toHexString();
   next();
 });
