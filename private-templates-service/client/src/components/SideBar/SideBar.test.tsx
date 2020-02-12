@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter as Router } from "react-router-dom";
 
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
@@ -12,7 +13,9 @@ it('Renders without crashing', () => {
   const store = createStore(rootReducer, {});
   ReactDOM.render(
     <Provider store={store}>
-      <SideBar authButtonMethod={() => { }} />
+      <Router>
+        <SideBar authButtonMethod={() => { }} />
+      </Router>
     </Provider>, div);
 
   ReactDOM.unmountComponentAtNode(div);
