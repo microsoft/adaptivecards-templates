@@ -1,6 +1,7 @@
 import { JSONResponse, IUser, ITemplate } from "../models/models";
 import { StorageProvider } from "./IStorageProvider";
 import uuidv4 from "uuid/v4";
+import { ITemplateModel } from "../models/mongo/TemplateModel";
 
 export class InMemoryDBProvider implements StorageProvider {
   users: Map<string, IUser> = new Map();
@@ -184,14 +185,15 @@ export class InMemoryDBProvider implements StorageProvider {
     });
     return true;
   }
-
   // Omitted version search for now
+  // Add name search
   protected _matchTemplate(query: Partial<ITemplate>, template: ITemplate): boolean {
     if (
+      (query.name &&  template.name && !(template.name.includes(query.name))) ||
       (query.owner && !(query.owner === template.owner)) ||
       (query._id && !(query._id === template._id)) ||
       (query.isPublished && !(query.isPublished === template.isPublished)) ||
-      (query.tags && !this._ifContainsList(template.tags, query.tags))
+      (query.tags && template.tags && !this._ifContainsList(template.tags, query.tags))
     ) {
       return false;
     }

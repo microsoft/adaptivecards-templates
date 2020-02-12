@@ -6,9 +6,9 @@
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
-    "start:prod": "npm install && node server.js",
-    "start": "tsc && node dist/server.js | bunyan",
-    "build": "tsc",
+    "start": "node dist/server/src/server.js",
+    "build": "",
+    "deploy": "tsc",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "server": "nodemon --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' --exec ts-node src/server.ts | bunyan",
     "client": "cd ../client && npm start"
@@ -16,6 +16,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "adaptivecards-templating-service": "file:../adaptivecards-templating-service",
     "async": "^3.1.1",
     "body-parser": "^1.19.0",
     "bunyan": "^1.8.12",
@@ -24,7 +25,10 @@
     "express-validator": "^6.3.1",
     "jws": "^4.0.0",
     "passport": "^0.4.1",
-    "passport-azure-ad": "^4.2.1"
+    "passport-azure-ad": "^4.2.1",
+    "axios": "^0.19.2",
+    "mongoose": "^5.8.10",
+    "uuid": "^3.4.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.0.2",
