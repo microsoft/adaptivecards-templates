@@ -6,13 +6,15 @@ info:
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "adaptivecms.azurewebsites.net" #"localhost:5000"
+host: "adaptivecms.azurewebsites.net"
 tags:
 - name: "template"
   description: "Adaptive Cards Template"
   externalDocs:
     description: "Adaptive Cards Templating Service"
     url: "https://github.com/microsoft/adaptivecards-templates/tree/dev/private-templates-service"
+- name: "user"
+  description: "Adaptive Cards Templating Service users"
 schemes:
 - "https"
 - "http"
@@ -43,6 +45,23 @@ paths:
           description: "Unauthorized user"
           schema: 
             $ref: "#/definitions/BaseError"
+      parameters:
+        - in: query
+          name: isPublished
+          type: boolean
+          description: Query based on if template is published
+        - in: query
+          name: name
+          type: string
+          description: Name of template to query for
+        - in: query
+          name: version
+          type: string
+          description: Version of template
+        - in: query
+          name: owned
+          type: boolean
+          description: Display only the templates owned by the user
       security:
         - bearer_auth: []
     post: 
@@ -50,18 +69,18 @@ paths:
         - "template"
       summary: "Add a new template"
       description: ""
-      consumes:
-        - "application/json"
       parameters:
         - in: "body"
           name: "body"
           description: "Template object to be added"
           required: true
           schema:
-            $ref: "#/definitions/NewTemplate"
+            $ref: "#/definitions/TemplateJSON"
       responses:
         201: 
           description: "Template successfully created"
+          schema:
+            $ref: "#/definitions/ResourceCreated"
         400:
           description: "Invalid template"
           schema: 
@@ -91,7 +110,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: '#/definitions/Template'
+            $ref: '#/definitions/TemplateList'
         400:
           description: "Invalid template ID supplied"
           schema: 
@@ -106,7 +125,79 @@ paths:
             $ref: "#/definitions/BaseError"
       security:
         - bearer_auth: []
+    post:
+      tags: 
+        - "template"
+      summary: "Update existing template"
+      description: "Update existing template given id"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "templateId"
+          in: "path"
+          description: "ID of template to update"
+          required: true
+          type: string
+        - in: "body"
+          name: "body"
+          description: "Template object to be added"
+          required: true
+          schema:
+            $ref: "#/definitions/TemplateJSON"
+      responses:
+        201: 
+          description: "successful operation"
+        400:
+          description: "Unable to create given template"
+          schema: 
+            $ref: "#/definitions/BaseError"
+        401:
+          description: "Unauthorized user"
+          schema: 
+            $ref: "#/definitions/BaseError"        
+      security:
+        - bearer_auth: []
+  '/user':
+    get: 
+      tags:
+        - "user"
+      summary: "Get user's info"
+      description: "Returns user's info"
+      produces:
+        - "application/json"
+      responses:
+        200: 
+          description: "successful operation"
+          schema: 
+            $ref: "#/definitions/UserList"
+        401: 
+          description: "Unauthorized user"
+          schema: 
+            $ref: "#/definitions/BaseError" 
+      security:
+        - bearer_auth: []
+    delete: 
+      tags: 
+        - "user"
+      summary: "Delete all user info"
+      description: "Delete all user info and user owner templates"
+      produces: 
+        - "application/json"
+      responses:
+        204: 
+          description: "successful operation"
+        401: 
+          description: "Unauthorized user"
+          schema: 
+            $ref: "#/definitions/BaseError" 
+      security:
+        - bearer_auth: []
 definitions:
+  ResourceCreated:
+    type: object
+    properties:
+      id:
+        type: string
   BaseError: 
     type: object
     properties: 
@@ -118,32 +209,76 @@ definitions:
           message:
             type: string
   TemplateList:
-    type: array
-    items: 
-      $ref: "#/definitions/NewTemplate"
+    type: object
+    properties: 
+      templates:
+        type: array
+        items: 
+          $ref: "#/definitions/Template"
   Template:
     type: object
     properties:
-      id: 
+      _id: 
         type: string
+      name: 
+        type: string
+      instances:
+        type: array
+        items: 
+          $ref: "#/definitions/TemplateInstance"
+      owner: 
+        type: string
+      isPublished:
+        type: boolean
+      createdAt:
+        type: string
+        format: Date
+      updatedAt:
+        type: string
+        format: Date
+      tags: 
+        type: array
+        items:
+          type: string
+  TemplateInstance:
+    type: object
+    properties:
+      json: 
+        type: string
+        format: JSON
+      version: 
+        type: string
+  TemplateJSON:
+    type: object
+    properties: 
       template: 
         type: string
         format: JSON
       isPublished:
         type: boolean
-      createdAt: 
+      name: 
         type: string
-      owner:
-        type: string
-      tags: 
-        type: array
-        items:
-          type: string
-  NewTemplate:
+  UserList:
     type: object
     properties:
-      template: 
+      user:
+        type: array
+        items:
+          $ref: "#/definitions/User"
+  User: 
+    type: object  
+    properties:
+      _id: 
         type: string
-        format: JSON
-      isPublished: 
-        type: boolean
+      authId: 
+        type: string
+      issuer:
+        type: string
+      team: 
+        type: array
+        items: 
+          type: string
+      org: 
+        type: array
+        items: 
+          type: string
