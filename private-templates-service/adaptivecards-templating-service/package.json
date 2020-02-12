@@ -23,7 +23,8 @@
     "mongoose": "^5.8.10",
     "passport": "^0.4.1",
     "passport-azure-ad": "^4.2.1",
-    "uuid": "^3.4.0"
+    "uuid": "^3.4.0",
+    "xmlhttprequest": "^1.8.0"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
