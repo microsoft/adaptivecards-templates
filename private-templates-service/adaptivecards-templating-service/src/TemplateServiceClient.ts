@@ -64,7 +64,7 @@ export class TemplateServiceClient {
     if (!this.ownerID) return { success: true };
 
     // Remove all templates under user
-    const template: ITemplate = {
+    const template: Partial<ITemplate> = {
       instances: [],
       tags: [],
       owner: this.ownerID
@@ -170,7 +170,7 @@ export class TemplateServiceClient {
    * @param version - updated version number
    */
   private async _updateTemplate(templateId: string, template?: JSON, version?: string, isPublished?: boolean): Promise<JSONResponse<Number>> {
-    const queryTemplate: ITemplate = {
+    const queryTemplate: Partial<ITemplate> = {
       _id: templateId,
       instances: [],
       tags: []
@@ -181,7 +181,7 @@ export class TemplateServiceClient {
       version: version || "1.0"
     };
 
-    const newTemplate: ITemplate = {
+    const newTemplate: Partial<ITemplate> = {
       instances: [templateInstance],
       tags: [],
       owner: this.ownerID!,
@@ -229,6 +229,7 @@ export class TemplateServiceClient {
     };
 
     const newTemplate: ITemplate = {
+      name: "", // for Grace: fix
       instances: [templateInstance],
       tags: [],
       owner: this.ownerID!,
@@ -271,7 +272,7 @@ export class TemplateServiceClient {
           };
       }
 
-      const templateQuery: ITemplate = {
+      const templateQuery: Partial<ITemplate> = {
         _id: templateId,
         instances: [],
         tags: [],
@@ -283,7 +284,7 @@ export class TemplateServiceClient {
     }
 
     // Return all published public templates
-    const templateQueryPublished: ITemplate = {
+    const templateQueryPublished: Partial<ITemplate> = {
       _id: templateId,
       instances: [],
       tags: [],
