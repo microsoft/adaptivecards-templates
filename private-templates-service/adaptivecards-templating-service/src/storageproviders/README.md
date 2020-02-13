@@ -27,7 +27,7 @@ await db.connect().then(response => {
 // Ex., to insert a user: (check for required data fields in src/models/models.ts)
 await db.insertUser({authId: "j1valo2", issuer: "abra", team: ["cats", "dogs"]}).then(response => {
 	if(response.success) {
-		console.log(response.result); // insertUser will return _id of a new inserted user
+	    console.log(response.result); // insertUser will return _id of a new inserted user
 })
 
 // Ex., to insert a template:
