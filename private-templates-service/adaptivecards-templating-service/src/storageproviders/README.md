@@ -10,7 +10,7 @@ import { StorageProvider, MongoDBProvider } from 'adaptivecards-templating-servi
 
 
 #### Basic provider workflow
-````
+```
 let db: StorageProvider = new MongoDBProvider({connectionString: "myConnectionString"});
 // Before running any queries establish connection to the database 
 // and make sure that it was successfull:
@@ -50,3 +50,4 @@ await db.getTemplates({name: "sun"}, SortBy.name, SortOrder.ascending).then(resp
 			console.log(response.result);
 	}
 })
+```
