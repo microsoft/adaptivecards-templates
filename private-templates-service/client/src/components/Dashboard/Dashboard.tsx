@@ -7,8 +7,10 @@ import { setPage } from "../../store/page/actions";
 
 import requireAuthentication from "../../utils/requireAuthentication";
 import Gallery from "../Gallery";
-import { Title, DashboardContainer } from "../Dashboard/styled";
+import { Title, DashboardContainer, StyledSortAndFilter } from "../Dashboard/styled";
 import PreviewModal from "./PreviewModal";
+import Filter from "./FilterButton/Filter";
+import Sort from "./SortButton/Sort";
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -51,9 +53,11 @@ class Dashboard extends React.Component<Props, State> {
   render() {
     return (
       <DashboardContainer>
+        <StyledSortAndFilter>
+          <Filter></Filter>
+          <Sort></Sort>
+        </StyledSortAndFilter>
         <Title>Recent</Title>
-        <Gallery toggleModal={this.toggleModal}></Gallery>
-        <Title>Drafts</Title>
         <Gallery toggleModal={this.toggleModal}></Gallery>
         <PreviewModal show={this.state.isPreviewOpen} toggleModal={this.toggleModal} />
       </DashboardContainer>

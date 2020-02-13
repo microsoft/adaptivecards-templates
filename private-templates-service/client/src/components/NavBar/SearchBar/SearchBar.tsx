@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { StyledSearchBox } from './styled';
 import { RootState } from '../../../store/rootReducer';
 import { connect } from 'react-redux';
