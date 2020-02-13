@@ -28,7 +28,6 @@ class Gallery extends React.Component<Props> {
   }
   render() {
     let cards = [];
-    console.log(this.props.templates);
     if (!this.props.templates.fetching && this.props && this.props.templates && this.props.templates.templates && this.props.templates.templates.templates) {
       cards = this.props.templates.templates.templates.map((val: any) => <AdaptiveCardPanel toggleModal={this.props.toggleModal} template={val} />);
     }
