@@ -1,7 +1,6 @@
 import { TemplateState, TemplateAction, REQUEST_TEMPLATES, RECEIVE_TEMPLATES, FAIL_GET } from "./types";
 import { TemplateList } from "adaptive-templating-service-typescript-node";
 
-// not sure about fetching? not sure about template type?
 const initialState: TemplateState = {
   fetching: false,
   templates: TemplateList,
