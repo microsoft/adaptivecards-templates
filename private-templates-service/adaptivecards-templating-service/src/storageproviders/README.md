@@ -50,4 +50,3 @@ await db.getTemplates({name: "sun"}, SortBy.name, SortOrder.ascending).then(resp
 			console.log(response.result);
 	}
 })
-```
