@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Container, TemplateName, ACWrapper } from "./styled";
 import AdaptiveCard from '../Common/AdaptiveCard';
-import { renderAdaptiveCard } from "../Common/AdaptiveCard/AdaptiveCard";
 
 interface Props {
   toggleModal: () => void;
