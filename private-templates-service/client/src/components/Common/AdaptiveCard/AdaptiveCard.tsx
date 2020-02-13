@@ -4,12 +4,16 @@ import { Card } from './styled';
 import markdownit from "markdown-it";
 import { Template, TemplateInstance } from 'adaptive-templating-service-typescript-node';
 
+interface Props {
+  toggleModal: () => void;
+  cardtemplate: Template,
+}
+
 function renderingSetup(): AdaptiveCards.AdaptiveCard {
   AdaptiveCards.AdaptiveCard.onProcessMarkdown = function (text: string, result: { didProcess: boolean, outputHtml?: string }) {
     result.outputHtml = new markdownit().render(text);
     result.didProcess = true;
   }
-
   let adaptiveCard = new AdaptiveCards.AdaptiveCard();
   // Set its hostConfig property unless you want to use the default Host Config
   // Host Config defines the style and behavior of a card
@@ -18,7 +22,8 @@ function renderingSetup(): AdaptiveCards.AdaptiveCard {
   });
   return adaptiveCard;
 }
-function parseCardTemplate(template: any): AdaptiveCards.AdaptiveCard {
+
+function parseCardTemplate(template: Template): AdaptiveCards.AdaptiveCard {
   let adaptiveCard = renderingSetup();
   try {
     // Parse the card payload
@@ -29,7 +34,8 @@ function parseCardTemplate(template: any): AdaptiveCards.AdaptiveCard {
     return new AdaptiveCards.AdaptiveCard;
   }
 }
-export function renderAdaptiveCard(template: any): any {
+
+export function renderAdaptiveCard(template: Template): any {
   let adaptiveCard = parseCardTemplate(template);
   try {
     // Render the card to an HTML element
@@ -41,16 +47,11 @@ export function renderAdaptiveCard(template: any): any {
   }
 }
 
-interface Props {
-  toggleModal: () => void;
-  cardtemplate: Template,
-}
-
 /*
 cleanTemplate accepts a template object. This method strips the object of the unncessary '\\\' contained in the object and removes the 
 extra characters before and after the actual JSON object. It then parses the string into JSON and returns the JSON object.  
 */
-function cleanTemplate(temp: any): any {
+function cleanTemplate(temp: TemplateInstance): Template {
   const templateString = JSON.stringify(temp.json);
   const replaceChar = templateString.replace(/\\\\\\/g, '');
   const trimTemp = replaceChar.slice(3, replaceChar.length - 3);
@@ -59,7 +60,7 @@ function cleanTemplate(temp: any): any {
 
 }
 
-function processTemplate(temp: any): any {
+function processTemplate(temp: TemplateInstance): any {
   const jsonTemp = cleanTemplate(temp);
   const template = renderAdaptiveCard(jsonTemp);
   return template;
