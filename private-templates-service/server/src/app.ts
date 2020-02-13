@@ -4,12 +4,27 @@ import passport from "./config/passport";
 import bodyParser from "body-parser";
 
 // import controllers
-import { TemplateServiceClient, ClientOptions, AzureADProvider, InMemoryDBProvider } from '../../adaptivecards-templating-service';
-
+import { TemplateServiceClient } from "../../adaptivecards-templating-service/src/TemplateServiceClient";
+import { ClientOptions } from "../../adaptivecards-templating-service/src/IClientOptions";
+import { AzureADProvider } from "../../adaptivecards-templating-service/src/authproviders/AzureADProvider";
+import { InMemoryDBProvider } from "../../adaptivecards-templating-service/src/storageproviders/InMemoryDBProvider";
+// import mongo, create new mongo, pass options
 const app = express();
 
 // Express configuration
-app.use(express.static(path.join(__dirname, "../../../../client/build")));
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, Content-Type, Accept, Authorization, api_key"
+  );
+  res.header(
+    "Access-Control-Allow-Methods",
+    "GET, POST, OPTIONS, DELETE"
+  );
+  next();
+});
+app.use(express.static(path.join(__dirname, "../client/build")));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(bodyParser.json());

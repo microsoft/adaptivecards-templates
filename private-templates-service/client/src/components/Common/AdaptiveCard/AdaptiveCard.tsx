@@ -6,6 +6,7 @@ import { Card } from './styled';
 import markdownit from "markdown-it";
 
 function getCard(): any {
+
   // Hard coded, will remove and connect to backend in future PR
   let card = {
     type: "AdaptiveCard",
