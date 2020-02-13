@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import { RootState } from '../../store/rootReducer';
 import AdaptiveCardPanel from "../AdaptiveCardPanel";
 import { Container } from "./styled";
-import { getTemplates } from "../../store/templates/actions";
-import { TemplateState } from "../../store/templates/types";
+import { getAllTemplates } from "../../store/templates/actions";
+import { AllTemplateState } from "../../store/templates/types";
 
 const mapStateToProps = (state: RootState) => {
   return { templates: state.templates };
@@ -12,14 +12,14 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    getTemplates: () => { dispatch(getTemplates()) }
+    getTemplates: () => { dispatch(getAllTemplates()) }
   }
 }
 
 interface Props {
   toggleModal: () => void;
   getTemplates: () => void;
-  templates: TemplateState;
+  templates: AllTemplateState;
 }
 
 class Gallery extends React.Component<Props> {
