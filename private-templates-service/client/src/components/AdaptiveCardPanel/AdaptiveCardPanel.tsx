@@ -10,6 +10,7 @@ interface Props {
 class AdaptiveCardPanel extends React.Component<Props> {
   render() {
     let temp = this.props.template;
+    console.log(temp);
     return (
       <Container>
         <ACWrapper>

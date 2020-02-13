@@ -16,6 +16,7 @@ class PreviewModal extends React.Component<Props, {}> {
         <ModalWrapper>
           <ACPanel>
             <ACWrapper>
+              {/* TODO add redux store functionality for individual cards */}
               {/* <AdaptiveCard /> */}
             </ACWrapper>
           </ACPanel>
