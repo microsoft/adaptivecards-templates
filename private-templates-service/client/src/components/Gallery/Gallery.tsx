@@ -19,7 +19,6 @@ interface Props {
   toggleModal: () => void;
   getTemplates: () => void;
   templates: any;
-  // state: RootState;
 }
 
 class Gallery extends React.Component<Props> {
