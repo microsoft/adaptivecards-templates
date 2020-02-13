@@ -39,6 +39,17 @@ export interface JSONResponse<T> {
   result?: T;
 }
 
+export enum SortBy {
+  dateCreated = "createdAt",
+  dateModified = "updatedAt",
+  name = "name"
+}
+
+export enum SortOrder {
+  ascending = 1,
+  descending = -1
+}
+
 /**
  * @enum
  * Access token issuer types.
