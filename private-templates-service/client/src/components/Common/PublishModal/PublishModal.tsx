@@ -37,7 +37,7 @@ class PublishModal extends React.Component<Props> {
     const { template } = this.props;
 
     return (
-      <BackDrop onClick={this.props.toggleModal}>
+      <BackDrop>
         <Modal>
           <Header>Publish Template</Header>
           <Description>Your template design will be sent for review. Once approved, your new design will go live as <DescriptionAccent>{template.name}</DescriptionAccent></Description>
