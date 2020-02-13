@@ -1,8 +1,8 @@
 ### Installation and Usage
-After you have installed the templating service package via:
+After we have installed the templating service package via:
 `npm install adaptivecards-templating-service`
 
-You can import mongo provider:
+We can import storage and mongo providers:
 
 ```
 import { StorageProvider, MongoDBProvider } from 'adaptivecards-templating-service';
@@ -13,7 +13,7 @@ import { StorageProvider, MongoDBProvider } from 'adaptivecards-templating-servi
 ```
 let db: StorageProvider = new MongoDBProvider({connectionString: "myConnectionString"});
 ```
-Before running any queries establish connection to the database and make sure that it was successfull:
+Before running any queries we have to establish connection to the database and make sure that it was successfull:
 ```
 await db.connect().then(response => {
 	// Check result status of the connectiona attempt:
