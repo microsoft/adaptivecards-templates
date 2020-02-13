@@ -57,7 +57,7 @@ export class MongoDBProvider implements StorageProvider {
   // Default sort is by name and in ascending order.
   async getTemplates(
     query: Partial<ITemplate>,
-    sortBy: SortBy = SortBy.name,
+    sortBy: SortBy = SortBy.alphabetical,
     sortOrder: SortOrder = SortOrder.ascending
   ): Promise<JSONResponse<ITemplate[]>> {
     let templateQuery: any = this._constructTemplateQuery(query);

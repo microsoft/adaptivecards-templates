@@ -5,6 +5,7 @@ import { AuthenticationProvider } from ".";
 import { TemplateError, ApiError, ServiceErrorMessage } from "./models/errorModels";
 import { StorageProvider } from ".";
 import { ITemplate, JSONResponse, ITemplateInstance, IUser } from ".";
+import { SortBy, SortOrder } from "./models/models";
 
 export class TemplateServiceClient {
   private storageProvider: StorageProvider;
@@ -286,7 +287,9 @@ export class TemplateServiceClient {
     isPublished?: boolean,
     templateName?: string,
     version?: number,
-    owned?: boolean
+    owned?: boolean,
+    sortBy?: SortBy,
+    sortOrder?: SortOrder
   ): Promise<JSONResponse<ITemplate[]>> {
     let checkAuthentication = this._checkAuthenticated();
     if (!checkAuthentication.success) {
@@ -309,10 +312,10 @@ export class TemplateServiceClient {
         name: templateName,
         tags: [],
         owner: this.ownerID,
-        isPublished: isPublished
+        isPublished: isPublished, 
       };
 
-      return this.storageProvider.getTemplates(templateQuery);
+      return this.storageProvider.getTemplates(templateQuery, sortBy, sortOrder);
     }
 
     // Return all published public templates
@@ -362,7 +365,17 @@ export class TemplateServiceClient {
     router.all("/", this._routerAuthentication);
 
     router.get("/", (req: Request, res: Response, _next: NextFunction) => {
-      this.getTemplates(undefined, req.query.isPublished, req.query.name, req.query.version, req.query.owned).then(response => {
+      if (req.query.sortBy && !(req.query.sortBy in SortBy)){
+        const err = new TemplateError(ApiError.InvalidQueryParam, "Sort by value is not valid.");
+        res.status(400).json({ error: err });
+      }
+
+      if (req.query.sortOrder && !(req.query.sortOrder in SortOrder)){
+        const err = new TemplateError(ApiError.InvalidQueryParam, "Sort order value is not valid.");
+        res.status(400).json({ error: err });
+      }
+
+      this.getTemplates(undefined, req.query.isPublished, req.query.name, req.query.version, req.query.owned, req.query.sortBy, req.query.sortOrder).then(response => {
         if (!response.success) {
           return res.status(200).json({ templates: [] });
         }

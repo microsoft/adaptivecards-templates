@@ -18,6 +18,7 @@ export class TemplateError {
  */
 export enum ApiError {
   InvalidTemplate = "InvalidTemplate",
+  InvalidQueryParam = "InvalidQueryParam",
   TemplateNotFound = "TemplateNotFound",
   InvalidAuthenticationToken = "InvalidAuthenticationToken",
   UserNotFound = "UserNotFound",
