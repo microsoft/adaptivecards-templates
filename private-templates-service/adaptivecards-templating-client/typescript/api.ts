@@ -201,7 +201,9 @@ export class Template {
     'isPublished'?: boolean;
     'createdAt'?: string;
     'updatedAt'?: string;
+    'publishedAt'?: string;
     'tags'?: Array<string>;
+    'isShareable'?: boolean;
 
     static discriminator: string | undefined = undefined;
 
@@ -242,9 +244,19 @@ export class Template {
             "type": "string"
         },
         {
+            "name": "publishedAt",
+            "baseName": "publishedAt",
+            "type": "string"
+        },
+        {
             "name": "tags",
             "baseName": "tags",
             "type": "Array<string>"
+        },
+        {
+            "name": "isShareable",
+            "baseName": "isShareable",
+            "type": "boolean"
         }    ];
 
     static getAttributeTypeMap() {
@@ -279,6 +291,8 @@ export class TemplateJSON {
     'template'?: string;
     'isPublished'?: boolean;
     'name'?: string;
+    'isShareable'?: boolean;
+    'tags'?: Array<string>;
 
     static discriminator: string | undefined = undefined;
 
@@ -297,6 +311,16 @@ export class TemplateJSON {
             "name": "name",
             "baseName": "name",
             "type": "string"
+        },
+        {
+            "name": "isShareable",
+            "baseName": "isShareable",
+            "type": "boolean"
+        },
+        {
+            "name": "tags",
+            "baseName": "tags",
+            "type": "Array<string>"
         }    ];
 
     static getAttributeTypeMap() {
@@ -318,6 +342,52 @@ export class TemplateList {
 
     static getAttributeTypeMap() {
         return TemplateList.attributeTypeMap;
+    }
+}
+
+export class TemplatePreview {
+    'name'?: string;
+    'json'?: string;
+    'owner'?: string;
+
+    static discriminator: string | undefined = undefined;
+
+    static attributeTypeMap: Array<{name: string, baseName: string, type: string}> = [
+        {
+            "name": "name",
+            "baseName": "name",
+            "type": "string"
+        },
+        {
+            "name": "json",
+            "baseName": "json",
+            "type": "string"
+        },
+        {
+            "name": "owner",
+            "baseName": "owner",
+            "type": "string"
+        }    ];
+
+    static getAttributeTypeMap() {
+        return TemplatePreview.attributeTypeMap;
+    }
+}
+
+export class TemplatePreviewResponse {
+    'template'?: TemplatePreview;
+
+    static discriminator: string | undefined = undefined;
+
+    static attributeTypeMap: Array<{name: string, baseName: string, type: string}> = [
+        {
+            "name": "template",
+            "baseName": "template",
+            "type": "TemplatePreview"
+        }    ];
+
+    static getAttributeTypeMap() {
+        return TemplatePreviewResponse.attributeTypeMap;
     }
 }
 
@@ -391,6 +461,8 @@ let typeMap: {[index: string]: any} = {
     "TemplateInstance": TemplateInstance,
     "TemplateJSON": TemplateJSON,
     "TemplateList": TemplateList,
+    "TemplatePreview": TemplatePreview,
+    "TemplatePreviewResponse": TemplatePreviewResponse,
     "User": User,
     "UserList": UserList,
 }
@@ -557,9 +629,11 @@ export class TemplateApi {
      * @param name Name of template to query for
      * @param version Version of template
      * @param owned Display only the templates owned by the user
+     * @param sortBy Sort templates by date created, date modified, alphabetical
+     * @param sortOrder Sort templates by ascending or descending order
      * @param {*} [options] Override http request options.
      */
-    public templateGet (isPublished?: boolean, name?: string, version?: string, owned?: boolean, options: any = {}) : Promise<{ response: http.IncomingMessage; body: TemplateList;  }> {
+    public templateGet (isPublished?: boolean, name?: string, version?: string, owned?: boolean, sortBy?: string, sortOrder?: string, options: any = {}) : Promise<{ response: http.IncomingMessage; body: TemplateList;  }> {
         const localVarPath = this.basePath + '/template';
         let localVarQueryParameters: any = {};
         let localVarHeaderParams: any = (<any>Object).assign({}, this.defaultHeaders);
@@ -579,6 +653,14 @@ export class TemplateApi {
 
         if (owned !== undefined) {
             localVarQueryParameters['owned'] = ObjectSerializer.serialize(owned, "boolean");
+        }
+
+        if (sortBy !== undefined) {
+            localVarQueryParameters['sortBy'] = ObjectSerializer.serialize(sortBy, "string");
+        }
+
+        if (sortOrder !== undefined) {
+            localVarQueryParameters['sortOrder'] = ObjectSerializer.serialize(sortOrder, "string");
         }
 
         (<any>Object).assign(localVarHeaderParams, options.headers);
@@ -668,6 +750,63 @@ export class TemplateApi {
                     reject(error);
                 } else {
                     body = ObjectSerializer.deserialize(body, "ResourceCreated");
+                    if (response.statusCode && response.statusCode >= 200 && response.statusCode <= 299) {
+                        resolve({ response: response, body: body });
+                    } else {
+                        reject({ response: response, body: body });
+                    }
+                }
+            });
+        });
+    }
+    /**
+     * Template preview for shareable link
+     * @summary Get template preview
+     * @param templateId ID of template to return
+     * @param {*} [options] Override http request options.
+     */
+    public templatePreviewById (templateId: string, options: any = {}) : Promise<{ response: http.IncomingMessage; body: TemplatePreviewResponse;  }> {
+        const localVarPath = this.basePath + '/template/{templateId}/preview'
+            .replace('{' + 'templateId' + '}', encodeURIComponent(String(templateId)));
+        let localVarQueryParameters: any = {};
+        let localVarHeaderParams: any = (<any>Object).assign({}, this.defaultHeaders);
+        let localVarFormParams: any = {};
+
+        // verify required parameter 'templateId' is not null or undefined
+        if (templateId === null || templateId === undefined) {
+            throw new Error('Required parameter templateId was null or undefined when calling templatePreviewById.');
+        }
+
+        (<any>Object).assign(localVarHeaderParams, options.headers);
+
+        let localVarUseFormData = false;
+
+        let localVarRequestOptions: localVarRequest.Options = {
+            method: 'GET',
+            qs: localVarQueryParameters,
+            headers: localVarHeaderParams,
+            uri: localVarPath,
+            useQuerystring: this._useQuerystring,
+            json: true,
+        };
+
+        this.authentications.bearer_auth.applyToRequest(localVarRequestOptions);
+
+        this.authentications.default.applyToRequest(localVarRequestOptions);
+
+        if (Object.keys(localVarFormParams).length) {
+            if (localVarUseFormData) {
+                (<any>localVarRequestOptions).formData = localVarFormParams;
+            } else {
+                localVarRequestOptions.form = localVarFormParams;
+            }
+        }
+        return new Promise<{ response: http.IncomingMessage; body: TemplatePreviewResponse;  }>((resolve, reject) => {
+            localVarRequest(localVarRequestOptions, (error, response, body) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    body = ObjectSerializer.deserialize(body, "TemplatePreviewResponse");
                     if (response.statusCode && response.statusCode >= 200 && response.statusCode <= 299) {
                         resolve({ response: response, body: body });
                     } else {

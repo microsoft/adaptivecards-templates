@@ -62,6 +62,14 @@ paths:
           name: owned
           type: boolean
           description: Display only the templates owned by the user
+        - in: query
+          name: sortBy
+          type: string
+          description: Sort templates by date created, date modified, alphabetical    
+        - in: query
+          name: sortOrder
+          type: string
+          description: Sort templates by ascending or descending order 
       security:
         - bearer_auth: []
     post: 
@@ -157,6 +165,40 @@ paths:
             $ref: "#/definitions/BaseError"        
       security:
         - bearer_auth: []
+  '/template/{templateId}/preview':
+    get:
+      tags: 
+        - "template"
+      summary: "Get template preview"
+      description: "Template preview for shareable link"
+      operationId: "templatePreviewById"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "templateId"
+          in: "path"
+          description: "ID of template to return"
+          required: true
+          type: string
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: '#/definitions/TemplatePreviewResponse'
+        400:
+          description: "Invalid template ID supplied"
+          schema: 
+            $ref: "#/definitions/BaseError"
+        404:
+          description: "Template not found"
+          schema: 
+            $ref: "#/definitions/BaseError"
+        401:
+          description: "Unauthorized user"
+          schema: 
+            $ref: "#/definitions/BaseError"  
+      security:
+        - bearer_auth: []
   '/user':
     get: 
       tags:
@@ -236,10 +278,15 @@ definitions:
       updatedAt:
         type: string
         format: Date
+      publishedAt:
+        type: string
+        format: Date     
       tags: 
         type: array
         items:
           type: string
+      isShareable:
+        type: boolean
   TemplateInstance:
     type: object
     properties:
@@ -258,6 +305,12 @@ definitions:
         type: boolean
       name: 
         type: string
+      isShareable:
+        type: boolean
+      tags: 
+        type: array
+        items:
+          type: string
   UserList:
     type: object
     properties:
@@ -265,6 +318,21 @@ definitions:
         type: array
         items:
           $ref: "#/definitions/User"
+  TemplatePreviewResponse:
+    type: object
+    properties:
+      template:
+        $ref: "#/definitions/TemplatePreview"
+  TemplatePreview:
+    type: object
+    properties:
+      name: 
+        type: string
+      json:
+        type: string
+        format: JSON
+      owner: 
+        type: string
   User: 
     type: object  
     properties:

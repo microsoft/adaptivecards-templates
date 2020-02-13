@@ -52,7 +52,9 @@ export declare class Template {
     'isPublished'?: boolean;
     'createdAt'?: string;
     'updatedAt'?: string;
+    'publishedAt'?: string;
     'tags'?: Array<string>;
+    'isShareable'?: boolean;
     static discriminator: string | undefined;
     static attributeTypeMap: Array<{
         name: string;
@@ -84,6 +86,8 @@ export declare class TemplateJSON {
     'template'?: string;
     'isPublished'?: boolean;
     'name'?: string;
+    'isShareable'?: boolean;
+    'tags'?: Array<string>;
     static discriminator: string | undefined;
     static attributeTypeMap: Array<{
         name: string;
@@ -98,6 +102,36 @@ export declare class TemplateJSON {
 }
 export declare class TemplateList {
     'templates'?: Array<Template>;
+    static discriminator: string | undefined;
+    static attributeTypeMap: Array<{
+        name: string;
+        baseName: string;
+        type: string;
+    }>;
+    static getAttributeTypeMap(): {
+        name: string;
+        baseName: string;
+        type: string;
+    }[];
+}
+export declare class TemplatePreview {
+    'name'?: string;
+    'json'?: string;
+    'owner'?: string;
+    static discriminator: string | undefined;
+    static attributeTypeMap: Array<{
+        name: string;
+        baseName: string;
+        type: string;
+    }>;
+    static getAttributeTypeMap(): {
+        name: string;
+        baseName: string;
+        type: string;
+    }[];
+}
+export declare class TemplatePreviewResponse {
+    'template'?: TemplatePreview;
     static discriminator: string | undefined;
     static attributeTypeMap: Array<{
         name: string;
@@ -186,13 +220,17 @@ export declare class TemplateApi {
         response: http.IncomingMessage;
         body: TemplateList;
     }>;
-    templateGet(isPublished?: boolean, name?: string, version?: string, owned?: boolean, options?: any): Promise<{
+    templateGet(isPublished?: boolean, name?: string, version?: string, owned?: boolean, sortBy?: string, sortOrder?: string, options?: any): Promise<{
         response: http.IncomingMessage;
         body: TemplateList;
     }>;
     templatePost(body: TemplateJSON, options?: any): Promise<{
         response: http.IncomingMessage;
         body: ResourceCreated;
+    }>;
+    templatePreviewById(templateId: string, options?: any): Promise<{
+        response: http.IncomingMessage;
+        body: TemplatePreviewResponse;
     }>;
     templateTemplateIdPost(templateId: string, body: TemplateJSON, options?: any): Promise<{
         response: http.IncomingMessage;

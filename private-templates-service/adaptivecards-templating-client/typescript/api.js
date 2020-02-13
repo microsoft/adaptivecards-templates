@@ -222,9 +222,19 @@ var Template = (function () {
             "type": "string"
         },
         {
+            "name": "publishedAt",
+            "baseName": "publishedAt",
+            "type": "string"
+        },
+        {
             "name": "tags",
             "baseName": "tags",
             "type": "Array<string>"
+        },
+        {
+            "name": "isShareable",
+            "baseName": "isShareable",
+            "type": "boolean"
         }
     ];
     return Template;
@@ -274,6 +284,16 @@ var TemplateJSON = (function () {
             "name": "name",
             "baseName": "name",
             "type": "string"
+        },
+        {
+            "name": "isShareable",
+            "baseName": "isShareable",
+            "type": "boolean"
+        },
+        {
+            "name": "tags",
+            "baseName": "tags",
+            "type": "Array<string>"
         }
     ];
     return TemplateJSON;
@@ -296,6 +316,50 @@ var TemplateList = (function () {
     return TemplateList;
 }());
 exports.TemplateList = TemplateList;
+var TemplatePreview = (function () {
+    function TemplatePreview() {
+    }
+    TemplatePreview.getAttributeTypeMap = function () {
+        return TemplatePreview.attributeTypeMap;
+    };
+    TemplatePreview.discriminator = undefined;
+    TemplatePreview.attributeTypeMap = [
+        {
+            "name": "name",
+            "baseName": "name",
+            "type": "string"
+        },
+        {
+            "name": "json",
+            "baseName": "json",
+            "type": "string"
+        },
+        {
+            "name": "owner",
+            "baseName": "owner",
+            "type": "string"
+        }
+    ];
+    return TemplatePreview;
+}());
+exports.TemplatePreview = TemplatePreview;
+var TemplatePreviewResponse = (function () {
+    function TemplatePreviewResponse() {
+    }
+    TemplatePreviewResponse.getAttributeTypeMap = function () {
+        return TemplatePreviewResponse.attributeTypeMap;
+    };
+    TemplatePreviewResponse.discriminator = undefined;
+    TemplatePreviewResponse.attributeTypeMap = [
+        {
+            "name": "template",
+            "baseName": "template",
+            "type": "TemplatePreview"
+        }
+    ];
+    return TemplatePreviewResponse;
+}());
+exports.TemplatePreviewResponse = TemplatePreviewResponse;
 var User = (function () {
     function User() {
     }
@@ -359,6 +423,8 @@ var typeMap = {
     "TemplateInstance": TemplateInstance,
     "TemplateJSON": TemplateJSON,
     "TemplateList": TemplateList,
+    "TemplatePreview": TemplatePreview,
+    "TemplatePreviewResponse": TemplatePreviewResponse,
     "User": User,
     "UserList": UserList,
 };
@@ -508,7 +574,7 @@ var TemplateApi = (function () {
             });
         });
     };
-    TemplateApi.prototype.templateGet = function (isPublished, name, version, owned, options) {
+    TemplateApi.prototype.templateGet = function (isPublished, name, version, owned, sortBy, sortOrder, options) {
         if (options === void 0) { options = {}; }
         var localVarPath = this.basePath + '/template';
         var localVarQueryParameters = {};
@@ -525,6 +591,12 @@ var TemplateApi = (function () {
         }
         if (owned !== undefined) {
             localVarQueryParameters['owned'] = ObjectSerializer.serialize(owned, "boolean");
+        }
+        if (sortBy !== undefined) {
+            localVarQueryParameters['sortBy'] = ObjectSerializer.serialize(sortBy, "string");
+        }
+        if (sortOrder !== undefined) {
+            localVarQueryParameters['sortOrder'] = ObjectSerializer.serialize(sortOrder, "string");
         }
         Object.assign(localVarHeaderParams, options.headers);
         var localVarUseFormData = false;
@@ -600,6 +672,53 @@ var TemplateApi = (function () {
                 }
                 else {
                     body = ObjectSerializer.deserialize(body, "ResourceCreated");
+                    if (response.statusCode && response.statusCode >= 200 && response.statusCode <= 299) {
+                        resolve({ response: response, body: body });
+                    }
+                    else {
+                        reject({ response: response, body: body });
+                    }
+                }
+            });
+        });
+    };
+    TemplateApi.prototype.templatePreviewById = function (templateId, options) {
+        if (options === void 0) { options = {}; }
+        var localVarPath = this.basePath + '/template/{templateId}/preview'
+            .replace('{' + 'templateId' + '}', encodeURIComponent(String(templateId)));
+        var localVarQueryParameters = {};
+        var localVarHeaderParams = Object.assign({}, this.defaultHeaders);
+        var localVarFormParams = {};
+        if (templateId === null || templateId === undefined) {
+            throw new Error('Required parameter templateId was null or undefined when calling templatePreviewById.');
+        }
+        Object.assign(localVarHeaderParams, options.headers);
+        var localVarUseFormData = false;
+        var localVarRequestOptions = {
+            method: 'GET',
+            qs: localVarQueryParameters,
+            headers: localVarHeaderParams,
+            uri: localVarPath,
+            useQuerystring: this._useQuerystring,
+            json: true,
+        };
+        this.authentications.bearer_auth.applyToRequest(localVarRequestOptions);
+        this.authentications.default.applyToRequest(localVarRequestOptions);
+        if (Object.keys(localVarFormParams).length) {
+            if (localVarUseFormData) {
+                localVarRequestOptions.formData = localVarFormParams;
+            }
+            else {
+                localVarRequestOptions.form = localVarFormParams;
+            }
+        }
+        return new Promise(function (resolve, reject) {
+            localVarRequest(localVarRequestOptions, function (error, response, body) {
+                if (error) {
+                    reject(error);
+                }
+                else {
+                    body = ObjectSerializer.deserialize(body, "TemplatePreviewResponse");
                     if (response.statusCode && response.statusCode >= 200 && response.statusCode <= 299) {
                         resolve({ response: response, body: body });
                     }

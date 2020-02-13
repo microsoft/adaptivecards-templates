@@ -1,5 +1,5 @@
 import { ClientOptions } from "./IClientOptions";
-import express, { Request, Response, NextFunction, Router, response } from "express";
+import express, { Request, Response, NextFunction, Router } from "express";
 import { check, validationResult } from "express-validator";
 import { AuthenticationProvider } from ".";
 import { TemplateError, ApiError, ServiceErrorMessage } from "./models/errorModels";
@@ -204,7 +204,7 @@ export class TemplateServiceClient {
       updatedAt: new Date(Date.now()),
       publishedAt: (isPublished === true)? new Date(Date.now()): undefined,
       isPublished: isPublished, 
-      isShareable: isShareable,
+      isShareable: isShareable
     };
 
     return this.storageProvider.updateTemplate(queryTemplate, newTemplate);
@@ -446,8 +446,13 @@ export class TemplateServiceClient {
         return res.status(400).json({ error: err });
       }
 
-      let isPublished : boolean = req.body.isPublished === "true" || req.body.isPublished === "True";
-      let isShareable: boolean = req.body.isShareable === "true" || req.body.isShareable === "True";
+      let isPublished: boolean = req.body.isPublished;
+      let isShareable: boolean = req.body.isShareable;
+      if (!req.is('application/json')){
+        isPublished = req.body.isPublished === "true" || req.body.isPublished === "True";
+        isShareable = req.body.isShareable === "true" || req.body.isShareable === "True";
+      }
+      
       let tags: string[] = req.body.tags;
       let response = req.params.id?
       await this.postTemplates(req.body.template, req.params.id, req.body.version, isPublished, req.body.name, tags, isShareable) :

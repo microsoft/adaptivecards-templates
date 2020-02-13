@@ -33,12 +33,6 @@ export interface ITemplate {
   isShareable?: boolean;
 }
 
-export interface ITemplatePreview {
-  name: string;
-  json: string;
-  owner: string;
-}
-
 export interface JSONResponse<T> {
   success: boolean;
   errorMessage?: string;
@@ -54,6 +48,16 @@ export enum SortBy {
 export enum SortOrder {
   ascending = 1,
   descending = -1
+}
+
+/**
+ * @interface 
+ * Template preview. 
+ */
+export interface ITemplatePreview {
+  name: string;
+  json: string;
+  owner: string;
 }
 
 /**
