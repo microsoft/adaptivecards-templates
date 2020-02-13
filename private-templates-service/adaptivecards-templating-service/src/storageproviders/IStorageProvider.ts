@@ -15,6 +15,6 @@ export interface StorageProvider {
   removeTemplate(query: Partial<ITemplate>): Promise<JSONResponse<Number>>;
   // Params are optional and don't have to be provided at connection time.
   // They can be provided in the constructor.
-  connect<T>(params: T): Promise<JSONResponse<Boolean>>;
+  connect<T>(params?: T): Promise<JSONResponse<Boolean>>;
   close(): Promise<JSONResponse<Boolean>>;
 }

@@ -26,7 +26,8 @@ export const TemplateSchema: Schema = new Schema(
     instances: { type: [TemplateInstanceSchema], required: true },
     tags: { type: [String], default: [] },
     owner: { type: String, default: "" }, // todo: add ref: "User" so it checks if owner exists and make type ObjectID
-    isPublished: { type: String, default: false }
+    isPublished: { type: String, default: false },
+    isShareable: { type: String, default: false }
   },
   {
     versionKey: false,

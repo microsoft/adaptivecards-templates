@@ -30,6 +30,7 @@ export interface ITemplate {
   updatedAt?: Date;
   publishedAt?: Date;
   isPublished?: boolean;
+  isShareable?: boolean;
 }
 
 export interface JSONResponse<T> {

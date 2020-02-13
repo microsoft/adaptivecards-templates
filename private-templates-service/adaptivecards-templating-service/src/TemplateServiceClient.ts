@@ -37,6 +37,15 @@ export class TemplateServiceClient {
   }
 
   /**
+   * @public
+   * @async
+   * Connect to TemplateServiceClient's storage provider
+   */
+  public async connect() {
+    return this.storageProvider.connect();
+  }
+
+  /**
    * @private
    * Check if user has already been authenticated.
    */
@@ -169,7 +178,14 @@ export class TemplateServiceClient {
    * @param template - updated template json
    * @param version - updated version number
    */
-  private async _updateTemplate(templateId: string, name: string, template?: JSON, version?: string, isPublished?: boolean, tags?: string[]): Promise<JSONResponse<Number>> {
+  private async _updateTemplate(
+    templateId: string, 
+    name: string, 
+    template?: JSON, 
+    version?: string, 
+    isPublished?: boolean, 
+    tags?: string[], 
+    isShareable?: boolean): Promise<JSONResponse<Number>> {
     const queryTemplate: Partial<ITemplate> = {
       _id: templateId,
     };
@@ -186,7 +202,8 @@ export class TemplateServiceClient {
       owner: this.ownerID!,
       updatedAt: new Date(Date.now()),
       publishedAt: (isPublished === true)? new Date(Date.now()): undefined,
-      isPublished: isPublished
+      isPublished: isPublished, 
+      isShareable: isShareable,
     };
 
     return this.storageProvider.updateTemplate(queryTemplate, newTemplate);
@@ -200,7 +217,14 @@ export class TemplateServiceClient {
    * @param {string} version - version number
    * @returns Promise as valid json
    */
-  public async postTemplates(template: JSON, templateId?: string, version?: string, isPublished?: boolean, name?: string, tags?: string[]): Promise<JSONResponse<String>> {
+  public async postTemplates(
+    template: JSON, 
+    templateId?: string, 
+    version?: string, 
+    isPublished?: boolean, 
+    name?: string, 
+    tags?: string[], 
+    isShareable?: boolean): Promise<JSONResponse<String>> {
     let checkAuthentication = this._checkAuthenticated();
     if (!checkAuthentication.success) {
       return checkAuthentication;
@@ -216,7 +240,7 @@ export class TemplateServiceClient {
     if (existingTemplate.success && existingTemplate.result && existingTemplate.result.length > 0 && templateId) {
       let templateTags = tags? tags: existingTemplate.result[0].tags;
       let templateName = name? name : existingTemplate.result[0].name
-      let updatedTemplate = await this._updateTemplate(templateId, templateName, template, version, isPublished, templateTags);
+      let updatedTemplate = await this._updateTemplate(templateId, templateName, template, version, isPublished, templateTags, isShareable);
       if (updatedTemplate.success) {
         return { success: true };
       }
@@ -239,7 +263,8 @@ export class TemplateServiceClient {
       tags: tags,
       owner: this.ownerID!,
       publishedAt: (isPublished === true)? new Date(Date.now()): undefined,
-      isPublished: isPublished
+      isPublished: isPublished,
+      isShareable: isShareable
     };
 
     return this.storageProvider.insertTemplate(newTemplate);
@@ -367,10 +392,11 @@ export class TemplateServiceClient {
       }
 
       let isPublished : boolean = req.body.isPublished === "true" || req.body.isPublished === "True";
+      let isShareable: boolean = req.body.isShareable === "true" || req.body.isShareable === "True";
       let tags: string[] = req.body.tags;
       let response = req.params.id?
-      await this.postTemplates(req.body.template, req.params.id, req.body.version, isPublished, req.body.name, tags) :
-      await this.postTemplates(req.body.template, undefined, req.body.version, isPublished, req.body.name, tags);
+      await this.postTemplates(req.body.template, req.params.id, req.body.version, isPublished, req.body.name, tags, isShareable) :
+      await this.postTemplates(req.body.template, undefined, req.body.version, isPublished, req.body.name, tags, isShareable);
 
       if (!response.success) {
         const err = new TemplateError(ApiError.InvalidTemplate, "Unable to create given template.");
