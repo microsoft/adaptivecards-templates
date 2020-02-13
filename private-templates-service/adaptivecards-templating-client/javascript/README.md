@@ -121,13 +121,16 @@ api.templateById(templateId, callback);
 
 ## Documentation for API Endpoints
 
-All URIs are relative to *https://localhost:5000*
+All URIs are relative to *https://adaptivecms.azurewebsites.net*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *AdaptivecardsTemplatingServiceJavascriptSdk.TemplateApi* | [**templateById**](docs/TemplateApi.md#templateById) | **GET** /template/{templateId} | Find template by id
 *AdaptivecardsTemplatingServiceJavascriptSdk.TemplateApi* | [**templateGet**](docs/TemplateApi.md#templateGet) | **GET** /template | Find all templates
 *AdaptivecardsTemplatingServiceJavascriptSdk.TemplateApi* | [**templatePost**](docs/TemplateApi.md#templatePost) | **POST** /template | Add a new template
+*AdaptivecardsTemplatingServiceJavascriptSdk.TemplateApi* | [**templateTemplateIdPost**](docs/TemplateApi.md#templateTemplateIdPost) | **POST** /template/{templateId} | Update existing template
+*AdaptivecardsTemplatingServiceJavascriptSdk.UserApi* | [**userDelete**](docs/UserApi.md#userDelete) | **DELETE** /user | Delete all user info
+*AdaptivecardsTemplatingServiceJavascriptSdk.UserApi* | [**userGet**](docs/UserApi.md#userGet) | **GET** /user | Get user's info
 
 
 ## Documentation for Models
@@ -137,6 +140,7 @@ Class | Method | HTTP request | Description
  - [AdaptivecardsTemplatingServiceJavascriptSdk.NewTemplate](docs/NewTemplate.md)
  - [AdaptivecardsTemplatingServiceJavascriptSdk.Template](docs/Template.md)
  - [AdaptivecardsTemplatingServiceJavascriptSdk.TemplateList](docs/TemplateList.md)
+ - [AdaptivecardsTemplatingServiceJavascriptSdk.User](docs/User.md)
 
 
 ## Documentation for Authorization

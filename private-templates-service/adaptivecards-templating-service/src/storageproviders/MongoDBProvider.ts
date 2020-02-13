@@ -1,5 +1,5 @@
 import { StorageProvider } from "./IStorageProvider";
-import { IUser, ITemplate, JSONResponse } from "../models/models";
+import { IUser, ITemplate, JSONResponse, SortBy, SortOrder } from "../models/models";
 import { MongoConnectionParams } from "../models/mongo/MongoConnectionParams";
 import { MongoWorker } from "../util/mongoutils/MongoWorker";
 
@@ -53,9 +53,16 @@ export class MongoDBProvider implements StorageProvider {
         return Promise.resolve({ success: false, errorMessage: e });
       });
   }
-  async getTemplates(query: Partial<ITemplate>): Promise<JSONResponse<ITemplate[]>> {
+
+  // Default sort is by name and in ascending order.
+  async getTemplates(
+    query: Partial<ITemplate>,
+    sortBy: SortBy = SortBy.name,
+    sortOrder: SortOrder = SortOrder.ascending
+  ): Promise<JSONResponse<ITemplate[]>> {
     let templateQuery: any = this._constructTemplateQuery(query);
-    return await this.worker.Template.find(templateQuery)
+    return await this.worker.Template.find(templateQuery, {})
+      .sort({ [sortBy]: sortOrder })
       .then(templates => {
         if (templates.length) {
           return Promise.resolve({

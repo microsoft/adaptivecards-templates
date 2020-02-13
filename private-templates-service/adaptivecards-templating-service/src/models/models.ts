@@ -21,7 +21,6 @@ export interface ITemplateInstance {
 }
 
 export interface ITemplate {
-  name?: string;
   _id?: string;
   name: string;
   instances: ITemplateInstance[];
@@ -36,6 +35,17 @@ export interface JSONResponse<T> {
   success: boolean;
   errorMessage?: string;
   result?: T;
+}
+
+export enum SortBy {
+  dateCreated = "createdAt",
+  dateModified = "updatedAt",
+  name = "name"
+}
+
+export enum SortOrder {
+  ascending = 1,
+  descending = -1
 }
 
 /**
