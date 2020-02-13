@@ -239,8 +239,8 @@ export class TemplateServiceClient {
     // Check if template already exists
     let existingTemplate = await this.getTemplates(templateId);
     if (existingTemplate.success && existingTemplate.result && existingTemplate.result.length > 0 && templateId) {
-      let templateTags = tags? tags: existingTemplate.result[0].tags;
-      let templateName = name? name : existingTemplate.result[0].name
+      let templateTags = tags || existingTemplate.result[0].tags;
+      let templateName = name || existingTemplate.result[0].name
       let updatedTemplate = await this._updateTemplate(templateId, templateName, template, version, isPublished, templateTags, isShareable);
       if (updatedTemplate.success) {
         return { success: true };
@@ -256,7 +256,7 @@ export class TemplateServiceClient {
       version: version || "1.0"
     };
 
-    let templateName = name? name : "Untitled Template";
+    let templateName = name || "Untitled Template";
 
     const newTemplate: ITemplate = {
       name: templateName,
@@ -452,7 +452,7 @@ export class TemplateServiceClient {
         isPublished = req.body.isPublished === "true" || req.body.isPublished === "True";
         isShareable = req.body.isShareable === "true" || req.body.isShareable === "True";
       }
-      
+
       let tags: string[] = req.body.tags;
       let response = req.params.id?
       await this.postTemplates(req.body.template, req.params.id, req.body.version, isPublished, req.body.name, tags, isShareable) :
