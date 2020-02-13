@@ -45,7 +45,7 @@ await db.getTemplates({_id: templateID}).then(response => {
 });
 
 // Ex., to sort the results of query
-// It will return all the templates that contain "sun" in their name in ascending order
+// it will return all the templates that contain "sun" in their name in ascending order
 await db.getTemplates({name: "sun"}, SortBy.name, SortOrder.ascending).then(response => {
 	if(response.success) {
 			console.log(response.result);
