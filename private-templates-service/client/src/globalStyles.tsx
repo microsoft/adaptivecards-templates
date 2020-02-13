@@ -10,7 +10,8 @@ export const COLORS = {
   GREEN: '#00D610',
   YELLOW: '#FFBD53',
   BLUE: '#016FC4',
-  BORDER: '#C3C3C3',
+  BORDER: '#E6E6E6',
+  BORDER2: '#C3C3C3',
   BLUE2: '#02599C',
 }
 

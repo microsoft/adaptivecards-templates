@@ -18,6 +18,9 @@ import ErrorMessage, { ErrorMessageProps } from "./components/ErrorMessage/Error
 import config from "./Config";
 import { getUserDetails, getOrgDetails } from "./Services/GraphService";
 
+// import { TemplateApi, NewTemplate } from 'adaptive-templating-service-typescript-node';
+
+
 // CSS
 import "bootstrap/dist/css/bootstrap.css";
 
@@ -81,6 +84,66 @@ class App extends Component<Props, State> {
       // Enhance user object with data from Graph
       this.getUserProfile();
     }
+
+
+    // // const defaultClient = ApiClient.instance;
+    // // const bearer_auth = defaultClient.authentications['bearer_auth'];
+    // // bearer_auth.apiKey = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IkhsQzBSMTJza3hOWjFXUXdtak9GXzZ0X3RERSJ9.eyJhdWQiOiI0ODAzZjY2YS0xMzZkLTQxNTUtYTUxZS02ZDk4NDAwZDU1MDYiLCJpc3MiOiJodHRwczovL2xvZ2luLm1pY3Jvc29mdG9ubGluZS5jb20vNzJmOTg4YmYtODZmMS00MWFmLTkxYWItMmQ3Y2QwMTFkYjQ3L3YyLjAiLCJpYXQiOjE1ODE0NzI1NzIsIm5iZiI6MTU4MTQ3MjU3MiwiZXhwIjoxNTgxNDc2NDcyLCJhaW8iOiI0Mk5nWUxCUFBLSzJMenQwbVVqZDNQc3RmRWRpQUE9PSIsImF6cCI6IjQ4MDNmNjZhLTEzNmQtNDE1NS1hNTFlLTZkOTg0MDBkNTUwNiIsImF6cGFjciI6IjEiLCJvaWQiOiI4Yzg1ZjgwNi03MDA1LTRlY2QtOGYxZS1kMWY3ODRmNThiOWMiLCJzdWIiOiI4Yzg1ZjgwNi03MDA1LTRlY2QtOGYxZS1kMWY3ODRmNThiOWMiLCJ0aWQiOiI3MmY5ODhiZi04NmYxLTQxYWYtOTFhYi0yZDdjZDAxMWRiNDciLCJ1dGkiOiJfTlJWUG1DWHNrS1laRnFFaXhFcEFBIiwidmVyIjoiMi4wIn0.WPIMtfep_Sae39EkNc9iNcqx66uuNEqYVJQ9DNTVfcH1Y5bdD1XZV8q_YOMzQBb7Akp9MijgBRzsl-zxDYQZP_R7XgERzyrayPGziwiVwB471vud52W0PPKa2dyw1Ityt9pNYZE4m6_oSKWjafPSMEZQkKYu_JEhoOKao440zXcoSUJe8VB4IdGLEE95bva7OJfrjiZ3a0rM9wYM3b_QHvQsP2NJS5aoaSwJ6guqfjw3ebhU0K_963IhS86nur6qezZLgcZWGTvSlImvUEhak-mOACgy0rgOYG9IotMaRWpJGtX8yqO10KHfsbDphEP1JtWca-B3Jirqzdgday34-A"
+    // let api = new TemplateApi();
+    // api.setApiKey(0, 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IkhsQzBSMTJza3hOWjFXUXdtak9GXzZ0X3RERSJ9.eyJhdWQiOiI0ODAzZjY2YS0xMzZkLTQxNTUtYTUxZS02ZDk4NDAwZDU1MDYiLCJpc3MiOiJodHRwczovL2xvZ2luLm1pY3Jvc29mdG9ubGluZS5jb20vNzJmOTg4YmYtODZmMS00MWFmLTkxYWItMmQ3Y2QwMTFkYjQ3L3YyLjAiLCJpYXQiOjE1ODE0NzI1NzIsIm5iZiI6MTU4MTQ3MjU3MiwiZXhwIjoxNTgxNDc2NDcyLCJhaW8iOiI0Mk5nWUxCUFBLSzJMenQwbVVqZDNQc3RmRWRpQUE9PSIsImF6cCI6IjQ4MDNmNjZhLTEzNmQtNDE1NS1hNTFlLTZkOTg0MDBkNTUwNiIsImF6cGFjciI6IjEiLCJvaWQiOiI4Yzg1ZjgwNi03MDA1LTRlY2QtOGYxZS1kMWY3ODRmNThiOWMiLCJzdWIiOiI4Yzg1ZjgwNi03MDA1LTRlY2QtOGYxZS1kMWY3ODRmNThiOWMiLCJ0aWQiOiI3MmY5ODhiZi04NmYxLTQxYWYtOTFhYi0yZDdjZDAxMWRiNDciLCJ1dGkiOiJfTlJWUG1DWHNrS1laRnFFaXhFcEFBIiwidmVyIjoiMi4wIn0.WPIMtfep_Sae39EkNc9iNcqx66uuNEqYVJQ9DNTVfcH1Y5bdD1XZV8q_YOMzQBb7Akp9MijgBRzsl-zxDYQZP_R7XgERzyrayPGziwiVwB471vud52W0PPKa2dyw1Ityt9pNYZE4m6_oSKWjafPSMEZQkKYu_JEhoOKao440zXcoSUJe8VB4IdGLEE95bva7OJfrjiZ3a0rM9wYM3b_QHvQsP2NJS5aoaSwJ6guqfjw3ebhU0K_963IhS86nur6qezZLgcZWGTvSlImvUEhak-mOACgy0rgOYG9IotMaRWpJGtX8yqO10KHfsbDphEP1JtWca-B3Jirqzdgday34-A');
+
+    // // api.templatePost(template, (error: any, data: any, resp: any) => {
+    // //   console.log(error, data, resp);
+    // // });
+
+    // let newTemplate = new NewTemplate();
+
+    // let template = `{
+    //   "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+    //   "version": "1.0",
+    //   "type": "AdaptiveCard",
+    //   "speak": "<s>Your flight is confirmed for you and 3 other passengers from San Francisco to Amsterdam on Friday, October 10 8:30 AM</s>",
+    //   "body": [
+    //     {
+    //       "type": "ColumnSet",
+    //       "spacing": "Medium",
+    //       "columns": [
+    //         {
+    //           "type": "Column",
+    //           "width": 1,
+    //           "items": [
+    //             {
+    //               "type": "TextBlock",
+    //               "text": "YEET",
+    //               "size": "Medium",
+    //               "isSubtle": true
+    //             }
+    //           ]
+    //         },
+    //         {
+    //           "type": "Column",
+    //           "width": 1,
+    //           "items": [
+    //             {
+    //               "type": "TextBlock",
+    //               "horizontalAlignment": "Right",
+    //               "text": "THIS IS BOLDED TEXT",
+    //               "size": "Medium",
+    //               "weight": "Bolder"
+    //             }
+    //           ]
+    //         }
+    //       ]
+    //     }
+    //   ]
+    // }`;
+    // template = template.replace(/[\r\n]+/gm, "");
+    // newTemplate.template = template;
+    // // newTemplate.isPublished = false;
+    // const resp = api.templatePost(newTemplate);
+    // console.log(resp);
+
+    // // console.log(api.templateGet());
   }
 
   render() {
