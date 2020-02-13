@@ -1,9 +1,10 @@
 import { TemplateState, TemplateAction, REQUEST_TEMPLATES_GET, REQUEST_TEMPLATE_GET_SUCCES, REQUEST_TEMPLATE_GET_FAIL } from "./types";
 import { TemplateList } from "adaptive-templating-service-typescript-node";
+import { ActionsConfig } from "adaptivecards";
 
 const initialState: TemplateState = {
   fetching: false,
-  templates: TemplateList,
+  templates: new TemplateList(),
 }
 
 export function templateReducer(state = initialState, action: TemplateAction): TemplateState {
@@ -23,7 +24,7 @@ export function templateReducer(state = initialState, action: TemplateAction): T
       return {
         ...state,
         fetching: false,
-        templates: TemplateList
+        templates: new TemplateList()
       }
     default:
       return state;

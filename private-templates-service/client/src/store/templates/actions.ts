@@ -1,7 +1,6 @@
 import { REQUEST_TEMPLATES_GET, REQUEST_TEMPLATE_GET_SUCCES, REQUEST_TEMPLATE_GET_FAIL, TemplateAction } from "./types";
-import { TemplateApi, TemplateList } from 'adaptive-templating-service-typescript-node';
+import { TemplateApi, TemplateList, Template } from 'adaptive-templating-service-typescript-node';
 import { IncomingMessage } from "http";
-
 
 export function requestTemplates(): TemplateAction {
   return {

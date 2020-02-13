@@ -2,6 +2,7 @@ import React from 'react';
 import * as AdaptiveCards from "adaptivecards";
 import { Card } from './styled';
 import markdownit from "markdown-it";
+import { Template, TemplateInstance } from 'adaptive-templating-service-typescript-node';
 
 function renderingSetup(): AdaptiveCards.AdaptiveCard {
   AdaptiveCards.AdaptiveCard.onProcessMarkdown = function (text: string, result: { didProcess: boolean, outputHtml?: string }) {
@@ -42,7 +43,7 @@ export function renderAdaptiveCard(template: any): any {
 
 interface Props {
   toggleModal: () => void;
-  cardtemplate: any,
+  cardtemplate: Template,
 }
 
 /*
@@ -66,7 +67,10 @@ function processTemplate(temp: any): any {
 
 class AdaptiveCard extends React.Component<Props> {
   render() {
-    const template = processTemplate(this.props.cardtemplate.instances[0]);
+    let template: any = [];
+    if (this.props.cardtemplate && this.props.cardtemplate && this.props.cardtemplate.instances) {
+      template = processTemplate(this.props.cardtemplate.instances[0]);
+    }
     return (
       <Card
         ref={n => {

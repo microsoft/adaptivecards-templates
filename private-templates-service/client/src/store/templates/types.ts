@@ -3,7 +3,7 @@ import { TemplateList } from "adaptive-templating-service-typescript-node";
 
 export interface TemplateState {
   fetching: boolean;
-  templates: any;
+  templates?: TemplateList;
 }
 
 //Action Types
