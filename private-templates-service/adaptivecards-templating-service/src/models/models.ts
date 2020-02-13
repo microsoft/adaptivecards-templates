@@ -33,6 +33,12 @@ export interface ITemplate {
   isShareable?: boolean;
 }
 
+export interface ITemplatePreview {
+  name: string;
+  json: string;
+  owner: string;
+}
+
 export interface JSONResponse<T> {
   success: boolean;
   errorMessage?: string;

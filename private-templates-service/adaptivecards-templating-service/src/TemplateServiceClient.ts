@@ -1,11 +1,11 @@
 import { ClientOptions } from "./IClientOptions";
-import express, { Request, Response, NextFunction, Router } from "express";
+import express, { Request, Response, NextFunction, Router, response } from "express";
 import { check, validationResult } from "express-validator";
 import { AuthenticationProvider } from ".";
 import { TemplateError, ApiError, ServiceErrorMessage } from "./models/errorModels";
 import { StorageProvider } from ".";
 import { ITemplate, JSONResponse, ITemplateInstance, IUser } from ".";
-import { SortBy, SortOrder } from "./models/models";
+import { SortBy, SortOrder, ITemplatePreview } from "./models/models";
 
 export class TemplateServiceClient {
   private storageProvider: StorageProvider;
@@ -273,6 +273,37 @@ export class TemplateServiceClient {
 
   /**
    * @public
+   * Retrieve preview of shareable template.
+   * @param templateId 
+   */
+  public async getTemplatePreview(templateId: string) : Promise<JSONResponse<ITemplatePreview>> {
+    const templateQuery: Partial<ITemplate> = {
+      _id: templateId,
+    };
+
+    let template = await this.storageProvider.getTemplates(templateQuery);
+    if (!template.success || template.result && template.result.length === 0){
+      return { success: false, errorMessage: ServiceErrorMessage.FailedtoRetrievePreview };
+    }
+
+    let templateResponse = template.result![0];
+
+    if (!templateResponse.isShareable) {
+      return { success: false, errorMessage: ServiceErrorMessage.UnauthorizedRequest };
+    }
+    // TODO: search for template by version instead once storage providers support search by version.
+    // Current behavior is to only return the first template instance retrieved. 
+    const templatePreview : ITemplatePreview = {
+      name: templateResponse.name,
+      json: templateResponse.instances[0].json,
+      owner: templateResponse.owner || "Unknown"
+    }
+
+    return { success: true, result: templatePreview };
+  }
+
+  /**
+   * @public
    * Get entry point.
    * Returns specified templates
    * @param {string} templateId - unique template id
@@ -390,6 +421,17 @@ export class TemplateServiceClient {
           return res.status(404).json({ error: err });
         }
         res.status(200).json({ templates: response.result });
+      });
+    });
+
+    router.get("/:id/preview", (req: Request, res: Response, _next: NextFunction) => {
+      this.getTemplatePreview(req.params.id).then(response => {
+        if (!response.success) {
+          const err = new TemplateError(ApiError.TemplateNotFound, `Template with id ${req.params.id} does not exist.`);
+          return res.status(404).json({ error: err });
+        }
+        
+      res.status(200).json({ template: response.result });
       });
     });
 

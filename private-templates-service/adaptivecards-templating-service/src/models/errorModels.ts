@@ -33,5 +33,7 @@ export enum ServiceErrorMessage {
   AuthFailureResponse = "No owner specified, please authenticate.",
   InvalidUser = "Failed to create user.",
   InvalidTemplate = "Invalid template.",
-  DeleteUserInfoFailed = "Failed to delete all user info."
+  DeleteUserInfoFailed = "Failed to delete all user info.",
+  FailedtoRetrievePreview = "Failed to retrieve template preview.",
+  UnauthorizedRequest = "User does not have access.",
 }
