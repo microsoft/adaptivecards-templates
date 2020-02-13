@@ -5,6 +5,10 @@ import * as AdaptiveCards from "adaptivecards";
 import { Card } from './styled';
 import markdownit from "markdown-it";
 
+// interface Props {
+//   template: string
+// }
+
 function getCard(): any {
 
   // Hard coded, will remove and connect to backend in future PR
@@ -50,20 +54,19 @@ function renderingSetup(): AdaptiveCards.AdaptiveCard {
   });
   return adaptiveCard;
 }
-function parseCardTemplate(): AdaptiveCards.AdaptiveCard {
+function parseCardTemplate(template: any): AdaptiveCards.AdaptiveCard {
   let adaptiveCard = renderingSetup();
   try {
-    let cardTemplate = getCard();
     // Parse the card payload
-    adaptiveCard.parse(cardTemplate);
+    adaptiveCard.parse(template);
     return adaptiveCard;
   }
   catch (e) {
     return new AdaptiveCards.AdaptiveCard;
   }
 }
-export function renderAdaptiveCard(): any {
-  let adaptiveCard = parseCardTemplate();
+export function renderAdaptiveCard(template: any): any {
+  let adaptiveCard = parseCardTemplate(template);
   try {
     // Render the card to an HTML element
     let renderedCard = adaptiveCard.render();
@@ -74,15 +77,29 @@ export function renderAdaptiveCard(): any {
   }
 }
 
+interface Props {
+  toggleModal: () => void;
+  cardtemplate: any,
+}
 
-class AdaptiveCard extends React.Component {
+function processTemplate(temp: any): any {
+  const templateString = JSON.stringify(temp.json);
+  const replaceChar = templateString.replace(/\\\\\\/g, '');
+  const trimTemp = replaceChar.slice(3, replaceChar.length - 3);
+  const jsonTemp = JSON.parse(trimTemp);
+  const template = renderAdaptiveCard(jsonTemp);
+  return template;
+}
+
+class AdaptiveCard extends React.Component<Props> {
   render() {
+    const template = processTemplate(this.props.cardtemplate.instances[0]);
     return (
       <Card
         ref={n => {
           // Work around for known issue: https://github.com/gatewayapps/react-adaptivecards/issues/10
           n && n.firstChild && n.removeChild(n.firstChild);
-          n && n.appendChild(renderAdaptiveCard());
+          n && n.appendChild(template);
         }}
       />
     )

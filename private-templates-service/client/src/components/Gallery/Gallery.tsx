@@ -28,7 +28,9 @@ class Gallery extends React.Component<Props> {
   }
   componentDidUpdate(prevProps: Props) {
     if (!this.props.state.templates.fetching && this.props.state && this.props.state.templates && this.props.state.templates.templates) {
-      this.props.state.templates.templates.templates.map((val: any) => console.log((val.instances[0])));
+      // this.props.state.templates.templates.templates.map((val: any) => console.log((val.instances[0])));
+      // this.props.state.templates.templates.templates.map((val: any) => console.log((val)));
+
     }
 
   }
@@ -36,12 +38,13 @@ class Gallery extends React.Component<Props> {
   render() {
     let cards = [];
     if (!this.props.state.templates.fetching && this.props.state && this.props.state.templates && this.props.state.templates.templates && this.props.state.templates.templates.templates) {
-      cards = this.props.state.templates.templates.templates.map((val: any) => <AdaptiveCardPanel toggleModal={this.props.toggleModal} />);
+      cards = this.props.state.templates.templates.templates.map((val: any) => <AdaptiveCardPanel toggleModal={this.props.toggleModal} template={val} />);
     }
 
     return (
       <Container>
         {cards}
+        {/* {cards.slice(0, 3)} */}
       </Container>
     );
   }

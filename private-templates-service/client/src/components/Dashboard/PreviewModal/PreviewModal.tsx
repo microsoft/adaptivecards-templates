@@ -16,7 +16,7 @@ class PreviewModal extends React.Component<Props, {}> {
         <ModalWrapper>
           <ACPanel>
             <ACWrapper>
-              <AdaptiveCard />
+              {/* <AdaptiveCard /> */}
             </ACWrapper>
           </ACPanel>
           <DescriptorWrapper>

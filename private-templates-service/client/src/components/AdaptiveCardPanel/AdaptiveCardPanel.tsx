@@ -4,16 +4,18 @@ import AdaptiveCard from '../Common/AdaptiveCard';
 
 interface Props {
   toggleModal: () => void;
+  template: any
 }
 
 class AdaptiveCardPanel extends React.Component<Props> {
   render() {
+    let temp = this.props.template;
     return (
       <Container>
         <ACWrapper>
-          <AdaptiveCard />
+          <AdaptiveCard toggleModal={this.props.toggleModal} cardtemplate={temp} />
         </ACWrapper>
-        <TemplateName onClick={this.props.toggleModal}>Template Name</TemplateName>
+        <TemplateName onClick={this.props.toggleModal}>{this.props.template.name}</TemplateName>
       </Container>
     );
   }
