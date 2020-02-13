@@ -8,7 +8,6 @@ You can import mongo provider:
 import { StorageProvider, MongoDBProvider } from 'adaptivecards-templating-service';
 ```
 
-StorageProvider provides base interface for all the providers that must implement the following functions:
 
 #### Basic provider workflow
 ````
