@@ -45,11 +45,21 @@ interface Props {
   cardtemplate: any,
 }
 
-function processTemplate(temp: any): any {
+/*
+cleanTemplate accepts a template object. This method strips the object of the unncessary '\\\' contained in the object and removes the 
+extra characters before and after the actual JSON object. It then parses the string into JSON and returns the JSON object.  
+*/
+function cleanTemplate(temp: any): any {
   const templateString = JSON.stringify(temp.json);
   const replaceChar = templateString.replace(/\\\\\\/g, '');
   const trimTemp = replaceChar.slice(3, replaceChar.length - 3);
   const jsonTemp = JSON.parse(trimTemp);
+  return jsonTemp;
+
+}
+
+function processTemplate(temp: any): any {
+  const jsonTemp = cleanTemplate(temp);
   const template = renderAdaptiveCard(jsonTemp);
   return template;
 }

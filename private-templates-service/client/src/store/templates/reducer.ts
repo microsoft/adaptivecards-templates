@@ -1,4 +1,4 @@
-import { TemplateState, TemplateAction, REQUEST_TEMPLATES, RECEIVE_TEMPLATES, FAIL_GET } from "./types";
+import { TemplateState, TemplateAction, REQUEST_TEMPLATES_GET, REQUEST_TEMPLATE_GET_SUCCES, REQUEST_TEMPLATE_GET_FAIL } from "./types";
 import { TemplateList } from "adaptive-templating-service-typescript-node";
 
 const initialState: TemplateState = {
@@ -8,18 +8,18 @@ const initialState: TemplateState = {
 
 export function templateReducer(state = initialState, action: TemplateAction): TemplateState {
   switch (action.type) {
-    case REQUEST_TEMPLATES:
+    case REQUEST_TEMPLATES_GET:
       return {
         ...state,
         fetching: true,
       }
-    case RECEIVE_TEMPLATES:
+    case REQUEST_TEMPLATE_GET_SUCCES:
       return {
         ...state,
         fetching: false,
         templates: action.cards
       }
-    case FAIL_GET:
+    case REQUEST_TEMPLATE_GET_FAIL:
       return {
         ...state,
         fetching: false,

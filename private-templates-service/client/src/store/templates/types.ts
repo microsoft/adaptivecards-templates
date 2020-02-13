@@ -7,13 +7,13 @@ export interface TemplateState {
 }
 
 //Action Types
-export const REQUEST_TEMPLATES = 'REQUEST_TEMPLATES';
-export const RECEIVE_TEMPLATES = 'RECEIVE_TEMPLATES';
-export const FAIL_GET = 'FAIL_GET';
+export const REQUEST_TEMPLATES_GET = 'REQUEST_TEMPLATES_GET';
+export const REQUEST_TEMPLATE_GET_SUCCES = 'REQUEST_TEMPLATE_GET_SUCCES';
+export const REQUEST_TEMPLATE_GET_FAIL = 'REQUEST_TEMPLATE_GET_FAIL';
 
 //Actions
 export interface TemplateAction {
-  type: typeof REQUEST_TEMPLATES | typeof RECEIVE_TEMPLATES | typeof FAIL_GET;
+  type: typeof REQUEST_TEMPLATES_GET | typeof REQUEST_TEMPLATE_GET_SUCCES | typeof REQUEST_TEMPLATE_GET_FAIL;
   cards?: TemplateList,
   error?: IncomingMessage,
 }

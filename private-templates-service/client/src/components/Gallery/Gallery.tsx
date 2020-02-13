@@ -6,7 +6,7 @@ import { Container } from "./styled";
 import { getTemplates } from "../../store/templates/actions";
 
 const mapStateToProps = (state: RootState) => {
-  return { state: state };
+  return { templates: state.templates };
 }
 
 const mapDispatchToProps = (dispatch: any) => {
@@ -18,7 +18,8 @@ const mapDispatchToProps = (dispatch: any) => {
 interface Props {
   toggleModal: () => void;
   getTemplates: () => void;
-  state: RootState;
+  templates: any;
+  // state: RootState;
 }
 
 class Gallery extends React.Component<Props> {
@@ -27,8 +28,9 @@ class Gallery extends React.Component<Props> {
   }
   render() {
     let cards = [];
-    if (!this.props.state.templates.fetching && this.props.state && this.props.state.templates && this.props.state.templates.templates && this.props.state.templates.templates.templates) {
-      cards = this.props.state.templates.templates.templates.map((val: any) => <AdaptiveCardPanel toggleModal={this.props.toggleModal} template={val} />);
+    console.log(this.props.templates);
+    if (!this.props.templates.fetching && this.props && this.props.templates && this.props.templates.templates && this.props.templates.templates.templates) {
+      cards = this.props.templates.templates.templates.map((val: any) => <AdaptiveCardPanel toggleModal={this.props.toggleModal} template={val} />);
     }
     return (
       <Container>
