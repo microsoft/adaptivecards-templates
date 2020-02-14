@@ -194,7 +194,8 @@ class App extends Component<Props, State> {
         this.props.userLogin({
           displayName: user.displayName,
           email: user.mail || user.userPrincipalName,
-          organization: org
+          organization: org,
+          avatarURL: user.image,
         });
       }
     } catch (err) {

@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom';
 
 import { RootState } from '../../store/rootReducer';
 import { UserType } from '../../store/auth/types';
-import { UserAvatar } from './UserAvatar';
+import UserAvatar from './UserAvatar';
 import mainLogo from '../../assets/adaptive-cards-100-logo.png';
 
 // CSS

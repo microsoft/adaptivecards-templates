@@ -7,7 +7,7 @@ export interface UserType {
   displayName: string;
   email: string;
   organization?: string;
-  avatar?: string;
+  avatarURL?: string;
 }
 
 // Action Types
