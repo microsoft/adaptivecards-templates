@@ -9,4 +9,14 @@ export module MongoUtils {
   export function generateUniqueID(): mongoose.Types.ObjectId {
     return new mongoose.Types.ObjectId();
   }
+
+  export function removeUndefinedFields<T>(obj: T): T {
+    let result: T = { ...obj };
+    for (let key in obj) {
+      if (obj[key] === undefined) {
+        delete obj[key];
+      }
+    }
+    return result;
+  }
 }

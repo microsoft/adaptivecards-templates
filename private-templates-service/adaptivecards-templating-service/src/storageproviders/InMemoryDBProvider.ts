@@ -1,7 +1,6 @@
-import { JSONResponse, IUser, ITemplate } from "../models/models";
+import { JSONResponse, IUser, ITemplate, SortBy, SortOrder } from "../models/models";
 import { StorageProvider } from "./IStorageProvider";
 import uuidv4 from "uuid/v4";
-import { ITemplateModel } from "../models/mongo/TemplateModel";
 
 export class InMemoryDBProvider implements StorageProvider {
   users: Map<string, IUser> = new Map();
@@ -66,8 +65,18 @@ export class InMemoryDBProvider implements StorageProvider {
     return this._matchUsers(query);
   }
 
-  async getTemplates(query: Partial<ITemplate>): Promise<JSONResponse<ITemplate[]>> {
-    return this._matchTemplates(query);
+  async getTemplates(
+    query: Partial<ITemplate>,
+    sortBy: SortBy = SortBy.alphabetical,
+    sortOrder: SortOrder = SortOrder.ascending
+  ): Promise<JSONResponse<ITemplate[]>> {
+    return this._matchTemplates(query, sortBy, sortOrder);
+    // return await this._matchTemplates(query, sortBy, sortOrder).then(result => {
+    //   if (result.success) {
+    //     // result.result?.sort(this.sortByField<T>, SortBy.alphabetical, SortOrder.ascending);
+    //     return Promise.resolve({ sucess: result.success, result: result.result });
+    //   }
+    //   return Promise.resolve({ success: result.success, errorMessage: result.errorMessage }) as Promise<JSONResponse<ITemplate[]>>;
   }
 
   // Will be fixed in a while to use JSONResponse
@@ -120,7 +129,14 @@ export class InMemoryDBProvider implements StorageProvider {
     return Promise.resolve({ success: false });
   }
 
-  protected async _matchTemplates(query: Partial<ITemplate>): Promise<JSONResponse<ITemplate[]>> {
+  private _sortByField<T>(sortBy: keyof T, sortOrder: SortOrder): (a: T, b: T) => number {
+    return (a: T, b: T): number => {
+      var result = a[sortBy] < b[sortBy] ? -1 : a[sortBy] > b[sortBy] ? 1 : 0;
+      return result * sortOrder;
+    };
+  }
+
+  protected async _matchTemplates(query: Partial<ITemplate>, sortBy?: SortBy, sortOrder?: SortOrder): Promise<JSONResponse<ITemplate[]>> {
     let res: ITemplate[] = new Array();
     this.templates.forEach(template => {
       if (this._matchTemplate(query, template)) {
@@ -128,6 +144,9 @@ export class InMemoryDBProvider implements StorageProvider {
       }
     });
     if (res.length) {
+      if (sortBy && sortOrder) {
+        res.sort(this._sortByField(sortBy, sortOrder));
+      }
       return Promise.resolve({ success: true, result: res });
     }
     return Promise.resolve({ success: false });
@@ -178,18 +197,25 @@ export class InMemoryDBProvider implements StorageProvider {
   }
 
   protected _ifContainsList<T>(toVerify: T[], list: T[]): boolean {
-    list.forEach(obj => {
+    if (!list.length) {
+      if (!toVerify.length) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    for (let obj of list) {
       if (!toVerify.includes(obj)) {
         return false;
       }
-    });
+    }
     return true;
   }
   // Omitted version search for now
   // Add name search
   protected _matchTemplate(query: Partial<ITemplate>, template: ITemplate): boolean {
     if (
-      (query.name && !(template.name.includes(query.name))) ||
+      (query.name && !template.name.includes(query.name)) ||
       (query.owner && !(query.owner === template.owner)) ||
       (query._id && !(query._id === template._id)) ||
       (query.isPublished && !(query.isPublished === template.isPublished)) ||
