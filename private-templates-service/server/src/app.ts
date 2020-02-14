@@ -12,19 +12,7 @@ import { InMemoryDBProvider } from "../../adaptivecards-templating-service/src/s
 const app = express();
 
 // Express configuration
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, Content-Type, Accept, Authorization, api_key"
-  );
-  res.header(
-    "Access-Control-Allow-Methods",
-    "GET, POST, OPTIONS, DELETE"
-  );
-  next();
-});
-app.use(express.static(path.join(__dirname, "../client/build")));
+app.use(express.static(path.join(__dirname, "../../../../client/build")));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(bodyParser.json());

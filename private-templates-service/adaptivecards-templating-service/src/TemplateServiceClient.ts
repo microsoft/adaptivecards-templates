@@ -228,7 +228,7 @@ export class TemplateServiceClient {
       version: version || "1.0"
     };
 
-    let templateName = name ? name : "Untitled Template";
+    let templateName = name || "Untitled Template";
 
     const newTemplate: ITemplate = {
       name: templateName,

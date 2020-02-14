@@ -3,22 +3,23 @@ import { connect } from 'react-redux';
 import { RootState } from '../../store/rootReducer';
 import AdaptiveCardPanel from "../AdaptiveCardPanel";
 import { Container } from "./styled";
-import { getTemplates } from "../../store/templates/actions";
+import { getAllTemplates } from "../../store/templates/actions";
+import { AllTemplateState } from "../../store/templates/types";
 
 const mapStateToProps = (state: RootState) => {
-  return { state: state };
+  return { templates: state.templates };
 }
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    getTemplates: () => { dispatch(getTemplates()) }
+    getTemplates: () => { dispatch(getAllTemplates()) }
   }
 }
 
 interface Props {
   toggleModal: () => void;
   getTemplates: () => void;
-  state: RootState;
+  templates: AllTemplateState;
 }
 
 class Gallery extends React.Component<Props> {
@@ -26,9 +27,9 @@ class Gallery extends React.Component<Props> {
     this.props.getTemplates();
   }
   render() {
-    let cards = [];
-    if (!this.props.state.templates.fetching && this.props.state && this.props.state.templates && this.props.state.templates.templates && this.props.state.templates.templates.templates) {
-      cards = this.props.state.templates.templates.templates.map((val: any) => <AdaptiveCardPanel toggleModal={this.props.toggleModal} template={val} />);
+    let cards: JSX.Element[] = [];
+    if (!this.props.templates.fetching && this.props && this.props.templates && this.props.templates.templates && this.props.templates.templates.templates) {
+      cards = this.props.templates.templates.templates.map((val: any) => <AdaptiveCardPanel toggleModal={this.props.toggleModal} template={val} />);
     }
     return (
       <Container>

@@ -1,10 +1,11 @@
 import * as React from "react";
 import { Container, TemplateName, ACWrapper } from "./styled";
 import AdaptiveCard from '../Common/AdaptiveCard';
+import { Template } from 'adaptive-templating-service-typescript-node';
 
 interface Props {
   toggleModal: () => void;
-  template: any
+  template: Template
 }
 
 class AdaptiveCardPanel extends React.Component<Props> {
@@ -15,7 +16,7 @@ class AdaptiveCardPanel extends React.Component<Props> {
         <ACWrapper>
           <AdaptiveCard toggleModal={this.props.toggleModal} cardtemplate={temp} />
         </ACWrapper>
-        <TemplateName onClick={this.props.toggleModal}>{this.props.template.name}</TemplateName>
+        <TemplateName onClick={this.props.toggleModal}>{temp.name}</TemplateName>
       </Container>
     );
   }

@@ -1,19 +1,19 @@
 import { IncomingMessage } from "http";
 import { TemplateList } from "adaptive-templating-service-typescript-node";
 
-export interface TemplateState {
+export interface AllTemplateState {
   fetching: boolean;
-  templates: any;
+  templates?: TemplateList;
 }
 
 //Action Types
-export const REQUEST_TEMPLATES = 'REQUEST_TEMPLATES';
-export const RECEIVE_TEMPLATES = 'RECEIVE_TEMPLATES';
-export const FAIL_GET = 'FAIL_GET';
+export const REQUEST_TEMPLATES_GET = 'REQUEST_TEMPLATES_GET';
+export const REQUEST_TEMPLATE_GET_SUCCESS = 'REQUEST_TEMPLATE_GET_SUCCESS';
+export const REQUEST_TEMPLATE_GET_FAIL = 'REQUEST_TEMPLATE_GET_FAIL';
 
 //Actions
-export interface TemplateAction {
-  type: typeof REQUEST_TEMPLATES | typeof RECEIVE_TEMPLATES | typeof FAIL_GET;
+export interface AllTemplateAction {
+  type: typeof REQUEST_TEMPLATES_GET | typeof REQUEST_TEMPLATE_GET_SUCCESS | typeof REQUEST_TEMPLATE_GET_FAIL;
   cards?: TemplateList,
   error?: IncomingMessage,
 }
