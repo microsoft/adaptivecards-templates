@@ -18,9 +18,6 @@ import ErrorMessage, { ErrorMessageProps } from "./components/ErrorMessage/Error
 import config from "./Config";
 import { getUserDetails, getOrgDetails } from "./Services/GraphService";
 
-// import { TemplateApi, NewTemplate } from 'adaptive-templating-service-typescript-node';
-
-
 // CSS
 import "bootstrap/dist/css/bootstrap.css";
 

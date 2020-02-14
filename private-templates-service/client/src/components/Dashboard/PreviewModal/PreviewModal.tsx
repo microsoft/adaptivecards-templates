@@ -14,6 +14,7 @@ const mapDispatchToProps = (dispatch: any) => {
   }
 }
 
+// TODO: kodyang dynamically render the template
 const template = {
   "name": "Publish Schema Card",
   "instances": [

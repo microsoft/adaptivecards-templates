@@ -1,7 +1,8 @@
 import React from 'react';
 
-import { ActionButton, IIconProps } from 'office-ui-fabric-react';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import { ActionButton } from 'office-ui-fabric-react';
+
+import PublishModal from '../../../Common/PublishModal';
 
 import {
   OuterWrapper,
@@ -21,7 +22,6 @@ import {
   IconWrapper,
   UsageNumber,
 } from './styled';
-import PublishModal from '../../../Common/PublishModal';
 
 
 const buttons = [

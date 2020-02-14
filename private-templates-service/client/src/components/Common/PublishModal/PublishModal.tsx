@@ -1,8 +1,14 @@
 import React from 'react';
 
+// Libraries
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { PrimaryButton } from 'office-ui-fabric-react'
+import { SearchBox } from 'office-ui-fabric-react';
 
+// Components
+import AdaptiveCard from '../AdaptiveCard';
+
+// Styles
 import {
   BackDrop,
   Modal,
@@ -19,8 +25,6 @@ import {
   ButtonGroup,
   CancelButton,
 } from './styled';
-import { SearchBox } from 'office-ui-fabric-react';
-import AdaptiveCard from '../AdaptiveCard';
 
 interface Props {
   template: any;
@@ -30,7 +34,7 @@ interface Props {
 class PublishModal extends React.Component<Props> {
 
   publish = () => {
-    console.log(" so this is where the publish code is");
+    // TODO: USE CLIENT SDK TO PUBLISH
   }
 
   render() {
