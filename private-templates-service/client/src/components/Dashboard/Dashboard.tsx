@@ -1,19 +1,23 @@
 import React from "react";
+import { connect } from "react-redux";
 
 import { RootState } from "../../store/rootReducer";
 import { UserType } from "../../store/auth/types";
-import { connect } from "react-redux";
+import { BatchTemplatesState } from '../../store/templates/types';
 import { setPage } from "../../store/page/actions";
+import { getAllTemplates } from "../../store/templates/actions";
 
 import requireAuthentication from "../../utils/requireAuthentication";
 import Gallery from "../Gallery";
-import { Title, DashboardContainer } from "../Dashboard/styled";
 import PreviewModal from "./PreviewModal";
+
+import { Title, DashboardContainer } from "../Dashboard/styled";
 
 const mapStateToProps = (state: RootState) => {
   return {
     isAuthenticated: state.auth.isAuthenticated,
-    user: state.auth.user
+    user: state.auth.user,
+    batchTemplates: state.batchTemplates,
   };
 };
 
@@ -21,7 +25,8 @@ const mapDispatchToProps = (dispatch: any) => {
   return {
     setPage: (currentPageTitle: string) => {
       dispatch(setPage(currentPageTitle));
-    }
+    },
+    getTemplates: () => { dispatch(getAllTemplates()) }
   }
 }
 
@@ -32,16 +37,18 @@ interface State {
 interface Props {
   isAuthenticated: boolean;
   user?: UserType;
+  batchTemplates: BatchTemplatesState;
   authButtonMethod: () => Promise<void>;
   setPage: (currentPageTitle: string) => void;
+  getTemplates: () => void;
 }
 
 class Dashboard extends React.Component<Props, State> {
-
   constructor(props: Props) {
     super(props);
     this.state = { isPreviewOpen: false };
     props.setPage("Dashboard");
+    props.getTemplates();
   }
 
   toggleModal = () => {
@@ -50,12 +57,15 @@ class Dashboard extends React.Component<Props, State> {
 
   render() {
     //TODO add sort functionality to separate templates displayed in recent vs draft
+    let templates = undefined;
+    if (!this.props.batchTemplates.isFetching && this.props.batchTemplates.templateList) {
+      templates = this.props.batchTemplates.templateList.templates;
+    }
+
     return (
       <DashboardContainer>
         <Title>Recent</Title>
-        <Gallery toggleModal={this.toggleModal}></Gallery>
-        <Title>Drafts</Title>
-        <Gallery toggleModal={this.toggleModal}></Gallery>
+        <Gallery onClick={this.toggleModal} templates={templates}></Gallery>
         <PreviewModal show={this.state.isPreviewOpen} toggleModal={this.toggleModal} />
       </DashboardContainer>
     );

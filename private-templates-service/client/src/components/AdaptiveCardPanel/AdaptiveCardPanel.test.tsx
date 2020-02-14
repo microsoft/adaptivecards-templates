@@ -26,7 +26,7 @@ it("Renders without crashing", () => {
   }
   ReactDOM.render(
     <Provider store={store}>
-      <AdaptiveCardPanel toggleModal={() => { }} template={template} />
+      <AdaptiveCardPanel onClick={() => { }} template={template} />
     </Provider>,
     div
   );

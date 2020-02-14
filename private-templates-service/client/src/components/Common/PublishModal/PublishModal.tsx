@@ -44,7 +44,7 @@ class PublishModal extends React.Component<Props> {
           <CenterPanelWrapper>
             <CenterPanelLeft>
               <AdaptiveCardPanel>
-                <AdaptiveCard />
+                <AdaptiveCard cardtemplate={template} />
               </AdaptiveCardPanel>
               <SemiBoldText>
                 Notified

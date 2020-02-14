@@ -8,7 +8,7 @@ export const rootReducer = combineReducers({
   auth: authReducer,
   search: searchReducer,
   page: pageReducer,
-  templates: allTemplateReducer
+  batchTemplates: allTemplateReducer
 })
 
 export type RootState = ReturnType<typeof rootReducer>;

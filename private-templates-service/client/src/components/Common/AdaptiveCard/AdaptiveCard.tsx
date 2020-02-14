@@ -5,7 +5,7 @@ import markdownit from "markdown-it";
 import { Template, TemplateInstance } from 'adaptive-templating-service-typescript-node';
 
 interface Props {
-  toggleModal: () => void;
+  onClick?: () => void;
   cardtemplate: Template,
 }
 
@@ -74,6 +74,7 @@ class AdaptiveCard extends React.Component<Props> {
     }
     return (
       <Card
+        onClick={this.props.onClick}
         ref={n => {
           // Work around for known issue: https://github.com/gatewayapps/react-adaptivecards/issues/10
           n && n.firstChild && n.removeChild(n.firstChild);

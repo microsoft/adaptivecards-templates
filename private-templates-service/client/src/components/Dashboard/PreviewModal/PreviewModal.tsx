@@ -48,7 +48,7 @@ class PreviewModal extends React.Component<Props, {}> {
           <ACPanel>
             <ACWrapper>
               {/* TODO add redux store functionality for individual cards */}
-              {/* <AdaptiveCard /> */}
+              <AdaptiveCard cardtemplate={template} />
             </ACWrapper>
           </ACPanel>
           <DescriptorWrapper>

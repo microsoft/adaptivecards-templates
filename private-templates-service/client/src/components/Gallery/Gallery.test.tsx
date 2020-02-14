@@ -11,7 +11,7 @@ it("Renders without crashing", () => {
   const store = createStore(rootReducer, applyMiddleware(thunk));
   ReactDOM.render(
     <Provider store={store}>
-      <Gallery toggleModal={() => { }} />
+      <Gallery onClick={() => { }} />
     </Provider>,
     div
   );
