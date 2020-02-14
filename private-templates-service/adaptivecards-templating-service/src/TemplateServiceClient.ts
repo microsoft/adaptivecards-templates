@@ -212,7 +212,7 @@ export class TemplateServiceClient {
     // Check if template already exists
     let existingTemplate = await this.getTemplates(templateId);
     if (existingTemplate.success && existingTemplate.result && existingTemplate.result.length > 0 && templateId) {
-      let templateName = name? name : existingTemplate.result[0].name
+      let templateName = name ? name : existingTemplate.result[0].name
       let updatedTemplate = await this._updateTemplate(templateId, templateName, template, version, isPublished);
       if (updatedTemplate.success) {
         return { success: true };
@@ -228,7 +228,7 @@ export class TemplateServiceClient {
       version: version || "1.0"
     };
 
-    let templateName = name? name : "Untitled Template";
+    let templateName = name || "Untitled Template";
 
     const newTemplate: ITemplate = {
       name: templateName,
@@ -305,7 +305,7 @@ export class TemplateServiceClient {
     if (req.method === "OPTIONS") {
       next();
     }
-    
+
     if (!req.headers.authorization) {
       const err = new TemplateError(ApiError.InvalidAuthenticationToken, "Missing credentials.");
       return res.status(401).json({ error: err });
@@ -362,9 +362,9 @@ export class TemplateServiceClient {
         return res.status(400).json({ error: err });
       }
 
-      let response = req.params.id?
-      await this.postTemplates(req.body.template, req.params.id, req.body.version, req.body.isPublished, req.body.name) :
-      await this.postTemplates(req.body.template, undefined, req.body.version, req.body.isPublished, req.body.name);
+      let response = req.params.id ?
+        await this.postTemplates(req.body.template, req.params.id, req.body.version, req.body.isPublished, req.body.name) :
+        await this.postTemplates(req.body.template, undefined, req.body.version, req.body.isPublished, req.body.name);
 
       if (!response.success) {
         const err = new TemplateError(ApiError.InvalidTemplate, "Unable to create given template.");
