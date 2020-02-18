@@ -49,6 +49,7 @@ class Dashboard extends React.Component<Props, State> {
   }
 
   render() {
+    //TODO add sort functionality to separate templates displayed in recent vs draft
     return (
       <DashboardContainer>
         <Title>Recent</Title>
