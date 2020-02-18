@@ -29,13 +29,13 @@ class SearchPage extends React.Component<Props> {
   render() {
     return (
       <div>
-      <SearchResultBanner>
-        <StyledSearchText>Template Results for '{this.props.searchValue}'</StyledSearchText>
-        <SearchAndFilter>
-          <Sort/>
-          <Filter/>
-        </SearchAndFilter>
-      </SearchResultBanner>
+        <SearchResultBanner>
+          <StyledSearchText>Template Results for '{this.props.searchValue}'</StyledSearchText>
+          <SearchAndFilter>
+            <Sort/>
+            <Filter/>
+          </SearchAndFilter>
+        </SearchResultBanner>
       <h1>filter value: {this.props.filterType}</h1>
       <h1>sort value: {this.props.sortType}</h1>
       </div>

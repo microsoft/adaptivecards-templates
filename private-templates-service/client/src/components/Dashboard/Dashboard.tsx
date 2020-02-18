@@ -1,7 +1,6 @@
 import React from "react";
 
 import { RootState } from "../../store/rootReducer";
-import { UserType } from "../../store/auth/types";
 import { connect } from "react-redux";
 import { setPage } from "../../store/page/actions";
 
@@ -33,7 +32,6 @@ interface State {
 
 interface Props {
   isAuthenticated: boolean;
-  user?: UserType;
   authButtonMethod: () => Promise<void>;
   setPage: (currentPageTitle: string) => void;
   isSearch: boolean;
@@ -52,7 +50,7 @@ class Dashboard extends React.Component<Props, State> {
 
   render() {
 
-    if(this.props.isSearch === true) {
+    if(this.props.isSearch) {
       return(
         <DashboardContainer>
           <SearchPage/>
@@ -63,7 +61,7 @@ class Dashboard extends React.Component<Props, State> {
       <DashboardContainer>
         <Title>Recent</Title>
         <Gallery toggleModal={this.toggleModal}></Gallery>
-        <PreviewModal show={this.state.isPreviewOpen}toggleModal={this.toggleModal}/>
+        <PreviewModal show={this.state.isPreviewOpen} toggleModal={this.toggleModal}/>
         <Title>Drafts</Title>
         <Gallery toggleModal={this.toggleModal}></Gallery>
         <PreviewModal show={this.state.isPreviewOpen} toggleModal={this.toggleModal}/>

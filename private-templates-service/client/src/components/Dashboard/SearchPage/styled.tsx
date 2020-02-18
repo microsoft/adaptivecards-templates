@@ -17,8 +17,6 @@ export const SearchResultBanner = styled.div`
 
 export const StyledSearchText = styled.div`
   letter-spacing 0;
-  opacity: 1;
   font-size: 26px;
-  margin-bottom: 0;
   font-weight: 600;
 `;
