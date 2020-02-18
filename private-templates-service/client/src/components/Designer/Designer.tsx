@@ -1,34 +1,32 @@
 import React, { useEffect } from 'react';
-import { RootState } from '../../store/rootReducer';
 import requireAuthentication from '../../utils/requireAuthentication';
+
+import { RootState } from '../../store/rootReducer';
 import { connect } from 'react-redux';
-import { editTemplate, newTemplate } from '../../store/designer/actions';
 import { UserType } from '../../store/auth/types';
 import { useHistory } from 'react-router-dom';
+import { updateTemplate } from '../../store/currentTemplate/actions';
+
 //ACDesigner
 import * as monaco from 'monaco-editor';
 import markdownit from 'markdown-it';
 import * as ACDesigner from 'adaptivecards-designer';
-//API
-import { TemplateApi, TemplateJSON } from 'adaptive-templating-service-typescript-node';
 
 const mapStateToProps = (state: RootState) => {
   return {
     isAuthenticated: state.auth.isAuthenticated,
     user: state.auth.user,
-    templateID: state.designer.templateID,
-    templateJSON: state.designer.templateID,
-    sampleDataJSON: state.designer.sampleDataJSON
+    templateID: state.currentTemplate.templateID,
+    templateJSON: state.currentTemplate.templateID,
+    templateName: state.currentTemplate.templateName,
+    sampleDataJSON: state.currentTemplate.sampleDataJSON
   };
 };
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    newTemplate: () => {
-      dispatch(newTemplate());
-    },
-    editTemplate: (templateID: string, templateJSON: string, sampleDataJSON: string) => {
-      dispatch(editTemplate(templateID, templateJSON, sampleDataJSON));
+    updateTemplate: (templateID: string, templateJSON: string, templateName: string, sampleDataJSON: string) => {
+      dispatch(updateTemplate(templateID, templateJSON, templateName, sampleDataJSON));
     }
   }
 }
@@ -38,7 +36,9 @@ interface DesignerProps {
   user?: UserType;
   templateID: string;
   templateJSON: string;
+  templateName: string;
   sampleDataJSON: string;
+  updateTemplate: (templateID: string, templateJSON: string, templateName: string, sampleDataJSON: string) => any;
 }
 
 const Designer = (props: DesignerProps) => {
@@ -50,20 +50,9 @@ const Designer = (props: DesignerProps) => {
     }
 
     designer.monacoModuleLoaded(monaco);
-
-    getCardData(designer);
   }, [])
 
   let history = useHistory();
-  let api = new TemplateApi();
-  let bearer_auth = api.setApiKey(0, "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IkhsQzBSMTJza3hOWjFXUXdtak9GXzZ0X3RERSJ9.eyJhdWQiOiI4NjMxY2E0ZS1hMjVkLTQ5YWUtYmQ5OC1mZjNlMWRkZDQ0MTgiLCJpc3MiOiJodHRwczovL2xvZ2luLm1pY3Jvc29mdG9ubGluZS5jb20vNzJmOTg4YmYtODZmMS00MWFmLTkxYWItMmQ3Y2QwMTFkYjQ3L3YyLjAiLCJpYXQiOjE1ODEzNjA2MTgsIm5iZiI6MTU4MTM2MDYxOCwiZXhwIjoxNTgxMzY0NTE4LCJhaW8iOiI0Mk5nWUdDVzk3Qm1NamRrY3pQK1pLSGZMeFlPQUE9PSIsImF6cCI6Ijg2MzFjYTRlLWEyNWQtNDlhZS1iZDk4LWZmM2UxZGRkNDQxOCIsImF6cGFjciI6IjEiLCJvaWQiOiI4YWRiZWRhNi00ZDdkLTQ1N2ItOTNkZC1jMTVmMWE1Y2NiMzEiLCJzdWIiOiI4YWRiZWRhNi00ZDdkLTQ1N2ItOTNkZC1jMTVmMWE1Y2NiMzEiLCJ0aWQiOiI3MmY5ODhiZi04NmYxLTQxYWYtOTFhYi0yZDdjZDAxMWRiNDciLCJ1dGkiOiJ6SDlkcHVQNnprcUJidC1MUnVGYkFBIiwidmVyIjoiMi4wIn0.WhdvkqeJymW-Ayeht6tafd8Z1muoMnyPhKoYq6KGrHdv6psfYQtmK0P0-TA5_zgOOHNNJvpVqH2LPnZTbpK4qgKLByR9umELHgD2FW9v5Djg1NAKqmQEGg_-Th__SGE3L9_WI58Wh0_Toh3f7fpLDzNBiC5iYDdGSaTilwxaYMGbXnJO2Y6Tow83GQATKGA3B27Xz2iBO9UFmEy9rte4DyLUAEIE6SCKwg-3YuD0zKfpgyd-lvhZZr37HeE9Y6hyOm_M4b_jwWI7oK0uZASuQer83W5jsSZNtiXg_T0euXJcvI9lL6R4oJDI_N6Y42RdDioIwX6FzOA4vRzTySZjBw");
-  let callback = function (error: any, data: any, response: any) {
-    if (error) {
-      console.error(error);
-    } else {
-      console.log('API called successfully. Returned data: ' + data);
-    }
-  };
 
   ACDesigner.GlobalSettings.enableDataBindingSupport = true;
   ACDesigner.GlobalSettings.showSampleDataEditorToolbox = true;
@@ -83,34 +72,18 @@ const Designer = (props: DesignerProps) => {
   publishButton.separator = true;
   designer.toolbar.insertElementAfter(publishButton, ACDesigner.CardDesigner.ToolbarCommands.TogglePreview);
 
-  let saveButton = new ACDesigner.ToolbarButton("saveButton", "Save", "", (sender) => (onSave(designer, props, api)));
+  let saveButton = new ACDesigner.ToolbarButton("saveButton", "Save", "", (sender) => (onSave(designer, props)));
   saveButton.separator = true;
   designer.toolbar.insertElementAfter(saveButton, ACDesigner.CardDesigner.ToolbarCommands.TogglePreview);
 
-  const element = document.getElementById("root");
-  if (element) {
-    designer.attachTo(element);
-  }
-
-  designer.monacoModuleLoaded(monaco);
-
-  getCardData(designer);
+  designer.sampleData = "";
 
   return <div id="designer-container" dangerouslySetInnerHTML={{ __html: "dangerouslySetACDesigner" }}></div>;
 }
 
-function onSave(designer: ACDesigner.CardDesigner, props: DesignerProps, api: TemplateApi): void {
-  let currTemplate = new TemplateJSON();
-  currTemplate.template = JSON.stringify(designer.getCard());
-  currTemplate.isPublished = false;
-  let sampleDataJSON: string = JSON.stringify(designer.sampleData);
-  if (props.templateID != "") {
-    api.templateTemplateIdPost(props.templateID, currTemplate);
-    editTemplate(props.templateID, currTemplate.template, sampleDataJSON)
-  }
-  else {
-    const newTemplateID = api.templatePost(currTemplate).then((res) => (res.body));
-    //editTemplate(newTemplateID, currTemplate.template, sampleDataJSON);
+function onSave(designer: ACDesigner.CardDesigner, props: DesignerProps): void {
+  if (props.templateJSON !== JSON.stringify(designer.getCard()) || props.sampleDataJSON !== designer.sampleData) {
+    props.updateTemplate(props.templateID, JSON.stringify(designer.getCard()), props.templateName, designer.sampleData);
   }
 }
 
@@ -131,12 +104,6 @@ function initDesigner(): ACDesigner.CardDesigner {
   designer.assetPath = window.location.origin + "/ACDesigner";
 
   return designer;
-}
-
-function getCardData(designer: ACDesigner.CardDesigner): void {
-  //Example of how to export data from designer
-  console.log("Adaptive Card Template: " + designer.getCard());
-  console.log("Adaptive Card Sample Data: " + designer.sampleData);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(requireAuthentication(Designer));
