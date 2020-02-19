@@ -11,7 +11,7 @@
 on:
     push:
         branches:
-            - dev
+            - users/daniellemott/fix_dev_deploy
 
 env:
     AZURE_WEBAPP_NAME: adaptivecms # set this to your application's name
@@ -26,7 +26,7 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v2.0.0
               with:
-                  ref: dev
+                  ref: users/daniellemott/fix_dev_deploy
             - name: Use Node.js ${{ env.NODE_VERSION }}
               uses: actions/setup-node@v1
               with:
@@ -39,7 +39,10 @@ jobs:
                   cd ..
             - name: Frontend Jest Test
               run: |
-                  cd private-templates-service/client
+                  cd adaptivecards-templating-service
+                  npm link
+                  cd ../client
+                  npm link adaptivecards-templating-service
                   npm install
                   npm run test
                   cd ..
@@ -56,11 +59,11 @@ jobs:
                   cd ../server
                   npm install
                   npm link adaptivecards-templating-service
-                  npm run deploy
-            - name: "Deploy to Azure WebApp"
-              if: success()
-              uses: azure/webapps-deploy@v1
-              with:
-                  app-name: ${{ env.AZURE_WEBAPP_NAME }}
-                  publish-profile: ${{ secrets.AZURE_ADAPTIVECMS }}
-                  package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+            #       npm run deploy
+            # - name: "Deploy to Azure WebApp"
+            #   if: success()
+            #   uses: azure/webapps-deploy@v1
+            #   with:
+            #       app-name: ${{ env.AZURE_WEBAPP_NAME }}
+            #       publish-profile: ${{ secrets.AZURE_ADAPTIVECMS }}
+            #       package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
