@@ -39,7 +39,7 @@ jobs:
                   cd ..
             - name: Frontend Jest Test
               run: |
-                  cd private-templates-service/adaptivecards-templating-service/typescript
+                  cd private-templates-service/adaptivecards-templating-client/typescript
                   npm install
                   npm link
                   cd ../../client
