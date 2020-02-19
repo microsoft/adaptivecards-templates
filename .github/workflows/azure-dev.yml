@@ -39,7 +39,7 @@ jobs:
                   cd ..
             - name: Frontend Jest Test
               run: |
-                  cd adaptivecards-templating-service
+                  cd private-templates-service/adaptivecards-templating-service
                   npm link
                   cd ../client
                   npm link adaptivecards-templating-service
