@@ -1,10 +1,35 @@
 import { StorageProvider } from "./IStorageProvider";
-import { IUser, ITemplate, JSONResponse, SortBy, SortOrder } from "../models/models";
+import { IUser, ITemplate, JSONResponse, SortBy, SortOrder, ITemplateInstance } from "../models/models";
 import { MongoConnectionParams } from "../models/mongo/MongoConnectionParams";
 import { MongoWorker } from "../util/mongoutils/MongoWorker";
 import { MongoUtils } from "../util/mongoutils/mongoutils";
 
 export class MongoDBProvider implements StorageProvider {
+  // getTemplateVersions(templateQuery: Partial<ITemplate>, versionQuery: Partial<ITemplateInstance>[]): Promise<JSONResponse<ITemplateInstance[]>> {
+  //   let query: any = this._constructTemplateQuery(templateQuery);
+  //   query.instances = { $elemMatch: { version: "2.1" } };
+  //   console.log(query);
+  //   console.log(query.instances);
+  //   return this.worker.Template.findOne(query)
+  //     .then(template => {
+  //       if (template) {
+  //         return Promise.resolve({
+  //           success: true,
+  //           result: template.instances
+  //         });
+  //       }
+  //       return Promise.resolve({
+  //         success: false,
+  //         errorMessage: "No templates found matching given criteria"
+  //       }) as Promise<JSONResponse<ITemplateInstance[]>>; // "as" has to be used because TypeScript cannot deduce the type correctly
+  //     })
+  //     .catch(e => {
+  //       return Promise.resolve({ success: false, errorMessage: e });
+  //     });
+  // }
+  // removeTemplateVersions(templateQuery: Partial<ITemplate>, versionQuery: Partial<import("../models/models").ITemplateInstance>): Promise<JSONResponse<Number[]>> {
+  //   return Promise.resolve({ success: true });
+  // }
   worker: MongoWorker;
 
   constructor(params: MongoConnectionParams = {}) {
@@ -57,11 +82,7 @@ export class MongoDBProvider implements StorageProvider {
   }
 
   // Default sort is by name and in ascending order.
-  async getTemplates(
-    query: Partial<ITemplate>,
-    sortBy: SortBy = SortBy.alphabetical,
-    sortOrder: SortOrder = SortOrder.ascending
-  ): Promise<JSONResponse<ITemplate[]>> {
+  async getTemplates(query: Partial<ITemplate>, sortBy: SortBy = SortBy.alphabetical, sortOrder: SortOrder = SortOrder.ascending): Promise<JSONResponse<ITemplate[]>> {
     let templateQuery: any = this._constructTemplateQuery(query);
     return await this.worker.Template.find(templateQuery, {})
       .sort({ [sortBy]: sortOrder })
