@@ -40,6 +40,7 @@ jobs:
             - name: Frontend Jest Test
               run: |
                   cd private-templates-service/adaptivecards-templating-service
+                  npm install
                   npm link
                   cd ../client
                   npm link adaptive-templating-service-typescript-node
