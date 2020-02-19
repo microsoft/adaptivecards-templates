@@ -34,8 +34,8 @@ jobs:
             - name: Backend Jest Test
               run: |
                   cd private-templates-service/server
-                  npm install
-                  npm run test
+                  # npm install
+                  # npm run test
                   cd ..
             - name: Frontend Jest Test
               run: |
@@ -44,9 +44,6 @@ jobs:
                   cd ../client
                   npm link adaptive-templating-service-typescript-node
                   npm install
-                  cd src
-                  npm link adaptive-templating-service-typescript-node
-                  cd ..
                   npm run test
                   cd ..
             - name: Create production build
