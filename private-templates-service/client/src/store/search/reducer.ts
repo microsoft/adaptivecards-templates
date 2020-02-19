@@ -2,15 +2,15 @@ import {
   SearchState,
   SEARCH,
   CLEAR_SEARCH,
-  SearchAction,
+  SearchAction
 } from './types';
 
-const initalState: SearchState = {
+const initialState: SearchState = {
   isSearch: false,
   searchValue: "",
 }
 
-export function searchReducer( state = initalState, action: SearchAction): SearchState{
+export function searchReducer( state = initialState, action: SearchAction): SearchState{
   switch(action.type){
     case  SEARCH:
       return {
