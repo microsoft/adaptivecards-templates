@@ -1,10 +1,9 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import requireAuthentication from '../../utils/requireAuthentication';
 
 import { RootState } from '../../store/rootReducer';
 import { connect } from 'react-redux';
 import { UserType } from '../../store/auth/types';
-import { useHistory } from 'react-router-dom';
 import { updateTemplate } from '../../store/currentTemplate/actions';
 
 //ACDesigner
