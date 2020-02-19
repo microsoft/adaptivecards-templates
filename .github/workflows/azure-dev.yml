@@ -42,7 +42,7 @@ jobs:
                   cd private-templates-service/adaptivecards-templating-service/typescript
                   npm install
                   npm link
-                  cd ../client
+                  cd ../../client
                   npm link adaptive-templating-service-typescript-node
                   npm install
                   npm run test
