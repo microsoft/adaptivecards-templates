@@ -44,6 +44,10 @@ jobs:
                   cd ../client
                   npm link adaptivecards-templating-service
                   npm install
+                  cd src
+                  npm link adaptivecards-templating-service
+                  npm install
+                  cd ..
                   npm run test
                   cd ..
             - name: Create production build
