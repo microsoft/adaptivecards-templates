@@ -11,8 +11,7 @@
 on:
     push:
         branches:
-            - users/daniellemott/fix_dev_deploy
-
+            - dev
 env:
     AZURE_WEBAPP_NAME: adaptivecms # set this to your application's name
     AZURE_WEBAPP_PACKAGE_PATH: "private-templates-service/" # set this to the path to your web app project, defaults to the repository root
@@ -26,7 +25,7 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v2.0.0
               with:
-                  ref: users/daniellemott/fix_dev_deploy
+                  ref: dev
             - name: Use Node.js ${{ env.NODE_VERSION }}
               uses: actions/setup-node@v1
               with:
@@ -56,19 +55,19 @@ jobs:
               run: |
                   # Build and test the project, then
                   # deploy to Azure Web App.
-            #       cd private-templates-service/client
-            #       npm install
-            #       npm run build:staging --if-present
-            #       cd ../adaptivecards-templating-service
-            #       npm link
-            #       cd ../server
-            #       npm install
-            #       npm link adaptivecards-templating-service
-            #       npm run deploy
-            # - name: "Deploy to Azure WebApp"
-            #   if: success()
-            #   uses: azure/webapps-deploy@v1
-            #   with:
-            #       app-name: ${{ env.AZURE_WEBAPP_NAME }}
-            #       publish-profile: ${{ secrets.AZURE_ADAPTIVECMS_STAGE }}
-            #       package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+                  cd private-templates-service/client
+                  npm install
+                  npm run build:staging --if-present
+                  cd ../adaptivecards-templating-service
+                  npm link
+                  cd ../server
+                  npm install
+                  npm link adaptivecards-templating-service
+                  npm run deploy
+            - name: "Deploy to Azure WebApp"
+              if: success()
+              uses: azure/webapps-deploy@v1
+              with:
+                  app-name: ${{ env.AZURE_WEBAPP_NAME }}
+                  publish-profile: ${{ secrets.AZURE_ADAPTIVECMS_STAGE }}
+                  package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
