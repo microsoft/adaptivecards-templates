@@ -56,19 +56,19 @@ jobs:
               run: |
                   # Build and test the project, then
                   # deploy to Azure Web App.
-                  cd private-templates-service/client
-                  npm install
-                  npm run build:dev --if-present
-                  cd ../adaptivecards-templating-service
-                  npm link
-                  cd ../server
-                  npm install
-                  npm link adaptivecards-templating-service
-                  npm run deploy
-            - name: "Deploy to Azure WebApp"
-              if: success()
-              uses: azure/webapps-deploy@v1
-              with:
-                  app-name: ${{ env.AZURE_WEBAPP_NAME }}
-                  publish-profile: ${{ secrets.AZURE_ADAPTIVECMS }}
-                  package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+            #       cd private-templates-service/client
+            #       npm install
+            #       npm run build:dev --if-present
+            #       cd ../adaptivecards-templating-service
+            #       npm link
+            #       cd ../server
+            #       npm install
+            #       npm link adaptivecards-templating-service
+            #       npm run deploy
+            # - name: "Deploy to Azure WebApp"
+            #   if: success()
+            #   uses: azure/webapps-deploy@v1
+            #   with:
+            #       app-name: ${{ env.AZURE_WEBAPP_NAME }}
+            #       publish-profile: ${{ secrets.AZURE_ADAPTIVECMS }}
+            #       package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}

@@ -11,7 +11,7 @@
 on:
     push:
         branches:
-            - stage
+            - users/daniellemott/fix_dev_deploy
 
 env:
     AZURE_WEBAPP_NAME: adaptivecms # set this to your application's name
@@ -26,7 +26,7 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v2.0.0
               with:
-                  ref: stage
+                  ref: users/daniellemott/fix_dev_deploy
             - name: Use Node.js ${{ env.NODE_VERSION }}
               uses: actions/setup-node@v1
               with:
@@ -39,8 +39,16 @@ jobs:
                   cd ..
             - name: Frontend Jest Test
               run: |
-                  cd private-templates-service/client
+                  cd private-templates-service/adaptivecards-templating-client/typescript
                   npm install
+                  npm run build
+                  npm link
+                  cd ../../client
+                  npm link adaptive-templating-service-typescript-node
+                  npm install
+                  cd src 
+                  npm link adaptive-templating-service-typescript-node
+                  cd ..
                   npm run test
                   cd ..
             - name: Create production build
@@ -48,19 +56,19 @@ jobs:
               run: |
                   # Build and test the project, then
                   # deploy to Azure Web App.
-                  cd private-templates-service/client
-                  npm install
-                  npm run build:staging --if-present
-                  cd ../adaptivecards-templating-service
-                  npm link
-                  cd ../server
-                  npm install
-                  npm link adaptivecards-templating-service
-                  npm run deploy
-            - name: "Deploy to Azure WebApp"
-              if: success()
-              uses: azure/webapps-deploy@v1
-              with:
-                  app-name: ${{ env.AZURE_WEBAPP_NAME }}
-                  publish-profile: ${{ secrets.AZURE_ADAPTIVECMS_STAGE }}
-                  package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+            #       cd private-templates-service/client
+            #       npm install
+            #       npm run build:staging --if-present
+            #       cd ../adaptivecards-templating-service
+            #       npm link
+            #       cd ../server
+            #       npm install
+            #       npm link adaptivecards-templating-service
+            #       npm run deploy
+            # - name: "Deploy to Azure WebApp"
+            #   if: success()
+            #   uses: azure/webapps-deploy@v1
+            #   with:
+            #       app-name: ${{ env.AZURE_WEBAPP_NAME }}
+            #       publish-profile: ${{ secrets.AZURE_ADAPTIVECMS_STAGE }}
+            #       package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
