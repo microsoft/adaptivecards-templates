@@ -49,7 +49,6 @@ class Dashboard extends React.Component<Props, State> {
   };
 
   render() {
-
     if(this.props.isSearch) {
       return(
         <DashboardContainer>
@@ -57,6 +56,7 @@ class Dashboard extends React.Component<Props, State> {
         </DashboardContainer>
       );
     }
+    //TODO add sort functionality to separate templates displayed in recent vs draft
     return (
       <DashboardContainer>
         <Title>Recent</Title>
