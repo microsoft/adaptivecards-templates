@@ -32,7 +32,7 @@ const mapStateToProps = (state: RootState) => {
     isAuthenticated: state.auth.isAuthenticated,
     user: state.auth.user,
     searchValue: state.search.searchValue,
-    stateMap: state
+    stateMap: state.currentTemplate
   };
 };
 

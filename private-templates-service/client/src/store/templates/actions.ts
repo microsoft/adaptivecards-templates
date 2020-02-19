@@ -31,9 +31,9 @@ export function getAllTemplates() {
     return api.templateGet()
       .then(response => {
         if (response.response.statusCode && response.response.statusCode == 200) {
-          //dispatch(receiveAllTemplates(response.body))
+          dispatch(receiveAllTemplates(response.body))
         } else {
-          //dispatch(failGetAll(response.response))
+          dispatch(failGetAll(response.response))
         }
       })
   }

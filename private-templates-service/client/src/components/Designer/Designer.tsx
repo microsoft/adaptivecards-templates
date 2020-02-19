@@ -84,7 +84,7 @@ const Designer = (props: DesignerProps) => {
 function onSave(designer: ACDesigner.CardDesigner, props: DesignerProps): void {
   if (props.templateJSON !== JSON.stringify(designer.getCard()) || props.sampleDataJSON !== designer.sampleData) {
     props.updateTemplate(props.templateID, JSON.stringify(designer.getCard()), props.templateName, designer.sampleData);
-    console.log("The Designer thinks the templateID is: " + props.templateID);
+    console.log("idddddd: " + props.templateID)
   }
 }
 
