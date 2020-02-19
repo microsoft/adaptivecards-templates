@@ -44,9 +44,10 @@ jobs:
                   cd ../client
                   npm link adaptivecards-templating-service
                   npm install
-                  cd src
+                  cd src/store
                   npm link adaptivecards-templating-service
                   npm install
+                  cd ..
                   cd ..
                   npm run test
                   cd ..
