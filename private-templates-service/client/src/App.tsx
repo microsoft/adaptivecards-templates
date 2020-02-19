@@ -31,8 +31,7 @@ const mapStateToProps = (state: RootState) => {
   return {
     isAuthenticated: state.auth.isAuthenticated,
     user: state.auth.user,
-    searchValue: state.search.searchValue,
-    stateMap: state
+    searchValue: state.search.searchValue
   };
 };
 
@@ -52,16 +51,11 @@ interface Props {
   userLogout: () => void;
   isAuthenticated: boolean;
   user?: UserType;
-  searchValue: string,
-  stateMap: any
+  searchValue: string
 }
 
 class App extends Component<Props, State> {
   userAgentApplication: UserAgentApplication;
-
-  componentDidUpdate() {
-    console.log(this.props.stateMap);
-  }
 
   constructor(props: Props) {
     super(props);
