@@ -70,29 +70,23 @@ export function updateTemplate(templateID: string, templateJSON: string, sampleD
     newTemplate.name = templateName;
     newTemplate.isPublished = false;
 
-    console.log("current ID: " + templateID);
     if (templateID === null || templateID === "") {
       dispatch(requestNewTemplateUpdate());
       return api.templatePost(newTemplate).then(response => {
         if (response.response.statusCode && response.response.statusCode === 201 && response.body.id) {
-          console.log("success in posting new template")
           dispatch(receiveNewTemplateUpdate(response.body.id, templateJSON, templateName, sampleDataJSON));
         } else {
-          console.log("fail in posting new template")
-          dispatch(failureNewTemplateUpdate(response.response))
+          dispatch(failureNewTemplateUpdate(response.response));
         }
       });
     }
     else {
-      console.log("attempting to post existing template")
       dispatch(requestExistingTemplateUpdate());
       return api.templateTemplateIdPost(templateID, newTemplate).then(response => {
-        if (response.response.statusCode && response.response.statusCode === 200 && response.body.id === templateID) {
-          console.log("success in posting existing template")
+        if (response.response.statusCode && response.response.statusCode === 201) {
           dispatch(receiveExistingTemplateUpdate(templateJSON, templateName, sampleDataJSON));
         }
         else {
-          console.log("fail in posting existing template")
           dispatch(failureExistingTemplateUpdate(response.response));
         }
       });

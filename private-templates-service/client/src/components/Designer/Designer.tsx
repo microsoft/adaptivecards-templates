@@ -41,50 +41,58 @@ interface DesignerProps {
   updateTemplate: (templateID: string, templateJSON: string, templateName: string, sampleDataJSON: string) => any;
 }
 
-const Designer = (props: DesignerProps) => {
+let designer: ACDesigner.CardDesigner;
 
-  useEffect(() => {
+class Designer extends React.Component<DesignerProps> {
+
+  componentWillMount() {
+    ACDesigner.GlobalSettings.enableDataBindingSupport = true;
+    ACDesigner.GlobalSettings.showSampleDataEditorToolbox = true;
+
+    ACDesigner.CardDesigner.onProcessMarkdown = (text: string, result: { didProcess: boolean, outputHtml?: string }) => {
+      result.outputHtml = new markdownit().render(text);
+      result.didProcess = true;
+    }
+
+    designer = initDesigner();
+
+    let publishButton = new ACDesigner.ToolbarButton("publishButton", "Publish", "", (sender) => (alert("Published!")));
+    publishButton.separator = true;
+    designer.toolbar.insertElementAfter(publishButton, ACDesigner.CardDesigner.ToolbarCommands.TogglePreview);
+
+    let saveButton = new ACDesigner.ToolbarButton("saveButton", "Save", "", (sender) => (onSave(designer, this.props)));
+    saveButton.separator = true;
+    designer.toolbar.insertElementAfter(saveButton, ACDesigner.CardDesigner.ToolbarCommands.TogglePreview);
+
+    designer.sampleData = "";
+  }
+
+  componentDidMount() {
     const element = document.getElementById("designer-container");
     if (element) {
       designer.attachTo(element);
     }
 
     designer.monacoModuleLoaded(monaco);
-  }, [])
 
-  let history = useHistory();
-
-  ACDesigner.GlobalSettings.enableDataBindingSupport = true;
-  ACDesigner.GlobalSettings.showSampleDataEditorToolbox = true;
-
-  ACDesigner.CardDesigner.onProcessMarkdown = (text: string, result: { didProcess: boolean, outputHtml?: string }) => {
-    result.outputHtml = new markdownit().render(text);
-    result.didProcess = true;
+    console.log("id in designer: " + this.props.templateID);
   }
 
-  let designer = initDesigner();
+  render() {
 
-  let closeButton = new ACDesigner.ToolbarButton("closeButton", "Close", "", (sender) => (history.goBack()));
-  closeButton.separator = true;
-  designer.toolbar.insertElementAfter(closeButton, ACDesigner.CardDesigner.ToolbarCommands.TogglePreview);
+    return (
+      <div id="designer-container" dangerouslySetInnerHTML={{ __html: "dangerouslySetACDesigner" }}></div>
+    )
+  }
 
-  let publishButton = new ACDesigner.ToolbarButton("publishButton", "Publish", "", (sender) => (alert("Published!")));
-  publishButton.separator = true;
-  designer.toolbar.insertElementAfter(publishButton, ACDesigner.CardDesigner.ToolbarCommands.TogglePreview);
-
-  let saveButton = new ACDesigner.ToolbarButton("saveButton", "Save", "", (sender) => (onSave(designer, props)));
-  saveButton.separator = true;
-  designer.toolbar.insertElementAfter(saveButton, ACDesigner.CardDesigner.ToolbarCommands.TogglePreview);
-
-  designer.sampleData = "";
-
-  return <div id="designer-container" dangerouslySetInnerHTML={{ __html: "dangerouslySetACDesigner" }}></div>;
+  shouldComponentUpdate() {
+    return false;
+  }
 }
 
 function onSave(designer: ACDesigner.CardDesigner, props: DesignerProps): void {
   if (props.templateJSON !== JSON.stringify(designer.getCard()) || props.sampleDataJSON !== designer.sampleData) {
     props.updateTemplate(props.templateID, JSON.stringify(designer.getCard()), props.templateName, designer.sampleData);
-    console.log("idddddd: " + props.templateID)
   }
 }
 

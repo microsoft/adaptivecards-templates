@@ -6,7 +6,7 @@ const initialState: CurrentTemplateState = {
   templateName: undefined,
   sampleDataJSON: undefined,
   isFetching: false
-}
+};
 
 export function currentTemplateReducer(state = initialState, action: CurrentTemplateAction): CurrentTemplateState {
   switch (action.type) {

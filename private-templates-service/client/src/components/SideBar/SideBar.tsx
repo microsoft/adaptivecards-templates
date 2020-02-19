@@ -79,7 +79,6 @@ const SideBar = (props: Props) => {
     event.preventDefault();
     if (element.url === "/designer") {
       props.newTemplate();
-      console.log(props.templateID);
     }
     history.push(element.url);
   }
