@@ -1,30 +1,43 @@
 {
-	"env": {
-		"browser": true,
-		"es6": true,
-		"node": true
-	},
-	"extends": [
-		"plugin:react/recommended",
-		"airbnb",
-		"airbnb/hooks",
-		"prettier",
-		"plugin:prettier/recommended"
-	],
-	"globals": {
-		"Atomics": "readonly",
-		"SharedArrayBuffer": "readonly"
-	},
-	"parser": "babel-eslint",
-	"parserOptions": {
-		"ecmaFeatures": {
-			"jsx": true
-		},
-		"ecmaVersion": 2020,
-		"sourceType": "module"
-	},
-	"plugins": ["react", "jsx-ally", "import", "prettier"],
-	"rules": {
-		"prettier/prettier": "error"
-	}
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true
+  },
+  "extends": [
+    "plugin:react/recommended",
+    "eslint:recommended"
+  ],
+  "globals": {
+    "Atomics": "readonly",
+    "SharedArrayBuffer": "readonly"
+  },
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 2020,
+    "sourceType": "module"
+  },
+  "plugins": [
+    "react",
+    "import",
+    "@typescript-eslint"
+  ],
+  "rules": {
+    "default-case": 1,
+    "max-len": [
+      2,
+      120
+    ],
+    "semi": [
+      "error",
+      "always"
+    ],
+    "eol-last": [
+      "error",
+      "always"
+    ]
+  }
 }
