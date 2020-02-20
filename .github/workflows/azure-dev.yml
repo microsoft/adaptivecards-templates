@@ -50,22 +50,22 @@ jobs:
                   cd ..
                   # npm run test
                   cd ..
-            - name: Find and Replace - Using Secrets
-              run: |
-                  SECRET='${{ secrets.AZURE_ADPATIVECMS_DB_CONNECTION }}'
-                  # SECRET=${SECRET//$'\n'/\\n}
-                  find . -type f -exec sed -i "s%needle%$SECRET%g" {} \;    
-
-            # - name: Replace DBConnection token with DB Connection string
-            #   uses: cschleiden/replace-tokens@v1
-            #   with:
-            #     files: '["**/*.ts"]'
-            #   env:
-            #     DBConnection: ${{ secrets.AZURE_ADPATIVECMS_DB_CONNECTION }}
-            # - name: Print file contents
+            # - name: Find and Replace - Using Secrets
             #   run: |
-            #     cd private-templates-service/server/src
-            #     cat app.ts
+            #       SECRET='${{ secrets.AZURE_ADPATIVECMS_DB_CONNECTION }}'
+            #       # SECRET=${SECRET//$'\n'/\\n}
+            #       find . -type f -exec sed -i "s%needle%$SECRET%g" {} \;    
+
+            - name: Replace DBConnection token with DB Connection string
+              uses: cschleiden/replace-tokens@v1
+              with:
+                files: '["**/*.ts"]'
+              env:
+                needle: ${{ secrets.AZURE_ADPATIVECMS_DB_CONNECTION }}
+            - name: Print file contents
+              run: |
+                cd private-templates-service/server/src
+                cat app.ts
             - name: Create production build
               if: success()
               run: |
