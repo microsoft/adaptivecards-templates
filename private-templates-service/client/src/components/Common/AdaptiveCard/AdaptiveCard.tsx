@@ -55,24 +55,13 @@ function cleanTemplate(temp: TemplateInstance): Template {
   const templateString = JSON.stringify(temp.json);
   const replaceChar = templateString.replace(/\\\\\\/g, '');
   const trimTemp = replaceChar.slice(3, replaceChar.length - 3);
-
   let jsonTemp = {};
 
   try {
     jsonTemp = JSON.parse(trimTemp);
   } catch {
     console.log("Invalid Adaptive Cards JSON. Card not parsed.");
-    const errorMessageJSON = {
-      "type": "AdaptiveCard",
-      "version": "1.0",
-      "body": [
-        {
-          "type": "TextBlock",
-          "text": "Parsing Error!"
-        }
-      ],
-      "$schema": "http://adaptivecards.io/schemas/adaptive-card.json"
-    }
+    const errorMessageJSON = JSON.stringify(require('../../../assets/default-adaptivecards/defaultErrorCard.json'));
     jsonTemp = errorMessageJSON;
   }
   return jsonTemp;
