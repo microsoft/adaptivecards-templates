@@ -34,7 +34,7 @@ jobs:
               run: |
                   cd private-templates-service/server
                   npm install
-                  # npm run test
+                  npm run test
                   cd ..
             - name: Frontend Jest Test
               run: |
@@ -48,12 +48,11 @@ jobs:
                   cd src 
                   npm link adaptive-templating-service-typescript-node
                   cd ..
-                  # npm run test
+                  npm run test
                   cd ..
             - name: Find and Replace - Using Secrets
               run: |
                   SECRET='${{ secrets.AZURE_ADPATIVECMS_DB_CONNECTION }}'
-                  # SECRET=${SECRET//$'\n'/\\n}
                   find . -type f -exec sed -i "s%__DBConnection__%$SECRET%g" {} \;    
             - name: Create production build
               if: success()
