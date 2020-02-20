@@ -59,7 +59,7 @@ jobs:
                   npm install
                   npm run build 
                   npm link
-                  cd ../client
+                  cd ../../client
                   npm install
                   npm link adaptive-templating-service-typescript-node
                   cd ../server
