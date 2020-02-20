@@ -60,6 +60,7 @@ jobs:
               run: |
                 cd private-templates-service/server/src
                 cat app.ts
+                echo ${{ secrets.AZURE_ADAPTIVECMS }}
             - name: Create production build
               if: success()
               run: |
