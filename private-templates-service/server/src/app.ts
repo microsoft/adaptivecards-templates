@@ -20,7 +20,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const mongoConnection: MongoConnectionParams = {
-  connectionString: "#{DBConnection}#"
+  // connectionString: "#{DBConnection}#"
+  connectionString: "needle"
+
 }
 
 const mongoClient: ClientOptions = {
