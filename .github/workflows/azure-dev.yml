@@ -62,11 +62,11 @@ jobs:
                   cd ../../client
                   npm install
                   npm link adaptive-templating-service-typescript-node
+                  cd ../client
+                  npm run build:dev --if-present
                   cd ../server
                   npm install
                   npm link adaptive-templating-service-typescript-node
-                  cd ../client
-                  npm run build:dev --if-present
                   npm run deploy
             # - name: "Deploy to Azure WebApp"
             #   if: success()
