@@ -30,7 +30,7 @@ mongoDB.connect()
       if (res.success) {
         const mongoClient: ClientOptions = {
           authenticationProvider: new AzureADProvider(),
-          storageProvider: new MongoDBProvider(mongoConnection),
+          storageProvider: mongoDB,
         }
 
         const client: TemplateServiceClient = TemplateServiceClient.init(mongoClient);
