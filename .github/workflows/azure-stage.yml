@@ -50,6 +50,10 @@ jobs:
                   cd ..
                   npm run test
                   cd ..
+            - name: Find and Replace - Using Secrets
+              run: |
+                  SECRET='${{ secrets.AZURE_ADPATIVECMS_DB_CONNECTION }}'
+                  find . -type f -exec sed -i "s%__DBConnection__%$SECRET%g" {} \;   
             - name: Create production build
               if: success()
               run: |
