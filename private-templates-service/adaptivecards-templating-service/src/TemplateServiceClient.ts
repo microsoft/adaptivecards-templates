@@ -636,6 +636,34 @@ export class TemplateServiceClient {
   }
 
   /**
+   * @public 
+   * Retrieve a list of recently viewed templates for the logged in user.
+   */
+  public async getRecentTemplates(): Promise<JSONResponse<ITemplate[]>> {
+    let checkAuthentication = this._checkAuthenticated();
+    if (!checkAuthentication.success) {
+      return checkAuthentication;
+    }
+
+    let results: ITemplate[] = [];
+    let response = await this._getUser();
+    if (!response.success || response.result && response.result.length === 0) {
+      return { success: false, errorMessage: response.errorMessage };
+    }
+    let user: IUser = response.result![0];
+    if (!user.recentlyViewed) {
+      return { success: true, result: results };
+    }
+    for (let templateId of user.recentlyViewed) {
+      let templateResponse = await this.getTemplates(templateId);
+      if (templateResponse.success && templateResponse.result && templateResponse.result.length === 1){
+        results.push(templateResponse.result[0]);
+      }
+    }
+    return { success: true, result: results };
+  }
+
+  /**
    * @public
    * Get a list of tags available for logged in user to query by
    */
