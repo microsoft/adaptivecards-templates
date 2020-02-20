@@ -39,8 +39,16 @@ jobs:
                   cd ..
             - name: Frontend Jest Test
               run: |
-                  cd private-templates-service/client
+                  cd private-templates-service/adaptivecards-templating-client/typescript
                   npm install
+                  npm run build
+                  npm link
+                  cd ../../client
+                  npm link adaptive-templating-service-typescript-node
+                  npm install
+                  cd src 
+                  npm link adaptive-templating-service-typescript-node
+                  cd ..
                   npm run test
                   cd ..
             - name: Create production build
