@@ -55,10 +55,7 @@ jobs:
               run: |
                   # Build and test the project, then
                   # deploy to Azure Web App.
-                  cd private-templates-service/client
-                  npm install
-                  npm run build:dev --if-present
-                  cd ../adaptivecards-templating-service/typescript
+                  cd private-templates-service/adaptivecards-templating-service/typescript
                   npm run build 
                   npm link
                   cd ../client
@@ -67,6 +64,8 @@ jobs:
                   cd ../server
                   npm install
                   npm link adaptive-templating-service-typescript-node
+                  cd ../client
+                  npm run build:dev --if-present
             #       npm run deploy
             # - name: "Deploy to Azure WebApp"
             #   if: success()
