@@ -1,4 +1,12 @@
-import { CurrentTemplateState, CurrentTemplateAction, REQUEST_NEW_TEMPLATE_UPDATE, FAILURE_NEW_TEMPLATE_UPDATE, RECEIVE_NEW_TEMPLATE_UPDATE, REQUEST_EXISTING_TEMPLATE_UPDATE, FAILURE_EXISTING_TEMPLATE_UPDATE, NEW_TEMPLATE, RECEIVE_EXISTING_TEMPLATE_UPDATE } from "./types";
+import { CurrentTemplateState } from "./types";
+import { CurrentTemplateAction } from './types';
+import { NEW_TEMPLATE } from './types';
+import { REQUEST_NEW_TEMPLATE_UPDATE } from './types';
+import { REQUEST_EXISTING_TEMPLATE_UPDATE } from './types';
+import { RECEIVE_NEW_TEMPLATE_UPDATE } from './types';
+import { RECEIVE_EXISTING_TEMPLATE_UPDATE } from './types';
+import { FAILURE_NEW_TEMPLATE_UPDATE } from './types';
+import { FAILURE_EXISTING_TEMPLATE_UPDATE } from './types';
 
 const initialState: CurrentTemplateState = {
   templateID: undefined,
