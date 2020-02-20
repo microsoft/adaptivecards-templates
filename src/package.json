@@ -21,6 +21,7 @@
   "dependencies": {
     "@wmfs/tymly-data-types": "^1.5.0",
     "adaptivecards-templating": "0.1.0-alpha1",
+    "change-case": "^4.1.1",
     "lodash": "^4.17.15",
     "lodash-inflection": "^1.5.0"
   },

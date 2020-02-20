@@ -1,0 +1,678 @@
+{
+	"id": "9a7f65f9-2ef6-44f1-8958-1f75738f69c1",
+	"name": "ACTemplates",
+	"description": "The Adaptive Cards Template Service is a proof-of-concept service that allows anyone to find, contribute to, and share a set of well-known templates.\n\nContact Support: \n{\n\nName : Adaptive Cards\n\nEmail : undefined\n\n}",
+	"auth": null,
+	"events": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "bf3f481b-e460-4e87-9c54-2deeb64cd900",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "76bd70b1-4782-4309-b7a7-7393c14d8f53",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variables": [
+		{
+			"key": "baseUrl",
+			"value": "https://templates.adaptivecards.io",
+			"disabled": false
+		}
+	],
+	"order": [
+		"da226491-f091-4a1e-8d8a-866f86b2d75d",
+		"f92f43d6-5675-4040-9dd8-0897983f4361",
+		"27b21790-bd0f-47f6-9fa6-95b8d761a118"
+	],
+	"folders_order": [
+		"581a0f79-83e1-41e7-a1d6-5d624c28c0aa",
+		"e02f9930-8ad1-4d02-9438-4afdd828952a"
+	],
+	"protocolProfileBehavior": {},
+	"folders": [
+		{
+			"id": "581a0f79-83e1-41e7-a1d6-5d624c28c0aa",
+			"name": "find",
+			"description": null,
+			"auth": null,
+			"events": null,
+			"collection": "9a7f65f9-2ef6-44f1-8958-1f75738f69c1",
+			"folder": null,
+			"order": [
+				"90341c32-1061-4928-895e-53757835ac9d",
+				"d61ee8fa-7d0c-4547-9579-f5f2d521830c"
+			],
+			"folders_order": [],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"id": "e02f9930-8ad1-4d02-9438-4afdd828952a",
+			"name": "{template}",
+			"description": null,
+			"auth": null,
+			"events": null,
+			"collection": "9a7f65f9-2ef6-44f1-8958-1f75738f69c1",
+			"folder": null,
+			"order": [
+				"d88e5bbe-d7ad-422f-8323-72dfe1e0a138",
+				"0a2e82a3-9c8a-4746-b4a0-8a1b48575766"
+			],
+			"folders_order": [],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"requests": [
+		{
+			"id": "0a2e82a3-9c8a-4746-b4a0-8a1b48575766",
+			"name": "Retrieve an Adaptive Card based on the template",
+			"url": "{{baseUrl}}/:template?sampleData=<boolean>",
+			"description": "Pass your data in the POST body and it will be data-bound on the server",
+			"data": [],
+			"dataOptions": null,
+			"dataMode": "raw",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json"
+				}
+			],
+			"method": "POST",
+			"pathVariableData": [
+				{
+					"id": "4e1b1a01-7c4f-4fa6-8636-c7970774cdcf",
+					"key": "template",
+					"value": "<string>",
+					"type": "string",
+					"description": {
+						"content": "The template to retrieve",
+						"type": "text/plain"
+					}
+				}
+			],
+			"queryParams": [
+				{
+					"key": "sampleData",
+					"value": "<boolean>",
+					"description": "Whether or not to include sample data in the response"
+				}
+			],
+			"auth": {
+				"type": "noauth"
+			},
+			"events": null,
+			"folder": "e02f9930-8ad1-4d02-9438-4afdd828952a",
+			"responses": [
+				{
+					"id": "ec4035ec-dc0d-4436-b5fd-64d110eb1d52",
+					"name": "Adaptive Card Template",
+					"status": "OK",
+					"mime": null,
+					"language": "json",
+					"text": "{\n \"type\": \"<string>\",\n \"actions\": [\n  \"schema type not provided\",\n  \"schema type not provided\"\n ],\n \"body\": [\n  \"schema type not provided\",\n  \"schema type not provided\"\n ],\n \"selectAction\": {}\n}",
+					"responseCode": {
+						"code": 200,
+						"name": "OK",
+						"detail": ""
+					},
+					"requestObject": {
+						"id": "b7f8b990-cbf0-41c6-8907-5359c9b42eca",
+						"method": "POST",
+						"headers": "Content-Type: application/json",
+						"dataMode": "raw",
+						"pathVariables": {},
+						"url": "{{baseUrl}}/<string>?sampleData=<boolean>",
+						"pathVariableData": [],
+						"queryParams": [
+							{
+								"key": "sampleData",
+								"value": "<boolean>"
+							}
+						],
+						"headerData": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"data": [],
+						"rawModeData": "\"<object>\""
+					},
+					"headers": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookies": [],
+					"request": "0a2e82a3-9c8a-4746-b4a0-8a1b48575766",
+					"collection": "9a7f65f9-2ef6-44f1-8958-1f75738f69c1"
+				}
+			],
+			"rawModeData": "\"<object>\"",
+			"headers": "Content-Type: application/json\n",
+			"pathVariables": {
+				"template": "<string>"
+			}
+		},
+		{
+			"id": "27b21790-bd0f-47f6-9fa6-95b8d761a118",
+			"name": "Generate a card from a JSON Schema",
+			"url": "{{baseUrl}}/generate",
+			"description": "",
+			"data": [],
+			"dataOptions": {
+				"raw": {
+					"language": "json"
+				}
+			},
+			"dataMode": "raw",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"name": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"type": "text"
+				}
+			],
+			"method": "POST",
+			"pathVariableData": [],
+			"queryParams": [],
+			"auth": null,
+			"events": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "45dc5406-1085-4f75-88cf-18a04e6423b1",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"folder": null,
+			"responses": [
+				{
+					"id": "e2d99f17-ad74-4357-978b-441a3b897218",
+					"name": "Generate a card from a JSON Schema",
+					"status": null,
+					"mime": null,
+					"language": "json",
+					"text": "{\n    \"$schema\": \"http://adaptivecards.io/schemas/adaptive-card.json\",\n    \"version\": \"1.0\",\n    \"type\": \"AdaptiveCard\",\n    \"body\": [\n        {\n            \"type\": \"Container\",\n            \"items\": [\n                {\n                    \"type\": \"TextBlock\",\n                    \"text\": \"A registration form Editor\",\n                    \"size\": \"medium\",\n                    \"weight\": \"bolder\"\n                },\n                {\n                    \"type\": \"TextBlock\",\n                    \"text\": \"A form for editing a A registration form.\",\n                    \"size\": \"medium\",\n                    \"weight\": \"bolder\"\n                }\n            ]\n        },\n        {\n            \"type\": \"TextBlock\",\n            \"text\": \"First name\"\n        },\n        {\n            \"id\": \"firstName\",\n            \"type\": \"Input.Text\",\n            \"title\": \"First name\",\n            \"value\": \"Chuck\"\n        },\n        {\n            \"type\": \"TextBlock\",\n            \"text\": \"Last name\"\n        },\n        {\n            \"id\": \"lastName\",\n            \"type\": \"Input.Text\",\n            \"title\": \"Last name\"\n        },\n        {\n            \"type\": \"TextBlock\",\n            \"text\": \"Age\"\n        },\n        {\n            \"id\": \"age\",\n            \"type\": \"Input.Number\",\n            \"title\": \"Age\"\n        },\n        {\n            \"type\": \"TextBlock\",\n            \"text\": \"Bio\"\n        },\n        {\n            \"id\": \"bio\",\n            \"type\": \"Input.Text\",\n            \"title\": \"Bio\"\n        },\n        {\n            \"type\": \"TextBlock\",\n            \"text\": \"Password\"\n        },\n        {\n            \"id\": \"password\",\n            \"type\": \"Input.Text\",\n            \"title\": \"Password\"\n        },\n        {\n            \"type\": \"TextBlock\",\n            \"text\": \"Telephone\"\n        },\n        {\n            \"id\": \"telephone\",\n            \"type\": \"Input.Text\",\n            \"title\": \"Telephone\"\n        }\n    ],\n    \"actions\": [\n        {\n            \"type\": \"Action.Submit\",\n            \"title\": \"Cancel\"\n        },\n        {\n            \"type\": \"Action.Submit\",\n            \"title\": \"Submit\"\n        }\n    ],\n    \"templateMeta\": {\n        \"title\": \"A registration form Editor\"\n    },\n    \"meta\": {\n        \"generatedOn\": \"2/11/2020, 11:59:14 PM\"\n    }\n}",
+					"responseCode": {
+						"code": 200,
+						"name": "OK"
+					},
+					"requestObject": {
+						"data": [],
+						"dataMode": "raw",
+						"dataOptions": {
+							"raw": {
+								"language": "json"
+							}
+						},
+						"headerData": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"description": "",
+								"type": "text"
+							}
+						],
+						"method": "POST",
+						"pathVariableData": [],
+						"queryParams": [],
+						"url": "{{baseUrl}}/generate",
+						"rawModeData": "{\r\n  \"title\": \"A registration form\",\r\n  \"description\": \"A simple form example.\",\r\n  \"type\": \"object\",\r\n  \"required\": [\r\n    \"firstName\",\r\n    \"lastName\"\r\n  ],\r\n  \"properties\": {\r\n    \"firstName\": {\r\n      \"type\": \"string\",\r\n      \"title\": \"First name\",\r\n      \"default\": \"Chuck\"\r\n    },\r\n    \"lastName\": {\r\n      \"type\": \"string\",\r\n      \"title\": \"Last name\"\r\n    },\r\n    \"age\": {\r\n      \"type\": \"integer\",\r\n      \"title\": \"Age\"\r\n    },\r\n    \"bio\": {\r\n      \"type\": \"string\",\r\n      \"title\": \"Bio\"\r\n    },\r\n    \"password\": {\r\n      \"type\": \"string\",\r\n      \"title\": \"Password\",\r\n      \"minLength\": 3\r\n    },\r\n    \"telephone\": {\r\n      \"type\": \"string\",\r\n      \"title\": \"Telephone\",\r\n      \"minLength\": 10\r\n    }\r\n  }\r\n}"
+					},
+					"headers": [
+						{
+							"key": "Content-Length",
+							"value": "646"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Encoding",
+							"value": "gzip"
+						},
+						{
+							"key": "Vary",
+							"value": "Accept-Encoding"
+						},
+						{
+							"key": "Request-Context",
+							"value": "appId=cid-v1:f755a679-53a0-4f1d-bddf-d7acac6592a4"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 11 Feb 2020 23:59:14 GMT"
+						}
+					],
+					"cookies": null,
+					"request": "27b21790-bd0f-47f6-9fa6-95b8d761a118",
+					"collection": "9a7f65f9-2ef6-44f1-8958-1f75738f69c1"
+				}
+			],
+			"rawModeData": "",
+			"headers": "Content-Type: application/json\n",
+			"pathVariables": {}
+		},
+		{
+			"id": "90341c32-1061-4928-895e-53757835ac9d",
+			"name": "Find a template by type name",
+			"url": "{{baseUrl}}/find?odata.type=<string>",
+			"description": null,
+			"data": null,
+			"dataOptions": null,
+			"dataMode": null,
+			"headerData": [],
+			"method": "GET",
+			"pathVariableData": [],
+			"queryParams": [
+				{
+					"key": "odata.type",
+					"value": "<string>",
+					"description": "Search for templates by odata.type"
+				}
+			],
+			"auth": {
+				"type": "noauth"
+			},
+			"events": null,
+			"folder": "581a0f79-83e1-41e7-a1d6-5d624c28c0aa",
+			"responses": [
+				{
+					"id": "879c6e91-21ef-437b-927b-3f383a628d71",
+					"name": "Find a template by type name",
+					"status": null,
+					"mime": null,
+					"language": null,
+					"text": null,
+					"responseCode": null,
+					"requestObject": {
+						"data": null,
+						"dataMode": null,
+						"dataOptions": null,
+						"headerData": [],
+						"method": "GET",
+						"pathVariableData": [],
+						"queryParams": [
+							{
+								"key": "odata.type",
+								"value": "%23microsoft.graph.user",
+								"equals": true,
+								"description": "",
+								"enabled": true
+							}
+						],
+						"url": "{{baseUrl}}/find?odata.type=%23microsoft.graph.user"
+					},
+					"headers": null,
+					"cookies": null,
+					"request": "90341c32-1061-4928-895e-53757835ac9d",
+					"collection": "9a7f65f9-2ef6-44f1-8958-1f75738f69c1"
+				},
+				{
+					"id": "8b58e6cb-3298-4a75-937a-d79d4a2107e3",
+					"name": "Template search results",
+					"status": "OK",
+					"mime": null,
+					"language": "json",
+					"text": "[\n {\n  \"templateUrl\": \"<string>\",\n  \"confidence\": \"<integer>\"\n },\n {\n  \"templateUrl\": \"<string>\",\n  \"confidence\": \"<integer>\"\n }\n]",
+					"responseCode": {
+						"code": 200,
+						"name": "OK",
+						"detail": ""
+					},
+					"requestObject": {
+						"id": "783fb2b9-4e88-4be1-817f-9945f939b42c",
+						"method": "GET",
+						"headers": "",
+						"pathVariables": {},
+						"url": "{{baseUrl}}/find?odata.type=<string>",
+						"pathVariableData": [],
+						"queryParams": [
+							{
+								"key": "odata.type",
+								"value": "<string>"
+							}
+						],
+						"headerData": [],
+						"dataMode": null,
+						"data": null
+					},
+					"headers": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookies": [],
+					"request": "90341c32-1061-4928-895e-53757835ac9d",
+					"collection": "9a7f65f9-2ef6-44f1-8958-1f75738f69c1"
+				}
+			],
+			"headers": "",
+			"pathVariables": {}
+		},
+		{
+			"id": "d61ee8fa-7d0c-4547-9579-f5f2d521830c",
+			"name": "Find templates for a data type",
+			"url": "{{baseUrl}}/find",
+			"description": null,
+			"data": [],
+			"dataOptions": null,
+			"dataMode": "raw",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json"
+				}
+			],
+			"method": "POST",
+			"pathVariableData": [],
+			"queryParams": [],
+			"auth": {
+				"type": "noauth"
+			},
+			"events": null,
+			"folder": "581a0f79-83e1-41e7-a1d6-5d624c28c0aa",
+			"responses": [
+				{
+					"id": "139fa0dd-e113-4755-b0e0-a740c738cc1b",
+					"name": "Template search results",
+					"status": "OK",
+					"mime": null,
+					"language": "json",
+					"text": "[\n {\n  \"templateUrl\": \"<string>\",\n  \"confidence\": \"<integer>\"\n },\n {\n  \"templateUrl\": \"<string>\",\n  \"confidence\": \"<integer>\"\n }\n]",
+					"responseCode": {
+						"code": 200,
+						"name": "OK",
+						"detail": ""
+					},
+					"requestObject": {
+						"id": "bec31f55-48a4-49d6-ba55-5513156cc918",
+						"method": "POST",
+						"headers": "Content-Type: application/json",
+						"dataMode": "raw",
+						"pathVariables": {},
+						"url": "{{baseUrl}}/find",
+						"pathVariableData": [],
+						"queryParams": [],
+						"headerData": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"data": [],
+						"rawModeData": "\"<object>\""
+					},
+					"headers": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookies": [],
+					"request": "d61ee8fa-7d0c-4547-9579-f5f2d521830c",
+					"collection": "9a7f65f9-2ef6-44f1-8958-1f75738f69c1"
+				}
+			],
+			"rawModeData": "\"<object>\"",
+			"headers": "Content-Type: application/json\n",
+			"pathVariables": {}
+		},
+		{
+			"id": "d88e5bbe-d7ad-422f-8323-72dfe1e0a138",
+			"name": "Retrieve a raw template for client-side data binding",
+			"url": "{{baseUrl}}/:template?sampleData=<boolean>",
+			"description": null,
+			"data": null,
+			"dataOptions": null,
+			"dataMode": null,
+			"headerData": [],
+			"method": "GET",
+			"pathVariableData": [
+				{
+					"id": "dc4a1729-aeb6-433e-b221-4b6e2a25c16a",
+					"key": "template",
+					"value": "<string>",
+					"type": "string",
+					"description": {
+						"content": "The template to retrieve",
+						"type": "text/plain"
+					}
+				}
+			],
+			"queryParams": [
+				{
+					"key": "sampleData",
+					"value": "<boolean>",
+					"description": "Whether or not to include sample data in the response"
+				}
+			],
+			"auth": {
+				"type": "noauth"
+			},
+			"events": null,
+			"folder": "e02f9930-8ad1-4d02-9438-4afdd828952a",
+			"responses": [
+				{
+					"id": "1c149092-5e45-4c90-be86-12497445c727",
+					"name": "Adaptive Card Template",
+					"status": "OK",
+					"mime": null,
+					"language": "json",
+					"text": "{\n \"type\": \"<string>\",\n \"actions\": [\n  \"schema type not provided\",\n  \"schema type not provided\"\n ],\n \"body\": [\n  \"schema type not provided\",\n  \"schema type not provided\"\n ],\n \"selectAction\": {}\n}",
+					"responseCode": {
+						"code": 200,
+						"name": "OK",
+						"detail": ""
+					},
+					"requestObject": {
+						"id": "85cd3a37-9849-461c-84e4-30e10709b52b",
+						"method": "GET",
+						"headers": "",
+						"pathVariables": {},
+						"url": "{{baseUrl}}/<string>?sampleData=<boolean>",
+						"pathVariableData": [],
+						"queryParams": [
+							{
+								"key": "sampleData",
+								"value": "<boolean>"
+							}
+						],
+						"headerData": [],
+						"dataMode": null,
+						"data": null
+					},
+					"headers": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookies": [],
+					"request": "d88e5bbe-d7ad-422f-8323-72dfe1e0a138",
+					"collection": "9a7f65f9-2ef6-44f1-8958-1f75738f69c1"
+				}
+			],
+			"headers": "",
+			"pathVariables": {
+				"template": "<string>"
+			}
+		},
+		{
+			"id": "da226491-f091-4a1e-8d8a-866f86b2d75d",
+			"name": "Get all available templates",
+			"url": "{{baseUrl}}/list",
+			"description": null,
+			"data": null,
+			"dataOptions": null,
+			"dataMode": null,
+			"headerData": [],
+			"method": "GET",
+			"pathVariableData": [],
+			"queryParams": [],
+			"auth": {
+				"type": "noauth"
+			},
+			"events": null,
+			"folder": null,
+			"responses": [
+				{
+					"id": "65d3c0f4-fa7d-4374-8e9f-8f5fc03576c0",
+					"name": "Get all known Adaptive Card templates",
+					"status": "OK",
+					"mime": null,
+					"language": "text",
+					"text": "",
+					"responseCode": {
+						"code": 200,
+						"name": "OK",
+						"detail": ""
+					},
+					"requestObject": {
+						"id": "496d4587-5eb3-409a-90ee-61ec18cbacad",
+						"method": "GET",
+						"headers": "",
+						"pathVariables": {},
+						"url": "{{baseUrl}}/list",
+						"pathVariableData": [],
+						"queryParams": [],
+						"headerData": [],
+						"dataMode": null,
+						"data": null
+					},
+					"headers": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookies": [],
+					"request": "da226491-f091-4a1e-8d8a-866f86b2d75d",
+					"collection": "9a7f65f9-2ef6-44f1-8958-1f75738f69c1"
+				}
+			],
+			"headers": "",
+			"pathVariables": {}
+		},
+		{
+			"id": "f92f43d6-5675-4040-9dd8-0897983f4361",
+			"name": "Bind an inline template and data",
+			"url": "{{baseUrl}}/bind",
+			"description": "Bind an inline template payload with data",
+			"data": [],
+			"dataOptions": {
+				"raw": {
+					"language": "json"
+				}
+			},
+			"dataMode": "raw",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"name": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"type": "text"
+				}
+			],
+			"method": "POST",
+			"pathVariableData": [],
+			"queryParams": [],
+			"auth": null,
+			"events": null,
+			"folder": null,
+			"responses": [
+				{
+					"id": "821de510-79e5-43cc-8b69-dfad03ba830f",
+					"name": "https://templates.adaptivecards.io/bind",
+					"status": null,
+					"mime": null,
+					"language": "json",
+					"text": "{\n\t\t\"type\": \"AdaptiveCard\",\n\t\t\"version\": \"1.0\",\n\t\t\"body\": [\n\t\t\t{\n\t\t\t\t\"type\": \"TextBlock\",\n\t\t\t\t\"text\": \"Hello Matt\"\n\t\t\t}\n\t\t]\n\t}",
+					"responseCode": {
+						"code": 200,
+						"name": "OK"
+					},
+					"requestObject": {
+						"data": [],
+						"dataMode": "raw",
+						"dataOptions": {
+							"raw": {
+								"language": "json"
+							}
+						},
+						"headerData": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"description": "",
+								"type": "text"
+							}
+						],
+						"method": "POST",
+						"pathVariableData": [],
+						"queryParams": [],
+						"url": "https://templates.adaptivecards.io/bind",
+						"rawModeData": "{\n\t\"template\": {\n\t\t\"type\": \"AdaptiveCard\",\n\t\t\"version\": \"1.0\",\n\t\t\"body\": [\n\t\t\t{\n\t\t\t\t\"type\": \"TextBlock\",\n\t\t\t\t\"text\": \"Hello {name}\"\n\t\t\t}\n\t\t]\n\t},\n\t\"data\": {\n\t\t\"name\": \"Matt\"\n\t}\n}"
+					},
+					"headers": [
+						{
+							"key": "Content-Length",
+							"value": "175"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Encoding",
+							"value": "gzip"
+						},
+						{
+							"key": "Vary",
+							"value": "Accept-Encoding"
+						},
+						{
+							"key": "Request-Context",
+							"value": "appId="
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 11 Feb 2020 23:41:32 GMT"
+						}
+					],
+					"cookies": null,
+					"request": "f92f43d6-5675-4040-9dd8-0897983f4361",
+					"collection": "9a7f65f9-2ef6-44f1-8958-1f75738f69c1"
+				}
+			],
+			"rawModeData": "",
+			"headers": "Content-Type: application/json\n",
+			"pathVariables": {}
+		}
+	]
+}

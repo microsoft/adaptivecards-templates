@@ -4,7 +4,7 @@ const makeLabel = require('../utils/make-label')
 
 module.exports = function inputTextElementGenerator (key, config, options) {
   const elements = []
-  elements.push(makeLabel(config))
+  elements.push(makeLabel(key, config))
 
   const numberElement = makeBaseElement(key, 'Input.Number', config)
   addDescriptions(numberElement, config)

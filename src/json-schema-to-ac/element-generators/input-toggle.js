@@ -1,15 +1,27 @@
 const makeBaseElement = require('../utils/make-base-element')
-const addDescriptions = require('../utils/add-descriptions')
-const makeLabel = require('../utils/make-label')
 
 module.exports = function inputToggleElementGenerator (key, config, options) {
   const elements = []
 
-  const numberElement = makeBaseElement(key, 'Input.Toggle', config)
-  addDescriptions(numberElement, config)
-  if (config.showWhen) {
-    numberElement.showWhen = config.showWhen
+  const toggleElement = makeBaseElement(key, 'Input.Toggle', config)
+
+  if(config.description) {
+    const description = {
+        type: 'TextBlock',
+        text: config.description,
+        wrap: true,
+        spacing: 'none'
+    }
+
+    elements.push(description)
+}
+
+  if(config.default === true) {
+    toggleElement.value = "true"
   }
-  elements.push(numberElement)
+  if (config.showWhen) {
+    toggleElement.showWhen = config.showWhen
+  }
+  elements.push(toggleElement)
   return elements
 }

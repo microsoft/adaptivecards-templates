@@ -1,0 +1,629 @@
+{
+	"info": {
+		"_postman_id": "9a7f65f9-2ef6-44f1-8958-1f75738f69c1",
+		"name": "ACTemplates",
+		"description": "The Adaptive Cards Template Service is a proof-of-concept service that allows anyone to find, contribute to, and share a set of well-known templates.\n\nContact Support: \n{\n\nName : Adaptive Cards\n\nEmail : undefined\n\n}",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "find",
+			"item": [
+				{
+					"name": "Find a template by type name",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/find?odata.type=<string>",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"find"
+							],
+							"query": [
+								{
+									"key": "odata.type",
+									"value": "<string>",
+									"description": "Search for templates by odata.type"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Find a template by type name",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/find?odata.type=%23microsoft.graph.user",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"find"
+									],
+									"query": [
+										{
+											"key": "odata.type",
+											"value": "%23microsoft.graph.user"
+										}
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						},
+						{
+							"name": "Template search results",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/find?odata.type=<string>",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"find"
+									],
+									"query": [
+										{
+											"key": "odata.type",
+											"value": "<string>"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "[\n {\n  \"templateUrl\": \"<string>\",\n  \"confidence\": \"<integer>\"\n },\n {\n  \"templateUrl\": \"<string>\",\n  \"confidence\": \"<integer>\"\n }\n]"
+						}
+					]
+				},
+				{
+					"name": "Find templates for a data type",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "\"<object>\""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/find",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"find"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Template search results",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "\"<object>\""
+								},
+								"url": {
+									"raw": "{{baseUrl}}/find",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"find"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "[\n {\n  \"templateUrl\": \"<string>\",\n  \"confidence\": \"<integer>\"\n },\n {\n  \"templateUrl\": \"<string>\",\n  \"confidence\": \"<integer>\"\n }\n]"
+						}
+					]
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "{template}",
+			"item": [
+				{
+					"name": "Retrieve a raw template for client-side data binding",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/:template?sampleData=<boolean>",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								":template"
+							],
+							"query": [
+								{
+									"key": "sampleData",
+									"value": "<boolean>",
+									"description": "Whether or not to include sample data in the response"
+								}
+							],
+							"variable": [
+								{
+									"id": "dc4a1729-aeb6-433e-b221-4b6e2a25c16a",
+									"key": "template",
+									"value": "<string>",
+									"type": "string",
+									"description": {
+										"content": "The template to retrieve",
+										"type": "text/plain"
+									}
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Adaptive Card Template",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/<string>?sampleData=<boolean>",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"<string>"
+									],
+									"query": [
+										{
+											"key": "sampleData",
+											"value": "<boolean>"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"type\": \"<string>\",\n \"actions\": [\n  \"schema type not provided\",\n  \"schema type not provided\"\n ],\n \"body\": [\n  \"schema type not provided\",\n  \"schema type not provided\"\n ],\n \"selectAction\": {}\n}"
+						}
+					]
+				},
+				{
+					"name": "Retrieve an Adaptive Card based on the template",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "\"<object>\""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/:template?sampleData=<boolean>",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								":template"
+							],
+							"query": [
+								{
+									"key": "sampleData",
+									"value": "<boolean>",
+									"description": "Whether or not to include sample data in the response"
+								}
+							],
+							"variable": [
+								{
+									"id": "4e1b1a01-7c4f-4fa6-8636-c7970774cdcf",
+									"key": "template",
+									"value": "<string>",
+									"type": "string",
+									"description": {
+										"content": "The template to retrieve",
+										"type": "text/plain"
+									}
+								}
+							]
+						},
+						"description": "Pass your data in the POST body and it will be data-bound on the server"
+					},
+					"response": [
+						{
+							"name": "Adaptive Card Template",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "\"<object>\""
+								},
+								"url": {
+									"raw": "{{baseUrl}}/<string>?sampleData=<boolean>",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"<string>"
+									],
+									"query": [
+										{
+											"key": "sampleData",
+											"value": "<boolean>"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"type\": \"<string>\",\n \"actions\": [\n  \"schema type not provided\",\n  \"schema type not provided\"\n ],\n \"body\": [\n  \"schema type not provided\",\n  \"schema type not provided\"\n ],\n \"selectAction\": {}\n}"
+						}
+					]
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Get all available templates",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/list",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"list"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Get all known Adaptive Card templates",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/list",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"list"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				}
+			]
+		},
+		{
+			"name": "Bind an inline template and data",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/bind",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"bind"
+					]
+				},
+				"description": "Bind an inline template payload with data"
+			},
+			"response": [
+				{
+					"name": "https://templates.adaptivecards.io/bind",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"template\": {\n\t\t\"type\": \"AdaptiveCard\",\n\t\t\"version\": \"1.0\",\n\t\t\"body\": [\n\t\t\t{\n\t\t\t\t\"type\": \"TextBlock\",\n\t\t\t\t\"text\": \"Hello {name}\"\n\t\t\t}\n\t\t]\n\t},\n\t\"data\": {\n\t\t\"name\": \"Matt\"\n\t}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://templates.adaptivecards.io/bind",
+							"protocol": "https",
+							"host": [
+								"templates",
+								"adaptivecards",
+								"io"
+							],
+							"path": [
+								"bind"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Length",
+							"value": "175"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Encoding",
+							"value": "gzip"
+						},
+						{
+							"key": "Vary",
+							"value": "Accept-Encoding"
+						},
+						{
+							"key": "Request-Context",
+							"value": "appId="
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 11 Feb 2020 23:41:32 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "{\n\t\t\"type\": \"AdaptiveCard\",\n\t\t\"version\": \"1.0\",\n\t\t\"body\": [\n\t\t\t{\n\t\t\t\t\"type\": \"TextBlock\",\n\t\t\t\t\"text\": \"Hello Matt\"\n\t\t\t}\n\t\t]\n\t}"
+				}
+			]
+		},
+		{
+			"name": "Generate a card from a JSON Schema",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "45dc5406-1085-4f75-88cf-18a04e6423b1",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/generate",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"generate"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Generate a card from a JSON Schema",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"A registration form\",\r\n  \"description\": \"A simple form example.\",\r\n  \"type\": \"object\",\r\n  \"required\": [\r\n    \"firstName\",\r\n    \"lastName\"\r\n  ],\r\n  \"properties\": {\r\n    \"firstName\": {\r\n      \"type\": \"string\",\r\n      \"title\": \"First name\",\r\n      \"default\": \"Chuck\"\r\n    },\r\n    \"lastName\": {\r\n      \"type\": \"string\",\r\n      \"title\": \"Last name\"\r\n    },\r\n    \"age\": {\r\n      \"type\": \"integer\",\r\n      \"title\": \"Age\"\r\n    },\r\n    \"bio\": {\r\n      \"type\": \"string\",\r\n      \"title\": \"Bio\"\r\n    },\r\n    \"password\": {\r\n      \"type\": \"string\",\r\n      \"title\": \"Password\",\r\n      \"minLength\": 3\r\n    },\r\n    \"telephone\": {\r\n      \"type\": \"string\",\r\n      \"title\": \"Telephone\",\r\n      \"minLength\": 10\r\n    }\r\n  }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/generate",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"generate"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Length",
+							"value": "646"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Encoding",
+							"value": "gzip"
+						},
+						{
+							"key": "Vary",
+							"value": "Accept-Encoding"
+						},
+						{
+							"key": "Request-Context",
+							"value": "appId=cid-v1:f755a679-53a0-4f1d-bddf-d7acac6592a4"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 11 Feb 2020 23:59:14 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"$schema\": \"http://adaptivecards.io/schemas/adaptive-card.json\",\n    \"version\": \"1.0\",\n    \"type\": \"AdaptiveCard\",\n    \"body\": [\n        {\n            \"type\": \"Container\",\n            \"items\": [\n                {\n                    \"type\": \"TextBlock\",\n                    \"text\": \"A registration form Editor\",\n                    \"size\": \"medium\",\n                    \"weight\": \"bolder\"\n                },\n                {\n                    \"type\": \"TextBlock\",\n                    \"text\": \"A form for editing a A registration form.\",\n                    \"size\": \"medium\",\n                    \"weight\": \"bolder\"\n                }\n            ]\n        },\n        {\n            \"type\": \"TextBlock\",\n            \"text\": \"First name\"\n        },\n        {\n            \"id\": \"firstName\",\n            \"type\": \"Input.Text\",\n            \"title\": \"First name\",\n            \"value\": \"Chuck\"\n        },\n        {\n            \"type\": \"TextBlock\",\n            \"text\": \"Last name\"\n        },\n        {\n            \"id\": \"lastName\",\n            \"type\": \"Input.Text\",\n            \"title\": \"Last name\"\n        },\n        {\n            \"type\": \"TextBlock\",\n            \"text\": \"Age\"\n        },\n        {\n            \"id\": \"age\",\n            \"type\": \"Input.Number\",\n            \"title\": \"Age\"\n        },\n        {\n            \"type\": \"TextBlock\",\n            \"text\": \"Bio\"\n        },\n        {\n            \"id\": \"bio\",\n            \"type\": \"Input.Text\",\n            \"title\": \"Bio\"\n        },\n        {\n            \"type\": \"TextBlock\",\n            \"text\": \"Password\"\n        },\n        {\n            \"id\": \"password\",\n            \"type\": \"Input.Text\",\n            \"title\": \"Password\"\n        },\n        {\n            \"type\": \"TextBlock\",\n            \"text\": \"Telephone\"\n        },\n        {\n            \"id\": \"telephone\",\n            \"type\": \"Input.Text\",\n            \"title\": \"Telephone\"\n        }\n    ],\n    \"actions\": [\n        {\n            \"type\": \"Action.Submit\",\n            \"title\": \"Cancel\"\n        },\n        {\n            \"type\": \"Action.Submit\",\n            \"title\": \"Submit\"\n        }\n    ],\n    \"templateMeta\": {\n        \"title\": \"A registration form Editor\"\n    },\n    \"meta\": {\n        \"generatedOn\": \"2/11/2020, 11:59:14 PM\"\n    }\n}"
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "bf3f481b-e460-4e87-9c54-2deeb64cd900",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "76bd70b1-4782-4309-b7a7-7393c14d8f53",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "fc3d372d-29fc-4c4f-a50e-2ee1fa0307d2",
+			"key": "baseUrl",
+			"value": "https://templates.adaptivecards.io",
+			"type": "string"
+		}
+	],
+	"protocolProfileBehavior": {}
+}

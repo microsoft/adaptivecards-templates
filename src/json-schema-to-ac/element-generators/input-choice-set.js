@@ -5,7 +5,7 @@ const makeLabel = require('../utils/make-label')
 
 function choiceSetElementGenerator (key, config, options) {
   const elements = [] 
-  elements.push(makeLabel(config))
+  elements.push(makeLabel(key, config))
 
   const choiceSetElement = makeBaseElement(key, 'Input.ChoiceSet', config)
   choiceSetElement.choices = []
