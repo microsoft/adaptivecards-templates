@@ -54,33 +54,15 @@ jobs:
               run: |
                   SECRET='${{ secrets.AZURE_ADPATIVECMS_DB_CONNECTION }}'
                   # SECRET=${SECRET//$'\n'/\\n}
-                  find . -type f -exec sed -i "s%needleZZZZ%$SECRET%g" {} \;    
-
-            # - name: Replace DBConnection token with DB Connection string
-            #   uses: cschleiden/replace-tokens@v1
-            #   with:
-            #     files: '["**/*.ts"]'
-            #   env:
-            #     DBConnection: ${{ secrets.AZURE_ADPATIVECMS_DB_CONNECTION }}
-            # - name: Print file contents
-            #   run: |
-            #     cd private-templates-service/server/src
-            #     cat app.ts
+                  find . -type f -exec sed -i "s%__DBConnection__%$SECRET%g" {} \;    
             - name: Create production build
               if: success()
               run: |
                   # Build and test the project, then
                   # deploy to Azure Web App.
-                  cd private-templates-service/server/src
-                  cat app.ts
-                  cd ..
-                  cd ..
-                  cd client
+                  cd private-templates-service/client
                   npm run build:dev --if-present
                   cd ../server
-                  cd src 
-                  cat app.ts
-                  cd ..
                   npm run deploy
             # - name: "Deploy to Azure WebApp"
             #   if: success()
