@@ -22,7 +22,7 @@ export const UserSchema: Schema = new Schema(
     lastName: { type: String, default: "" },
     team: { type: [String], default: [] },
     org: { type: [String], default: [] },
-    recentlyViewedTemplates: { type: [String], default: [] }
+    recentlyViewed: { type: [String], default: [] }
   },
   {
     versionKey: false,

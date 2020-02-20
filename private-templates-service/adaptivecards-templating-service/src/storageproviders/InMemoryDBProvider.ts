@@ -76,7 +76,6 @@ export class InMemoryDBProvider implements StorageProvider {
   }
 
   async getTemplates(query: Partial<ITemplate>, sortBy: SortBy = SortBy.alphabetical, sortOrder: SortOrder = SortOrder.ascending): Promise<JSONResponse<ITemplate[]>> {
-    console.log(query);
     return this._matchTemplates(query, sortBy, sortOrder);
   }
 
@@ -179,7 +178,7 @@ export class InMemoryDBProvider implements StorageProvider {
       instance.data = "{}";
     }
     if (!instance.publishedAt) {
-      instance.publishedAt = undefined;
+      instance.publishedAt = new Date("null");
     }
   }
   protected _autoCompleteTemplateModel(template: ITemplate): void {
