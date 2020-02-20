@@ -56,13 +56,8 @@ jobs:
                   # Build and test the project, then
                   # deploy to Azure Web App.
                   cd private-templates-service/client
-                  npm install
-                  npm run build:staging --if-present
-                  cd ../adaptivecards-templating-service
-                  npm link
+                  npm run build:stage --if-present
                   cd ../server
-                  npm install
-                  npm link adaptivecards-templating-service
                   npm run deploy
             - name: "Deploy to Azure WebApp"
               if: success()
