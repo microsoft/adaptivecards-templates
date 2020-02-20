@@ -55,7 +55,7 @@ function cleanTemplate(temp: TemplateInstance): Template {
   const templateString = JSON.stringify(temp.json);
   const replaceChar = templateString.replace(/\\\\\\/g, '');
   const trimTemp = replaceChar.slice(3, replaceChar.length - 3);
-  let jsonTemp = JSON.parse("{}");
+  let jsonTemp = {};
   try {
     jsonTemp = JSON.parse(trimTemp);
   }

@@ -16,7 +16,7 @@ const mapStateToProps = (state: RootState) => {
     isAuthenticated: state.auth.isAuthenticated,
     user: state.auth.user,
     templateID: state.currentTemplate.templateID,
-    templateJSON: state.currentTemplate.templateID,
+    templateJSON: state.currentTemplate.templateJSON,
     templateName: state.currentTemplate.templateName,
     sampleDataJSON: state.currentTemplate.sampleDataJSON
   };
