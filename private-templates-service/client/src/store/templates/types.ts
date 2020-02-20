@@ -1,7 +1,7 @@
 import { IncomingMessage } from "http";
 import { TemplateList } from "adaptive-templating-service-typescript-node";
 
-export interface BatchTemplatesState {
+export interface AllTemplatesState {
   isFetching: boolean;
   templateList?: TemplateList;
 }

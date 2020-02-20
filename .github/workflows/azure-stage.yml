@@ -12,7 +12,6 @@ on:
     push:
         branches:
             - stage
-
 env:
     AZURE_WEBAPP_NAME: adaptivecms # set this to your application's name
     AZURE_WEBAPP_PACKAGE_PATH: "private-templates-service/" # set this to the path to your web app project, defaults to the repository root
@@ -39,23 +38,30 @@ jobs:
                   cd ..
             - name: Frontend Jest Test
               run: |
-                  cd private-templates-service/client
+                  cd private-templates-service/adaptivecards-templating-client/typescript
                   npm install
+                  npm run build
+                  npm link
+                  cd ../../client
+                  npm link adaptive-templating-service-typescript-node
+                  npm install
+                  cd src 
+                  npm link adaptive-templating-service-typescript-node
+                  cd ..
                   npm run test
                   cd ..
+            - name: Find and Replace - Using Secrets
+              run: |
+                  SECRET='${{ secrets.AZURE_ADPATIVECMS_DB_CONNECTION }}'
+                  find . -type f -exec sed -i "s%__DBConnection__%$SECRET%g" {} \;   
             - name: Create production build
               if: success()
               run: |
                   # Build and test the project, then
                   # deploy to Azure Web App.
                   cd private-templates-service/client
-                  npm install
-                  npm run build:staging --if-present
-                  cd ../adaptivecards-templating-service
-                  npm link
+                  npm run build:stage --if-present
                   cd ../server
-                  npm install
-                  npm link adaptivecards-templating-service
                   npm run deploy
             - name: "Deploy to Azure WebApp"
               if: success()

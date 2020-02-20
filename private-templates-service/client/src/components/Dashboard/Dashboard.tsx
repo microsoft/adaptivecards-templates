@@ -3,13 +3,14 @@ import { connect } from "react-redux";
 
 import { RootState } from "../../store/rootReducer";
 import { UserType } from "../../store/auth/types";
-import { BatchTemplatesState } from '../../store/templates/types';
+import { AllTemplatesState } from '../../store/templates/types';
 import { setPage } from "../../store/page/actions";
 import { getAllTemplates } from "../../store/templates/actions";
 
 import requireAuthentication from "../../utils/requireAuthentication";
 import Gallery from "../Gallery";
 import PreviewModal from "./PreviewModal";
+import SearchPage from './SearchPage/SearchPage';
 
 import { Title, DashboardContainer } from "../Dashboard/styled";
 
@@ -17,7 +18,8 @@ const mapStateToProps = (state: RootState) => {
   return {
     isAuthenticated: state.auth.isAuthenticated,
     user: state.auth.user,
-    batchTemplates: state.batchTemplates,
+    batchTemplates: state.templates,
+    isSearch: state.search.isSearch
   };
 };
 
@@ -37,10 +39,11 @@ interface State {
 interface Props {
   isAuthenticated: boolean;
   user?: UserType;
-  batchTemplates: BatchTemplatesState;
+  batchTemplates: AllTemplatesState;
   authButtonMethod: () => Promise<void>;
   setPage: (currentPageTitle: string) => void;
   getTemplates: () => void;
+  isSearch: boolean;
 }
 
 class Dashboard extends React.Component<Props, State> {
@@ -53,9 +56,16 @@ class Dashboard extends React.Component<Props, State> {
 
   toggleModal = () => {
     this.setState({ isPreviewOpen: !this.state.isPreviewOpen });
-  }
+  };
 
   render() {
+    if (this.props.isSearch) {
+      return (
+        <DashboardContainer>
+          <SearchPage />
+        </DashboardContainer>
+      );
+    }
     //TODO add sort functionality to separate templates displayed in recent vs draft
     let templates = undefined;
     if (!this.props.batchTemplates.isFetching && this.props.batchTemplates.templateList) {
