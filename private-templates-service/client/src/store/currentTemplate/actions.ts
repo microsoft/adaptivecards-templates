@@ -70,7 +70,7 @@ export function updateTemplate(templateID: string, templateJSON: string, sampleD
     newTemplate.name = templateName;
     newTemplate.isPublished = false;
 
-    if (templateID === null || templateID === "") {
+    if (templateID === null || templateID === undefined || templateID === "") {
       dispatch(requestNewTemplateUpdate());
       return api.templatePost(newTemplate).then(response => {
         if (response.response.statusCode && response.response.statusCode === 201 && response.body.id) {
