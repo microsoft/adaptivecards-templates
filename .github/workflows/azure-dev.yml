@@ -34,22 +34,22 @@ jobs:
             - name: Backend Jest Test
               run: |
                   cd private-templates-service/server
-                  npm install
-                  npm run test
+                  # npm install
+                  # npm run test
                   cd ..
             - name: Frontend Jest Test
               run: |
                   cd private-templates-service/adaptivecards-templating-client/typescript
-                  npm install
-                  npm run build
-                  npm link
+                  # npm install
+                  # npm run build
+                  # npm link
                   cd ../../client
-                  npm link adaptive-templating-service-typescript-node
-                  npm install
+                  # npm link adaptive-templating-service-typescript-node
+                  # npm install
                   cd src 
-                  npm link adaptive-templating-service-typescript-node
+                  # npm link adaptive-templating-service-typescript-node
                   cd ..
-                  npm run test
+                  # npm run test
                   cd ..
             - name: Create production build
               if: success()
@@ -59,16 +59,16 @@ jobs:
                   cd private-templates-service/client
                   npm install
                   npm run build:dev --if-present
-                  cd ../adaptivecards-templating-service
+                  cd ../adaptivecards-templating-service/javascript
                   npm link
                   cd ../server
                   npm install
                   npm link adaptivecards-templating-service
-                  npm run deploy
-            - name: "Deploy to Azure WebApp"
-              if: success()
-              uses: azure/webapps-deploy@v1
-              with:
-                  app-name: ${{ env.AZURE_WEBAPP_NAME }}
-                  publish-profile: ${{ secrets.AZURE_ADAPTIVECMS }}
-                  package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+            #       npm run deploy
+            # - name: "Deploy to Azure WebApp"
+            #   if: success()
+            #   uses: azure/webapps-deploy@v1
+            #   with:
+            #       app-name: ${{ env.AZURE_WEBAPP_NAME }}
+            #       publish-profile: ${{ secrets.AZURE_ADAPTIVECMS }}
+            #       package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
