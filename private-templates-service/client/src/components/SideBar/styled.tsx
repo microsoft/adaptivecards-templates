@@ -56,11 +56,12 @@ export const LogoTextSubHeader = styled.div`
 export const UserWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 48px 0;
+  margin: 60px 0;
 `
 
 export const AvatarIcon = styled.img`
-  width: 32px;
+  width: 80px;
+  margin-bottom: 16px;
 `;
 
 export const DefaultAvatarIcon = styled(Icon) <{ size?: string }>`
