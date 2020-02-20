@@ -12,7 +12,7 @@ import { InMemoryDBProvider } from "../../adaptivecards-templating-service/src/s
 const app = express();
 
 // Express configuration
-app.use(express.static(path.join(__dirname, "../client/build")));
+app.use(express.static(path.join(__dirname, "../../../../client/build")));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(bodyParser.json());
