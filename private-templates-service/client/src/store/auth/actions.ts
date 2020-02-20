@@ -1,21 +1,26 @@
 import {
-  LOGIN,
   LOGOUT,
-  LOGIN_POPUP_BEGIN,
-  LOGIN_POPUP_FAIL,
-  LOGIN_POPUP_SUCCESS,
+  ACCESS_TOKEN_SET,
   UserType,
   AuthAction,
-  LoginPopupAction
+  AccessTokenAction,
+  GetUserDetailsAction,
+  GetOrgDetailsAction,
+  GetProfilePictureAction,
+  GET_USER_DETAILS,
+  GET_USER_DETAILS_SUCCESS,
+  GET_USER_DETAILS_FAILURE,
+  GET_ORG_DETAILS,
+  GET_ORG_DETAILS_SUCCESS,
+  GET_ORG_DETAILS_FAILURE,
+  GET_PROFILE_PICTURE,
+  GET_PROFILE_PICTURE_SUCCESS,
+  GET_PROFILE_PICTURE_FAILURE,
 } from './types';
 
-export function login(user: UserType): AuthAction {
-  return {
-    type: LOGIN,
-    text: 'User login',
-    user: user
-  }
-}
+import { getAuthenticatedClient } from '../../Services/GraphService';
+import { AuthResponse } from 'msal';
+import { RootState } from '../rootReducer';
 
 export function logout(): AuthAction {
   return {
@@ -24,29 +29,128 @@ export function logout(): AuthAction {
   }
 }
 
-export function loginPopupBegin(): LoginPopupAction {
+export function setAccessToken(accessToken: AuthResponse): AccessTokenAction {
   return {
-    type: LOGIN_POPUP_BEGIN
+    type: ACCESS_TOKEN_SET,
+    accessToken
   }
 }
 
-export function loginPopupFail(): LoginPopupAction {
+function requestUserDetails(): GetUserDetailsAction {
   return {
-    type: LOGIN_POPUP_FAIL
+    type: GET_USER_DETAILS,
   }
 }
 
-export function loginPopupSucess(): LoginPopupAction {
+function requestUserDetailsSuccess(user: UserType): GetUserDetailsAction {
   return {
-    type: LOGIN_POPUP_SUCCESS
+    type: GET_USER_DETAILS_SUCCESS,
+    user,
   }
 }
 
-export function loginPopup(): (dispatch: any) => void {
+function requestUserDetailsFailure(): GetUserDetailsAction {
+  return {
+    type: GET_USER_DETAILS_FAILURE
+  }
+}
 
-  return function (dispatch: any) {
-    dispatch(loginPopupBegin());
+function requestOrgDetails(): GetOrgDetailsAction {
+  return {
+    type: GET_ORG_DETAILS
+  }
+}
 
+function requestOrgDetailsSuccess(org: string): GetOrgDetailsAction {
+  return {
+    type: GET_ORG_DETAILS_SUCCESS,
+    org,
+  }
+}
 
+function requestOrgDetailsFailure(): GetOrgDetailsAction {
+  return {
+    type: GET_ORG_DETAILS_FAILURE
+  }
+}
+
+function requestProfilePicture(): GetProfilePictureAction {
+  return {
+    type: GET_PROFILE_PICTURE
+  }
+}
+
+function requestProfilePictureSuccess(imageURL: string): GetProfilePictureAction {
+  return {
+    type: GET_PROFILE_PICTURE_SUCCESS,
+    imageURL
+  }
+}
+
+function requestProfilePictureFailure(): GetProfilePictureAction {
+  return {
+    type: GET_PROFILE_PICTURE_FAILURE
+  }
+}
+
+export function getUserDetails() {
+  return function (dispatch: any, getState: () => RootState) {
+    dispatch(requestUserDetails());
+    const state = getState();
+
+    if (!state.auth.accessToken) {
+      return dispatch(requestUserDetailsFailure());
+    }
+
+    const client = getAuthenticatedClient(state.auth.accessToken);
+    return client.api('/me').get()
+      .then((userDetails: UserType) => {
+        dispatch(requestUserDetailsSuccess(userDetails))
+      }, (fail: any) => {
+        dispatch(requestUserDetailsFailure());
+      })
+  }
+}
+
+export function getOrgDetails() {
+  return function (dispatch: any, getState: () => RootState) {
+    dispatch(requestOrgDetails());
+    const state = getState();
+
+    if (!state.auth.accessToken) {
+      return dispatch(requestOrgDetailsFailure());
+    }
+
+    const client = getAuthenticatedClient(state.auth.accessToken);
+    return client.api('/organization').get()
+      .then((org: any) => {
+        if (org.value.length === 0) {
+          dispatch(requestOrgDetailsFailure());
+        } else {
+          dispatch(requestOrgDetailsSuccess(org.value[0].displayName));
+        }
+      }, (fail: any) => {
+        dispatch(requestOrgDetailsFailure());
+      })
+  }
+}
+
+export function getProfilePicture() {
+  return function (dispatch: any, getState: () => RootState) {
+    dispatch(requestProfilePicture());
+    const state = getState();
+
+    if (!state.auth.accessToken) {
+      return dispatch(requestProfilePictureFailure());
+    }
+
+    const client = getAuthenticatedClient(state.auth.accessToken);
+    return client.api('/me/photos/240x240/$value').get()
+      .then((image: Blob) => {
+        const imageURL = URL.createObjectURL(image);
+        dispatch(requestProfilePictureSuccess(imageURL));
+      }, (fail: any) => {
+        dispatch(requestProfilePictureFailure());
+      })
   }
 }

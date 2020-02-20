@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { UserAgentApplication, ClientAuthError } from "msal";
+import { AuthResponse } from 'msal';
 import { initializeIcons } from '@uifabric/icons';
 
 // Redux
 import { connect } from "react-redux";
-import { login, logout } from "./store/auth/actions";
+import { setAccessToken, getUserDetails, getOrgDetails, getProfilePicture, logout } from "./store/auth/actions";
 import { UserType } from "./store/auth/types";
 import { RootState } from "./store/rootReducer";
 
@@ -16,7 +17,6 @@ import SideBar from "./components/SideBar";
 import Dashboard from "./components/Dashboard";
 import ErrorMessage, { ErrorMessageProps } from "./components/ErrorMessage/ErrorMessage";
 import config from "./Config";
-import { getUserDetails, getOrgDetails } from "./Services/GraphService";
 
 // CSS
 import "bootstrap/dist/css/bootstrap.css";
@@ -37,8 +37,17 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    userLogin: (user: UserType) => {
-      dispatch(login(user));
+    setAccessToken: (accessToken: AuthResponse) => {
+      dispatch(setAccessToken(accessToken));
+    },
+    getUserDetails: () => {
+      dispatch(getUserDetails());
+    },
+    getOrgDetails: () => {
+      dispatch(getOrgDetails());
+    },
+    getProfilePicture: () => {
+      dispatch(getProfilePicture());
     },
     userLogout: () => {
       dispatch(logout());
@@ -47,7 +56,10 @@ const mapDispatchToProps = (dispatch: any) => {
 };
 
 interface Props {
-  userLogin: (user: UserType) => void;
+  setAccessToken: (accessToken: AuthResponse) => void;
+  getUserDetails: () => void;
+  getOrgDetails: () => void;
+  getProfilePicture: () => void;
   userLogout: () => void;
   isAuthenticated: boolean;
   user?: UserType;
@@ -79,7 +91,7 @@ class App extends Component<Props, State> {
 
     if (user) {
       // Enhance user object with data from Graph
-      this.getUserProfile();
+      this.getUserInfo();
     }
   }
 
@@ -130,7 +142,7 @@ class App extends Component<Props, State> {
         scopes: config.scopes,
         prompt: "select_account"
       });
-      await this.getUserProfile();
+      await this.getUserInfo();
     } catch (err) {
       let error = {};
 
@@ -168,36 +180,24 @@ class App extends Component<Props, State> {
     this.props.userLogout();
   };
 
-  getUserProfile = async () => {
+  getUserInfo = async () => {
     try {
       // Get the access token silently
       // If the cache contains a non-expired token, this function
       // will just return the cached token. Otherwise, it will
       // make a request to the Azure OAuth endpoint to get a token
-
       let accessToken = await this.userAgentApplication.acquireTokenSilent(
         {
           scopes: config.scopes
         }
       );
 
-      if (accessToken) {
-        // Get the user's profile from Graph
-        let user = await getUserDetails(accessToken);
-        let org = await getOrgDetails(accessToken);
-        if (org.value.length === 0) {
-          org = null;
-        } else {
-          org = org.value[0].displayName;
-        }
+      this.props.setAccessToken(accessToken);
 
-        this.props.userLogin({
-          displayName: user.displayName,
-          email: user.mail || user.userPrincipalName,
-          organization: org,
-          avatarURL: user.image,
-        });
-      }
+      this.props.getUserDetails();
+      this.props.getOrgDetails();
+      this.props.getProfilePicture();
+
     } catch (err) {
       let error: ErrorMessageProps;
       if (typeof err === "string") {

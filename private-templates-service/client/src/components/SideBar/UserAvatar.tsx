@@ -18,10 +18,10 @@ const mapStateToProps = (state: RootState) => {
 class UserAvatar extends React.Component<Props> {
   // If a user avatar is available, return an img tag with the pic
   render() {
-    if (this.props.user && this.props.user.avatarURL) {
+    if (this.props.user && this.props.user.imageURL) {
       return (
         <AvatarIcon
-          src={this.props.user.avatarURL}
+          src={this.props.user.imageURL}
           alt="user"
           className="rounded-circle align-self-center"
         ></AvatarIcon>
