@@ -21,7 +21,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 const mongoConnection: MongoConnectionParams = {
   // connectionString: "#{DBConnection}#"
-  connectionString: "mongodb://adaptivecardstemplates-staging:Ohl3g9RUdIy12LmQQqrELRhSrb1RCV5BN06wAkKRbpSR6LSQSDYlpEdgyOlzbKlWtmZQ7QOcqeWZEnswOK2kMA==@adaptivecardstemplates-staging.mongo.cosmos.azure.com:10255/?ssl=true&replicaSet=globaldb&maxIdleTimeMS=120000&appName=@adaptivecardstemplates-staging@"
+  connectionString: "needle"
 
 }
 
