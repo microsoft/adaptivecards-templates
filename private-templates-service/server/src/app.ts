@@ -23,17 +23,24 @@ const mongoConnection: MongoConnectionParams = {
   connectionString: "__DBConnection__"
 }
 
-const mongoClient: ClientOptions = {
-  authenticationProvider: new AzureADProvider(),
-  storageProvider: new MongoDBProvider(mongoConnection),
-}
+let mongoDB = new MongoDBProvider(mongoConnection);
+mongoDB.connect()
+  .then(
+    (res) => {
+      if (res.success) {
+        const mongoClient: ClientOptions = {
+          authenticationProvider: new AzureADProvider(),
+          storageProvider: new MongoDBProvider(mongoConnection),
+        }
 
-const client: TemplateServiceClient = TemplateServiceClient.init(mongoClient);
-app.use("/template", client.expressMiddleware());
-app.use("/user", client.userExpressMiddleware());
+        const client: TemplateServiceClient = TemplateServiceClient.init(mongoClient);
+        app.use("/template", client.expressMiddleware());
+        app.use("/user", client.userExpressMiddleware());
+      } else {
+        console.log(res.errorMessage);
+      }
 
-app.get('/api/status', (req, res) => {
-  res.status(200).send("Hello World");
-})
+    }
+  )
 
 export default app;
