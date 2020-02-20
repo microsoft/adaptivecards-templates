@@ -55,7 +55,7 @@ jobs:
               run: |
                   # Build and test the project, then
                   # deploy to Azure Web App.
-                  cd private-templates-service/adaptivecards-templating-service/typescript
+                  cd adaptivecards-templating-service/typescript
                   npm run build 
                   npm link
                   cd ../client
