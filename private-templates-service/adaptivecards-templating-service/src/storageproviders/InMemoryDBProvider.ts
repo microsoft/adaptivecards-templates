@@ -178,6 +178,9 @@ export class InMemoryDBProvider implements StorageProvider {
     if (!instance.data) {
       instance.data = "{}";
     }
+    if (!instance.publishedAt) {
+      instance.publishedAt = undefined;
+    }
   }
   protected _autoCompleteTemplateModel(template: ITemplate): void {
     if (!template.tags) {
