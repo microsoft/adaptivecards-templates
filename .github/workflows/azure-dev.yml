@@ -50,18 +50,18 @@ jobs:
                   cd ..
                   # npm run test
                   cd ..
-            # - name: Find and Replace - Using Secrets
-            #   run: |
-            #       SECRET='${{ secrets.AZURE_ADPATIVECMS_DB_CONNECTION }}'
-            #       # SECRET=${SECRET//$'\n'/\\n}
-            #       find . -type f -exec sed -i "s%needle%$SECRET%g" {} \;    
+            - name: Find and Replace - Using Secrets
+              run: |
+                  SECRET='${{ secrets.AZURE_ADPATIVECMS_DB_CONNECTION }}'
+                  # SECRET=${SECRET//$'\n'/\\n}
+                  find . -type f -exec sed -i "s%needle%$SECRET%g" {} \;    
 
-            - name: Replace DBConnection token with DB Connection string
-              uses: cschleiden/replace-tokens@v1
-              with:
-                files: '["**/*.ts"]'
-              env:
-                DBConnection: ${{ secrets.AZURE_ADPATIVECMS_DB_CONNECTION }}
+            # - name: Replace DBConnection token with DB Connection string
+            #   uses: cschleiden/replace-tokens@v1
+            #   with:
+            #     files: '["**/*.ts"]'
+            #   env:
+            #     DBConnection: ${{ secrets.AZURE_ADPATIVECMS_DB_CONNECTION }}
             # - name: Print file contents
             #   run: |
             #     cd private-templates-service/server/src
@@ -74,9 +74,13 @@ jobs:
                   cd private-templates-service/client
                   npm run build:dev --if-present
                   cd ../server
-                  cd src 
+            - name: Print file contents (using email suggestions)
+              run: |
+                  cd src
                   cat app.ts
                   cd ..
+            - name: Run deploy
+              run: |
                   npm run deploy
             # - name: "Deploy to Azure WebApp"
             #   if: success()
