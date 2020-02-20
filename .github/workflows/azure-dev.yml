@@ -56,7 +56,7 @@ jobs:
                 files: '["**/*.ts"]'
               env:
                 DBConnectionToken: DB_CONNECTION_TOKEN
-                DBCOnnectionString: ${{ AZURE_ADPATIVECMS_DB_CONNECTION }}
+                DBCOnnectionString: ${{ secrets.AZURE_ADPATIVECMS_DB_CONNECTION }}
             - name: Create production build
               if: success()
               run: |
