@@ -4,21 +4,21 @@ import { IncomingMessage } from "http";
 
 export function newTemplate(): CurrentTemplateAction {
   return {
-    type: NEW_TEMPLATE,
+    actionType: NEW_TEMPLATE,
     text: "new template"
   };
 }
 
 function requestNewTemplateUpdate(): CurrentTemplateAction {
   return {
-    type: REQUEST_NEW_TEMPLATE_UPDATE,
+    actionType: REQUEST_NEW_TEMPLATE_UPDATE,
     text: "requesting post new template on save"
   };
 }
 
 function receiveNewTemplateUpdate(templateID: string, templateJSON: string, templateName: string, sampleDataJSON: string): CurrentTemplateAction {
   return {
-    type: RECEIVE_NEW_TEMPLATE_UPDATE,
+    actionType: RECEIVE_NEW_TEMPLATE_UPDATE,
     text: "receiving post new template on save",
     templateID: templateID,
     templateJSON: templateJSON,
@@ -29,7 +29,7 @@ function receiveNewTemplateUpdate(templateID: string, templateJSON: string, temp
 
 function failureNewTemplateUpdate(error: IncomingMessage): CurrentTemplateAction {
   return {
-    type: FAILURE_NEW_TEMPLATE_UPDATE,
+    actionType: FAILURE_NEW_TEMPLATE_UPDATE,
     text: "failure post new template on save",
     error: error
   };
@@ -37,14 +37,14 @@ function failureNewTemplateUpdate(error: IncomingMessage): CurrentTemplateAction
 
 function requestExistingTemplateUpdate(): CurrentTemplateAction {
   return {
-    type: REQUEST_EXISTING_TEMPLATE_UPDATE,
+    actionType: REQUEST_EXISTING_TEMPLATE_UPDATE,
     text: "requesting post existing template on save"
   };
 }
 
 function receiveExistingTemplateUpdate(templateJSON: string, templateName: string, sampleDataJSON: string): CurrentTemplateAction {
   return {
-    type: RECEIVE_EXISTING_TEMPLATE_UPDATE,
+    actionType: RECEIVE_EXISTING_TEMPLATE_UPDATE,
     text: "receiving post existing template on save",
     templateJSON: templateJSON,
     templateName: templateName,
@@ -54,7 +54,7 @@ function receiveExistingTemplateUpdate(templateJSON: string, templateName: strin
 
 function failureExistingTemplateUpdate(error: IncomingMessage): CurrentTemplateAction {
   return {
-    type: FAILURE_EXISTING_TEMPLATE_UPDATE,
+    actionType: FAILURE_EXISTING_TEMPLATE_UPDATE,
     text: "failure post existing template on save",
     error: error
   };

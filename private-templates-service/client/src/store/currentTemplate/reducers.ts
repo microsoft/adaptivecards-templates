@@ -9,7 +9,7 @@ const initialState: CurrentTemplateState = {
 };
 
 export function currentTemplateReducer(state = initialState, action: CurrentTemplateAction): CurrentTemplateState {
-  switch (action.type) {
+  switch (action.actionType) {
     case NEW_TEMPLATE:
       return {
         ...state,
