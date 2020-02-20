@@ -67,7 +67,7 @@ jobs:
                   npm link adaptive-templating-service-typescript-node
                   cd ../client
                   npm run build:dev --if-present
-            #       npm run deploy
+                  npm run deploy
             # - name: "Deploy to Azure WebApp"
             #   if: success()
             #   uses: azure/webapps-deploy@v1
