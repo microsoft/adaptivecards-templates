@@ -1,4 +1,4 @@
-import { JSONResponse, IUser, ITemplate, SortBy, SortOrder, ITemplateInstance } from "../models/models";
+import { JSONResponse, IUser, ITemplate, SortBy, SortOrder, ITemplateInstance, TemplateState } from "../models/models";
 import { StorageProvider } from "./IStorageProvider";
 import * as Utils from "../util/inmemorydbutils/inmemorydbutils";
 import uuidv4 from "uuid/v4";
@@ -23,6 +23,7 @@ export class InMemoryDBProvider implements StorageProvider {
   }
 
   private _updateTemplate(template: ITemplate, updateQuery: Partial<ITemplate>): void {
+    template.updatedAt = new Date(Date.now());
     this.templates.set(template._id!, { ...template, ...updateQuery });
   }
 
@@ -75,6 +76,7 @@ export class InMemoryDBProvider implements StorageProvider {
   }
 
   async getTemplates(query: Partial<ITemplate>, sortBy: SortBy = SortBy.alphabetical, sortOrder: SortOrder = SortOrder.ascending): Promise<JSONResponse<ITemplate[]>> {
+    console.log(query);
     return this._matchTemplates(query, sortBy, sortOrder);
   }
 
@@ -163,9 +165,27 @@ export class InMemoryDBProvider implements StorageProvider {
     this._setID(user);
   }
 
+  protected _autoCompleteTemplateInstanceModel(instance: ITemplateInstance): void {
+    if (!instance.state) {
+      instance.state = TemplateState.draft;
+    }
+    if (!instance.isShareable) {
+      instance.isShareable = false;
+    }
+    if (!instance.numHits) {
+      instance.numHits = 0;
+    }
+    if (!instance.data) {
+      instance.data = "{}";
+    }
+  }
   protected _autoCompleteTemplateModel(template: ITemplate): void {
     if (!template.tags) {
       template.tags = [];
+    } else {
+      template.tags = template.tags.map(x => {
+        return x.toLowerCase();
+      });
     }
     if (!template.isLive) {
       template.isLive = false;
@@ -175,6 +195,10 @@ export class InMemoryDBProvider implements StorageProvider {
     }
     if (!template.instances) {
       template.instances = [];
+    } else {
+      for (let instance of template.instances) {
+        this._autoCompleteTemplateInstanceModel(instance);
+      }
     }
     if (!template.deletedVersions) {
       template.deletedVersions = [];
@@ -204,11 +228,16 @@ export class InMemoryDBProvider implements StorageProvider {
     }
   }
 
+  // protected _setT;
+
   protected _setTimestamps(doc: ITemplate): void {
+    let currentDate: Date = new Date(Date.now());
+    doc.createdAt = currentDate;
+    doc.updatedAt = currentDate;
     if (doc.instances) {
       for (let instance of doc.instances) {
-        instance.createdAt = new Date(Date.now());
-        instance.updatedAt = new Date(Date.now());
+        instance.createdAt = currentDate;
+        instance.updatedAt = currentDate;
       }
     }
   }
@@ -230,7 +259,7 @@ export class InMemoryDBProvider implements StorageProvider {
 
   protected _matchTemplate(query: Partial<ITemplate>, template: ITemplate): boolean {
     if (
-      (query.name && !template.name.includes(query.name)) ||
+      (query.name && !template.name.toLocaleUpperCase().includes(query.name.toLocaleUpperCase())) ||
       (query.owner && !(query.owner === template.owner)) ||
       (query._id && !(query._id === template._id)) ||
       (query.isLive && !(query.isLive === template.isLive)) ||

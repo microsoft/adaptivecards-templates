@@ -3,33 +3,10 @@ import { IUser, ITemplate, JSONResponse, SortBy, SortOrder, ITemplateInstance } 
 import { MongoConnectionParams } from "../models/mongo/MongoConnectionParams";
 import { MongoWorker } from "../util/mongoutils/MongoWorker";
 import { MongoUtils } from "../util/mongoutils/mongoutils";
+import { clone } from "../util/inmemorydbutils/inmemorydbutils";
+import { InMemoryDBProvider } from "./InMemoryDBProvider";
 
 export class MongoDBProvider implements StorageProvider {
-  // getTemplateVersions(templateQuery: Partial<ITemplate>, versionQuery: Partial<ITemplateInstance>[]): Promise<JSONResponse<ITemplateInstance[]>> {
-  //   let query: any = this._constructTemplateQuery(templateQuery);
-  //   query.instances = { $elemMatch: { version: "2.1" } };
-  //   console.log(query);
-  //   console.log(query.instances);
-  //   return this.worker.Template.findOne(query)
-  //     .then(template => {
-  //       if (template) {
-  //         return Promise.resolve({
-  //           success: true,
-  //           result: template.instances
-  //         });
-  //       }
-  //       return Promise.resolve({
-  //         success: false,
-  //         errorMessage: "No templates found matching given criteria"
-  //       }) as Promise<JSONResponse<ITemplateInstance[]>>; // "as" has to be used because TypeScript cannot deduce the type correctly
-  //     })
-  //     .catch(e => {
-  //       return Promise.resolve({ success: false, errorMessage: e });
-  //     });
-  // }
-  // removeTemplateVersions(templateQuery: Partial<ITemplate>, versionQuery: Partial<import("../models/models").ITemplateInstance>): Promise<JSONResponse<Number[]>> {
-  //   return Promise.resolve({ success: true });
-  // }
   worker: MongoWorker;
 
   constructor(params: MongoConnectionParams = {}) {
@@ -56,7 +33,11 @@ export class MongoDBProvider implements StorageProvider {
       templateQuery.name = { $regex: query.name, $options: "i" };
     }
     if (query.tags && query.tags.length) {
-      templateQuery.tags = { $all: query.tags };
+      templateQuery.tags = {
+        $all: clone(query.tags).map(x => {
+          return x.toLocaleLowerCase();
+        })
+      };
     }
 
     return templateQuery;
