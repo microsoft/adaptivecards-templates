@@ -71,7 +71,11 @@ jobs:
               run: |
                   # Build and test the project, then
                   # deploy to Azure Web App.
-                  cd private-templates-service/client
+                  cd private-templates-service/server/src
+                  cat app.ts
+                  cd ..
+                  cd ..
+                  cd client
                   npm run build:dev --if-present
                   cd ../server
                   cd src 
