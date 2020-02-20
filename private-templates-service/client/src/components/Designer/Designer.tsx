@@ -69,10 +69,9 @@ class Designer extends React.Component<DesignerProps> {
   }
 
   render() {
-
     return (
       <div id="designer-container" dangerouslySetInnerHTML={{ __html: "dangerouslySetACDesigner" }}></div>
-    )
+    );
   }
 
   shouldComponentUpdate() {

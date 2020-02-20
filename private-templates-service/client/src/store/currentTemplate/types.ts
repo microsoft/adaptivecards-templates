@@ -26,7 +26,7 @@ export type CurrentTemplateActionTypes = typeof NEW_TEMPLATE |
   typeof FAILURE_EXISTING_TEMPLATE_UPDATE;
 
 export interface CurrentTemplateAction {
-  actionType: CurrentTemplateActionTypes
+  type: CurrentTemplateActionTypes
   text: string;
   templateID?: string;
   templateJSON?: string;
