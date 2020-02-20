@@ -32,6 +32,9 @@ function autoCompleteTemplateInstanceModel(instance: ITemplateInstance): void {
   if (!instance.data) {
     instance.data = "{}";
   }
+  if (!instance.publishedAt) {
+    instance.publishedAt = undefined;
+  }
 }
 function autoCompleteTemplateModel(template: ITemplate): void {
   if (!template.tags) {
