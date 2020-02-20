@@ -55,8 +55,7 @@ jobs:
               with:
                 files: '["**/*.ts"]'
               env:
-                DBConnectionToken: DB_CONNECTION_TOKEN
-                DBCOnnectionString: ${{ secrets.AZURE_ADPATIVECMS_DB_CONNECTION }}
+                DBConnection: ${{ secrets.AZURE_ADPATIVECMS_DB_CONNECTION }}
             - name: Print file contents
               run: |
                 cd private-templates-service/server/src
@@ -70,10 +69,10 @@ jobs:
                   npm run build:dev --if-present
                   cd ../server
                   npm run deploy
-            - name: "Deploy to Azure WebApp"
-              if: success()
-              uses: azure/webapps-deploy@v1
-              with:
-                  app-name: ${{ env.AZURE_WEBAPP_NAME }}
-                  publish-profile: ${{ secrets.AZURE_ADAPTIVECMS }}
-                  package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+            # - name: "Deploy to Azure WebApp"
+            #   if: success()
+            #   uses: azure/webapps-deploy@v1
+            #   with:
+            #       app-name: ${{ env.AZURE_WEBAPP_NAME }}
+            #       publish-profile: ${{ secrets.AZURE_ADAPTIVECMS }}
+            #       package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
