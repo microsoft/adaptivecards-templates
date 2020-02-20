@@ -73,7 +73,8 @@ jobs:
                   # deploy to Azure Web App.
                   cd private-templates-service/client
                   npm run build:dev --if-present
-                  cd ../server
+                  cd ../server/src
+                  cat app.ts
             - name: Print file contents (using email suggestions)
               run: |
                   cd src
