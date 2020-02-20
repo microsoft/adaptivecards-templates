@@ -2,7 +2,7 @@ import React from 'react';
 import { StyledSearchBox } from './styled';
 import { RootState } from '../../../store/rootReducer';
 import { connect } from 'react-redux';
-import { search, clearSearch } from '../../../store/search/actions';
+import { querySearch, clearSearch } from '../../../store/search/actions';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import { THEME, BREAK } from '../../../globalStyles';
 
@@ -17,7 +17,7 @@ const mapStateToProps = (state:RootState) => {
 const mapDispatchToProps = (dispatch: any) => {
   return {
     search: (searchValue: string) => {
-      dispatch(search(searchValue));
+      dispatch(querySearch(searchValue));
     },
     clearSearch: () => {
       dispatch(clearSearch());

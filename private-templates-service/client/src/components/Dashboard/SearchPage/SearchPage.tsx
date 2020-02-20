@@ -10,7 +10,8 @@ const mapStateToProps = (state: RootState) => {
     searchValue: state.search.searchValue,
     isSearch: state.search.isSearch,
     filterType: state.filter.filterType,
-    sortType: state.sort.sortType
+    sortType: state.sort.sortType,
+    loading: state.search.loading
   }
 }
 
@@ -19,6 +20,7 @@ interface Props {
   isSearch: boolean
   filterType: string;
   sortType: string;
+  loading: boolean;
 }
 
 class SearchPage extends React.Component<Props> {
@@ -27,6 +29,11 @@ class SearchPage extends React.Component<Props> {
   };
 
   render() {
+    if(this.props.loading){
+      return(
+        <div>Loading.......</div>
+      )
+    }
     return (
       <div>
         <SearchResultBanner>
