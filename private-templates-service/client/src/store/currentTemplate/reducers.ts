@@ -14,7 +14,7 @@ export function currentTemplateReducer(state = initialState, action: CurrentTemp
       return {
         ...state,
         templateID: "",
-        templateJSON: JSON.stringify(require('../../assets/designer/defaultAdaptiveCard.json')),
+        templateJSON: JSON.stringify(require('../../assets/default-adaptivecards/defaultAdaptiveCard.json')),
         templateName: "Untitled",
         sampleDataJSON: "",
         isFetching: false

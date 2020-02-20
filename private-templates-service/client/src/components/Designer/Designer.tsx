@@ -73,8 +73,6 @@ class Designer extends React.Component<DesignerProps> {
     }
 
     designer.monacoModuleLoaded(monaco);
-
-    console.log("id in designer: " + this.props.templateID);
   }
 
   render() {
