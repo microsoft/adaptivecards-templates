@@ -54,7 +54,7 @@ jobs:
               run: |
                   SECRET='${{ secrets.AZURE_ADPATIVECMS_DB_CONNECTION }}'
                   # SECRET=${SECRET//$'\n'/\\n}
-                  find . -type f -exec sed -i "s@needle@$SECRET@g" {} \;    
+                  find . -type f -exec sed -i "s%needle%$SECRET%g" {} \;    
 
             # - name: Replace DBConnection token with DB Connection string
             #   uses: cschleiden/replace-tokens@v1
