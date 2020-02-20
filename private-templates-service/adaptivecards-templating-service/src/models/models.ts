@@ -4,31 +4,46 @@
  * @property {string} _id - unique identifier
  * @property {string} authId - unique id given by auth provider in access token
  * @property {string} issuer - one of the value in Issuer, both authId and issuer can identify the id
+ * @property {string} firstName
+ * @property {string} lastName
  * @property {string[]} team
  * @property {string[]} org
+ * @property {string[]} recentlyViewed - list of 5 templates that were last viewed (GET /template/{id}) by logged in user 
  */
 export interface IUser {
-  _id?: string;
-  authId: string;
-  issuer: string;
-  team?: string[];
-  org?: string[];
+	_id?: string;
+	authId: string;
+	issuer: string;
+	firstName?: string;
+	lastName?: string;
+	team?: string[];
+	org?: string[];
+	recentlyViewed?: string[]; // max size 5
 }
 
 export interface ITemplateInstance {
-  json: string;
-  version: string;
+  _id?: string;
+	json: string;
+	version: string;
+	publishedAt?: Date; // time when "live"
+	state?: string; // "draft" | "live" | "deprecated" 
+	isShareable?: boolean;
+	numHits?: number;
+	data?: string[];
+	updatedAt?: Date;
+	createdAt?: Date;
 }
 
 export interface ITemplate {
-  _id?: string;
-  name: string;
-  instances: ITemplateInstance[];
-  tags?: string[];
-  owner?: string;
-  createdAt?: Date;
-  updatedAt?: Date;
-  isPublished?: boolean;
+	_id?: string;
+	name: string;
+	owner: string;
+	instances?: ITemplateInstance[];
+	tags?: string[];
+  deletedVersions?: string[];
+  isLive?: boolean; // at least one version is published
+	createdAt?: Date;   // for sorting
+	updatedAt?: Date;   // for sorting
 }
 
 export interface JSONResponse<T> {
@@ -40,7 +55,7 @@ export interface JSONResponse<T> {
 export enum SortBy {
   dateCreated = "createdAt",
   dateModified = "updatedAt",
-  name = "name"
+  alphabetical = "name"
 }
 
 export enum SortOrder {
@@ -54,4 +69,44 @@ export enum SortOrder {
  */
 export enum Issuer {
   AzureAD = "AzureAD"
+}
+
+/**
+ * @enum
+ * State of the template version.
+ */
+export enum TemplateState {
+  draft = "draft",
+  deprecated = "deprecated",
+  live = "live"
+}
+
+export interface TemplateInstancePreview {
+  version: string;
+  json: JSON;
+  state: string;
+  data: JSON[];
+}
+
+/**
+ * @interface
+ * User information that is viewable by client.
+ */
+export interface UserPreview {
+	firstName: string;
+	lastName: string;
+	team?: string[];
+	org?: string[];
+}
+
+/**
+ * @interface
+ * Template preview.
+ */
+export interface TemplatePreview {
+  _id: string;
+  name: string;
+  owner: UserPreview;
+  instance: TemplateInstancePreview;
+  tags: string[];
 }
