@@ -11,7 +11,7 @@
 on:
     push:
         branches:
-            - dev
+            - users/daniellemott/v3_connect_to_backend
 env:
     AZURE_WEBAPP_NAME: adaptivecms # set this to your application's name
     AZURE_WEBAPP_PACKAGE_PATH: "private-templates-service/" # set this to the path to your web app project, defaults to the repository root
@@ -25,7 +25,7 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v2.0.0
               with:
-                  ref: dev
+                  ref: users/daniellemott/v3_connect_to_backend
             - name: Use Node.js ${{ env.NODE_VERSION }}
               uses: actions/setup-node@v1
               with:
@@ -50,6 +50,13 @@ jobs:
                   cd ..
                   npm run test
                   cd ..
+            - name: Replace DBConnection token with DB Connection string
+              uses: cschleiden/replace-tokens@v1
+              with:
+                files: '["**/*.ts"]'
+              env:
+                DBConnectionToken: DB_CONNECTION_TOKEN
+                DBCOnnectionString: ${{ AZURE_ADPATIVECMS_DB_CONNECTION }}
             - name: Create production build
               if: success()
               run: |
