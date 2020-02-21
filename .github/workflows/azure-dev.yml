@@ -51,9 +51,14 @@ jobs:
                   npm run test
                   cd ..
             - name: Find and Replace - Using Secrets
-              run: |
-                  SECRET='${{ secrets.AZURE_ADPATIVECMS_DB_CONNECTION_STRING }}'
-                  find . -type f -exec sed -i "s%needlez%$SECRET%g" {} \;    
+              uses: cschleiden/replace-tokens@v1
+              with:
+                files: '["**/*.ts"]'
+              env:
+                needlez: ${{ secrets.AZURE_ADPATIVECMS_DB_CONNECTION_STRING }}
+              # run: |
+              #     SECRET='${{ secrets.AZURE_ADPATIVECMS_DB_CONNECTION_STRING }}'
+              #     find . -type f -exec sed -i "s%needlez%$SECRET%g" {} \;    
             - name: Create production build
               if: success()
               run: |
