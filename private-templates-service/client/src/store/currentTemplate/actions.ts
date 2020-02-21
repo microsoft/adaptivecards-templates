@@ -153,8 +153,7 @@ export function getTemplate(templateID: string) {
               templateObject.instances[0].json,
               templateObject.name,
               ""
-            )
-          )
+            ))
         }
         dispatch(requestTemplateFailure());
       })

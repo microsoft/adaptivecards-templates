@@ -76,7 +76,6 @@ function processTemplate(temp: TemplateInstance): any {
 
 class AdaptiveCard extends React.Component<Props> {
   render() {
-    // console.log(this.props.cardtemplate);
     let template: any = [];
     if (this.props.cardtemplate && this.props.cardtemplate && this.props.cardtemplate.instances) {
       template = processTemplate(this.props.cardtemplate.instances[0]);

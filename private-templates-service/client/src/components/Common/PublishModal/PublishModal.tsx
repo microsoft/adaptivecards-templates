@@ -55,7 +55,6 @@ class PublishModal extends React.Component<Props> {
   }
 
   publish = () => {
-    console.log(this.props.template);
     const {
       id,
       name,
