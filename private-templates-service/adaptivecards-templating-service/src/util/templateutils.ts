@@ -15,6 +15,7 @@ export function getMostRecentTemplate(template : ITemplate): ITemplate {
 /**
  * @function
  * Removes the most recent version/instance from a template object.
+ * Updates the deletedVersion array as well.
  * @param template
  */
 export function removeMostRecentTemplate(template: ITemplate): ITemplate {
@@ -25,6 +26,7 @@ export function removeMostRecentTemplate(template: ITemplate): ITemplate {
     if (instance.version !== lastVersion.version) templateInstances.push(instance);
   }
   template.instances = templateInstances;
+  template.deletedVersions?.push(lastVersion.version);
   return template;
 }
 
@@ -35,10 +37,9 @@ export function removeMostRecentTemplate(template: ITemplate): ITemplate {
  */
 export function getMostRecentVersion(template: ITemplate): ITemplateInstance | undefined {
   if (!template.instances || template.instances.length === 0) return undefined;
-  let currVersion = "";
   let latestInstance = template.instances[0];
   for (let instance of template.instances){
-    if (compareVersion(instance.version, currVersion)) {
+    if (compareVersion(instance.version, latestInstance.version)) {
       latestInstance = instance;
     }
   }

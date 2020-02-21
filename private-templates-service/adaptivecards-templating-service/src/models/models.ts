@@ -18,7 +18,9 @@ export interface IUser {
 	lastName?: string;
 	team?: string[];
 	org?: string[];
-	recentlyViewed?: string[]; // max size 5
+  recentlyViewed?: string[]; // max size 5
+  recentlyEdited?: string[]; //max size 5
+  recentTags?: string[]; // max size 10
 }
 
 export interface ITemplateInstance {
@@ -109,4 +111,13 @@ export interface TemplatePreview {
   owner: UserPreview;
   instance: TemplateInstancePreview;
   tags: string[];
+}
+
+/**
+ * @interface
+ * Tags
+ */
+export interface TagList {
+  ownedTags: any[];
+  allTags: any[]
 }

@@ -192,7 +192,7 @@ export class InMemoryDBProvider implements StorageProvider {
       (query.name && !(template.name.includes(query.name))) ||
       (query.owner && !(query.owner === template.owner)) ||
       (query._id && !(query._id === template._id)) ||
-      (query.isPublished && !(query.isPublished === template.isPublished)) ||
+      (query.isLive && !(query.isLive === template.isLive)) ||
       (query.tags && template.tags && !this._ifContainsList(template.tags, query.tags))
     ) {
       return false;
