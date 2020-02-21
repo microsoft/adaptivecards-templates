@@ -19,7 +19,7 @@ const mapStateToProps = (state: RootState) => {
     isAuthenticated: state.auth.isAuthenticated,
     user: state.auth.user,
     batchTemplates: state.batchTemplates,
-    isSearch: state.search
+    isSearch: state.search.isSearch
   };
 };
 
@@ -71,7 +71,8 @@ class Dashboard extends React.Component<Props, State> {
     if (!this.props.batchTemplates.isFetching && this.props.batchTemplates.templateList) {
       templates = this.props.batchTemplates.templateList.templates;
     }
-
+    this.props.setPage("Dashboard");
+    console.log(this.props.batchTemplates);
     return (
       <DashboardContainer>
         <Title>Recent</Title>
