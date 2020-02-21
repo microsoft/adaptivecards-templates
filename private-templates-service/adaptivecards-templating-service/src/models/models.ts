@@ -41,8 +41,8 @@ export interface IUser {
   lastName?: string;
   team?: string[];
   org?: string[];
-  recentlyViewed?: string[]; // size 5
-  recentlyEdited?: string[]; // max size 5
+  recentlyViewedTemplates?: string[]; // size 5
+  recentlyEditedTemplates?: string[]; // max size 5
   recentTags?: string[]; // max size 10
 }
 

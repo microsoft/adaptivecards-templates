@@ -149,14 +149,14 @@ export class InMemoryDBProvider implements StorageProvider {
     if (!user.org) {
       user.org = [];
     }
-    if (!user.recentlyViewed) {
-      user.recentlyViewed = [];
+    if (!user.recentlyViewedTemplates) {
+      user.recentlyViewedTemplates = [];
     }
-    if (!user.recentlyEdited) {
-      user.recentlyEdited = [];
+    if (!user.recentlyEditedTemplates) {
+      user.recentlyEditedTemplates = [];
     }
-    if (!user.recentlyViewed) {
-      user.recentlyViewed = [];
+    if (!user.recentTags) {
+      user.recentTags = [];
     }
     this._setID(user);
   }
