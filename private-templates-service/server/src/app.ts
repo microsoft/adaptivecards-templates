@@ -7,7 +7,8 @@ import bodyParser from "body-parser";
 import { TemplateServiceClient } from "../../adaptivecards-templating-service/src/TemplateServiceClient";
 import { ClientOptions } from "../../adaptivecards-templating-service/src/IClientOptions";
 import { AzureADProvider } from "../../adaptivecards-templating-service/src/authproviders/AzureADProvider";
-import { InMemoryDBProvider } from "../../adaptivecards-templating-service/src/storageproviders/InMemoryDBProvider";
+import { MongoDBProvider } from "../../adaptivecards-templating-service/src/storageproviders/MongoDBProvider";
+import { MongoConnectionParams } from "../../adaptivecards-templating-service/src/models/mongo/MongoConnectionParams";
 // import mongo, create new mongo, pass options
 const app = express();
 
@@ -18,12 +19,16 @@ app.use(passport.session());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const clientOptions: ClientOptions = {
-  authenticationProvider: new AzureADProvider(),
-  storageProvider: new InMemoryDBProvider(),
+const mongoConnection: MongoConnectionParams = {
+  connectionString: "__DBConnection__"
 }
 
-const client: TemplateServiceClient = TemplateServiceClient.init(clientOptions);
+const mongoClient: ClientOptions = {
+  authenticationProvider: new AzureADProvider(),
+  storageProvider: new MongoDBProvider(mongoConnection),
+}
+
+const client: TemplateServiceClient = TemplateServiceClient.init(mongoClient);
 app.use("/template", client.expressMiddleware());
 app.use("/user", client.userExpressMiddleware());
 

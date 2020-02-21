@@ -1,9 +1,11 @@
-import React, { useEffect } from 'react';
-import { RootState } from '../../store/rootReducer';
+import React from 'react';
 import requireAuthentication from '../../utils/requireAuthentication';
+
+import { RootState } from '../../store/rootReducer';
 import { connect } from 'react-redux';
 import { UserType } from '../../store/auth/types';
-import { useHistory } from 'react-router-dom';
+import { updateTemplate } from '../../store/currentTemplate/actions';
+
 //ACDesigner
 import * as monaco from 'monaco-editor';
 import markdownit from 'markdown-it';
@@ -12,45 +14,76 @@ import * as ACDesigner from 'adaptivecards-designer';
 const mapStateToProps = (state: RootState) => {
   return {
     isAuthenticated: state.auth.isAuthenticated,
-    user: state.auth.user
+    user: state.auth.user,
+    templateID: state.currentTemplate.templateID,
+    templateJSON: state.currentTemplate.templateJSON,
+    templateName: state.currentTemplate.templateName,
+    sampleDataJSON: state.currentTemplate.sampleDataJSON
   };
 };
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    updateTemplate: (templateID: string, templateJSON: string, templateName: string, sampleDataJSON: string) => {
+      dispatch(updateTemplate(templateID, templateJSON, templateName, sampleDataJSON));
+    }
+  }
+}
 
 interface DesignerProps {
   isAuthenticated: boolean;
   user?: UserType;
+  templateID: string;
+  templateJSON: string;
+  templateName: string;
+  sampleDataJSON: string;
+  updateTemplate: (templateID: string, templateJSON: string, templateName: string, sampleDataJSON: string) => any;
 }
 
-const Designer = (props: DesignerProps) => {
+let designer: ACDesigner.CardDesigner;
 
-  useEffect(() => {
+class Designer extends React.Component<DesignerProps> {
+
+  componentWillMount() {
+    ACDesigner.GlobalSettings.enableDataBindingSupport = true;
+    ACDesigner.GlobalSettings.showSampleDataEditorToolbox = true;
+
+    ACDesigner.CardDesigner.onProcessMarkdown = (text: string, result: { didProcess: boolean, outputHtml?: string }) => {
+      result.outputHtml = new markdownit().render(text);
+      result.didProcess = true;
+    }
+
+    designer = initDesigner();
+
+    let publishButton = new ACDesigner.ToolbarButton("publishButton", "Publish", "", (sender) => (alert("Published!")));
+    publishButton.separator = true;
+    designer.toolbar.insertElementAfter(publishButton, ACDesigner.CardDesigner.ToolbarCommands.TogglePreview);
+
+    let saveButton = new ACDesigner.ToolbarButton("saveButton", "Save", "", (sender) => (onSave(designer, this.props)));
+    saveButton.separator = true;
+    designer.toolbar.insertElementAfter(saveButton, ACDesigner.CardDesigner.ToolbarCommands.TogglePreview);
+
+    designer.sampleData = "";
+  }
+
+  componentDidMount() {
     const element = document.getElementById("designer-container");
     if (element) {
       designer.attachTo(element);
     }
 
     designer.monacoModuleLoaded(monaco);
-
-    getCardData(designer);
-  }, [])
-
-  let history = useHistory();
-
-  ACDesigner.GlobalSettings.enableDataBindingSupport = true;
-  ACDesigner.GlobalSettings.showSampleDataEditorToolbox = true;
-
-  ACDesigner.CardDesigner.onProcessMarkdown = (text: string, result: { didProcess: boolean, outputHtml?: string }) => {
-    result.outputHtml = new markdownit().render(text);
-    result.didProcess = true;
   }
 
-  let designer = initDesigner();
+  render() {
+    return (
+      <div id="designer-container" dangerouslySetInnerHTML={{ __html: "dangerouslySetACDesigner" }}></div>
+    );
+  }
 
-  let closeButton = new ACDesigner.ToolbarButton("closeButton", "Close", "", (sender) => (history.goBack()));
-  closeButton.separator = true;
-  designer.toolbar.insertElementAfter(closeButton, ACDesigner.CardDesigner.ToolbarCommands.TogglePreview);
-
-  return <div id="designer-container" dangerouslySetInnerHTML={{ __html: "dangerouslySetACDesigner" }}></div>;
+  shouldComponentUpdate() {
+    return false;
+  }
 }
 
 function initDesigner(): ACDesigner.CardDesigner {
@@ -72,10 +105,9 @@ function initDesigner(): ACDesigner.CardDesigner {
   return designer;
 }
 
-function getCardData(designer: ACDesigner.CardDesigner): void {
-  //Example of how to export data from designer
-  console.log("Adaptive Card Template: " + designer.getCard());
-  console.log("Adaptive Card Sample Data: " + designer.sampleData);
+function onSave(designer: ACDesigner.CardDesigner, props: DesignerProps): void {
+  if (props.templateJSON !== JSON.stringify(designer.getCard()) || props.sampleDataJSON !== designer.sampleData) {
+    props.updateTemplate(props.templateID, JSON.stringify(designer.getCard()), props.templateName, designer.sampleData);
+  }
 }
-
-export default connect(mapStateToProps)(requireAuthentication(Designer));
+export default connect(mapStateToProps, mapDispatchToProps)(requireAuthentication(Designer));
