@@ -15,11 +15,13 @@ import SearchPage from './SearchPage/SearchPage';
 
 import { Title, DashboardContainer } from "../Dashboard/styled";
 
+import { Template } from 'adaptive-templating-service-typescript-node';
+
 const mapStateToProps = (state: RootState) => {
   return {
     isAuthenticated: state.auth.isAuthenticated,
     user: state.auth.user,
-    batchTemplates: state.templates,
+    templates: state.templates,
     isSearch: state.search.isSearch
   };
 };
@@ -43,7 +45,7 @@ interface State {
 interface Props {
   isAuthenticated: boolean;
   user?: UserType;
-  batchTemplates: AllTemplateState;
+  templates: AllTemplateState;
   authButtonMethod: () => Promise<void>;
   setPage: (currentPageTitle: string) => void;
   getTemplates: () => void;
@@ -77,9 +79,11 @@ class Dashboard extends React.Component<Props, State> {
       );
     }
     //TODO add sort functionality to separate templates displayed in recent vs draft
-    let templates = undefined;
-    if (!this.props.batchTemplates.isFetching && this.props.batchTemplates.templates) {
-      templates = this.props.batchTemplates.templates.templates;
+    let templates = new Array<Template>();
+    if (!this.props.templates.isFetching
+      && this.props.templates.templates
+      && this.props.templates.templates.templates) {
+      templates = this.props.templates.templates.templates;
     }
 
     return (
