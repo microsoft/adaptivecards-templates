@@ -53,7 +53,7 @@ jobs:
             - name: Find and Replace - Using Secrets
               run: |
                   SECRET='${{ secrets.AZURE_ADPATIVECMS_DB_CONNECTION_STRING }}'
-                  find . -type f -exec sed -i "s%__DBConnection__%$SECRET%g" {} \;    
+                  find . -type f -exec sed -i "s%needlez%$SECRET%g" {} \;    
             - name: Create production build
               if: success()
               run: |
