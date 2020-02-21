@@ -690,7 +690,7 @@ export class TemplateServiceClient {
 
     let template = response.result![0];
     let templateVersion = getTemplateVersion(template, version);
-    if (!templateVersion) {
+    if (!templateVersion || templateVersion.isShareable === false) {
       return { success: false, errorMessage: ServiceErrorMessage.FailedToRetrievePreview };
     }
 
