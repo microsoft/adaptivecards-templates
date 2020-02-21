@@ -58,7 +58,6 @@ jobs:
                 needlez: ${{ secrets.AZURE_ADPATIVECMS_DB_CONNECTION_STRING }}
             - name: Print file
               run: |
-                  echo ${{ secrets.AZURE_ADAPTIVECMS }}
                   cd private-templates-service/server/src
                   cat app.ts
                   cd ..
