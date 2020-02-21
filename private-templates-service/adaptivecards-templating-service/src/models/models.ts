@@ -42,6 +42,8 @@ export interface IUser {
   team?: string[];
   org?: string[];
   recentlyViewed?: string[]; // size 5
+  recentlyEdited?: string[]; // max size 5
+  recentTags?: string[]; // max size 10
 }
 
 export interface JSONResponse<T> {

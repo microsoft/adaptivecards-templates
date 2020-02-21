@@ -43,7 +43,6 @@ export const TemplateSchema: Schema = new Schema(
 );
 
 TemplateInstanceSchema.pre("validate", function(next) {
-  // if(!this._id)
   this._id = MongoUtils.generateUniqueID().toHexString();
   next();
 });

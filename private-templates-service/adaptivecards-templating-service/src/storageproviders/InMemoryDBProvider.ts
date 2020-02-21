@@ -4,15 +4,6 @@ import * as Utils from "../util/inmemorydbutils/inmemorydbutils";
 import uuidv4 from "uuid/v4";
 
 export class InMemoryDBProvider implements StorageProvider {
-  // getTemplateVersions(templateQuery: Partial<ITemplate>, versionQuery: Partial<ITemplateInstance>[]): Promise<JSONResponse<ITemplateInstance[]>> {
-  //   // throw new Error("Method not implemented.");
-  //   return Promise.resolve({ success: true });
-  // }
-  // removeTemplateVersions(templateQuery: Partial<ITemplate>, versionQuery: Partial<ITemplateInstance>): Promise<JSONResponse<Number[]>> {
-  //   // throw new Error("Method not implemented.");
-  //   return Promise.resolve({ success: true });
-  // }
-
   users: Map<string, IUser> = new Map();
   templates: Map<string, ITemplate> = new Map();
 
@@ -157,6 +148,12 @@ export class InMemoryDBProvider implements StorageProvider {
     }
     if (!user.org) {
       user.org = [];
+    }
+    if (!user.recentlyViewed) {
+      user.recentlyViewed = [];
+    }
+    if (!user.recentlyEdited) {
+      user.recentlyEdited = [];
     }
     if (!user.recentlyViewed) {
       user.recentlyViewed = [];

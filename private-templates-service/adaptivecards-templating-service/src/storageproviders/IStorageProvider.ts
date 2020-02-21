@@ -4,14 +4,10 @@ import { JSONResponse, IUser, ITemplate, SortBy, SortOrder, ITemplateInstance } 
 // T - type of connection parameter required
 export interface StorageProvider {
   // If no users found - result of the response must be set to false
-  getUsers(query: Partial<IUser>): Promise<JSONResponse<IUser[]>>;
   // If no templates found - result of the response must be set to false
-
   // TODO: Implement OR by tags or name
+  getUsers(query: Partial<IUser>): Promise<JSONResponse<IUser[]>>;
   getTemplates(query: Partial<ITemplate>, sortBy?: SortBy, sortOrder?: SortOrder): Promise<JSONResponse<ITemplate[]>>;
-  // getTemplateVersions(templateQuery: Partial<ITemplate>, versionQuery: Partial<ITemplateInstance>[]): Promise<JSONResponse<ITemplateInstance[]>>;
-
-  // TODO: Partial update - VERIFY
   updateUser(query: Partial<IUser>, updateQuery: Partial<IUser>): Promise<JSONResponse<Number>>;
   updateTemplate(query: Partial<ITemplate>, updateQuery: Partial<ITemplate>): Promise<JSONResponse<Number>>;
   insertUser(user: IUser): Promise<JSONResponse<string>>;
