@@ -9,6 +9,7 @@ import { ClientOptions } from "../../adaptivecards-templating-service/src/IClien
 import { AzureADProvider } from "../../adaptivecards-templating-service/src/authproviders/AzureADProvider";
 import { MongoDBProvider } from "../../adaptivecards-templating-service/src/storageproviders/MongoDBProvider";
 import { MongoConnectionParams } from "../../adaptivecards-templating-service/src/models/mongo/MongoConnectionParams";
+import { InMemoryDBProvider } from "../../adaptivecards-templating-service/src/storageproviders/InMemoryDBProvider";
 // import mongo, create new mongo, pass options
 const app = express();
 
@@ -28,7 +29,12 @@ const mongoClient: ClientOptions = {
   storageProvider: new MongoDBProvider(mongoConnection),
 }
 
-const client: TemplateServiceClient = TemplateServiceClient.init(mongoClient);
+const inMemoryClient: ClientOptions = {
+  authenticationProvider: new AzureADProvider(),
+  storageProvider: new InMemoryDBProvider(),
+}
+const client: TemplateServiceClient = TemplateServiceClient.init(inMemoryClient);
+
 app.use("/template", client.expressMiddleware());
 app.use("/user", client.userExpressMiddleware());
 
