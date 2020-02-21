@@ -37,7 +37,7 @@ export const Title = styled.div`
   font-weight: 500;
 `;
 
-export const StatusIndicator = styled.div<{ isPublished: string }>`
+export const StatusIndicator = styled.div<{ isPublished?: boolean }>`
   background-color: ${props => props.isPublished ? COLORS.GREEN : COLORS.YELLOW};
   width: 10px;
   height: 10px;

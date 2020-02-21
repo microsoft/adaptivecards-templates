@@ -6,6 +6,7 @@ import { UserType } from "../../store/auth/types";
 import { AllTemplatesState } from '../../store/templates/types';
 import { setPage } from "../../store/page/actions";
 import { getAllTemplates } from "../../store/templates/actions";
+import { getTemplate } from "../../store/currentTemplate/actions";
 
 import requireAuthentication from "../../utils/requireAuthentication";
 import Gallery from "../Gallery";
@@ -28,7 +29,10 @@ const mapDispatchToProps = (dispatch: any) => {
     setPage: (currentPageTitle: string) => {
       dispatch(setPage(currentPageTitle));
     },
-    getTemplates: () => { dispatch(getAllTemplates()) }
+    getTemplates: () => { dispatch(getAllTemplates()) },
+    getTemplate: (templateID: string) => {
+      dispatch(getTemplate(templateID));
+    }
   }
 }
 
@@ -43,6 +47,7 @@ interface Props {
   authButtonMethod: () => Promise<void>;
   setPage: (currentPageTitle: string) => void;
   getTemplates: () => void;
+  getTemplate: (templateID: string) => void;
   isSearch: boolean;
 }
 
@@ -54,8 +59,13 @@ class Dashboard extends React.Component<Props, State> {
     props.getTemplates();
   }
 
+  selectTemplate = (templateID: string) => {
+    this.props.getTemplate(templateID);
+    this.setState({ isPreviewOpen: true });
+  }
+
   toggleModal = () => {
-    this.setState({ isPreviewOpen: !this.state.isPreviewOpen });
+    this.setState({ isPreviewOpen: false });
   };
 
   render() {
@@ -75,7 +85,7 @@ class Dashboard extends React.Component<Props, State> {
     return (
       <DashboardContainer>
         <Title>Recent</Title>
-        <Gallery onClick={this.toggleModal} templates={templates}></Gallery>
+        <Gallery onClick={this.selectTemplate} templates={templates}></Gallery>
         <PreviewModal show={this.state.isPreviewOpen} toggleModal={this.toggleModal} />
       </DashboardContainer>
     );
