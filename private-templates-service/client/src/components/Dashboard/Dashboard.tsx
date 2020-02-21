@@ -78,8 +78,8 @@ class Dashboard extends React.Component<Props, State> {
     }
     //TODO add sort functionality to separate templates displayed in recent vs draft
     let templates = undefined;
-    if (!this.props.batchTemplates.isFetching && this.props.batchTemplates.templateList) {
-      templates = this.props.batchTemplates.templateList.templates;
+    if (!this.props.batchTemplates.isFetching && this.props.batchTemplates.templates) {
+      templates = this.props.batchTemplates.templates.templates;
     }
 
     return (
