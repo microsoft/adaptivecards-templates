@@ -1,12 +1,15 @@
 import { StorageProvider } from "./IStorageProvider";
-import { IUser, ITemplate, JSONResponse, SortBy, SortOrder } from "../models/models";
+import { IUser, ITemplate, JSONResponse, SortBy, SortOrder, ITemplateInstance } from "../models/models";
 import { MongoConnectionParams } from "../models/mongo/MongoConnectionParams";
 import { MongoWorker } from "../util/mongoutils/MongoWorker";
+import { MongoUtils } from "../util/mongoutils/mongoutils";
+import { clone } from "../util/inmemorydbutils/inmemorydbutils";
+import { InMemoryDBProvider } from "./InMemoryDBProvider";
 
 export class MongoDBProvider implements StorageProvider {
   worker: MongoWorker;
 
-  constructor(params: MongoConnectionParams) {
+  constructor(params: MongoConnectionParams = {}) {
     this.worker = new MongoWorker(params);
   }
 
@@ -15,23 +18,28 @@ export class MongoDBProvider implements StorageProvider {
   // provided in the query, then we need to add operator $all
   // to make sure they're both in the returned user 'team' field
   private _constructUserQuery(query: Partial<IUser>): any {
-    let userQuery: any = { ...query };
-    if (query.team) {
+    let userQuery: any = MongoUtils.removeUndefinedFields(query);
+    if (query.team && query.team.length) {
       userQuery.team = { $all: query.team };
     }
-    if (query.org) {
+    if (query.org && query.org.length) {
       userQuery.org = { $all: query.org };
     }
     return userQuery;
   }
   private _constructTemplateQuery(query: Partial<ITemplate>): any {
-    let templateQuery: any = { ...query };
+    let templateQuery: any = MongoUtils.removeUndefinedFields(query);
     if (query.name) {
       templateQuery.name = { $regex: query.name, $options: "i" };
     }
-    if (query.tags) {
-      templateQuery.tags = { $all: query.tags };
+    if (query.tags && query.tags.length) {
+      templateQuery.tags = {
+        $all: clone(query.tags).map(x => {
+          return x.toLocaleLowerCase();
+        })
+      };
     }
+
     return templateQuery;
   }
   async getUsers(query: Partial<IUser>): Promise<JSONResponse<IUser[]>> {
@@ -55,11 +63,7 @@ export class MongoDBProvider implements StorageProvider {
   }
 
   // Default sort is by name and in ascending order.
-  async getTemplates(
-    query: Partial<ITemplate>,
-    sortBy: SortBy = SortBy.alphabetical,
-    sortOrder: SortOrder = SortOrder.ascending
-  ): Promise<JSONResponse<ITemplate[]>> {
+  async getTemplates(query: Partial<ITemplate>, sortBy: SortBy = SortBy.alphabetical, sortOrder: SortOrder = SortOrder.ascending): Promise<JSONResponse<ITemplate[]>> {
     let templateQuery: any = this._constructTemplateQuery(query);
     return await this.worker.Template.find(templateQuery, {})
       .sort({ [sortBy]: sortOrder })
@@ -121,7 +125,7 @@ export class MongoDBProvider implements StorageProvider {
       });
   }
   async insertUser(user: IUser): Promise<JSONResponse<string>> {
-    return await this.worker.User.create(user)
+    return await this.worker.User.create(MongoUtils.removeUndefinedFields(user))
       .then(result => {
         return Promise.resolve({ success: true, result: result.id });
       })
@@ -133,7 +137,7 @@ export class MongoDBProvider implements StorageProvider {
       });
   }
   async insertTemplate(template: ITemplate): Promise<JSONResponse<string>> {
-    return await this.worker.Template.create(template)
+    return await this.worker.Template.create(MongoUtils.removeUndefinedFields(template))
       .then(result => {
         return Promise.resolve({ success: true, result: result.id });
       })
@@ -167,7 +171,6 @@ export class MongoDBProvider implements StorageProvider {
   }
   async removeTemplate(query: Partial<ITemplate>): Promise<JSONResponse<Number>> {
     let templateQuery: any = this._constructTemplateQuery(query);
-    console.log(templateQuery);
     return await this.worker.Template.deleteOne(templateQuery)
       .then(result => {
         if (result.deletedCount) {

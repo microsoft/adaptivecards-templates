@@ -1,11 +1,13 @@
 import React from 'react';
-import { connect } from 'react-redux';
 
 import { useHistory } from 'react-router-dom';
 
+import { connect } from 'react-redux';
 import { RootState } from '../../store/rootReducer';
 import { UserType } from '../../store/auth/types';
-import { UserAvatar } from './UserAvatar';
+import { newTemplate } from '../../store/currentTemplate/actions';
+
+import UserAvatar from './UserAvatar';
 import mainLogo from '../../assets/adaptive-cards-100-logo.png';
 
 // CSS
@@ -24,16 +26,28 @@ import {
   LogoTextSubHeader
 } from './styled';
 
+
 interface Props {
   authButtonMethod: () => void;
   isAuthenticated: boolean;
   user?: UserType;
+  templateID: string | undefined;
+  newTemplate: () => void;
 }
 
 const mapStateToProps = (state: RootState) => {
   return {
     isAuthenticated: state.auth.isAuthenticated,
     user: state.auth.user,
+    templateID: state.currentTemplate.templateID
+  };
+}
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    newTemplate: () => {
+      dispatch(newTemplate());
+    }
   }
 }
 
@@ -63,6 +77,9 @@ const SideBar = (props: Props) => {
 
   const onNavClick = (event: any, element: any) => {
     event.preventDefault();
+    if (element.url === "/designer") {
+      props.newTemplate();
+    }
     history.push(element.url);
   }
 
@@ -94,4 +111,4 @@ const SideBar = (props: Props) => {
   )
 }
 
-export default connect(mapStateToProps)(SideBar);
+export default connect(mapStateToProps, mapDispatchToProps)(SideBar);

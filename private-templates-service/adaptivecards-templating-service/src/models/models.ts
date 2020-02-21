@@ -10,42 +10,43 @@
  * @property {string[]} org
  * @property {string[]} recentlyViewed - list of 5 templates that were last viewed (GET /template/{id}) by logged in user 
  */
-export interface IUser {
-	_id?: string;
-	authId: string;
-	issuer: string;
-	firstName?: string;
-	lastName?: string;
-	team?: string[];
-	org?: string[];
-  recentlyViewed?: string[]; // max size 5
-  recentlyEdited?: string[]; //max size 5
-  recentTags?: string[]; // max size 10
-}
 
 export interface ITemplateInstance {
   _id?: string;
-	json: string;
-	version: string;
-	publishedAt?: Date; // time when "live"
-	state?: string; // "draft" | "live" | "deprecated" 
-	isShareable?: boolean;
-	numHits?: number;
-	data?: string[];
-	updatedAt?: Date;
-	createdAt?: Date;
+  json: string;
+  version: string;
+  publishedAt?: Date;
+  state?: TemplateState;
+  isShareable?: boolean;
+  numHits?: number;
+  data?: string[];
+  updatedAt?: Date;
+  createdAt?: Date;
 }
 
 export interface ITemplate {
-	_id?: string;
-	name: string;
-	owner: string;
-	instances?: ITemplateInstance[];
-	tags?: string[];
+  _id?: string;
+  name: string;
+  owner: string;
+  instances?: ITemplateInstance[];
+  tags?: string[];
   deletedVersions?: string[];
   isLive?: boolean; // at least one version is published
-	createdAt?: Date;   // for sorting
-	updatedAt?: Date;   // for sorting
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface IUser {
+  _id?: string;
+  authIssuer: string;
+  authId: string;
+  firstName?: string;
+  lastName?: string;
+  team?: string[];
+  org?: string[];
+  recentlyViewedTemplates?: string[]; // size 5
+  recentlyEditedTemplates?: string[]; // max size 5
+  recentTags?: string[]; // max size 10
 }
 
 export interface JSONResponse<T> {
@@ -69,7 +70,7 @@ export enum SortOrder {
  * @enum
  * Access token issuer types.
  */
-export enum Issuer {
+export enum AuthIssuer {
   AzureAD = "AzureAD"
 }
 

@@ -1,7 +1,7 @@
-import { JSONResponse, IUser, ITemplate } from "../models/models";
+import { JSONResponse, IUser, ITemplate, SortBy, SortOrder, ITemplateInstance, TemplateState } from "../models/models";
 import { StorageProvider } from "./IStorageProvider";
+import * as Utils from "../util/inmemorydbutils/inmemorydbutils";
 import uuidv4 from "uuid/v4";
-import { ITemplateModel } from "../models/mongo/TemplateModel";
 
 export class InMemoryDBProvider implements StorageProvider {
   users: Map<string, IUser> = new Map();
@@ -14,6 +14,7 @@ export class InMemoryDBProvider implements StorageProvider {
   }
 
   private _updateTemplate(template: ITemplate, updateQuery: Partial<ITemplate>): void {
+    template.updatedAt = new Date(Date.now());
     this.templates.set(template._id!, { ...template, ...updateQuery });
   }
 
@@ -23,7 +24,7 @@ export class InMemoryDBProvider implements StorageProvider {
       if (response.success) {
         response.result!.forEach(user => {
           updateCount += 1;
-          this._updateUser(user, this._clone(updateQuery));
+          this._updateUser(user, Utils.clone(updateQuery));
         });
       }
     });
@@ -41,7 +42,7 @@ export class InMemoryDBProvider implements StorageProvider {
     if (response.success) {
       response.result!.forEach(template => {
         updateCount += 1;
-        this._updateTemplate(template, this._clone(updateQuery));
+        this._updateTemplate(template, Utils.clone(updateQuery));
       });
     }
     if (updateCount) {
@@ -54,20 +55,19 @@ export class InMemoryDBProvider implements StorageProvider {
   }
 
   async insertUser(doc: IUser): Promise<JSONResponse<string>> {
-    return this._insert(doc, this.users);
+    return this._insert(doc, this.users, this._autoCompleteUserModel.bind(this));
   }
 
   async insertTemplate(doc: ITemplate): Promise<JSONResponse<string>> {
-    this._setTimestamps(doc);
-    return this._insert(doc, this.templates);
+    return this._insert(doc, this.templates, this._autoCompleteTemplateModel.bind(this));
   }
 
   async getUsers(query: Partial<IUser>): Promise<JSONResponse<IUser[]>> {
     return this._matchUsers(query);
   }
 
-  async getTemplates(query: Partial<ITemplate>): Promise<JSONResponse<ITemplate[]>> {
-    return this._matchTemplates(query);
+  async getTemplates(query: Partial<ITemplate>, sortBy: SortBy = SortBy.alphabetical, sortOrder: SortOrder = SortOrder.ascending): Promise<JSONResponse<ITemplate[]>> {
+    return this._matchTemplates(query, sortBy, sortOrder);
   }
 
   // Will be fixed in a while to use JSONResponse
@@ -111,7 +111,7 @@ export class InMemoryDBProvider implements StorageProvider {
     let res: IUser[] = new Array();
     this.users.forEach(user => {
       if (this._matchUser(query, user)) {
-        res.push(this._clone(user));
+        res.push(Utils.clone(user));
       }
     });
     if (res.length) {
@@ -120,27 +120,95 @@ export class InMemoryDBProvider implements StorageProvider {
     return Promise.resolve({ success: false });
   }
 
-  protected async _matchTemplates(query: Partial<ITemplate>): Promise<JSONResponse<ITemplate[]>> {
+  protected async _matchTemplates(query: Partial<ITemplate>, sortBy?: SortBy, sortOrder?: SortOrder): Promise<JSONResponse<ITemplate[]>> {
     let res: ITemplate[] = new Array();
     this.templates.forEach(template => {
       if (this._matchTemplate(query, template)) {
-        res.push(this._clone(template));
+        res.push(Utils.clone(template));
       }
     });
     if (res.length) {
+      if (sortBy && sortOrder) {
+        res.sort(Utils.sortByField(sortBy, sortOrder));
+      }
       return Promise.resolve({ success: true, result: res });
     }
     return Promise.resolve({ success: false });
   }
 
-  protected _clone<T>(obj: T): T {
-    let cloned: T = JSON.parse(JSON.stringify(obj));
-    return cloned;
+  protected _autoCompleteUserModel(user: IUser): void {
+    if (!user.firstName) {
+      user.firstName = "";
+    }
+    if (!user.lastName) {
+      user.lastName = "";
+    }
+    if (!user.team) {
+      user.team = [];
+    }
+    if (!user.org) {
+      user.org = [];
+    }
+    if (!user.recentlyViewedTemplates) {
+      user.recentlyViewedTemplates = [];
+    }
+    if (!user.recentlyEditedTemplates) {
+      user.recentlyEditedTemplates = [];
+    }
+    if (!user.recentTags) {
+      user.recentTags = [];
+    }
+    this._setID(user);
   }
 
-  protected async _insert<T extends ITemplate | IUser>(doc: T, collection: Map<String, T>): Promise<JSONResponse<string>> {
-    let docToInsert: T = this._clone(doc);
-    this._setID(docToInsert);
+  protected _autoCompleteTemplateInstanceModel(instance: ITemplateInstance): void {
+    if (!instance.state) {
+      instance.state = TemplateState.draft;
+    }
+    if (!instance.isShareable) {
+      instance.isShareable = false;
+    }
+    if (!instance.numHits) {
+      instance.numHits = 0;
+    }
+    if (!instance.data) {
+      instance.data = [];
+    }
+    if (!instance.publishedAt) {
+      instance.publishedAt = new Date("null");
+    }
+  }
+  protected _autoCompleteTemplateModel(template: ITemplate): void {
+    if (!template.tags) {
+      template.tags = [];
+    } else {
+      template.tags = template.tags.map(x => {
+        return x.toLowerCase();
+      });
+    }
+    if (!template.isLive) {
+      template.isLive = false;
+    }
+    if (!template.owner) {
+      template.owner = "";
+    }
+    if (!template.instances) {
+      template.instances = [];
+    } else {
+      for (let instance of template.instances) {
+        this._autoCompleteTemplateInstanceModel(instance);
+      }
+    }
+    if (!template.deletedVersions) {
+      template.deletedVersions = [];
+    }
+    this._setTimestamps(template);
+    this._setID(template);
+  }
+
+  protected async _insert<T extends ITemplate | IUser>(doc: T, collection: Map<String, T>, autoComplete: (doc: T) => void): Promise<JSONResponse<string>> {
+    let docToInsert: T = Utils.clone(doc);
+    autoComplete(docToInsert);
     if (!collection.has(docToInsert._id!)) {
       collection.set(docToInsert._id!, docToInsert);
       return Promise.resolve({ success: true, result: docToInsert._id });
@@ -159,41 +227,42 @@ export class InMemoryDBProvider implements StorageProvider {
     }
   }
 
+  // protected _setT;
+
   protected _setTimestamps(doc: ITemplate): void {
-    doc.createdAt = new Date(Date.now());
-    doc.updatedAt = new Date(Date.now());
+    let currentDate: Date = new Date(Date.now());
+    doc.createdAt = currentDate;
+    doc.updatedAt = currentDate;
+    if (doc.instances) {
+      for (let instance of doc.instances) {
+        instance.createdAt = currentDate;
+        instance.updatedAt = currentDate;
+      }
+    }
   }
 
   protected _matchUser(query: Partial<IUser>, user: IUser): boolean {
     if (
+      (query.lastName && !(query.lastName === user.lastName)) ||
+      (query.firstName && !(query.firstName === user.firstName)) ||
       (query._id && !(query._id === user._id)) ||
       (query.authId && !(query.authId === user.authId)) ||
-      (query.issuer && !(query.issuer === user.issuer)) ||
-      (query.org && user.org && !this._ifContainsList(user.org, query.org)) ||
-      (query.team && user.team && !this._ifContainsList(user.team, query.team))
+      (query.authIssuer && !(query.authIssuer === user.authIssuer)) ||
+      (query.org && user.org && !Utils.ifContainsList(user.org, query.org)) ||
+      (query.team && user.team && !Utils.ifContainsList(user.team, query.team))
     ) {
       return false;
     }
     return true;
   }
 
-  protected _ifContainsList<T>(toVerify: T[], list: T[]): boolean {
-    list.forEach(obj => {
-      if (!toVerify.includes(obj)) {
-        return false;
-      }
-    });
-    return true;
-  }
-  // Omitted version search for now
-  // Add name search
   protected _matchTemplate(query: Partial<ITemplate>, template: ITemplate): boolean {
     if (
-      (query.name && !(template.name.includes(query.name))) ||
+      (query.name && !template.name.toLocaleUpperCase().includes(query.name.toLocaleUpperCase())) ||
       (query.owner && !(query.owner === template.owner)) ||
       (query._id && !(query._id === template._id)) ||
       (query.isLive && !(query.isLive === template.isLive)) ||
-      (query.tags && template.tags && !this._ifContainsList(template.tags, query.tags))
+      (query.tags && template.tags && !Utils.ifContainsList(template.tags, query.tags))
     ) {
       return false;
     }

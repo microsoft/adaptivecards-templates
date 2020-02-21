@@ -6,7 +6,7 @@ import { TemplateError, ApiError, ServiceErrorMessage } from "./models/errorMode
 import { StorageProvider } from ".";
 import { ITemplate, JSONResponse, ITemplateInstance, IUser } from ".";
 import { SortBy, SortOrder, TemplatePreview, TemplateState, TemplateInstancePreview, UserPreview, TagList } from "./models/models";
-import { getMostRecentTemplate, stringifyJSONArray, removeMostRecentTemplate, getTemplateVersion, JSONStringArray, getMostRecentVersion } from "./util/templateutils";
+import { getMostRecentTemplate, stringifyJSONArray, removeMostRecentTemplate, getTemplateVersion, JSONStringArray } from "./util/templateutils";
 
 export class TemplateServiceClient {
   private storageProvider: StorageProvider;
@@ -84,7 +84,7 @@ export class TemplateServiceClient {
 
     const user: IUser = {
       authId: this.authProvider.getOwner()!,
-      issuer: this.authProvider.issuer
+      authIssuer: this.authProvider.issuer
     };
 
     let removeUserResponse = await this.storageProvider.removeUser(user);
@@ -126,7 +126,7 @@ export class TemplateServiceClient {
 
     const userQuery: Partial<IUser> = {
       authId: this.authProvider.getOwner()!,
-      issuer: this.authProvider.issuer, 
+      authIssuer: this.authProvider.issuer, 
     }
 
     const user : Partial<IUser> = {
@@ -134,7 +134,7 @@ export class TemplateServiceClient {
       lastName: lastName, 
       team: team,
       org: org,
-      recentlyViewed: recentlyViewed
+      recentlyViewedTemplates: recentlyViewed
     }
 
     return this.storageProvider.updateUser(userQuery, user);
@@ -153,7 +153,7 @@ export class TemplateServiceClient {
 
     const user: IUser = {
       authId: this.authProvider.getOwner()!,
-      issuer: this.authProvider.issuer
+      authIssuer: this.authProvider.issuer
     };
 
     return this.storageProvider.getUsers(user);
@@ -205,12 +205,12 @@ export class TemplateServiceClient {
 
     const user: IUser = {
       authId: this.authProvider.getOwner()!,
-      issuer: this.authProvider.issuer,
+      authIssuer: this.authProvider.issuer,
       firstName: firstName,
       lastName: lastName,
       team: team,
       org: org,
-      recentlyViewed: recentlyViewed
+      recentlyViewedTemplates: recentlyViewed
     };
 
     let response = await this.storageProvider.insertUser(user);
@@ -376,7 +376,7 @@ export class TemplateServiceClient {
         if (instance.version === templateInstance.version) {
           templateInstance.numHits = instance.numHits;
           templateInstance.state = isPublished === false && templateInstance.state !== TemplateState.deprecated && templateInstance.state !== TemplateState.draft &&
-                                  instance.state !== TemplateState.deprecated && instance.state !== TemplateState.draft? "draft" : templateInstance.state || instance.state;
+                                  instance.state !== TemplateState.deprecated && instance.state !== TemplateState.draft? TemplateState.draft : templateInstance.state || instance.state;
           templateInstance.data = templateInstance.data || instance.data;
           templateInstance.publishedAt = templateInstance.publishedAt || instance.publishedAt;
           templateInstance.isShareable = templateInstance.isShareable || instance.isShareable;
@@ -387,7 +387,7 @@ export class TemplateServiceClient {
         }
       }
       if (!added) {
-        templateInstance.state = templateState || "draft";
+        templateInstance.state = templateState || TemplateState.draft;
         templateInstance.isShareable = isShareable || false;
         templateInstance.data = templateData || [];
         templateInstances.push(templateInstance);
@@ -480,7 +480,7 @@ export class TemplateServiceClient {
       json: JSON.stringify(template),
       version: version || "1.0",
       publishedAt: isPublished? new Date(Date.now()) : undefined,
-      state: isPublished? TemplateState.live : state? state : "draft",
+      state: isPublished? TemplateState.live : state? state : TemplateState.draft,
       isShareable: isShareable || false,
       numHits: 0,
       data: data? data instanceof Array? stringifyJSONArray(data) : [JSON.stringify(data)] : [],
@@ -574,7 +574,7 @@ export class TemplateServiceClient {
       // Update recently viewed for user
       let user = await this._getUser();
       if (user.success && user.result && user.result.length === 1){
-        let recentlyViewed = user.result[0].recentlyViewed;
+        let recentlyViewed = user.result[0].recentlyViewedTemplates;
         if (recentlyViewed!.includes(templateId)){
           let index = recentlyViewed!.indexOf(templateId);
           recentlyViewed!.splice(index, 1);
@@ -733,10 +733,10 @@ export class TemplateServiceClient {
       return { success: false, errorMessage: response.errorMessage };
     }
     let user: IUser = response.result![0];
-    if (!user.recentlyViewed) {
+    if (!user.recentlyViewedTemplates) {
       return { success: true, result: results };
     }
-    for (let templateId of user.recentlyViewed) {
+    for (let templateId of user.recentlyViewedTemplates) {
       let templateResponse = await this.getTemplates(templateId);
       if (templateResponse.success && templateResponse.result && templateResponse.result.length === 1){
         results.push(templateResponse.result[0]);

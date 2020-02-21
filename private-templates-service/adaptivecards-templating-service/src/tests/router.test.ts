@@ -462,7 +462,7 @@ describe("Filtering Templates", () => {
     .send({
       template: "{}",
       tags: [
-        "Weather"
+        "weather"
       ]
     });
     expect(res.status).toEqual(201);
@@ -476,7 +476,7 @@ describe("Filtering Templates", () => {
     .send({
       template: "{}",
       tags: [
-        "Sunny"
+        "sunny"
       ]
     });
     expect(res.status).toEqual(201);
@@ -487,7 +487,7 @@ describe("Filtering Templates", () => {
       .set({ Authorization: "Bearer " + token })
       .send({
         tags: [
-          "Weather"
+          "weather"
         ]
       });
     expect(res.status).toEqual(200);
@@ -523,7 +523,7 @@ describe("Get Tags", () => {
       .send({
         template: "{}",
         tags: [
-          "Weather"
+          "weather"
         ],
         isPublished: false
       });
@@ -538,7 +538,7 @@ describe("Get Tags", () => {
     expect(res.body.templates).toHaveLength(1);
     let template = res.body.templates[0];
     expect(template.tags).toHaveLength(1);
-    expect(template.tags[0]).toEqual("Weather");
+    expect(template.tags[0]).toEqual("weather");
 
     res = await request(app)
     .post("/template")
@@ -546,7 +546,7 @@ describe("Get Tags", () => {
     .send({
       template: "{}",
       tags: [
-        "Contosa"
+        "contosa"
       ],
       isPublished: true
     });
@@ -564,10 +564,10 @@ describe("Get Tags", () => {
     expect(res.body).toHaveProperty("ownedTags");
     expect(res.body).toHaveProperty("allTags");
     expect(res.body.ownedTags).toHaveLength(2);
-    expect(res.body.ownedTags).toContain("Weather");
-    expect(res.body.ownedTags).toContain("Contosa");
+    expect(res.body.ownedTags).toContain("weather");
+    expect(res.body.ownedTags).toContain("contosa");
     expect(res.body.allTags).toHaveLength(1);
-    expect(res.body.allTags).toContain("Contosa");
+    expect(res.body.allTags).toContain("contosa");
   });
 
   afterAll(async () => {

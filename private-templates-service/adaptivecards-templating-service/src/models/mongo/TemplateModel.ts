@@ -15,7 +15,7 @@ export const TemplateInstanceSchema: Schema = new Schema(
     _id: { type: String, required: true },
     json: { type: String, required: true },
     version: { type: String, required: true },
-    publishedAt: { type: Date, default: "" },
+    publishedAt: { type: Date, default: null },
     state: { type: String, default: TemplateState.draft },
     isShareable: { type: Boolean, default: false },
     hits: { type: Number, default: 0 },
@@ -43,7 +43,6 @@ export const TemplateSchema: Schema = new Schema(
 );
 
 TemplateInstanceSchema.pre("validate", function(next) {
-  // if(!this._id)
   this._id = MongoUtils.generateUniqueID().toHexString();
   next();
 });
