@@ -107,7 +107,6 @@ function initDesigner(): ACDesigner.CardDesigner {
 
 function onSave(designer: ACDesigner.CardDesigner, props: DesignerProps): void {
   if (props.templateJSON !== JSON.stringify(designer.getCard()) || props.sampleDataJSON !== designer.sampleData) {
-    console.log(JSON.stringify(designer.getCard()));
     props.updateTemplate(props.templateID, JSON.stringify(designer.getCard()), props.templateName, designer.sampleData);
   }
 }
