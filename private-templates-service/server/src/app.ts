@@ -19,11 +19,7 @@ app.use(passport.session());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const mongoConnection: MongoConnectionParams = {
-  connectionString: "#{needlez}#"
-}
-
-let mongoDB = new MongoDBProvider({ connectionString: "#{needlez}#" });
+let mongoDB = new MongoDBProvider({ connectionString: "#{DB_CONNECTION_TOKEN}#" });
 mongoDB.connect()
   .then(
     (res) => {
