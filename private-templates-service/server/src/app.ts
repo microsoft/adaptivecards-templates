@@ -23,7 +23,7 @@ const mongoConnection: MongoConnectionParams = {
   connectionString: "#{needlez}#"
 }
 
-let mongoDB = new MongoDBProvider(mongoConnection);
+let mongoDB = new MongoDBProvider({ connectionString: "#{needlez}#" });
 mongoDB.connect()
   .then(
     (res) => {
