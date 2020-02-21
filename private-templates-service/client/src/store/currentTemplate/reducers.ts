@@ -72,12 +72,12 @@ export function currentTemplateReducer(state = initialState, action: CurrentTemp
     case GET_TEMPLATE:
       return {
         ...state,
-        isFetching: true,
         templateID: action.templateID,
         template: undefined,
         templateJSON: undefined,
         templateName: undefined,
         sampleDataJSON: undefined,
+        isFetching: true,
       }
     case GET_TEMPLATE_SUCCESS:
       return {

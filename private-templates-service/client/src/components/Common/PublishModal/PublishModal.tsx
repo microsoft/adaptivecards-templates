@@ -13,6 +13,7 @@ import { updateTemplate } from '../../../store/currentTemplate/actions';
 
 // Components
 import AdaptiveCard from '../AdaptiveCard';
+import processTemplate from '../../../Services/ProcessTemplate';
 
 // Styles
 import {
@@ -48,12 +49,6 @@ const mapDispatchToProps = (dispatch: any) => {
 
 class PublishModal extends React.Component<Props> {
 
-  processTemplate = (template: string) => {
-    let parsedTemplate = template.replace(/(\\"(.*?)\\")/g, '"$2"');
-    parsedTemplate = parsedTemplate.substr(1, parsedTemplate.length - 2);
-    return parsedTemplate;
-  }
-
   publish = () => {
     const {
       id,
@@ -62,7 +57,7 @@ class PublishModal extends React.Component<Props> {
     } = this.props.template;
     if (id && name && instances && instances.length === 1 && instances[0].json) {
       const template = instances[0].json;
-      const parsedTemplate = this.processTemplate(template);
+      const parsedTemplate = processTemplate(template);
       this.props.publishTemplate(id, parsedTemplate, "", name);
       this.props.toggleModal();
     }

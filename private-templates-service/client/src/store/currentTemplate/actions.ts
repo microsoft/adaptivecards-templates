@@ -157,7 +157,8 @@ export function getTemplate(templateID: string) {
         }
         dispatch(requestTemplateFailure());
       })
-    } catch {
+    }
+    catch {
       dispatch(requestTemplateFailure());
     }
   }

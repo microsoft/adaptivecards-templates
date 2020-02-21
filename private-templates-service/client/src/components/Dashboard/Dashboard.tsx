@@ -61,11 +61,11 @@ class Dashboard extends React.Component<Props, State> {
 
   selectTemplate = (templateID: string) => {
     this.props.getTemplate(templateID);
-    this.setState({ isPreviewOpen: true });
+    this.toggleModal();
   }
 
   toggleModal = () => {
-    this.setState({ isPreviewOpen: false });
+    this.setState({ isPreviewOpen: !this.state.isPreviewOpen });
   };
 
   render() {
