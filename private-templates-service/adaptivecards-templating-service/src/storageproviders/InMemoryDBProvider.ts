@@ -247,7 +247,7 @@ export class InMemoryDBProvider implements StorageProvider {
       (query.firstName && !(query.firstName === user.firstName)) ||
       (query._id && !(query._id === user._id)) ||
       (query.authId && !(query.authId === user.authId)) ||
-      (query.issuer && !(query.issuer === user.issuer)) ||
+      (query.authIssuer && !(query.authIssuer === user.authIssuer)) ||
       (query.org && user.org && !Utils.ifContainsList(user.org, query.org)) ||
       (query.team && user.team && !Utils.ifContainsList(user.team, query.team))
     ) {

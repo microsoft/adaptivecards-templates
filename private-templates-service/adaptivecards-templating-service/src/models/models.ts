@@ -35,7 +35,7 @@ export interface ITemplate {
 
 export interface IUser {
   _id?: string;
-  issuer: string;
+  authIssuer: string;
   authId: string;
   firstName?: string;
   lastName?: string;
@@ -73,6 +73,6 @@ export enum SortOrder {
  * @enum
  * Access token issuer types.
  */
-export enum Issuer {
+export enum AuthIssuer {
   AzureAD = "AzureAD"
 }
