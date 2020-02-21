@@ -10,7 +10,7 @@ import { TemplateList } from "adaptive-templating-service-typescript-node";
 
 const initialState: SearchState = {
   isSearch: false,
-  searchValue: "",
+  searchByTemplateName: "",
   loading: false,
   templates: new TemplateList(),
   error: undefined
@@ -31,7 +31,7 @@ export function searchReducer( state = initialState, action: SearchAction): Sear
         isSearch: true,
         loading: false,
         templates: action.cards,
-        searchValue: action.searchValue
+        searchByTemplateName: action.searchByTemplateName
       }
     case QUERY_SEARCH_FAILURE:
       return{

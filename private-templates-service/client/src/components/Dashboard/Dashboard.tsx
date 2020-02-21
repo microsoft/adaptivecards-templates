@@ -2,7 +2,6 @@ import React from "react";
 import { connect } from "react-redux";
 
 import { RootState } from "../../store/rootReducer";
-import { UserType } from "../../store/auth/types";
 import { BatchTemplatesState } from '../../store/templates/types';
 import { setPage } from "../../store/page/actions";
 import { getAllTemplates } from "../../store/templates/actions";
@@ -17,7 +16,6 @@ import { Title, DashboardContainer } from "../Dashboard/styled";
 const mapStateToProps = (state: RootState) => {
   return {
     isAuthenticated: state.auth.isAuthenticated,
-    user: state.auth.user,
     batchTemplates: state.batchTemplates,
     isSearch: state.search.isSearch
   };
@@ -38,7 +36,6 @@ interface State {
 
 interface Props {
   isAuthenticated: boolean;
-  user?: UserType;
   isSearch: boolean;
   batchTemplates: BatchTemplatesState;
   authButtonMethod: () => Promise<void>;

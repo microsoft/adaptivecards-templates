@@ -7,21 +7,22 @@ import { SearchAndFilter, SearchResultBanner, StyledSearchText, StyledSpinner } 
 import Gallery from '../../Gallery';
 import PreviewModal from "../PreviewModal";
 import { setPage } from "../../../store/page/actions";
-import { TemplateList } from 'adaptive-templating-service-typescript-node';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
+
+import { Template, TemplateList } from "adaptive-templating-service-typescript-node";
 
 const mapStateToProps = (state: RootState) => {
   return {
-    searchValue: state.search.searchValue,
+    searchByTemplateName: state.search.searchByTemplateName,
     isSearch: state.search.isSearch,
     filterType: state.filter.filterType,
     sortType: state.sort.sortType,
     loading: state.search.loading,
-    templates: state.search.templates
+    templates: state.search.templates,
   }
 }
 
-const mapDipatchToProps = (dispatch: any) => {
+const mapDispatchToProps = (dispatch: any) => {
   return{
     setPage: (currentPageTitle: string) => {
       dispatch(setPage(currentPageTitle));
@@ -30,7 +31,7 @@ const mapDipatchToProps = (dispatch: any) => {
 }
 
 interface Props {
-  searchValue: string;
+  searchByTemplateName: string;
   isSearch: boolean
   filterType: string;
   sortType: string;
@@ -62,16 +63,16 @@ class SearchPage extends React.Component<Props, State> {
       )
     }
 
-    let templates = undefined;
-    let searchText = undefined;
+    let templates = new Array<Template>();
+    let searchText = "";
     if(!this.props.loading && this.props.templates?.templates){
       templates = this.props.templates.templates;
     }
-    
+
     if(this.props.templates?.templates?.length === 0){
-      searchText = "No Results Found For " + "'" + this.props.searchValue + "'";
+      searchText = "No Results Found For " + "'" + this.props.searchByTemplateName + "'";
     }else{
-      searchText = "Template Results For " + "'" + this.props.searchValue + "'";
+      searchText = "Template Results For " + "'" + this.props.searchByTemplateName + "'";
     }
     
     return (
@@ -93,4 +94,4 @@ class SearchPage extends React.Component<Props, State> {
   }
 }
 
-export default connect(mapStateToProps, mapDipatchToProps)(SearchPage);
+export default connect(mapStateToProps, mapDispatchToProps)(SearchPage);

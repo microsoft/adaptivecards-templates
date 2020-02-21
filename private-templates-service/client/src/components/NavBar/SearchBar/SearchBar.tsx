@@ -9,15 +9,15 @@ import { THEME, BREAK } from '../../../globalStyles';
 const mapStateToProps = (state:RootState) => {
   return {
     isSearch: state.search.isSearch,
-    searchValue: state.search.searchValue,
+    searchByTemplateName: state.search.searchByTemplateName,
     isAuthenticated :state.auth.isAuthenticated
   }
 }
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    search: (searchValue: string) => {
-      dispatch(querySearch(searchValue));
+    search: (searchByTemplateName: string) => {
+      dispatch(querySearch(searchByTemplateName));
     },
     clearSearch: () => {
       dispatch(clearSearch());
@@ -27,9 +27,9 @@ const mapDispatchToProps = (dispatch: any) => {
 
 interface Props { 
   isSearch: boolean,
-  searchValue: string,
+  searchByTemplateName: string,
   isAuthenticated: boolean;
-  search: (searchValue: string) => void,
+  search: (searchByTemplateName: string) => void,
   clearSearch: () => void,
 }
 
@@ -61,12 +61,12 @@ class SearchBar extends React.Component<Props, State> {
     this.props.clearSearch();
   }
 
-  onSearch = (searchValue: string) => {
-    if(searchValue === "") {
+  onSearch = (searchByTemplateName: string) => {
+    if(searchByTemplateName === "") {
       this.props.clearSearch();
     } 
     else {
-      this.props.search(searchValue);
+      this.props.search(searchByTemplateName);
     }
   }
 

@@ -15,7 +15,6 @@ export const rootReducer = combineReducers({
   currentTemplate: currentTemplateReducer,
   filter: filterReducer,
   sort: sortReducer,
-  templates: allTemplateReducer,
   batchTemplates: allTemplateReducer
 });
 

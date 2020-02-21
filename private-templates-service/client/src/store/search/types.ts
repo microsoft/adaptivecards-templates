@@ -3,7 +3,7 @@ import { IncomingMessage } from "http";
 
 export interface SearchState {
   isSearch: boolean;
-  searchValue: string;
+  searchByTemplateName: string;
   templates?: TemplateList; 
   loading: boolean;
   error?: IncomingMessage;
@@ -23,8 +23,7 @@ export interface SearchAction{
     typeof QUERY_SEARCH_FAILURE | 
     typeof CLEAR_SEARCH;
     
-  text: string;
-  searchValue: string;
+  searchByTemplateName: string;
   cards?: TemplateList;
   error?: IncomingMessage;
 }
