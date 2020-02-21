@@ -11,7 +11,6 @@ let options: ClientOptions = {
   authenticationProvider: new AzureADProvider(),
   storageProvider: new InMemoryDBProvider()
 };
-
 describe("Get endpoints", () => {
   let token: string;
   const app = express();

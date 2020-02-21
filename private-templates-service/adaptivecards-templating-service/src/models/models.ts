@@ -7,28 +7,43 @@
  * @property {string[]} team
  * @property {string[]} org
  */
-export interface IUser {
-  _id?: string;
-  authId: string;
-  issuer: string;
-  team?: string[];
-  org?: string[];
-}
 
 export interface ITemplateInstance {
+  _id?: string;
   json: string;
   version: string;
+  publishedAt?: Date;
+  state?: TemplateState;
+  isShareable?: boolean;
+  numHits?: number;
+  data?: string;
+  updatedAt?: Date;
+  createdAt?: Date;
 }
 
 export interface ITemplate {
   _id?: string;
   name: string;
-  instances: ITemplateInstance[];
+  owner: string;
+  instances?: ITemplateInstance[];
   tags?: string[];
-  owner?: string;
+  deletedVersions?: string[];
+  isLive?: boolean; // at least one version is published
   createdAt?: Date;
   updatedAt?: Date;
-  isPublished?: boolean;
+}
+
+export interface IUser {
+  _id?: string;
+  authIssuer: string;
+  authId: string;
+  firstName?: string;
+  lastName?: string;
+  team?: string[];
+  org?: string[];
+  recentlyViewedTemplates?: string[]; // size 5
+  recentlyEditedTemplates?: string[]; // max size 5
+  recentTags?: string[]; // max size 10
 }
 
 export interface JSONResponse<T> {
@@ -37,10 +52,16 @@ export interface JSONResponse<T> {
   result?: T;
 }
 
+export enum TemplateState {
+  draft = "draft",
+  live = "live",
+  deprecated = "deprecated"
+}
+
 export enum SortBy {
   dateCreated = "createdAt",
   dateModified = "updatedAt",
-  name = "name"
+  alphabetical = "name"
 }
 
 export enum SortOrder {
@@ -52,6 +73,6 @@ export enum SortOrder {
  * @enum
  * Access token issuer types.
  */
-export enum Issuer {
+export enum AuthIssuer {
   AzureAD = "AzureAD"
 }
