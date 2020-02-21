@@ -126,6 +126,7 @@ export function updateTemplate(templateID: string, templateJSON: string, sampleD
       return api.templateTemplateIdPost(templateID, newTemplate).then(response => {
         if (response.response.statusCode && response.response.statusCode === 201) {
           dispatch(receiveExistingTemplateUpdate(templateJSON, templateName, sampleDataJSON));
+          dispatch(getTemplate(templateID));
         }
         else {
           dispatch(failureExistingTemplateUpdate(response.response));

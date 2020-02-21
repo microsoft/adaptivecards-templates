@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 
 import { RootState } from "../../store/rootReducer";
 import { UserType } from "../../store/auth/types";
-import { AllTemplatesState } from '../../store/templates/types';
+import { AllTemplateState } from '../../store/templates/types';
 import { setPage } from "../../store/page/actions";
 import { getAllTemplates } from "../../store/templates/actions";
 import { getTemplate } from "../../store/currentTemplate/actions";
@@ -43,7 +43,7 @@ interface State {
 interface Props {
   isAuthenticated: boolean;
   user?: UserType;
-  batchTemplates: AllTemplatesState;
+  batchTemplates: AllTemplateState;
   authButtonMethod: () => Promise<void>;
   setPage: (currentPageTitle: string) => void;
   getTemplates: () => void;
