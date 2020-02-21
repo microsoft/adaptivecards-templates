@@ -56,6 +56,12 @@ jobs:
                 files: '["**/*.ts"]'
               env:
                 needlez: ${{ secrets.AZURE_ADPATIVECMS_DB_CONNECTION_STRING }}
+              run: |
+                  cd private-templates-service/server/src
+                  cat app.ts
+                  cd ..
+                  cd ..
+                  cd ..
               # run: |
               #     SECRET='${{ secrets.AZURE_ADPATIVECMS_DB_CONNECTION_STRING }}'
               #     find . -type f -exec sed -i "s%needlez%$SECRET%g" {} \;    
@@ -64,6 +70,7 @@ jobs:
               run: |
                   # Build and test the project, then
                   # deploy to Azure Web App.
+
                   cd private-templates-service/client
                   npm run build:dev --if-present
 

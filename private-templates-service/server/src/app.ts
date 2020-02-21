@@ -20,7 +20,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const mongoConnection: MongoConnectionParams = {
-  connectionString: "needlez"
+  connectionString: "#{needlez}#"
 }
 
 let mongoDB = new MongoDBProvider(mongoConnection);
