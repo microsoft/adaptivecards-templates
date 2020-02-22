@@ -19,8 +19,6 @@ export class TemplateServiceClient {
    * @param {ClientOptions} clientOptions - storage provider and auth provider options
    */
   public static init(clientOptions: ClientOptions): TemplateServiceClient {
-    // TODO: add db setup step once mongo adapter is added
-
     if (clientOptions.storageProvider === undefined) {
       const error = new Error();
       error.name = "Missing Storage Provider";
@@ -74,7 +72,7 @@ export class TemplateServiceClient {
 
     if (!this.ownerID) return { success: true };
 
-    // Remove all templates under user
+    // Remove all unpublished templates under user
     const template: Partial<ITemplate> = {
       owner: this.ownerID,
       isLive: false
@@ -104,11 +102,11 @@ export class TemplateServiceClient {
 
   /**
    * @public 
-   * Public update user info. 
-   * @param firstName 
-   * @param lastName 
-   * @param team 
-   * @param org 
+   * Public update user info function. 
+   * @param {string} firstName
+   * @param {string}lastName
+   * @param {string[]} team
+   * @param {string[]} org
    */
   public async updateUser(firstName?: string, lastName?: string, team?: string[], org?: string[]): Promise<JSONResponse<Number>> {
     return this._updateUser(firstName, lastName, team, org);
@@ -117,6 +115,11 @@ export class TemplateServiceClient {
   /**
    * @private
    * Update user info and recently viewed.
+   * @param {string} firstName
+   * @param {string} lastName
+   * @param {string[]} team
+   * @param {string[]} org
+   * @param {string[]} recentlyViewed - list of template ids last viewed by the logged in user, should be of length 5 or less
    */
   private async _updateUser(firstName?: string, lastName?: string, team?: string[], org?: string[], recentlyViewed?: string[]): Promise<JSONResponse<Number>> {
     let checkAuthentication = this._checkAuthenticated();
@@ -161,7 +164,8 @@ export class TemplateServiceClient {
 
   /**
    * @private
-   * Get other user's public info.
+   * Get other user's public info: {firstName, lastName, team, org}
+   * Used by the template preview. 
    */
   private async _searchUserInfo(id: string): Promise<JSONResponse<UserPreview>> {
     const query: Partial<IUser> = {
@@ -186,6 +190,7 @@ export class TemplateServiceClient {
   
   /**
    * @private
+   * Creates new user object, updates instance ownerID if successful.
    * @param {string[]} team - user's team within org
    * @param {string[]} org - user's organization
    * @param {string} firstName 
@@ -214,8 +219,8 @@ export class TemplateServiceClient {
     };
 
     let response = await this.storageProvider.insertUser(user);
-    if (response.success) {
-      this.ownerID = response.result!;
+    if (response.success && response.result) {
+      this.ownerID = response.result;
     }
     return response;
   }
@@ -248,8 +253,9 @@ export class TemplateServiceClient {
 
   /**
    * @private
-   * Increment number of hits
+   * Increment the number of hits on a template.
    * @param templateId
+   * @param template
    * @param version - If provided, only specific version numHits is incremented
    */
   private async _incrementTemplateHits(
@@ -260,11 +266,11 @@ export class TemplateServiceClient {
       _id: templateId,
     };
 
-    if (!template || !template.instances) { 
+    if (!template.instances) {
       return { success: true };
     }
+    
     let templateInstances = [];
-
     for (let instance of template.instances) {
       if (!version || version === instance.version) {
         instance.numHits! += 1;
@@ -306,8 +312,8 @@ export class TemplateServiceClient {
   private _getOwnedTemplates(templates: ITemplate[], owned: boolean): ITemplate[] {
     let result: ITemplate[] = [];
     for (let instance of templates){
-      let isOwners = instance.owner === this.ownerID;
-      if (isOwners && owned || !isOwners && !owned){
+      let isOwner = instance.owner === this.ownerID;
+      if (isOwner && owned || !isOwner && !owned){
         result.push(instance);
       }
     }
@@ -352,32 +358,42 @@ export class TemplateServiceClient {
       return { success: false };
     }
 
-    let existingTemplate : ITemplate = response.result[0];
-    let templateName = name ? name : existingTemplate.name;
-    let tags = tag? [tag] : tagList;
-    let templateData : string[] | undefined = data? [JSON.stringify(data)] : dataList? stringifyJSONArray(dataList) : undefined;
-    let templateState : TemplateState | undefined = isPublished? TemplateState.live : state;
+    let existingTemplate: ITemplate = response.result[0];
+    let templateName: string = name ? name : existingTemplate.name;
+    let existingTags = existingTemplate.tags;
+    if (tag){
+      existingTags!.push(tag);
+    }
+    let tags: string[] | undefined = tag? existingTags : tagList;
+    let templateState: TemplateState | undefined = isPublished? TemplateState.live : state;
 
     let templateInstance: ITemplateInstance = {
       json: JSON.stringify(template),
       version: version || "1.0", 
       state: templateState,
-      data: templateData, 
+      data: [], 
       publishedAt: isPublished? new Date(Date.now()) : undefined,
       updatedAt: new Date(Date.now()),
       numHits: 0,
       isShareable: isShareable
     }
 
-    let templateInstances : ITemplateInstance[] = [];
+    let templateInstances: ITemplateInstance[] = [];
     if (existingTemplate.instances) {
+      // Check if updated version already exists
       let added = false;
       for (let instance of existingTemplate.instances){
         if (instance.version === templateInstance.version) {
+          let existingData = instance.data;
+          if (data){
+            existingData!.push(JSON.stringify(data));
+          }
+          let templateData: string[] | undefined = data? existingData: dataList? stringifyJSONArray(dataList) : undefined;
           templateInstance.numHits = instance.numHits;
           templateInstance.state = isPublished === false && templateInstance.state !== TemplateState.deprecated && templateInstance.state !== TemplateState.draft &&
-                                  instance.state !== TemplateState.deprecated && instance.state !== TemplateState.draft? TemplateState.draft : templateInstance.state || instance.state;
-          templateInstance.data = templateInstance.data || instance.data;
+                                  instance.state !== TemplateState.deprecated && instance.state !== TemplateState.draft? TemplateState.draft : 
+                                  templateInstance.state || instance.state;
+          templateInstance.data = templateData || instance.data;
           templateInstance.publishedAt = templateInstance.publishedAt || instance.publishedAt;
           templateInstance.isShareable = templateInstance.isShareable || instance.isShareable;
           added = true;
@@ -387,6 +403,8 @@ export class TemplateServiceClient {
         }
       }
       if (!added) {
+        let templateData: string[] | undefined = data? [JSON.stringify(data)]: dataList? stringifyJSONArray(dataList) : undefined;
+        // Updated version does not already exist, add to instances list
         templateInstance.state = templateState || TemplateState.draft;
         templateInstance.isShareable = isShareable || false;
         templateInstance.data = templateData || [];
@@ -459,9 +477,9 @@ export class TemplateServiceClient {
         
       if (data instanceof Array) {
         dataList = data;
-        data = undefined;
+        dataItem = undefined;
       } else {
-        data = data;
+        dataItem = data;
         dataList = undefined;
       }
 
@@ -618,8 +636,8 @@ export class TemplateServiceClient {
    * Delete template endpoint. 
    * If the only template version is deleted, the entire template object is deleted. 
    * If a version is not specified, the last version is deleted. 
-   * @param templateId
-   * @param version 
+   * @param {string} templateId
+   * @param {string} version 
    */
   public async deleteTemplate(templateId: string, version?: string): Promise<JSONResponse<Number>> {
     let checkAuthentication = this._checkAuthenticated();
@@ -676,7 +694,8 @@ export class TemplateServiceClient {
   /**
    * @public
    * Retrieve preview of shareable template version.
-   * @param templateId
+   * @param {string} templateId
+   * @param {string} version
    */
   public async getTemplatePreview(templateId: string, version: string): Promise<JSONResponse<TemplatePreview>> {
     const templateQuery: Partial<ITemplate> = {
@@ -697,7 +716,7 @@ export class TemplateServiceClient {
     let templateInstance: TemplateInstancePreview = {
       version: version, 
       json: JSON.parse(templateVersion.json),
-      state: templateVersion.state || "draft",
+      state: templateVersion.state || TemplateState.draft,
       data: templateVersion.data? JSONStringArray(templateVersion.data) : []
     }
 
@@ -732,10 +751,12 @@ export class TemplateServiceClient {
     if (!response.success || response.result && response.result.length === 0) {
       return { success: false, errorMessage: response.errorMessage };
     }
+
     let user: IUser = response.result![0];
     if (!user.recentlyViewedTemplates) {
       return { success: true, result: results };
     }
+
     for (let templateId of user.recentlyViewedTemplates) {
       let templateResponse = await this.getTemplates(templateId);
       if (templateResponse.success && templateResponse.result && templateResponse.result.length === 1){
@@ -903,8 +924,8 @@ export class TemplateServiceClient {
         isShareable = req.body.isShareable === "true" || req.body.isShareable === "True";
       }
       
-      let tags: string[] = req.body.tags;
-      let data: JSON[] = req.body.data;
+      let tags: string[] | string = req.body.tags;
+      let data: JSON[] | JSON = req.body.data;
 
       let response = req.params.id ?
         await this.postTemplates(req.body.template, req.params.id, req.body.version, isPublished, req.body.name, req.body.state, isShareable, tags, data) :
