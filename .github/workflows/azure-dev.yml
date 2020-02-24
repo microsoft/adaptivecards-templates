@@ -36,6 +36,18 @@ jobs:
                   npm install
                   npm run test
                   cd ..
+            - name: Find and Replace: CLIENT_SECRET_TOKEN
+              uses: cschleiden/replace-tokens@v1
+              with:
+                files: '["**/*.ts"]'
+              env:
+                CLIENT_SECRET_TOKEN: ${{ secrets.AZURE_ADAPTIVECMS_CLIENT_SECRET }}
+            - name: Adaptive Cards Templating Service Test
+              run: |
+                  cd private-templates-service/adaptivecards-templating-service
+                  npm install
+                  npm run test
+                  cd ..
             - name: Frontend Jest Test
               run: |
                   cd private-templates-service/adaptivecards-templating-client/typescript
@@ -47,7 +59,7 @@ jobs:
                   npm install
                   npm run test
                   cd ..
-            - name: Find and Replace - Using Secrets
+            - name: Find and Replace: DB_CONNECTION_TOKEN
               uses: cschleiden/replace-tokens@v1
               with:
                 files: '["**/*.ts"]'
