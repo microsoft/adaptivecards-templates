@@ -20,3 +20,10 @@ export const StyledSearchText = styled.div`
   font-size: 26px;
   font-weight: 600;
 `;
+
+export const StyledSpinner = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+`;

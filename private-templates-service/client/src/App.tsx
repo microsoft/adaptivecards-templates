@@ -31,7 +31,7 @@ const mapStateToProps = (state: RootState) => {
   return {
     isAuthenticated: state.auth.isAuthenticated,
     user: state.auth.user,
-    searchValue: state.search.searchValue
+    searchByTemplateName: state.search.searchByTemplateName
   };
 };
 
@@ -63,7 +63,7 @@ interface Props {
   userLogout: () => void;
   isAuthenticated: boolean;
   user?: UserType;
-  searchValue: string
+  searchByTemplateName: string
 }
 
 class App extends Component<Props, State> {
