@@ -7,7 +7,7 @@ import { RootState } from '../../store/rootReducer';
 import { UserType } from '../../store/auth/types';
 import { newTemplate } from '../../store/currentTemplate/actions';
 
-import { UserAvatar } from './UserAvatar';
+import UserAvatar from './UserAvatar';
 import mainLogo from '../../assets/adaptive-cards-100-logo.png';
 
 // CSS

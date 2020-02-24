@@ -1,7 +1,7 @@
 import { AuthenticationProvider } from "./IAuthenticationProvider";
 import jws, { Algorithm, Signature } from "jws";
 import axios from "axios";
-import { Issuer } from "../models/models";
+import { AuthIssuer } from "../models/models";
 
 /**
  * @class
@@ -9,7 +9,7 @@ import { Issuer } from "../models/models";
  * @extends AuthenticationProvider
  */
 export class AzureADProvider implements AuthenticationProvider {
-  public issuer: Issuer = Issuer.AzureAD;
+  public issuer: AuthIssuer = AuthIssuer.AzureAD;
   private user: string = "";
   private static CERT_URL: string = "https://login.microsoftonline.com/common/discovery/keys";
 
