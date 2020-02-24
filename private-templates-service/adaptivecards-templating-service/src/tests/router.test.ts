@@ -9,22 +9,12 @@ import { InMemoryDBProvider } from "../storageproviders/InMemoryDBProvider";
 import { ITemplate, ITemplateInstance } from "../models/models";
 
 export default async function getToken(): Promise<string> {
-    let options = {
-      method: "post",
-      url:
-        "https://login.microsoftonline.com/72f988bf-86f1-41af-91ab-2d7cd011db47/oauth2/token",
-      data: {
-        grant_type: "client_credentials",
-        client_id: "4803f66a-136d-4155-a51e-6d98400d5506",
-        client_secret: "#{secrets.AZURE_ADAPTIVECMS_CLIENT_SECRET}#",
-      }
-    };
     const request = require('request-promise');
-    const endpoint = options.url;
+    const endpoint = "https://login.microsoftonline.com/72f988bf-86f1-41af-91ab-2d7cd011db47/oauth2/token";
     const requestParams = {
       grant_type: "client_credentials",
-      client_id: options.data.client_id,
-      client_secret: options.data.client_secret,
+      client_id: "4803f66a-136d-4155-a51e-6d98400d5506",
+      client_secret: "#{secrets.AZURE_ADAPTIVECMS_CLIENT_SECRET}#",
       resource: "https://graph.windows.net"
     };
     return await request.post({ url: endpoint, form: requestParams })
