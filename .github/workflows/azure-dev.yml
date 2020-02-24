@@ -36,7 +36,7 @@ jobs:
                   npm install
                   npm run test
                   cd ..
-            - name: Find and Replace: CLIENT_SECRET_TOKEN
+            - name: Find and Replace CLIENT_SECRET_TOKEN
               uses: cschleiden/replace-tokens@v1
               with:
                 files: '["**/*.ts"]'
@@ -56,10 +56,11 @@ jobs:
                   npm link
                   cd ../../client
                   npm link adaptive-templating-service-typescript-node
+
                   npm install
                   npm run test
                   cd ..
-            - name: Find and Replace: DB_CONNECTION_TOKEN
+            - name: Find and Replace DB_CONNECTION_TOKEN
               uses: cschleiden/replace-tokens@v1
               with:
                 files: '["**/*.ts"]'
