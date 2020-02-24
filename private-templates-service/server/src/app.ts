@@ -8,7 +8,6 @@ import { TemplateServiceClient } from "../../adaptivecards-templating-service/sr
 import { ClientOptions } from "../../adaptivecards-templating-service/src/IClientOptions";
 import { AzureADProvider } from "../../adaptivecards-templating-service/src/authproviders/AzureADProvider";
 import { MongoDBProvider } from "../../adaptivecards-templating-service/src/storageproviders/MongoDBProvider";
-import { MongoConnectionParams } from "../../adaptivecards-templating-service/src/models/mongo/MongoConnectionParams";
 // import mongo, create new mongo, pass options
 const app = express();
 

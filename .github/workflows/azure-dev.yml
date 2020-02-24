@@ -32,18 +32,9 @@ jobs:
                   node-version: ${{ env.NODE_VERSION }}
             - name: Backend Jest Test
               run: |
-                  cd private-templates-service/adaptivecards-templating-service
-                  npm install
-                  npm run build
-                  npm link
-
-                  cd ..
-                  cd ..
-
                   cd private-templates-service/server
-                  npm link adaptivecards-templating-service
                   npm install
-                  # npm run test
+                  npm run test
                   cd ..
             - name: Frontend Jest Test
               run: |
@@ -54,10 +45,7 @@ jobs:
                   cd ../../client
                   npm link adaptive-templating-service-typescript-node
                   npm install
-                  cd src 
-                  npm link adaptive-templating-service-typescript-node
-                  cd ..
-                  # npm run test
+                  npm run test
                   cd ..
             - name: Find and Replace - Using Secrets
               uses: cschleiden/replace-tokens@v1
@@ -65,34 +53,22 @@ jobs:
                 files: '["**/*.ts"]'
               env:
                 DB_CONNECTION_TOKEN: ${{ secrets.AZURE_ADPATIVECMS_DB_CONNECTION_STRING }}
-            - name: Print file
-              run: |
-                  cd private-templates-service/server/src
-                  cat app.ts
-                  cd ..
-                  cd ..
-                  cd ..  
             - name: Create production build
               if: success()
               run: |
                   # Build and test the project, then
                   # deploy to Azure Web App.
-
                   cd private-templates-service/client
                   npm run build:dev --if-present
-
                   cd ../adaptivecards-templating-service
-                  npm install
-                  npm run build
                   npm link
-
                   cd ../server
                   npm link adaptivecards-templating-service
                   npm run deploy
-            - name: "Deploy to Azure WebApp"
-              if: success()
-              uses: azure/webapps-deploy@v1
-              with:
-                  app-name: ${{ env.AZURE_WEBAPP_NAME }}
-                  publish-profile: ${{ secrets.AZURE_ADAPTIVECMS }}
-                  package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+            # - name: "Deploy to Azure WebApp"
+            #   if: success()
+            #   uses: azure/webapps-deploy@v1
+            #   with:
+            #       app-name: ${{ env.AZURE_WEBAPP_NAME }}
+            #       publish-profile: ${{ secrets.AZURE_ADAPTIVECMS }}
+            #       package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}

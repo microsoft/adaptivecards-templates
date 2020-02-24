@@ -7,6 +7,49 @@ import mongoose from "mongoose";
 import bodyParser from "body-parser";
 import { InMemoryDBProvider } from "../storageproviders/InMemoryDBProvider";
 
+export default async function getToken(): Promise<string> {
+  let options = {
+    method: "post",
+    url:
+      "https://login.microsoftonline.com/72f988bf-86f1-41af-91ab-2d7cd011db47/oauth2/token",
+    data: {
+      grant_type: "client_credentials",
+      client_id: "4803f66a-136d-4155-a51e-6d98400d5506",
+      client_secret: "#{CLIENT_SECRET_TOKEN}#",
+    }
+  };
+  const request = require('request-promise');
+
+  const endpoint = options.url;
+  const requestParams = {
+    grant_type: "client_credentials",
+    client_id: options.data.client_id,
+    client_secret: options.data.client_secret,
+    resource: "https://graph.windows.net"
+  };
+  return await request.post({ url: endpoint, form: requestParams })
+    // put in try catch
+    .then((err: any, response: any, body: any) => {
+      if (err) {
+        let parsedBody = JSON.parse(err);
+        return Promise.resolve(parsedBody.access_token);
+      }
+      else {
+        console.log("Body=" + body);
+        let parsedBody = JSON.parse(body);
+        if (parsedBody.error_description) {
+          console.log("Error=" + parsedBody.error_description);
+          return Promise.resolve("hi");
+        }
+        else {
+          console.log("Access Token=" + parsedBody.access_token);
+          return Promise.resolve(parsedBody.access_token);
+        }
+      }
+
+    });
+}
+
 let options: ClientOptions = {
   authenticationProvider: new AzureADProvider(),
   storageProvider: new InMemoryDBProvider()
@@ -18,7 +61,7 @@ describe("Get endpoints", () => {
 
   beforeAll(async () => {
     // TODO: request access token for registered AD app
-    token = "<INSERT_APP_TOKEN_HERE>";
+    token = await getToken();
     let templateClient = await TemplateServiceClient.init(options);
     let middleware: Router = templateClient.expressMiddleware();
     app.use(middleware);
@@ -50,7 +93,7 @@ describe("Post Templates", () => {
 
   beforeAll(async () => {
     // TODO: request access token for registered AD app
-    token = "<INSERT_APP_TOKEN_HERE>";
+    token = await getToken();
     let templateClient = await TemplateServiceClient.init(options);
     let middleware: Router = templateClient.expressMiddleware();
     let userMiddleware: Router = templateClient.userExpressMiddleware();
