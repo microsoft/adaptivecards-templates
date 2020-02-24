@@ -30,13 +30,12 @@ jobs:
               uses: actions/setup-node@v1
               with:
                   node-version: ${{ env.NODE_VERSION }}
-            - name: Find and Replace CLIENT_SECRET_TOKEN
+            - name: Find and Replace CLIENT_SECRET_TOKEN and TEST_DB_CONNECTION_TOKEN
               uses: cschleiden/replace-tokens@v1
               with:
                 files: '["**/*.ts"]'
               env:
                 CLIENT_SECRET_TOKEN: ${{ secrets.AZURE_ADAPTIVECMS_CLIENT_SECRET }}
-                TEST_DB_CONNECTION_TOKEN: ${{ secrets.TEST_AZURE_ADPATIVECMS_DB_CONNECTION_STRING }}
             - name: Adaptive Cards Templating Service Test
               run: |
                   cd private-templates-service/adaptivecards-templating-service

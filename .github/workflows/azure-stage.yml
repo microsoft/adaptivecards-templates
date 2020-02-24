@@ -11,7 +11,7 @@
 on:
     push:
         branches:
-            - stage
+            - users/daniellemott/deploy_to_web
 env:
     AZURE_WEBAPP_NAME: adaptivecms # set this to your application's name
     AZURE_WEBAPP_PACKAGE_PATH: "private-templates-service/" # set this to the path to your web app project, defaults to the repository root
@@ -25,7 +25,7 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v2.0.0
               with:
-                  ref: stage
+                  ref: users/daniellemott/deploy_to_web
             - name: Use Node.js ${{ env.NODE_VERSION }}
               uses: actions/setup-node@v1
               with:
@@ -50,10 +50,12 @@ jobs:
                   cd ..
                   npm run test
                   cd ..
-            - name: Find and Replace - Using Secrets
-              run: |
-                  SECRET='${{ secrets.AZURE_ADPATIVECMS_DB_CONNECTION }}'
-                  find . -type f -exec sed -i "s%__DBConnection__%$SECRET%g" {} \;   
+            - name: Find and Replace DB_CONNECTION_TOKEN
+              uses: cschleiden/replace-tokens@v1
+              with:
+                files: '["**/*.ts"]'
+              env:
+                DB_CONNECTION_TOKEN: ${{ secrets.AZURE_ADPATIVECMS_DB_CONNECTION_STRING }}  
             - name: Create production build
               if: success()
               run: |
@@ -61,7 +63,10 @@ jobs:
                   # deploy to Azure Web App.
                   cd private-templates-service/client
                   npm run build:stage --if-present
+                  cd ../adaptivecards-templating-service
+                  npm link
                   cd ../server
+                  npm link adaptivecards-templating-service
                   npm run deploy
             - name: "Deploy to Azure WebApp"
               if: success()

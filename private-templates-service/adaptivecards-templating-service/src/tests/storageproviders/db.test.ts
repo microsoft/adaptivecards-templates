@@ -3,7 +3,7 @@ import { StorageProvider } from "../../storageproviders/IStorageProvider";
 import { InMemoryDBProvider } from "../../storageproviders/InMemoryDBProvider";
 import * as DBTester from "../../tests_helper/db_t_definition";
 
-const connectionString = "#{TEST_DB_CONNECTION_TOKEN}#";
+const connectionString = process.env.MONGO_URL;
 describe("Test MongoDB", () => {
   let db: StorageProvider = new MongoDBProvider({ connectionString: connectionString });
   DBTester.testDB(db);

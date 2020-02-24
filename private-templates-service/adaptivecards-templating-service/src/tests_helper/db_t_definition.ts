@@ -127,8 +127,6 @@ async function insertAndValidateTemplate(db: StorageProvider, template: ITemplat
   });
 }
 
-// async function populateDB(db: StorageProvider) {}
-
 export function testDB(db: StorageProvider) {
   beforeAll(async () => {
     await db.connect().then(result => {
