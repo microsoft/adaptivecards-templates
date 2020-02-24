@@ -1,5 +1,5 @@
-import { StorageProvider } from "../../storageproviders/IStorageProvider";
-import { IUser, ITemplate, ITemplateInstance, JSONResponse, TemplateState } from "../../models/models";
+import { StorageProvider } from "../storageproviders/IStorageProvider";
+import { IUser, ITemplate, ITemplateInstance, JSONResponse, TemplateState } from "../models/models";
 
 function autoCompleteUserModel(user: IUser): void {
   if (!user.firstName) {

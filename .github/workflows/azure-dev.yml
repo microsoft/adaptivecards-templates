@@ -30,24 +30,19 @@ jobs:
               uses: actions/setup-node@v1
               with:
                   node-version: ${{ env.NODE_VERSION }}
-            - name: Backend Jest Test
+            - name: Find and Replace CLIENT_SECRET_TOKEN
+              uses: cschleiden/replace-tokens@v1
+              with:
+                files: '["**/*.ts"]'
+              env:
+                CLIENT_SECRET_TOKEN: ${{ secrets.AZURE_ADAPTIVECMS_CLIENT_SECRET }}
+                  TEST_DB_CONNECTION_TOKEN: ${{ secrets.TEST_AZURE_ADPATIVECMS_DB_CONNECTION_STRING }}
+            - name: Adaptive Cards Templating Service Test
               run: |
-                  cd private-templates-service/server
+                  cd private-templates-service/adaptivecards-templating-service
                   npm install
                   npm run test
                   cd ..
-            # - name: Find and Replace CLIENT_SECRET_TOKEN
-            #   uses: cschleiden/replace-tokens@v1
-            #   with:
-            #     files: '["**/*.ts"]'
-            #   env:
-            #     CLIENT_SECRET_TOKEN: ${{ secrets.AZURE_ADAPTIVECMS_CLIENT_SECRET }}
-            # - name: Adaptive Cards Templating Service Test
-            #   run: |
-            #       cd private-templates-service/adaptivecards-templating-service
-            #       npm install
-            #       npm run test
-            #       cd ..
             - name: Frontend Jest Test
               run: |
 
