@@ -14,8 +14,8 @@ function autoCompleteUserModel(user: IUser): void {
   if (!user.org) {
     user.org = [];
   }
-  if (!user.recentlyViewed) {
-    user.recentlyViewed = [];
+  if (!user.recentlyViewedTemplates) {
+    user.recentlyViewedTemplates = [];
   }
 }
 
@@ -30,7 +30,7 @@ function autoCompleteTemplateInstanceModel(instance: ITemplateInstance): void {
     instance.numHits = 0;
   }
   if (!instance.data) {
-    instance.data = "{}";
+    instance.data = [];
   }
   if (!instance.publishedAt) {
     instance.publishedAt = undefined;
@@ -88,13 +88,13 @@ export function validateMatchingTemplates(a: ITemplate, b: ITemplate): void {
 }
 
 export function validateMatchingUsers(a: IUser, b: IUser): void {
-  expect(a.issuer).toEqual(b.issuer);
+  expect(a.authIssuer).toEqual(b.authIssuer);
   expect(a.authId).toEqual(b.authId);
   expect(a.firstName).toEqual(b.firstName);
   expect(a.lastName).toEqual(b.lastName);
   expect(a.org).toEqual(Array.from(b.org!));
   expect(a.team).toEqual(Array.from(b.team!));
-  expect(a.recentlyViewed).toEqual(Array.from(b.recentlyViewed!));
+  expect(a.recentlyViewedTemplates).toEqual(Array.from(b.recentlyViewedTemplates!));
 }
 
 async function insertAndValidateUser(db: StorageProvider, user: IUser): Promise<void> {
@@ -152,12 +152,12 @@ export function testDB(db: StorageProvider) {
   });
 
   it("Completely filled: create & save user successfully", async () => {
-    const validUser: IUser = { firstName: "John", lastName: "Travolta", issuer: "Microsoft Oauth2", authId: "51201", org: ["Microsoft"], team: ["Bing"] };
+    const validUser: IUser = { firstName: "John", lastName: "Travolta", authIssuer: "Microsoft Oauth2", authId: "51201", org: ["Microsoft"], team: ["Bing"] };
     await insertAndValidateUser(db, validUser);
   });
 
   it("Partially filled: create & save user successfully", async () => {
-    const validUser: IUser = { firstName: "John", lastName: "Travolta", issuer: "Microsoft Oauth2", authId: "51201" };
+    const validUser: IUser = { firstName: "John", lastName: "Travolta", authIssuer: "Microsoft Oauth2", authId: "51201" };
     await insertAndValidateUser(db, validUser);
   });
 

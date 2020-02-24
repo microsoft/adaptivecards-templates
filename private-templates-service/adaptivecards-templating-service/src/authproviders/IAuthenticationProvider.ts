@@ -1,11 +1,11 @@
-import { Issuer } from "../models/models";
+import { AuthIssuer } from "../models/models";
 /**
  * @interface
  * General authenticator provider
  */
 export interface AuthenticationProvider {
   // Issuer and owner fields unique identify every user
-  issuer: Issuer;
+  issuer: AuthIssuer;
 
   /**
    * To get an id that uniquely identifies the user from

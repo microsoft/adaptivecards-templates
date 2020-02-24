@@ -172,7 +172,7 @@ export class InMemoryDBProvider implements StorageProvider {
       instance.numHits = 0;
     }
     if (!instance.data) {
-      instance.data = "{}";
+      instance.data = [];
     }
     if (!instance.publishedAt) {
       instance.publishedAt = new Date("null");

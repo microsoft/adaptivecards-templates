@@ -4,8 +4,11 @@
  * @property {string} _id - unique identifier
  * @property {string} authId - unique id given by auth provider in access token
  * @property {string} issuer - one of the value in Issuer, both authId and issuer can identify the id
+ * @property {string} firstName
+ * @property {string} lastName
  * @property {string[]} team
  * @property {string[]} org
+ * @property {string[]} recentlyViewed - list of 5 templates that were last viewed (GET /template/{id}) by logged in user 
  */
 
 export interface ITemplateInstance {
@@ -16,7 +19,7 @@ export interface ITemplateInstance {
   state?: TemplateState;
   isShareable?: boolean;
   numHits?: number;
-  data?: string;
+  data?: string[];
   updatedAt?: Date;
   createdAt?: Date;
 }
@@ -52,12 +55,6 @@ export interface JSONResponse<T> {
   result?: T;
 }
 
-export enum TemplateState {
-  draft = "draft",
-  live = "live",
-  deprecated = "deprecated"
-}
-
 export enum SortBy {
   dateCreated = "createdAt",
   dateModified = "updatedAt",
@@ -75,4 +72,53 @@ export enum SortOrder {
  */
 export enum AuthIssuer {
   AzureAD = "AzureAD"
+}
+
+/**
+ * @enum
+ * State of the template version.
+ */
+export enum TemplateState {
+  draft = "draft",
+  deprecated = "deprecated",
+  live = "live"
+}
+
+export interface TemplateInstancePreview {
+  version: string;
+  json: JSON;
+  state: string;
+  data: JSON[];
+}
+
+/**
+ * @interface
+ * User information that is viewable by client.
+ */
+export interface UserPreview {
+	firstName: string;
+	lastName: string;
+	team?: string[];
+	org?: string[];
+}
+
+/**
+ * @interface
+ * Template preview.
+ */
+export interface TemplatePreview {
+  _id: string;
+  name: string;
+  owner: UserPreview;
+  instance: TemplateInstancePreview;
+  tags: string[];
+}
+
+/**
+ * @interface
+ * Tags
+ */
+export interface TagList {
+  ownedTags: any[];
+  allTags: any[]
 }
