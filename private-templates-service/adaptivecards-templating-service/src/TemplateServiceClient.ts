@@ -120,8 +120,10 @@ export class TemplateServiceClient {
    * @param {string[]} team
    * @param {string[]} org
    * @param {string[]} recentlyViewed - list of template ids last viewed by the logged in user, should be of length 5 or less
+   * @param {string[]} recentlyEdited - list of template ids last edited by the logged in user, should be of length 5 or less
+   * @param {string[]} recentTags - list of tags lsat used by the logged in user, should be of length 10 or less
    */
-  private async _updateUser(firstName?: string, lastName?: string, team?: string[], org?: string[], recentlyViewed?: string[]): Promise<JSONResponse<Number>> {
+  private async _updateUser(firstName?: string, lastName?: string, team?: string[], org?: string[], recentlyViewed?: string[], recentlyEdited?: string[], recentTags?: string[]): Promise<JSONResponse<Number>> {
     let checkAuthentication = this._checkAuthenticated();
     if (!checkAuthentication.success) {
       return checkAuthentication;
@@ -137,7 +139,9 @@ export class TemplateServiceClient {
       lastName: lastName, 
       team: team,
       org: org,
-      recentlyViewedTemplates: recentlyViewed
+      recentlyViewedTemplates: recentlyViewed, 
+      recentlyEditedTemplates: recentlyEdited,
+      recentTags: recentTags
     }
 
     return this.storageProvider.updateUser(userQuery, user);
@@ -202,7 +206,9 @@ export class TemplateServiceClient {
     org?: string[], 
     firstName?: string, 
     lastName?: string, 
-    recentlyViewed?: string[]): Promise<JSONResponse<string>> {
+    recentlyViewed?: string[], 
+    recentlyEdited?: string[], 
+    recentTags?: string[]): Promise<JSONResponse<string>> {
     let checkAuthentication = this._checkAuthenticated();
     if (!checkAuthentication.success) {
       return checkAuthentication;
@@ -211,11 +217,13 @@ export class TemplateServiceClient {
     const user: IUser = {
       authId: this.authProvider.getOwner()!,
       authIssuer: this.authProvider.issuer,
-      firstName: firstName,
-      lastName: lastName,
-      team: team,
-      org: org,
-      recentlyViewedTemplates: recentlyViewed
+      firstName: firstName || "",
+      lastName: lastName || "",
+      team: team || [],
+      org: org || [],
+      recentlyViewedTemplates: recentlyViewed || [], 
+      recentlyEditedTemplates: recentlyEdited || [], 
+      recentTags: recentTags || []
     };
 
     let response = await this.storageProvider.insertUser(user);
@@ -233,7 +241,7 @@ export class TemplateServiceClient {
     // Check if user exists, if not, create new user
     let userResponse = await this._getUser();
     if (!userResponse.success || (userResponse.result && userResponse.result.length === 0)) {
-      let newUser = await this._postUser([], [], undefined, undefined, []);
+      let newUser = await this._postUser();
       if (!newUser.success || !newUser.result) {
         return {
           success: false,
@@ -485,6 +493,11 @@ export class TemplateServiceClient {
 
       let response = await this._updateTemplate(templateId, name, template, version, isPublished, state, isShareable, tag, tagList, dataItem, dataList);
 
+      let newTags = tag? [tag]: tagList? tagList : [];
+      // Update recent tags and recently edited template
+      await this._updateRecentTags(newTags);
+      await this._updateRecentTemplate(templateId, false);
+      
       if (response.success) {
         return { success: true };
       }
@@ -507,17 +520,82 @@ export class TemplateServiceClient {
 
     let templateName = name || "Untitled Template";
 
+    let newTags = tags? tags instanceof Array? tags : [tags]: [];
+
     const newTemplate: ITemplate = {
       name: templateName,
       owner: this.ownerID!,
       instances: [templateInstance],
-      tags: tags? tags instanceof Array? tags : [tags]: [],
+      tags: newTags,
       deletedVersions: [],
       isLive: isPublished || false,
       updatedAt: new Date(Date.now()) 
     };
 
-    return this.storageProvider.insertTemplate(newTemplate);
+    // Update recent tags for user
+    await this._updateRecentTags(newTags);
+
+    let response = await this.storageProvider.insertTemplate(newTemplate);
+    if (response.success && response.result){
+      templateId = response.result;
+      await this._updateRecentTemplate(templateId, false);
+    }
+    return response;
+  }
+
+  /**
+   * @private
+   * Update user's recent tags list
+   * @param tags
+   */
+  private async _updateRecentTags(tags: string[]): Promise<JSONResponse<Number>> {
+    if (tags.length === 0) return { success: true };
+    
+    // Update recently viewed for user
+    let user = await this._getUser();
+    if (!user.success || !user.result || user.result.length !== 1){
+      return { success: false };
+    }
+    
+    let recentTags = user.result[0].recentTags;
+    for (let tag of tags){
+      if (recentTags!.includes(tag)){
+        let index = recentTags!.indexOf(tag);
+        recentTags!.splice(index, 1);
+      }
+      if (recentTags!.length >= 10) {
+        recentTags!.shift();
+      }
+      recentTags!.push(tag);
+    }
+    return await this._updateUser(undefined, undefined, undefined, undefined, undefined, undefined, recentTags);
+  }
+
+  /**
+   * @private
+   * @param templateId 
+   * @param viewed - if true, adds given template id to viewed list for logged in user, otherwise adds to edited list
+   */
+  private async _updateRecentTemplate(templateId: string, viewed: boolean): Promise<JSONResponse<Number>> {
+    // Update recently viewed for user
+    let user = await this._getUser();
+    if (!user.success || !user.result || user.result.length !== 1){
+      return { success: false };
+    }
+    let recentList = viewed? user.result[0].recentlyViewedTemplates : user.result[0].recentlyEditedTemplates;
+    
+    if (recentList!.includes(templateId)){
+      let index = recentList!.indexOf(templateId);
+      recentList!.splice(index, 1);
+    }
+    if (recentList!.length >= 5) {
+      recentList!.shift();
+    }
+    recentList!.push(templateId);
+    if (viewed){
+      return await this._updateUser(undefined, undefined, undefined, undefined, recentList);
+    }
+    return await this._updateUser(undefined, undefined, undefined, undefined, undefined, recentList);
   }
 
   /**
@@ -589,20 +667,7 @@ export class TemplateServiceClient {
     }
 
     if (templateId && templates.length > 0) {
-      // Update recently viewed for user
-      let user = await this._getUser();
-      if (user.success && user.result && user.result.length === 1){
-        let recentlyViewed = user.result[0].recentlyViewedTemplates;
-        if (recentlyViewed!.includes(templateId)){
-          let index = recentlyViewed!.indexOf(templateId);
-          recentlyViewed!.splice(index, 1);
-        }
-        if (recentlyViewed!.length >= 5) {
-          recentlyViewed!.shift();
-        }
-        recentlyViewed!.push(templateId);
-        await this._updateUser(undefined, undefined, undefined, undefined, recentlyViewed);
-      }
+      await this._updateRecentTemplate(templateId, true);
 
       if (!isClient) {
         // Update hit counter for template
@@ -737,10 +802,10 @@ export class TemplateServiceClient {
   }
 
   /**
-   * @public 
-   * Retrieve a list of recently viewed templates for the logged in user.
+   * @private
+   * @param viewed - If true, returns last 5 viewed templates, otherwise last 5 edited templates
    */
-  public async getRecentTemplates(): Promise<JSONResponse<ITemplate[]>> {
+  private async _getRecentTemplates(viewed: boolean): Promise<JSONResponse<ITemplate[]>> {
     let checkAuthentication = this._checkAuthenticated();
     if (!checkAuthentication.success) {
       return checkAuthentication;
@@ -753,17 +818,52 @@ export class TemplateServiceClient {
     }
 
     let user: IUser = response.result![0];
-    if (!user.recentlyViewedTemplates) {
+    if (viewed && !user.recentlyViewedTemplates || !viewed && !user.recentlyEditedTemplates) {
       return { success: true, result: results };
     }
 
-    for (let templateId of user.recentlyViewedTemplates) {
+    let templateList = viewed? user.recentlyViewedTemplates: user.recentlyEditedTemplates;
+    for (let templateId of templateList!) {
       let templateResponse = await this.getTemplates(templateId);
       if (templateResponse.success && templateResponse.result && templateResponse.result.length === 1){
         results.push(templateResponse.result[0]);
       }
     }
     return { success: true, result: results };
+  }
+  /**
+   * @public 
+   * Retrieve a list of recently viewed templates for the logged in user.
+   */
+  public async getRecentlyViewedTemplates(): Promise<JSONResponse<ITemplate[]>> {
+    return this._getRecentTemplates(true);
+  }
+
+  /**
+   * @public
+   * Retrieve a list of recently edited templates for the logged in user.
+   */
+  public async getRecentlyEditedTemplates(): Promise<JSONResponse<ITemplate[]>> {
+    return this._getRecentTemplates(false);
+  }
+
+  /**
+   * @public
+   * Retrieve a list of recently used tags for the logged in user.
+   */
+  public async getRecentTags(): Promise<JSONResponse<string[]>> {
+    let checkAuthentication = this._checkAuthenticated();
+    if (!checkAuthentication.success) {
+      return checkAuthentication;
+    }
+
+    let response = await this._getUser();
+    if (!response.success || response.result && response.result.length === 0) {
+      return { success: false, errorMessage: response.errorMessage };
+    }
+
+    let user: IUser = response.result![0];
+    return { success: true, result: user.recentTags || [] };
   }
 
   /**
@@ -863,13 +963,24 @@ export class TemplateServiceClient {
       });
     });
 
-    router.get("/recent", (_req: Request, res: Response, _next: NextFunction) => {
-      this.getRecentTemplates().then(response => {
-        if (!response.success) {
-          return res.status(200).json({ templates: [] });
+    router.get("/recent", async (_req: Request, res: Response, _next: NextFunction) => {
+      let response = await this.getRecentlyViewedTemplates();
+      let recentlyViewedTemplates: ITemplate[] = [];
+      if (response.success && response.result) {  
+        recentlyViewedTemplates = response.result;
+      }
+
+      res.status(200).json({
+        recentlyViewed: {
+          templates: recentlyViewedTemplates
+        }, 
+        recentlyEdited: {
+          templates: []
+        },
+        recentlyUsed: {
+          tags: []
         }
-        res.status(200).json({ templates: response.result });
-      })
+      });
     });
 
     router.get("/tag", (_req: Request, res: Response, _next: NextFunction) => {

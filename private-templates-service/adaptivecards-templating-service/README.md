@@ -196,34 +196,41 @@ Retrieves a list of recent templates viewed by the logged in user.
 
 ```json
 {
-	"templates": [
-		{
-            "_id": "123",
-            "name": "Untitled Template",
-            "instance": 
-                {
-                    "version": "1.0",
-                    "json": {},
-                    "updatedAt": "2020-02-14T19:16:22.162Z",
-                    "createdAt": "2020-02-14T19:16:22.162Z",
-                    "publishedAt": "2020-02-14T19:16:22.162Z",
-                    "state": "draft", 
-                    "isShareable": false,
-                    "numHits": 10,
-                    "data": []
-                },
-           "tags": [
-               "Contosa"
-           ],
-           "owner": {
-               "firstName": "Em",
-               "lastName": "ployee",
-               "team": ["Contosa", "NotTeams"],
-               "org": ["Microsoft"]     		   
+	"recentlyViewed": {
+		"templates": [
+            {
+                "_id": "123",
+                "name": "Untitled Template",
+                "instance": 
+                    {
+                        "version": "1.0",
+                        "json": {},
+                        "updatedAt": "2020-02-14T19:16:22.162Z",
+                        "createdAt": "2020-02-14T19:16:22.162Z",
+                        "publishedAt": "2020-02-14T19:16:22.162Z",
+                        "state": "draft", 
+                        "isShareable": false,
+                        "numHits": 10,
+                        "data": []
+                    },
+               "tags": [
+                   "Contosa"
+               ],
+               "owner": {
+                   "firstName": "Em",
+                   "lastName": "ployee",
+                   "team": ["Contosa", "NotTeams"],
+                   "org": ["Microsoft"]     		   
+                }
             }
-        }, 
-        {...}
-	]
+		]
+	}, 
+	"recentlyEdited": {
+		"templates": []
+	}, 
+	"recentlyUsed": {
+		"tags": []
+	}
 }
 ```
 
