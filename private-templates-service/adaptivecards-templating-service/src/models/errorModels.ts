@@ -18,10 +18,12 @@ export class TemplateError {
  */
 export enum ApiError {
   InvalidTemplate = "InvalidTemplate",
+  InvalidQueryParam = "InvalidQueryParam",
   TemplateNotFound = "TemplateNotFound",
   InvalidAuthenticationToken = "InvalidAuthenticationToken",
   UserNotFound = "UserNotFound",
-  DeleteUserInfoFailed = "Failed to delete all user info."
+  DeleteUserInfoFailed = "DeleteUserInfoFailed",
+  DeleteTemplateVersionFailed = "DeleteTemplateVersionFailed"
 }
 
 /**
@@ -32,5 +34,8 @@ export enum ServiceErrorMessage {
   AuthFailureResponse = "No owner specified, please authenticate.",
   InvalidUser = "Failed to create user.",
   InvalidTemplate = "Invalid template.",
-  DeleteUserInfoFailed = "Failed to delete all user info."
+  DeleteUserInfoFailed = "Failed to delete all user info.",
+  UnauthorizedAction = "User is not allowed to perform this action.",
+  FailedToRetrievePreview = "Failed to retrieve template preview.",
+  UserNotFound = "User does not exist.",
 }
