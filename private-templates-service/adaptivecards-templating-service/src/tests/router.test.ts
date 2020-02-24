@@ -8,6 +8,37 @@ import bodyParser from "body-parser";
 import { InMemoryDBProvider } from "../storageproviders/InMemoryDBProvider";
 import { ITemplate, ITemplateInstance } from "../models/models";
 
+export default async function getToken(): Promise<string> {
+    const request = require('request-promise');
+    const endpoint = "https://login.microsoftonline.com/72f988bf-86f1-41af-91ab-2d7cd011db47/oauth2/token";
+    const requestParams = {
+      grant_type: "client_credentials",
+      client_id: "4803f66a-136d-4155-a51e-6d98400d5506",
+      client_secret: "#{secrets.AZURE_ADAPTIVECMS_CLIENT_SECRET}#",
+      resource: "https://graph.windows.net"
+    };
+    return await request.post({ url: endpoint, form: requestParams })
+      // put in try catch
+      .then((err: any, response: any, body: any) => {
+        if (err) {
+          let parsedBody = JSON.parse(err);
+          return Promise.resolve(parsedBody.access_token);
+        }
+        else {
+          console.log("Body=" + body);
+          let parsedBody = JSON.parse(body);
+          if (parsedBody.error_description) {
+            console.log("Error=" + parsedBody.error_description);
+            return Promise.resolve("hi");
+          }
+          else {
+            console.log("Access Token=" + parsedBody.access_token);
+            return Promise.resolve(parsedBody.access_token);
+          }
+        }
+      });
+  }
+
 let options: ClientOptions = {
   authenticationProvider: new AzureADProvider(),
   storageProvider: new InMemoryDBProvider()
@@ -31,7 +62,6 @@ export function testDefaultTemplateInstanceParameters(instance: ITemplateInstanc
   expect(instance).toHaveProperty("isShareable");
   expect(instance).toHaveProperty("numHits");
   expect(instance).toHaveProperty("data");
-  expect(instance.data).toHaveLength(0);
   expect(instance).toHaveProperty("updatedAt");
 }
 
@@ -43,7 +73,7 @@ describe("Basic Post Templates", () => {
 
   beforeAll(async () => {
     // TODO: request access token for registered AD app
-    token = "<INSERT_APP_TOKEN_HERE>";
+    token = await getToken();
     let templateClient = TemplateServiceClient.init(options);
     let middleware: Router = templateClient.expressMiddleware();
     let userMiddleware: Router = templateClient.userExpressMiddleware();
@@ -192,7 +222,7 @@ describe("Basic Get Templates", () => {
 
   beforeAll(async () => {
     // TODO: request access token for registered AD app
-    token = "<INSERT_APP_TOKEN_HERE>";
+    token = await getToken();
     let templateClient = TemplateServiceClient.init(options);
     let middleware: Router = templateClient.expressMiddleware();
     let userMiddleware: Router = templateClient.userExpressMiddleware();
@@ -278,7 +308,7 @@ describe("Preview Templates", () => {
 
   beforeAll(async () => {
     // TODO: request access token for registered AD app
-    token = "<INSERT_APP_TOKEN_HERE>";
+    token = await getToken();
     let templateClient = TemplateServiceClient.init(options);
     let middleware: Router = templateClient.expressMiddleware();
     app.use(bodyParser.json());
@@ -371,7 +401,7 @@ describe("Delete Templates", () => {
 
   beforeAll(async () => {
     // TODO: request access token for registered AD app
-    token = "<INSERT_APP_TOKEN_HERE>";
+    token = await getToken();
     let templateClient = TemplateServiceClient.init(options);
     let middleware: Router = templateClient.expressMiddleware();
     app.use(bodyParser.json());
@@ -448,7 +478,7 @@ describe("Filtering Templates", () => {
 
   beforeAll(async () => {
     // TODO: request access token for registered AD app
-    token = "<INSERT_APP_TOKEN_HERE>";
+    token = await getToken();
     let templateClient = TemplateServiceClient.init(options);
     let middleware: Router = templateClient.expressMiddleware();
     app.use(bodyParser.json());
@@ -509,7 +539,7 @@ describe("Get Tags", () => {
 
   beforeAll(async () => {
     // TODO: request access token for registered AD app
-    token = "<INSERT_APP_TOKEN_HERE>";
+    token = await getToken();
     let templateClient = TemplateServiceClient.init(options);
     let middleware: Router = templateClient.expressMiddleware();
     app.use(bodyParser.json());

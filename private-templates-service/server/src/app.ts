@@ -8,7 +8,6 @@ import { TemplateServiceClient } from "../../adaptivecards-templating-service/sr
 import { ClientOptions } from "../../adaptivecards-templating-service/src/IClientOptions";
 import { AzureADProvider } from "../../adaptivecards-templating-service/src/authproviders/AzureADProvider";
 import { MongoDBProvider } from "../../adaptivecards-templating-service/src/storageproviders/MongoDBProvider";
-import { MongoConnectionParams } from "../../adaptivecards-templating-service/src/models/mongo/MongoConnectionParams";
 // import mongo, create new mongo, pass options
 const app = express();
 
@@ -19,21 +18,24 @@ app.use(passport.session());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const mongoConnection: MongoConnectionParams = {
-  connectionString: "__DBConnection__"
-}
+let mongoDB = new MongoDBProvider({ connectionString: "#{secrets.DB_CONNECTION_TOKEN}#" });
+mongoDB.connect()
+  .then(
+    (res) => {
+      if (res.success) {
+        const mongoClient: ClientOptions = {
+          authenticationProvider: new AzureADProvider(),
+          storageProvider: mongoDB,
+        }
 
-const mongoClient: ClientOptions = {
-  authenticationProvider: new AzureADProvider(),
-  storageProvider: new MongoDBProvider(mongoConnection),
-}
+        const client: TemplateServiceClient = TemplateServiceClient.init(mongoClient);
+        app.use("/template", client.expressMiddleware());
+        app.use("/user", client.userExpressMiddleware());
+      } else {
+        console.log(res.errorMessage);
+      }
 
-const client: TemplateServiceClient = TemplateServiceClient.init(mongoClient);
-app.use("/template", client.expressMiddleware());
-app.use("/user", client.userExpressMiddleware());
-
-app.get('/api/status', (req, res) => {
-  res.status(200).send("Hello World");
-})
+    }
+  )
 
 export default app;

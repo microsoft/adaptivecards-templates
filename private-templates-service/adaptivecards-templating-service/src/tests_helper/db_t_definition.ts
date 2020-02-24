@@ -1,5 +1,5 @@
-import { StorageProvider } from "../../storageproviders/IStorageProvider";
-import { IUser, ITemplate, ITemplateInstance, JSONResponse, TemplateState } from "../../models/models";
+import { StorageProvider } from "../storageproviders/IStorageProvider";
+import { IUser, ITemplate, ITemplateInstance, JSONResponse, TemplateState } from "../models/models";
 
 function autoCompleteUserModel(user: IUser): void {
   if (!user.firstName) {
@@ -126,8 +126,6 @@ async function insertAndValidateTemplate(db: StorageProvider, template: ITemplat
     validateMatchingTemplates(template, retrievedTemplate);
   });
 }
-
-// async function populateDB(db: StorageProvider) {}
 
 export function testDB(db: StorageProvider) {
   beforeAll(async () => {
