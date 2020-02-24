@@ -16,7 +16,7 @@ export default async function getToken(): Promise<string> {
       data: {
         grant_type: "client_credentials",
         client_id: "4803f66a-136d-4155-a51e-6d98400d5506",
-        client_secret: "Zpn0hluP3qNr.:gk3bx7ddjNhFt/yzP?",
+        client_secret: "#{secrets.AZURE_ADAPTIVECMS_CLIENT_SECRET}#",
       }
     };
     const request = require('request-promise');
