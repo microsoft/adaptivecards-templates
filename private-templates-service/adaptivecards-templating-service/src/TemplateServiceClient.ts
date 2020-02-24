@@ -6,7 +6,7 @@ import { TemplateError, ApiError, ServiceErrorMessage } from "./models/errorMode
 import { StorageProvider } from ".";
 import { ITemplate, JSONResponse, ITemplateInstance, IUser } from ".";
 import { SortBy, SortOrder, TemplatePreview, TemplateState, TemplateInstancePreview, UserPreview, TagList } from "./models/models";
-import { getMostRecentTemplate, stringifyJSONArray, removeMostRecentTemplate, getTemplateVersion, JSONStringArray } from "./util/templateutils";
+import { updateTemplateToLatestInstance, stringifyJSONArray, removeMostRecentTemplate, getTemplateVersion, JSONStringArray } from "./util/templateutils";
 
 export class TemplateServiceClient {
   private storageProvider: StorageProvider;
@@ -690,7 +690,8 @@ export class TemplateServiceClient {
           }
         }
       } else {
-        resultTemplates.push(getMostRecentTemplate(template));
+        updateTemplateToLatestInstance(template);
+        resultTemplates.push(template);
       }
     }
     return { success: true, result: resultTemplates };

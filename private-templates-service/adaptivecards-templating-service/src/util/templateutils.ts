@@ -2,14 +2,13 @@ import { ITemplate, ITemplateInstance } from "../models/models";
 
 /**
  * @function
- * Returns a ITemplate object with only the latest version instance. 
+ * Updates passed ITemplate object to only have the latest version instance. 
  * @param template 
  */
-export function getMostRecentTemplate(template : ITemplate): ITemplate {
+export function updateTemplateToLatestInstance(template : ITemplate) {
   if (!template.instances || template.instances.length === 0) return template; 
   let latestInstance : ITemplateInstance[] = [getMostRecentVersion(template)!];
   template.instances = latestInstance;
-  return template;
 }
 
 /**
@@ -66,7 +65,7 @@ export function getTemplateVersion(template: ITemplate, version: string): ITempl
  * @function
  * Returns true if a's version is greater than b, returns false if the same 
  */
-export function compareVersion(a: string, b: string) {
+export function compareVersion(a: string, b: string): boolean {
   let v1 = a.split('.');
   let v2 = b.split('.');
   let length = Math.min(v1.length, v2.length);
