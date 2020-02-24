@@ -56,7 +56,9 @@ jobs:
                   npm link
                   cd ../../client
                   npm link adaptive-templating-service-typescript-node
-
+                  cd src
+                  npm link adaptive-templating-service-typescript-node
+                  cd ..
                   npm install
                   npm run test
                   cd ..
