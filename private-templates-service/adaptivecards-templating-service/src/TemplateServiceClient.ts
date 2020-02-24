@@ -550,7 +550,7 @@ export class TemplateServiceClient {
    */
   private async _updateRecentTags(tags: string[]): Promise<JSONResponse<Number>> {
     if (tags.length === 0) return { success: true };
-    
+
     // Update recently viewed for user
     let user = await this._getUser();
     if (!user.success || !user.result || user.result.length !== 1){
@@ -970,15 +970,27 @@ export class TemplateServiceClient {
         recentlyViewedTemplates = response.result;
       }
 
+      response = await this.getRecentlyEditedTemplates();
+      let recentlyEditedTemplates: ITemplate[] = [];
+      if (response.success && response.result) {
+        recentlyEditedTemplates = response.result;
+      }
+
+      let tagResponse = await this.getRecentTags();
+      let recentTags: string[] = [];
+      if (tagResponse.success && tagResponse.result) {
+        recentTags = tagResponse.result;
+      }
+
       res.status(200).json({
         recentlyViewed: {
           templates: recentlyViewedTemplates
         }, 
         recentlyEdited: {
-          templates: []
+          templates: recentlyEditedTemplates
         },
         recentlyUsed: {
-          tags: []
+          tags: recentTags
         }
       });
     });
