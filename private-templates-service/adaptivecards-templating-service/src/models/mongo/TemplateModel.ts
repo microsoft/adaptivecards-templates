@@ -19,7 +19,7 @@ export const TemplateInstanceSchema: Schema = new Schema(
     state: { type: String, default: TemplateState.draft },
     isShareable: { type: Boolean, default: false },
     hits: { type: Number, default: 0 },
-    data: { type: String, default: "" }
+    data: { type: [String], default: [] }
   },
   {
     versionKey: false,
