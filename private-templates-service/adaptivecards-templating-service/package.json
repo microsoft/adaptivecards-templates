@@ -23,6 +23,8 @@
     "mongoose": "^5.8.10",
     "passport": "^0.4.1",
     "passport-azure-ad": "^4.2.1",
+    "request": "^2.88.2",
+    "request-promise": "^4.2.5",
     "uuid": "^3.4.0"
   },
   "devDependencies": {
