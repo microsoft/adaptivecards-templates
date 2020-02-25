@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import NavBar from '../NavBar/NavBar';
 import { setPage } from '../../store/page/actions';
 import { connect } from "react-redux";
@@ -9,10 +9,14 @@ import { ModalBackdrop, ModalWrapper, ACPanel, ACWrapper } from './styled';
 import { DescriptorWrapper } from '../Dashboard/PreviewModal/styled';
 import TemplateSourceInfo from './TemplateSourceInfo';
 import AdaptiveCard from '../Common/AdaptiveCard';
+import { useParams } from 'react-router-dom';
 
 const mapStateToProps = (state: RootState) => {
   return {
-    currentPageTitle: state.page.currentPageTitle
+    currentPageTitle: state.page.currentPageTitle,
+    templateID: state.currentTemplate.templateID,
+    templateJSON: state.currentTemplate.templateJSON,
+    templateName: state.currentTemplate.templateName
   };
 };
 
@@ -29,37 +33,40 @@ const mapDispatchToProps = (dispatch: any) => {
 
 interface SharedComponentProps {
   currentPageTitle: string;
+  templateID: string;
+  templateJSON: string;
+  templateName: string;
   authButtonMethod: () => Promise<void>;
   setPage: (currentPageTitle: string) => void;
   setSearchBarVisible: (isSearchBarVisible: boolean) => void;
 }
 
-class Shared extends React.Component<SharedComponentProps> {
+const Shared = (props: SharedComponentProps) => {
 
-  componentWillMount() {
-    this.props.setPage("Preview");
-    this.props.setSearchBarVisible(false);
-  }
+  let { uuid } = useParams();
 
-  render() {
-    return (
-      <React.Fragment>
-        <NavBar></NavBar>
-        <ModalBackdrop>
-          <ModalWrapper>
-            <ACPanel>
-              <ACWrapper>
-              </ACWrapper>
-            </ACPanel>
-            <DescriptorWrapper>
-              <TemplateSourceInfo>
-              </TemplateSourceInfo>
-            </DescriptorWrapper>
-          </ModalWrapper>
-        </ModalBackdrop>
-      </React.Fragment>
-    );
-  }
+  useEffect(() => {
+    props.setPage(props.templateName);
+    props.setSearchBarVisible(false);
+  });
+
+  return (
+    <React.Fragment>
+      <NavBar></NavBar>
+      <ModalBackdrop>
+        <ModalWrapper>
+          <ACPanel>
+            <ACWrapper>
+            </ACWrapper>
+          </ACPanel>
+          <DescriptorWrapper>
+            <TemplateSourceInfo>
+            </TemplateSourceInfo>
+          </DescriptorWrapper>
+        </ModalWrapper>
+      </ModalBackdrop>
+    </React.Fragment>
+  );
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(requireAuthentication(Shared));
