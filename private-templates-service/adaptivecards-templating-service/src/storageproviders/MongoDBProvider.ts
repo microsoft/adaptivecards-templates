@@ -86,6 +86,7 @@ export class MongoDBProvider implements StorageProvider {
   // Updates Only one user
   async updateUser(query: Partial<IUser>, updateQuery: Partial<IUser>): Promise<JSONResponse<Number>> {
     let userQuery: any = this._constructUserQuery(query);
+    updateQuery = MongoUtils.removeUndefinedFields(updateQuery);
     return await this.worker.User.findOneAndUpdate(userQuery, updateQuery)
       .then(result => {
         if (result) {
@@ -107,6 +108,7 @@ export class MongoDBProvider implements StorageProvider {
   }
   async updateTemplate(query: Partial<ITemplate>, updateQuery: Partial<ITemplate>): Promise<JSONResponse<Number>> {
     let templateQuery: any = this._constructTemplateQuery(query);
+    updateQuery = MongoUtils.removeUndefinedFields(updateQuery);
     return await this.worker.Template.findOneAndUpdate(templateQuery, updateQuery)
       .then(result => {
         if (result) {

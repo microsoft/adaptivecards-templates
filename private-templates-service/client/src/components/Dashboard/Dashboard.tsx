@@ -21,7 +21,7 @@ const mapStateToProps = (state: RootState) => {
   return {
     isAuthenticated: state.auth.isAuthenticated,
     user: state.auth.user,
-    templates: state.templates,
+    templates: state.allTemplates,
     isSearch: state.search.isSearch
   };
 };
@@ -85,7 +85,7 @@ class Dashboard extends React.Component<Props, State> {
       && this.props.templates.templates.templates) {
       templates = this.props.templates.templates.templates;
     }
-
+    this.props.setPage("Dashboard");
     return (
       <DashboardContainer>
         <Title>Recent</Title>

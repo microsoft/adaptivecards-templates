@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var localVarRequest = require("request");
 var Promise = require("bluebird");
-var defaultBasePath = 'http://adaptivecms.azurewebsites.net';
+var defaultBasePath = 'http://localhost:3000';
 var primitives = [
     "string",
     "boolean",

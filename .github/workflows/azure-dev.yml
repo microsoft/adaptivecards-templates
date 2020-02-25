@@ -30,14 +30,21 @@ jobs:
               uses: actions/setup-node@v1
               with:
                   node-version: ${{ env.NODE_VERSION }}
-            - name: Backend Jest Test
+            - name: Find and Replace CLIENT_SECRET_TOKEN
+              uses: cschleiden/replace-tokens@v1
+              with:
+                files: '["**/*.ts"]'
+              env:
+                CLIENT_SECRET_TOKEN: ${{ secrets.AZURE_ADAPTIVECMS_CLIENT_SECRET }}
+            - name: Adaptive Cards Templating Service Test
               run: |
-                  cd private-templates-service/server
+                  cd private-templates-service/adaptivecards-templating-service
                   npm install
                   npm run test
                   cd ..
             - name: Frontend Jest Test
               run: |
+
                   cd private-templates-service/adaptivecards-templating-client/typescript
                   npm install
                   npm run build
@@ -45,15 +52,17 @@ jobs:
                   cd ../../client
                   npm link adaptive-templating-service-typescript-node
                   npm install
-                  cd src 
+                  cd src
                   npm link adaptive-templating-service-typescript-node
                   cd ..
                   npm run test
                   cd ..
-            - name: Find and Replace - Using Secrets
-              run: |
-                  SECRET='${{ secrets.AZURE_ADPATIVECMS_DB_CONNECTION }}'
-                  find . -type f -exec sed -i "s%__DBConnection__%$SECRET%g" {} \;    
+            - name: Find and Replace DB_CONNECTION_TOKEN
+              uses: cschleiden/replace-tokens@v1
+              with:
+                files: '["**/*.ts"]'
+              env:
+                DB_CONNECTION_TOKEN: ${{ secrets.AZURE_ADPATIVECMS_DB_CONNECTION_STRING }}
             - name: Create production build
               if: success()
               run: |
@@ -61,7 +70,11 @@ jobs:
                   # deploy to Azure Web App.
                   cd private-templates-service/client
                   npm run build:dev --if-present
+                  cd ../adaptivecards-templating-service
+                  npm link
                   cd ../server
+                  npm link adaptivecards-templating-service
+                  npm install
                   npm run deploy
             - name: "Deploy to Azure WebApp"
               if: success()
