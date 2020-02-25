@@ -16,4 +16,11 @@ export module MongoUtils {
     }
     return result;
   }
+
+  export function jsonToString(o: JSON) : String {
+    return JSON.stringify(o)
+  }
+  export function jsonArrayToString(o: JSON[]) : String[] {
+    return o.map(obj => {return jsonToString(obj)});
+  }
 }

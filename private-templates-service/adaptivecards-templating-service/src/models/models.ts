@@ -13,13 +13,13 @@
 
 export interface ITemplateInstance {
   _id?: string;
-  json: string;
+  json: JSON;
   version: string;
   publishedAt?: Date;
   state?: TemplateState;
   isShareable?: boolean;
   numHits?: number;
-  data?: string[];
+  data?: JSON[];
   updatedAt?: Date;
   createdAt?: Date;
 }
