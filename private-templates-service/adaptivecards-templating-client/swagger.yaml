@@ -29,7 +29,8 @@ paths:
       tags: 
         - "template"
       summary: "Find all templates"
-      description: "Returns all public templates and owned templates"
+      operationId: "allTemplates"
+      description: "Returns the latest version of all public templates and owned templates"
       produces:
         - "application/json"
       responses:
@@ -62,20 +63,38 @@ paths:
           name: owned
           type: boolean
           description: Display only the templates owned by the user
+        - in: query
+          name: sortBy
+          enum:
+            - "alphabetical"
+            - "dateCreated"
+            - "dateUpdated"
+          type: string
+          description: Sort returned templates by parameter
+        - in: query
+          name: sortOrder
+          enum:
+            - "ascending"
+            - "descending"
+          type: string
+        - in: query
+          name: tags
+          description: List of tags to filter templates by
+          type: string
       security:
         - bearer_auth: []
     post: 
       tags: 
         - "template"
       summary: "Add a new template"
-      description: ""
+      operationId: "createTemplate"
       parameters:
         - in: "body"
           name: "body"
           description: "Template object to be added"
           required: true
           schema:
-            $ref: "#/definitions/TemplateJSON"
+            $ref: "#/definitions/PostedTemplate"
       responses:
         201: 
           description: "Template successfully created"
@@ -106,6 +125,14 @@ paths:
           description: "ID of template to return"
           required: true
           type: string
+        - name: isPublished
+          in: query
+          type: boolean
+          description: Query based on if template is published
+        - name: version
+          in: query
+          type: string
+          description: Version of template to return
       responses:
         200:
           description: "successful operation"
@@ -143,7 +170,7 @@ paths:
           description: "Template object to be added"
           required: true
           schema:
-            $ref: "#/definitions/TemplateJSON"
+            $ref: "#/definitions/PostedTemplate"
       responses:
         201: 
           description: "successful operation"
@@ -155,6 +182,66 @@ paths:
           description: "Unauthorized user"
           schema: 
             $ref: "#/definitions/BaseError"        
+      security:
+        - bearer_auth: []
+    delete:
+      tags: 
+        - "template"
+      summary: "Delete version of template, default latest"
+      parameters:
+        - name: "templateId"
+          in: "path"
+          description: "ID of template to return"
+          required: true
+          type: string
+        - name: version
+          in: query
+          description: "Version of template to delete"
+          type: string
+      responses:
+        204:
+          description: "successful delete"
+        401:
+          description: "Unauthorized user"
+          schema: 
+            $ref: "#/definitions/BaseError"   
+  '/template/{templateId}/preview':
+    get: 
+      tags: 
+        - "template"
+      summary: "Get template preview"
+      operationId: "templatePreview"
+      produces: 
+        - "application/json"
+      parameters:
+        - name: "templateId"
+          in: "path"
+          description: "ID of template to return"
+          required: true
+          type: string
+        - name: version
+          in: query
+          description: "Version of template to preview"
+          required: true
+          type: string
+      responses: 
+        200: 
+          description: "successful operation"
+          schema: 
+            $ref: "#/definitions/TemplatePreview"
+  '/template/recent':
+    get: 
+      tags: 
+        - "template"
+      summary: "Get recently viewed, edited templates, and recent tags."
+      operationId: "getRecent"
+      produces: 
+        - "application/json"
+      responses: 
+        200: 
+          description: "successful operation"
+          schema: 
+            $ref: "#/definitions/Recent"
       security:
         - bearer_auth: []
   '/user':
@@ -176,6 +263,26 @@ paths:
             $ref: "#/definitions/BaseError" 
       security:
         - bearer_auth: []
+    post:
+      tags:
+        - "user"
+      summary: "Update user's info"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "User info to be added"
+          required: true
+          schema:
+            $ref: "#/definitions/PostedUser"
+      responses: 
+        200: 
+          description: "successful operation"
+        401: 
+          description: "Unauthorized user"
+          schema: 
+            $ref: "#/definitions/BaseError"       
     delete: 
       tags: 
         - "user"
@@ -228,36 +335,84 @@ definitions:
           $ref: "#/definitions/TemplateInstance"
       owner: 
         type: string
-      isPublished:
+      isLive:
         type: boolean
       createdAt:
         type: string
         format: Date
-      updatedAt:
+      updatedAt: 
         type: string
         format: Date
       tags: 
         type: array
         items:
           type: string
+      deletedVersions: 
+        type: array
+        items: 
+          type: string
   TemplateInstance:
     type: object
     properties:
+      _id: 
+        type: string
       json: 
         type: string
         format: JSON
       version: 
         type: string
-  TemplateJSON:
+      publishedAt: 
+        type: string
+        format: Date
+      state: 
+        enum:
+          - "draft"
+          - "live"
+          - "deprecated"
+        type: string
+      isShareable:
+        type: boolean
+      numHits: 
+        type: number
+      data: 
+        type: array
+        items: 
+          type: string
+      updatedAt:
+        type: string
+        format: Date
+      createdAt:
+        type: string
+        format: Date
+  PostedTemplate:
     type: object
     properties: 
-      template: 
-        type: string
-        format: JSON
-      isPublished:
-        type: boolean
       name: 
         type: string
+      version: 
+        type: string
+      template: 
+        type: object
+        format: JSON
+      state: 
+        enum:
+          - "draft"
+          - "live"
+          - "deprecated"
+        type: string
+      isShareable: 
+        type: boolean
+      isPublished:
+        type: boolean
+      tags: 
+        type: array
+        items: 
+          type: string
+      data: 
+        type: array
+        items: 
+          type: string
+          format: JSON
   UserList:
     type: object
     properties:
@@ -265,6 +420,21 @@ definitions:
         type: array
         items:
           $ref: "#/definitions/User"
+  PostedUser:
+    type: object
+    properties:
+      firstName: 
+        type: string
+      lastName: 
+        type: string
+      team: 
+        type: array
+        items: 
+          type: string
+      org: 
+        type: array
+        items: 
+          type: string     
   User: 
     type: object  
     properties:
@@ -272,7 +442,11 @@ definitions:
         type: string
       authId: 
         type: string
-      issuer:
+      authIssuer:
+        type: string
+      firstName: 
+        type: string
+      lastName: 
         type: string
       team: 
         type: array
@@ -282,3 +456,82 @@ definitions:
         type: array
         items: 
           type: string
+      recentlyViewed: 
+        type: array
+        items: 
+          type: string
+      recentlyEdited: 
+        type: array
+        items: 
+          type: string   
+      recentTags: 
+        type: array
+        items: 
+          type: string
+  TagList: 
+    type: object
+    properties: 
+      tags:
+        type: array
+        items: 
+          type: string
+  Recent: 
+    type: object
+    properties: 
+      recentlyViewed:
+        $ref: "#/definitions/TemplateList"
+      recentlyEdited: 
+        $ref: "#/definitions/TemplateList"
+      recentlyUsed:
+        $ref: "#/definitions/TagList"
+  TemplatePreviewInstance:
+    type: object
+    properties:
+      version:
+        type: string
+      json:
+        type: string
+        format: JSON
+      state: 
+        type: string
+      data: 
+        type: array
+        items:  
+          type: string
+          format: JSON
+  TemplatePreviewUser: 
+    type: object
+    properties:
+      firstName: 
+        type: string
+      lastName: 
+        type: string
+      team: 
+        type: array
+        items: 
+          type: string
+      org: 
+        type: array
+        items: 
+          type: string
+  TemplateInfo: 
+    type: object
+    properties:
+      _id: 
+        type: string
+      name: 
+        type: string
+      instance: 
+        $ref: "#/definitions/TemplatePreviewInstance"
+      tags: 
+        type: array
+        items:
+          type: string
+      owner: 
+        $ref: "#/definitions/TemplatePreviewUser"
+  TemplatePreview: 
+    type: object
+    properties:
+      template:
+        $ref: "#/definitions/TemplateInfo"
+        
