@@ -6,7 +6,7 @@ import { TemplateError, ApiError, ServiceErrorMessage } from "./models/errorMode
 import { StorageProvider } from ".";
 import { ITemplate, JSONResponse, ITemplateInstance, IUser } from ".";
 import { SortBy, SortOrder, TemplatePreview, TemplateState, TemplateInstancePreview, UserPreview, TagList } from "./models/models";
-import { updateTemplateToLatestInstance, removeMostRecentTemplate, getTemplateVersion, JSONStringArray, stringifyJSONArray } from "./util/templateutils";
+import { updateTemplateToLatestInstance, stringifyJSONArray, removeMostRecentTemplate, getTemplateVersion, JSONStringArray } from "./util/templateutils";
 
 export class TemplateServiceClient {
   private storageProvider: StorageProvider;
@@ -1034,13 +1034,13 @@ export class TemplateServiceClient {
 
     router.post("/:id*?", async (req: Request, res: Response, _next: NextFunction) => {
       await check("template", "Template is not valid JSON.")
-        .isJSON()	
-        .run(req);	
-      const errors = validationResult(req);	
+        .isJSON()
+        .run(req);
+      const errors = validationResult(req);
 
-      if (!errors.isEmpty()) {	
-        const err = new TemplateError(ApiError.InvalidTemplate, "Template is incorrectly formatted.");	
-        return res.status(400).json({ error: err });	
+      if (!errors.isEmpty()) {
+        const err = new TemplateError(ApiError.InvalidTemplate, "Template is incorrectly formatted.");
+        return res.status(400).json({ error: err });
       }
       
       let isPublished: boolean = req.body.isPublished;

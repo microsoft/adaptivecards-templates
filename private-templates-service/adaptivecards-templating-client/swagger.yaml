@@ -282,7 +282,9 @@ paths:
         401: 
           description: "Unauthorized user"
           schema: 
-            $ref: "#/definitions/BaseError"       
+            $ref: "#/definitions/BaseError"   
+      security:
+        - bearer_auth: []    
     delete: 
       tags: 
         - "user"
