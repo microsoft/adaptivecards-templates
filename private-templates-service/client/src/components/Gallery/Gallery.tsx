@@ -7,7 +7,7 @@ import AdaptiveCardPanel from "../AdaptiveCardPanel";
 import { Container } from "./styled";
 
 interface Props {
-  onClick?: () => void;
+  onClick?: (templateID: string) => void;
   templates?: Array<Template>;
 }
 

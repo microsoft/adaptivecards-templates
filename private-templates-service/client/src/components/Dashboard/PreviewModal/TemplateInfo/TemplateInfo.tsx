@@ -1,6 +1,7 @@
 import React from 'react';
-
 import { ActionButton } from 'office-ui-fabric-react';
+
+import { Template } from 'adaptive-templating-service-typescript-node';
 
 import PublishModal from '../../../Common/PublishModal';
 
@@ -43,6 +44,7 @@ const buttons = [
   },
 ];
 
+// TODO: Dynamically show info. Backend not ready
 const cards = [
   {
     header: 'Folder',
@@ -62,7 +64,7 @@ const cards = [
 ];
 
 interface Props {
-  template: any;
+  template: Template;
   onClose: () => void;
 }
 
@@ -105,7 +107,7 @@ class TemplateInfo extends React.Component<Props, State> {
           </TopRowWrapper>
           <ActionsWrapper>
             {buttons.map((val) => (
-              <ActionButton iconProps={val.icon} allowDisabledFocus onClick={val.text === 'Publish' ? this.toggleModal : () => { }} >
+              <ActionButton key={val.text} iconProps={val.icon} allowDisabledFocus onClick={val.text === 'Publish' ? this.toggleModal : () => { }} >
                 {val.text}
               </ActionButton>
             ))}
@@ -114,7 +116,7 @@ class TemplateInfo extends React.Component<Props, State> {
         <MainContentWrapper>
           <RowWrapper>
             {cards.map((val) => (
-              <Card>
+              <Card key={val.header}>
                 <CardHeader>
                   {val.header}
                 </CardHeader>
