@@ -70,10 +70,10 @@ jobs:
                   npm link adaptivecards-templating-service
                   npm install
                   npm run deploy
-            # - name: "Deploy to Azure WebApp"
-            #   if: success()
-            #   uses: azure/webapps-deploy@v1
-            #   with:
-            #       app-name: ${{ env.AZURE_WEBAPP_NAME }}
-            #       publish-profile: ${{ secrets.AZURE_ADAPTIVECMS_STAGE }}
-            #       package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+            - name: "Deploy to Azure WebApp"
+              if: success()
+              uses: azure/webapps-deploy@v1
+              with:
+                  app-name: ${{ env.AZURE_WEBAPP_NAME }}
+                  publish-profile: ${{ secrets.AZURE_ADAPTIVECMS_STAGE }}
+                  package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
