@@ -955,8 +955,10 @@ export class TemplateServiceClient {
         isClient = req.body.isClient === "true" || req.body.isClient === "True";
       }
 
+      let tagList: string[] = req.query.tags? req.query.tags.split(",") : undefined;
+
       this.getTemplates(undefined, isPublished, req.query.name, req.query.version, 
-        owned, req.query.sortBy, req.query.sortOrder, req.body.tags, isClient).then(response => {
+        owned, req.query.sortBy, req.query.sortOrder, tagList, isClient).then(response => {
         if (!response.success) {
           return res.status(200).json({ templates: [] });
         }

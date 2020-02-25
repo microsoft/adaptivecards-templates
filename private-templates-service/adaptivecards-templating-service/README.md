@@ -160,18 +160,6 @@ Returns the latest version of all published and owned templates.
 }
 ```
 
-### Filter by tags
-
-#### Body (optional)
-
-```json
-{
-    "tags": [
-        "Contosa"
-    ]
-}
-```
-
 #### Query Params
 
 ***GET /template?isPublished=true*** : Returns the newest published (live) version of all templates
@@ -187,6 +175,8 @@ Returns the latest version of all published and owned templates.
 ***GET /template?owned=true*** : Returns the newest version of all owned templates (includes unpublished and published templates)
 
 ***GET /template?owned=false*** : Returns the newest version of all published templates not owned by logged in user
+
+***GET /template?tags=weather,sunny***:  Filters by given tags.
 
 - ### GET /recent: 
 ##### Description
