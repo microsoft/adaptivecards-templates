@@ -6,7 +6,7 @@ import { TemplateError, ApiError, ServiceErrorMessage } from "./models/errorMode
 import { StorageProvider } from ".";
 import { ITemplate, JSONResponse, ITemplateInstance, IUser } from ".";
 import { SortBy, SortOrder, TemplatePreview, TemplateState, TemplateInstancePreview, UserPreview, TagList } from "./models/models";
-import { updateTemplateToLatestInstance, removeMostRecentTemplate, getTemplateVersion } from "./util/templateutils";
+import { updateTemplateToLatestInstance, removeMostRecentTemplate, getTemplateVersion, JSONStringArray, stringifyJSONArray } from "./util/templateutils";
 
 export class TemplateServiceClient {
   private storageProvider: StorageProvider;
@@ -376,7 +376,7 @@ export class TemplateServiceClient {
     let templateState: TemplateState | undefined = isPublished? TemplateState.live : state;
 
     let templateInstance: ITemplateInstance = {
-      json: template ||  JSON.parse("{}"),
+      json: JSON.stringify(template),
       version: version || "1.0", 
       state: templateState,
       data: [], 
@@ -394,9 +394,9 @@ export class TemplateServiceClient {
         if (instance.version === templateInstance.version) {
           let existingData = instance.data;
           if (data){
-            existingData!.push(data);
+            existingData!.push(JSON.stringify(data));
           }
-          let templateData: JSON[] | undefined = data? existingData: dataList? dataList : undefined;
+          let templateData: string[] | undefined = data? existingData: dataList? stringifyJSONArray(dataList) : undefined;
           templateInstance.numHits = instance.numHits;
           templateInstance.state = isPublished === false && templateInstance.state !== TemplateState.deprecated && templateInstance.state !== TemplateState.draft &&
                                   instance.state !== TemplateState.deprecated && instance.state !== TemplateState.draft? TemplateState.draft : 
@@ -411,7 +411,7 @@ export class TemplateServiceClient {
         }
       }
       if (!added) {
-        let templateData: JSON[] | undefined = data? [data]: dataList? dataList : undefined;
+        let templateData: string[] | undefined = data? [JSON.stringify(data)]: dataList? stringifyJSONArray(dataList) : undefined;
         // Updated version does not already exist, add to instances list
         templateInstance.state = templateState || TemplateState.draft;
         templateInstance.isShareable = isShareable || false;
@@ -508,13 +508,13 @@ export class TemplateServiceClient {
     }
 
     const templateInstance: ITemplateInstance = {
-      json: template,
+      json: JSON.stringify(template),
       version: version || "1.0",
       publishedAt: isPublished? new Date(Date.now()) : undefined,
       state: isPublished? TemplateState.live : state? state : TemplateState.draft,
       isShareable: isShareable || false,
       numHits: 0,
-      data: data? data instanceof Array? data : [data] : [],
+      data: data? data instanceof Array? stringifyJSONArray(data) : [JSON.stringify(data)] : [],
       updatedAt: new Date(Date.now())
     };
 
@@ -781,9 +781,9 @@ export class TemplateServiceClient {
 
     let templateInstance: TemplateInstancePreview = {
       version: version, 
-      json: templateVersion.json,
+      json: JSON.parse(templateVersion.json),
       state: templateVersion.state || TemplateState.draft,
-      data: templateVersion.data? templateVersion.data : []
+      data: templateVersion.data? JSONStringArray(templateVersion.data) : []
     }
 
     let userInfo = await this._searchUserInfo(template.owner);
@@ -1033,7 +1033,15 @@ export class TemplateServiceClient {
     })
 
     router.post("/:id*?", async (req: Request, res: Response, _next: NextFunction) => {
-      // TODO: check valid json
+      await check("template", "Template is not valid JSON.")
+        .isJSON()	
+        .run(req);	
+      const errors = validationResult(req);	
+
+      if (!errors.isEmpty()) {	
+        const err = new TemplateError(ApiError.InvalidTemplate, "Template is incorrectly formatted.");	
+        return res.status(400).json({ error: err });	
+      }
       
       let isPublished: boolean = req.body.isPublished;
       let isShareable: boolean = req.body.isShareable;

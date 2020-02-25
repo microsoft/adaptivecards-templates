@@ -13,13 +13,13 @@ export interface ITemplateModel extends mongoose.Document, ITemplate {
 export const TemplateInstanceSchema: Schema = new Schema(
   {
     _id: { type: String, required: true },
-    json: { type: String, required: true, set: MongoUtils.jsonToString },
+    json: { type: String, required: true },
     version: { type: String, required: true },
     publishedAt: { type: Date, default: null },
     state: { type: String, default: TemplateState.draft },
     isShareable: { type: Boolean, default: false },
     hits: { type: Number, default: 0 },
-    data: { type: [String], default: [], set: MongoUtils.jsonArrayToString}
+    data: { type: [String], default: [] }
   },
   {
     versionKey: false,
