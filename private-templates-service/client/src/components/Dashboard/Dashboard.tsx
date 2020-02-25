@@ -9,6 +9,7 @@ import Gallery from "../Gallery";
 import { Title, DashboardContainer } from "../Dashboard/styled";
 import PreviewModal from "./PreviewModal";
 import SearchPage from './SearchPage/SearchPage';
+import { setSearchBarVisible } from "../../store/search/actions";
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -22,6 +23,9 @@ const mapDispatchToProps = (dispatch: any) => {
   return {
     setPage: (currentPageTitle: string) => {
       dispatch(setPage(currentPageTitle));
+    },
+    setSearchBarVisible: (isSearchBarVisible: boolean) => {
+      dispatch(setSearchBarVisible(isSearchBarVisible));
     }
   };
 };
@@ -34,6 +38,7 @@ interface Props {
   isAuthenticated: boolean;
   authButtonMethod: () => Promise<void>;
   setPage: (currentPageTitle: string) => void;
+  setSearchBarVisible: (isSearchBarVisible: boolean) => void;
   isSearch: boolean;
 }
 
@@ -49,10 +54,13 @@ class Dashboard extends React.Component<Props, State> {
   };
 
   render() {
-    if(this.props.isSearch) {
-      return(
+
+    this.props.setSearchBarVisible(true);
+
+    if (this.props.isSearch) {
+      return (
         <DashboardContainer>
-          <SearchPage/>
+          <SearchPage />
         </DashboardContainer>
       );
     }
@@ -61,10 +69,10 @@ class Dashboard extends React.Component<Props, State> {
       <DashboardContainer>
         <Title>Recent</Title>
         <Gallery toggleModal={this.toggleModal}></Gallery>
-        <PreviewModal show={this.state.isPreviewOpen} toggleModal={this.toggleModal}/>
+        <PreviewModal show={this.state.isPreviewOpen} toggleModal={this.toggleModal} />
         <Title>Drafts</Title>
         <Gallery toggleModal={this.toggleModal}></Gallery>
-        <PreviewModal show={this.state.isPreviewOpen} toggleModal={this.toggleModal}/>
+        <PreviewModal show={this.state.isPreviewOpen} toggleModal={this.toggleModal} />
       </DashboardContainer>
     );
   }

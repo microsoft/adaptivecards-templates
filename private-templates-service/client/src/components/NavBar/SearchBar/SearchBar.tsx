@@ -6,11 +6,12 @@ import { search, clearSearch } from '../../../store/search/actions';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import { THEME, BREAK } from '../../../globalStyles';
 
-const mapStateToProps = (state:RootState) => {
+const mapStateToProps = (state: RootState) => {
   return {
     isSearch: state.search.isSearch,
     searchValue: state.search.searchValue,
-    isAuthenticated :state.auth.isAuthenticated
+    isAuthenticated: state.auth.isAuthenticated,
+    isSearchBarVisible: state.search.isSearchBarVisible
   }
 }
 
@@ -25,10 +26,11 @@ const mapDispatchToProps = (dispatch: any) => {
   }
 }
 
-interface Props { 
+interface Props {
   isSearch: boolean,
   searchValue: string,
   isAuthenticated: boolean;
+  isSearchBarVisible?: boolean;
   search: (searchValue: string) => void,
   clearSearch: () => void,
 }
@@ -40,7 +42,7 @@ interface State {
 class SearchBar extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = {isMobile: window.screen.width < BREAK.SM};
+    this.state = { isMobile: window.screen.width < BREAK.SM };
     initializeIcons(); // to initilize the icons being used
   }
 
@@ -49,11 +51,11 @@ class SearchBar extends React.Component<Props, State> {
   }
 
   dimentionsUpdate = (e: Event) => {
-    if(!this.state.isMobile && window.innerWidth < BREAK.SM) {
-      this.setState({isMobile: true});
+    if (!this.state.isMobile && window.innerWidth < BREAK.SM) {
+      this.setState({ isMobile: true });
     }
-    else if(this.state.isMobile && window.innerWidth >= BREAK.SM) {
-      this.setState({isMobile: false});
+    else if (this.state.isMobile && window.innerWidth >= BREAK.SM) {
+      this.setState({ isMobile: false });
     }
   }
 
@@ -62,29 +64,29 @@ class SearchBar extends React.Component<Props, State> {
   }
 
   onSearch = (searchValue: string) => {
-    if(searchValue === "") {
+    if (searchValue === "") {
       this.props.clearSearch();
-    } 
+    }
     else {
       this.props.search(searchValue);
     }
   }
 
   render() {
-    if(this.props.isAuthenticated) {
-      return( 
+    if (this.props.isAuthenticated && this.props.isSearchBarVisible) {
+      return (
         <StyledSearchBox
-          placeholder = {"search" + (this.state.isMobile ? "" : " templates")}
-          onSearch = {this.onSearch} // will trigger when "Enter" is pressed
-          onClear = {this.onClear} // will trigger when "Esc" or "X" is pressed
-          theme = {THEME.DARK}
+          placeholder={"search" + (this.state.isMobile ? "" : " templates")}
+          onSearch={this.onSearch} // will trigger when "Enter" is pressed
+          onClear={this.onClear} // will trigger when "Esc" or "X" is pressed
+          theme={THEME.DARK}
         />
       );
     }
-      
+
     // return empty 
-    return (<React.Fragment/>);
-   
+    return (<React.Fragment />);
+
   }
 }
 

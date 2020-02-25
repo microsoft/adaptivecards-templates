@@ -1,12 +1,12 @@
 import styled from 'styled-components';
 
-import { COLORS, BREAK } from '../../../globalStyles';
+import { COLORS, BREAK } from '../../globalStyles';
 
 export const ModalBackdrop = styled.div`
   position: fixed;
   top: 55px;
   bottom: 0;
-  left: 260px;
+  left: 0;
   right: 0;
   background-color: ${COLORS.GREY1};
   z-index: 1;
@@ -27,7 +27,7 @@ export const ModalWrapper = styled.div`
 export const ACPanel = styled.div`
   flex: 1 0 auto;
   display: flex;
-  width: 60%;
+  width: 50%;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -40,7 +40,7 @@ export const ACWrapper = styled.div`
 export const DescriptorWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 40%;
+  width: 50%;
   align-items: stretch;
   flex: 1 0 auto;
   background: ${COLORS.WHITE};

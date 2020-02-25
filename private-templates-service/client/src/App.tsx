@@ -22,6 +22,7 @@ import config from "./Config";
 import "bootstrap/dist/css/bootstrap.css";
 
 import { OuterAppWrapper, MainAppWrapper, MainApp } from "./styled";
+import Shared from "./components/Shared/";
 
 interface State {
   error: ErrorMessageProps | null;
@@ -108,30 +109,34 @@ class App extends Component<Props, State> {
 
     return (
       <Router>
-        <OuterAppWrapper>
-          <SideBar
-            authButtonMethod={
-              this.props.isAuthenticated
-                ? this.logout
-                : this.login
-            }
-          />
-          <MainAppWrapper>
-            <NavBar
-            />
-            <MainApp>
-              {error}
-              <Switch>
-                <Route exact path="/">
-                  <Dashboard authButtonMethod={this.login} />
-                </Route>
-                <Route exact path="/designer">
-                  <Designer authButtonMethod={this.login} />
-                </Route>
-              </Switch>
-            </MainApp>
-          </MainAppWrapper>
-        </OuterAppWrapper>
+        <Switch>
+          <Route exact path="/preview">
+            <Shared authButtonMethod={this.login}></Shared>
+          </Route>
+          <Route exact path="/">
+            <OuterAppWrapper>
+              <SideBar
+                authButtonMethod={
+                  this.props.isAuthenticated
+                    ? this.logout
+                    : this.login
+                }
+              />
+              <MainAppWrapper>
+                <NavBar />
+                <MainApp>
+                  {error}
+                  <Route exact path="/">
+                    <Dashboard authButtonMethod={this.login} />
+                  </Route>
+                  <Route exact path="/designer">
+                    <Designer authButtonMethod={this.login} />
+                  </Route>
+                </MainApp>
+              </MainAppWrapper>
+            </OuterAppWrapper>
+          </Route>
+        </Switch>
       </Router >
     );
   }
