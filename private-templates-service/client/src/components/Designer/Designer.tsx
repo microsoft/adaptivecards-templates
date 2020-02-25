@@ -10,6 +10,7 @@ import { updateTemplate } from '../../store/currentTemplate/actions';
 import * as monaco from 'monaco-editor';
 import markdownit from 'markdown-it';
 import * as ACDesigner from 'adaptivecards-designer';
+import { setPage } from '../../store/page/actions';
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -26,6 +27,9 @@ const mapDispatchToProps = (dispatch: any) => {
   return {
     updateTemplate: (templateID: string, templateJSON: string, templateName: string, sampleDataJSON: string) => {
       dispatch(updateTemplate(templateID, templateJSON, templateName, sampleDataJSON));
+    },
+    setPage: (currentPageTitle: string, currentPage: string) => {
+      dispatch(setPage(currentPageTitle, currentPage));
     }
   }
 }
@@ -38,11 +42,16 @@ interface DesignerProps {
   templateName: string;
   sampleDataJSON: string;
   updateTemplate: (templateID: string, templateJSON: string, templateName: string, sampleDataJSON: string) => any;
+  setPage: (currentPageTitle: string, currentPage: string) => void;
 }
 
 let designer: ACDesigner.CardDesigner;
 
 class Designer extends React.Component<DesignerProps> {
+  constructor(props: DesignerProps) {
+    super(props);
+    props.setPage(this.props.templateName, "Designer");
+  }
 
   componentWillMount() {
     ACDesigner.GlobalSettings.enableDataBindingSupport = true;

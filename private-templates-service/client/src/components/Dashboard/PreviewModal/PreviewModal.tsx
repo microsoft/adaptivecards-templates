@@ -8,8 +8,8 @@ import { setPage } from '../../../store/page/actions';
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    setHeader: (header: string) => {
-      dispatch(setPage(header))
+    setPage: (currentPageTitle: string, currentPage: string) => {
+      dispatch(setPage(currentPageTitle, currentPage))
     }
   }
 }
@@ -32,13 +32,13 @@ const template = {
 interface Props {
   show: boolean;
   toggleModal: () => void;
-  setHeader: (header: string) => void;
+  setPage: (currentPageTitle: string, currentPage: string) => void;
 }
 
 class PreviewModal extends React.Component<Props, {}> {
   componentDidUpdate(prevProps: Props) {
     if (prevProps.show !== this.props.show) {
-      this.props.setHeader(this.props.show ? template.name : 'Dashboard');
+      this.props.setPage(this.props.show ? template.name : 'Dashboard', this.props.show ? template.name : "Dashboard");
     }
   }
 

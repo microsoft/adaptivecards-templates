@@ -23,8 +23,8 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    setPage: (currentPageTitle: string) => {
-      dispatch(setPage(currentPageTitle));
+    setPage: (currentPageTitle: string, currentPage: string) => {
+      dispatch(setPage(currentPageTitle, currentPage));
     },
     getTemplates: () => { dispatch(getAllTemplates()) }
   }
@@ -39,7 +39,7 @@ interface Props {
   isSearch: boolean;
   batchTemplates: BatchTemplatesState;
   authButtonMethod: () => Promise<void>;
-  setPage: (currentPageTitle: string) => void;
+  setPage: (currentPageTitle: string, currentPage: string) => void;
   getTemplates: () => void;
 }
 
@@ -47,7 +47,7 @@ class Dashboard extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = { isPreviewOpen: false };
-    props.setPage("Dashboard");
+    props.setPage("Dashboard", "Dashboard");
     props.getTemplates();
   }
 
@@ -56,10 +56,10 @@ class Dashboard extends React.Component<Props, State> {
   };
 
   render() {
-    if(this.props.isSearch) {
-      return(
+    if (this.props.isSearch) {
+      return (
         <DashboardContainer>
-          <SearchPage/>
+          <SearchPage />
         </DashboardContainer>
       );
     }
@@ -68,7 +68,7 @@ class Dashboard extends React.Component<Props, State> {
     if (!this.props.batchTemplates.isFetching && this.props.batchTemplates.templateList) {
       templates = this.props.batchTemplates.templateList.templates;
     }
-    this.props.setPage("Dashboard");
+    this.props.setPage("Dashboard", "Dashboard");
     console.log(this.props.batchTemplates);
     return (
       <DashboardContainer>
