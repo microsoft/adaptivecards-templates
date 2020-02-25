@@ -11,7 +11,7 @@
 on:
     push:
         branches:
-            - dev
+            - users/daniellemott/change_variable_pipeline
 env:
     AZURE_WEBAPP_NAME: adaptivecms # set this to your application's name
     AZURE_WEBAPP_PACKAGE_PATH: "private-templates-service/" # set this to the path to your web app project, defaults to the repository root
@@ -25,7 +25,7 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v2.0.0
               with:
-                  ref: dev
+                  ref: users/daniellemott/change_variable_pipeline
             - name: Use Node.js ${{ env.NODE_VERSION }}
               uses: actions/setup-node@v1
               with:
