@@ -159,6 +159,7 @@ paths:
       description: "Update existing template given id"
       produces:
         - "application/json"
+      operationId: "postTemplateById"
       parameters:
         - name: "templateId"
           in: "path"
@@ -188,6 +189,7 @@ paths:
       tags: 
         - "template"
       summary: "Delete version of template, default latest"
+      operationId: "deleteTemplateById"
       parameters:
         - name: "templateId"
           in: "path"
