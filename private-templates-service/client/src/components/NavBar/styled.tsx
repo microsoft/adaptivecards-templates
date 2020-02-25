@@ -44,3 +44,12 @@ export const Styledh1 = styled.div`
     font-size: 18px;
   }
 `;
+
+export const StyledButton = styled.div`
+  background-color: ${COLORS.GREY1};
+  width: 100px;
+  height: fill;
+  text-align: center;
+  display: table-cell;
+  vertical-align: middle;
+`;
