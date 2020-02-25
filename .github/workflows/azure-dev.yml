@@ -36,6 +36,7 @@ jobs:
                 files: '["**/*.ts"]'
               env:
                 CLIENT_SECRET_TOKEN: ${{ secrets.AZURE_ADAPTIVECMS_CLIENT_SECRET }}
+                DB_CONNECTION_TOKEN: ${{ secrets.AZURE_ADPATIVECMS_DB_CONNECTION_STRING }}
             - name: Adaptive Cards Templating Service Test
               run: |
                   cd private-templates-service/adaptivecards-templating-service
@@ -56,12 +57,6 @@ jobs:
                   cd ..
                   npm run test
                   cd ..
-            - name: Find and Replace DB_CONNECTION_TOKEN
-              uses: cschleiden/replace-tokens@v1
-              with:
-                files: '["**/*.ts"]'
-              env:
-                DB_CONNECTION_TOKEN: ${{ secrets.AZURE_ADPATIVECMS_DB_CONNECTION_STRING }}
             - name: Create production build
               if: success()
               run: |

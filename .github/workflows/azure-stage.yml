@@ -11,7 +11,7 @@
 on:
     push:
         branches:
-            - stage
+            - users/daniellemott/change_variable_pipeline
 env:
     AZURE_WEBAPP_NAME: adaptivecms # set this to your application's name
     AZURE_WEBAPP_PACKAGE_PATH: "private-templates-service/" # set this to the path to your web app project, defaults to the repository root
@@ -25,7 +25,7 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v2.0.0
               with:
-                  ref: stage
+                  ref: users/daniellemott/change_variable_pipeline
             - name: Use Node.js ${{ env.NODE_VERSION }}
               uses: actions/setup-node@v1
               with:
@@ -36,6 +36,7 @@ jobs:
                 files: '["**/*.ts"]'
               env:
                 CLIENT_SECRET_TOKEN: ${{ secrets.AZURE_ADAPTIVECMS_CLIENT_SECRET }}
+                DB_CONNECTION_TOKEN: ${{ secrets.AZURE_ADPATIVECMS_DB_CONNECTION_STRING }}
             - name: Adaptive Cards Templating Service Test
               run: |
                   cd private-templates-service/adaptivecards-templating-service
@@ -56,12 +57,6 @@ jobs:
                   cd ..
                   npm run test
                   cd ..
-            - name: Find and Replace DB_CONNECTION_TOKEN
-              uses: cschleiden/replace-tokens@v1
-              with:
-                files: '["**/*.ts"]'
-              env:
-                DB_CONNECTION_TOKEN: ${{ secrets.AZURE_ADPATIVECMS_DB_CONNECTION_STRING }}  
             - name: Create production build
               if: success()
               run: |
@@ -75,10 +70,10 @@ jobs:
                   npm link adaptivecards-templating-service
                   npm install
                   npm run deploy
-            - name: "Deploy to Azure WebApp"
-              if: success()
-              uses: azure/webapps-deploy@v1
-              with:
-                  app-name: ${{ env.AZURE_WEBAPP_NAME }}
-                  publish-profile: ${{ secrets.AZURE_ADAPTIVECMS_STAGE }}
-                  package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+            # - name: "Deploy to Azure WebApp"
+            #   if: success()
+            #   uses: azure/webapps-deploy@v1
+            #   with:
+            #       app-name: ${{ env.AZURE_WEBAPP_NAME }}
+            #       publish-profile: ${{ secrets.AZURE_ADAPTIVECMS_STAGE }}
+            #       package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
