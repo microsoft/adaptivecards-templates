@@ -31,7 +31,7 @@ jobs:
               with:
                   node-version: ${{ env.NODE_VERSION }}
             - name: Find and Replace CLIENT_SECRET_TOKEN
-              uses: ./.github/actions
+              uses: github/actions
               with:
                 files: '["**/*.ts"]'
               env:
