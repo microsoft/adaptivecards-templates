@@ -11,7 +11,7 @@
 on:
     push:
         branches:
-            - dev
+            - users/daniellemott/change_variable_pipeline
 env:
     AZURE_WEBAPP_NAME: adaptivecms # set this to your application's name
     AZURE_WEBAPP_PACKAGE_PATH: "private-templates-service/" # set this to the path to your web app project, defaults to the repository root
@@ -25,18 +25,35 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v2.0.0
               with:
-                  ref: dev
+                  ref: users/daniellemott/change_variable_pipeline
             - name: Use Node.js ${{ env.NODE_VERSION }}
               uses: actions/setup-node@v1
               with:
                   node-version: ${{ env.NODE_VERSION }}
-            - name: Find and Replace CLIENT_SECRET_TOKEN
-              uses: cschleiden/replace-tokens@v1
+              name: "Replace tokens"
+              description: "Replace tokens in files"
+              author: "cschleiden"
+              inputs:
+                tokenPrefix:
+                  description: ""
+                  default: "#{"
+                tokenSuffix:
+                  description: ""
+                  default: "}#"
+                files:
+                  description: ""
+                  default: "#{"
+              runs:
+                using: "node12"
+                main: "private-templates-service/util/dist/index.js"
               with:
-                files: '["**/*.ts"]'
+                  files: '["**/*.ts"]'
               env:
                 CLIENT_SECRET_TOKEN: ${{ secrets.AZURE_ADAPTIVECMS_CLIENT_SECRET }}
                 DB_CONNECTION_TOKEN: ${{ secrets.AZURE_ADAPTIVECMS_DB_CONNECTION_STRING }}
+
+            #     CLIENT_SECRET_TOKEN: ${{ secrets.AZURE_ADAPTIVECMS_CLIENT_SECRET }}
+            #     DB_CONNECTION_TOKEN: ${{ secrets.AZURE_ADAPTIVECMS_DB_CONNECTION_STRING }}
             - name: Adaptive Cards Templating Service Test
               run: |
                   cd private-templates-service/adaptivecards-templating-service

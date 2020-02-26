@@ -1,0 +1,16 @@
+name: "Replace tokens"
+description: "Replace tokens in files"
+author: "cschleiden"
+inputs:
+  tokenPrefix:
+    description: ""
+    default: "#{"
+  tokenSuffix:
+    description: ""
+    default: "}#"
+  files:
+    description: ""
+    default: "#{"
+runs:
+  using: "node12"
+  main: "dist/index.js"

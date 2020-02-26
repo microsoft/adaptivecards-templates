@@ -1,0 +1,37 @@
+{
+  "name": "replace-tokens-action",
+  "version": "1.0.0",
+  "private": true,
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "package": "ncc build src/main.ts -o dist",
+    "test": "jest --runInBand",
+    "test-watch": "jest --watch --runInBand"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cschleiden/replace-tokens.git"
+  },
+  "keywords": [
+    "actions",
+    "node",
+    "setup"
+  ],
+  "author": "cschleiden",
+  "license": "MIT",
+  "dependencies": {
+    "@actions/core": "^1.0.0",
+    "replace-in-file": "^4.2.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.13",
+    "@types/node": "^12.0.4",
+    "@zeit/ncc": "^0.20.5",
+    "jest": "^24.8.0",
+    "jest-circus": "^24.7.1",
+    "ts-jest": "^24.0.2",
+    "typescript": "^3.5.1"
+  }
+}
