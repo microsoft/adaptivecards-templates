@@ -57,6 +57,14 @@ jobs:
                   cd ..
                   npm run test
                   cd ..
+            - name: Install in server
+              run: |
+                  cd private-templates-service/adaptivecards-templating-service
+                  npm link
+                  cd ../server
+                  npm link adaptivecards-templating-service
+                  npm install
+                  cd ..
             - name: Create production build
               if: success()
               run: |
