@@ -36,7 +36,7 @@ jobs:
                 files: '["**/*.ts"]'
               env:
                 CLIENT_SECRET_TOKEN: ${{ secrets.AZURE_ADAPTIVECMS_CLIENT_SECRET }}
-                DB_CONNECTION_TOKEN: ${{ secrets.AZURE_ADPATIVECMS_DB_CONNECTION_STRING }}
+                DB_CONNECTION_TOKEN: ${{ secrets.AZURE_ADAPTIVECMS_DB_CONNECTION_STRING }}
             - name: Adaptive Cards Templating Service Test
               run: |
                   cd private-templates-service/adaptivecards-templating-service
