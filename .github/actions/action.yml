@@ -13,4 +13,4 @@ inputs:
     default: "#{"
 runs:
   using: "node12"
-  main: "private-templates-service/util/dist/index.js"
+  main: "../../private-templates-service/util/dist/index.js"
