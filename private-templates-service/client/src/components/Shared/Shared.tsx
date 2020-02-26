@@ -22,8 +22,8 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    setPage: (currentPageTitle: string) => {
-      dispatch(setPage(currentPageTitle));
+    setPage: (currentPageTitle: string, currentPage: string) => {
+      dispatch(setPage(currentPageTitle, currentPage));
     },
     setSearchBarVisible: (isSearchBarVisible: boolean) => {
       dispatch(setSearchBarVisible(isSearchBarVisible));
@@ -37,7 +37,7 @@ interface SharedComponentProps {
   templateJSON: string;
   templateName: string;
   authButtonMethod: () => Promise<void>;
-  setPage: (currentPageTitle: string) => void;
+  setPage: (currentPageTitle: string, currentPage: string) => void;
   setSearchBarVisible: (isSearchBarVisible: boolean) => void;
 }
 
@@ -46,7 +46,7 @@ const Shared = (props: SharedComponentProps) => {
   let { uuid } = useParams();
 
   useEffect(() => {
-    props.setPage(props.templateName);
+    props.setPage(props.templateName, "sharedPage");
     props.setSearchBarVisible(false);
   });
 

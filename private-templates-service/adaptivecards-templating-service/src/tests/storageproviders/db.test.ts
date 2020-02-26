@@ -1,7 +1,7 @@
 import { MongoDBProvider } from "../../storageproviders/MongoDBProvider";
 import { StorageProvider } from "../../storageproviders/IStorageProvider";
 import { InMemoryDBProvider } from "../../storageproviders/InMemoryDBProvider";
-import * as DBTester from "./db_test_definition";
+import * as DBTester from "../../tests_helper/db_t_definition";
 
 const connectionString = process.env.MONGO_URL;
 describe("Test MongoDB", () => {

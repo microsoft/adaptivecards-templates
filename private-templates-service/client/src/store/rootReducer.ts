@@ -15,7 +15,7 @@ export const rootReducer = combineReducers({
   currentTemplate: currentTemplateReducer,
   filter: filterReducer,
   sort: sortReducer,
-  templates: allTemplateReducer
+  allTemplates: allTemplateReducer
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

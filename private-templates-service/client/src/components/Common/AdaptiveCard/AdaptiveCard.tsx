@@ -5,7 +5,7 @@ import markdownit from "markdown-it";
 import { Template, TemplateInstance } from 'adaptive-templating-service-typescript-node';
 
 interface Props {
-  toggleModal: () => void;
+  onClick?: () => void;
   cardtemplate: Template,
 }
 
@@ -51,6 +51,7 @@ export function renderAdaptiveCard(template: Template): any {
 cleanTemplate accepts a template object. This method strips the object of the unncessary '\\\' contained in the object and removes the 
 extra characters before and after the actual JSON object. It then parses the string into JSON and returns the JSON object.  
 */
+
 function cleanTemplate(temp: TemplateInstance): Template {
   const templateString = JSON.stringify(temp.json);
   const replaceChar = templateString.replace(/\\\\\\/g, '');
@@ -81,6 +82,7 @@ class AdaptiveCard extends React.Component<Props> {
     }
     return (
       <Card
+        onClick={this.props.onClick}
         ref={n => {
           // Work around for known issue: https://github.com/gatewayapps/react-adaptivecards/issues/10
           n && n.firstChild && n.removeChild(n.firstChild);

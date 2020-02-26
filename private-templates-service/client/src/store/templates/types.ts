@@ -2,7 +2,7 @@ import { IncomingMessage } from "http";
 import { TemplateList } from "adaptive-templating-service-typescript-node";
 
 export interface AllTemplateState {
-  fetching: boolean;
+  isFetching: boolean;
   templates?: TemplateList;
 }
 

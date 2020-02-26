@@ -44,5 +44,5 @@ export const DescriptorWrapper = styled.div`
   align-items: stretch;
   flex: 1 0 auto;
   background: ${COLORS.WHITE};
-  border-left: 1px solid ${COLORS.BORDER};
+  border-left: 1px solid ${COLORS.BORDER2};
 `;

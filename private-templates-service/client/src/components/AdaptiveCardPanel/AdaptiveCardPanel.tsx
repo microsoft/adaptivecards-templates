@@ -4,19 +4,25 @@ import AdaptiveCard from '../Common/AdaptiveCard';
 import { Template } from 'adaptive-templating-service-typescript-node';
 
 interface Props {
-  toggleModal: () => void;
+  onClick?: (templateID: string) => void;
   template: Template
 }
 
 class AdaptiveCardPanel extends React.Component<Props> {
+  onClick = () => {
+    if (this.props.onClick && this.props.template.id) {
+      this.props.onClick(this.props.template.id);
+    }
+  }
+
   render() {
-    let temp = this.props.template;
+    let template = this.props.template;
     return (
-      <Container>
+      <Container onClick={this.onClick}>
         <ACWrapper>
-          <AdaptiveCard toggleModal={this.props.toggleModal} cardtemplate={temp} />
+          <AdaptiveCard cardtemplate={template} />
         </ACWrapper>
-        <TemplateName onClick={this.props.toggleModal}>{temp.name}</TemplateName>
+        <TemplateName>{template.name}</TemplateName>
       </Container>
     );
   }
