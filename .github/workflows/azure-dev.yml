@@ -31,8 +31,6 @@ jobs:
               with:
                   node-version: ${{ env.NODE_VERSION }}
             - name: "Replace tokens"
-              description: "Replace tokens in files"
-              author: "cschleiden"
               inputs:
                 tokenPrefix:
                   description: ""
@@ -43,14 +41,14 @@ jobs:
                 files:
                   description: ""
                   default: "#{"
-              runs:
-                using: "node12"
-                main: "private-templates-service/util/dist/index.js"
-              with:
-                  files: '["**/*.ts"]'
-              env:
-                CLIENT_SECRET_TOKEN: ${{ secrets.AZURE_ADAPTIVECMS_CLIENT_SECRET }}
-                DB_CONNECTION_TOKEN: ${{ secrets.AZURE_ADAPTIVECMS_DB_CONNECTION_STRING }}
+                runs:
+                  using: "node12"
+                  main: "private-templates-service/util/dist/index.js"
+                with:
+                    files: '["**/*.ts"]'
+                env:
+                  CLIENT_SECRET_TOKEN: ${{ secrets.AZURE_ADAPTIVECMS_CLIENT_SECRET }}
+                  DB_CONNECTION_TOKEN: ${{ secrets.AZURE_ADAPTIVECMS_DB_CONNECTION_STRING }}
 
             #     CLIENT_SECRET_TOKEN: ${{ secrets.AZURE_ADAPTIVECMS_CLIENT_SECRET }}
             #     DB_CONNECTION_TOKEN: ${{ secrets.AZURE_ADAPTIVECMS_DB_CONNECTION_STRING }}
