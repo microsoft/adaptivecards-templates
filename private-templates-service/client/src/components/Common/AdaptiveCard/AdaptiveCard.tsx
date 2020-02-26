@@ -80,7 +80,10 @@ class AdaptiveCard extends React.Component<Props> {
     let template: any = [];
     if (this.props.cardtemplate && this.props.cardtemplate && this.props.cardtemplate.instances) {
       template = processTemplate(this.props.cardtemplate.instances[0]);
+    } else {
+      return (<div />);
     }
+    // console.log(template); return (<div />);
     return (
       <Card
         onClick={this.props.onClick}
