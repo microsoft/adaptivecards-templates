@@ -327,12 +327,7 @@ describe("Preview Templates", () => {
     id = res.body.id;
     idsToDelete.push(id);
 
-<<<<<<< HEAD
-    res = await request(app)
-      .get(`/template/${id}/preview?version=1.2`)
-=======
     res = await request(app).get(`/template/${id}/preview?version=1.2`);
->>>>>>> 4503b26f0cd92d844a14f2e3a5a1358396cde2d1
     expect(res.body).toHaveProperty("template");
     let template = res.body.template;
     expect(template).toHaveProperty("_id");
@@ -452,12 +447,7 @@ describe("Delete Templates", () => {
     res = await request(app).get(`/template/${id}?version=1.4`);
     expect(res.status).toEqual(404);
 
-<<<<<<< HEAD
-    res = await request(app)
-      .get(`/template/${id}`);
-=======
     res = await request(app).get(`/template/${id}`);
->>>>>>> 4503b26f0cd92d844a14f2e3a5a1358396cde2d1
     expect(res.status).toEqual(200);
     expect(res.body.templates[0].instances[0].version).toEqual("1.0");
   });
@@ -490,13 +480,7 @@ describe("Filtering Templates", () => {
       .set({ Authorization: "Bearer " + token })
       .send({
         template: "{}",
-<<<<<<< HEAD
-        tags: [
-          "weather"
-        ]
-=======
         tags: ["weather"]
->>>>>>> 4503b26f0cd92d844a14f2e3a5a1358396cde2d1
       });
     expect(res.status).toEqual(201);
     expect(res.body).toHaveProperty("id");
@@ -508,13 +492,7 @@ describe("Filtering Templates", () => {
       .set({ Authorization: "Bearer " + token })
       .send({
         template: "{}",
-<<<<<<< HEAD
-        tags: [
-          "sunny"
-        ]
-=======
         tags: ["sunny"]
->>>>>>> 4503b26f0cd92d844a14f2e3a5a1358396cde2d1
       });
     expect(res.status).toEqual(201);
     idsToDelete.push(res.body.id);
@@ -565,12 +543,7 @@ describe("Get Tags", () => {
     id = res.body.id;
     idsToDelete.push(id);
 
-<<<<<<< HEAD
-    res = await request(app)
-      .get(`/template/${id}`)
-=======
     res = await request(app).get(`/template/${id}`);
->>>>>>> 4503b26f0cd92d844a14f2e3a5a1358396cde2d1
     expect(res.body).toHaveProperty("templates");
     expect(res.body.templates).toHaveLength(1);
     let template = res.body.templates[0];
@@ -582,13 +555,7 @@ describe("Get Tags", () => {
       .set({ Authorization: "Bearer " + token })
       .send({
         template: "{}",
-<<<<<<< HEAD
-        tags: [
-          "contosa"
-        ],
-=======
         tags: ["contosa"],
->>>>>>> 4503b26f0cd92d844a14f2e3a5a1358396cde2d1
         isPublished: true
       });
     expect(res.status).toEqual(201);
