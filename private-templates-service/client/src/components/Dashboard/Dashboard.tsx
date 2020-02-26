@@ -22,7 +22,7 @@ const mapStateToProps = (state: RootState) => {
   return {
     isAuthenticated: state.auth.isAuthenticated,
     user: state.auth.user,
-    templates: state.batchTemplates,
+    templates: state.allTemplates,
     isSearch: state.search.isSearch
   };
 };

@@ -10,13 +10,14 @@ import { DescriptorWrapper } from '../Dashboard/PreviewModal/styled';
 import TemplateSourceInfo from './TemplateSourceInfo';
 import AdaptiveCard from '../Common/AdaptiveCard';
 import { useParams } from 'react-router-dom';
+import { getTemplate, getTemplateInstance } from '../../store/currentTemplate/actions';
+import { Template, TemplateInstance } from 'adaptive-templating-service-typescript-node';
 
 const mapStateToProps = (state: RootState) => {
   return {
     currentPageTitle: state.page.currentPageTitle,
-    templateID: state.currentTemplate.templateID,
-    templateJSON: state.currentTemplate.templateJSON,
-    templateName: state.currentTemplate.templateName
+    template: state.currentTemplate.template,
+    templateInstance: state.currentTemplate.templateInstance
   };
 };
 
@@ -27,28 +28,48 @@ const mapDispatchToProps = (dispatch: any) => {
     },
     setSearchBarVisible: (isSearchBarVisible: boolean) => {
       dispatch(setSearchBarVisible(isSearchBarVisible));
+    },
+    getTemplate: (templateID: string) => {
+      dispatch(getTemplate(templateID));
+    },
+    assignTemplateInstance: (version?: string) => {
+      dispatch(getTemplateInstance(version));
     }
   };
 };
 
 interface SharedComponentProps {
   currentPageTitle: string;
-  templateID: string;
-  templateJSON: string;
-  templateName: string;
+  template: Template;
+  templateInstance?: TemplateInstance;
   authButtonMethod: () => Promise<void>;
   setPage: (currentPageTitle: string, currentPage: string) => void;
   setSearchBarVisible: (isSearchBarVisible: boolean) => void;
+  getTemplate: (templateID: string) => void;
+  assignTemplateInstance: (version?: string) => void;
 }
 
 const Shared = (props: SharedComponentProps) => {
 
-  let { uuid } = useParams();
+  let { uuid, version } = useParams();
+  //let templateInstance: TemplateInstance | undefined = undefined;
+  props.setPage((props.template !== undefined && props.template.name &&
+    props.template.name !== "") ? props.template.name : "Preview", "sharedPage");
+  props.setSearchBarVisible(false);
 
   useEffect(() => {
-    props.setPage(props.templateName, "sharedPage");
-    props.setSearchBarVisible(false);
-  });
+    if (uuid !== undefined) {
+      props.getTemplate(uuid);
+    }
+  }, [uuid]);
+
+  useEffect(() => {
+    if (props.template !== undefined && props.template.instances !== undefined &&
+      props.template.instances !== null && props.template.instances.length > 0) {
+      props.assignTemplateInstance(version);
+    }
+
+  }, [props.template]);
 
   return (
     <React.Fragment>
@@ -57,10 +78,11 @@ const Shared = (props: SharedComponentProps) => {
         <ModalWrapper>
           <ACPanel>
             <ACWrapper>
+              <AdaptiveCard cardtemplate={props.template}></AdaptiveCard>
             </ACWrapper>
           </ACPanel>
           <DescriptorWrapper>
-            <TemplateSourceInfo>
+            <TemplateSourceInfo templateJSON={props.templateInstance !== undefined ? props.templateInstance['json'] : ''}>
             </TemplateSourceInfo>
           </DescriptorWrapper>
         </ModalWrapper>

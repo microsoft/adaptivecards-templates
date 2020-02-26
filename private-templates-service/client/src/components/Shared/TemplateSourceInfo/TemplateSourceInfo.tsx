@@ -2,7 +2,11 @@ import React from 'react';
 import { TopRowWrapper, TitleWrapper, Title, HeaderWrapper, TemplateSourceWrapper, SourceWrapper, Source } from './styled';
 import { ActionButton, ScrollablePane, Text } from 'office-ui-fabric-react';
 
-class TemplateSourceInfo extends React.Component {
+interface TemplateSourceInfoProps {
+  templateJSON?: string;
+}
+
+class TemplateSourceInfo extends React.Component<TemplateSourceInfoProps> {
 
   onCopy = () => {
     alert("Copied!");
@@ -25,7 +29,7 @@ class TemplateSourceInfo extends React.Component {
           <ScrollablePane initialScrollPosition={0} scrollbarVisibility="always">
             <SourceWrapper>
               <Source>
-                This is text. This is text. This is text.
+                {this.props.templateJSON !== undefined ? this.props.templateJSON : 'undefined'}
               </Source>
             </SourceWrapper>
           </ScrollablePane>

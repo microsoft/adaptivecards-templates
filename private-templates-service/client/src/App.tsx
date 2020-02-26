@@ -110,7 +110,7 @@ class App extends Component<Props, State> {
     return (
       <Router>
         <Switch>
-          <Route exact path="/preview/:uuid">
+          <Route exact path="/preview/:uuid/:version">
             <Shared authButtonMethod={this.login}></Shared>
           </Route>
           <Route exact path="/">

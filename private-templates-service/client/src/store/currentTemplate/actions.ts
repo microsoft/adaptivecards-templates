@@ -10,9 +10,10 @@ import {
   GET_TEMPLATE,
   GET_TEMPLATE_SUCCESS,
   GET_TEMPLATE_FAILURE,
+  ASSIGN_TEMPLATE_INSTANCE,
 } from './types';
 
-import { Template, TemplateApi, TemplateJSON } from "adaptive-templating-service-typescript-node";
+import { Template, TemplateApi, TemplateJSON, TemplateInstance } from "adaptive-templating-service-typescript-node";
 
 import { IncomingMessage } from "http";
 import { RootState } from '../rootReducer';
@@ -160,6 +161,34 @@ export function getTemplate(templateID: string) {
     }
     catch {
       dispatch(requestTemplateFailure());
+    }
+  }
+}
+
+function assignTemplateInstance(templateInstance: TemplateInstance) {
+  return {
+    type: ASSIGN_TEMPLATE_INSTANCE,
+    text: 'Specifying and storing specific template instance of a template in store',
+    templateInstance: templateInstance
+  }
+}
+
+export function getTemplateInstance(version?: string) {
+  return function (dispatch: any, getState: any) {
+    let currentState = getState();
+    if (currentState.currentTemplate.template && currentState.currentTemplate.template.instances && currentState.currentTemplate.template.instances.length > 0) {
+      let currentTemplate = currentState.currentTemplate.template;
+      if (version !== undefined) {
+        for (let i = 0; i < currentTemplate.instances.length; i++) {
+          if (currentTemplate.instances[i].version === version) {
+            dispatch(assignTemplateInstance(currentTemplate.instances[i]));
+            break;
+          }
+        }
+      }
+      else {
+        dispatch(assignTemplateInstance(currentTemplate.instances[currentTemplate.instance.slength - 1]));
+      }
     }
   }
 }
