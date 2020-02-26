@@ -8,18 +8,18 @@
  * @property {string} lastName
  * @property {string[]} team
  * @property {string[]} org
- * @property {string[]} recentlyViewed - list of 5 templates that were last viewed (GET /template/{id}) by logged in user 
+ * @property {string[]} recentlyViewed - list of 5 templates that were last viewed (GET /template/{id}) by logged in user
  */
 
 export interface ITemplateInstance {
   _id?: string;
-  json: string;
+  json: JSON;
   version: string;
   publishedAt?: Date;
   state?: TemplateState;
   isShareable?: boolean;
   numHits?: number;
-  data?: string[];
+  data?: JSON[];
   updatedAt?: Date;
   createdAt?: Date;
 }
@@ -96,10 +96,10 @@ export interface TemplateInstancePreview {
  * User information that is viewable by client.
  */
 export interface UserPreview {
-	firstName: string;
-	lastName: string;
-	team?: string[];
-	org?: string[];
+  firstName: string;
+  lastName: string;
+  team?: string[];
+  org?: string[];
 }
 
 /**
@@ -120,5 +120,5 @@ export interface TemplatePreview {
  */
 export interface TagList {
   ownedTags: any[];
-  allTags: any[]
+  allTags: any[];
 }
