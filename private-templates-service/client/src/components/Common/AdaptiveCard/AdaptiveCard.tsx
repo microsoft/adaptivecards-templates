@@ -51,6 +51,7 @@ export function renderAdaptiveCard(template: Template): any {
 cleanTemplate accepts a template object. This method strips the object of the unncessary '\\\' contained in the object and removes the 
 extra characters before and after the actual JSON object. It then parses the string into JSON and returns the JSON object.  
 */
+
 function cleanTemplate(temp: TemplateInstance): Template {
   const templateString = JSON.stringify(temp.json);
   const replaceChar = templateString.replace(/\\\\\\/g, '');
