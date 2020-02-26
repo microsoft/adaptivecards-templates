@@ -86,7 +86,7 @@ describe("Basic Post Templates", () => {
       .post("/template")
       .send({
         template: {},
-        isPublished: false
+        isLive: false
       });
     expect(res.status).toEqual(401);
   });
