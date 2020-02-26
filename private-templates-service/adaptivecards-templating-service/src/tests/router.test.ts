@@ -28,7 +28,7 @@ export default async function getToken(): Promise<string> {
         let parsedBody = JSON.parse(body);
         if (parsedBody.error_description) {
           console.log("Error=" + parsedBody.error_description);
-          return Promise.resolve("hi");
+          return Promise.resolve(parsedBody.error_description);
         } else {
           console.log("Access Token=" + parsedBody.access_token);
           return Promise.resolve(parsedBody.access_token);
