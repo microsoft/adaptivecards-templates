@@ -53,11 +53,14 @@ extra characters before and after the actual JSON object. It then parses the str
 */
 
 function cleanTemplate(temp: TemplateInstance): Template {
-  const json = JSON.stringify(temp.json);
+  const templateString = JSON.stringify(temp.json);
+  const replaceChar = templateString.replace(/\\\\\\/g, '');
+  const trimTemp = replaceChar.slice(3, replaceChar.length - 3);
+
   let jsonTemp = {};
 
   try {
-    jsonTemp = JSON.parse(json);
+    jsonTemp = JSON.parse(trimTemp);
   } catch {
     console.log("Invalid Adaptive Cards JSON. Card not parsed.");
     const errorMessageJSON = JSON.stringify(require('../../../assets/default-adaptivecards/defaultErrorCard.json'));
