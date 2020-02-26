@@ -9,7 +9,7 @@ import { InMemoryDBProvider } from "../storageproviders/InMemoryDBProvider";
 import { ITemplate, ITemplateInstance } from "../models/models";
 
 export default async function getToken(): Promise<string> {
-  const request = require('request-promise');
+  const request = require("request-promise");
   const endpoint = "https://login.microsoftonline.com/72f988bf-86f1-41af-91ab-2d7cd011db47/oauth2/token";
   const requestParams = {
     grant_type: "client_credentials",
@@ -23,15 +23,13 @@ export default async function getToken(): Promise<string> {
       if (err) {
         let parsedBody = JSON.parse(err);
         return Promise.resolve(parsedBody.access_token);
-      }
-      else {
+      } else {
         console.log("Body=" + body);
         let parsedBody = JSON.parse(body);
         if (parsedBody.error_description) {
           console.log("Error=" + parsedBody.error_description);
-          return Promise.resolve("hi");
-        }
-        else {
+          return Promise.resolve(parsedBody.error_description);
+        } else {
           console.log("Access Token=" + parsedBody.access_token);
           return Promise.resolve(parsedBody.access_token);
         }
@@ -329,8 +327,12 @@ describe("Preview Templates", () => {
     id = res.body.id;
     idsToDelete.push(id);
 
+<<<<<<< HEAD
     res = await request(app)
       .get(`/template/${id}/preview?version=1.2`)
+=======
+    res = await request(app).get(`/template/${id}/preview?version=1.2`);
+>>>>>>> 4503b26f0cd92d844a14f2e3a5a1358396cde2d1
     expect(res.body).toHaveProperty("template");
     let template = res.body.template;
     expect(template).toHaveProperty("_id");
@@ -352,8 +354,7 @@ describe("Preview Templates", () => {
   });
 
   it("should try to get posted template preview without passing version and fail", async () => {
-    const res = await request(app)
-      .get(`/template/${id}/preview`)
+    const res = await request(app).get(`/template/${id}/preview`);
     expect(res.status).toEqual(404);
   });
 
@@ -371,8 +372,7 @@ describe("Preview Templates", () => {
     id = res.body.id;
     idsToDelete.push(id);
 
-    res = await request(app)
-      .get(`/template/${id}`);
+    res = await request(app).get(`/template/${id}`);
     expect(res.status).toEqual(200);
     expect(res.body).toHaveProperty("templates");
     expect(res.body.templates).toHaveLength(1);
@@ -381,8 +381,7 @@ describe("Preview Templates", () => {
     expect(template.instances[0]).toHaveProperty("isShareable");
     expect(template.instances[0].isShareable).toEqual(false);
 
-    res = await request(app)
-      .get(`/template/${id}/preview?version=1.0`);
+    res = await request(app).get(`/template/${id}/preview?version=1.0`);
     expect(res.status).toEqual(404);
   });
 
@@ -419,12 +418,10 @@ describe("Delete Templates", () => {
     expect(res.body).toHaveProperty("id");
     id = res.body.id;
 
-    res = await request(app)
-      .delete(`/template/${id}`);
+    res = await request(app).delete(`/template/${id}`);
     expect(res.status).toEqual(204);
 
-    res = await request(app)
-      .get(`/template/${id}`);
+    res = await request(app).get(`/template/${id}`);
     expect(res.status).toEqual(404);
   });
 
@@ -449,16 +446,18 @@ describe("Delete Templates", () => {
       });
     expect(res.status).toEqual(201);
 
-    res = await request(app)
-      .delete(`/template/${id}?version=1.4`);
+    res = await request(app).delete(`/template/${id}?version=1.4`);
     expect(res.status).toEqual(204);
 
-    res = await request(app)
-      .get(`/template/${id}?version=1.4`);
+    res = await request(app).get(`/template/${id}?version=1.4`);
     expect(res.status).toEqual(404);
 
+<<<<<<< HEAD
     res = await request(app)
       .get(`/template/${id}`);
+=======
+    res = await request(app).get(`/template/${id}`);
+>>>>>>> 4503b26f0cd92d844a14f2e3a5a1358396cde2d1
     expect(res.status).toEqual(200);
     expect(res.body.templates[0].instances[0].version).toEqual("1.0");
   });
@@ -491,9 +490,13 @@ describe("Filtering Templates", () => {
       .set({ Authorization: "Bearer " + token })
       .send({
         template: "{}",
+<<<<<<< HEAD
         tags: [
           "weather"
         ]
+=======
+        tags: ["weather"]
+>>>>>>> 4503b26f0cd92d844a14f2e3a5a1358396cde2d1
       });
     expect(res.status).toEqual(201);
     expect(res.body).toHaveProperty("id");
@@ -505,9 +508,13 @@ describe("Filtering Templates", () => {
       .set({ Authorization: "Bearer " + token })
       .send({
         template: "{}",
+<<<<<<< HEAD
         tags: [
           "sunny"
         ]
+=======
+        tags: ["sunny"]
+>>>>>>> 4503b26f0cd92d844a14f2e3a5a1358396cde2d1
       });
     expect(res.status).toEqual(201);
     idsToDelete.push(res.body.id);
@@ -516,9 +523,7 @@ describe("Filtering Templates", () => {
       .get("/template")
       .set({ Authorization: "Bearer " + token })
       .send({
-        tags: [
-          "weather"
-        ]
+        tags: ["weather"]
       });
     expect(res.status).toEqual(200);
     expect(res.body.templates).toHaveLength(1);
@@ -552,9 +557,7 @@ describe("Get Tags", () => {
       .set({ Authorization: "Bearer " + token })
       .send({
         template: "{}",
-        tags: [
-          "weather"
-        ],
+        tags: ["weather"],
         isPublished: false
       });
     expect(res.status).toEqual(201);
@@ -562,8 +565,12 @@ describe("Get Tags", () => {
     id = res.body.id;
     idsToDelete.push(id);
 
+<<<<<<< HEAD
     res = await request(app)
       .get(`/template/${id}`)
+=======
+    res = await request(app).get(`/template/${id}`);
+>>>>>>> 4503b26f0cd92d844a14f2e3a5a1358396cde2d1
     expect(res.body).toHaveProperty("templates");
     expect(res.body.templates).toHaveLength(1);
     let template = res.body.templates[0];
@@ -575,9 +582,13 @@ describe("Get Tags", () => {
       .set({ Authorization: "Bearer " + token })
       .send({
         template: "{}",
+<<<<<<< HEAD
         tags: [
           "contosa"
         ],
+=======
+        tags: ["contosa"],
+>>>>>>> 4503b26f0cd92d844a14f2e3a5a1358396cde2d1
         isPublished: true
       });
     expect(res.status).toEqual(201);
@@ -588,8 +599,7 @@ describe("Get Tags", () => {
 
   // Authenticated post request
   it("should try to get the list of owners and all tags and succeed", async () => {
-    let res = await request(app)
-      .get("/template/tag");
+    let res = await request(app).get("/template/tag");
     expect(res.status).toEqual(200);
     expect(res.body).toHaveProperty("ownedTags");
     expect(res.body).toHaveProperty("allTags");

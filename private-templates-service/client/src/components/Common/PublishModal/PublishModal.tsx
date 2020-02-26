@@ -1,12 +1,19 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 // Libraries
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { PrimaryButton } from 'office-ui-fabric-react'
+import { PrimaryButton, ThemeSettingName } from 'office-ui-fabric-react'
 import { SearchBox } from 'office-ui-fabric-react';
+
+import { Template } from 'adaptive-templating-service-typescript-node';
+
+// Redux
+import { updateTemplate } from '../../../store/currentTemplate/actions';
 
 // Components
 import AdaptiveCard from '../AdaptiveCard';
+import processTemplate from '../../../Services/ProcessTemplate';
 
 // Styles
 import {
@@ -27,14 +34,33 @@ import {
 } from './styled';
 
 interface Props {
-  template: any;
+  template: Template;
   toggleModal: () => void;
+  publishTemplate: (templateID: string, templateJSON: string, sampleDataJSON: string, templateName: string) => void;
+}
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    publishTemplate: (templateID: string, templateJSON: string, sampleDataJSON: string, templateName: string) => {
+      dispatch(updateTemplate(templateID, templateJSON, sampleDataJSON, templateName, true));
+    }
+  }
 }
 
 class PublishModal extends React.Component<Props> {
 
   publish = () => {
-    // TODO: USE CLIENT SDK TO PUBLISH
+    const {
+      id,
+      name,
+      instances
+    } = this.props.template;
+    if (id && name && instances && instances.length === 1 && instances[0].json) {
+      const template = instances[0].json;
+      const parsedTemplate = processTemplate(template);
+      this.props.publishTemplate(id, parsedTemplate, "", name);
+      this.props.toggleModal();
+    }
   }
 
   render() {
@@ -74,4 +100,4 @@ class PublishModal extends React.Component<Props> {
   }
 }
 
-export default PublishModal;
+export default connect(() => { return {} }, mapDispatchToProps)(PublishModal);
