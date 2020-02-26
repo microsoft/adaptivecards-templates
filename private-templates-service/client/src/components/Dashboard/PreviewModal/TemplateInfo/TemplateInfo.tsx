@@ -84,7 +84,7 @@ class TemplateInfo extends React.Component<Props, State> {
 
   render() {
     const {
-      isPublished,
+      isLive,
       createdAt
     } = this.props.template;
     const {
@@ -97,8 +97,8 @@ class TemplateInfo extends React.Component<Props, State> {
           <TopRowWrapper>
             <TitleWrapper>
               <Title>Version 1.0.0</Title>
-              <StatusIndicator isPublished={isPublished} />
-              <Status>{isPublished ? 'Published' : 'Draft'}</Status>
+              <StatusIndicator isPublished={isLive} />
+              <Status>{isLive ? 'Published' : 'Draft'}</Status>
             </TitleWrapper>
             <TimeStamp>
               Created {createdAt}
