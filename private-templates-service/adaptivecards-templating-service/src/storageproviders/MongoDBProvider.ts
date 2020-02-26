@@ -45,6 +45,7 @@ export class MongoDBProvider implements StorageProvider {
   async getUsers(query: Partial<IUser>): Promise<JSONResponse<IUser[]>> {
     let userQuery: any = this._constructUserQuery(query);
     return await this.worker.User.find(userQuery)
+      .lean()
       .then(users => {
         if (users.length) {
           return Promise.resolve({
@@ -63,9 +64,17 @@ export class MongoDBProvider implements StorageProvider {
   }
 
   // Default sort is by name and in ascending order.
-  async getTemplates(query: Partial<ITemplate>, sortBy: SortBy = SortBy.alphabetical, sortOrder: SortOrder = SortOrder.ascending): Promise<JSONResponse<ITemplate[]>> {
+  async getTemplates(
+    query: Partial<ITemplate>,
+    sortBy: SortBy = SortBy.alphabetical,
+    sortOrder: SortOrder = SortOrder.ascending
+  ): Promise<JSONResponse<ITemplate[]>> {
     let templateQuery: any = this._constructTemplateQuery(query);
     return await this.worker.Template.find(templateQuery, {})
+      .lean()
+      .map(templateModels => {
+        return MongoUtils.restoreJSONTypeOfTemplate(templateModels);
+      })
       .sort({ [sortBy]: sortOrder })
       .then(templates => {
         if (templates.length) {
@@ -88,6 +97,7 @@ export class MongoDBProvider implements StorageProvider {
     let userQuery: any = this._constructUserQuery(query);
     updateQuery = MongoUtils.removeUndefinedFields(updateQuery);
     return await this.worker.User.findOneAndUpdate(userQuery, updateQuery)
+      .lean()
       .then(result => {
         if (result) {
           return Promise.resolve({
@@ -110,6 +120,7 @@ export class MongoDBProvider implements StorageProvider {
     let templateQuery: any = this._constructTemplateQuery(query);
     updateQuery = MongoUtils.removeUndefinedFields(updateQuery);
     return await this.worker.Template.findOneAndUpdate(templateQuery, updateQuery)
+      .lean()
       .then(result => {
         if (result) {
           return Promise.resolve({ success: true });

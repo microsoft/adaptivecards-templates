@@ -35,6 +35,9 @@ function autoCompleteTemplateInstanceModel(instance: ITemplateInstance): void {
   if (!instance.publishedAt) {
     instance.publishedAt = undefined;
   }
+  if (!instance.data) {
+    instance.data = [];
+  }
 }
 function autoCompleteTemplateModel(template: ITemplate): void {
   if (!template.tags) {
@@ -150,7 +153,14 @@ export function testDB(db: StorageProvider) {
   });
 
   it("Completely filled: create & save user successfully", async () => {
-    const validUser: IUser = { firstName: "John", lastName: "Travolta", authIssuer: "Microsoft Oauth2", authId: "51201", org: ["Microsoft"], team: ["Bing"] };
+    const validUser: IUser = {
+      firstName: "John",
+      lastName: "Travolta",
+      authIssuer: "Microsoft Oauth2",
+      authId: "51201",
+      org: ["Microsoft"],
+      team: ["Bing"]
+    };
     await insertAndValidateUser(db, validUser);
   });
 
@@ -160,7 +170,7 @@ export function testDB(db: StorageProvider) {
   });
 
   it("Completely filled:create & save template successfully", async () => {
-    const validTemplateInstance: ITemplateInstance = { json: '"key":"value"', version: "1.0" };
+    const validTemplateInstance: ITemplateInstance = { json: JSON.parse('{"key":"value"}'), version: "1.0" };
     const validTemplate: ITemplate = {
       name: "validTemplate",
       instances: [validTemplateInstance],
