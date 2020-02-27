@@ -128,7 +128,7 @@ class TemplateInfo extends React.Component<Props, State> {
             <CardHeader>Tags</CardHeader>
             <CardBody>
               <TagsWrapper>
-                <Tags tags={tags || []} allowAddTag={true} />
+                <Tags tags={["tag1", "tag2", "tag3", "weather", "reaaaaaaaaaaaally long tag!", "tag with emojis 🙃🙃🙃"]} allowAddTag={true} />
               </TagsWrapper>
             </CardBody>
           </Card>
