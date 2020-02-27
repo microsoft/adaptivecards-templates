@@ -1,5 +1,5 @@
 import React from 'react';
-import { ActionButton, IconButton } from 'office-ui-fabric-react';
+import { ActionButton } from 'office-ui-fabric-react';
 
 import { Template } from 'adaptive-templating-service-typescript-node';
 
@@ -70,13 +70,9 @@ interface State {
 }
 
 class TemplateInfo extends React.Component<Props, State> {
-  addTagInput = React.createRef<HTMLInputElement>();
-
   constructor(props: Props) {
     super(props);
-    this.state = {
-      isPublishOpen: false,
-    }
+    this.state = { isPublishOpen: false }
   }
 
   toggleModal = () => {

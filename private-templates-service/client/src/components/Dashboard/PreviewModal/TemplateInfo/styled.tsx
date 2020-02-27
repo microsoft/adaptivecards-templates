@@ -1,7 +1,6 @@
-import styled, { css, keyframes } from 'styled-components';
+import styled from 'styled-components';
 import { COLORS } from '../../../../globalStyles';
 
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { Icon } from 'office-ui-fabric-react';
 
 export const OuterWrapper = styled.div`
