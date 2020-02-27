@@ -1,7 +1,5 @@
 {
-    "presets": [
-        "react-native",
-        "flow"
-    ],
-    "retainLines": true
+	"presets": ["react-native", "flow"],
+	"retainLines": true,
+	"plugins": ["babel-plugin-styled-components"]
 }
