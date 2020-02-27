@@ -31,7 +31,21 @@ interface Props {
   setHeader: (header: string) => void;
 }
 
-class PreviewModal extends React.Component<Props, {}> {
+interface State {
+  templateVersion: string;
+}
+
+
+class PreviewModal extends React.Component<Props, State> {
+  constructor(props: Props){
+    super(props);
+    this.state = { templateVersion: "1.0" }
+  }
+  
+  toggleTemplateVersion = (templateVersion: string) => {
+    this.setState({ templateVersion: templateVersion });
+  };
+
   componentDidUpdate(prevProps: Props) {
     if (prevProps.show !== this.props.show || prevProps.template !== this.props.template) {
       this.props.setHeader(
@@ -47,11 +61,11 @@ class PreviewModal extends React.Component<Props, {}> {
         <ModalWrapper>
           <ACPanel>
             <ACWrapper>
-              <AdaptiveCard cardtemplate={this.props.template} />
+              <AdaptiveCard cardtemplate={this.props.template} templateVersion={this.state.templateVersion}/>
             </ACWrapper>
           </ACPanel>
           <DescriptorWrapper>
-            <TemplateInfo template={this.props.template} onClose={this.props.toggleModal} />
+            <TemplateInfo template={this.props.template} onClose={this.props.toggleModal} onSwitchVersion={this.toggleTemplateVersion} />
           </DescriptorWrapper>
         </ModalWrapper>
       </ModalBackdrop>
