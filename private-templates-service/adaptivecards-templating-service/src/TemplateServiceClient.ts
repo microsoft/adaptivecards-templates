@@ -1,12 +1,11 @@
 import { ClientOptions } from "./IClientOptions";
 import express, { Request, Response, NextFunction, Router } from "express";
-import { check, validationResult } from "express-validator";
 import { AuthenticationProvider } from ".";
 import { TemplateError, ApiError, ServiceErrorMessage } from "./models/errorModels";
 import { StorageProvider } from ".";
 import { ITemplate, JSONResponse, ITemplateInstance, IUser } from ".";
 import { SortBy, SortOrder, TemplatePreview, TemplateState, TemplateInstancePreview, UserPreview, TagList } from "./models/models";
-import { updateTemplateToLatestInstance, removeMostRecentTemplate, getTemplateVersion, isValidJSONString } from "./util/templateutils";
+import { updateTemplateToLatestInstance, removeMostRecentTemplate, getTemplateVersion, isValidJSONString, sortTemplateByVersion } from "./util/templateutils";
 
 export class TemplateServiceClient {
   private storageProvider: StorageProvider;
@@ -698,7 +697,7 @@ export class TemplateServiceClient {
         // Update hit counter for template
         this._incrementTemplateHits(templateId, templates![0], version);
       }
-
+      sortTemplateByVersion(templates![0]);
       if (!version) return { success: true, result: templates };
     }
 
