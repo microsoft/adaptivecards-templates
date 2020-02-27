@@ -104,6 +104,7 @@ export function incrementVersion(template: ITemplate): string{
   // check if this is the most recent version 
   let latestTemplate = getMostRecentVersion(template);
   let version = latestTemplate?.version.split(".");
+
   if(!version){
     return "1.0";
   }

@@ -383,7 +383,10 @@ export class TemplateServiceClient {
     let tags: string[] | undefined = tag ? existingTags : tagList;
     let templateState: TemplateState | undefined =  state;
 
-
+    if(!version){
+      version = incrementVersion(existingTemplate);
+    }
+ 
     let templateInstance: ITemplateInstance = {
       json: template ? template : JSON.parse("{}"),
       version: version || "1.0",
@@ -394,7 +397,6 @@ export class TemplateServiceClient {
       numHits: 0,
       isShareable: isShareable
     };
-
     let templateInstances: ITemplateInstance[] = [];
     if (existingTemplate.instances) {
       // Check if updated version already exists
@@ -408,6 +410,7 @@ export class TemplateServiceClient {
             // pushing existing deprecated version back
             let templateData: JSON[] | undefined = data ? [data] : dataList ? dataList : undefined;
             version = incrementVersion(existingTemplate);
+            templateState =  templateState === TemplateState.live  ? TemplateState.live : TemplateState.draft;
             templateInstance = setTemplateInstanceParam(templateInstance,templateData,templateState,isShareable,version);
             templateInstances.push(templateInstance); 
             added = true;
@@ -455,6 +458,7 @@ export class TemplateServiceClient {
       if (!added) {
         let templateData: JSON[] | undefined = data ? [data] : dataList ? dataList : undefined;
         // Updated version does not already exist, add to instances list
+        templateState =  templateState === TemplateState.live  ? TemplateState.live : TemplateState.draft;
         templateInstance = setTemplateInstanceParam(templateInstance,templateData,templateState,isShareable,version)
         templateInstances.push(templateInstance);
         
@@ -468,7 +472,6 @@ export class TemplateServiceClient {
       tags: tags,
       owner: this.ownerID!,
       updatedAt: new Date(Date.now()),
-      //isLive: existingTemplate.isLive || isPublished || state === TemplateState.live
       isLive: anyVersionsLive(templateInstances)
     };
 
@@ -532,7 +535,6 @@ export class TemplateServiceClient {
         dataItem = data;
         dataList = undefined;
       }
-
       let response = await this._updateTemplate(
         templateId,
         name,
