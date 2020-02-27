@@ -20,7 +20,7 @@ class AdaptiveCardPanel extends React.Component<Props> {
     return (
       <Container onClick={this.onClick}>
         <ACWrapper>
-          <AdaptiveCard cardtemplate={template} />
+          <AdaptiveCard cardtemplate={template} templateVersion={"1.0"}/>
         </ACWrapper>
         <TemplateName>{template.name}</TemplateName>
       </Container>
