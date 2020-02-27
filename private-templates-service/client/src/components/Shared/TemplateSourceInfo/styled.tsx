@@ -28,7 +28,6 @@ export const Title = styled.div`
 `;
 
 export const TemplateSourceWrapper = styled.div`
-  background-color: ${COLORS.GREY2};
   width: 100%;
   height: 100vh;
   position: relative;

@@ -56,6 +56,7 @@ const Shared = (props: SharedComponentProps) => {
 
   useEffect(() => {
     if (uuid !== undefined) {
+      console.log(uuid);
       props.getTemplate(uuid);
     }
   }, [uuid]);

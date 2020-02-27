@@ -18,8 +18,8 @@ class TemplateSourceInfo extends React.Component<TemplateSourceInfoProps> {
   onCopy = () => {
     let copyCode = document.createElement('textarea');
     if (this.props.templateJSON) {
-      let sourceJSONobj = JSON.parse(JSON.parse(this.props.templateJSON));
-      copyCode.innerText = JSON.stringify(sourceJSONobj, undefined, 2);
+      let sourceJSON = JSON.stringify(this.props.templateJSON, undefined, 2);
+      copyCode.innerText = sourceJSON;
     }
     document.body.appendChild(copyCode);
     copyCode.select();
@@ -28,9 +28,9 @@ class TemplateSourceInfo extends React.Component<TemplateSourceInfoProps> {
   }
 
   render() {
-    let sourceJSONobj = undefined;
+    let sourceJSON = undefined;
     if (this.props.templateJSON) {
-      sourceJSONobj = JSON.parse(JSON.parse(this.props.templateJSON));
+      sourceJSON = JSON.stringify(this.props.templateJSON, undefined, 2);
     }
     return (
       <React.Fragment>
@@ -48,7 +48,7 @@ class TemplateSourceInfo extends React.Component<TemplateSourceInfoProps> {
           <ScrollablePane initialScrollPosition={0} scrollbarVisibility="always">
             <SourceWrapper>
               <Source>
-                {sourceJSONobj ? JSON.stringify(sourceJSONobj, undefined, 2) : 'undefined'}
+                {sourceJSON ? sourceJSON : 'undefined'}
               </Source>
             </SourceWrapper>
           </ScrollablePane>
