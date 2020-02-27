@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var localVarRequest = require("request");
 var Promise = require("bluebird");
-var defaultBasePath = 'http://localhost:3000';
+var defaultBasePath = 'https://adaptivecms.azurewebsites.net';
 var primitives = [
     "string",
     "boolean",
@@ -161,6 +161,126 @@ var BaseErrorError = (function () {
     return BaseErrorError;
 }());
 exports.BaseErrorError = BaseErrorError;
+var PostedTemplate = (function () {
+    function PostedTemplate() {
+    }
+    PostedTemplate.getAttributeTypeMap = function () {
+        return PostedTemplate.attributeTypeMap;
+    };
+    PostedTemplate.discriminator = undefined;
+    PostedTemplate.attributeTypeMap = [
+        {
+            "name": "name",
+            "baseName": "name",
+            "type": "string"
+        },
+        {
+            "name": "version",
+            "baseName": "version",
+            "type": "string"
+        },
+        {
+            "name": "template",
+            "baseName": "template",
+            "type": "any"
+        },
+        {
+            "name": "state",
+            "baseName": "state",
+            "type": "PostedTemplate.StateEnum"
+        },
+        {
+            "name": "isShareable",
+            "baseName": "isShareable",
+            "type": "boolean"
+        },
+        {
+            "name": "isPublished",
+            "baseName": "isPublished",
+            "type": "boolean"
+        },
+        {
+            "name": "tags",
+            "baseName": "tags",
+            "type": "Array<string>"
+        },
+        {
+            "name": "data",
+            "baseName": "data",
+            "type": "Array<string>"
+        }
+    ];
+    return PostedTemplate;
+}());
+exports.PostedTemplate = PostedTemplate;
+(function (PostedTemplate) {
+    var StateEnum;
+    (function (StateEnum) {
+        StateEnum[StateEnum["Draft"] = 'draft'] = "Draft";
+        StateEnum[StateEnum["Live"] = 'live'] = "Live";
+        StateEnum[StateEnum["Deprecated"] = 'deprecated'] = "Deprecated";
+    })(StateEnum = PostedTemplate.StateEnum || (PostedTemplate.StateEnum = {}));
+})(PostedTemplate = exports.PostedTemplate || (exports.PostedTemplate = {}));
+exports.PostedTemplate = PostedTemplate;
+var PostedUser = (function () {
+    function PostedUser() {
+    }
+    PostedUser.getAttributeTypeMap = function () {
+        return PostedUser.attributeTypeMap;
+    };
+    PostedUser.discriminator = undefined;
+    PostedUser.attributeTypeMap = [
+        {
+            "name": "firstName",
+            "baseName": "firstName",
+            "type": "string"
+        },
+        {
+            "name": "lastName",
+            "baseName": "lastName",
+            "type": "string"
+        },
+        {
+            "name": "team",
+            "baseName": "team",
+            "type": "Array<string>"
+        },
+        {
+            "name": "org",
+            "baseName": "org",
+            "type": "Array<string>"
+        }
+    ];
+    return PostedUser;
+}());
+exports.PostedUser = PostedUser;
+var Recent = (function () {
+    function Recent() {
+    }
+    Recent.getAttributeTypeMap = function () {
+        return Recent.attributeTypeMap;
+    };
+    Recent.discriminator = undefined;
+    Recent.attributeTypeMap = [
+        {
+            "name": "recentlyViewed",
+            "baseName": "recentlyViewed",
+            "type": "TemplateList"
+        },
+        {
+            "name": "recentlyEdited",
+            "baseName": "recentlyEdited",
+            "type": "TemplateList"
+        },
+        {
+            "name": "recentlyUsed",
+            "baseName": "recentlyUsed",
+            "type": "TagList"
+        }
+    ];
+    return Recent;
+}());
+exports.Recent = Recent;
 var ResourceCreated = (function () {
     function ResourceCreated() {
     }
@@ -178,6 +298,23 @@ var ResourceCreated = (function () {
     return ResourceCreated;
 }());
 exports.ResourceCreated = ResourceCreated;
+var TagList = (function () {
+    function TagList() {
+    }
+    TagList.getAttributeTypeMap = function () {
+        return TagList.attributeTypeMap;
+    };
+    TagList.discriminator = undefined;
+    TagList.attributeTypeMap = [
+        {
+            "name": "tags",
+            "baseName": "tags",
+            "type": "Array<string>"
+        }
+    ];
+    return TagList;
+}());
+exports.TagList = TagList;
 var Template = (function () {
     function Template() {
     }
@@ -207,8 +344,8 @@ var Template = (function () {
             "type": "string"
         },
         {
-            "name": "isPublished",
-            "baseName": "isPublished",
+            "name": "isLive",
+            "baseName": "isLive",
             "type": "boolean"
         },
         {
@@ -225,11 +362,53 @@ var Template = (function () {
             "name": "tags",
             "baseName": "tags",
             "type": "Array<string>"
+        },
+        {
+            "name": "deletedVersions",
+            "baseName": "deletedVersions",
+            "type": "Array<string>"
         }
     ];
     return Template;
 }());
 exports.Template = Template;
+var TemplateInfo = (function () {
+    function TemplateInfo() {
+    }
+    TemplateInfo.getAttributeTypeMap = function () {
+        return TemplateInfo.attributeTypeMap;
+    };
+    TemplateInfo.discriminator = undefined;
+    TemplateInfo.attributeTypeMap = [
+        {
+            "name": "id",
+            "baseName": "_id",
+            "type": "string"
+        },
+        {
+            "name": "name",
+            "baseName": "name",
+            "type": "string"
+        },
+        {
+            "name": "instance",
+            "baseName": "instance",
+            "type": "TemplatePreviewInstance"
+        },
+        {
+            "name": "tags",
+            "baseName": "tags",
+            "type": "Array<string>"
+        },
+        {
+            "name": "owner",
+            "baseName": "owner",
+            "type": "TemplatePreviewUser"
+        }
+    ];
+    return TemplateInfo;
+}());
+exports.TemplateInfo = TemplateInfo;
 var TemplateInstance = (function () {
     function TemplateInstance() {
     }
@@ -239,6 +418,11 @@ var TemplateInstance = (function () {
     TemplateInstance.discriminator = undefined;
     TemplateInstance.attributeTypeMap = [
         {
+            "name": "id",
+            "baseName": "_id",
+            "type": "string"
+        },
+        {
             "name": "json",
             "baseName": "json",
             "type": "string"
@@ -247,38 +431,55 @@ var TemplateInstance = (function () {
             "name": "version",
             "baseName": "version",
             "type": "string"
+        },
+        {
+            "name": "publishedAt",
+            "baseName": "publishedAt",
+            "type": "string"
+        },
+        {
+            "name": "state",
+            "baseName": "state",
+            "type": "TemplateInstance.StateEnum"
+        },
+        {
+            "name": "isShareable",
+            "baseName": "isShareable",
+            "type": "boolean"
+        },
+        {
+            "name": "numHits",
+            "baseName": "numHits",
+            "type": "number"
+        },
+        {
+            "name": "data",
+            "baseName": "data",
+            "type": "Array<string>"
+        },
+        {
+            "name": "updatedAt",
+            "baseName": "updatedAt",
+            "type": "string"
+        },
+        {
+            "name": "createdAt",
+            "baseName": "createdAt",
+            "type": "string"
         }
     ];
     return TemplateInstance;
 }());
 exports.TemplateInstance = TemplateInstance;
-var TemplateJSON = (function () {
-    function TemplateJSON() {
-    }
-    TemplateJSON.getAttributeTypeMap = function () {
-        return TemplateJSON.attributeTypeMap;
-    };
-    TemplateJSON.discriminator = undefined;
-    TemplateJSON.attributeTypeMap = [
-        {
-            "name": "template",
-            "baseName": "template",
-            "type": "string"
-        },
-        {
-            "name": "isPublished",
-            "baseName": "isPublished",
-            "type": "boolean"
-        },
-        {
-            "name": "name",
-            "baseName": "name",
-            "type": "string"
-        }
-    ];
-    return TemplateJSON;
-}());
-exports.TemplateJSON = TemplateJSON;
+(function (TemplateInstance) {
+    var StateEnum;
+    (function (StateEnum) {
+        StateEnum[StateEnum["Draft"] = 'draft'] = "Draft";
+        StateEnum[StateEnum["Live"] = 'live'] = "Live";
+        StateEnum[StateEnum["Deprecated"] = 'deprecated'] = "Deprecated";
+    })(StateEnum = TemplateInstance.StateEnum || (TemplateInstance.StateEnum = {}));
+})(TemplateInstance = exports.TemplateInstance || (exports.TemplateInstance = {}));
+exports.TemplateInstance = TemplateInstance;
 var TemplateList = (function () {
     function TemplateList() {
     }
@@ -296,6 +497,87 @@ var TemplateList = (function () {
     return TemplateList;
 }());
 exports.TemplateList = TemplateList;
+var TemplatePreview = (function () {
+    function TemplatePreview() {
+    }
+    TemplatePreview.getAttributeTypeMap = function () {
+        return TemplatePreview.attributeTypeMap;
+    };
+    TemplatePreview.discriminator = undefined;
+    TemplatePreview.attributeTypeMap = [
+        {
+            "name": "template",
+            "baseName": "template",
+            "type": "TemplateInfo"
+        }
+    ];
+    return TemplatePreview;
+}());
+exports.TemplatePreview = TemplatePreview;
+var TemplatePreviewInstance = (function () {
+    function TemplatePreviewInstance() {
+    }
+    TemplatePreviewInstance.getAttributeTypeMap = function () {
+        return TemplatePreviewInstance.attributeTypeMap;
+    };
+    TemplatePreviewInstance.discriminator = undefined;
+    TemplatePreviewInstance.attributeTypeMap = [
+        {
+            "name": "version",
+            "baseName": "version",
+            "type": "string"
+        },
+        {
+            "name": "json",
+            "baseName": "json",
+            "type": "string"
+        },
+        {
+            "name": "state",
+            "baseName": "state",
+            "type": "string"
+        },
+        {
+            "name": "data",
+            "baseName": "data",
+            "type": "Array<string>"
+        }
+    ];
+    return TemplatePreviewInstance;
+}());
+exports.TemplatePreviewInstance = TemplatePreviewInstance;
+var TemplatePreviewUser = (function () {
+    function TemplatePreviewUser() {
+    }
+    TemplatePreviewUser.getAttributeTypeMap = function () {
+        return TemplatePreviewUser.attributeTypeMap;
+    };
+    TemplatePreviewUser.discriminator = undefined;
+    TemplatePreviewUser.attributeTypeMap = [
+        {
+            "name": "firstName",
+            "baseName": "firstName",
+            "type": "string"
+        },
+        {
+            "name": "lastName",
+            "baseName": "lastName",
+            "type": "string"
+        },
+        {
+            "name": "team",
+            "baseName": "team",
+            "type": "Array<string>"
+        },
+        {
+            "name": "org",
+            "baseName": "org",
+            "type": "Array<string>"
+        }
+    ];
+    return TemplatePreviewUser;
+}());
+exports.TemplatePreviewUser = TemplatePreviewUser;
 var User = (function () {
     function User() {
     }
@@ -315,8 +597,18 @@ var User = (function () {
             "type": "string"
         },
         {
-            "name": "issuer",
-            "baseName": "issuer",
+            "name": "authIssuer",
+            "baseName": "authIssuer",
+            "type": "string"
+        },
+        {
+            "name": "firstName",
+            "baseName": "firstName",
+            "type": "string"
+        },
+        {
+            "name": "lastName",
+            "baseName": "lastName",
             "type": "string"
         },
         {
@@ -327,6 +619,21 @@ var User = (function () {
         {
             "name": "org",
             "baseName": "org",
+            "type": "Array<string>"
+        },
+        {
+            "name": "recentlyViewed",
+            "baseName": "recentlyViewed",
+            "type": "Array<string>"
+        },
+        {
+            "name": "recentlyEdited",
+            "baseName": "recentlyEdited",
+            "type": "Array<string>"
+        },
+        {
+            "name": "recentTags",
+            "baseName": "recentTags",
             "type": "Array<string>"
         }
     ];
@@ -350,15 +657,25 @@ var UserList = (function () {
     return UserList;
 }());
 exports.UserList = UserList;
-var enumsMap = {};
+var enumsMap = {
+    "PostedTemplate.StateEnum": PostedTemplate.StateEnum,
+    "TemplateInstance.StateEnum": TemplateInstance.StateEnum,
+};
 var typeMap = {
     "BaseError": BaseError,
     "BaseErrorError": BaseErrorError,
+    "PostedTemplate": PostedTemplate,
+    "PostedUser": PostedUser,
+    "Recent": Recent,
     "ResourceCreated": ResourceCreated,
+    "TagList": TagList,
     "Template": Template,
+    "TemplateInfo": TemplateInfo,
     "TemplateInstance": TemplateInstance,
-    "TemplateJSON": TemplateJSON,
     "TemplateList": TemplateList,
+    "TemplatePreview": TemplatePreview,
+    "TemplatePreviewInstance": TemplatePreviewInstance,
+    "TemplatePreviewUser": TemplatePreviewUser,
     "User": User,
     "UserList": UserList,
 };
@@ -461,54 +778,7 @@ var TemplateApi = (function () {
     TemplateApi.prototype.setApiKey = function (key, value) {
         this.authentications[TemplateApiApiKeys[key]].apiKey = value;
     };
-    TemplateApi.prototype.templateById = function (templateId, options) {
-        if (options === void 0) { options = {}; }
-        var localVarPath = this.basePath + '/template/{templateId}'
-            .replace('{' + 'templateId' + '}', encodeURIComponent(String(templateId)));
-        var localVarQueryParameters = {};
-        var localVarHeaderParams = Object.assign({}, this.defaultHeaders);
-        var localVarFormParams = {};
-        if (templateId === null || templateId === undefined) {
-            throw new Error('Required parameter templateId was null or undefined when calling templateById.');
-        }
-        Object.assign(localVarHeaderParams, options.headers);
-        var localVarUseFormData = false;
-        var localVarRequestOptions = {
-            method: 'GET',
-            qs: localVarQueryParameters,
-            headers: localVarHeaderParams,
-            uri: localVarPath,
-            useQuerystring: this._useQuerystring,
-            json: true,
-        };
-        this.authentications.bearer_auth.applyToRequest(localVarRequestOptions);
-        this.authentications.default.applyToRequest(localVarRequestOptions);
-        if (Object.keys(localVarFormParams).length) {
-            if (localVarUseFormData) {
-                localVarRequestOptions.formData = localVarFormParams;
-            }
-            else {
-                localVarRequestOptions.form = localVarFormParams;
-            }
-        }
-        return new Promise(function (resolve, reject) {
-            localVarRequest(localVarRequestOptions, function (error, response, body) {
-                if (error) {
-                    reject(error);
-                }
-                else {
-                    body = ObjectSerializer.deserialize(body, "TemplateList");
-                    if (response.statusCode && response.statusCode >= 200 && response.statusCode <= 299) {
-                        resolve({ response: response, body: body });
-                    }
-                    else {
-                        reject({ response: response, body: body });
-                    }
-                }
-            });
-        });
-    };
-    TemplateApi.prototype.templateGet = function (isPublished, name, version, owned, options) {
+    TemplateApi.prototype.allTemplates = function (isPublished, name, version, owned, sortBy, sortOrder, tags, options) {
         if (options === void 0) { options = {}; }
         var localVarPath = this.basePath + '/template';
         var localVarQueryParameters = {};
@@ -526,6 +796,15 @@ var TemplateApi = (function () {
         if (owned !== undefined) {
             localVarQueryParameters['owned'] = ObjectSerializer.serialize(owned, "boolean");
         }
+        if (sortBy !== undefined) {
+            localVarQueryParameters['sortBy'] = ObjectSerializer.serialize(sortBy, "'alphabetical' | 'dateCreated' | 'dateUpdated'");
+        }
+        if (sortOrder !== undefined) {
+            localVarQueryParameters['sortOrder'] = ObjectSerializer.serialize(sortOrder, "'ascending' | 'descending'");
+        }
+        if (tags !== undefined) {
+            localVarQueryParameters['tags'] = ObjectSerializer.serialize(tags, "string");
+        }
         Object.assign(localVarHeaderParams, options.headers);
         var localVarUseFormData = false;
         var localVarRequestOptions = {
@@ -563,14 +842,14 @@ var TemplateApi = (function () {
             });
         });
     };
-    TemplateApi.prototype.templatePost = function (body, options) {
+    TemplateApi.prototype.createTemplate = function (body, options) {
         if (options === void 0) { options = {}; }
         var localVarPath = this.basePath + '/template';
         var localVarQueryParameters = {};
         var localVarHeaderParams = Object.assign({}, this.defaultHeaders);
         var localVarFormParams = {};
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling templatePost.');
+            throw new Error('Required parameter body was null or undefined when calling createTemplate.');
         }
         Object.assign(localVarHeaderParams, options.headers);
         var localVarUseFormData = false;
@@ -581,7 +860,7 @@ var TemplateApi = (function () {
             uri: localVarPath,
             useQuerystring: this._useQuerystring,
             json: true,
-            body: ObjectSerializer.serialize(body, "TemplateJSON")
+            body: ObjectSerializer.serialize(body, "PostedTemplate")
         };
         this.authentications.bearer_auth.applyToRequest(localVarRequestOptions);
         this.authentications.default.applyToRequest(localVarRequestOptions);
@@ -610,7 +889,7 @@ var TemplateApi = (function () {
             });
         });
     };
-    TemplateApi.prototype.templateTemplateIdPost = function (templateId, body, options) {
+    TemplateApi.prototype.deleteTemplateById = function (templateId, version, options) {
         if (options === void 0) { options = {}; }
         var localVarPath = this.basePath + '/template/{templateId}'
             .replace('{' + 'templateId' + '}', encodeURIComponent(String(templateId)));
@@ -618,21 +897,61 @@ var TemplateApi = (function () {
         var localVarHeaderParams = Object.assign({}, this.defaultHeaders);
         var localVarFormParams = {};
         if (templateId === null || templateId === undefined) {
-            throw new Error('Required parameter templateId was null or undefined when calling templateTemplateIdPost.');
+            throw new Error('Required parameter templateId was null or undefined when calling deleteTemplateById.');
         }
-        if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling templateTemplateIdPost.');
+        if (version !== undefined) {
+            localVarQueryParameters['version'] = ObjectSerializer.serialize(version, "string");
         }
         Object.assign(localVarHeaderParams, options.headers);
         var localVarUseFormData = false;
         var localVarRequestOptions = {
-            method: 'POST',
+            method: 'DELETE',
             qs: localVarQueryParameters,
             headers: localVarHeaderParams,
             uri: localVarPath,
             useQuerystring: this._useQuerystring,
             json: true,
-            body: ObjectSerializer.serialize(body, "TemplateJSON")
+        };
+        this.authentications.default.applyToRequest(localVarRequestOptions);
+        if (Object.keys(localVarFormParams).length) {
+            if (localVarUseFormData) {
+                localVarRequestOptions.formData = localVarFormParams;
+            }
+            else {
+                localVarRequestOptions.form = localVarFormParams;
+            }
+        }
+        return new Promise(function (resolve, reject) {
+            localVarRequest(localVarRequestOptions, function (error, response, body) {
+                if (error) {
+                    reject(error);
+                }
+                else {
+                    if (response.statusCode && response.statusCode >= 200 && response.statusCode <= 299) {
+                        resolve({ response: response, body: body });
+                    }
+                    else {
+                        reject({ response: response, body: body });
+                    }
+                }
+            });
+        });
+    };
+    TemplateApi.prototype.getRecent = function (options) {
+        if (options === void 0) { options = {}; }
+        var localVarPath = this.basePath + '/template/recent';
+        var localVarQueryParameters = {};
+        var localVarHeaderParams = Object.assign({}, this.defaultHeaders);
+        var localVarFormParams = {};
+        Object.assign(localVarHeaderParams, options.headers);
+        var localVarUseFormData = false;
+        var localVarRequestOptions = {
+            method: 'GET',
+            qs: localVarQueryParameters,
+            headers: localVarHeaderParams,
+            uri: localVarPath,
+            useQuerystring: this._useQuerystring,
+            json: true,
         };
         this.authentications.bearer_auth.applyToRequest(localVarRequestOptions);
         this.authentications.default.applyToRequest(localVarRequestOptions);
@@ -650,6 +969,162 @@ var TemplateApi = (function () {
                     reject(error);
                 }
                 else {
+                    body = ObjectSerializer.deserialize(body, "Recent");
+                    if (response.statusCode && response.statusCode >= 200 && response.statusCode <= 299) {
+                        resolve({ response: response, body: body });
+                    }
+                    else {
+                        reject({ response: response, body: body });
+                    }
+                }
+            });
+        });
+    };
+    TemplateApi.prototype.postTemplateById = function (templateId, body, options) {
+        if (options === void 0) { options = {}; }
+        var localVarPath = this.basePath + '/template/{templateId}'
+            .replace('{' + 'templateId' + '}', encodeURIComponent(String(templateId)));
+        var localVarQueryParameters = {};
+        var localVarHeaderParams = Object.assign({}, this.defaultHeaders);
+        var localVarFormParams = {};
+        if (templateId === null || templateId === undefined) {
+            throw new Error('Required parameter templateId was null or undefined when calling postTemplateById.');
+        }
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling postTemplateById.');
+        }
+        Object.assign(localVarHeaderParams, options.headers);
+        var localVarUseFormData = false;
+        var localVarRequestOptions = {
+            method: 'POST',
+            qs: localVarQueryParameters,
+            headers: localVarHeaderParams,
+            uri: localVarPath,
+            useQuerystring: this._useQuerystring,
+            json: true,
+            body: ObjectSerializer.serialize(body, "PostedTemplate")
+        };
+        this.authentications.bearer_auth.applyToRequest(localVarRequestOptions);
+        this.authentications.default.applyToRequest(localVarRequestOptions);
+        if (Object.keys(localVarFormParams).length) {
+            if (localVarUseFormData) {
+                localVarRequestOptions.formData = localVarFormParams;
+            }
+            else {
+                localVarRequestOptions.form = localVarFormParams;
+            }
+        }
+        return new Promise(function (resolve, reject) {
+            localVarRequest(localVarRequestOptions, function (error, response, body) {
+                if (error) {
+                    reject(error);
+                }
+                else {
+                    if (response.statusCode && response.statusCode >= 200 && response.statusCode <= 299) {
+                        resolve({ response: response, body: body });
+                    }
+                    else {
+                        reject({ response: response, body: body });
+                    }
+                }
+            });
+        });
+    };
+    TemplateApi.prototype.templateById = function (templateId, isPublished, version, options) {
+        if (options === void 0) { options = {}; }
+        var localVarPath = this.basePath + '/template/{templateId}'
+            .replace('{' + 'templateId' + '}', encodeURIComponent(String(templateId)));
+        var localVarQueryParameters = {};
+        var localVarHeaderParams = Object.assign({}, this.defaultHeaders);
+        var localVarFormParams = {};
+        if (templateId === null || templateId === undefined) {
+            throw new Error('Required parameter templateId was null or undefined when calling templateById.');
+        }
+        if (isPublished !== undefined) {
+            localVarQueryParameters['isPublished'] = ObjectSerializer.serialize(isPublished, "boolean");
+        }
+        if (version !== undefined) {
+            localVarQueryParameters['version'] = ObjectSerializer.serialize(version, "string");
+        }
+        Object.assign(localVarHeaderParams, options.headers);
+        var localVarUseFormData = false;
+        var localVarRequestOptions = {
+            method: 'GET',
+            qs: localVarQueryParameters,
+            headers: localVarHeaderParams,
+            uri: localVarPath,
+            useQuerystring: this._useQuerystring,
+            json: true,
+        };
+        this.authentications.bearer_auth.applyToRequest(localVarRequestOptions);
+        this.authentications.default.applyToRequest(localVarRequestOptions);
+        if (Object.keys(localVarFormParams).length) {
+            if (localVarUseFormData) {
+                localVarRequestOptions.formData = localVarFormParams;
+            }
+            else {
+                localVarRequestOptions.form = localVarFormParams;
+            }
+        }
+        return new Promise(function (resolve, reject) {
+            localVarRequest(localVarRequestOptions, function (error, response, body) {
+                if (error) {
+                    reject(error);
+                }
+                else {
+                    body = ObjectSerializer.deserialize(body, "TemplateList");
+                    if (response.statusCode && response.statusCode >= 200 && response.statusCode <= 299) {
+                        resolve({ response: response, body: body });
+                    }
+                    else {
+                        reject({ response: response, body: body });
+                    }
+                }
+            });
+        });
+    };
+    TemplateApi.prototype.templatePreview = function (templateId, version, options) {
+        if (options === void 0) { options = {}; }
+        var localVarPath = this.basePath + '/template/{templateId}/preview'
+            .replace('{' + 'templateId' + '}', encodeURIComponent(String(templateId)));
+        var localVarQueryParameters = {};
+        var localVarHeaderParams = Object.assign({}, this.defaultHeaders);
+        var localVarFormParams = {};
+        if (templateId === null || templateId === undefined) {
+            throw new Error('Required parameter templateId was null or undefined when calling templatePreview.');
+        }
+        if (version === null || version === undefined) {
+            throw new Error('Required parameter version was null or undefined when calling templatePreview.');
+        }
+        if (version !== undefined) {
+            localVarQueryParameters['version'] = ObjectSerializer.serialize(version, "string");
+        }
+        Object.assign(localVarHeaderParams, options.headers);
+        var localVarUseFormData = false;
+        var localVarRequestOptions = {
+            method: 'GET',
+            qs: localVarQueryParameters,
+            headers: localVarHeaderParams,
+            uri: localVarPath,
+            useQuerystring: this._useQuerystring,
+            json: true,
+        };
+        this.authentications.default.applyToRequest(localVarRequestOptions);
+        if (Object.keys(localVarFormParams).length) {
+            if (localVarUseFormData) {
+                localVarRequestOptions.formData = localVarFormParams;
+            }
+            else {
+                localVarRequestOptions.form = localVarFormParams;
+            }
+        }
+        return new Promise(function (resolve, reject) {
+            localVarRequest(localVarRequestOptions, function (error, response, body) {
+                if (error) {
+                    reject(error);
+                }
+                else {
+                    body = ObjectSerializer.deserialize(body, "TemplatePreview");
                     if (response.statusCode && response.statusCode >= 200 && response.statusCode <= 299) {
                         resolve({ response: response, body: body });
                     }
@@ -785,6 +1260,52 @@ var UserApi = (function () {
                 }
                 else {
                     body = ObjectSerializer.deserialize(body, "UserList");
+                    if (response.statusCode && response.statusCode >= 200 && response.statusCode <= 299) {
+                        resolve({ response: response, body: body });
+                    }
+                    else {
+                        reject({ response: response, body: body });
+                    }
+                }
+            });
+        });
+    };
+    UserApi.prototype.userPost = function (body, options) {
+        if (options === void 0) { options = {}; }
+        var localVarPath = this.basePath + '/user';
+        var localVarQueryParameters = {};
+        var localVarHeaderParams = Object.assign({}, this.defaultHeaders);
+        var localVarFormParams = {};
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling userPost.');
+        }
+        Object.assign(localVarHeaderParams, options.headers);
+        var localVarUseFormData = false;
+        var localVarRequestOptions = {
+            method: 'POST',
+            qs: localVarQueryParameters,
+            headers: localVarHeaderParams,
+            uri: localVarPath,
+            useQuerystring: this._useQuerystring,
+            json: true,
+            body: ObjectSerializer.serialize(body, "PostedUser")
+        };
+        this.authentications.bearer_auth.applyToRequest(localVarRequestOptions);
+        this.authentications.default.applyToRequest(localVarRequestOptions);
+        if (Object.keys(localVarFormParams).length) {
+            if (localVarUseFormData) {
+                localVarRequestOptions.formData = localVarFormParams;
+            }
+            else {
+                localVarRequestOptions.form = localVarFormParams;
+            }
+        }
+        return new Promise(function (resolve, reject) {
+            localVarRequest(localVarRequestOptions, function (error, response, body) {
+                if (error) {
+                    reject(error);
+                }
+                else {
                     if (response.statusCode && response.statusCode >= 200 && response.statusCode <= 299) {
                         resolve({ response: response, body: body });
                     }
