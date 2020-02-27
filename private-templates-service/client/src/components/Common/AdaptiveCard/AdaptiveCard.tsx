@@ -51,14 +51,13 @@ export function renderAdaptiveCard(template: Template): any {
 cleanTemplate accepts a template object. This method strips the object of the unncessary '\\\' contained in the object and removes the 
 extra characters before and after the actual JSON object. It then parses the string into JSON and returns the JSON object.  
 */
+
 function cleanTemplate(temp: TemplateInstance): Template {
-  const templateString = JSON.stringify(temp.json);
-  const replaceChar = templateString.replace(/\\\\\\/g, '');
-  const trimTemp = replaceChar.slice(3, replaceChar.length - 3);
+  const json = JSON.stringify(temp.json);
   let jsonTemp = {};
 
   try {
-    jsonTemp = JSON.parse(trimTemp);
+    jsonTemp = JSON.parse(json);
   } catch {
     console.log("Invalid Adaptive Cards JSON. Card not parsed.");
     const errorMessageJSON = JSON.stringify(require('../../../assets/default-adaptivecards/defaultErrorCard.json'));

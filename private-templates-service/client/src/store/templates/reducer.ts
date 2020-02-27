@@ -1,12 +1,12 @@
-import { BatchTemplatesState, AllTemplateAction, REQUEST_TEMPLATES_GET, REQUEST_TEMPLATE_GET_SUCCESS, REQUEST_TEMPLATE_GET_FAIL } from "./types";
+import { AllTemplateState, AllTemplateAction, REQUEST_TEMPLATES_GET, REQUEST_TEMPLATE_GET_SUCCESS, REQUEST_TEMPLATE_GET_FAIL } from "./types";
 import { TemplateList } from "adaptive-templating-service-typescript-node";
 
-const initialState: BatchTemplatesState = {
+const initialState: AllTemplateState = {
   isFetching: false,
-  templateList: new TemplateList(),
+  templates: new TemplateList(),
 }
 
-export function allTemplateReducer(state = initialState, action: AllTemplateAction): BatchTemplatesState {
+export function allTemplateReducer(state = initialState, action: AllTemplateAction): AllTemplateState {
   switch (action.type) {
     case REQUEST_TEMPLATES_GET:
       return {
@@ -17,13 +17,13 @@ export function allTemplateReducer(state = initialState, action: AllTemplateActi
       return {
         ...state,
         isFetching: false,
-        templateList: action.cards
+        templates: action.cards
       }
     case REQUEST_TEMPLATE_GET_FAIL:
       return {
         ...state,
         isFetching: false,
-        templateList: new TemplateList()
+        templates: new TemplateList()
       }
     default:
       return state;
