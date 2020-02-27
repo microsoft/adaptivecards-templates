@@ -1,10 +1,10 @@
 import React from 'react';
 import { ActionButton, IconButton } from 'office-ui-fabric-react';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
 
 import { Template } from 'adaptive-templating-service-typescript-node';
 
 import PublishModal from '../../../Common/PublishModal';
+import Tags from '../../../Common/Tags';
 
 import {
   OuterWrapper,
@@ -24,13 +24,6 @@ import {
   IconWrapper,
   UsageNumber,
   TagsWrapper,
-  Tag,
-  TagCloseIcon,
-  TagText,
-  AddTagWrapper,
-  AddTagInput,
-  TagAddIcon,
-  TagSubmitIcon,
 } from './styled';
 
 
@@ -74,8 +67,6 @@ interface Props {
 
 interface State {
   isPublishOpen: boolean;
-  isAdding: boolean;
-  newTagName: string;
 }
 
 class TemplateInfo extends React.Component<Props, State> {
@@ -85,42 +76,11 @@ class TemplateInfo extends React.Component<Props, State> {
     super(props);
     this.state = {
       isPublishOpen: false,
-      isAdding: false,
-      newTagName: '',
     }
   }
 
   toggleModal = () => {
     this.setState({ isPublishOpen: !this.state.isPublishOpen });
-  }
-
-  tagRemove = (tag: string) => {
-    console.log(tag);
-  }
-
-  openNewTag = () => {
-    this.setState({ isAdding: true }, () => {
-      if (this.addTagInput && this.addTagInput.current) {
-        this.addTagInput.current.focus();
-      }
-    });
-  }
-
-  handleChange = (event: React.FormEvent<HTMLInputElement>) => {
-    if (event && event.currentTarget) {
-      this.setState({ newTagName: event.currentTarget.value });
-    }
-  }
-
-  submitNewTag = () => {
-    if (this.addTagInput && this.addTagInput.current) {
-      const tag = this.addTagInput.current.value;
-      console.log("new tag submitted: ", tag);
-    }
-  }
-
-  closeAddTag = () => {
-    this.setState({ isAdding: false });
   }
 
   render() {
@@ -130,9 +90,6 @@ class TemplateInfo extends React.Component<Props, State> {
       tags,
     } = this.props.template;
     const { onClose } = this.props;
-    const {
-      isAdding
-    } = this.state;
 
     return (
       <OuterWrapper>
@@ -175,17 +132,7 @@ class TemplateInfo extends React.Component<Props, State> {
             <CardHeader>Tags</CardHeader>
             <CardBody>
               <TagsWrapper>
-                {tags && tags.map((tag: string) => (
-                  <Tag key={tag}>
-                    <TagText>{tag}</TagText>
-                    <TagCloseIcon key={tag} iconName="ChromeClose" onClick={() => this.tagRemove(tag)} />
-                  </Tag>
-                ))}
-                <AddTagWrapper onSubmit={this.submitNewTag} open={isAdding}>
-                  <AddTagInput ref={this.addTagInput} open={isAdding} value={this.state.newTagName} onChange={this.handleChange} />
-                  <TagAddIcon iconName="Add" onClick={this.openNewTag} open={isAdding} />
-                  <TagSubmitIcon iconName="CheckMark" onClick={this.submitNewTag} open={isAdding} />
-                </AddTagWrapper>
+                <Tags tags={tags || []} allowAddTag={true} />
               </TagsWrapper>
             </CardBody>
           </Card>
