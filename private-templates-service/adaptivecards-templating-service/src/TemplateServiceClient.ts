@@ -6,7 +6,7 @@ import { TemplateError, ApiError, ServiceErrorMessage } from "./models/errorMode
 import { StorageProvider } from ".";
 import { ITemplate, JSONResponse, ITemplateInstance, IUser } from ".";
 import { SortBy, SortOrder, TemplatePreview, TemplateState, TemplateInstancePreview, UserPreview, TagList } from "./models/models";
-import { updateTemplateToLatestInstance, stringifyJSONArray, removeMostRecentTemplate, getTemplateVersion, JSONStringArray, incrementVersion,  setTemplateInstanceParam } from "./util/templateutils";
+import { updateTemplateToLatestInstance, stringifyJSONArray, removeMostRecentTemplate, getTemplateVersion, JSONStringArray, incrementVersion,  setTemplateInstanceParam, anyVersionsLive } from "./util/templateutils";
 
 export class TemplateServiceClient {
   private storageProvider: StorageProvider;
@@ -376,18 +376,20 @@ export class TemplateServiceClient {
     let existingTemplate: ITemplate = response.result[0];
     let templateName: string = name ? name : existingTemplate.name;
     let existingTags = existingTemplate.tags;
+    
     if (tag) {
       existingTags!.push(tag);
     }
     let tags: string[] | undefined = tag ? existingTags : tagList;
-    let templateState: TemplateState | undefined = isPublished ? TemplateState.live : state;
+    let templateState: TemplateState | undefined =  state;
+
 
     let templateInstance: ITemplateInstance = {
       json: template ? template : JSON.parse("{}"),
       version: version || "1.0",
       state: templateState,
       data: [],
-      publishedAt: isPublished ? new Date(Date.now()) : undefined,
+      publishedAt: state === TemplateState.live ? new Date(Date.now()) : undefined,
       updatedAt: new Date(Date.now()),
       numHits: 0,
       isShareable: isShareable
@@ -399,24 +401,46 @@ export class TemplateServiceClient {
       let added = false;
       for (let instance of existingTemplate.instances) {
         if (instance.version === templateInstance.version) { 
+          
           if(instance.state === TemplateState.deprecated){
             // the template that is trying to be modified is deprecated
-            templateInstances.push(templateInstance); 
+            templateInstances.push(instance); 
             // pushing existing deprecated version back
             let templateData: JSON[] | undefined = data ? [data] : dataList ? dataList : undefined;
             version = incrementVersion(existingTemplate);
-            templateInstance = setTemplateInstanceParam(templateInstance,templateData,templateState,isShareable,version)
+            templateInstance = setTemplateInstanceParam(templateInstance,templateData,templateState,isShareable,version);
             templateInstances.push(templateInstance); 
+            added = true;
             continue;
           }
-
+          if(instance.state === TemplateState.live) {
+            if(templateState === TemplateState.deprecated ) { 
+              //set the template to deprecated
+              let templateData: JSON[] | undefined = data ? [data] : dataList ? dataList : undefined;
+              templateInstance = setTemplateInstanceParam(templateInstance,templateData,templateState,isShareable,version);
+              templateInstances.push(templateInstance);
+              added = true;
+              continue;
+            }
+            else{
+              templateInstances.push(instance); 
+              // pushing existing deprecated version back
+              let templateData: JSON[] | undefined = data ? [data] : dataList ? dataList : undefined;
+              version = incrementVersion(existingTemplate);
+              templateInstance = setTemplateInstanceParam(templateInstance,templateData,templateState,isShareable,version);
+              templateInstances.push(templateInstance); 
+              added = true;
+              continue;
+            }
+          }
+          
           let existingData = instance.data;
           if (data) {
             existingData!.push(data);
           }
           let templateData: JSON[] | undefined = data ? existingData : dataList ? dataList : undefined;
           templateInstance.numHits = instance.numHits;
-          templateInstance.state = isPublished === false && templateInstance.state !== TemplateState.deprecated && templateInstance.state !== TemplateState.draft &&
+          templateInstance.state = templateInstance.state !== TemplateState.deprecated && templateInstance.state !== TemplateState.draft &&
                                   instance.state !== TemplateState.draft? TemplateState.draft : 
                                   templateInstance.state || instance.state;
           templateInstance.data = templateData || instance.data;
@@ -438,14 +462,14 @@ export class TemplateServiceClient {
     } else {
       templateInstances.push(templateInstance);
     }
-
     const newTemplate: Partial<ITemplate> = {
       name: templateName,
       instances: templateInstances,
       tags: tags,
       owner: this.ownerID!,
       updatedAt: new Date(Date.now()),
-      isLive: existingTemplate.isLive || isPublished
+      //isLive: existingTemplate.isLive || isPublished || state === TemplateState.live
+      isLive: anyVersionsLive(templateInstances)
     };
 
     return this.storageProvider.updateTemplate(queryTemplate, newTemplate);

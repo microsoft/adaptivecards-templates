@@ -125,3 +125,14 @@ export function setTemplateInstanceParam(templateInstance: ITemplateInstance, te
   templateInstance.version = version || "1.0";
   return templateInstance;
 }
+
+export function anyVersionsLive(templates: ITemplateInstance[]): boolean { 
+  if(templates){
+    for(let instance of templates){ 
+      if(instance.state === TemplateState.live){
+        return true;
+      }
+    }
+  }
+  return false;
+}
