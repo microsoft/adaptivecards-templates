@@ -99,8 +99,9 @@ class TemplateInfo extends React.Component<Props, State> {
 
   onVersionChange = (event: React.FormEvent<HTMLDivElement>, option?:IDropdownOption) => {
     if (!option) return;
-    this.setState({ version: option.key.toString() });
-    this.props.onSwitchVersion(option.key.toString());
+    let version = option.key.toString();
+    this.setState({ version: version });
+    this.props.onSwitchVersion(version);
   }
 
   render() {
