@@ -1,7 +1,7 @@
 import React from 'react';
-import { ActionButton } from 'office-ui-fabric-react';
+import { ActionButton, IDropdownOption } from 'office-ui-fabric-react';
 
-import { Template } from 'adaptive-templating-service-typescript-node';
+import { Template, TemplateInstance } from 'adaptive-templating-service-typescript-node';
 
 import PublishModal from '../../../Common/PublishModal';
 
@@ -22,7 +22,10 @@ import {
   CardBody,
   IconWrapper,
   UsageNumber,
+  StyledVersionDropdown,
+  DropdownStyles
 } from './styled';
+import { THEME } from '../../../../globalStyles';
 
 
 const buttons = [
@@ -66,26 +69,46 @@ const cards = [
 interface Props {
   template: Template;
   onClose: () => void;
+  onSwitchVersion: (templateVersion: string) => void;
 }
 
 interface State {
   isPublishOpen: boolean;
+  version: string;
 }
 
 class TemplateInfo extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { isPublishOpen: false }
+    this.state = { isPublishOpen: false, version: "1.0" }
   }
 
   toggleModal = () => {
     this.setState({ isPublishOpen: !this.state.isPublishOpen });
   }
 
+  versionList = (instances: TemplateInstance[] | undefined, excludedVersion?: string): IDropdownOption[] => {
+    if (!instances) return [];
+    let options: IDropdownOption[] = [];
+    for (let instance of instances){
+      if (!instance.version) continue;
+      if (excludedVersion && instance.version === excludedVersion) continue;
+      options.push({key: instance.version, text: `Version ${instance.version}`});
+    }
+    return options;
+  }
+
+  onVersionChange = (event: React.FormEvent<HTMLDivElement>, option?:IDropdownOption) => {
+    if (!option) return;
+    this.setState({ version: option.key.toString() });
+    this.props.onSwitchVersion(option.key.toString());
+  }
+
   render() {
     const {
       isLive,
-      createdAt
+      createdAt, 
+      instances,
     } = this.props.template;
     const {
       onClose
@@ -96,7 +119,15 @@ class TemplateInfo extends React.Component<Props, State> {
         <HeaderWrapper>
           <TopRowWrapper>
             <TitleWrapper>
-              <Title>Version 1.0.0</Title>
+            <Title>
+                <StyledVersionDropdown
+                  placeholder = {`Version ${this.state.version}`}
+                  options = {this.versionList(instances)}
+                  onChange = {this.onVersionChange}
+                  theme = {THEME.LIGHT}
+                  styles = {DropdownStyles}
+                />
+              </Title>
               <StatusIndicator isPublished={isLive} />
               <Status>{isLive ? 'Published' : 'Draft'}</Status>
             </TitleWrapper>
@@ -129,7 +160,7 @@ class TemplateInfo extends React.Component<Props, State> {
             ))}
           </RowWrapper>
         </MainContentWrapper>
-        {this.state.isPublishOpen && <PublishModal toggleModal={this.toggleModal} template={this.props.template} />}
+        {this.state.isPublishOpen && <PublishModal toggleModal={this.toggleModal} template={this.props.template} templateVersion={this.state.version}/>}
       </OuterWrapper>
     );
   }
