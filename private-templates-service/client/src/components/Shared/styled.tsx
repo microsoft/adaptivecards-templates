@@ -27,7 +27,7 @@ export const ModalWrapper = styled.div`
 export const ACPanel = styled.div`
   flex: 1 0 auto;
   display: flex;
-  width: 50%;
+  width: 60%;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -40,7 +40,7 @@ export const ACWrapper = styled.div`
 export const DescriptorWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 50%;
+  width: 40%;
   align-items: stretch;
   flex: 1 0 auto;
   background: ${COLORS.WHITE};

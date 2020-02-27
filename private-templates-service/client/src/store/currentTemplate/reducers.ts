@@ -10,8 +10,7 @@ import {
   FAILURE_EXISTING_TEMPLATE_UPDATE,
   GET_TEMPLATE,
   GET_TEMPLATE_SUCCESS,
-  GET_TEMPLATE_FAILURE,
-  ASSIGN_TEMPLATE_INSTANCE,
+  GET_TEMPLATE_FAILURE
 } from './types';
 
 const initialState: CurrentTemplateState = {
@@ -19,8 +18,7 @@ const initialState: CurrentTemplateState = {
   templateJSON: undefined,
   templateName: undefined,
   sampleDataJSON: undefined,
-  isFetching: false,
-  templateInstance: undefined
+  isFetching: false
 };
 
 export function currentTemplateReducer(state = initialState, action: CurrentTemplateAction): CurrentTemplateState {
@@ -95,11 +93,6 @@ export function currentTemplateReducer(state = initialState, action: CurrentTemp
         ...state,
         templateID: undefined,
         isFetching: false,
-      }
-    case ASSIGN_TEMPLATE_INSTANCE:
-      return {
-        ...state,
-        templateInstance: action.templateInstance
       }
     default:
       return state;

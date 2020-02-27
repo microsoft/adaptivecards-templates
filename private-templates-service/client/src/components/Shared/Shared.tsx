@@ -1,23 +1,25 @@
 import React, { useEffect } from 'react';
-import NavBar from '../NavBar/NavBar';
-import { setPage } from '../../store/page/actions';
-import { connect } from "react-redux";
-import { RootState } from '../../store/rootReducer';
-import requireAuthentication from '../../utils/requireAuthentication';
-import { setSearchBarVisible } from '../../store/search/actions';
-import { ModalBackdrop, ModalWrapper, ACPanel, ACWrapper } from './styled';
-import { DescriptorWrapper } from '../Dashboard/PreviewModal/styled';
-import TemplateSourceInfo from './TemplateSourceInfo';
-import AdaptiveCard from '../Common/AdaptiveCard';
 import { useParams } from 'react-router-dom';
-import { getTemplate, getTemplateInstance } from '../../store/currentTemplate/actions';
+
+import AdaptiveCard from '../Common/AdaptiveCard';
+import NavBar from '../NavBar/NavBar';
+import TemplateSourceInfo from './TemplateSourceInfo';
+import requireAuthentication from '../../utils/requireAuthentication';
+
+import { connect } from "react-redux";
+import { setPage } from '../../store/page/actions';
+import { RootState } from '../../store/rootReducer';
+import { setSearchBarVisible } from '../../store/search/actions';
+import { getTemplate } from '../../store/currentTemplate/actions';
+
+import { ModalBackdrop, ModalWrapper, ACPanel, ACWrapper, DescriptorWrapper } from './styled';
+
 import { Template, TemplateInstance } from 'adaptive-templating-service-typescript-node';
 
 const mapStateToProps = (state: RootState) => {
   return {
     currentPageTitle: state.page.currentPageTitle,
-    template: state.currentTemplate.template,
-    templateInstance: state.currentTemplate.templateInstance
+    template: state.currentTemplate.template
   };
 };
 
@@ -31,9 +33,6 @@ const mapDispatchToProps = (dispatch: any) => {
     },
     getTemplate: (templateID: string) => {
       dispatch(getTemplate(templateID));
-    },
-    assignTemplateInstance: (version?: string) => {
-      dispatch(getTemplateInstance(version));
     }
   };
 };
@@ -41,18 +40,16 @@ const mapDispatchToProps = (dispatch: any) => {
 interface SharedComponentProps {
   currentPageTitle: string;
   template: Template;
-  templateInstance?: TemplateInstance;
   authButtonMethod: () => Promise<void>;
   setPage: (currentPageTitle: string, currentPage: string) => void;
   setSearchBarVisible: (isSearchBarVisible: boolean) => void;
   getTemplate: (templateID: string) => void;
-  assignTemplateInstance: (version?: string) => void;
 }
 
 const Shared = (props: SharedComponentProps) => {
 
   let { uuid, version } = useParams();
-  //let templateInstance: TemplateInstance | undefined = undefined;
+  let templateInstance: TemplateInstance | undefined = undefined;
   props.setPage((props.template !== undefined && props.template.name &&
     props.template.name !== "") ? props.template.name : "Preview", "sharedPage");
   props.setSearchBarVisible(false);
@@ -63,13 +60,19 @@ const Shared = (props: SharedComponentProps) => {
     }
   }, [uuid]);
 
-  useEffect(() => {
-    if (props.template !== undefined && props.template.instances !== undefined &&
-      props.template.instances !== null && props.template.instances.length > 0) {
-      props.assignTemplateInstance(version);
+  if (props.template !== undefined && props.template.instances && props.template.instances.length > 0) {
+    if (version) {
+      for (let i = 0; i < props.template.instances.length; i++) {
+        if (props.template.instances[i].version === version) {
+          templateInstance = props.template.instances[i];
+          break;
+        }
+      }
     }
-
-  }, [props.template]);
+    else {
+      templateInstance = props.template.instances[props.template.instances.length - 1];
+    }
+  }
 
   return (
     <React.Fragment>
@@ -82,7 +85,7 @@ const Shared = (props: SharedComponentProps) => {
             </ACWrapper>
           </ACPanel>
           <DescriptorWrapper>
-            <TemplateSourceInfo templateJSON={props.templateInstance !== undefined ? props.templateInstance['json'] : ''}>
+            <TemplateSourceInfo templateJSON={templateInstance !== undefined ? templateInstance['json'] : ''}>
             </TemplateSourceInfo>
           </DescriptorWrapper>
         </ModalWrapper>

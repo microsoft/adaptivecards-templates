@@ -3,9 +3,6 @@ import * as AdaptiveCards from "adaptivecards";
 import { Card } from './styled';
 import markdownit from "markdown-it";
 import { Template, TemplateInstance } from 'adaptive-templating-service-typescript-node';
-import { getTemplateInstance } from '../../../store/currentTemplate/actions';
-import { connect } from 'react-redux';
-import { RootState } from '../../../store/rootReducer';
 
 interface Props {
   onClick?: () => void;
@@ -82,7 +79,6 @@ let isTemplateProcessed: boolean = false;
 class AdaptiveCard extends React.Component<Props> {
 
   render() {
-    console.log(this.props);
     let template: any = [];
     if (this.props.cardtemplate && this.props.cardtemplate.instances) {
       if (this.props.version) {

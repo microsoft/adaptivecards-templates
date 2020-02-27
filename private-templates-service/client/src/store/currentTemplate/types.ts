@@ -1,4 +1,4 @@
-import { Template, TemplateInstance } from 'adaptive-templating-service-typescript-node';
+import { Template } from 'adaptive-templating-service-typescript-node';
 
 import { IncomingMessage } from "http";
 
@@ -8,7 +8,6 @@ export interface CurrentTemplateState {
   templateName?: string;
   sampleDataJSON?: string;
   template?: Template;
-  templateInstance?: TemplateInstance;
   isFetching: boolean;
 }
 
@@ -26,8 +25,6 @@ export const GET_TEMPLATE = 'GET_TEMPLATE';
 export const GET_TEMPLATE_SUCCESS = 'GET_TEMPLATE_SUCCESS';
 export const GET_TEMPLATE_FAILURE = 'GET_TEMPLATE_FAILURE';
 
-export const ASSIGN_TEMPLATE_INSTANCE = 'ASSIGN_TEMPLATE_INSTANCE';
-
 export type CurrentTemplateActionTypes = typeof NEW_TEMPLATE |
   typeof REQUEST_NEW_TEMPLATE_UPDATE |
   typeof RECEIVE_NEW_TEMPLATE_UPDATE |
@@ -37,8 +34,7 @@ export type CurrentTemplateActionTypes = typeof NEW_TEMPLATE |
   typeof FAILURE_EXISTING_TEMPLATE_UPDATE |
   typeof GET_TEMPLATE |
   typeof GET_TEMPLATE_SUCCESS |
-  typeof GET_TEMPLATE_FAILURE |
-  typeof ASSIGN_TEMPLATE_INSTANCE;
+  typeof GET_TEMPLATE_FAILURE;
 
 export interface CurrentTemplateAction {
   type: CurrentTemplateActionTypes;
@@ -48,6 +44,5 @@ export interface CurrentTemplateAction {
   templateName?: string;
   sampleDataJSON?: string;
   template?: Template;
-  templateInstance?: TemplateInstance;
   error?: IncomingMessage;
 }
