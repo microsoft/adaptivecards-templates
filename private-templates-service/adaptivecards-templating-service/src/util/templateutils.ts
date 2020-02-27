@@ -77,3 +77,16 @@ export function compareVersion(a: string, b: string): boolean {
   }
   return v1.length == v2.length ? false : v1.length > v2.length;
 }
+
+/**
+ * @function
+ * @param input 
+ */
+export function isValidJSONString(input: string) {
+  try { 
+    JSON.parse(input);
+  } catch(e){
+    return false;
+  }
+  return true;
+}
