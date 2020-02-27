@@ -17,12 +17,10 @@ export const CLEAR_SEARCH = 'CLEAR_SEARCH';
 
 // Actions
 export interface SearchAction {
-  type:
-  typeof QUERY_SEARCH_BEGIN |
+  type: typeof QUERY_SEARCH_BEGIN |
   typeof QUERY_SEARCH_SUCCESS |
   typeof QUERY_SEARCH_FAILURE |
   typeof CLEAR_SEARCH;
-
   searchByTemplateName: string;
   cards?: TemplateList;
   error?: IncomingMessage;
