@@ -137,3 +137,15 @@ export function anyVersionsLive(templates: ITemplateInstance[]): boolean {
   }
   return false;
 }
+/**
+ * @function
+ * @param input 
+ */
+export function isValidJSONString(input: string) {
+  try { 
+    JSON.parse(input);
+  } catch(e){
+    return false;
+  }
+  return true;
+}

@@ -6,7 +6,7 @@ import { TemplateError, ApiError, ServiceErrorMessage } from "./models/errorMode
 import { StorageProvider } from ".";
 import { ITemplate, JSONResponse, ITemplateInstance, IUser } from ".";
 import { SortBy, SortOrder, TemplatePreview, TemplateState, TemplateInstancePreview, UserPreview, TagList } from "./models/models";
-import { updateTemplateToLatestInstance, stringifyJSONArray, removeMostRecentTemplate, getTemplateVersion, JSONStringArray, incrementVersion,  setTemplateInstanceParam, anyVersionsLive } from "./util/templateutils";
+import { updateTemplateToLatestInstance, removeMostRecentTemplate, getTemplateVersion, isValidJSONString, setTemplateInstanceParam, incrementVersion, anyVersionsLive } from "./util/templateutils";
 
 export class TemplateServiceClient {
   private storageProvider: StorageProvider;
@@ -1091,6 +1091,11 @@ export class TemplateServiceClient {
     });
 
     router.post("/:id*?", async (req: Request, res: Response, _next: NextFunction) => {
+      if (!(req.body.template instanceof Object) || !isValidJSONString(JSON.stringify(req.body.template))) {
+        const err = new TemplateError(ApiError.InvalidTemplate, `Template must be valid JSON.`);
+        return res.status(400).json({ error: err });
+      }
+
       let isPublished: boolean = req.body.isPublished;
       let isShareable: boolean = req.body.isShareable;
       if (!req.is("application/json")) {

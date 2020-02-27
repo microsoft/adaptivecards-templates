@@ -14,11 +14,11 @@ export default async function getToken(): Promise<string> {
   const requestParams = {
     grant_type: "client_credentials",
     client_id: "4803f66a-136d-4155-a51e-6d98400d5506",
-    client_secret: "#{secrets.AZURE_ADAPTIVECMS_CLIENT_SECRET}#",
+    client_secret: "#{CLIENT_SECRET_TOKEN}#",
     resource: "https://graph.windows.net"
   };
-  return await request
-    .post({ url: endpoint, form: requestParams }) // put in try catch
+  return await request.post({ url: endpoint, form: requestParams })
+    // put in try catch
     .then((err: any, response: any, body: any) => {
       if (err) {
         let parsedBody = JSON.parse(err);
@@ -97,7 +97,7 @@ describe("Basic Post Templates", () => {
       .post("/template")
       .set({ Authorization: "Bearer " + token })
       .send({
-        template: "{}"
+        template: {}
       });
     expect(res.status).toEqual(201);
     expect(res.body).toHaveProperty("id");
@@ -150,7 +150,7 @@ describe("Basic Post Templates", () => {
       .post("/template")
       .set({ Authorization: "Bearer " + token })
       .send({
-        template: "{}"
+        template: {}
       });
     expect(res.status).toEqual(201);
     expect(res.body).toHaveProperty("id");
@@ -161,7 +161,7 @@ describe("Basic Post Templates", () => {
       .post(`/template/${id}`)
       .set({ Authorization: "Bearer " + token })
       .send({
-        template: "{}",
+        template: {},
         version: "1.2"
       });
     expect(res.status).toEqual(201);
@@ -250,7 +250,7 @@ describe("Basic Get Templates", () => {
       .post("/template")
       .set({ Authorization: "Bearer " + token })
       .send({
-        template: "{}"
+        template: {}
       });
     expect(res.status).toEqual(201);
     expect(res.body).toHaveProperty("id");
@@ -261,7 +261,7 @@ describe("Basic Get Templates", () => {
       .post(`/template/${id}`)
       .set({ Authorization: "Bearer " + token })
       .send({
-        template: "{}",
+        template: {},
         version: "1.2"
       });
     expect(res.status).toEqual(201);
@@ -318,7 +318,7 @@ describe("Preview Templates", () => {
       .post("/template")
       .set({ Authorization: "Bearer " + token })
       .send({
-        template: "{}",
+        template: {},
         version: "1.2",
         isShareable: true
       });
@@ -358,7 +358,7 @@ describe("Preview Templates", () => {
       .post("/template")
       .set({ Authorization: "Bearer " + token })
       .send({
-        template: "{}",
+        template: {},
         version: "1.0",
         isShareable: false
       });
@@ -407,7 +407,7 @@ describe("Delete Templates", () => {
       .post("/template")
       .set({ Authorization: "Bearer " + token })
       .send({
-        template: "{}"
+        template: {}
       });
     expect(res.status).toEqual(201);
     expect(res.body).toHaveProperty("id");
@@ -425,7 +425,7 @@ describe("Delete Templates", () => {
       .post("/template")
       .set({ Authorization: "Bearer " + token })
       .send({
-        template: "{}"
+        template: {}
       });
     expect(res.status).toEqual(201);
     expect(res.body).toHaveProperty("id");
@@ -436,7 +436,7 @@ describe("Delete Templates", () => {
       .post(`/template/${id}`)
       .set({ Authorization: "Bearer " + token })
       .send({
-        template: "{}",
+        template: {},
         version: "1.4"
       });
     expect(res.status).toEqual(201);
@@ -479,7 +479,7 @@ describe("Filtering Templates", () => {
       .post("/template")
       .set({ Authorization: "Bearer " + token })
       .send({
-        template: "{}",
+        template: {},
         tags: ["weather"]
       });
     expect(res.status).toEqual(201);
@@ -491,18 +491,15 @@ describe("Filtering Templates", () => {
       .post("/template")
       .set({ Authorization: "Bearer " + token })
       .send({
-        template: "{}",
+        template: {},
         tags: ["sunny"]
       });
     expect(res.status).toEqual(201);
     idsToDelete.push(res.body.id);
 
     res = await request(app)
-      .get("/template")
-      .set({ Authorization: "Bearer " + token })
-      .send({
-        tags: ["weather"]
-      });
+      .get("/template?tags=weather")
+      .set({ Authorization: "Bearer " + token });
     expect(res.status).toEqual(200);
     expect(res.body.templates).toHaveLength(1);
   });
@@ -534,7 +531,7 @@ describe("Get Tags", () => {
       .post("/template")
       .set({ Authorization: "Bearer " + token })
       .send({
-        template: "{}",
+        template: {},
         tags: ["weather"],
         isPublished: false
       });
@@ -554,7 +551,7 @@ describe("Get Tags", () => {
       .post("/template")
       .set({ Authorization: "Bearer " + token })
       .send({
-        template: "{}",
+        template: {},
         tags: ["contosa"],
         isPublished: true
       });

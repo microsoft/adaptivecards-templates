@@ -35,6 +35,7 @@ import {
 
 interface Props {
   template: Template;
+  templateVersion: string;
   toggleModal: () => void;
   publishTemplate: (templateID: string, templateJSON: string, sampleDataJSON: string, templateName: string) => void;
 }
@@ -74,7 +75,7 @@ class PublishModal extends React.Component<Props> {
           <CenterPanelWrapper>
             <CenterPanelLeft>
               <AdaptiveCardPanel>
-                <AdaptiveCard cardtemplate={template} />
+                <AdaptiveCard cardtemplate={template} templateVersion={this.props.templateVersion}/>
               </AdaptiveCardPanel>
               <SemiBoldText>
                 Notified
