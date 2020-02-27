@@ -7,19 +7,21 @@ import Logo from '../../assets/adaptive-cards-100-logo.png'
 import { DefaultSerializer } from "v8";
 import { ActionButton } from "office-ui-fabric-react";
 import { useHistory } from "react-router-dom";
+import { Template } from "adaptive-templating-service-typescript-node";
 
 const mapStateToProps = (state: RootState) => {
   return {
     currentPageTitle: state.page.currentPageTitle,
     currentPage: state.page.currentPage,
-    templateName: state.currentTemplate.templateName
+    template: state.currentTemplate.template
   }
 }
 
 interface NavBarProps {
   currentPageTitle: string;
   currentPage: string;
-  templateName?: string;
+  template: Template;
+  version?: string;
 }
 
 
@@ -43,11 +45,20 @@ const NavBar = (props: NavBarProps) => {
         <Banner>
           <MobileBanner>
             <StyledLogo src={Logo} />
-            <Styledh1>{props.templateName + "/v1.0"}</Styledh1>
+            <Styledh1>{props.template.name + " - "}</Styledh1>
           </MobileBanner>
           <ActionButton onClick={() => { history.push("/") }}>
             <StyledButton>Finish</StyledButton>
           </ActionButton>
+        </Banner>
+      );
+    case "sharedView":
+      return (
+        <Banner>
+          <MobileBanner>
+            <StyledLogo src={Logo} />
+            <Styledh1>{props.version ? props.template.name + " - " + props.version : props.template.name}</Styledh1>
+          </MobileBanner>
         </Banner>
       );
     default:
