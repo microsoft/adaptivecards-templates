@@ -175,6 +175,7 @@ function assignTemplateInstance(templateInstance: TemplateInstance) {
 
 export function getTemplateInstance(version?: string) {
   return function (dispatch: any, getState: any) {
+    console.log(version);
     let currentState = getState();
     if (currentState.currentTemplate.template && currentState.currentTemplate.template.instances && currentState.currentTemplate.template.instances.length > 0) {
       let currentTemplate = currentState.currentTemplate.template;
@@ -187,7 +188,8 @@ export function getTemplateInstance(version?: string) {
         }
       }
       else {
-        dispatch(assignTemplateInstance(currentTemplate.instances[currentTemplate.instance.slength - 1]));
+        console.log("get latest template");
+        dispatch(assignTemplateInstance(currentTemplate.instances[currentTemplate.instances.length - 1]));
       }
     }
   }

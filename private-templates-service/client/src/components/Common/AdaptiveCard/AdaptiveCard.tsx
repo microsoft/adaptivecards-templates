@@ -3,10 +3,14 @@ import * as AdaptiveCards from "adaptivecards";
 import { Card } from './styled';
 import markdownit from "markdown-it";
 import { Template, TemplateInstance } from 'adaptive-templating-service-typescript-node';
+import { getTemplateInstance } from '../../../store/currentTemplate/actions';
+import { connect } from 'react-redux';
+import { RootState } from '../../../store/rootReducer';
 
 interface Props {
   onClick?: () => void;
-  cardtemplate: Template,
+  cardtemplate: Template;
+  version?: string;
 }
 
 function renderingSetup(): AdaptiveCards.AdaptiveCard {
@@ -56,7 +60,6 @@ function cleanTemplate(temp: TemplateInstance): Template {
   const templateString = JSON.stringify(temp.json);
   const replaceChar = templateString.replace(/\\\\\\/g, '');
   const trimTemp = replaceChar.slice(3, replaceChar.length - 3);
-
   let jsonTemp = {};
 
   try {
@@ -75,15 +78,28 @@ function processTemplate(temp: TemplateInstance): any {
   return template;
 }
 
+let isTemplateProcessed: boolean = false;
 class AdaptiveCard extends React.Component<Props> {
+
   render() {
+    console.log(this.props);
     let template: any = [];
-    if (this.props.cardtemplate && this.props.cardtemplate && this.props.cardtemplate.instances) {
-      template = processTemplate(this.props.cardtemplate.instances[0]);
-    } else {
+    if (this.props.cardtemplate && this.props.cardtemplate.instances) {
+      if (this.props.version) {
+        for (let i = 0; i < this.props.cardtemplate.instances.length; i++) {
+          if (this.props.cardtemplate.instances[i].version === this.props.version) {
+            template = processTemplate(this.props.cardtemplate.instances[i]);
+            break;
+          }
+        }
+      }
+      else {
+        template = processTemplate(this.props.cardtemplate.instances[this.props.cardtemplate.instances.length - 1]);
+      }
+    }
+    else {
       return (<div />);
     }
-    // console.log(template); return (<div />);
     return (
       <Card
         onClick={this.props.onClick}

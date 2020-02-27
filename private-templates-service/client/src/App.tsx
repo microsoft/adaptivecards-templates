@@ -15,14 +15,14 @@ import Designer from "./components/Designer";
 import NavBar from "./components/NavBar/NavBar";
 import SideBar from "./components/SideBar";
 import Dashboard from "./components/Dashboard";
+import Shared from "./components/Shared/";
 import ErrorMessage, { ErrorMessageProps } from "./components/ErrorMessage/ErrorMessage";
 import config from "./Config";
 
 // CSS
 import "bootstrap/dist/css/bootstrap.css";
-
 import { OuterAppWrapper, MainAppWrapper, MainApp } from "./styled";
-import Shared from "./components/Shared/";
+
 
 interface State {
   error: ErrorMessageProps | null;
@@ -113,29 +113,27 @@ class App extends Component<Props, State> {
           <Route exact path="/preview/:uuid/:version">
             <Shared authButtonMethod={this.login}></Shared>
           </Route>
-          <Route exact path="/">
-            <OuterAppWrapper>
-              <SideBar
-                authButtonMethod={
-                  this.props.isAuthenticated
-                    ? this.logout
-                    : this.login
-                }
-              />
-              <MainAppWrapper>
-                <NavBar />
-                <MainApp>
-                  {error}
-                  <Route exact path="/">
-                    <Dashboard authButtonMethod={this.login} />
-                  </Route>
-                  <Route exact path="/designer">
-                    <Designer authButtonMethod={this.login} />
-                  </Route>
-                </MainApp>
-              </MainAppWrapper>
-            </OuterAppWrapper>
-          </Route>
+          <OuterAppWrapper>
+            <SideBar
+              authButtonMethod={
+                this.props.isAuthenticated
+                  ? this.logout
+                  : this.login
+              }
+            />
+            <MainAppWrapper>
+              <NavBar />
+              <MainApp>
+                {error}
+                <Route exact path="/">
+                  <Dashboard authButtonMethod={this.login} />
+                </Route>
+                <Route exact path="/designer">
+                  <Designer authButtonMethod={this.login} />
+                </Route>
+              </MainApp>
+            </MainAppWrapper>
+          </OuterAppWrapper>
         </Switch>
       </Router >
     );

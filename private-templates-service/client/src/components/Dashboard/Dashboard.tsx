@@ -65,6 +65,7 @@ class Dashboard extends React.Component<Props, State> {
     super(props);
     this.state = { isPreviewOpen: false };
     props.setPage("Dashboard", "Dashboard");
+    props.setSearchBarVisible(true);
     props.getTemplates();
   }
 
@@ -78,9 +79,6 @@ class Dashboard extends React.Component<Props, State> {
   };
 
   render() {
-
-    this.props.setSearchBarVisible(true);
-
     if (this.props.isSearch) {
       return (
         <DashboardContainer>
