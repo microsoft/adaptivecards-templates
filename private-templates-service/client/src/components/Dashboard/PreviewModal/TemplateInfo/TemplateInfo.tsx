@@ -87,12 +87,11 @@ class TemplateInfo extends React.Component<Props, State> {
     this.setState({ isPublishOpen: !this.state.isPublishOpen });
   }
 
-  versionList = (instances: TemplateInstance[] | undefined, excludedVersion?: string): IDropdownOption[] => {
+  versionList = (instances: TemplateInstance[] | undefined): IDropdownOption[] => {
     if (!instances) return [];
     let options: IDropdownOption[] = [];
     for (let instance of instances){
       if (!instance.version) continue;
-      if (excludedVersion && instance.version === excludedVersion) continue;
       options.push({key: instance.version, text: `Version ${instance.version}`});
     }
     return options;

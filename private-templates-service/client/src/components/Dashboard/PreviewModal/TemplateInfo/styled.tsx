@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { COLORS } from '../../../../globalStyles';
 
-import { Icon, IDropdownStyles, FontWeights } from 'office-ui-fabric-react';
+import { Icon, IDropdownStyles, FontWeights, IDropdownSubComponentStyles } from 'office-ui-fabric-react';
 import { Dropdown } from "office-ui-fabric-react";
 
 export const StyledVersionDropdown = styled(Dropdown)`
@@ -11,7 +11,7 @@ export const StyledVersionDropdown = styled(Dropdown)`
 
 export const DropdownStyles: Partial<IDropdownStyles> = {
   dropdown: {
-    fontSize: 22,
+    fontSize: 22
   },
   title: {
     marginLeft: 10,
@@ -19,7 +19,7 @@ export const DropdownStyles: Partial<IDropdownStyles> = {
     marginTop: 5, 
     marginBottom: 5,
     borderWidth: 0,
-  }
+  },
 }
 
 export const OuterWrapper = styled.div`
