@@ -1,5 +1,6 @@
 import React from 'react';
-import { ActionButton } from 'office-ui-fabric-react';
+import { ActionButton, IconButton } from 'office-ui-fabric-react';
+import { Icon } from 'office-ui-fabric-react/lib/Icon';
 
 import { Template } from 'adaptive-templating-service-typescript-node';
 
@@ -22,6 +23,14 @@ import {
   CardBody,
   IconWrapper,
   UsageNumber,
+  TagsWrapper,
+  Tag,
+  TagCloseIcon,
+  TagText,
+  AddTagWrapper,
+  AddTagInput,
+  TagAddIcon,
+  TagSubmitIcon,
 } from './styled';
 
 
@@ -47,11 +56,6 @@ const buttons = [
 // TODO: Dynamically show info. Backend not ready
 const cards = [
   {
-    header: 'Folder',
-    iconName: 'FabricFolder',
-    bodyText: 'Contoso Weather'
-  },
-  {
     header: 'Owner',
     iconName: 'Contact',
     bodyText: 'Henry Trent'
@@ -70,26 +74,65 @@ interface Props {
 
 interface State {
   isPublishOpen: boolean;
+  isAdding: boolean;
+  newTagName: string;
 }
 
 class TemplateInfo extends React.Component<Props, State> {
+  addTagInput = React.createRef<HTMLInputElement>();
+
   constructor(props: Props) {
     super(props);
-    this.state = { isPublishOpen: false }
+    this.state = {
+      isPublishOpen: false,
+      isAdding: false,
+      newTagName: '',
+    }
   }
 
   toggleModal = () => {
     this.setState({ isPublishOpen: !this.state.isPublishOpen });
   }
 
+  tagRemove = (tag: string) => {
+    console.log(tag);
+  }
+
+  openNewTag = () => {
+    this.setState({ isAdding: true }, () => {
+      if (this.addTagInput && this.addTagInput.current) {
+        this.addTagInput.current.focus();
+      }
+    });
+  }
+
+  handleChange = (event: React.FormEvent<HTMLInputElement>) => {
+    if (event && event.currentTarget) {
+      this.setState({ newTagName: event.currentTarget.value });
+    }
+  }
+
+  submitNewTag = () => {
+    if (this.addTagInput && this.addTagInput.current) {
+      const tag = this.addTagInput.current.value;
+      console.log("new tag submitted: ", tag);
+    }
+  }
+
+  closeAddTag = () => {
+    this.setState({ isAdding: false });
+  }
+
   render() {
     const {
       isLive,
-      createdAt
+      createdAt,
+      tags,
     } = this.props.template;
+    const { onClose } = this.props;
     const {
-      onClose
-    } = this.props;
+      isAdding
+    } = this.state;
 
     return (
       <OuterWrapper>
@@ -128,6 +171,24 @@ class TemplateInfo extends React.Component<Props, State> {
               </Card>
             ))}
           </RowWrapper>
+          <Card>
+            <CardHeader>Tags</CardHeader>
+            <CardBody>
+              <TagsWrapper>
+                {tags && tags.map((tag: string) => (
+                  <Tag key={tag}>
+                    <TagText>{tag}</TagText>
+                    <TagCloseIcon key={tag} iconName="ChromeClose" onClick={() => this.tagRemove(tag)} />
+                  </Tag>
+                ))}
+                <AddTagWrapper onSubmit={this.submitNewTag} open={isAdding}>
+                  <AddTagInput ref={this.addTagInput} open={isAdding} value={this.state.newTagName} onChange={this.handleChange} />
+                  <TagAddIcon iconName="Add" onClick={this.openNewTag} open={isAdding} />
+                  <TagSubmitIcon iconName="CheckMark" onClick={this.submitNewTag} open={isAdding} />
+                </AddTagWrapper>
+              </TagsWrapper>
+            </CardBody>
+          </Card>
         </MainContentWrapper>
         {this.state.isPublishOpen && <PublishModal toggleModal={this.toggleModal} template={this.props.template} />}
       </OuterWrapper>
