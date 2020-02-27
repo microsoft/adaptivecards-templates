@@ -18,7 +18,7 @@ app.use(passport.session());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-let mongoDB = new MongoDBProvider({ connectionString: "mongodb://adaptivecardstemplates-staging:Ohl3g9RUdIy12LmQQqrELRhSrb1RCV5BN06wAkKRbpSR6LSQSDYlpEdgyOlzbKlWtmZQ7QOcqeWZEnswOK2kMA==@adaptivecardstemplates-staging.mongo.cosmos.azure.com:10255/test?ssl=true&replicaSet=globaldb&maxIdleTimeMS=120000&appName=@adaptivecardstemplates-staging@" });
+let mongoDB = new MongoDBProvider({ connectionString: "#{DB_CONNECTION_TOKEN}#" });
 mongoDB.connect()
   .then(
     (res) => {
