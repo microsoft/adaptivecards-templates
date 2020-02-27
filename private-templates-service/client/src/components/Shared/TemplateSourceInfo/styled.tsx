@@ -29,9 +29,10 @@ export const Title = styled.div`
 
 export const TemplateSourceWrapper = styled.div`
   background-color: ${COLORS.GREY2};
-  width: fill;
+  width: 100%;
   height: 100vh;
   position: relative;
+  overflow-wrap: break-word;
 `;
 
 export const SourceWrapper = styled.div`
@@ -42,4 +43,5 @@ export const Source = styled.div`
   font-family: "Courier New", Courier, monospace;
   font-size: 14px;
   font-weight: normal;
+  white-space: pre-wrap;
 `;
