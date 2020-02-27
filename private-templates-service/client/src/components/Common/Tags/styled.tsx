@@ -49,7 +49,7 @@ export const AddTagWrapper = styled.form<{ open: boolean }>`
   color: white;
   background-color: ${COLORS.BLUE};
   border-radius: 1em;
-  padding: 4px 6.5px;
+  padding: 6.5px;
   margin-bottom: 12px;
   ${props => (props.open && css`
     animation: ${ExpandAddKeyframe} 0.2s ease-out forwards;
@@ -97,11 +97,18 @@ export const TagSubmitButton = styled.button<{ open: boolean }>`
   display: ${props => !props.open && 'none'};
   align-self: center;
   border: 0px;
-  padding: 0;
-  margin: 0;
-  outline: none;
+  outline: 0px;
+  padding: 0px;
   background-color: ${COLORS.BLUE};
   color: ${COLORS.WHITE};
+
+  &: active {
+    outline: 0px;
+  }
+
+  &: focus {
+    outline: 0px;
+  }
 `;
 
 export const TagSubmitIcon = styled(Icon)`

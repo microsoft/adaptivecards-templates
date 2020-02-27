@@ -12,8 +12,8 @@ import {
 } from './styled';
 
 interface Props {
-  tags: string[];
-  allowAddTag: boolean;
+  tags?: string[];
+  allowAddTag?: boolean;
 }
 
 interface State {
