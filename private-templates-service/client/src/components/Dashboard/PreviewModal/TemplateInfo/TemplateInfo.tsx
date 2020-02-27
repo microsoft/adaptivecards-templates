@@ -4,6 +4,7 @@ import { ActionButton, IDropdownOption } from 'office-ui-fabric-react';
 import { Template, TemplateInstance } from 'adaptive-templating-service-typescript-node';
 
 import PublishModal from '../../../Common/PublishModal';
+import Tags from '../../../Common/Tags';
 
 import {
   OuterWrapper,
@@ -22,8 +23,9 @@ import {
   CardBody,
   IconWrapper,
   UsageNumber,
+  TagsWrapper,
   StyledVersionDropdown,
-  DropdownStyles
+  DropdownStyles,
 } from './styled';
 import { THEME } from '../../../../globalStyles';
 
@@ -49,11 +51,6 @@ const buttons = [
 
 // TODO: Dynamically show info. Backend not ready
 const cards = [
-  {
-    header: 'Folder',
-    iconName: 'FabricFolder',
-    bodyText: 'Contoso Weather'
-  },
   {
     header: 'Owner',
     iconName: 'Contact',
@@ -107,12 +104,11 @@ class TemplateInfo extends React.Component<Props, State> {
   render() {
     const {
       isLive,
+      tags,
       createdAt, 
       instances,
     } = this.props.template;
-    const {
-      onClose
-    } = this.props;
+    const { onClose } = this.props;
 
     return (
       <OuterWrapper>
@@ -159,6 +155,14 @@ class TemplateInfo extends React.Component<Props, State> {
               </Card>
             ))}
           </RowWrapper>
+          <Card>
+            <CardHeader>Tags</CardHeader>
+            <CardBody>
+              <TagsWrapper>
+                <Tags tags={tags} allowAddTag={true} />
+              </TagsWrapper>
+            </CardBody>
+          </Card>
         </MainContentWrapper>
         {this.state.isPublishOpen && <PublishModal toggleModal={this.toggleModal} template={this.props.template} templateVersion={this.state.version}/>}
       </OuterWrapper>
