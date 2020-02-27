@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { RootState } from "../../store/rootReducer";
 import SearchBar from "./SearchBar";
-import { Banner, Styledh1, StyledLogo, MobileBanner, StyledButton } from './styled';
+import { Banner, Styledh1, StyledLogo, MobileBanner, StyledButton, Styledh2, StyledButtonContent } from './styled';
 import Logo from '../../assets/adaptive-cards-100-logo.png'
 import { DefaultSerializer } from "v8";
 import { ActionButton } from "office-ui-fabric-react";
@@ -20,7 +20,7 @@ const mapStateToProps = (state: RootState) => {
 interface NavBarProps {
   currentPageTitle: string;
   currentPage: string;
-  template: Template;
+  template?: Template;
   version?: string;
 }
 
@@ -45,19 +45,25 @@ const NavBar = (props: NavBarProps) => {
         <Banner>
           <MobileBanner>
             <StyledLogo src={Logo} />
-            <Styledh1>{props.template.name + " - "}</Styledh1>
+            <Styledh1>{props.template ? props.template.name : props.currentPageTitle}</Styledh1>
+            <Styledh2>{props.version ? "Version " + props.version : ""}</Styledh2>
           </MobileBanner>
           <ActionButton onClick={() => { history.push("/") }}>
-            <StyledButton>Finish</StyledButton>
+            <StyledButton>
+              <StyledButtonContent>
+                Finish
+              </StyledButtonContent>
+            </StyledButton>
           </ActionButton>
         </Banner>
       );
-    case "sharedView":
+    case "sharedPage":
       return (
         <Banner>
           <MobileBanner>
             <StyledLogo src={Logo} />
-            <Styledh1>{props.version ? props.template.name + " - " + props.version : props.template.name}</Styledh1>
+            <Styledh1>{props.template ? (props.version ? props.template.name + " - " + props.version : props.template.name) : "Preview"}</Styledh1>
+            <Styledh2>{props.template ? "ID: " + props.template.id : ""}</Styledh2>
           </MobileBanner>
         </Banner>
       );
