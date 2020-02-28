@@ -109,6 +109,8 @@ export function updateTemplate(templateID?: string, templateJSON?: string, sampl
     api.setApiKey(0, "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IkhsQzBSMTJza3hOWjFXUXdtak9GXzZ0X3RERSJ9.eyJhdWQiOiI4NjMxY2E0ZS1hMjVkLTQ5YWUtYmQ5OC1mZjNlMWRkZDQ0MTgiLCJpc3MiOiJodHRwczovL2xvZ2luLm1pY3Jvc29mdG9ubGluZS5jb20vNzJmOTg4YmYtODZmMS00MWFmLTkxYWItMmQ3Y2QwMTFkYjQ3L3YyLjAiLCJpYXQiOjE1ODEzNjA2MTgsIm5iZiI6MTU4MTM2MDYxOCwiZXhwIjoxNTgxMzY0NTE4LCJhaW8iOiI0Mk5nWUdDVzk3Qm1NamRrY3pQK1pLSGZMeFlPQUE9PSIsImF6cCI6Ijg2MzFjYTRlLWEyNWQtNDlhZS1iZDk4LWZmM2UxZGRkNDQxOCIsImF6cGFjciI6IjEiLCJvaWQiOiI4YWRiZWRhNi00ZDdkLTQ1N2ItOTNkZC1jMTVmMWE1Y2NiMzEiLCJzdWIiOiI4YWRiZWRhNi00ZDdkLTQ1N2ItOTNkZC1jMTVmMWE1Y2NiMzEiLCJ0aWQiOiI3MmY5ODhiZi04NmYxLTQxYWYtOTFhYi0yZDdjZDAxMWRiNDciLCJ1dGkiOiJ6SDlkcHVQNnprcUJidC1MUnVGYkFBIiwidmVyIjoiMi4wIn0.WhdvkqeJymW-Ayeht6tafd8Z1muoMnyPhKoYq6KGrHdv6psfYQtmK0P0-TA5_zgOOHNNJvpVqH2LPnZTbpK4qgKLByR9umELHgD2FW9v5Djg1NAKqmQEGg_-Th__SGE3L9_WI58Wh0_Toh3f7fpLDzNBiC5iYDdGSaTilwxaYMGbXnJO2Y6Tow83GQATKGA3B27Xz2iBO9UFmEy9rte4DyLUAEIE6SCKwg-3YuD0zKfpgyd-lvhZZr37HeE9Y6hyOm_M4b_jwWI7oK0uZASuQer83W5jsSZNtiXg_T0euXJcvI9lL6R4oJDI_N6Y42RdDioIwX6FzOA4vRzTySZjBw");
 
     let newTemplate = new PostedTemplate();
+    const id = templateID || state.currentTemplate.templateID;
+
     if (templateJSON) {
       newTemplate.template = JSON.parse(templateJSON);
     } else {
@@ -119,7 +121,7 @@ export function updateTemplate(templateID?: string, templateJSON?: string, sampl
     newTemplate.isPublished = isPublished;
     newTemplate.tags = tags;
 
-    if (templateID === null || templateID === undefined || templateID === "") {
+    if (id === null || id === undefined || id === "") {
       dispatch(requestNewTemplateUpdate());
       return api.createTemplate(newTemplate).then(response => {
         if (response.response.statusCode && response.response.statusCode === 201 && response.body.id) {
@@ -131,10 +133,10 @@ export function updateTemplate(templateID?: string, templateJSON?: string, sampl
     }
     else {
       dispatch(requestExistingTemplateUpdate());
-      return api.postTemplateById(templateID, newTemplate).then(response => {
+      return api.postTemplateById(id, newTemplate).then(response => {
         if (response.response.statusCode && response.response.statusCode === 201) {
           dispatch(receiveExistingTemplateUpdate(templateJSON, templateName, sampleDataJSON));
-          dispatch(getTemplate(templateID));
+          dispatch(getTemplate(id));
         }
         else {
           dispatch(failureExistingTemplateUpdate(response.response));

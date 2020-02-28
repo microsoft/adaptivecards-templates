@@ -19,15 +19,14 @@ import {
 
 const mapStateToProps = (state: RootState) => {
   return {
-    templateID: state.currentTemplate.templateID,
     template: state.currentTemplate.template,
   }
 }
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    updateTags: (templateID: string, tags: string[]) => {
-      dispatch(updateTemplate(templateID, undefined, undefined, undefined, undefined, tags))
+    updateTags: (tags: string[]) => {
+      dispatch(updateTemplate(undefined, undefined, undefined, undefined, undefined, tags))
     }
   }
 }
@@ -38,7 +37,7 @@ interface Props {
   allowAddTag?: boolean;
   templateID?: string;
   template?: Template;
-  updateTags: (templateID: string, tags: string[]) => void;
+  updateTags: (tags: string[]) => void;
 }
 
 interface State {
@@ -58,9 +57,9 @@ class Tags extends React.Component<Props, State>  {
   }
 
   tagRemove = (tag: string) => {
-    if (this.props.allowEdit && this.props.templateID && this.props.template && this.props.template.tags) {
+    if (this.props.allowEdit && this.props.template && this.props.template.tags) {
       const newTags = this.props.template.tags.filter((existingTag: string) => existingTag !== tag);
-      this.props.updateTags(this.props.templateID, newTags);
+      this.props.updateTags(newTags);
     }
   }
 
@@ -80,9 +79,9 @@ class Tags extends React.Component<Props, State>  {
 
   submitNewTag = (e: any): void => {
     e.preventDefault();
-    if (this.addTagInput && this.addTagInput.current && this.props.template && this.props.template.tags && this.props.templateID) {
+    if (this.addTagInput && this.addTagInput.current && this.props.template && this.props.template.tags) {
       const tag = this.addTagInput.current.value;
-      this.props.updateTags(this.props.templateID, [...this.props.template.tags, tag]);
+      this.props.updateTags([...this.props.template.tags, tag]);
     }
   }
 
