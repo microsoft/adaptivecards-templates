@@ -8,7 +8,7 @@ import { RootState } from '../../../store/rootReducer';
 import AdaptiveCard from '../../Common/AdaptiveCard'
 import TemplateInfo from './TemplateInfo';
 
-import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
+import { SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 
 import { ModalBackdrop, ModalWrapper, ACPanel, ACWrapper, DescriptorWrapper, CenteredSpinner } from './styled';
 
