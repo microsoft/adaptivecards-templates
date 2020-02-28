@@ -1,4 +1,5 @@
-import { ITemplate, ITemplateInstance } from "../models/models";
+import { ITemplate, ITemplateInstance, TemplateState } from "../models/models";
+import { version } from "mongoose";
 
 /**
  * @function
@@ -78,6 +79,50 @@ export function compareVersion(a: string, b: string): boolean {
   return v1.length == v2.length ? false : v1.length > v2.length;
 }
 
+
+/**
+ * @function
+ * @param template 
+ * 
+ */
+export function incrementVersion(template: ITemplate): string{ 
+  // check if this is the most recent version 
+  let latestTemplate = getMostRecentVersion(template);
+  let version = latestTemplate?.version.split(".");
+
+  if(!version){
+    return "1.0";
+  }
+  if(version[1] === "9"){
+    version[0] = (parseInt(version[0])+1).toString();
+    version[1]="0";
+  }
+  else {
+    version[1] = (parseInt(version[1])+1).toString();
+  }
+  return (version[0] + "." + version[1]);
+}
+
+export function setTemplateInstanceParam(templateInstance: ITemplateInstance, templateData: JSON[] | undefined, state: TemplateState | undefined, isShareable: boolean | undefined, version?: string): ITemplateInstance { 
+  // set params for the template instance. 
+  templateInstance.state = state || TemplateState.draft ;
+  templateInstance.isShareable = isShareable || false ;
+  templateInstance.data = templateData || []; 
+  templateInstance.version = version || "1.0";
+  return templateInstance;
+}
+
+export function anyVersionsLive(templates: ITemplateInstance[]): boolean { 
+  if(!templates){
+    return false;
+  }
+  for(let instance of templates){ 
+    if(instance.state === TemplateState.live){
+      return true;
+    }
+  }
+  return false;
+}
 /**
  * @function
  */
