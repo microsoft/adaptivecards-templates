@@ -12,6 +12,7 @@ import requireAuthentication from "../../utils/requireAuthentication";
 import Gallery from "../Gallery";
 import PreviewModal from "./PreviewModal";
 import SearchPage from './SearchPage/SearchPage';
+import { setSearchBarVisible } from "../../store/search/actions";
 
 import { Title, DashboardContainer } from "../Dashboard/styled";
 
@@ -31,7 +32,12 @@ const mapDispatchToProps = (dispatch: any) => {
     setPage: (currentPageTitle: string, currentPage: string) => {
       dispatch(setPage(currentPageTitle, currentPage));
     },
-    getTemplates: () => { dispatch(getAllTemplates()) },
+    setSearchBarVisible: (isSearchBarVisible: boolean) => {
+      dispatch(setSearchBarVisible(isSearchBarVisible));
+    },
+    getTemplates: () => {
+      dispatch(getAllTemplates());
+    },
     getTemplate: (templateID: string) => {
       dispatch(getTemplate(templateID));
     }
@@ -48,6 +54,7 @@ interface Props {
   templates: AllTemplateState;
   authButtonMethod: () => Promise<void>;
   setPage: (currentPageTitle: string, currentPage: string) => void;
+  setSearchBarVisible: (isSearchBarVisible: boolean) => void;
   getTemplates: () => void;
   getTemplate: (templateID: string) => void;
   isSearch: boolean;
@@ -58,6 +65,7 @@ class Dashboard extends React.Component<Props, State> {
     super(props);
     this.state = { isPreviewOpen: false };
     props.setPage("Dashboard", "Dashboard");
+    props.setSearchBarVisible(true);
     props.getTemplates();
   }
 

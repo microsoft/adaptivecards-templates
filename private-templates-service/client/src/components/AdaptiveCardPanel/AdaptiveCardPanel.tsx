@@ -5,7 +5,7 @@ import { Template } from 'adaptive-templating-service-typescript-node';
 
 interface Props {
   onClick?: (templateID: string) => void;
-  template: Template
+  template: Template;
 }
 
 class AdaptiveCardPanel extends React.Component<Props> {
