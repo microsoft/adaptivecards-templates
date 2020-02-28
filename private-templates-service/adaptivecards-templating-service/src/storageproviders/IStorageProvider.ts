@@ -20,3 +20,5 @@ export interface StorageProvider {
   connect<T>(params?: T): Promise<JSONResponse<Boolean>>;
   close(): Promise<JSONResponse<Boolean>>;
 }
+
+

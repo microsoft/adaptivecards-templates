@@ -19,18 +19,10 @@ class UserAvatar extends React.Component<Props> {
   // If a user avatar is available, return an img tag with the pic
   render() {
     if (this.props.user && this.props.user.imageURL) {
-      return (
-        <AvatarIcon
-          src={this.props.user.imageURL}
-          alt="user"
-          className="rounded-circle align-self-center"
-        ></AvatarIcon>
-      );
+      return <AvatarIcon src={this.props.user.imageURL} alt="user" className="rounded-circle align-self-center"></AvatarIcon>;
     }
     // No avatar available, return a default icon
-    return (
-      <DefaultAvatarIcon iconName="contact" size={this.props.iconSize} ></DefaultAvatarIcon>
-    );
+    return <DefaultAvatarIcon iconName="contact" size={this.props.iconSize}></DefaultAvatarIcon>;
   }
 }
 

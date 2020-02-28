@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 
 import { RootState } from "../../store/rootReducer";
 import { UserType } from "../../store/auth/types";
-import { AllTemplateState } from '../../store/templates/types';
+import { AllTemplateState } from "../../store/templates/types";
 import { setPage } from "../../store/page/actions";
 import { getAllTemplates } from "../../store/templates/actions";
 import { getTemplate } from "../../store/currentTemplate/actions";
@@ -11,11 +11,11 @@ import { getTemplate } from "../../store/currentTemplate/actions";
 import requireAuthentication from "../../utils/requireAuthentication";
 import Gallery from "../Gallery";
 import PreviewModal from "./PreviewModal";
-import SearchPage from './SearchPage/SearchPage';
+import SearchPage from "./SearchPage/SearchPage";
 
 import { Title, DashboardContainer } from "../Dashboard/styled";
 
-import { Template } from 'adaptive-templating-service-typescript-node';
+import { Template } from "adaptive-templating-service-typescript-node";
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -31,12 +31,14 @@ const mapDispatchToProps = (dispatch: any) => {
     setPage: (currentPageTitle: string) => {
       dispatch(setPage(currentPageTitle));
     },
-    getTemplates: () => { dispatch(getAllTemplates()) },
+    getTemplates: () => {
+      dispatch(getAllTemplates());
+    },
     getTemplate: (templateID: string) => {
       dispatch(getTemplate(templateID));
     }
-  }
-}
+  };
+};
 
 interface State {
   isPreviewOpen: boolean;
@@ -64,7 +66,7 @@ class Dashboard extends React.Component<Props, State> {
   selectTemplate = (templateID: string) => {
     this.props.getTemplate(templateID);
     this.toggleModal();
-  }
+  };
 
   toggleModal = () => {
     this.setState({ isPreviewOpen: !this.state.isPreviewOpen });
@@ -80,17 +82,19 @@ class Dashboard extends React.Component<Props, State> {
     }
     //TODO add sort functionality to separate templates displayed in recent vs draft
     let templates = new Array<Template>();
-    if (!this.props.templates.isFetching
-      && this.props.templates.templates
-      && this.props.templates.templates.templates) {
+    if (!this.props.templates.isFetching && this.props.templates.templates && this.props.templates.templates.templates) {
       templates = this.props.templates.templates.templates;
     }
     this.props.setPage("Dashboard");
     return (
       <DashboardContainer>
-        <Title>Recent</Title>
-        <Gallery onClick={this.selectTemplate} templates={templates}></Gallery>
+        <Title>Recently Edited</Title>
+        {/* <Gallery onClick={this.selectTemplate} templates={templates}></Gallery> */}
         <PreviewModal show={this.state.isPreviewOpen} toggleModal={this.toggleModal} />
+
+        {/* <Title>Recently Viewed</Title> */}
+        {/* <Gallery onClick={this.selectTemplate} templates={templates}></Gallery> */}
+        {/* <PreviewModal show={this.state.isPreviewOpen} toggleModal={this.toggleModal} /> */}
       </DashboardContainer>
     );
   }
