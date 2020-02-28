@@ -88,7 +88,7 @@ describe("Basic Post Templates", () => {
         template: {},
         isPublished: false
       });
-    expect(res.status).toEqual(401);
+    expect(res.status).toEqual(402);
   });
 
   // Authenticated post request
@@ -676,7 +676,7 @@ describe("Post Templates, and increment version", () => {
     expect(res.body).toHaveProperty("id");
     id = res.body.id;
     idsToDelete.push(id);
-    
+
     // send second instance 
     res = await request(app)
       .post(`/template/${id}`)
@@ -696,7 +696,7 @@ describe("Post Templates, and increment version", () => {
       });
     expect(res.status).toEqual(201);
     idsToDelete.push(res.body.id);
-    
+
     //recive instances 
     res = await request(app)
       .get(`/template/${id}`)
@@ -714,24 +714,24 @@ describe("Post Templates, and increment version", () => {
 
     //edit first instance
     res = await request(app)
-    .post(`/template/${id}`)
-    .set({ Authorization: "Bearer " + token })
-    .send({
-      template: {},
-      version: "1.0",
-      state: "deprecated"
-    });
+      .post(`/template/${id}`)
+      .set({ Authorization: "Bearer " + token })
+      .send({
+        template: {},
+        version: "1.0",
+        state: "deprecated"
+      });
     expect(res.status).toEqual(201);
     idsToDelete.push(res.body.id);
 
     //edit third instance which is deprecated, should create a new instance 1.3 
     res = await request(app)
-    .post(`/template/${id}`)
-    .set({ Authorization: "Bearer " + token })
-    .send({
-      template: {},
-      version: "1.0",
-    });
+      .post(`/template/${id}`)
+      .set({ Authorization: "Bearer " + token })
+      .send({
+        template: {},
+        version: "1.0",
+      });
     expect(res.status).toEqual(201);
     idsToDelete.push(res.body.id);
 
