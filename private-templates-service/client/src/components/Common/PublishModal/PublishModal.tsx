@@ -13,7 +13,6 @@ import { updateTemplate } from '../../../store/currentTemplate/actions';
 
 // Components
 import AdaptiveCard from '../AdaptiveCard';
-import processTemplate from '../../../Services/ProcessTemplate';
 
 // Styles
 import {
@@ -58,7 +57,7 @@ class PublishModal extends React.Component<Props> {
     } = this.props.template;
     if (id && name && instances && instances.length === 1 && instances[0].json) {
       const template = instances[0].json;
-      const parsedTemplate = processTemplate(template);
+      const parsedTemplate = JSON.stringify(template);
       this.props.publishTemplate(id, parsedTemplate, "", name);
       this.props.toggleModal();
     }
@@ -75,7 +74,7 @@ class PublishModal extends React.Component<Props> {
           <CenterPanelWrapper>
             <CenterPanelLeft>
               <AdaptiveCardPanel>
-                <AdaptiveCard cardtemplate={template} templateVersion={this.props.templateVersion}/>
+                <AdaptiveCard cardtemplate={template} templateVersion={this.props.templateVersion} />
               </AdaptiveCardPanel>
               <SemiBoldText>
                 Notified

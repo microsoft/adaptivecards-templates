@@ -87,14 +87,14 @@ class TemplateInfo extends React.Component<Props, State> {
   versionList = (instances: TemplateInstance[] | undefined): IDropdownOption[] => {
     if (!instances) return [];
     let options: IDropdownOption[] = [];
-    for (let instance of instances){
+    for (let instance of instances) {
       if (!instance.version) continue;
-      options.push({key: instance.version, text: `Version ${instance.version}`});
+      options.push({ key: instance.version, text: `Version ${instance.version}` });
     }
     return options;
   }
 
-  onVersionChange = (event: React.FormEvent<HTMLDivElement>, option?:IDropdownOption) => {
+  onVersionChange = (event: React.FormEvent<HTMLDivElement>, option?: IDropdownOption) => {
     if (!option) return;
     let version = option.key.toString();
     this.setState({ version: version });
@@ -105,30 +105,37 @@ class TemplateInfo extends React.Component<Props, State> {
     const {
       isLive,
       tags,
-      createdAt, 
+      createdAt,
       instances,
     } = this.props.template;
     const { onClose } = this.props;
+
+    let createdAtParsed = "";
+
+    if (createdAt) {
+      const createdAtDate = new Date(createdAt);
+      createdAtParsed = createdAtDate.toLocaleString();
+    }
 
     return (
       <OuterWrapper>
         <HeaderWrapper>
           <TopRowWrapper>
             <TitleWrapper>
-            <Title>
+              <Title>
                 <StyledVersionDropdown
-                  placeholder = {`Version ${this.state.version}`}
-                  options = {this.versionList(instances)}
-                  onChange = {this.onVersionChange}
-                  theme = {THEME.LIGHT}
-                  styles = {DropdownStyles}
+                  placeholder={`Version ${this.state.version}`}
+                  options={this.versionList(instances)}
+                  onChange={this.onVersionChange}
+                  theme={THEME.LIGHT}
+                  styles={DropdownStyles}
                 />
               </Title>
               <StatusIndicator isPublished={isLive} />
               <Status>{isLive ? 'Published' : 'Draft'}</Status>
             </TitleWrapper>
             <TimeStamp>
-              Created {createdAt}
+              Created {createdAtParsed}
             </TimeStamp>
             <ActionButton iconProps={{ iconName: 'ChromeClose' }} onClick={onClose} >Close</ActionButton>
           </TopRowWrapper>
@@ -164,7 +171,7 @@ class TemplateInfo extends React.Component<Props, State> {
             </CardBody>
           </Card>
         </MainContentWrapper>
-        {this.state.isPublishOpen && <PublishModal toggleModal={this.toggleModal} template={this.props.template} templateVersion={this.state.version}/>}
+        {this.state.isPublishOpen && <PublishModal toggleModal={this.toggleModal} template={this.props.template} templateVersion={this.state.version} />}
       </OuterWrapper>
     );
   }
