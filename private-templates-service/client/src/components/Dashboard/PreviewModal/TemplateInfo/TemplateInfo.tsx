@@ -4,6 +4,7 @@ import { ActionButton, IDropdownOption } from 'office-ui-fabric-react';
 import { Template, TemplateInstance, PostedTemplate } from 'adaptive-templating-service-typescript-node';
 
 import PublishModal from '../../../Common/PublishModal';
+import Tags from '../../../Common/Tags';
 
 import {
   OuterWrapper,
@@ -22,8 +23,9 @@ import {
   CardBody,
   IconWrapper,
   UsageNumber,
+  TagsWrapper,
   StyledVersionDropdown,
-  DropdownStyles
+  DropdownStyles,
 } from './styled';
 import { THEME } from '../../../../globalStyles';
 import VersionCard from './VersionCard';
@@ -50,11 +52,6 @@ const buttons = [
 
 // TODO: Dynamically show info. Backend not ready
 const cards = [
-  {
-    header: 'Folder',
-    iconName: 'FabricFolder',
-    bodyText: 'Contoso Weather'
-  },
   {
     header: 'Owner',
     iconName: 'Contact',
@@ -91,14 +88,14 @@ class TemplateInfo extends React.Component<Props, State> {
   versionList = (instances: TemplateInstance[] | undefined): IDropdownOption[] => {
     if (!instances) return [];
     let options: IDropdownOption[] = [];
-    for (let instance of instances){
+    for (let instance of instances) {
       if (!instance.version) continue;
-      options.push({key: instance.version, text: `Version ${instance.version}`});
+      options.push({ key: instance.version, text: `Version ${instance.version}` });
     }
     return options;
   }
 
-  onVersionChange = (event: React.FormEvent<HTMLDivElement>, option?:IDropdownOption) => {
+  onVersionChange = (event: React.FormEvent<HTMLDivElement>, option?: IDropdownOption) => {
     if (!option) return;
     let version = option.key.toString();
     this.setState({ version: version });
@@ -108,32 +105,38 @@ class TemplateInfo extends React.Component<Props, State> {
   render() {
     const {
       isLive,
-      createdAt, 
+      tags,
+      createdAt,
       instances,
     } = this.props.template;
-    const {
-      onClose
-    } = this.props;
+    const { onClose } = this.props;
+
+    let createdAtParsed = "";
+
+    if (createdAt) {
+      const createdAtDate = new Date(createdAt);
+      createdAtParsed = createdAtDate.toLocaleString();
+    }
 
     return (
       <OuterWrapper>
         <HeaderWrapper>
           <TopRowWrapper>
             <TitleWrapper>
-            <Title>
+              <Title>
                 <StyledVersionDropdown
-                  placeholder = {`Version ${this.state.version}`}
-                  options = {this.versionList(instances)}
-                  onChange = {this.onVersionChange}
-                  theme = {THEME.LIGHT}
-                  styles = {DropdownStyles}
+                  placeholder={`Version ${this.state.version}`}
+                  options={this.versionList(instances)}
+                  onChange={this.onVersionChange}
+                  theme={THEME.LIGHT}
+                  styles={DropdownStyles}
                 />
               </Title>
               <StatusIndicator state={isLive? PostedTemplate.StateEnum.Live : PostedTemplate.StateEnum.Draft} />
               <Status>{isLive ? 'Published' : 'Draft'}</Status>
             </TitleWrapper>
             <TimeStamp>
-              Created {createdAt}
+              Created {createdAtParsed}
             </TimeStamp>
             <ActionButton iconProps={{ iconName: 'ChromeClose' }} onClick={onClose} >Close</ActionButton>
           </TopRowWrapper>
@@ -160,11 +163,19 @@ class TemplateInfo extends React.Component<Props, State> {
               </Card>
             ))}
           </RowWrapper>
+          <Card>
+            <CardHeader>Tags</CardHeader>
+            <CardBody>
+              <TagsWrapper>
+                <Tags tags={tags} allowAddTag={true} />
+              </TagsWrapper>
+            </CardBody>
+          </Card>
           <RowWrapper>
-            <VersionCard template={this.props.template} />
+            <VersionCard template={this.props.template} templateVersion={this.state.version}/>
           </RowWrapper>
         </MainContentWrapper>
-        {this.state.isPublishOpen && <PublishModal toggleModal={this.toggleModal} template={this.props.template} templateVersion={this.state.version}/>}
+        {this.state.isPublishOpen && <PublishModal toggleModal={this.toggleModal} template={this.props.template} templateVersion={this.state.version} />}
       </OuterWrapper>
     );
   }

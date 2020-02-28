@@ -393,7 +393,7 @@ definitions:
     properties: 
       name: 
         type: string
-      version: 
+      version:
         type: string
       template: 
         type: object
@@ -415,7 +415,7 @@ definitions:
       data: 
         type: array
         items: 
-          type: string
+          type: object
           format: JSON
       isClient: 
           type: boolean

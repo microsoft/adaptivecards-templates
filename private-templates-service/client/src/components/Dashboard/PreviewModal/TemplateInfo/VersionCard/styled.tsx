@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { COLORS } from '../../../../../globalStyles';
-import { ActionButton } from 'office-ui-fabric-react';
+import { ActionButton, Icon } from 'office-ui-fabric-react';
 
 export const CardManageButton = styled(ActionButton)`
   color: ${COLORS.GREY3};
@@ -26,10 +26,11 @@ export const VersionCardRow = styled.div`
   flex-direction: row;
   justify-content: space-around;
   margin-top: 8px;
+  margin-left: 16px;
   margin-bottom: 8px;
+  margin-right: 16px;
   align-items: center;
 `
-
 export const VersionCardRowTitle = styled.div`
   font-weight: 600;
 `
@@ -49,4 +50,25 @@ export const StatusWrapper = styled.div`
   flex-basis: 20%;
   flex-direction: row;
   align-items: center;
+`
+
+export const VersionIcon = styled(Icon)`
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+height: 1rem;
+width: 1rem;
+border-radius: 50%;
+font-size: 1.0rem;
+color: ${COLORS.BLUE};
+margin: 0 0 0 15px;
+`
+
+export const VersionWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  font-weight: 600;
+  align-items: center;
+  flex-basis: 15%;
 `

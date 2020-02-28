@@ -8,9 +8,10 @@ import {
   VersionCardHeader, 
   VersionCardRowTitle,
   DateWrapper,
-  VersionCardRow, 
-  VersionCardRowText,
-  StatusWrapper
+  VersionCardRow,
+  StatusWrapper,
+  VersionIcon, 
+  VersionWrapper
 } from './styled'
 
 import {
@@ -24,6 +25,7 @@ import {
 
 interface Props {
   template: Template;
+  templateVersion: string;
 }
 
 
@@ -49,7 +51,7 @@ class VersionCard extends React.Component<Props, {}> {
 
   render() {
     return (
-      <Card key="Recent Releases">
+      <Card key="Recent Releases" style={{width: `100%`}}>
         <CardHeader>
           <VersionCardHeader>
             <CardTitle>Recent Releases</CardTitle>
@@ -58,13 +60,16 @@ class VersionCard extends React.Component<Props, {}> {
         </CardHeader>
         <CardBody>
           <VersionCardRow>
-            <VersionCardRowTitle>Version</VersionCardRowTitle>
-            <VersionCardRowTitle>Updated</VersionCardRowTitle>
-            <VersionCardRowTitle>Status</VersionCardRowTitle>
+            <VersionCardRowTitle style={{flexBasis: `15%`}}>Version</VersionCardRowTitle>
+            <VersionCardRowTitle style={{flexBasis: `25%`}}>Updated</VersionCardRowTitle>
+            <VersionCardRowTitle style={{flexBasis: `20%`}}>Status</VersionCardRowTitle>
           </VersionCardRow>  
           {this.props.template.instances!.map((instance) => (
             <VersionCardRow>
-              <VersionCardRowText>{instance.version}</VersionCardRowText>
+              <VersionWrapper>
+                {instance.version}
+                {instance.version === this.props.templateVersion && <VersionIcon iconName={'View'}></VersionIcon>}
+              </VersionWrapper>      
               <DateWrapper>{this.updatedDate(instance.updatedAt)}</DateWrapper>
               <StatusWrapper>
                 <StatusIndicator state = {instance.state}/>
