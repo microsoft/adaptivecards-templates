@@ -1,5 +1,6 @@
 import React from 'react';
 import * as AdaptiveCards from "adaptivecards";
+import * as ACData from "adaptivecards-templating";
 import { Card } from './styled';
 import markdownit from "markdown-it";
 import { Template, TemplateInstance } from 'adaptive-templating-service-typescript-node';
@@ -47,6 +48,30 @@ export function renderAdaptiveCard(template: Template): any {
   }
 }
 
+function setContextRoot(data: string, context: ACData.EvaluationContext) {
+  console.log(data);
+  try {
+    let dataString = JSON.stringify(data);
+    let dataJSON: JSON = JSON.parse(dataString);
+    context.$root = dataJSON;
+  }
+  catch (e) {
+    console.log(e);
+  }
+}
+
+// bindData binds the data to the adaptive card template
+function bindData(temp: TemplateInstance): TemplateInstance {
+  let jsonTemp = cleanTemplate(temp);
+  let template: ACData.Template = new ACData.Template(jsonTemp);
+  let context: ACData.EvaluationContext = new ACData.EvaluationContext()
+  if (temp.data && temp.data[0]) {
+    setContextRoot(temp.data[0], context);
+  }
+  let card = template.expand(context);
+  return card;
+}
+
 /*
 cleanTemplate accepts a template object. This method strips the object of the unncessary '\\\' contained in the object and removes the 
 extra characters before and after the actual JSON object. It then parses the string into JSON and returns the JSON object.  
@@ -61,13 +86,16 @@ function cleanTemplate(temp: TemplateInstance): Template {
   } catch {
     console.log("Invalid Adaptive Cards JSON. Card not parsed.");
     const errorMessageJSON = JSON.stringify(require('../../../assets/default-adaptivecards/defaultErrorCard.json'));
+
     jsonTemp = errorMessageJSON;
   }
   return jsonTemp;
 }
 
 function processTemplate(temp: TemplateInstance): any {
-  const jsonTemp = cleanTemplate(temp);
+  // const jsonTemp = cleanTemplate(temp);
+  // add data binding
+  const jsonTemp = bindData(temp);
   const template = renderAdaptiveCard(jsonTemp);
   return template;
 }
