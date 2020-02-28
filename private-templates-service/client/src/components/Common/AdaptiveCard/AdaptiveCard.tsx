@@ -76,7 +76,6 @@ function bindData(temp: TemplateInstance): TemplateInstance {
 cleanTemplate accepts a template object. This method strips the object of the unncessary '\\\' contained in the object and removes the 
 extra characters before and after the actual JSON object. It then parses the string into JSON and returns the JSON object.  
 */
-
 function cleanTemplate(temp: TemplateInstance): Template {
   const json = JSON.stringify(temp.json);
   let jsonTemp = {};
@@ -93,8 +92,6 @@ function cleanTemplate(temp: TemplateInstance): Template {
 }
 
 function processTemplate(temp: TemplateInstance): any {
-  // const jsonTemp = cleanTemplate(temp);
-  // add data binding
   const jsonTemp = bindData(temp);
   const template = renderAdaptiveCard(jsonTemp);
   return template;
