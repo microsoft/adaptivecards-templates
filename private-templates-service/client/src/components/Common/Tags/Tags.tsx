@@ -1,4 +1,10 @@
 import React from 'react';
+import { connect } from 'react-redux';
+
+import { updateTemplate } from '../../../store/currentTemplate/actions';
+import { RootState } from '../../../store/rootReducer';
+
+import { Template } from 'adaptive-templating-service-typescript-node';
 
 import {
   Tag,
@@ -11,9 +17,28 @@ import {
   TagSubmitIcon,
 } from './styled';
 
+const mapStateToProps = (state: RootState) => {
+  return {
+    templateID: state.currentTemplate.templateID,
+    template: state.currentTemplate.template,
+  }
+}
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    updateTags: (templateID: string, tags: string[]) => {
+      dispatch(updateTemplate(templateID, undefined, undefined, undefined, undefined, tags))
+    }
+  }
+}
+
 interface Props {
   tags?: string[];
+  allowEdit?: boolean;
   allowAddTag?: boolean;
+  templateID?: string;
+  template?: Template;
+  updateTags: (templateID: string, tags: string[]) => void;
 }
 
 interface State {
@@ -33,6 +58,7 @@ class Tags extends React.Component<Props, State>  {
   }
 
   tagRemove = (tag: string) => {
+    console.log(this.props.template);
     // TODO: kodyang REMOVE TAG
   }
 
@@ -51,11 +77,12 @@ class Tags extends React.Component<Props, State>  {
   }
 
   submitNewTag = (e: any): void => {
-    // TODO: kodyang SUBMIT NEW TAG
     e.preventDefault();
-    if (this.addTagInput && this.addTagInput.current) {
+    console.log(this.props);
+    if (this.addTagInput && this.addTagInput.current && this.props.template && this.props.template.tags && this.props.templateID) {
       const tag = this.addTagInput.current.value;
-      console.log("new tag submitted: ", tag);
+      console.log("Update tags: ", this.props.templateID, [...this.props.template.tags, tag]);
+      this.props.updateTags(this.props.templateID, [...this.props.template.tags, tag]);
     }
   }
 
@@ -64,6 +91,7 @@ class Tags extends React.Component<Props, State>  {
   }
 
   render() {
+    // console.log(this.props.template);
     const {
       tags,
       allowAddTag
@@ -94,4 +122,4 @@ class Tags extends React.Component<Props, State>  {
 }
 
 
-export default Tags;
+export default connect(mapStateToProps, mapDispatchToProps)(Tags);
