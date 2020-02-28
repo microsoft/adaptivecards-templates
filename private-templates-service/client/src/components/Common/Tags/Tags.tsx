@@ -58,8 +58,10 @@ class Tags extends React.Component<Props, State>  {
   }
 
   tagRemove = (tag: string) => {
-    console.log(this.props.template);
-    // TODO: kodyang REMOVE TAG
+    if (this.props.allowEdit && this.props.templateID && this.props.template && this.props.template.tags) {
+      const newTags = this.props.template.tags.filter((existingTag: string) => existingTag !== tag);
+      this.props.updateTags(this.props.templateID, newTags);
+    }
   }
 
   openNewTag = () => {
@@ -78,10 +80,8 @@ class Tags extends React.Component<Props, State>  {
 
   submitNewTag = (e: any): void => {
     e.preventDefault();
-    console.log(this.props);
     if (this.addTagInput && this.addTagInput.current && this.props.template && this.props.template.tags && this.props.templateID) {
       const tag = this.addTagInput.current.value;
-      console.log("Update tags: ", this.props.templateID, [...this.props.template.tags, tag]);
       this.props.updateTags(this.props.templateID, [...this.props.template.tags, tag]);
     }
   }
@@ -91,7 +91,6 @@ class Tags extends React.Component<Props, State>  {
   }
 
   render() {
-    // console.log(this.props.template);
     const {
       tags,
       allowAddTag

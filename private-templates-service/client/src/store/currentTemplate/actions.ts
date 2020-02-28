@@ -111,6 +111,8 @@ export function updateTemplate(templateID?: string, templateJSON?: string, sampl
     let newTemplate = new PostedTemplate();
     if (templateJSON) {
       newTemplate.template = JSON.parse(templateJSON);
+    } else {
+      newTemplate.template = state.currentTemplate.templateJSON;
     }
 
     newTemplate.name = templateName;
