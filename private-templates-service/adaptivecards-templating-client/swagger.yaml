@@ -393,7 +393,7 @@ definitions:
     properties: 
       name: 
         type: string
-      version: 
+      version:
         type: string
       template: 
         type: object
