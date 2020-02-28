@@ -1,7 +1,7 @@
 import React from 'react';
 import { ActionButton, IDropdownOption } from 'office-ui-fabric-react';
 
-import { Template, TemplateInstance } from 'adaptive-templating-service-typescript-node';
+import { Template, TemplateInstance, PostedTemplate } from 'adaptive-templating-service-typescript-node';
 
 import PublishModal from '../../../Common/PublishModal';
 
@@ -26,6 +26,7 @@ import {
   DropdownStyles
 } from './styled';
 import { THEME } from '../../../../globalStyles';
+import VersionCard from './VersionCard';
 
 
 const buttons = [
@@ -128,7 +129,7 @@ class TemplateInfo extends React.Component<Props, State> {
                   styles = {DropdownStyles}
                 />
               </Title>
-              <StatusIndicator isPublished={isLive} />
+              <StatusIndicator state={isLive? PostedTemplate.StateEnum.Live : PostedTemplate.StateEnum.Draft} />
               <Status>{isLive ? 'Published' : 'Draft'}</Status>
             </TitleWrapper>
             <TimeStamp>
@@ -158,6 +159,9 @@ class TemplateInfo extends React.Component<Props, State> {
                 </CardBody>
               </Card>
             ))}
+          </RowWrapper>
+          <RowWrapper>
+            <VersionCard template={this.props.template} />
           </RowWrapper>
         </MainContentWrapper>
         {this.state.isPublishOpen && <PublishModal toggleModal={this.toggleModal} template={this.props.template} templateVersion={this.state.version}/>}
