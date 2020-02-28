@@ -1089,7 +1089,6 @@ export class TemplateServiceClient {
 
     router.post("/:id*?", async (req: Request, res: Response, _next: NextFunction) => {
       if (req.body.template !== undefined && (!(req.body.template instanceof Object) || !isValidJSONString(JSON.stringify(req.body.template)))) {
-        console.log(req.body.template);
         const err = new TemplateError(ApiError.InvalidTemplate, `Template must be valid JSON.`);
         return res.status(400).json({ error: err });
       }
