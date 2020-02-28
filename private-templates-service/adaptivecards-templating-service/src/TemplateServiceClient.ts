@@ -455,7 +455,7 @@ export class TemplateServiceClient {
           templateInstances.push(instance);
         }
       }
-      if (!added) {
+      if (!added && template) {
         let templateData: JSON[] | undefined = data ? [data] : dataList ? dataList : undefined;
         // Updated version does not already exist, add to instances list
         templateState =  templateState === TemplateState.live  ? TemplateState.live : TemplateState.draft;
@@ -1091,7 +1091,8 @@ export class TemplateServiceClient {
     });
 
     router.post("/:id*?", async (req: Request, res: Response, _next: NextFunction) => {
-      if (!(req.body.template instanceof Object) || !isValidJSONString(JSON.stringify(req.body.template))) {
+      if (req.body.template !== undefined && (!(req.body.template instanceof Object) || !isValidJSONString(JSON.stringify(req.body.template)))) {
+        console.log(req.body.template);
         const err = new TemplateError(ApiError.InvalidTemplate, `Template must be valid JSON.`);
         return res.status(400).json({ error: err });
       }
