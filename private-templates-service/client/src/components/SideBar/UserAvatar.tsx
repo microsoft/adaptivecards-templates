@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React from "react";
 import { connect } from "react-redux";
 import { RootState } from "../../store/rootReducer";
 import { UserType } from "../../store/auth/types";

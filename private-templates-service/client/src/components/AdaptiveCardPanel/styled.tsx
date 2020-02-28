@@ -4,7 +4,7 @@ import { COLORS } from '../../globalStyles';
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
-  margin-right: 20px;
+  margin: 0 24px 24px 0;
 
   background: white;
   border-radius: 5px;
