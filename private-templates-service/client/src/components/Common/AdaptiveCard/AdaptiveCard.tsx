@@ -50,7 +50,6 @@ export function renderAdaptiveCard(template: Template): any {
 }
 
 function setContextRoot(data: string, context: ACData.EvaluationContext) {
-  console.log(data);
   try {
     let dataString = JSON.stringify(data);
     let dataJSON: JSON = JSON.parse(dataString);
