@@ -8,11 +8,6 @@ interface TemplateSourceInfoProps {
   templateJSON?: string;
 }
 
-const tempJSON = {
-  "one": "hello",
-  "two": "bye",
-}
-
 class TemplateSourceInfo extends React.Component<TemplateSourceInfoProps> {
 
   onCopy = () => {
@@ -30,7 +25,7 @@ class TemplateSourceInfo extends React.Component<TemplateSourceInfoProps> {
   render() {
     let sourceJSON = undefined;
     if (this.props.templateJSON) {
-      sourceJSON = JSON.stringify(this.props.templateJSON, undefined, 2);
+      sourceJSON = JSON.stringify(this.props.templateJSON, null, 2);
     }
     return (
       <React.Fragment>
