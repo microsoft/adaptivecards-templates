@@ -79,21 +79,6 @@ export function compareVersion(a: string, b: string): boolean {
   return v1.length == v2.length ? false : v1.length > v2.length;
 }
 
-export function stringifyJSONArray(list: JSON[]): string[] {
-  let result = [];
-  for (let item of list) {
-    result.push(JSON.stringify(item));
-  }
-  return result;
-}
-
-export function JSONStringArray(list: string[]): JSON[] {
-  let result = [];
-  for (let item of list) {
-    result.push(JSON.parse(item));
-  }
-  return result;
-}
 
 /**
  * @function
@@ -128,11 +113,12 @@ export function setTemplateInstanceParam(templateInstance: ITemplateInstance, te
 }
 
 export function anyVersionsLive(templates: ITemplateInstance[]): boolean { 
-  if(templates){
-    for(let instance of templates){ 
-      if(instance.state === TemplateState.live){
-        return true;
-      }
+  if(!templates){
+    return false;
+  }
+  for(let instance of templates){ 
+    if(instance.state === TemplateState.live){
+      return true;
     }
   }
   return false;

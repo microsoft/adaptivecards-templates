@@ -403,12 +403,12 @@ export class TemplateServiceClient {
       let added = false;
       for (let instance of existingTemplate.instances) {
         if (instance.version === templateInstance.version) { 
-          
+          let templateData: JSON[] | undefined = data ? [data] : dataList ? dataList : undefined;
           if(instance.state === TemplateState.deprecated){
-            // the template that is trying to be modified is deprecated
+            // The template that is trying to be modified is deprecated
             templateInstances.push(instance); 
-            // pushing existing deprecated version back
-            let templateData: JSON[] | undefined = data ? [data] : dataList ? dataList : undefined;
+            // Pushing existing deprecated version back
+            
             version = incrementVersion(existingTemplate);
             templateState =  templateState === TemplateState.live  ? TemplateState.live : TemplateState.draft;
             templateInstance = setTemplateInstanceParam(templateInstance,templateData,templateState,isShareable,version);
@@ -418,8 +418,7 @@ export class TemplateServiceClient {
           }
           if(instance.state === TemplateState.live) {
             if(templateState === TemplateState.deprecated ) { 
-              //set the template to deprecated
-              let templateData: JSON[] | undefined = data ? [data] : dataList ? dataList : undefined;
+              // Set the template to deprecated
               templateInstance = setTemplateInstanceParam(templateInstance,templateData,templateState,isShareable,version);
               templateInstances.push(templateInstance);
               added = true;
@@ -427,8 +426,7 @@ export class TemplateServiceClient {
             }
             else{
               templateInstances.push(instance); 
-              // pushing existing deprecated version back
-              let templateData: JSON[] | undefined = data ? [data] : dataList ? dataList : undefined;
+              // Pushing existing deprecated version back
               version = incrementVersion(existingTemplate);
               templateInstance = setTemplateInstanceParam(templateInstance,templateData,templateState,isShareable,version);
               templateInstances.push(templateInstance); 
@@ -441,7 +439,7 @@ export class TemplateServiceClient {
           if (data) {
             existingData!.push(data);
           }
-          let templateData: JSON[] | undefined = data ? existingData : dataList ? dataList : undefined;
+          templateData = data ? existingData : dataList ? dataList : undefined;
           templateInstance.numHits = instance.numHits;
           templateInstance.state = templateInstance.state !== TemplateState.deprecated && templateInstance.state !== TemplateState.draft &&
                                   instance.state !== TemplateState.draft? TemplateState.draft : 

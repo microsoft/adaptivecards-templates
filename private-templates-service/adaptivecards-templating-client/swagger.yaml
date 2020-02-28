@@ -393,6 +393,8 @@ definitions:
     properties: 
       name: 
         type: string
+      version:
+        type: string
       template: 
         type: object
         format: JSON
