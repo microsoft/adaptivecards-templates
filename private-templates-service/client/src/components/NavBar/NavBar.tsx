@@ -40,6 +40,16 @@ const NavBar = (props: NavBarProps) => {
           <SearchBar />
         </Banner>
       );
+    case "searchpage":
+      return (
+        <Banner>
+          <MobileBanner>
+            <StyledLogo src={Logo} />
+            <Styledh1>{props.currentPageTitle}</Styledh1>
+          </MobileBanner>
+          <SearchBar />
+        </Banner>
+      );
     case "designer":
       return (
         <Banner>
@@ -57,7 +67,7 @@ const NavBar = (props: NavBarProps) => {
           </ActionButton>
         </Banner>
       );
-    case "sharedPage":
+    case "sharedpage":
       return (
         <Banner>
           <MobileBanner>

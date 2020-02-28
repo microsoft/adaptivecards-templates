@@ -48,7 +48,7 @@ class SearchPage extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = { isPreviewOpen: false };
-    props.setPage("Templates", "Templates");
+    props.setPage("Templates", "searchPage");
   };
   toggleModal = () => {
     this.setState({ isPreviewOpen: !this.state.isPreviewOpen });
