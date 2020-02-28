@@ -21,8 +21,8 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    setHeader: (header: string) => {
-      dispatch(setPage(header))
+    setHeader: (header: string, currentPage: string) => {
+      dispatch(setPage(header, currentPage))
     }
   }
 }
@@ -32,7 +32,7 @@ interface Props {
   template?: Template;
   isFetching?: boolean;
   toggleModal: () => void;
-  setHeader: (header: string) => void;
+  setHeader: (header: string, currentPage: string) => void;
 }
 
 interface State {
@@ -54,7 +54,7 @@ class PreviewModal extends React.Component<Props, State> {
     if (prevProps.show !== this.props.show || prevProps.template !== this.props.template) {
       this.props.setHeader(
         this.props.show && this.props.template && this.props.template.name ?
-          this.props.template.name : 'Dashboard'
+          this.props.template.name : 'Dashboard', 'Dashboard'
       );
     }
   }

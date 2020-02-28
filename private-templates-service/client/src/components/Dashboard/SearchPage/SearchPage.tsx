@@ -23,9 +23,9 @@ const mapStateToProps = (state: RootState) => {
 }
 
 const mapDispatchToProps = (dispatch: any) => {
-  return{
-    setPage: (currentPageTitle: string) => {
-      dispatch(setPage(currentPageTitle));
+  return {
+    setPage: (currentPageTitle: string, currentPage: string) => {
+      dispatch(setPage(currentPageTitle, currentPage));
     }
   }
 }
@@ -37,57 +37,57 @@ interface Props {
   sortType: string;
   loading: boolean;
   templates?: TemplateList;
-  setPage: (currentPageTitle: string) => void;
+  setPage: (currentPageTitle: string, currentPage: string) => void;
 }
 
-interface State{ 
+interface State {
   isPreviewOpen: boolean;
 }
 
 class SearchPage extends React.Component<Props, State> {
-  constructor(props: Props){
+  constructor(props: Props) {
     super(props);
-    this.state = {isPreviewOpen: false};
-    props.setPage("Templates");
+    this.state = { isPreviewOpen: false };
+    props.setPage("Templates", "searchPage");
   };
   toggleModal = () => {
     this.setState({ isPreviewOpen: !this.state.isPreviewOpen });
   };
 
   render() {
-    if(this.props.loading){
-      return(
+    if (this.props.loading) {
+      return (
         <StyledSpinner>
-          <Spinner size = {SpinnerSize.large} />
+          <Spinner size={SpinnerSize.large} />
         </StyledSpinner>
       )
     }
 
     let templates = new Array<Template>();
     let searchText = "";
-    if(!this.props.loading && this.props.templates?.templates){
+    if (!this.props.loading && this.props.templates?.templates) {
       templates = this.props.templates.templates;
     }
 
-    if(this.props.templates?.templates?.length === 0){
+    if (this.props.templates?.templates?.length === 0) {
       searchText = "No Results Found For " + "'" + this.props.searchByTemplateName + "'";
-    }else{
+    } else {
       searchText = "Template Results For " + "'" + this.props.searchByTemplateName + "'";
     }
-    
+
     return (
       <div>
         <SearchResultBanner>
-          <StyledSearchText>{ searchText }</StyledSearchText>
+          <StyledSearchText>{searchText}</StyledSearchText>
           <SearchAndFilter>
-            <Sort/>
-            <Filter/>
+            <Sort />
+            <Filter />
           </SearchAndFilter>
         </SearchResultBanner>
-      <h1>filter value: {this.props.filterType}</h1>
-      <h1>sort value: {this.props.sortType}</h1>
-      <Gallery onClick = {this.toggleModal} templates={ templates }></Gallery>
-      <PreviewModal show= {this.state.isPreviewOpen} toggleModal ={this.toggleModal}/>
+        <h1>filter value: {this.props.filterType}</h1>
+        <h1>sort value: {this.props.sortType}</h1>
+        <Gallery onClick={this.toggleModal} templates={templates}></Gallery>
+        <PreviewModal show={this.state.isPreviewOpen} toggleModal={this.toggleModal} />
       </div>
       // TODO: add ability to see templates that are searched 
     );
