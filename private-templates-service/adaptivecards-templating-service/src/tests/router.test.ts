@@ -3,7 +3,7 @@ import { TemplateServiceClient } from "../index";
 import { ClientOptions } from "../IClientOptions";
 import { AzureADProvider } from "../authproviders/AzureADProvider";
 import express, { Router } from "express";
-import mongoose from "mongoose";
+import mongoose, { version } from "mongoose";
 import bodyParser from "body-parser";
 import { InMemoryDBProvider } from "../storageproviders/InMemoryDBProvider";
 import { ITemplate, ITemplateInstance } from "../models/models";
@@ -17,8 +17,8 @@ export default async function getToken(): Promise<string> {
     client_secret: "#{CLIENT_SECRET_TOKEN}#",
     resource: "https://graph.windows.net"
   };
-  return await request.post({ url: endpoint, form: requestParams })
-    // put in try catch
+  return await request
+    .post({ url: endpoint, form: requestParams }) // put in try catch
     .then((err: any, response: any, body: any) => {
       if (err) {
         let parsedBody = JSON.parse(err);
@@ -578,5 +578,281 @@ describe("Get Tags", () => {
     for (let id of idsToDelete) {
       await request(app).delete(`/template/${id}`);
     }
+  });
+});
+
+describe("Post Templates, and increment version", () => {
+  let token: string;
+  const app = express();
+  let id: string;
+  let idsToDelete: string[] = [];
+
+  beforeAll(async () => {
+    // TODO: request access token for registered AD app
+    token = await getToken();
+    let templateClient = TemplateServiceClient.init(options);
+    let middleware: Router = templateClient.expressMiddleware();
+    let userMiddleware: Router = templateClient.userExpressMiddleware();
+    app.use(bodyParser.json());
+    app.use("/template", middleware);
+    app.use("/user", userMiddleware);
+  });
+
+  // Unauthenticated request
+  it("should try to post without authenticating and fail", async () => {
+    const res = await request(app)
+      .post("/template")
+      .send({
+        template: {},
+        isPublished: false
+      });
+    expect(res.status).toEqual(401);
+  });
+
+  // Authenticated post request
+  it("should try to post with valid template with default parameters and succeed", async () => {
+    let res = await request(app)
+      .post("/template")
+      .set({ Authorization: "Bearer " + token })
+      .send({
+        template: {}
+      });
+    expect(res.status).toEqual(201);
+    expect(res.body).toHaveProperty("id");
+    id = res.body.id;
+    idsToDelete.push(id);
+
+    // User object should also be created
+    const userRes = await request(app)
+      .get("/user")
+      .set({ Authorization: "Bearer " + token });
+    expect(userRes.status).toEqual(200);
+    expect(res.body).toHaveProperty("id");
+    id = res.body.id;
+  });
+
+  // Template should exist in general GET
+  it("should try to get the last template and succeed", async () => {
+    const res = await request(app)
+      .get("/template")
+      .set({ Authorization: "Bearer " + token });
+
+    expect(res.status).toEqual(200);
+    expect(res.body).toHaveProperty("templates");
+    expect(res.body.templates).toHaveLength(2);
+    let template = res.body.templates[0];
+    testDefaultTemplateParameters(template);
+  });
+
+  // Template should exist in specific GET by id
+  it("should try to get specific template by id and succeed", async () => {
+    let res = await request(app)
+      .get(`/template/${id}`)
+      .set({ Authorization: "Bearer " + token });
+
+    expect(res.status).toEqual(200);
+    expect(res.body).toHaveProperty("templates");
+    expect(res.body.templates).toHaveLength(1);
+    let template = res.body.templates[0];
+    expect(template).toHaveProperty("_id");
+    expect(template._id).toMatch(id);
+    testDefaultTemplateParameters(template);
+    expect(template.instances).toHaveLength(1);
+    let instance = template.instances[0];
+    testDefaultTemplateInstanceParameters(instance);
+  });
+
+  // Authenticated post request
+  // send first instance 
+  it("should try to post multiple versions of a template", async () => {
+    let res = await request(app)
+      .post("/template")
+      .set({ Authorization: "Bearer " + token })
+      .send({
+        template: {},
+        state: "live"
+      });
+    expect(res.status).toEqual(201);
+    expect(res.body).toHaveProperty("id");
+    id = res.body.id;
+    idsToDelete.push(id);
+    
+    // send second instance 
+    res = await request(app)
+      .post(`/template/${id}`)
+      .set({ Authorization: "Bearer " + token })
+      .send({
+        template: {}
+      });
+    expect(res.status).toEqual(201);
+    idsToDelete.push(res.body.id);
+
+    // send third instance 
+    res = await request(app)
+      .post(`/template/${id}`)
+      .set({ Authorization: "Bearer " + token })
+      .send({
+        template: {}
+      });
+    expect(res.status).toEqual(201);
+    idsToDelete.push(res.body.id);
+    
+    //recive instances 
+    res = await request(app)
+      .get(`/template/${id}`)
+      .set({ Authorization: "Bearer " + token });
+    expect(res.status).toEqual(200);
+    expect(res.body).toHaveProperty("templates");
+    let instances = res.body.templates[0].instances
+    expect(instances[0].version).toEqual("1.0")
+    expect(instances[0].state).toEqual("live")
+    expect(instances[1].version).toEqual("1.1")
+    expect(instances[1].state).toEqual("draft")
+    expect(instances[2].version).toEqual("1.2")
+    expect(instances[2].state).toEqual("draft")
+
+
+    //edit first instance
+    res = await request(app)
+    .post(`/template/${id}`)
+    .set({ Authorization: "Bearer " + token })
+    .send({
+      template: {},
+      version: "1.0",
+      state: "deprecated"
+    });
+    expect(res.status).toEqual(201);
+    idsToDelete.push(res.body.id);
+
+    //edit third instance which is deprecated, should create a new instance 1.3 
+    res = await request(app)
+    .post(`/template/${id}`)
+    .set({ Authorization: "Bearer " + token })
+    .send({
+      template: {},
+      version: "1.0",
+    });
+    expect(res.status).toEqual(201);
+    idsToDelete.push(res.body.id);
+
+    res = await request(app)
+      .get(`/template/${id}`)
+      .set({ Authorization: "Bearer " + token });
+    expect(res.status).toEqual(200);
+    expect(res.body).toHaveProperty("templates");
+    let instancesAfter = res.body.templates[0].instances
+    expect(instancesAfter[0].version).toEqual("1.0")
+    expect(instancesAfter[0].state).toEqual("deprecated")
+    expect(instancesAfter[1].version).toEqual("1.3")
+    expect(instancesAfter[1].state).toEqual("draft")
+    expect(instancesAfter[2].version).toEqual("1.1")
+    expect(instancesAfter[2].state).toEqual("draft")
+    expect(instancesAfter[3].version).toEqual("1.2")
+    expect(instancesAfter[3].state).toEqual("draft")
+  });
+
+  it("should try to delete existing user and succeed", async () => {
+    const res = await request(app)
+      .delete("/user")
+      .set({ Authorization: "Bearer " + token });
+    expect(res.status).toEqual(204);
+    expect({ user: [] });
+
+    // No more templates under user
+    const templateRes = await request(app)
+      .get("/template")
+      .set({ Authorization: "Bearer " + token })
+      .send({
+        isPublished: false
+      })
+      .expect({ templates: [] });
+  });
+
+  // Authenticated post request with invalid template
+  it("should try to post with invalid template and fail", async () => {
+    const res = await request(app)
+      .post("/template")
+      .set({ Authorization: "Bearer " + token })
+      .send({
+        template: "{",
+        isPublished: false
+      });
+    expect(res.status).toEqual(400);
+  });
+
+  afterAll(async () => {
+    await mongoose.connection.close();
+    for (let id of idsToDelete) {
+      await request(app).delete(`/template/${id}`);
+    }
+  });
+});
+
+describe("Basic Get Templates", () => {
+  let token: string;
+  const app = express();
+  let id: string;
+  let idsToDelete: string[] = [];
+
+  beforeAll(async () => {
+    // TODO: request access token for registered AD app
+    token = await getToken();
+    let templateClient = TemplateServiceClient.init(options);
+    let middleware: Router = templateClient.expressMiddleware();
+    let userMiddleware: Router = templateClient.userExpressMiddleware();
+    app.use(bodyParser.json());
+    app.use("/template", middleware);
+    app.use("/user", userMiddleware);
+  });
+
+  // Unauthenticated get request
+  it("should try to get the templates without authenticating and fail", async () => {
+    const res = await request(app).get("/template");
+    expect(res.status).toEqual(401);
+  });
+
+  // Authenticated get request
+  it("should try to get the templates and succeed", async () => {
+    const res = await request(app)
+      .get("/template")
+      .set({ Authorization: "Bearer " + token });
+    expect(res.status).toEqual(200);
+    expect(res.body).toHaveProperty("templates");
+  });
+
+  // Authenticated post request
+  it("should try to post multiple versions of a template and succeed", async () => {
+    let res = await request(app)
+      .post("/template")
+      .set({ Authorization: "Bearer " + token })
+      .send({
+        template: {}
+      });
+    expect(res.status).toEqual(201);
+    expect(res.body).toHaveProperty("id");
+    id = res.body.id;
+    idsToDelete.push(id);
+
+    res = await request(app)
+      .post(`/template/${id}`)
+      .set({ Authorization: "Bearer " + token })
+      .send({
+        template: {},
+        version: "1.2"
+      });
+    expect(res.status).toEqual(201);
+    idsToDelete.push(id);
+
+    res = await request(app)
+      .get("/template")
+      .set({ Authorization: "Bearer " + token });
+    expect(res.status).toEqual(200);
+    expect(res.body).toHaveProperty("templates");
+    expect(res.body.templates).toHaveLength(1);
+    let template = res.body.templates[0];
+    id = template._id;
+    expect(template.instances).toHaveLength(1);
+    // Check that only the latest version is returned
+    expect(template.instances[0].version).toMatch("1.2");
   });
 });

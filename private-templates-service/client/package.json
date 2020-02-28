@@ -17,6 +17,7 @@
     "@types/styled-components": "^4.4.2",
     "adaptivecards": "^1.2.5",
     "adaptivecards-designer": "^0.7.3",
+    "adaptivecards-templating": "^0.1.1-alpha.0",
     "bootstrap": "^4.4.1",
     "copy-webpack-plugin": "^5.1.1",
     "css-loader": "^3.4.2",
