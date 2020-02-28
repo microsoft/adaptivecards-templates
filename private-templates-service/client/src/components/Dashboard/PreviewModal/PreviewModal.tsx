@@ -8,11 +8,14 @@ import { RootState } from '../../../store/rootReducer';
 import AdaptiveCard from '../../Common/AdaptiveCard'
 import TemplateInfo from './TemplateInfo';
 
-import { ModalBackdrop, ModalWrapper, ACPanel, ACWrapper, DescriptorWrapper } from './styled';
+import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
+
+import { ModalBackdrop, ModalWrapper, ACPanel, ACWrapper, DescriptorWrapper, CenteredSpinner } from './styled';
 
 const mapStateToProps = (state: RootState) => {
   return {
     template: state.currentTemplate.template,
+    isFetching: state.currentTemplate.isFetching,
   }
 }
 
@@ -27,6 +30,7 @@ const mapDispatchToProps = (dispatch: any) => {
 interface Props {
   show: boolean;
   template?: Template;
+  isFetching?: boolean;
   toggleModal: () => void;
   setHeader: (header: string) => void;
 }
@@ -37,11 +41,11 @@ interface State {
 
 
 class PreviewModal extends React.Component<Props, State> {
-  constructor(props: Props){
+  constructor(props: Props) {
     super(props);
     this.state = { templateVersion: "1.0" }
   }
-  
+
   toggleTemplateVersion = (templateVersion: string) => {
     this.setState({ templateVersion: templateVersion });
   };
@@ -56,17 +60,29 @@ class PreviewModal extends React.Component<Props, State> {
   }
 
   render() {
-    return this.props.show && this.props.template ? (
+
+    const {
+      show,
+      isFetching,
+      template,
+    } = this.props;
+
+    return show ? (
       <ModalBackdrop>
         <ModalWrapper>
-          <ACPanel>
-            <ACWrapper>
-              <AdaptiveCard cardtemplate={this.props.template} templateVersion={this.state.templateVersion}/>
-            </ACWrapper>
-          </ACPanel>
-          <DescriptorWrapper>
-            <TemplateInfo template={this.props.template} onClose={this.props.toggleModal} onSwitchVersion={this.toggleTemplateVersion} />
-          </DescriptorWrapper>
+          {template && !isFetching ?
+            <React.Fragment>
+              <ACPanel>
+                <ACWrapper>
+                  <AdaptiveCard cardtemplate={template} templateVersion={this.state.templateVersion} />
+                </ACWrapper>
+              </ACPanel>
+              <DescriptorWrapper>
+                <TemplateInfo template={template} onClose={this.props.toggleModal} onSwitchVersion={this.toggleTemplateVersion} />
+              </DescriptorWrapper>
+            </React.Fragment>
+            : <CenteredSpinner size={SpinnerSize.large} />
+          }
         </ModalWrapper>
       </ModalBackdrop>
     ) : null;
