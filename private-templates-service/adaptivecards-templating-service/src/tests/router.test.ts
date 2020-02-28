@@ -14,7 +14,7 @@ export default async function getToken(): Promise<string> {
   const requestParams = {
     grant_type: "client_credentials",
     client_id: "4803f66a-136d-4155-a51e-6d98400d5506",
-    client_secret: "#{secrets.AZURE_ADAPTIVECMS_CLIENT_SECRET}#",
+    client_secret: "#{CLIENT_SECRET_TOKEN}#",
     resource: "https://graph.windows.net"
   };
   return await request
