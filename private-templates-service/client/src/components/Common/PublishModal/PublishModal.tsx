@@ -6,7 +6,7 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { PrimaryButton, ThemeSettingName } from 'office-ui-fabric-react'
 import { SearchBox } from 'office-ui-fabric-react';
 
-import { Template } from 'adaptive-templating-service-typescript-node';
+import { Template, PostedTemplate } from 'adaptive-templating-service-typescript-node';
 
 // Redux
 import { updateTemplate } from '../../../store/currentTemplate/actions';
@@ -36,13 +36,13 @@ interface Props {
   template: Template;
   templateVersion: string;
   toggleModal: () => void;
-  publishTemplate: (templateID: string, templateJSON: string, sampleDataJSON: string, templateName: string) => void;
+  publishTemplate: () => void;
 }
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    publishTemplate: (templateID: string, templateJSON: string, sampleDataJSON: string, templateName: string) => {
-      dispatch(updateTemplate(templateID, templateJSON, sampleDataJSON, templateName, true));
+    publishTemplate: () => {
+      dispatch(updateTemplate(undefined, undefined, undefined, undefined, PostedTemplate.StateEnum.Live));
     }
   }
 }
@@ -50,17 +50,9 @@ const mapDispatchToProps = (dispatch: any) => {
 class PublishModal extends React.Component<Props> {
 
   publish = () => {
-    const {
-      id,
-      name,
-      instances
-    } = this.props.template;
-    if (id && name && instances && instances.length === 1 && instances[0].json) {
-      const template = instances[0].json;
-      const parsedTemplate = JSON.stringify(template);
-      this.props.publishTemplate(id, parsedTemplate, "", name);
-      this.props.toggleModal();
-    }
+    // TODO: kodyang, grzhang PUBLISH CURRENT VERSION, NOT 1ST VERSION
+    this.props.publishTemplate();
+    this.props.toggleModal();
   }
 
   render() {
