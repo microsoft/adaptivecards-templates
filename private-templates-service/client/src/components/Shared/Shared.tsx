@@ -82,7 +82,7 @@ const Shared = (props: SharedComponentProps) => {
         <ModalWrapper>
           <ACPanel>
             <ACWrapper>
-              <AdaptiveCard cardtemplate={props.template}></AdaptiveCard>
+              <AdaptiveCard cardtemplate={props.template} templateVersion={version ? version : ""}></AdaptiveCard>
             </ACWrapper>
           </ACPanel>
           <DescriptorWrapper>
