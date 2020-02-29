@@ -1,7 +1,9 @@
 import styled from "styled-components";
-import { COLORS } from '../../globalStyles';
+import { COLORS } from "../../globalStyles";
 
 export const Container = styled.div`
+  flex-basis: 0;
+  flex: 1 1 0px;
   display: flex;
   flex-direction: column;
   margin: 0 24px 24px 0;
@@ -10,9 +12,9 @@ export const Container = styled.div`
   border-radius: 5px;
   width: 350px;
 
-  -webkit-box-shadow: 0px 2px 6px 0px rgba(111,111,111,0.4);
-  -moz-box-shadow: 0px 2px 6px 0px rgba(111,111,111,0.4);
-  box-shadow: 0px 2px 6px 0px rgba(111,111,111,0.4);
+  -webkit-box-shadow: 0px 2px 6px 0px rgba(111, 111, 111, 0.4);
+  -moz-box-shadow: 0px 2px 6px 0px rgba(111, 111, 111, 0.4);
+  box-shadow: 0px 2px 6px 0px rgba(111, 111, 111, 0.4);
 
   @media only screen and (max-width: 1399px) {
     margin-bottom: 20px;

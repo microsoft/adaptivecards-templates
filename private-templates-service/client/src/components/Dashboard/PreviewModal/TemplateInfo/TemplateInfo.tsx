@@ -1,10 +1,10 @@
-import React from 'react';
-import { ActionButton, IDropdownOption } from 'office-ui-fabric-react';
+import React from "react";
+import { ActionButton, IDropdownOption } from "office-ui-fabric-react";
 
-import { Template, TemplateInstance } from 'adaptive-templating-service-typescript-node';
+import { Template, TemplateInstance } from "adaptive-templating-service-typescript-node";
 
-import PublishModal from '../../../Common/PublishModal';
-import Tags from '../../../Common/Tags';
+import PublishModal from "../../../Common/PublishModal";
+import Tags from "../../../Common/Tags";
 
 import {
   OuterWrapper,
@@ -25,41 +25,40 @@ import {
   UsageNumber,
   TagsWrapper,
   StyledVersionDropdown,
-  DropdownStyles,
-} from './styled';
-import { THEME } from '../../../../globalStyles';
-
+  DropdownStyles
+} from "./styled";
+import { THEME } from "../../../../globalStyles";
 
 const buttons = [
   {
-    text: 'Edit in designer',
-    icon: { iconName: 'SingleColumnEdit' }
+    text: "Edit in designer",
+    icon: { iconName: "SingleColumnEdit" }
   },
   {
-    text: 'Delete',
-    icon: { iconName: 'Delete' }
+    text: "Delete",
+    icon: { iconName: "Delete" }
   },
   {
-    text: 'Share',
-    icon: { iconName: 'AddFriend' }
+    text: "Share",
+    icon: { iconName: "AddFriend" }
   },
   {
-    text: 'Publish',
-    icon: { iconName: 'PublishContent' }
-  },
+    text: "Publish",
+    icon: { iconName: "PublishContent" }
+  }
 ];
 
 // TODO: Dynamically show info. Backend not ready
 const cards = [
   {
-    header: 'Owner',
-    iconName: 'Contact',
-    bodyText: 'Henry Trent'
+    header: "Owner",
+    iconName: "Contact",
+    bodyText: "Henry Trent"
   },
   {
-    header: 'Usage',
-    body: (<UsageNumber>56</UsageNumber>),
-    bodyText: 'Requests'
+    header: "Usage",
+    body: <UsageNumber>56</UsageNumber>,
+    bodyText: "Requests"
   }
 ];
 
@@ -77,12 +76,12 @@ interface State {
 class TemplateInfo extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { isPublishOpen: false, version: "1.0" }
+    this.state = { isPublishOpen: false, version: "1.0" };
   }
 
   toggleModal = () => {
     this.setState({ isPublishOpen: !this.state.isPublishOpen });
-  }
+  };
 
   versionList = (instances: TemplateInstance[] | undefined): IDropdownOption[] => {
     if (!instances) return [];
@@ -92,22 +91,17 @@ class TemplateInfo extends React.Component<Props, State> {
       options.push({ key: instance.version, text: `Version ${instance.version}` });
     }
     return options;
-  }
+  };
 
   onVersionChange = (event: React.FormEvent<HTMLDivElement>, option?: IDropdownOption) => {
     if (!option) return;
     let version = option.key.toString();
     this.setState({ version: version });
     this.props.onSwitchVersion(version);
-  }
+  };
 
   render() {
-    const {
-      isLive,
-      tags,
-      createdAt,
-      instances,
-    } = this.props.template;
+    const { isLive, tags, createdAt, instances } = this.props.template;
     const { onClose } = this.props;
 
     let createdAtParsed = "";
@@ -132,16 +126,16 @@ class TemplateInfo extends React.Component<Props, State> {
                 />
               </Title>
               <StatusIndicator isPublished={isLive} />
-              <Status>{isLive ? 'Published' : 'Draft'}</Status>
+              <Status>{isLive ? "Published" : "Draft"}</Status>
             </TitleWrapper>
-            <TimeStamp>
-              Created {createdAtParsed}
-            </TimeStamp>
-            <ActionButton iconProps={{ iconName: 'ChromeClose' }} onClick={onClose} >Close</ActionButton>
+            <TimeStamp>Created {createdAtParsed}</TimeStamp>
+            <ActionButton iconProps={{ iconName: "ChromeClose" }} onClick={onClose}>
+              Close
+            </ActionButton>
           </TopRowWrapper>
           <ActionsWrapper>
-            {buttons.map((val) => (
-              <ActionButton key={val.text} iconProps={val.icon} allowDisabledFocus onClick={val.text === 'Publish' ? this.toggleModal : () => { }} >
+            {buttons.map(val => (
+              <ActionButton key={val.text} iconProps={val.icon} allowDisabledFocus onClick={val.text === "Publish" ? this.toggleModal : () => {}}>
                 {val.text}
               </ActionButton>
             ))}
@@ -149,11 +143,9 @@ class TemplateInfo extends React.Component<Props, State> {
         </HeaderWrapper>
         <MainContentWrapper>
           <RowWrapper>
-            {cards.map((val) => (
+            {cards.map(val => (
               <Card key={val.header}>
-                <CardHeader>
-                  {val.header}
-                </CardHeader>
+                <CardHeader>{val.header}</CardHeader>
                 <CardBody>
                   {val.iconName && <IconWrapper iconName={val.iconName}></IconWrapper>}
                   {val.body}
@@ -171,7 +163,9 @@ class TemplateInfo extends React.Component<Props, State> {
             </CardBody>
           </Card>
         </MainContentWrapper>
-        {this.state.isPublishOpen && <PublishModal toggleModal={this.toggleModal} template={this.props.template} templateVersion={this.state.version} />}
+        {this.state.isPublishOpen && (
+          <PublishModal toggleModal={this.toggleModal} template={this.props.template} templateVersion={this.state.version} />
+        )}
       </OuterWrapper>
     );
   }

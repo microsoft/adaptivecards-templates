@@ -13,9 +13,10 @@ import Gallery from "../Gallery";
 import PreviewModal from "./PreviewModal";
 import SearchPage from "./SearchPage/SearchPage";
 
-import { Title, DashboardContainer } from "../Dashboard/styled";
+import { Title, DashboardContainer, OuterWindow, TagsContainer } from "../Dashboard/styled";
 
 import { Template } from "adaptive-templating-service-typescript-node";
+import { Tags } from "../Common/Tags/Tags";
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -86,16 +87,23 @@ class Dashboard extends React.Component<Props, State> {
       templates = this.props.templates.templates.templates;
     }
     this.props.setPage("Dashboard");
+    const tags: string[] = ["Weather", "CurlySuperWeather", "NoWeatherWhatSoEver", "IamBatmanSuperHeroYee"];
     return (
-      <DashboardContainer>
-        <Title>Recently Edited</Title>
-        {/* <Gallery onClick={this.selectTemplate} templates={templates}></Gallery> */}
-        <PreviewModal show={this.state.isPreviewOpen} toggleModal={this.toggleModal} />
+      <OuterWindow>
+        <DashboardContainer>
+          <Title>Recently Edited</Title>
 
-        {/* <Title>Recently Viewed</Title> */}
-        {/* <Gallery onClick={this.selectTemplate} templates={templates}></Gallery> */}
-        {/* <PreviewModal show={this.state.isPreviewOpen} toggleModal={this.toggleModal} /> */}
-      </DashboardContainer>
+          <Gallery onClick={this.selectTemplate} templates={templates}></Gallery>
+          <PreviewModal show={this.state.isPreviewOpen} toggleModal={this.toggleModal} />
+
+          <Title>Recently Viewed</Title>
+          <Gallery onClick={this.selectTemplate} templates={templates}></Gallery>
+        </DashboardContainer>
+        <TagsContainer>
+          <Title style={{ marginRight: "150px" }}>Tags</Title>
+          <Tags tags={tags}></Tags>
+        </TagsContainer>
+      </OuterWindow>
     );
   }
 }
