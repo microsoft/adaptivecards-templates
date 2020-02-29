@@ -20,7 +20,7 @@ env:
 
 jobs:
     build-test-and-deploy:
-        name: Build Test and Deploy
+        name: Run Tests and Build 
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
@@ -37,7 +37,6 @@ jobs:
                 files: '["**/*.ts"]'
               env:
                 CLIENT_SECRET_TOKEN: ${{ secrets.AZURE_ADAPTIVECMS_CLIENT_SECRET }}
-                DB_CONNECTION_TOKEN: ${{ secrets.AZURE_ADAPTIVECMS_DB_CONNECTION_STRING }}
             - name: Adaptive Cards Templating Service Test
               run: |
                   cd private-templates-service/adaptivecards-templating-service
@@ -66,11 +65,9 @@ jobs:
                   npm link adaptivecards-templating-service
                   npm install
                   cd ..
-            - name: Create production build
+            - name: Create test build
               if: success()
               run: |
-                  # Build and test the project, then
-                  # deploy to Azure Web App.
                   cd private-templates-service/client
                   npm run build:dev --if-present
                   cd ../server
