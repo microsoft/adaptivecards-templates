@@ -1,13 +1,12 @@
 import styled from 'styled-components';
-import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 
-import { COLORS, BREAK } from '../../../globalStyles';
+import { COLORS, BREAK } from '../../globalStyles';
 
 export const ModalBackdrop = styled.div`
   position: fixed;
   top: 55px;
   bottom: 0;
-  left: 260px;
+  left: 0;
   right: 0;
   background-color: ${COLORS.GREY1};
   z-index: 1;
@@ -45,9 +44,5 @@ export const DescriptorWrapper = styled.div`
   align-items: stretch;
   flex: 1 0 auto;
   background: ${COLORS.WHITE};
-  border-left: 1px solid ${COLORS.BORDER2};
-`;
-
-export const CenteredSpinner = styled(Spinner)`
-  margin: auto;
+  border-left: 1px solid ${COLORS.BORDER};
 `;

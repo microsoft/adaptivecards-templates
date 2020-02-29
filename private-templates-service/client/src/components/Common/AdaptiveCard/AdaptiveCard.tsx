@@ -7,8 +7,8 @@ import { Template, TemplateInstance } from 'adaptive-templating-service-typescri
 
 interface Props {
   onClick?: () => void;
-  cardtemplate: Template,
-  templateVersion: string,
+  cardtemplate: Template;
+  templateVersion: string;
 }
 
 function renderingSetup(): AdaptiveCards.AdaptiveCard {
@@ -50,7 +50,6 @@ export function renderAdaptiveCard(template: Template): any {
 }
 
 function setContextRoot(data: string, context: ACData.EvaluationContext) {
-  console.log(data);
   try {
     let dataString = JSON.stringify(data);
     let dataJSON: JSON = JSON.parse(dataString);
@@ -69,8 +68,14 @@ function bindData(temp: TemplateInstance): TemplateInstance {
   if (temp.data && temp.data[0]) {
     setContextRoot(temp.data[0], context);
   }
-  let card = template.expand(context);
-  return card;
+  try {
+    let card = template.expand(context);
+    return card;
+  }
+  catch (e) {
+    console.log("Error parsing data: ", e);
+    return temp;
+  }
 }
 
 /*
@@ -98,18 +103,25 @@ function processTemplate(temp: TemplateInstance): any {
   return template;
 }
 
+let isTemplateProcessed: boolean = false;
 class AdaptiveCard extends React.Component<Props> {
+
   render() {
     let template: any = [];
-    if (this.props.cardtemplate && this.props.cardtemplate && this.props.cardtemplate.instances) {
+    if (this.props.cardtemplate && this.props.cardtemplate.instances) {
       for (let instance of this.props.cardtemplate.instances) {
-        if (instance.version === this.props.templateVersion){
+        if (instance.version === this.props.templateVersion) {
           template = processTemplate(instance);
         }
       }
-      if (template.length === 0) { 
+      if (template.length === 0) {
         template = processTemplate(this.props.cardtemplate.instances[0]);
       }
+    }
+    else {
+      return (
+        <div></div>
+      );
     }
     return (
       <Card

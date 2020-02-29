@@ -10,8 +10,10 @@ import { IStyle } from "office-ui-fabric-react";
 const mapStateToProps = (state: RootState) => {
   return {
     isSearch: state.search.isSearch,
-    searchByTemplateName: state.search.searchByTemplateName,
-    isAuthenticated: state.auth.isAuthenticated
+    searchValue: state.search.searchValue,
+    isAuthenticated: state.auth.isAuthenticated,
+    isSearchBarVisible: state.search.isSearchBarVisible,
+    searchByTemplateName: state.search.searchByTemplateName
   };
 };
 
@@ -30,6 +32,7 @@ interface Props {
   isSearch: boolean;
   searchByTemplateName: string;
   isAuthenticated: boolean;
+  isSearchBarVisible?: boolean;
   search: (searchByTemplateName: string) => void;
   clearSearch: () => void;
 }
@@ -95,17 +98,18 @@ class SearchBar extends React.Component<Props, State> {
   };
 
   render() {
-    if (this.props.isAuthenticated) {
+    if (this.props.isAuthenticated && this.props.isSearchBarVisible) {
       return (
         <StyledSearchBox
           placeholder={"search" + (this.state.isMobile ? "" : " templates")}
           onSearch={this.onSearch} // will trigger when "Enter" is pressed
           onClear={this.onClear} // will trigger when "Esc" or "X" is pressed
-          styles={placeHolderStyles}
-          iconProps={searchIconProps}
+          theme={THEME.DARK}
         />
       );
     }
+
+    // return empty
     return <React.Fragment />;
   }
 }

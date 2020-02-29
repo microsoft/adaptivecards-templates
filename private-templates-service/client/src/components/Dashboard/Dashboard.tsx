@@ -12,11 +12,12 @@ import requireAuthentication from "../../utils/requireAuthentication";
 import Gallery from "../Gallery";
 import PreviewModal from "./PreviewModal";
 import SearchPage from "./SearchPage/SearchPage";
+import { setSearchBarVisible } from "../../store/search/actions";
 
 import { Title, DashboardContainer, OuterWindow, TagsContainer } from "../Dashboard/styled";
 
 import { Template } from "adaptive-templating-service-typescript-node";
-import { Tags } from "../Common/Tags/Tags";
+import Tags from "../Common/Tags";
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -29,8 +30,11 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    setPage: (currentPageTitle: string) => {
-      dispatch(setPage(currentPageTitle));
+    setPage: (currentPageTitle: string, currentPage: string) => {
+      dispatch(setPage(currentPageTitle, currentPage));
+    },
+    setSearchBarVisible: (isSearchBarVisible: boolean) => {
+      dispatch(setSearchBarVisible(isSearchBarVisible));
     },
     getTemplates: () => {
       dispatch(getAllTemplates());
@@ -50,7 +54,8 @@ interface Props {
   user?: UserType;
   templates: AllTemplateState;
   authButtonMethod: () => Promise<void>;
-  setPage: (currentPageTitle: string) => void;
+  setPage: (currentPageTitle: string, currentPage: string) => void;
+  setSearchBarVisible: (isSearchBarVisible: boolean) => void;
   getTemplates: () => void;
   getTemplate: (templateID: string) => void;
   isSearch: boolean;
@@ -60,7 +65,8 @@ class Dashboard extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = { isPreviewOpen: false };
-    props.setPage("Dashboard");
+    props.setPage("Dashboard", "Dashboard");
+    props.setSearchBarVisible(true);
     props.getTemplates();
   }
 
@@ -86,8 +92,8 @@ class Dashboard extends React.Component<Props, State> {
     if (!this.props.templates.isFetching && this.props.templates.templates && this.props.templates.templates.templates) {
       templates = this.props.templates.templates.templates;
     }
-    this.props.setPage("Dashboard");
-    const tags: string[] = ["Weather", "CurlySuperWeather", "NoWeatherWhatSoEver", "IamBatmanSuperHeroYee"];
+    const tags: string[] = ["tag1", "myTagNumberTwo", "myTagNumberThreeeeee"];
+    this.props.setPage("Dashboard", "Dashboard");
     return (
       <OuterWindow>
         <DashboardContainer>

@@ -1,10 +1,34 @@
 import React from "react";
+import { connect } from "react-redux";
+
+import { updateTemplate } from "../../../store/currentTemplate/actions";
+import { RootState } from "../../../store/rootReducer";
+
+import { Template } from "adaptive-templating-service-typescript-node";
 
 import { Tag, TagCloseIcon, TagText, AddTagWrapper, AddTagInput, TagAddIcon, TagSubmitButton, TagSubmitIcon } from "./styled";
 
+const mapStateToProps = (state: RootState) => {
+  return {
+    template: state.currentTemplate.template
+  };
+};
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    updateTags: (tags: string[]) => {
+      dispatch(updateTemplate(undefined, undefined, undefined, undefined, undefined, tags));
+    }
+  };
+};
+
 interface Props {
   tags?: string[];
+  allowEdit?: boolean;
   allowAddTag?: boolean;
+  templateID?: string;
+  template?: Template;
+  updateTags: (tags: string[]) => void;
 }
 
 interface State {
@@ -12,7 +36,7 @@ interface State {
   newTagName: string;
 }
 
-export class Tags extends React.Component<Props, State> {
+class Tags extends React.Component<Props, State> {
   addTagInput = React.createRef<HTMLInputElement>();
 
   constructor(props: Props) {
@@ -24,7 +48,10 @@ export class Tags extends React.Component<Props, State> {
   }
 
   tagRemove = (tag: string) => {
-    // TODO: kodyang REMOVE TAG
+    if (this.props.allowEdit && this.props.template && this.props.template.tags) {
+      const newTags = this.props.template.tags.filter((existingTag: string) => existingTag !== tag);
+      this.props.updateTags(newTags);
+    }
   };
 
   openNewTag = () => {
@@ -42,11 +69,10 @@ export class Tags extends React.Component<Props, State> {
   };
 
   submitNewTag = (e: any): void => {
-    // TODO: kodyang SUBMIT NEW TAG
     e.preventDefault();
-    if (this.addTagInput && this.addTagInput.current) {
+    if (this.addTagInput && this.addTagInput.current && this.props.template && this.props.template.tags) {
       const tag = this.addTagInput.current.value;
-      console.log("new tag submitted: ", tag);
+      this.props.updateTags([...this.props.template.tags, tag]);
     }
   };
 
@@ -82,4 +108,4 @@ export class Tags extends React.Component<Props, State> {
   }
 }
 
-export default Tags;
+export default connect(mapStateToProps, mapDispatchToProps)(Tags);

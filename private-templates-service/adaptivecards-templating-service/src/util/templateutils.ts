@@ -125,6 +125,24 @@ export function anyVersionsLive(templates: ITemplateInstance[]): boolean {
 }
 /**
  * @function
+ */
+export function compareTemplateVersions(a: ITemplateInstance, b: ITemplateInstance): number {
+  return compareVersion(a.version, b.version)? -1 : 1;
+}
+
+/**
+ * @function
+ * Sort template by most recent version
+ * @param template 
+ */
+export function sortTemplateByVersion(template: ITemplate) {
+  if (!template.instances) return;
+  let instances: ITemplateInstance[] = template.instances.sort(compareTemplateVersions);
+  template.instances = instances;
+}
+
+/**
+ * @function
  * @param input 
  */
 export function isValidJSONString(input: string) {
