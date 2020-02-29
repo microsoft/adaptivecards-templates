@@ -11,7 +11,7 @@
 on:
     pull_request:
         branches:
-            - dev
+            - stage
             
 jobs:
     build-test-and-deploy:
@@ -21,7 +21,7 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v2.0.0
               with:
-                  ref: dev
+                  ref: stage
             - name: Use Node.js ${{ env.NODE_VERSION }}
               uses: actions/setup-node@v1
               with:
