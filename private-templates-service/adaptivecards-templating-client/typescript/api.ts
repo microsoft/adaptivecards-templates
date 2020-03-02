@@ -454,7 +454,7 @@ export class TemplateInstance {
     'state'?: TemplateInstance.StateEnum;
     'isShareable'?: boolean;
     'numHits'?: number;
-    'data'?: Array<string>;
+    'data'?: Array<any>;
     'updatedAt'?: string;
     'createdAt'?: string;
 
@@ -499,7 +499,7 @@ export class TemplateInstance {
         {
             "name": "data",
             "baseName": "data",
-            "type": "Array<string>"
+            "type": "Array<any>"
         },
         {
             "name": "updatedAt",
@@ -562,7 +562,7 @@ export class TemplatePreviewInstance {
     'version'?: string;
     'json'?: string;
     'state'?: string;
-    'data'?: Array<string>;
+    'data'?: Array<any>;
 
     static discriminator: string | undefined = undefined;
 
@@ -585,7 +585,7 @@ export class TemplatePreviewInstance {
         {
             "name": "data",
             "baseName": "data",
-            "type": "Array<string>"
+            "type": "Array<any>"
         }    ];
 
     static getAttributeTypeMap() {

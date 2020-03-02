@@ -389,7 +389,8 @@ definitions:
       data: 
         type: array
         items: 
-          type: string
+          type: object
+          format: JSON
       updatedAt:
         type: string
         format: Date
@@ -509,7 +510,7 @@ definitions:
       data: 
         type: array
         items:  
-          type: string
+          type: object
           format: JSON
   TemplatePreviewUser: 
     type: object
