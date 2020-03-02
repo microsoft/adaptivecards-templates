@@ -10,7 +10,19 @@ interface ShareModalProps {
   templateVersion?: string;
 }
 
+function onCopy(props: any) {
+  let copyCode = document.createElement('textarea');
+  copyCode.innerText = Config.redirectUri + "/preview/" +
+    props.template.id + "/" + props.templateVersion;
+  document.body.appendChild(copyCode);
+  copyCode.select();
+  document.execCommand('copy');
+  copyCode.remove();
+}
+
 class ShareModal extends React.Component<ShareModalProps> {
+
+
 
   render() {
     return (
@@ -28,7 +40,7 @@ class ShareModal extends React.Component<ShareModalProps> {
                     defaultValue={"/preview/" + this.props.template.id + "/" + this.props.templateVersion}
                     width={100} />
                 </TextFieldContainer>
-                <Button iconProps={{ iconName: 'Copy' }} onClick={() => { }}>
+                <Button iconProps={{ iconName: 'Copy' }} onClick={() => { onCopy(this.props) }}>
                   Copy
                 </Button>
               </LinkRow>
