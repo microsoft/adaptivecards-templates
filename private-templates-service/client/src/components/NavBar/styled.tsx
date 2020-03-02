@@ -65,7 +65,6 @@ export const StyledButton = styled.div`
   display: table;
   min-height: -webkit-fill-available;
   border-radius: 3px;
-  padding: 0px;
 `;
 
 export const StyledButtonContent = styled.div`
