@@ -184,7 +184,8 @@ export class PostedTemplate {
     'isShareable'?: boolean;
     'isPublished'?: boolean;
     'tags'?: Array<string>;
-    'data'?: Array<string>;
+    'data'?: Array<any>;
+    'isClient'?: boolean;
 
     static discriminator: string | undefined = undefined;
 
@@ -227,7 +228,12 @@ export class PostedTemplate {
         {
             "name": "data",
             "baseName": "data",
-            "type": "Array<string>"
+            "type": "Array<any>"
+        },
+        {
+            "name": "isClient",
+            "baseName": "isClient",
+            "type": "boolean"
         }    ];
 
     static getAttributeTypeMap() {
