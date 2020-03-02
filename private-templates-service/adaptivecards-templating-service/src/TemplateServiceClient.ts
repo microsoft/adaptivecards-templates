@@ -1003,7 +1003,8 @@ export class TemplateServiceClient {
 
       let isPublished: boolean | undefined = req.query.isPublished ? req.query.isPublished === "true" || req.query.isPublished === "True" : undefined;
       let owned: boolean | undefined = req.query.owned ? req.query.owned === "true" || req.query.owned === "True" : undefined;
-      let isClient: boolean = req.body.isClient;
+      let isClient: boolean | undefined = req.query.isClient ? req.query.isClient === "true" || req.query.isClient === "True" : undefined;
+      
       if (!req.is("application/json")) {
         isClient = req.body.isClient === "true" || req.body.isClient === "True";
       }
@@ -1061,10 +1062,7 @@ export class TemplateServiceClient {
     });
 
     router.get("/:id?", (req: Request, res: Response, _next: NextFunction) => {
-      let isClient: boolean = req.body.isClient;
-      if (!req.is("application/json")) {
-        isClient = req.body.isClient === "true" || req.body.isClient === "True";
-      }
+      let isClient: boolean | undefined = req.query.isClient ? req.query.isClient === "true" || req.query.isClient === "True" : undefined;
 
       this.getTemplates(req.params.id, undefined, undefined, req.query.version, undefined, undefined, undefined, undefined, isClient).then(
         response => {
