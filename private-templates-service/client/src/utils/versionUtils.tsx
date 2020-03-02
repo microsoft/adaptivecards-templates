@@ -1,3 +1,9 @@
+// Time constants
+const month = 30 * 24 *  60 * 60 * 1000;
+const day = 24 * 60 * 60 * 1000;
+const hour = 60 * 60 * 1000;
+const minute = 60 * 1000;
+
 /**
  * @function
  * Creates readable amount of time ago string given backend provided Date string 
@@ -5,10 +11,6 @@
  * @param date 
  */
 export function getDateString(date: string): string {
-    const month = 30 *24 *  60 * 60 * 1000;
-    const day = 24 * 60 * 60 * 1000;
-    const hour = 60 * 60 * 1000;
-    const minute = 60 * 1000;
     let currentDate = new Date();
     let newDate = new Date(date);
     let difference = Math.abs(currentDate.getTime() - newDate.getTime());
