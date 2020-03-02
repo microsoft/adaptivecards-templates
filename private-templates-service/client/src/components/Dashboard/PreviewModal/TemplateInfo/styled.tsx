@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { COLORS } from '../../../../globalStyles';
 
+import { PostedTemplate } from 'adaptive-templating-service-typescript-node';
 import { Icon, IDropdownStyles, FontWeights, IDropdownSubComponentStyles } from 'office-ui-fabric-react';
 import { Dropdown } from "office-ui-fabric-react";
 
@@ -56,8 +57,10 @@ export const Title = styled.div`
   font-weight: 500;
 `;
 
-export const StatusIndicator = styled.div<{ isPublished?: boolean }>`
-  background-color: ${props => props.isPublished ? COLORS.GREEN : COLORS.YELLOW};
+export const StatusIndicator = styled.div<{ state?: PostedTemplate.StateEnum }>`
+  background-color: ${props => 
+    props.state === PostedTemplate.StateEnum.Live ? COLORS.GREEN : 
+    props.state === PostedTemplate.StateEnum.Draft ? COLORS.YELLOW : COLORS.GREY3};
   width: 10px;
   height: 10px;
   border-radius: 50%;

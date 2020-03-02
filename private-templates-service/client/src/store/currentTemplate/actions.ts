@@ -101,7 +101,7 @@ function requestTemplateFailure(): CurrentTemplateAction {
   }
 }
 
-export function updateTemplate(templateID?: string, templateJSON?: string, sampleDataJSON?: string, templateName?: string, state?: PostedTemplate.StateEnum, tags?: string[]) {
+export function updateTemplate(templateID?: string, templateJSON?: string, sampleDataJSON?: string, templateName?: string, state?: PostedTemplate.StateEnum, tags?: string[], templateVersion: string) {
   return function (dispatch: any, getState: () => RootState) {
     const appState = getState();
 
@@ -120,6 +120,7 @@ export function updateTemplate(templateID?: string, templateJSON?: string, sampl
     newTemplate.name = templateName;
     newTemplate.state = state;
     newTemplate.tags = tags;
+    newTemplate.version = templateVersion;
 
     if (id === null || id === undefined || id === "") {
       dispatch(requestNewTemplateUpdate());

@@ -4,6 +4,9 @@ import { ActionButton, IDropdownOption } from 'office-ui-fabric-react';
 import { Template, TemplateInstance } from 'adaptive-templating-service-typescript-node';
 
 import PublishModal from '../../../Common/PublishModal';
+
+import VersionModal from '../../../Common/VersionModal';
+
 import Tags from '../../../Common/Tags';
 
 import {
@@ -171,7 +174,8 @@ class TemplateInfo extends React.Component<Props, State> {
             </CardBody>
           </Card>
         </MainContentWrapper>
-        {this.state.isPublishOpen && <PublishModal toggleModal={this.toggleModal} template={this.props.template} templateVersion={this.state.version} />}
+        {/* {this.state.isPublishOpen && <PublishModal toggleModal={this.toggleModal} template={this.props.template} templateVersion={this.state.version} />} */}
+        {this.state.isPublishOpen && <VersionModal toggleModal={this.toggleModal} template={this.props.template} />}
       </OuterWrapper>
     );
   }
