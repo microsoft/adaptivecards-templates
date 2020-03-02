@@ -2,11 +2,10 @@ import React from "react";
 import { connect } from "react-redux";
 import { RootState } from "../../store/rootReducer";
 import SearchBar from "./SearchBar";
-import { Banner, Styledh1, StyledLogo, MobileBanner, StyledButton, Styledh2, StyledButtonContent, CancelIcon, CancelText, Container } from './styled';
+import { Banner, Styledh1, StyledLogo, MobileBanner, StyledButton, Styledh2, StyledButtonContent } from './styled';
 import Logo from '../../assets/adaptive-cards-100-logo.png'
 import { DefaultSerializer } from "v8";
 import { ActionButton } from "office-ui-fabric-react";
-import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import { useHistory } from "react-router-dom";
 import { Template } from "adaptive-templating-service-typescript-node";
 
@@ -29,8 +28,6 @@ interface NavBarProps {
 const NavBar = (props: NavBarProps) => {
 
   let history = useHistory();
-  initializeIcons();
-  const MyIconButton = () => <CancelIcon iconName="Cancel" />;
 
   switch (props.currentPage.toLowerCase()) {
     case "dashboard":
@@ -64,10 +61,7 @@ const NavBar = (props: NavBarProps) => {
           <ActionButton onClick={() => { history.push("/") }}>
             <StyledButton>
               <StyledButtonContent>
-                <Container>
-                  <CancelIcon iconName="Cancel" title="Exit" />
-                  <CancelText>Exit Designer</CancelText>
-                </Container>
+                Finish
               </StyledButtonContent>
             </StyledButton>
           </ActionButton>

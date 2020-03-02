@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import { BREAK, COLORS } from '../../globalStyles';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
 
 export const Banner = styled.div`
   background-color: ${COLORS.BLUE};
@@ -61,10 +60,12 @@ export const Styledh2 = styled.div`
 `;
 
 export const StyledButton = styled.div`
-  width: 150;
+  background-color: ${COLORS.GREY1};
+  width: 100px;
   display: table;
   min-height: -webkit-fill-available;
   border-radius: 3px;
+  padding: 0px;
 `;
 
 export const StyledButtonContent = styled.div`
@@ -72,22 +73,3 @@ export const StyledButtonContent = styled.div`
   vertical-align: middle;
   text-align: center;
 `;
-
-export const CancelIcon = styled(Icon)`
-  padding-top: 1.6px;
-  font-size: 1.1rem;
-  font-weight: lighter;
-`;
-
-export const CancelText = styled.div`
-  padding: 3.45px 0px 0px  10px;
-  color: ${COLORS.GREY1};
-  font-size: 0.95rem;
-  font-weight: lighter;
-  `;
-
-export const Container = styled.div`
-  display: flex;
-  flex-direction: row;
-  color: ${COLORS.GREY1};
-  `;
