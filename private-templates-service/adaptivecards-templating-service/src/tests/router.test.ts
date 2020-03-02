@@ -676,7 +676,7 @@ describe("Post Templates, and increment version", () => {
     expect(res.body).toHaveProperty("id");
     id = res.body.id;
     idsToDelete.push(id);
-    
+
     // send second instance 
     res = await request(app)
       .post(`/template/${id}`)
@@ -696,7 +696,7 @@ describe("Post Templates, and increment version", () => {
       });
     expect(res.status).toEqual(201);
     idsToDelete.push(res.body.id);
-    
+
     //recive instances 
     res = await request(app)
       .get(`/template/${id}`)
@@ -704,34 +704,34 @@ describe("Post Templates, and increment version", () => {
     expect(res.status).toEqual(200);
     expect(res.body).toHaveProperty("templates");
     let instances = res.body.templates[0].instances
-    expect(instances[0].version).toEqual("1.0")
-    expect(instances[0].state).toEqual("live")
+    expect(instances[0].version).toEqual("1.2")
+    expect(instances[0].state).toEqual("draft")
     expect(instances[1].version).toEqual("1.1")
     expect(instances[1].state).toEqual("draft")
-    expect(instances[2].version).toEqual("1.2")
-    expect(instances[2].state).toEqual("draft")
+    expect(instances[2].version).toEqual("1.0")
+    expect(instances[2].state).toEqual("live")
 
 
     //edit first instance
     res = await request(app)
-    .post(`/template/${id}`)
-    .set({ Authorization: "Bearer " + token })
-    .send({
-      template: {},
-      version: "1.0",
-      state: "deprecated"
-    });
+      .post(`/template/${id}`)
+      .set({ Authorization: "Bearer " + token })
+      .send({
+        template: {},
+        version: "1.0",
+        state: "deprecated"
+      });
     expect(res.status).toEqual(201);
     idsToDelete.push(res.body.id);
 
     //edit third instance which is deprecated, should create a new instance 1.3 
     res = await request(app)
-    .post(`/template/${id}`)
-    .set({ Authorization: "Bearer " + token })
-    .send({
-      template: {},
-      version: "1.0",
-    });
+      .post(`/template/${id}`)
+      .set({ Authorization: "Bearer " + token })
+      .send({
+        template: {},
+        version: "1.0",
+      });
     expect(res.status).toEqual(201);
     idsToDelete.push(res.body.id);
 
@@ -741,14 +741,14 @@ describe("Post Templates, and increment version", () => {
     expect(res.status).toEqual(200);
     expect(res.body).toHaveProperty("templates");
     let instancesAfter = res.body.templates[0].instances
-    expect(instancesAfter[0].version).toEqual("1.0")
-    expect(instancesAfter[0].state).toEqual("deprecated")
-    expect(instancesAfter[1].version).toEqual("1.3")
+    expect(instancesAfter[0].version).toEqual("1.3")
+    expect(instancesAfter[0].state).toEqual("draft")
+    expect(instancesAfter[1].version).toEqual("1.2")
     expect(instancesAfter[1].state).toEqual("draft")
     expect(instancesAfter[2].version).toEqual("1.1")
     expect(instancesAfter[2].state).toEqual("draft")
-    expect(instancesAfter[3].version).toEqual("1.2")
-    expect(instancesAfter[3].state).toEqual("draft")
+    expect(instancesAfter[3].version).toEqual("1.0")
+    expect(instancesAfter[3].state).toEqual("deprecated")
   });
 
   it("should try to delete existing user and succeed", async () => {
