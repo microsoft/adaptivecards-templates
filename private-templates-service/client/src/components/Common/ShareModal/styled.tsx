@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import { COLORS } from '../../../globalStyles';
-import { DefaultButton } from 'office-ui-fabric-react';
 
 export const BackDrop = styled.div`
   position: fixed;
@@ -42,14 +41,32 @@ export const CenterPanelWrapper = styled.div`
 
 export const ShareLinkPanel = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   height: 50%;
   margin-bottom: 8px;
 `;
 
-export const EmailPanel = styled.div`
+export const LinkRow = styled.div`
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
+  height: 32px;
+`;
+
+export const TextFieldContainer = styled.div`
+  width: 100%;
+`;
+
+export const StyledButton = styled.div`
+  background-color: ${COLORS.GREY3};
+  width: 100px;
+  display: table;
+  height: 32px;
+`;
+
+export const EmailPanel = styled.div`
+  display: flex;
+  flex-direction: column;
   height: 50%;
   margin-top: 8px;
 `;

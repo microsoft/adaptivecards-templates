@@ -1,13 +1,13 @@
 import React from 'react';
 import { Template } from 'adaptive-templating-service-typescript-node';
-import { BackDrop, Modal, Header, Description, CenterPanelWrapper, ShareLinkPanel, EmailPanel } from './styled';
+import { BackDrop, Modal, Header, Description, CenterPanelWrapper, ShareLinkPanel, EmailPanel, LinkRow, StyledButton, TextFieldContainer } from './styled';
 import { SemiBoldText } from '../PublishModal/styled';
-import { TextField } from 'office-ui-fabric-react';
+import { TextField, Button } from 'office-ui-fabric-react';
 import Config from '../../../Config';
 
 interface ShareModalProps {
   template: Template;
-  version: string;
+  templateVersion?: string;
 }
 
 class ShareModal extends React.Component<ShareModalProps> {
@@ -21,10 +21,21 @@ class ShareModal extends React.Component<ShareModalProps> {
           <CenterPanelWrapper>
             <ShareLinkPanel>
               <SemiBoldText>Share with link</SemiBoldText>
-              <TextField readOnly={true} prefix={Config.redirectUri}>{"/preview/" + this.props.template.id + "/" + this.props.version}</TextField>
+              <LinkRow>
+                <TextFieldContainer>
+                  <TextField readOnly={true}
+                    prefix={Config.redirectUri}
+                    defaultValue={"/preview/" + this.props.template.id + "/" + this.props.templateVersion}
+                    width={100} />
+                </TextFieldContainer>
+                <Button iconProps={{ iconName: 'Copy' }} onClick={() => { }}>
+                  Copy
+                </Button>
+              </LinkRow>
             </ShareLinkPanel>
             <EmailPanel>
               <SemiBoldText>Send to recipients</SemiBoldText>
+              <TextField />
             </EmailPanel>
           </CenterPanelWrapper>
         </Modal>

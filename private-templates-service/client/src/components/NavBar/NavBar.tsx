@@ -3,8 +3,7 @@ import { connect } from "react-redux";
 import { RootState } from "../../store/rootReducer";
 import SearchBar from "./SearchBar";
 import { Banner, Styledh1, StyledLogo, MobileBanner, StyledButton, Styledh2, StyledButtonContent } from './styled';
-import Logo from '../../assets/adaptive-cards-100-logo.png'
-import { DefaultSerializer } from "v8";
+import Logo from '../../assets/adaptive-cards-100-logo.png';
 import { ActionButton } from "office-ui-fabric-react";
 import { useHistory } from "react-router-dom";
 import { Template } from "adaptive-templating-service-typescript-node";
@@ -18,8 +17,8 @@ const mapStateToProps = (state: RootState) => {
 }
 
 interface NavBarProps {
-  currentPageTitle: string;
-  currentPage: string;
+  currentPageTitle?: string;
+  currentPage?: string;
   template?: Template;
   version?: string;
 }
@@ -28,6 +27,17 @@ interface NavBarProps {
 const NavBar = (props: NavBarProps) => {
 
   let history = useHistory();
+
+  if (!props.currentPage) {
+    return (
+      <Banner>
+        <MobileBanner>
+          <StyledLogo src={Logo} />
+          <Styledh1>{props.currentPageTitle}</Styledh1>
+        </MobileBanner>
+      </Banner>
+    );
+  }
 
   switch (props.currentPage.toLowerCase()) {
     case "dashboard":
