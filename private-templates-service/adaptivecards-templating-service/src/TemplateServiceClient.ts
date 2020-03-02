@@ -1,12 +1,11 @@
 import { ClientOptions } from "./IClientOptions";
 import express, { Request, Response, NextFunction, Router } from "express";
-import { check, validationResult } from "express-validator";
 import { AuthenticationProvider } from ".";
 import { TemplateError, ApiError, ServiceErrorMessage } from "./models/errorModels";
 import { StorageProvider } from ".";
 import { ITemplate, JSONResponse, ITemplateInstance, IUser } from ".";
 import { SortBy, SortOrder, TemplatePreview, TemplateState, TemplateInstancePreview, UserPreview, TagList } from "./models/models";
-import { updateTemplateToLatestInstance, removeMostRecentTemplate, getTemplateVersion, isValidJSONString, setTemplateInstanceParam, incrementVersion, anyVersionsLive } from "./util/templateutils";
+import { updateTemplateToLatestInstance, removeMostRecentTemplate, getTemplateVersion, isValidJSONString, setTemplateInstanceParam, incrementVersion, anyVersionsLive, sortTemplateByVersion } from "./util/templateutils";
 
 export class TemplateServiceClient {
   private storageProvider: StorageProvider;
@@ -727,7 +726,7 @@ export class TemplateServiceClient {
         // Update hit counter for template
         this._incrementTemplateHits(templateId, templates![0], version);
       }
-
+      sortTemplateByVersion(templates![0]);
       if (!version) return { success: true, result: templates };
     }
 
@@ -1090,7 +1089,6 @@ export class TemplateServiceClient {
 
     router.post("/:id*?", async (req: Request, res: Response, _next: NextFunction) => {
       if (req.body.template !== undefined && (!(req.body.template instanceof Object) || !isValidJSONString(JSON.stringify(req.body.template)))) {
-        console.log(req.body.template);
         const err = new TemplateError(ApiError.InvalidTemplate, `Template must be valid JSON.`);
         return res.status(400).json({ error: err });
       }

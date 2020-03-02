@@ -15,7 +15,6 @@ export const CardTitle = styled.div`
 export const VersionCardHeader = styled.div`
   display: flex;
   width: 100%;
-  flex-direction: row;
   justify-content: space-around;
   align-items: center;
 `
@@ -23,7 +22,6 @@ export const VersionCardHeader = styled.div`
 export const VersionCardRow = styled.div`
   display: flex;
   width: 100%;
-  flex-direction: row;
   justify-content: space-around;
   margin-top: 8px;
   margin-left: 16px;
@@ -48,7 +46,6 @@ export const DateWrapper = styled.div`
 export const StatusWrapper = styled.div`
   display: flex;
   flex-basis: 20%;
-  flex-direction: row;
   align-items: center;
 `
 
@@ -67,7 +64,6 @@ margin: 0 0 0 15px;
 
 export const VersionWrapper = styled.div`
   display: flex;
-  flex-direction: row;
   font-weight: 600;
   align-items: center;
   flex-basis: 15%;

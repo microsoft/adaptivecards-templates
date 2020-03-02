@@ -10,7 +10,7 @@ import {
   FAILURE_EXISTING_TEMPLATE_UPDATE,
   GET_TEMPLATE,
   GET_TEMPLATE_SUCCESS,
-  GET_TEMPLATE_FAILURE,
+  GET_TEMPLATE_FAILURE
 } from './types';
 
 const initialState: CurrentTemplateState = {
