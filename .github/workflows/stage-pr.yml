@@ -16,7 +16,7 @@ jobs:
               uses: actions/setup-node@v1
               with:
                   node-version: ${{ env.NODE_VERSION }}
-            - name: Find and Replace CLIENT_SECRET_TOKEN and DB_CONNECTION_TOKEN
+            - name: Find and Replace CLIENT_SECRET_TOKEN
               uses: cschleiden/replace-tokens@v1
               with:
                 files: '["**/*.ts"]'
