@@ -6,7 +6,7 @@ const minute = 60 * 1000;
 
 /**
  * @function
- * Creates readable amount of time ago string given backend provided Date string 
+ * Creates readable amount of time ago string given backend provided Date string (ISO-8601 date string)
  * eg. 2 months ago, 2 days ago, 2 hours ago, 2 minutes ago
  * @param date 
  */
