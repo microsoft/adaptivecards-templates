@@ -75,10 +75,20 @@ interface State {
   version: string;
 }
 
+function getVersion(template: Template): string {
+  if (template.instances && template.instances[0] && template.instances[0].version) {
+    return template.instances[0].version;
+  }
+  return "1.0"
+
+}
+
 class TemplateInfo extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { isPublishOpen: false, version: "1.0" }
+    const vers = getVersion(this.props.template);
+    this.state = { isPublishOpen: false, version: vers }
+
   }
 
   toggleModal = () => {
@@ -132,7 +142,7 @@ class TemplateInfo extends React.Component<Props, State> {
                   styles={DropdownStyles}
                 />
               </Title>
-              <StatusIndicator state={isLive? PostedTemplate.StateEnum.Live : PostedTemplate.StateEnum.Draft} />
+              <StatusIndicator state={isLive ? PostedTemplate.StateEnum.Live : PostedTemplate.StateEnum.Draft} />
               <Status>{isLive ? 'Published' : 'Draft'}</Status>
             </TitleWrapper>
             <TimeStamp>
@@ -172,7 +182,7 @@ class TemplateInfo extends React.Component<Props, State> {
             </CardBody>
           </Card>
           <RowWrapper>
-            <VersionCard template={this.props.template} templateVersion={this.state.version}/>
+            <VersionCard template={this.props.template} templateVersion={this.state.version} />
           </RowWrapper>
         </MainContentWrapper>
         {this.state.isPublishOpen && <PublishModal toggleModal={this.toggleModal} template={this.props.template} templateVersion={this.state.version} />}
