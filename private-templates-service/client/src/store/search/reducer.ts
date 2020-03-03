@@ -6,7 +6,7 @@ import {
   CLEAR_SEARCH,
   SearchAction,
   SET_SEARCHBAR_VISIBLE
-} from './types';
+} from "./types";
 import { TemplateList } from "adaptive-templating-service-typescript-node";
 
 const initialState: SearchState = {
@@ -16,7 +16,7 @@ const initialState: SearchState = {
   loading: false,
   templates: new TemplateList(),
   error: undefined
-}
+};
 
 export function searchReducer(state = initialState, action: SearchAction): SearchState {
   switch (action.type) {
@@ -24,9 +24,8 @@ export function searchReducer(state = initialState, action: SearchAction): Searc
       return {
         ...state,
         isSearch: true,
-        loading: true,
-
-      }
+        loading: true
+      };
     case QUERY_SEARCH_SUCCESS:
       return {
         ...state,
@@ -34,28 +33,28 @@ export function searchReducer(state = initialState, action: SearchAction): Searc
         loading: false,
         templates: action.cards,
         searchByTemplateName: action.searchByTemplateName
-      }
+      };
     case QUERY_SEARCH_FAILURE:
       return {
         ...state,
         isSearch: true,
         loading: false,
-        templates: new TemplateList(), // this will return an empty list 
+        templates: new TemplateList(), // this will return an empty list
         error: action.error
-      }
+      };
     case CLEAR_SEARCH:
       return {
         ...state,
         isSearch: false,
-        loading: false,
-      }
+        loading: false
+      };
     case SET_SEARCHBAR_VISIBLE:
       return {
         ...state,
         isSearch: false,
         searchValue: "",
         isSearchBarVisible: action.isSearchBarVisible
-      }
+      };
     default:
       return state;
   }
