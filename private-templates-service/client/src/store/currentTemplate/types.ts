@@ -52,4 +52,5 @@ export interface CurrentTemplateAction {
   sampleDataJSON?: string;
   template?: Template;
   error?: IncomingMessage;
+  templateVersion?: string;
 }
