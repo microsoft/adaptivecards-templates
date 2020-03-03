@@ -42,19 +42,54 @@ export const CenterPanelWrapper = styled.div`
 
 export const ShareLinkPanel = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   height: 50%;
   margin-bottom: 8px;
 `;
 
-export const EmailPanel = styled.div`
+export const LinkRow = styled.div`
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
+  height: 32px;
+`;
+
+export const TextFieldContainer = styled.div`
+  width: 100%;
+`;
+
+export const StyledButton = styled.div`
+  background-color: ${COLORS.GREY3};
+  width: 100px;
+  display: table;
+  height: 32px;
+`;
+
+export const EmailPanel = styled.div`
+  display: flex;
+  flex-direction: column;
   height: 50%;
-  margin-top: 8px;
+  margin-top: 20px;
 `;
 
 export const SemiBoldText = styled.div`
   font-size: 16px;
   font-weight: 600;
+`;
+
+export const BottomRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: flex-end;
+  margin-top: 50px;
+`;
+
+export const ButtonGroup = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
+export const CancelButton = styled(DefaultButton)`
+  margin-right: 12px;
 `;

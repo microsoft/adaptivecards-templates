@@ -94,14 +94,14 @@ function requestTemplateSuccess(template: Template, templateJSON: string, templa
   }
 }
 
-function requestTemplateFailure(): CurrentTemplateAction {
+export function requestTemplateFailure(): CurrentTemplateAction {
   return {
     type: GET_TEMPLATE_FAILURE,
     text: "get single template failure",
   }
 }
 
-export function updateTemplate(templateID?: string, templateJSON?: string, sampleDataJSON?: string, templateName?: string, state?: PostedTemplate.StateEnum, tags?: string[]) {
+export function updateTemplate(templateID?: string, templateJSON?: string, sampleDataJSON?: string, templateName?: string, state?: PostedTemplate.StateEnum, tags?: string[], isShareable?: boolean) {
   return function (dispatch: any, getState: () => RootState) {
     const appState = getState();
 
@@ -120,6 +120,7 @@ export function updateTemplate(templateID?: string, templateJSON?: string, sampl
     newTemplate.name = templateName;
     newTemplate.state = state;
     newTemplate.tags = tags;
+    newTemplate.isShareable = isShareable;
 
     if (id === null || id === undefined || id === "") {
       dispatch(requestNewTemplateUpdate());

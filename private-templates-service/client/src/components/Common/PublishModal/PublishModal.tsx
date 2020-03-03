@@ -31,18 +31,22 @@ import {
   ButtonGroup,
   CancelButton,
 } from './styled';
+import { closeModal } from '../../../store/page/actions';
 
 interface Props {
   template: Template;
-  templateVersion: string;
-  toggleModal: () => void;
+  templateVersion?: string;
   publishTemplate: () => void;
+  closeModal: () => void;
 }
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
     publishTemplate: () => {
       dispatch(updateTemplate(undefined, undefined, undefined, undefined, PostedTemplate.StateEnum.Live));
+    },
+    closeModal: () => {
+      dispatch(closeModal());
     }
   }
 }
@@ -50,9 +54,8 @@ const mapDispatchToProps = (dispatch: any) => {
 class PublishModal extends React.Component<Props> {
 
   publish = () => {
-    // TODO: kodyang, grzhang PUBLISH CURRENT VERSION, NOT 1ST VERSION
     this.props.publishTemplate();
-    this.props.toggleModal();
+    this.props.closeModal();
   }
 
   render() {
@@ -82,7 +85,7 @@ class PublishModal extends React.Component<Props> {
               FACES HERE
             </NotifiedGroup>
             <ButtonGroup>
-              <CancelButton text="Cancel" onClick={this.props.toggleModal} />
+              <CancelButton text="Cancel" onClick={() => { this.props.closeModal() }} />
               <PrimaryButton text="Publish" onClick={this.publish} />
             </ButtonGroup>
           </BottomRow>

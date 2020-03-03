@@ -4,6 +4,7 @@ import { pageReducer } from './page/reducer';
 import { currentTemplateReducer } from './currentTemplate/reducers';
 import { filterReducer } from './filter/reducer';
 import { allTemplateReducer } from './templates/reducer';
+import { shareTemplateReducer } from './share/reducer';
 
 import { combineReducers } from 'redux';
 import { sortReducer } from './sort/reducer';
@@ -15,7 +16,8 @@ export const rootReducer = combineReducers({
   currentTemplate: currentTemplateReducer,
   filter: filterReducer,
   sort: sortReducer,
-  allTemplates: allTemplateReducer
+  allTemplates: allTemplateReducer,
+  shareTemplate: shareTemplateReducer
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

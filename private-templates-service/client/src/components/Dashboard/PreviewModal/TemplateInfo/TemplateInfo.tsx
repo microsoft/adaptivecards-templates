@@ -27,6 +27,10 @@ import {
   StyledVersionDropdown,
   DropdownStyles,
 } from './styled';
+import { RootState } from '../../../../store/rootReducer';
+import { openModal, closeModal } from '../../../../store/page/actions';
+import { connect } from 'react-redux';
+import ShareModal from '../../../Common/ShareModal/ShareModal';
 import { THEME } from '../../../../globalStyles';
 import VersionCard from './VersionCard';
 
@@ -68,21 +72,34 @@ interface Props {
   template: Template;
   onClose: () => void;
   onSwitchVersion: (templateVersion: string) => void;
+  version?: string;
+  modalOpen?: string;
+  openModal: (modalName: string) => void;
+  closeModal: () => void;
+  state: any;
 }
 
-interface State {
-  isPublishOpen: boolean;
-  version: string;
+const mapStateToProps = (state: RootState) => {
+  return {
+    modalOpen: state.page.modalOpen,
+    state: state
+  };
+};
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    openModal: (modalName: string) => {
+      dispatch(openModal(modalName));
+    },
+    closeModal: () => {
+      dispatch(closeModal());
+    }
+  }
 }
 
-class TemplateInfo extends React.Component<Props, State> {
+class TemplateInfo extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
-    this.state = { isPublishOpen: false, version: "1.0" }
-  }
-
-  toggleModal = () => {
-    this.setState({ isPublishOpen: !this.state.isPublishOpen });
   }
 
   versionList = (instances: TemplateInstance[] | undefined): IDropdownOption[] => {
@@ -103,6 +120,7 @@ class TemplateInfo extends React.Component<Props, State> {
   }
 
   render() {
+    console.log(this.props.state)
     const {
       isLive,
       tags,
@@ -125,7 +143,7 @@ class TemplateInfo extends React.Component<Props, State> {
             <TitleWrapper>
               <Title>
                 <StyledVersionDropdown
-                  placeholder={`Version ${this.state.version}`}
+                  placeholder={`Version ${this.props.version}`}
                   options={this.versionList(instances)}
                   onChange={this.onVersionChange}
                   theme={THEME.LIGHT}
@@ -142,7 +160,8 @@ class TemplateInfo extends React.Component<Props, State> {
           </TopRowWrapper>
           <ActionsWrapper>
             {buttons.map((val) => (
-              <ActionButton key={val.text} iconProps={val.icon} allowDisabledFocus onClick={val.text === 'Publish' ? this.toggleModal : () => { }} >
+              <ActionButton key={val.text} iconProps={val.icon} allowDisabledFocus
+                onClick={((val.text === 'Publish' || val.text === 'Share') ? () => { this.props.openModal(val.text.toLowerCase()) } : () => { })}>
                 {val.text}
               </ActionButton>
             ))}
@@ -175,10 +194,12 @@ class TemplateInfo extends React.Component<Props, State> {
             <VersionCard template={this.props.template} templateVersion={this.state.version}/>
           </RowWrapper>
         </MainContentWrapper>
-        {this.state.isPublishOpen && <PublishModal toggleModal={this.toggleModal} template={this.props.template} templateVersion={this.state.version} />}
+        {console.log(this.props.modalOpen)}
+        {this.props.modalOpen === 'publish' && <PublishModal template={this.props.template} templateVersion={this.props.version} />}
+        {this.props.modalOpen === 'share' && <ShareModal template={this.props.template} templateVersion={this.props.version} />}
       </OuterWrapper>
     );
   }
 }
 
-export default TemplateInfo;
+export default connect(mapStateToProps, mapDispatchToProps)(TemplateInfo);

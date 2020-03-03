@@ -8,7 +8,7 @@ import { Template, TemplateInstance } from 'adaptive-templating-service-typescri
 interface Props {
   onClick?: () => void;
   cardtemplate: Template;
-  templateVersion: string;
+  templateVersion?: string;
 }
 
 function renderingSetup(): AdaptiveCards.AdaptiveCard {
@@ -115,7 +115,7 @@ class AdaptiveCard extends React.Component<Props> {
         }
       }
       if (template.length === 0) {
-        template = processTemplate(this.props.cardtemplate.instances[0]);
+        template = processTemplate(this.props.cardtemplate.instances[this.props.cardtemplate.instances.length - 1]);
       }
     }
     else {
