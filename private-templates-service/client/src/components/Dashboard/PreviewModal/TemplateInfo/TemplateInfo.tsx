@@ -150,7 +150,7 @@ class TemplateInfo extends React.Component<Props> {
                   styles={DropdownStyles}
                 />
               </Title>
-              <StatusIndicator state={isLive? PostedTemplate.StateEnum.Live : PostedTemplate.StateEnum.Draft} />
+              <StatusIndicator state={isLive ? PostedTemplate.StateEnum.Live : PostedTemplate.StateEnum.Draft} />
               <Status>{isLive ? 'Published' : 'Draft'}</Status>
             </TitleWrapper>
             <TimeStamp>
@@ -191,7 +191,7 @@ class TemplateInfo extends React.Component<Props> {
             </CardBody>
           </Card>
           <RowWrapper>
-            <VersionCard template={this.props.template} templateVersion={this.state.version}/>
+            <VersionCard template={this.props.template} templateVersion={this.props.version ? this.props.version : "1.0"} />
           </RowWrapper>
         </MainContentWrapper>
         {console.log(this.props.modalOpen)}
