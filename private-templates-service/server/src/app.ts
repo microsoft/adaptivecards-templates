@@ -17,25 +17,27 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, Content-Type, Accept, Authorization, api_key");
+  res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS, DELETE");
+  next();
+});
 
-let mongoDB = new MongoDBProvider({ connectionString: "#{DB_CONNECTION_TOKEN}#" });
-mongoDB.connect()
-  .then(
-    (res) => {
-      if (res.success) {
-        const mongoClient: ClientOptions = {
-          authenticationProvider: new AzureADProvider(),
-          storageProvider: mongoDB,
-        }
+let mongoDB = new MongoDBProvider();
+mongoDB.connect().then(res => {
+  if (res.success) {
+    const mongoClient: ClientOptions = {
+      authenticationProvider: new AzureADProvider(),
+      storageProvider: mongoDB
+    };
 
-        const client: TemplateServiceClient = TemplateServiceClient.init(mongoClient);
-        app.use("/template", client.expressMiddleware());
-        app.use("/user", client.userExpressMiddleware());
-      } else {
-        console.log(res.errorMessage);
-      }
-
-    }
-  )
+    const client: TemplateServiceClient = TemplateServiceClient.init(mongoClient);
+    app.use("/template", client.expressMiddleware());
+    app.use("/user", client.userExpressMiddleware());
+  } else {
+    console.log(res.errorMessage);
+  }
+});
 
 export default app;

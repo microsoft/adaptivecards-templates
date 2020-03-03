@@ -1,8 +1,8 @@
-import styled from 'styled-components';
-import { Nav } from 'office-ui-fabric-react/lib/Nav';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { ActionButton } from 'office-ui-fabric-react';
-import { COLORS, BREAK } from '../../globalStyles';
+import styled from "styled-components";
+import { Nav } from "office-ui-fabric-react/lib/Nav";
+import { Icon } from "office-ui-fabric-react/lib/Icon";
+import { ActionButton } from "office-ui-fabric-react";
+import { COLORS, BREAK } from "../../globalStyles";
 
 export const OuterSideBarWrapper = styled.div`
   display: flex;
@@ -11,13 +11,15 @@ export const OuterSideBarWrapper = styled.div`
   min-width: 260px;
 
   z-index: 2;
-  -webkit-box-shadow: 3px 0px 3px 0px rgba(228,228,228,1);
-  -moz-box-shadow: 3px 0px 3px 0px rgba(228,228,228,1);
-  box-shadow: 3px 0px 3px 0px rgba(228,228,228,1);
+  -webkit-box-shadow: 3px 0px 3px 0px rgba(228, 228, 228, 1);
+  -moz-box-shadow: 3px 0px 3px 0px rgba(228, 228, 228, 1);
+  box-shadow: 3px 0px 3px 0px rgba(228, 228, 228, 1);
 
   @media only screen and (max-width: ${BREAK.SM}px) {
     display: none;
   }
+  color: white;
+  background-color: ${COLORS.BLUE};
 `;
 
 export const MainItems = styled.div`
@@ -57,14 +59,14 @@ export const UserWrapper = styled.div`
   display: flex;
   flex-direction: column;
   margin: 60px 0;
-`
+`;
 
 export const AvatarIcon = styled.img`
   width: 80px;
   margin-bottom: 16px;
 `;
 
-export const DefaultAvatarIcon = styled(Icon) <{ size?: string }>`
+export const DefaultAvatarIcon = styled(Icon)<{ size?: string }>`
   font-size: ${props => props.size || "1rem"};
   align-self: center;
 `;
@@ -75,7 +77,7 @@ export const Name = styled.div`
   align-self: center;
   font-size: 18px;
 
-  color: ${COLORS.SECONDARY};
+  color: ${COLORS.WHITE};
 
   font-weight: 600;
 `;
@@ -88,8 +90,12 @@ export const Title = styled.div`
 `;
 
 export const NavMenu = styled(Nav)`
+  link: [ {
+    color: white;
+  }]
 `;
 
 export const SignOut = styled(ActionButton)`
   margin: 24px;
+  color: ${COLORS.WHITE};
 `;

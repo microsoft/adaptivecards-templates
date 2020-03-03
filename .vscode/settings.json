@@ -1,15 +1,17 @@
 {
-	"azureFunctions.deploySubpath": "src",
-	"azureFunctions.projectLanguage": "TypeScript",
-	"azureFunctions.projectRuntime": "~2",
-	"debug.internalConsoleOptions": "neverOpen",
-	"azureFunctions.preDeployTask": "npm prune",
-	"editor.formatOnSave": true,
-	"javascript.format.enable": false,
-	"javascript.validate.enable": false,
-	"editor.codeActionsOnSave": {
-		"source.fixAll.eslint": true
-	},
-	"eslint.format.enable": true,
-	"appService.zipIgnorePattern": ["node_modules{,/**}", ".vscode{,/**}"]
+  "azureFunctions.deploySubpath": "src",
+  "azureFunctions.projectLanguage": "TypeScript",
+  "azureFunctions.projectRuntime": "~2",
+  "debug.internalConsoleOptions": "neverOpen",
+  "azureFunctions.preDeployTask": "npm prune",
+  "editor.formatOnSave": true,
+  "javascript.format.enable": false,
+  "javascript.validate.enable": false,
+  "prettier.useTabs": false,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "eslint.format.enable": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "appService.zipIgnorePattern": ["node_modules{,/**}", ".vscode{,/**}"]
 }

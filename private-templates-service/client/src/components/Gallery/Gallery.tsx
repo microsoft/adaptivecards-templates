@@ -12,17 +12,12 @@ interface Props {
 }
 
 class Gallery extends React.Component<Props> {
-
   render() {
     let cards: JSX.Element[] = [];
     if (this.props.templates) {
       cards = this.props.templates.map((val: any) => <AdaptiveCardPanel onClick={this.props.onClick} template={val} />);
     }
-    return (
-      <Container>
-        {cards}
-      </Container>
-    );
+    return <Container>{cards}</Container>;
   }
 }
 

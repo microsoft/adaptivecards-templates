@@ -9,7 +9,7 @@ import {
 const initalState: PageState = {
   currentPageTitle: "",
   currentPage: ""
-}
+};
 
 export function pageReducer(state = initalState, action: PageAction): PageState {
   switch (action.type) {

@@ -13,7 +13,7 @@ export function setPage(currentPageTitle: string, currentPage: string): PageActi
     text: "The user has changed the page",
     currentPageTitle: currentPageTitle,
     currentPage: currentPage
-  }
+  };
 }
 
 export function openModal(modalName: string): PageAction {

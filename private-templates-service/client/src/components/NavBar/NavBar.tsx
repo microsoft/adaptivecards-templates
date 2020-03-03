@@ -13,8 +13,8 @@ const mapStateToProps = (state: RootState) => {
     currentPageTitle: state.page.currentPageTitle,
     currentPage: state.page.currentPage,
     template: state.currentTemplate.template
-  }
-}
+  };
+};
 
 interface NavBarProps {
   currentPageTitle?: string;
@@ -23,9 +23,7 @@ interface NavBarProps {
   version?: string;
 }
 
-
 const NavBar = (props: NavBarProps) => {
-
   let history = useHistory();
 
   if (!props.currentPage) {
@@ -68,11 +66,13 @@ const NavBar = (props: NavBarProps) => {
             <Styledh1>{props.template ? props.template.name : props.currentPageTitle}</Styledh1>
             <Styledh2>{props.version ? "Version " + props.version : ""}</Styledh2>
           </MobileBanner>
-          <ActionButton onClick={() => { history.push("/") }}>
+          <ActionButton
+            onClick={() => {
+              history.push("/");
+            }}
+          >
             <StyledButton>
-              <StyledButtonContent>
-                Finish
-              </StyledButtonContent>
+              <StyledButtonContent>Finish</StyledButtonContent>
             </StyledButton>
           </ActionButton>
         </Banner>
@@ -97,7 +97,6 @@ const NavBar = (props: NavBarProps) => {
         </Banner>
       );
   }
-}
-
+};
 
 export default connect(mapStateToProps)(NavBar);
