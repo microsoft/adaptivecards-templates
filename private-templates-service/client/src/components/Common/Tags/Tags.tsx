@@ -81,7 +81,7 @@ class Tags extends React.Component<Props, State> {
   };
 
   render() {
-    const { tags, allowAddTag } = this.props;
+    const { tags, allowAddTag, allowEdit } = this.props;
 
     const { isAdding } = this.state;
 
@@ -91,7 +91,7 @@ class Tags extends React.Component<Props, State> {
           tags.map((tag: string) => (
             <Tag key={tag}>
               <TagText>{tag}</TagText>
-              <TagCloseIcon key={tag} iconName="ChromeClose" onClick={() => this.tagRemove(tag)} />
+              {allowEdit && <TagCloseIcon key={tag} iconName="ChromeClose" onClick={() => this.tagRemove(tag)} />}
             </Tag>
           ))}
         {allowAddTag && (

@@ -4,7 +4,6 @@ import { RootState } from "../../store/rootReducer";
 import SearchBar from "./SearchBar";
 import { Banner, Styledh1, StyledLogo, MobileBanner, StyledButton, Styledh2, StyledButtonContent } from "./styled";
 import Logo from "../../assets/adaptive-cards-100-logo.png";
-import { DefaultSerializer } from "v8";
 import { ActionButton } from "office-ui-fabric-react";
 import { useHistory } from "react-router-dom";
 import { Template } from "adaptive-templating-service-typescript-node";

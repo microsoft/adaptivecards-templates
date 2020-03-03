@@ -1,31 +1,31 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { Template } from 'adaptive-templating-service-typescript-node';
+import React from "react";
+import { connect } from "react-redux";
+import { Template } from "adaptive-templating-service-typescript-node";
 
-import { setPage } from '../../../store/page/actions';
-import { RootState } from '../../../store/rootReducer';
+import { setPage } from "../../../store/page/actions";
+import { RootState } from "../../../store/rootReducer";
 
-import AdaptiveCard from '../../Common/AdaptiveCard'
-import TemplateInfo from './TemplateInfo';
+import AdaptiveCard from "../../Common/AdaptiveCard";
+import TemplateInfo from "./TemplateInfo";
 
-import { SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
+import { SpinnerSize } from "office-ui-fabric-react/lib/Spinner";
 
-import { ModalBackdrop, ModalWrapper, ACPanel, ACWrapper, DescriptorWrapper, CenteredSpinner } from './styled';
+import { ModalBackdrop, ModalWrapper, ACPanel, ACWrapper, DescriptorWrapper, CenteredSpinner } from "./styled";
 
 const mapStateToProps = (state: RootState) => {
   return {
     template: state.currentTemplate.template,
-    isFetching: state.currentTemplate.isFetching,
-  }
-}
+    isFetching: state.currentTemplate.isFetching
+  };
+};
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
     setPage: (currentPageTitle: string, currentPage: string) => {
-      dispatch(setPage(currentPageTitle, currentPage))
+      dispatch(setPage(currentPageTitle, currentPage));
     }
-  }
-}
+  };
+};
 
 interface Props {
   show: boolean;
@@ -39,11 +39,10 @@ interface State {
   templateVersion: string;
 }
 
-
 class PreviewModal extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { templateVersion: "1.0" }
+    this.state = { templateVersion: "1.0" };
   }
 
   toggleTemplateVersion = (templateVersion: string) => {
@@ -53,23 +52,19 @@ class PreviewModal extends React.Component<Props, State> {
   componentDidUpdate(prevProps: Props) {
     if (prevProps.show !== this.props.show || prevProps.template !== this.props.template) {
       this.props.setPage(
-        this.props.show && this.props.template && this.props.template.name ? this.props.template.name : 'Dashboard',
-        this.props.show && this.props.template && this.props.template.name ? this.props.template.name : 'Dashboard');
+        this.props.show && this.props.template && this.props.template.name ? this.props.template.name : "Dashboard",
+        this.props.show && this.props.template && this.props.template.name ? this.props.template.name : "Dashboard"
+      );
     }
   }
 
   render() {
-
-    const {
-      show,
-      isFetching,
-      template,
-    } = this.props;
+    const { show, isFetching, template } = this.props;
 
     return show ? (
       <ModalBackdrop>
         <ModalWrapper>
-          {template && !isFetching ?
+          {template && !isFetching ? (
             <React.Fragment>
               <ACPanel>
                 <ACWrapper>
@@ -80,8 +75,9 @@ class PreviewModal extends React.Component<Props, State> {
                 <TemplateInfo template={template} onClose={this.props.toggleModal} onSwitchVersion={this.toggleTemplateVersion} />
               </DescriptorWrapper>
             </React.Fragment>
-            : <CenteredSpinner size={SpinnerSize.large} />
-          }
+          ) : (
+            <CenteredSpinner size={SpinnerSize.large} />
+          )}
         </ModalWrapper>
       </ModalBackdrop>
     ) : null;

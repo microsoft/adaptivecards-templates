@@ -104,7 +104,8 @@ class SearchBar extends React.Component<Props, State> {
           placeholder={"search" + (this.state.isMobile ? "" : " templates")}
           onSearch={this.onSearch} // will trigger when "Enter" is pressed
           onClear={this.onClear} // will trigger when "Esc" or "X" is pressed
-          theme={THEME.DARK}
+          styles={placeHolderStyles}
+          iconProps={searchIconProps}
         />
       );
     }
