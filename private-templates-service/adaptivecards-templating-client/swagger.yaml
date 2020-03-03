@@ -417,6 +417,8 @@ definitions:
         items: 
           type: object
           format: JSON
+      isClient: 
+          type: boolean
   UserList:
     type: object
     properties:

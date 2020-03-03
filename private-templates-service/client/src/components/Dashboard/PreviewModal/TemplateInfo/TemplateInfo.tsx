@@ -1,7 +1,7 @@
 import React from 'react';
 import { ActionButton, IDropdownOption } from 'office-ui-fabric-react';
 
-import { Template, TemplateInstance } from 'adaptive-templating-service-typescript-node';
+import { Template, TemplateInstance, PostedTemplate } from 'adaptive-templating-service-typescript-node';
 
 import PublishModal from '../../../Common/PublishModal';
 import Tags from '../../../Common/Tags';
@@ -32,6 +32,7 @@ import { openModal, closeModal } from '../../../../store/page/actions';
 import { connect } from 'react-redux';
 import ShareModal from '../../../Common/ShareModal/ShareModal';
 import { THEME } from '../../../../globalStyles';
+import VersionCard from './VersionCard';
 
 
 const buttons = [
@@ -149,7 +150,7 @@ class TemplateInfo extends React.Component<Props> {
                   styles={DropdownStyles}
                 />
               </Title>
-              <StatusIndicator isPublished={isLive} />
+              <StatusIndicator state={isLive? PostedTemplate.StateEnum.Live : PostedTemplate.StateEnum.Draft} />
               <Status>{isLive ? 'Published' : 'Draft'}</Status>
             </TitleWrapper>
             <TimeStamp>
@@ -189,6 +190,9 @@ class TemplateInfo extends React.Component<Props> {
               </TagsWrapper>
             </CardBody>
           </Card>
+          <RowWrapper>
+            <VersionCard template={this.props.template} templateVersion={this.state.version}/>
+          </RowWrapper>
         </MainContentWrapper>
         {console.log(this.props.modalOpen)}
         {this.props.modalOpen === 'publish' && <PublishModal template={this.props.template} templateVersion={this.props.version} />}
