@@ -10,8 +10,13 @@ import {
   FAILURE_EXISTING_TEMPLATE_UPDATE,
   GET_TEMPLATE,
   GET_TEMPLATE_SUCCESS,
-  GET_TEMPLATE_FAILURE
+  GET_TEMPLATE_FAILURE,
+  DELETE_TEMPLATE,
+  DELETE_TEMPLATE_SUCCESS,
+  DELETE_TEMPLATE_FAILURE
 } from './types';
+
+import { Template } from 'adaptive-templating-service-typescript-node';
 
 const initialState: CurrentTemplateState = {
   templateID: undefined,
@@ -93,6 +98,22 @@ export function currentTemplateReducer(state = initialState, action: CurrentTemp
         ...state,
         templateID: undefined,
         isFetching: false,
+      }
+    case DELETE_TEMPLATE: 
+      return {
+        ...state,
+        isFetching: true
+      }
+    case DELETE_TEMPLATE_SUCCESS:
+      return {
+        ...state, 
+        template: action.template,
+        isFetching: false
+      }
+    case DELETE_TEMPLATE_FAILURE: 
+      return {
+        ...state, 
+        isFetching: false
       }
     default:
       return state;

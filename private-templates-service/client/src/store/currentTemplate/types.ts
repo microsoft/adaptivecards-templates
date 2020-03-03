@@ -25,6 +25,10 @@ export const GET_TEMPLATE = 'GET_TEMPLATE';
 export const GET_TEMPLATE_SUCCESS = 'GET_TEMPLATE_SUCCESS';
 export const GET_TEMPLATE_FAILURE = 'GET_TEMPLATE_FAILURE';
 
+export const DELETE_TEMPLATE = 'DELETE_TEMPLATE';
+export const DELETE_TEMPLATE_SUCCESS = 'DELETE_TEMPLATE_SUCCESS';
+export const DELETE_TEMPLATE_FAILURE = 'DELETE_TEMPLATE_FAILURE';
+
 export type CurrentTemplateActionTypes = typeof NEW_TEMPLATE |
   typeof REQUEST_NEW_TEMPLATE_UPDATE |
   typeof RECEIVE_NEW_TEMPLATE_UPDATE |
@@ -34,7 +38,10 @@ export type CurrentTemplateActionTypes = typeof NEW_TEMPLATE |
   typeof FAILURE_EXISTING_TEMPLATE_UPDATE |
   typeof GET_TEMPLATE |
   typeof GET_TEMPLATE_SUCCESS |
-  typeof GET_TEMPLATE_FAILURE;
+  typeof GET_TEMPLATE_FAILURE | 
+  typeof DELETE_TEMPLATE | 
+  typeof DELETE_TEMPLATE_SUCCESS | 
+  typeof DELETE_TEMPLATE_FAILURE;
 
 export interface CurrentTemplateAction {
   type: CurrentTemplateActionTypes;

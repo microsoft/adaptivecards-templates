@@ -178,8 +178,7 @@ class TemplateInfo extends React.Component<Props, State> {
             <VersionCard template={this.props.template} templateVersion={this.state.version}/>
           </RowWrapper>
         </MainContentWrapper>
-        {/* {this.state.isPublishOpen && <PublishModal toggleModal={this.toggleModal} template={this.props.template} templateVersion={this.state.version} />} */}
-        {this.state.isPublishOpen && <VersionModal toggleModal={this.toggleModal} template={this.props.template} />}
+        {this.state.isPublishOpen && <PublishModal toggleModal={this.toggleModal} template={this.props.template} templateVersion={this.state.version} />}
       </OuterWrapper>
     );
   }

@@ -26,16 +26,25 @@ import {
 } from './../styled';
 
 import { getDateString } from '../../../../../utils/versionUtils';
+import VersionModal from '../../../../Common/VersionModal';
 
 interface Props {
   template: Template;
   templateVersion: string;
 }
 
+interface State {
+  isVersionOpen: boolean;
+}
 
-class VersionCard extends React.Component<Props> {
+class VersionCard extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
+    this.state = { isVersionOpen: false }
+  }
+
+  toggleModal = () => {
+    this.setState({ isVersionOpen: !this.state.isVersionOpen });
   }
 
   render() {
@@ -44,7 +53,7 @@ class VersionCard extends React.Component<Props> {
         <CardHeader>
           <VersionCardHeader>
             <CardTitle>Recent Releases</CardTitle>
-            <CardManageButton>Manage</CardManageButton>
+            <CardManageButton onClick={this.toggleModal}>Manage</CardManageButton>
           </VersionCardHeader>
         </CardHeader>
         <CardBody>
@@ -67,6 +76,7 @@ class VersionCard extends React.Component<Props> {
             </VersionCardRow>
           ))}       
         </CardBody>
+        {this.state.isVersionOpen && <VersionModal toggleModal={this.toggleModal} template={this.props.template} />}
       </Card>
     );
   }
