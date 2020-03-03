@@ -80,7 +80,6 @@ function getVersion(template: Template): string {
     return template.instances[0].version;
   }
   return "1.0"
-
 }
 
 class TemplateInfo extends React.Component<Props, State> {
