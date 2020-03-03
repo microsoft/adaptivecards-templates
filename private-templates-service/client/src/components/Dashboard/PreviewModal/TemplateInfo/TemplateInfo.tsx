@@ -4,7 +4,6 @@ import { ActionButton, IDropdownOption } from 'office-ui-fabric-react';
 import { Template, TemplateInstance, PostedTemplate } from 'adaptive-templating-service-typescript-node';
 
 import PublishModal from '../../../Common/PublishModal';
-
 import Tags from '../../../Common/Tags';
 
 import {

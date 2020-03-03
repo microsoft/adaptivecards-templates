@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 import { COLORS } from '../../../../globalStyles';
 
-import { PostedTemplate } from 'adaptive-templating-service-typescript-node';
 import { Icon, IDropdownStyles, FontWeights, IDropdownSubComponentStyles } from 'office-ui-fabric-react';
 import { Dropdown } from "office-ui-fabric-react";
+import { PostedTemplate } from 'adaptive-templating-service-typescript-node';
 
 export const StyledVersionDropdown = styled(Dropdown)`
   display: flex
