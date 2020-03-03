@@ -1,28 +1,30 @@
 import React from 'react';
 import { Template } from 'adaptive-templating-service-typescript-node';
-import { BackDrop, Modal, Header, Description, CenterPanelWrapper, ShareLinkPanel, EmailPanel, LinkRow, StyledButton, TextFieldContainer } from './styled';
+import { BackDrop, Modal, Header, Description, CenterPanelWrapper, ShareLinkPanel, EmailPanel, LinkRow, StyledButton, TextFieldContainer, BottomRow, ButtonGroup, CancelButton } from './styled';
 import { SemiBoldText } from '../PublishModal/styled';
-import { TextField, Button } from 'office-ui-fabric-react';
+import { TextField, Button, NormalPeoplePicker, PrimaryButton } from 'office-ui-fabric-react';
 import Config from '../../../Config';
+import { closeModal } from '../../../store/page/actions';
+import { connect } from 'react-redux';
+import ShareModalForm from './ShareModalForm/ShareModalForm';
 
 interface ShareModalProps {
   template: Template;
   templateVersion?: string;
+  closeModal: () => void;
 }
 
-function onCopy(props: any) {
-  let copyCode = document.createElement('textarea');
-  copyCode.innerText = Config.redirectUri + "/preview/" +
-    props.template.id + "/" + props.templateVersion;
-  document.body.appendChild(copyCode);
-  copyCode.select();
-  document.execCommand('copy');
-  copyCode.remove();
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    closeModal: () => {
+      dispatch(closeModal());
+    }
+  }
 }
+
+
 
 class ShareModal extends React.Component<ShareModalProps> {
-
-
 
   render() {
     return (
@@ -45,10 +47,7 @@ class ShareModal extends React.Component<ShareModalProps> {
                 </Button>
               </LinkRow>
             </ShareLinkPanel>
-            <EmailPanel>
-              <SemiBoldText>Send to recipients</SemiBoldText>
-              <TextField />
-            </EmailPanel>
+            <ShareModalForm />
           </CenterPanelWrapper>
         </Modal>
 
@@ -58,4 +57,19 @@ class ShareModal extends React.Component<ShareModalProps> {
   }
 }
 
-export default ShareModal;
+function onCopy(props: ShareModalProps) {
+  let copyCode = document.createElement('textarea');
+  copyCode.innerText = Config.redirectUri + "/preview/" +
+    props.template.id + "/" + props.templateVersion;
+  document.body.appendChild(copyCode);
+  copyCode.select();
+  document.execCommand('copy');
+  copyCode.remove();
+}
+
+function onShare(props: ShareModalProps, element: HTMLElement | null) {
+  if (element) {
+    alert();
+  }
+}
+export default connect(undefined, mapDispatchToProps)(ShareModal);

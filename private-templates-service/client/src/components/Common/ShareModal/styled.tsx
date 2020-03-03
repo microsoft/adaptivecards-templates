@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { COLORS } from '../../../globalStyles';
+import { DefaultButton } from 'office-ui-fabric-react';
 
 export const BackDrop = styled.div`
   position: fixed;
@@ -68,10 +69,27 @@ export const EmailPanel = styled.div`
   display: flex;
   flex-direction: column;
   height: 50%;
-  margin-top: 8px;
+  margin-top: 20px;
 `;
 
 export const SemiBoldText = styled.div`
   font-size: 16px;
   font-weight: 600;
+`;
+
+export const BottomRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: flex-end;
+  margin-top: 50px;
+`;
+
+export const ButtonGroup = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
+export const CancelButton = styled(DefaultButton)`
+  margin-right: 12px;
 `;
