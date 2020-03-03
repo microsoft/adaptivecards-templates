@@ -52,8 +52,8 @@ class ShareModalForm extends React.Component<ShareModalFormProps, State> {
     let emailStr = this.state.value.trim();
     let emails = emailStr.split(/[\s,]+/);
 
-    this.props.updateTemplate(true);
-    this.props.shareByEmail(emails, this.props.shareURL);
+    //this.props.updateTemplate(true);
+    //this.props.shareByEmail(emails, this.props.shareURL);
     this.props.closeModal();
 
     event.preventDefault();

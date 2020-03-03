@@ -75,11 +75,13 @@ interface Props {
   modalOpen?: string;
   openModal: (modalName: string) => void;
   closeModal: () => void;
+  state: any;
 }
 
 const mapStateToProps = (state: RootState) => {
   return {
-    modalOpen: state.page.modalOpen
+    modalOpen: state.page.modalOpen,
+    state: state
   };
 };
 
@@ -117,6 +119,7 @@ class TemplateInfo extends React.Component<Props> {
   }
 
   render() {
+    console.log(this.props.state)
     const {
       isLive,
       tags,
