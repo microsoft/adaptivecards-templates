@@ -5,8 +5,6 @@ import { Template, TemplateInstance, PostedTemplate } from 'adaptive-templating-
 
 import PublishModal from '../../../Common/PublishModal';
 
-import VersionModal from '../../../Common/VersionModal';
-
 import Tags from '../../../Common/Tags';
 
 import {

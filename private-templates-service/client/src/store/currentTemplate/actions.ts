@@ -111,12 +111,10 @@ function deleteTemplate(): CurrentTemplateAction {
   }
 }
 
-function deleteTemplateSuccess(templateVersion: string, template?: Template, templateID?: string): CurrentTemplateAction {
+function deleteTemplateSuccess(template?: Template): CurrentTemplateAction {
   return {
     type: DELETE_TEMPLATE_SUCCESS, 
     text: "delete specific template version success",
-    templateID,
-    templateVersion,
     template
   }
 }
@@ -226,7 +224,7 @@ export function deleteTemplateVersion(templateVersion: string, templateID?: stri
               template = undefined;
             }
           }
-          dispatch(deleteTemplateSuccess(templateVersion, template, id));
+          dispatch(deleteTemplateSuccess(template));
         }
         dispatch(deleteTemplateFailure());
       })
