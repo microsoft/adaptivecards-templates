@@ -4,9 +4,16 @@ import { TextField, PrimaryButton } from 'office-ui-fabric-react';
 import Config from '../../../../Config';
 import { closeModal } from '../../../../store/page/actions';
 import { connect } from 'react-redux';
+import { updateTemplate } from '../../../../store/currentTemplate/actions';
+import { shareByEmail } from '../../../../store/share/actions';
+import { RootState } from '../../../../store/rootReducer';
+import { Template } from 'adaptive-templating-service-typescript-node';
 
 interface ShareModalFormProps {
+  shareURL: string;
   closeModal: () => void;
+  updateTemplate: (isShareable: boolean) => void;
+  shareByEmail: (emails: string[], shareURL: string) => void;
 }
 
 interface State {
@@ -17,6 +24,12 @@ const mapDispatchToProps = (dispatch: any) => {
   return {
     closeModal: () => {
       dispatch(closeModal());
+    },
+    updateTemplate: (isShareable: boolean) => {
+      dispatch(updateTemplate(undefined, undefined, undefined, undefined, undefined, undefined, isShareable));
+    },
+    shareByEmail: (emails: string[], shareURL: string) => {
+      dispatch(shareByEmail(emails, shareURL));
     }
   }
 }
@@ -39,7 +52,9 @@ class ShareModalForm extends React.Component<ShareModalFormProps, State> {
     let emailStr = this.state.value.trim();
     let emails = emailStr.split(/[\s,]+/);
 
-    alert(emails);
+    this.props.updateTemplate(true);
+    this.props.shareByEmail(emails, this.props.shareURL);
+    this.props.closeModal();
 
     event.preventDefault();
   }
