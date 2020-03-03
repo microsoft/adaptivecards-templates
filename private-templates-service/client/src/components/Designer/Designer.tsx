@@ -11,6 +11,7 @@ import * as monaco from 'monaco-editor';
 import markdownit from 'markdown-it';
 import * as ACDesigner from 'adaptivecards-designer';
 import { setPage } from '../../store/page/actions';
+import { DesignerWrapper } from './styled';
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -86,7 +87,7 @@ class Designer extends React.Component<DesignerProps> {
 
   render() {
     return (
-      <div id="designer-container" dangerouslySetInnerHTML={{ __html: "dangerouslySetACDesigner" }}></div>
+      <DesignerWrapper id="designer-container" dangerouslySetInnerHTML={{ __html: "dangerouslySetACDesigner" }}></DesignerWrapper>
     );
   }
 
