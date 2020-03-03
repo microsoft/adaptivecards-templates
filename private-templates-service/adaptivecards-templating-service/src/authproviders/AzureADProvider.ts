@@ -2,6 +2,7 @@ import { AuthenticationProvider } from "./IAuthenticationProvider";
 import jws, { Algorithm, Signature } from "jws";
 import axios from "axios";
 import { AuthIssuer } from "../models/models";
+import config from "./Config";
 
 /**
  * @class
@@ -41,6 +42,10 @@ export class AzureADProvider implements AuthenticationProvider {
         break;
       }
     }
+
+    // Check aud of token matches the client ID of env app
+    result = config.appId === decodedToken.payload.aud;
+
     if (result) {
       this.user = decodedToken.payload.oid;
     }
