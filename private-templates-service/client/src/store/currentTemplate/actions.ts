@@ -101,7 +101,7 @@ function requestTemplateFailure(): CurrentTemplateAction {
   }
 }
 
-export function updateTemplate(templateID?: string, templateJSON?: string, sampleDataJSON?: string, templateName?: string, state?: PostedTemplate.StateEnum, tags?: string[]) {
+export function updateTemplate(templateID?: string, currentVersion?: string, templateJSON?: string, sampleDataJSON?: string, templateName?: string, state?: PostedTemplate.StateEnum, tags?: string[]) {
   return function (dispatch: any, getState: () => RootState) {
     const appState = getState();
 
@@ -110,6 +110,11 @@ export function updateTemplate(templateID?: string, templateJSON?: string, sampl
 
     let newTemplate = new PostedTemplate();
     const id = templateID || appState.currentTemplate.templateID;
+    
+    const version = currentVersion ? currentVersion :
+    (appState.currentTemplate.template && appState.currentTemplate.template.instances &&
+      appState.currentTemplate.template.instances[appState.currentTemplate.template.instances.length - 1].version ?
+      appState.currentTemplate.template.instances[appState.currentTemplate.template.instances.length - 1].version : "1.0");
 
     if (templateJSON) {
       newTemplate.template = JSON.parse(templateJSON);
@@ -120,6 +125,7 @@ export function updateTemplate(templateID?: string, templateJSON?: string, sampl
     newTemplate.name = templateName;
     newTemplate.state = state;
     newTemplate.tags = tags;
+    newTemplate.version = version;
 
     if (id === null || id === undefined || id === "") {
       dispatch(requestNewTemplateUpdate());
