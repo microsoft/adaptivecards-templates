@@ -38,7 +38,7 @@ jobs:
                 CLIENT_SECRET_TOKEN: ${{ secrets.AZURE_ADAPTIVECMS_DEV_CLIENT_SECRET }}
                 DB_CONNECTION_TOKEN: ${{ secrets.AZURE_ADAPTIVECMS_DB_CONNECTION_STRING }}
                 CLIENT_ID_TOKEN: ${{ secrets.AZURE_ADAPTIVECMS_DEV_CLIENT_ID }}
-                http://localhost:5000: https://adaptivecms.azurewebsites.net/
+                HTTP://LOCALHOST:5000: https://adaptivecms.azurewebsites.net/
             - name: Adaptive Cards Templating Service Test
               run: |
                   cd private-templates-service/adaptivecards-templating-service
