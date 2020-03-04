@@ -29,6 +29,7 @@ import {
 } from './styled';
 import { THEME } from '../../../../globalStyles';
 import VersionCard from './VersionCard';
+import UnpublishModal from '../../../Common/UnpublishModal';
 
 
 const buttons = [
@@ -46,6 +47,7 @@ const buttons = [
   },
   {
     text: 'Publish',
+    altText: 'Unpublish',
     icon: { iconName: 'PublishContent' }
   },
 ];
@@ -80,6 +82,14 @@ function getVersion(template: Template): string {
     return template.instances[0].version;
   }
   return "1.0"
+}
+
+function getTemplateState(template: Template, version: string): PostedTemplate.StateEnum {
+  if (!template.instances || template.instances.length === 0) return PostedTemplate.StateEnum.Draft;
+  for (let instance of template.instances){
+    if (instance.version === version) return instance.state || PostedTemplate.StateEnum.Draft;
+  }
+  return PostedTemplate.StateEnum.Draft;
 }
 
 class TemplateInfo extends React.Component<Props, State> {
@@ -152,7 +162,7 @@ class TemplateInfo extends React.Component<Props, State> {
           <ActionsWrapper>
             {buttons.map((val) => (
               <ActionButton key={val.text} iconProps={val.icon} allowDisabledFocus onClick={val.text === 'Publish' ? this.toggleModal : () => { }} >
-                {val.text}
+                {val.text === 'Publish' && getTemplateState(this.props.template, this.state.version) === PostedTemplate.StateEnum.Live? val.altText : val.text}
               </ActionButton>
             ))}
           </ActionsWrapper>
@@ -184,7 +194,8 @@ class TemplateInfo extends React.Component<Props, State> {
             <VersionCard template={this.props.template} templateVersion={this.state.version} />
           </RowWrapper>
         </MainContentWrapper>
-        {this.state.isPublishOpen && <PublishModal toggleModal={this.toggleModal} template={this.props.template} templateVersion={this.state.version} />}
+        {this.state.isPublishOpen && getTemplateState(this.props.template, this.state.version) === PostedTemplate.StateEnum.Draft && <PublishModal toggleModal={this.toggleModal} template={this.props.template} templateVersion={this.state.version} />}
+        {this.state.isPublishOpen && getTemplateState(this.props.template, this.state.version) === PostedTemplate.StateEnum.Live && <UnpublishModal toggleModal={this.toggleModal} template={this.props.template} templateVersion={this.state.version} />}
       </OuterWrapper>
     );
   }
