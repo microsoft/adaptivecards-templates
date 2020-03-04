@@ -5,7 +5,6 @@ import {
   CLOSE_MODAL
 }
   from "./types";
-import StateBlock from "markdown-it/lib/rules_block/state_block";
 
 export function setPage(currentPageTitle: string, currentPage: string): PageAction {
   return {

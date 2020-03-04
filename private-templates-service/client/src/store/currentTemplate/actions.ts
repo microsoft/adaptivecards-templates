@@ -94,7 +94,7 @@ function requestTemplateSuccess(template: Template, templateJSON: string, templa
   }
 }
 
-export function requestTemplateFailure(): CurrentTemplateAction {
+function requestTemplateFailure(): CurrentTemplateAction {
   return {
     type: GET_TEMPLATE_FAILURE,
     text: "get single template failure",

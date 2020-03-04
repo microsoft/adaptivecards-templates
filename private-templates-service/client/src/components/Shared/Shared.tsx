@@ -1,22 +1,21 @@
 import React, { useEffect } from 'react';
+
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 import AdaptiveCard from '../Common/AdaptiveCard';
 import NavBar from '../NavBar/NavBar';
 import TemplateSourceInfo from './TemplateSourceInfo';
 import requireAuthentication from '../../utils/requireAuthentication';
+import requireShared from '../../utils/requireShared/requireShared';
 
 import { connect } from "react-redux";
 import { setPage } from '../../store/page/actions';
 import { RootState } from '../../store/rootReducer';
-import { setSearchBarVisible } from '../../store/search/actions';
 import { getTemplate } from '../../store/currentTemplate/actions';
 
 import { ModalBackdrop, ModalWrapper, ACPanel, ACWrapper, DescriptorWrapper } from './styled';
 
 import { Template, TemplateInstance } from 'adaptive-templating-service-typescript-node';
-import requireShared from '../../utils/requireShared/requireShared';
-import { UserType } from '../../store/auth/types';
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -30,9 +29,6 @@ const mapDispatchToProps = (dispatch: any) => {
     setPage: (currentPageTitle: string, currentPage: string) => {
       dispatch(setPage(currentPageTitle, currentPage));
     },
-    setSearchBarVisible: (isSearchBarVisible: boolean) => {
-      dispatch(setSearchBarVisible(isSearchBarVisible));
-    },
     getTemplate: (templateID: string) => {
       dispatch(getTemplate(templateID));
     }
@@ -45,13 +41,10 @@ interface MatchParams {
 }
 
 interface SharedComponentProps extends RouteComponentProps<MatchParams> {
-  isAuthenticated: boolean;
-  user?: UserType;
   authButtonMethod: () => Promise<void>;
   currentPageTitle?: string;
   template?: Template;
   setPage: (currentPageTitle: string, currentPage: string) => void;
-  setSearchBarVisible: (isSearchBarVisible: boolean) => void;
   getTemplate: (templateID: string) => void;
 }
 
@@ -111,34 +104,6 @@ const Shared = (props: SharedComponentProps) => {
       </ModalBackdrop>
     </React.Fragment>
   );
-
-  // if (templateInstance && templateInstance.isShareable) {
-  //   return (
-  //     <React.Fragment>
-  //       <NavBar></NavBar>
-  //       <ModalBackdrop>
-  //         <ModalWrapper>
-  //           <ACPanel>
-  //             <ACWrapper>
-  //               <AdaptiveCard cardtemplate={props.template ? props.template : new Template()} templateVersion={version ? version : ""}></AdaptiveCard>
-  //             </ACWrapper>
-  //           </ACPanel>
-  //           <DescriptorWrapper>
-  //             <TemplateSourceInfo templateJSON={templateInstance !== undefined ? templateInstance['json'] : ''}>
-  //             </TemplateSourceInfo>
-  //           </DescriptorWrapper>
-  //         </ModalWrapper>
-  //       </ModalBackdrop>
-  //     </React.Fragment>
-  //   );
-  // }
-  // else {
-  //   return (
-  //     <React.Fragment>
-  //       This card is not shared.
-  //     </React.Fragment>
-  //   );
-  // }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(requireAuthentication(requireShared(withRouter(Shared))));

@@ -49,7 +49,7 @@ function requestUserDetailsSuccess(user: UserType): GetUserDetailsAction {
   }
 }
 
-export function requestUserDetailsFailure(): GetUserDetailsAction {
+function requestUserDetailsFailure(): GetUserDetailsAction {
   return {
     type: GET_USER_DETAILS_FAILURE
   }
