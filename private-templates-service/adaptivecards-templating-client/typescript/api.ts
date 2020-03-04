@@ -184,7 +184,7 @@ export class PostedTemplate {
     'isShareable'?: boolean;
     'isPublished'?: boolean;
     'tags'?: Array<string>;
-    'data'?: Array<string>;
+    'data'?: Array<any>;
 
     static discriminator: string | undefined = undefined;
 
@@ -227,7 +227,7 @@ export class PostedTemplate {
         {
             "name": "data",
             "baseName": "data",
-            "type": "Array<string>"
+            "type": "Array<any>"
         }    ];
 
     static getAttributeTypeMap() {
@@ -454,7 +454,7 @@ export class TemplateInstance {
     'state'?: TemplateInstance.StateEnum;
     'isShareable'?: boolean;
     'numHits'?: number;
-    'data'?: Array<string>;
+    'data'?: Array<any>;
     'updatedAt'?: string;
     'createdAt'?: string;
 
@@ -499,7 +499,7 @@ export class TemplateInstance {
         {
             "name": "data",
             "baseName": "data",
-            "type": "Array<string>"
+            "type": "Array<any>"
         },
         {
             "name": "updatedAt",
@@ -562,7 +562,7 @@ export class TemplatePreviewInstance {
     'version'?: string;
     'json'?: string;
     'state'?: string;
-    'data'?: Array<string>;
+    'data'?: Array<any>;
 
     static discriminator: string | undefined = undefined;
 
@@ -585,7 +585,7 @@ export class TemplatePreviewInstance {
         {
             "name": "data",
             "baseName": "data",
-            "type": "Array<string>"
+            "type": "Array<any>"
         }    ];
 
     static getAttributeTypeMap() {
@@ -843,6 +843,7 @@ export class TemplateApi {
      * Returns the latest version of all public templates and owned templates
      * @summary Find all templates
      * @param isPublished Query based on if template is published
+     * @param isClient If true, ignores updating hits on template
      * @param name Name of template to query for
      * @param version Version of template
      * @param owned Display only the templates owned by the user
@@ -851,7 +852,7 @@ export class TemplateApi {
      * @param tags List of tags to filter templates by
      * @param {*} [options] Override http request options.
      */
-    public allTemplates (isPublished?: boolean, name?: string, version?: string, owned?: boolean, sortBy?: 'alphabetical' | 'dateCreated' | 'dateUpdated', sortOrder?: 'ascending' | 'descending', tags?: string, options: any = {}) : Promise<{ response: http.IncomingMessage; body: TemplateList;  }> {
+    public allTemplates (isPublished?: boolean, isClient?: boolean, name?: string, version?: string, owned?: boolean, sortBy?: 'alphabetical' | 'dateCreated' | 'dateUpdated', sortOrder?: 'ascending' | 'descending', tags?: string, options: any = {}) : Promise<{ response: http.IncomingMessage; body: TemplateList;  }> {
         const localVarPath = this.basePath + '/template';
         let localVarQueryParameters: any = {};
         let localVarHeaderParams: any = (<any>Object).assign({}, this.defaultHeaders);
@@ -859,6 +860,10 @@ export class TemplateApi {
 
         if (isPublished !== undefined) {
             localVarQueryParameters['isPublished'] = ObjectSerializer.serialize(isPublished, "boolean");
+        }
+
+        if (isClient !== undefined) {
+            localVarQueryParameters['isClient'] = ObjectSerializer.serialize(isClient, "boolean");
         }
 
         if (name !== undefined) {
@@ -1158,10 +1163,11 @@ export class TemplateApi {
      * @summary Find template by id
      * @param templateId ID of template to return
      * @param isPublished Query based on if template is published
+     * @param isClient If true, ignores updating hits on template
      * @param version Version of template to return
      * @param {*} [options] Override http request options.
      */
-    public templateById (templateId: string, isPublished?: boolean, version?: string, options: any = {}) : Promise<{ response: http.IncomingMessage; body: TemplateList;  }> {
+    public templateById (templateId: string, isPublished?: boolean, isClient?: boolean, version?: string, options: any = {}) : Promise<{ response: http.IncomingMessage; body: TemplateList;  }> {
         const localVarPath = this.basePath + '/template/{templateId}'
             .replace('{' + 'templateId' + '}', encodeURIComponent(String(templateId)));
         let localVarQueryParameters: any = {};
@@ -1175,6 +1181,10 @@ export class TemplateApi {
 
         if (isPublished !== undefined) {
             localVarQueryParameters['isPublished'] = ObjectSerializer.serialize(isPublished, "boolean");
+        }
+
+        if (isClient !== undefined) {
+            localVarQueryParameters['isClient'] = ObjectSerializer.serialize(isClient, "boolean");
         }
 
         if (version !== undefined) {
