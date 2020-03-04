@@ -82,7 +82,6 @@ class PreviewModal extends React.Component<Props, State> {
               <DescriptorWrapper>
                 <TemplateInfo template={template} onClose={this.props.toggleModal} onSwitchVersion={this.toggleTemplateVersion} />
               </DescriptorWrapper>
-
             </React.Fragment>
             : <CenteredSpinner size={SpinnerSize.large} />
           }

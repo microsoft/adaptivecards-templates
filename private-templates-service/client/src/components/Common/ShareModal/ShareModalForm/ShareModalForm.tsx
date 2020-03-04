@@ -1,10 +1,14 @@
 import React from 'react';
-import { EmailPanel, SemiBoldText, BottomRow, ButtonGroup, CancelButton } from '../styled';
-import { TextField, PrimaryButton } from 'office-ui-fabric-react';
+
 import Config from '../../../../Config';
-import { closeModal } from '../../../../store/page/actions';
+
 import { connect } from 'react-redux';
 import { updateTemplate } from '../../../../store/currentTemplate/actions';
+import { closeModal } from '../../../../store/page/actions';
+
+import { TextField, PrimaryButton } from 'office-ui-fabric-react';
+
+import { EmailPanel, SemiBoldText, BottomRow, ButtonGroup, CancelButton } from '../styled';
 
 interface ShareModalFormProps {
   shareURL: string;
@@ -55,6 +59,7 @@ class ShareModalForm extends React.Component<ShareModalFormProps, State> {
   }
 
   render() {
+    let emailTextFieldDescription = "Please enter comma separated e-mail IDs. Warning: Before sharing, ensure that the embedded card data is not sensitive.";
     return (
       <React.Fragment>
         <form onSubmit={this.handleSubmit}>
@@ -63,7 +68,7 @@ class ShareModalForm extends React.Component<ShareModalFormProps, State> {
             <TextField id="emailTextField"
               value={this.state.value}
               onChange={this.handleChange}
-              description="Please enter comma separated e-mail IDs. Warning: Before sharing, ensure that the embedded card data is not sensitive." />
+              description={emailTextFieldDescription} />
           </EmailPanel>
           <BottomRow>
             <ButtonGroup>

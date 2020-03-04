@@ -1,11 +1,19 @@
 import React from 'react';
-import { ActionButton, IDropdownOption } from 'office-ui-fabric-react';
 
-import { Template, TemplateInstance, PostedTemplate } from 'adaptive-templating-service-typescript-node';
+import { RootState } from '../../../../store/rootReducer';
+import { connect } from 'react-redux';
+import { openModal, closeModal } from '../../../../store/page/actions';
 
 import PublishModal from '../../../Common/PublishModal';
 import Tags from '../../../Common/Tags';
+import ShareModal from '../../../Common/ShareModal';
+import VersionCard from './VersionCard';
 
+import { Template, TemplateInstance, PostedTemplate } from 'adaptive-templating-service-typescript-node';
+
+import { ActionButton, IDropdownOption } from 'office-ui-fabric-react';
+
+import { THEME } from '../../../../globalStyles';
 import {
   OuterWrapper,
   HeaderWrapper,
@@ -27,12 +35,8 @@ import {
   StyledVersionDropdown,
   DropdownStyles,
 } from './styled';
-import { RootState } from '../../../../store/rootReducer';
-import { openModal, closeModal } from '../../../../store/page/actions';
-import { connect } from 'react-redux';
-import ShareModal from '../../../Common/ShareModal/ShareModal';
-import { THEME } from '../../../../globalStyles';
-import VersionCard from './VersionCard';
+
+
 
 
 const buttons = [
@@ -168,7 +172,9 @@ class TemplateInfo extends React.Component<Props, State> {
           <ActionsWrapper>
             {buttons.map((val) => (
               <ActionButton key={val.text} iconProps={val.icon} allowDisabledFocus
-                onClick={((val.text === 'Publish' || val.text === 'Share') ? () => { this.props.openModal(val.text.toLowerCase()) } : () => { })}>
+                onClick={((val.text === 'Publish' || val.text === 'Share') ?
+                  () => { this.props.openModal(val.text.toLowerCase()) } :
+                  () => { })}>
                 {val.text}
               </ActionButton>
             ))}
@@ -201,7 +207,6 @@ class TemplateInfo extends React.Component<Props, State> {
             <VersionCard template={this.props.template} templateVersion={this.state.version} />
           </RowWrapper>
         </MainContentWrapper>
-        {console.log(this.props.modalOpen)}
         {this.props.modalOpen === 'publish' && <PublishModal template={this.props.template} templateVersion={this.state.version} />}
         {this.props.modalOpen === 'share' && <ShareModal template={this.props.template} templateVersion={this.state.version} />}
       </OuterWrapper>

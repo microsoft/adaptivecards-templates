@@ -1,12 +1,26 @@
 import React from 'react';
+
 import { Template } from 'adaptive-templating-service-typescript-node';
-import { BackDrop, Modal, Header, Description, CenterPanelWrapper, ShareLinkPanel, EmailPanel, LinkRow, StyledButton, TextFieldContainer, BottomRow, ButtonGroup, CancelButton } from './styled';
-import { SemiBoldText } from '../PublishModal/styled';
-import { TextField, Button, NormalPeoplePicker, PrimaryButton } from 'office-ui-fabric-react';
+
 import Config from '../../../Config';
+import ShareModalForm from './ShareModalForm';
+
 import { closeModal } from '../../../store/page/actions';
 import { connect } from 'react-redux';
-import ShareModalForm from './ShareModalForm/ShareModalForm';
+
+import { TextField, Button } from 'office-ui-fabric-react';
+
+import {
+  BackDrop,
+  Modal,
+  Header,
+  Description,
+  CenterPanelWrapper,
+  ShareLinkPanel,
+  SemiBoldText,
+  LinkRow,
+  TextFieldContainer
+} from './styled';
 
 interface ShareModalProps {
   template: Template;
@@ -21,8 +35,6 @@ const mapDispatchToProps = (dispatch: any) => {
     }
   }
 }
-
-
 
 class ShareModal extends React.Component<ShareModalProps> {
 
@@ -67,9 +79,4 @@ function onCopy(props: ShareModalProps) {
   copyCode.remove();
 }
 
-function onShare(props: ShareModalProps, element: HTMLElement | null) {
-  if (element) {
-    alert();
-  }
-}
 export default connect(undefined, mapDispatchToProps)(ShareModal);

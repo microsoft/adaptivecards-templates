@@ -3,13 +3,14 @@ import { connect } from 'react-redux';
 
 // Libraries
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { PrimaryButton, ThemeSettingName } from 'office-ui-fabric-react'
+import { PrimaryButton } from 'office-ui-fabric-react'
 import { SearchBox } from 'office-ui-fabric-react';
 
 import { Template, PostedTemplate } from 'adaptive-templating-service-typescript-node';
 
 // Redux
 import { updateTemplate } from '../../../store/currentTemplate/actions';
+import { closeModal } from '../../../store/page/actions';
 
 // Components
 import AdaptiveCard from '../AdaptiveCard';
@@ -31,7 +32,7 @@ import {
   ButtonGroup,
   CancelButton,
 } from './styled';
-import { closeModal } from '../../../store/page/actions';
+
 
 interface Props {
   template: Template;

@@ -1,9 +1,15 @@
 import React from 'react';
+
+import { Template, TemplateInstance } from 'adaptive-templating-service-typescript-node';
+
 import * as AdaptiveCards from "adaptivecards";
 import * as ACData from "adaptivecards-templating";
-import { Card } from './styled';
 import markdownit from "markdown-it";
-import { Template, TemplateInstance } from 'adaptive-templating-service-typescript-node';
+
+import { Card } from './styled';
+
+
+
 
 interface Props {
   onClick?: () => void;
