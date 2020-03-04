@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { COLORS } from '../../../globalStyles';
 
 export const CenterPanelWrapper = styled.div`
   display: flex;
