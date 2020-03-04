@@ -5,7 +5,7 @@ on:
 
 jobs:
     build-test-and-deploy:
-        name: Build Test and Deploy
+        name: Run Tests and Deploy
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
@@ -59,7 +59,7 @@ jobs:
                   npm link adaptivecards-templating-service
                   npm install
                   cd ..
-            - name: Create production build
+            - name: Create test build
               if: success()
               run: |
                   cd private-templates-service/client
