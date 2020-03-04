@@ -56,10 +56,13 @@ class PreviewModal extends React.Component<Props, State> {
         this.props.show && this.props.template && this.props.template.name ? this.props.template.name : 'Dashboard',
         this.props.show && this.props.template && this.props.template.name ? this.props.template.name : 'Dashboard');
     }
+    if (prevProps.template !== this.props.template && this.props.template && this.props.template.instances
+      && this.props.template.instances[0] && this.props.template.instances[0].version) {
+      this.setState({ templateVersion: this.props.template.instances[0].version });
+    }
   }
 
   render() {
-
     const {
       show,
       isFetching,
@@ -70,7 +73,7 @@ class PreviewModal extends React.Component<Props, State> {
       <ModalBackdrop>
         <ModalWrapper>
           {template && !isFetching ?
-            <React.Fragment>
+            < React.Fragment >
               <ACPanel>
                 <ACWrapper>
                   <AdaptiveCard cardtemplate={template} templateVersion={this.state.templateVersion} />
@@ -84,7 +87,7 @@ class PreviewModal extends React.Component<Props, State> {
             : <CenteredSpinner size={SpinnerSize.large} />
           }
         </ModalWrapper>
-      </ModalBackdrop>
+      </ModalBackdrop >
     ) : null;
   }
 }
