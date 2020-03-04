@@ -8,11 +8,9 @@ jobs:
         name: Run Tests and Build 
         runs-on: ubuntu-latest
         steps:
-            - name: pull-request-action
-              uses: vsoch/pull-request-action@master
-              env:
-                BRANCH_PREFIX: "origin/users"
-                PULL_REQUEST_BRANCH: "dev"
+            - uses: actions/checkout@v2
+              with:
+                ref: ${{ github.event.pull_request.head.sha }}
             - name: Use Node.js ${{ env.NODE_VERSION }}
               uses: actions/setup-node@v1
               with:
