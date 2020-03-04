@@ -111,11 +111,10 @@ export function updateTemplate(templateID?: string, currentVersion?: string, tem
     let newTemplate = new PostedTemplate();
     const id = templateID || appState.currentTemplate.templateID;
     
-    const version = currentVersion ? currentVersion :
-    (appState.currentTemplate.template && appState.currentTemplate.template.instances &&
-      appState.currentTemplate.template.instances[appState.currentTemplate.template.instances.length - 1].version ?
-      appState.currentTemplate.template.instances[appState.currentTemplate.template.instances.length - 1].version : "1.0");
-
+    const version = currentVersion || 
+    (appState.currentTemplate.template && appState.currentTemplate.template.instances && appState.currentTemplate.template.instances.length > 0 ?
+    appState.currentTemplate.template!.instances![0].version : "1.0")
+    
     if (templateJSON) {
       newTemplate.template = JSON.parse(templateJSON);
     } else {
