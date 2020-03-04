@@ -33,8 +33,8 @@ jobs:
             - name: Find and Replace CLIENT_SECRET_TOKEN and DB_CONNECTION_TOKEN
               uses: cschleiden/replace-tokens@v1
               with:
-                tokenPrefix: ''
-                tokenSuffix: ''
+                tokenPrefix: ""
+                tokenSuffix: ""
                 files: '["**/*.ts"]'
               env:
                 CLIENT_SECRET_TOKEN: ${{ secrets.AZURE_ADAPTIVECMS_DEV_CLIENT_SECRET }}
