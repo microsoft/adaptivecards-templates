@@ -111,7 +111,8 @@ function getVersion(template: Template): string {
 class TemplateInfo extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { version: "1.0" };
+    const vers = getVersion(this.props.template);
+    this.state = { version: vers };
   }
 
   versionList = (instances: TemplateInstance[] | undefined): IDropdownOption[] => {
