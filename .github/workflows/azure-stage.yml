@@ -56,7 +56,7 @@ jobs:
               run: |
                   cd private-templates-service/adaptivecards-templating-client/typescript
                   npm install
-                  npm run build stage
+                  npm run build
                   npm link
                   cat api.ts
                   cat api.js
