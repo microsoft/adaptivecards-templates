@@ -66,7 +66,6 @@ const cards = [
 
 interface Props {
   template: Template;
-  onClose: () => void;
   onSwitchVersion: (templateVersion: string) => void;
 }
 
@@ -109,7 +108,6 @@ class TemplateInfo extends React.Component<Props, State> {
       createdAt,
       instances,
     } = this.props.template;
-    const { onClose } = this.props;
 
     let createdAtParsed = "";
 
@@ -132,13 +130,12 @@ class TemplateInfo extends React.Component<Props, State> {
                   styles={DropdownStyles}
                 />
               </Title>
-              <StatusIndicator state={isLive? PostedTemplate.StateEnum.Live : PostedTemplate.StateEnum.Draft} />
+              <StatusIndicator state={isLive ? PostedTemplate.StateEnum.Live : PostedTemplate.StateEnum.Draft} />
               <Status>{isLive ? 'Published' : 'Draft'}</Status>
             </TitleWrapper>
             <TimeStamp>
               Created {createdAtParsed}
             </TimeStamp>
-            <ActionButton iconProps={{ iconName: 'ChromeClose' }} onClick={onClose} >Close</ActionButton>
           </TopRowWrapper>
           <ActionsWrapper>
             {buttons.map((val) => (
@@ -172,7 +169,7 @@ class TemplateInfo extends React.Component<Props, State> {
             </CardBody>
           </Card>
           <RowWrapper>
-            <VersionCard template={this.props.template} templateVersion={this.state.version}/>
+            <VersionCard template={this.props.template} templateVersion={this.state.version} />
           </RowWrapper>
         </MainContentWrapper>
         {this.state.isPublishOpen && <PublishModal toggleModal={this.toggleModal} template={this.props.template} templateVersion={this.state.version} />}
