@@ -1001,12 +1001,12 @@ export class TemplateServiceClient {
         res.status(400).json({ error: err });
       }
 
-      let isPublished: boolean | undefined = req.query.isPublished ? req.query.isPublished === "true" || req.query.isPublished === "True" : undefined;
-      let owned: boolean | undefined = req.query.owned ? req.query.owned === "true" || req.query.owned === "True" : undefined;
-      let isClient: boolean | undefined = req.query.isClient ? req.query.isClient === "true" || req.query.isClient === "True" : undefined;
+      let isPublished: boolean | undefined = req.query.isPublished ? req.query.isPublished.toLowerCase() === "true" : undefined;
+      let owned: boolean | undefined = req.query.owned ? req.query.owned.toLowerCase() === "true" : undefined;
+      let isClient: boolean | undefined = req.query.isClient ? req.query.isClient.toLowerCase() === "true" : undefined;
       
       if (!req.is("application/json")) {
-        isClient = req.body.isClient === "true" || req.body.isClient === "True";
+        isClient = req.body.isClient.toLowerCase() === "true";
       }
 
       let tagList: string[] = req.query.tags? req.query.tags.split(",") : undefined;
@@ -1062,7 +1062,7 @@ export class TemplateServiceClient {
     });
 
     router.get("/:id?", (req: Request, res: Response, _next: NextFunction) => {
-      let isClient: boolean | undefined = req.query.isClient ? req.query.isClient === "true" || req.query.isClient === "True" : undefined;
+      let isClient: boolean | undefined = req.query.isClient ? req.query.isClient.toLowerCase() === "true" : undefined;
 
       this.getTemplates(req.params.id, undefined, undefined, req.query.version, undefined, undefined, undefined, undefined, isClient).then(
         response => {
@@ -1094,8 +1094,8 @@ export class TemplateServiceClient {
       let isPublished: boolean = req.body.isPublished;
       let isShareable: boolean = req.body.isShareable;
       if (!req.is("application/json")) {
-        isPublished = req.body.isPublished === "true" || req.body.isPublished === "True";
-        isShareable = req.body.isShareable === "true" || req.body.isShareable === "True";
+        isPublished = req.body.isPublished.toLowerCase() === "true";
+        isShareable = req.body.isShareable.toLowerCase() === "true";
       }
 
       let tags: string[] | string = req.body.tags;
