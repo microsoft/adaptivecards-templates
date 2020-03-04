@@ -58,8 +58,6 @@ jobs:
                   npm install
                   npm run build
                   npm link
-                  cat api.ts
-                  cat api.js
                   cd ../../client
                   npm link adaptive-templating-service-typescript-node
                   npm install
