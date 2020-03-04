@@ -109,7 +109,6 @@ function processTemplate(temp: TemplateInstance): any {
   return template;
 }
 
-let isTemplateProcessed: boolean = false;
 class AdaptiveCard extends React.Component<Props> {
 
   render() {

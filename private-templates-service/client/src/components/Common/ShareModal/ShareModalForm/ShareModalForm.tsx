@@ -1,7 +1,5 @@
 import React from 'react';
 
-import Config from '../../../../Config';
-
 import { connect } from 'react-redux';
 import { updateTemplate } from '../../../../store/currentTemplate/actions';
 import { closeModal } from '../../../../store/page/actions';
@@ -79,22 +77,6 @@ class ShareModalForm extends React.Component<ShareModalFormProps, State> {
         </form>
       </React.Fragment>
     );
-  }
-}
-
-function onCopy(props: any) {
-  let copyCode = document.createElement('textarea');
-  copyCode.innerText = Config.redirectUri + "/preview/" +
-    props.template.id + "/" + props.templateVersion;
-  document.body.appendChild(copyCode);
-  copyCode.select();
-  document.execCommand('copy');
-  copyCode.remove();
-}
-
-function onShare(props: any, element: HTMLElement | null) {
-  if (element) {
-    alert();
   }
 }
 

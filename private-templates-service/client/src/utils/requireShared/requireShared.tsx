@@ -1,9 +1,12 @@
-import React, { useEffect } from 'react';
-import { Template } from 'adaptive-templating-service-typescript-node';
+import React from 'react';
+
+import { withRouter, RouteComponentProps } from 'react-router-dom';
+
 import { RootState } from '../../store/rootReducer';
 import { connect } from 'react-redux';
 import { getTemplate } from '../../store/currentTemplate/actions';
-import { withRouter, RouteComponentProps } from 'react-router-dom';
+
+import { Template } from 'adaptive-templating-service-typescript-node';
 
 interface MatchParams {
   uuid: string;
@@ -65,4 +68,4 @@ const requireShared = <P extends object>(Component: React.ComponentType<P>) => {
   }
 }
 
-export default (c: any) => connect(mapStateToProps)(withRouter(requireShared(c)));
+export default (c: any) => connect(mapStateToProps, mapDispatchToProps)(withRouter(requireShared(c)));
