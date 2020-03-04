@@ -35,6 +35,7 @@ mongoDB.connect()
         app.use("/template", client.expressMiddleware());
         app.use("/user", client.userExpressMiddleware());
 
+        // Keep this request at the end so it has lowest priority
         app.get('*', (req, res) => {
           res.sendFile(path.join(__dirname, RELATIVE_PATH_CLIENT + '/index.html'));
         })
