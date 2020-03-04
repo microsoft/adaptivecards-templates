@@ -69,6 +69,10 @@ class PreviewModal extends React.Component<Props, State> {
     if (prevProps.template === undefined && this.props.template && this.props.template.name) {
       this.props.setPage(this.props.template.name, 'Template');
     }
+    if (prevProps.template !== this.props.template && this.props.template && this.props.template.instances
+      && this.props.template.instances[0] && this.props.template.instances[0].version) {
+      this.setState({ templateVersion: this.props.template.instances[0].version });
+    }
   }
 
   render() {
