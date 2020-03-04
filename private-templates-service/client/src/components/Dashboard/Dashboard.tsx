@@ -96,10 +96,10 @@ class Dashboard extends React.Component<Props, State> {
     let recentlyViewedTemplates = new Array<Template>();
 
     if (!recentTemplates.isFetching && recentTemplates.recentlyEdited && recentTemplates.recentlyEdited.templates) {
-      recentlyEditedTemplates = recentTemplates.recentlyEdited.templates!;
+      recentlyEditedTemplates = recentTemplates.recentlyEdited.templates;
     }
     if (!recentTemplates.isFetching && recentTemplates.recentlyViewed && recentTemplates.recentlyViewed.templates) {
-      recentlyViewedTemplates = recentTemplates.recentlyViewed.templates!;
+      recentlyViewedTemplates = recentTemplates.recentlyViewed.templates;
     }
     // TODO: Get tags and make them clickable
     let tags: string[] = new Array();
