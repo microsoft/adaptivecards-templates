@@ -11,7 +11,7 @@ jobs:
             - name: pull-request-action
               uses: vsoch/pull-request-action@master
               env:
-                BRANCH_PREFIX: "users/"
+                BRANCH_PREFIX: "users"
                 PULL_REQUEST_BRANCH: "dev"
             - name: Use Node.js ${{ env.NODE_VERSION }}
               uses: actions/setup-node@v1
