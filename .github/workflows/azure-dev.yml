@@ -58,8 +58,6 @@ jobs:
                   npm install
                   npm run build
                   npm link
-                  cat api.ts
-                  cat api.js
                   cd ../../client
                   npm link adaptive-templating-service-typescript-node
                   npm install
@@ -75,9 +73,6 @@ jobs:
                   cd ../server
                   npm link adaptivecards-templating-service
                   npm install
-                  cd src
-                  cat app.ts
-                  cd ..
                   cd ..
             - name: Create production build
               if: success()
