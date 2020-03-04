@@ -36,14 +36,14 @@ import { closeModal } from '../../../store/page/actions';
 interface Props {
   template: Template;
   templateVersion?: string;
-  publishTemplate: () => void;
+  publishTemplate: (templateVersion: string) => void;
   closeModal: () => void;
 }
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    publishTemplate: () => {
-      dispatch(updateTemplate(undefined, undefined, undefined, undefined, PostedTemplate.StateEnum.Live));
+    publishTemplate: (templateVersion: string) => {
+      dispatch(updateTemplate(undefined, templateVersion, undefined, undefined, undefined, PostedTemplate.StateEnum.Live));
     },
     closeModal: () => {
       dispatch(closeModal());
@@ -54,7 +54,7 @@ const mapDispatchToProps = (dispatch: any) => {
 class PublishModal extends React.Component<Props> {
 
   publish = () => {
-    this.props.publishTemplate();
+    this.props.publishTemplate(this.props.templateVersion ? this.props.templateVersion : "1.0");
     this.props.closeModal();
   }
 

@@ -47,7 +47,7 @@ class ShareModal extends React.Component<ShareModalProps> {
                 </Button>
               </LinkRow>
             </ShareLinkPanel>
-            <ShareModalForm shareURL={Config.redirectUri + "/preview/" + this.props.template.id + "/" + this.props.templateVersion} />
+            <ShareModalForm shareURL={Config.redirectUri + "/preview/" + this.props.template.id + "/" + this.props.templateVersion} templateVersion={this.props.templateVersion} />
           </CenterPanelWrapper>
         </Modal>
 

@@ -27,7 +27,7 @@ const mapStateToProps = (state: RootState) => {
 const mapDispatchToProps = (dispatch: any) => {
   return {
     updateTemplate: (templateID: string, templateJSON: string, templateName: string, sampleDataJSON: string) => {
-      dispatch(updateTemplate(templateID, templateJSON, templateName, sampleDataJSON));
+      dispatch(updateTemplate(templateID, "1.0", templateJSON, templateName, sampleDataJSON));
     },
     setPage: (currentPageTitle: string, currentPage: string) => {
       dispatch(setPage(currentPageTitle, currentPage));

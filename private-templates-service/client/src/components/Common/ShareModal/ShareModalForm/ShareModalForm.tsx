@@ -5,15 +5,12 @@ import Config from '../../../../Config';
 import { closeModal } from '../../../../store/page/actions';
 import { connect } from 'react-redux';
 import { updateTemplate } from '../../../../store/currentTemplate/actions';
-import { shareByEmail } from '../../../../store/share/actions';
-import { RootState } from '../../../../store/rootReducer';
-import { Template } from 'adaptive-templating-service-typescript-node';
 
 interface ShareModalFormProps {
   shareURL: string;
+  templateVersion?: string;
   closeModal: () => void;
-  updateTemplate: (isShareable: boolean) => void;
-  shareByEmail: (emails: string[], shareURL: string) => void;
+  shareTemplate: (version: string, isShareable: boolean) => void;
 }
 
 interface State {
@@ -25,11 +22,8 @@ const mapDispatchToProps = (dispatch: any) => {
     closeModal: () => {
       dispatch(closeModal());
     },
-    updateTemplate: (isShareable: boolean) => {
-      dispatch(updateTemplate(undefined, undefined, undefined, undefined, undefined, undefined, isShareable));
-    },
-    shareByEmail: (emails: string[], shareURL: string) => {
-      dispatch(shareByEmail(emails, shareURL));
+    shareTemplate: (version: string, isShareable: boolean) => {
+      dispatch(updateTemplate(undefined, version, undefined, undefined, undefined, undefined, undefined, isShareable));
     }
   }
 }
@@ -49,11 +43,12 @@ class ShareModalForm extends React.Component<ShareModalFormProps, State> {
   }
 
   handleSubmit(event: any) {
-    let emailStr = this.state.value.trim();
-    let emails = emailStr.split(/[\s,]+/);
+    //let emailStr = this.state.value.trim();
+    //let emails = emailStr.split(/[\s,]+/);
 
-    //this.props.updateTemplate(true);
-    //this.props.shareByEmail(emails, this.props.shareURL);
+    //TODO: use emails given to send an email
+
+    this.props.shareTemplate(this.props.templateVersion ? this.props.templateVersion : "1.0", true);
     this.props.closeModal();
 
     event.preventDefault();

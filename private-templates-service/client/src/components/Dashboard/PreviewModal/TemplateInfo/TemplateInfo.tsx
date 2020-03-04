@@ -72,17 +72,18 @@ interface Props {
   template: Template;
   onClose: () => void;
   onSwitchVersion: (templateVersion: string) => void;
-  version?: string;
   modalOpen?: string;
   openModal: (modalName: string) => void;
   closeModal: () => void;
-  state: any;
+}
+
+interface State {
+  version: string;
 }
 
 const mapStateToProps = (state: RootState) => {
   return {
-    modalOpen: state.page.modalOpen,
-    state: state
+    modalOpen: state.page.modalOpen
   };
 };
 
@@ -97,9 +98,10 @@ const mapDispatchToProps = (dispatch: any) => {
   }
 }
 
-class TemplateInfo extends React.Component<Props> {
+class TemplateInfo extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
+    this.state = { version: "1.0" };
   }
 
   versionList = (instances: TemplateInstance[] | undefined): IDropdownOption[] => {
@@ -120,7 +122,6 @@ class TemplateInfo extends React.Component<Props> {
   }
 
   render() {
-    console.log(this.props.state)
     const {
       isLive,
       tags,
@@ -143,14 +144,14 @@ class TemplateInfo extends React.Component<Props> {
             <TitleWrapper>
               <Title>
                 <StyledVersionDropdown
-                  placeholder={`Version ${this.props.version}`}
+                  placeholder={`Version ${this.state.version}`}
                   options={this.versionList(instances)}
                   onChange={this.onVersionChange}
                   theme={THEME.LIGHT}
                   styles={DropdownStyles}
                 />
               </Title>
-              <StatusIndicator state={isLive? PostedTemplate.StateEnum.Live : PostedTemplate.StateEnum.Draft} />
+              <StatusIndicator state={isLive ? PostedTemplate.StateEnum.Live : PostedTemplate.StateEnum.Draft} />
               <Status>{isLive ? 'Published' : 'Draft'}</Status>
             </TitleWrapper>
             <TimeStamp>
@@ -191,12 +192,12 @@ class TemplateInfo extends React.Component<Props> {
             </CardBody>
           </Card>
           <RowWrapper>
-            <VersionCard template={this.props.template} templateVersion={this.state.version}/>
+            <VersionCard template={this.props.template} templateVersion={this.state.version} />
           </RowWrapper>
         </MainContentWrapper>
         {console.log(this.props.modalOpen)}
-        {this.props.modalOpen === 'publish' && <PublishModal template={this.props.template} templateVersion={this.props.version} />}
-        {this.props.modalOpen === 'share' && <ShareModal template={this.props.template} templateVersion={this.props.version} />}
+        {this.props.modalOpen === 'publish' && <PublishModal template={this.props.template} templateVersion={this.state.version} />}
+        {this.props.modalOpen === 'share' && <ShareModal template={this.props.template} templateVersion={this.state.version} />}
       </OuterWrapper>
     );
   }
