@@ -1,14 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Template } from 'adaptive-templating-service-typescript-node';
 import { RootState } from '../../store/rootReducer';
 import { connect } from 'react-redux';
 import { getTemplate } from '../../store/currentTemplate/actions';
-import { useParams } from 'react-router-dom';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 
-interface RequireSharedProps {
+interface MatchParams {
+  uuid: string;
+  version: string;
+}
+interface RequireSharedProps extends RouteComponentProps<MatchParams> {
   template?: Template;
-  templateVersion: string;
   getTemplate: (templateID: string) => void;
+  authButtonMethod: () => Promise<void>;
 }
 
 const mapStateToProps = (state: RootState) => {
@@ -26,58 +30,39 @@ const mapDispatchToProps = (dispatch: any) => {
 };
 
 const requireShared = <P extends object>(Component: React.ComponentType<P>) => {
+  return class SharedComponent extends React.Component<P & RequireSharedProps> {
 
-  return (props: P & RequireSharedProps) => {
-    const isShared = () => {
-      if (props.template && props.template.instances) {
-        for (let i = 0; i < props.template.instances.length; i++) {
-          if (props.template.instances[i].version === props.templateVersion) {
-            return props.template.instances[i].isShareable;
+    constructor(props: P & RequireSharedProps) {
+      super(props);
+      if (!this.props.template) {
+        console.log("hit");
+        const uuid = this.props.match.params.uuid;
+        this.props.getTemplate(uuid ? uuid : "");
+      }
+    }
+
+    isShared = () => {
+      if (this.props.template && this.props.template.instances) {
+        for (let i = 0; i < this.props.template.instances.length; i++) {
+          if (this.props.template.instances[i].version === this.props.match.params.version) {
+            return this.props.template.instances[i].isShareable;
           }
         }
       }
       return false;
     }
 
-    if (!props.template) {
-      const { uuid, version } = useParams();
-      props.getTemplate(uuid ? uuid : "");
+    render() {
+      console.log(this.props.template);
+      return (
+        <React.Fragment>
+          {this.isShared() ?
+            <Component {...this.props} /> :
+            <React.Fragment>Not shared yet.</React.Fragment>}
+        </React.Fragment>
+      );
     }
-
-    return <React.Fragment>
-      {isShared() ?
-        <Component {...props} /> :
-        <React.Fragment>Not shared yet.</React.Fragment>}
-    </React.Fragment>
   }
-
-  // return class SharedComponent extends React.Component<P & RequireSharedProps> {
-
-  //   isShared = () => {
-  //     if (this.props.template && this.props.template.instances) {
-  //       for (let i = 0; i < this.props.template.instances.length; i++) {
-  //         if (this.props.template.instances[i].version === this.props.templateVersion) {
-  //           return this.props.template.instances[i].isShareable;
-  //         }
-  //       }
-  //     }
-  //     return false;
-  //   }
-
-  //   render() {
-  //     if (!this.props.template) {
-  //       const { uuid, version } = useParams();
-  //       this.props.getTemplate(uuid ? uuid : "");
-  //     }
-  //     return (
-  //       <React.Fragment>
-  //         {this.isShared() ?
-  //           <Component {...this.props} /> :
-  //           <React.Fragment>Not shared yet.</React.Fragment>}
-  //       </React.Fragment>
-  //     );
-  //   }
-  // }
 }
 
-export default (c: any) => connect(mapStateToProps)(requireShared(c));
+export default (c: any) => connect(mapStateToProps)(withRouter(requireShared(c)));

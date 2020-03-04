@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 import AdaptiveCard from '../Common/AdaptiveCard';
 import NavBar from '../NavBar/NavBar';
@@ -16,6 +16,7 @@ import { ModalBackdrop, ModalWrapper, ACPanel, ACWrapper, DescriptorWrapper } fr
 
 import { Template, TemplateInstance } from 'adaptive-templating-service-typescript-node';
 import requireShared from '../../utils/requireShared/requireShared';
+import { UserType } from '../../store/auth/types';
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -38,10 +39,17 @@ const mapDispatchToProps = (dispatch: any) => {
   };
 };
 
-interface SharedComponentProps {
+interface MatchParams {
+  uuid: string;
+  version: string;
+}
+
+interface SharedComponentProps extends RouteComponentProps<MatchParams> {
+  isAuthenticated: boolean;
+  user?: UserType;
+  authButtonMethod: () => Promise<void>;
   currentPageTitle?: string;
   template?: Template;
-  authButtonMethod: () => Promise<void>;
   setPage: (currentPageTitle: string, currentPage: string) => void;
   setSearchBarVisible: (isSearchBarVisible: boolean) => void;
   getTemplate: (templateID: string) => void;
@@ -49,15 +57,17 @@ interface SharedComponentProps {
 
 const Shared = (props: SharedComponentProps) => {
 
-  const { uuid, version } = useParams();
   let templateInstance: TemplateInstance | undefined = undefined;
-
+  let uuid: string | undefined = undefined;
+  let version: string | undefined = undefined;
 
   useEffect(() => {
+    uuid = props.match.params.uuid;
+    version = props.match.params.version;
+
     props.setPage((props.template !== undefined && props.template.name &&
       props.template.name !== "") ? props.template.name : "Preview", "sharedPage");
 
-    console.log(uuid);
     if (uuid) {
       props.getTemplate(uuid);
     }
@@ -65,7 +75,6 @@ const Shared = (props: SharedComponentProps) => {
 
   useEffect(() => {
     if (uuid !== undefined) {
-      console.log(uuid);
       props.getTemplate(uuid);
     }
   }, [uuid]);
@@ -83,33 +92,53 @@ const Shared = (props: SharedComponentProps) => {
       templateInstance = props.template.instances[props.template.instances.length - 1];
     }
   }
-  if (templateInstance && templateInstance.isShareable) {
-    return (
-      <React.Fragment>
-        <NavBar></NavBar>
-        <ModalBackdrop>
-          <ModalWrapper>
-            <ACPanel>
-              <ACWrapper>
-                <AdaptiveCard cardtemplate={props.template ? props.template : new Template()} templateVersion={version ? version : ""}></AdaptiveCard>
-              </ACWrapper>
-            </ACPanel>
-            <DescriptorWrapper>
-              <TemplateSourceInfo templateJSON={templateInstance !== undefined ? templateInstance['json'] : ''}>
-              </TemplateSourceInfo>
-            </DescriptorWrapper>
-          </ModalWrapper>
-        </ModalBackdrop>
-      </React.Fragment>
-    );
-  }
-  else {
-    return (
-      <React.Fragment>
-        This card is not shared.
-      </React.Fragment>
-    );
-  }
+
+  return (
+    <React.Fragment>
+      <NavBar></NavBar>
+      <ModalBackdrop>
+        <ModalWrapper>
+          <ACPanel>
+            <ACWrapper>
+              <AdaptiveCard cardtemplate={props.template ? props.template : new Template()} templateVersion={version ? version : ""}></AdaptiveCard>
+            </ACWrapper>
+          </ACPanel>
+          <DescriptorWrapper>
+            <TemplateSourceInfo templateJSON={templateInstance !== undefined ? templateInstance['json'] : ''}>
+            </TemplateSourceInfo>
+          </DescriptorWrapper>
+        </ModalWrapper>
+      </ModalBackdrop>
+    </React.Fragment>
+  );
+
+  // if (templateInstance && templateInstance.isShareable) {
+  //   return (
+  //     <React.Fragment>
+  //       <NavBar></NavBar>
+  //       <ModalBackdrop>
+  //         <ModalWrapper>
+  //           <ACPanel>
+  //             <ACWrapper>
+  //               <AdaptiveCard cardtemplate={props.template ? props.template : new Template()} templateVersion={version ? version : ""}></AdaptiveCard>
+  //             </ACWrapper>
+  //           </ACPanel>
+  //           <DescriptorWrapper>
+  //             <TemplateSourceInfo templateJSON={templateInstance !== undefined ? templateInstance['json'] : ''}>
+  //             </TemplateSourceInfo>
+  //           </DescriptorWrapper>
+  //         </ModalWrapper>
+  //       </ModalBackdrop>
+  //     </React.Fragment>
+  //   );
+  // }
+  // else {
+  //   return (
+  //     <React.Fragment>
+  //       This card is not shared.
+  //     </React.Fragment>
+  //   );
+  // }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(requireAuthentication(Shared));
+export default connect(mapStateToProps, mapDispatchToProps)(requireAuthentication(requireShared(withRouter(Shared))));
