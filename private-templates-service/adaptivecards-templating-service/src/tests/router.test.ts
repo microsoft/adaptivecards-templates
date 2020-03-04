@@ -13,8 +13,8 @@ export default async function getToken(): Promise<string> {
   const endpoint = "https://login.microsoftonline.com/72f988bf-86f1-41af-91ab-2d7cd011db47/oauth2/token";
   const requestParams = {
     grant_type: "client_credentials",
-    client_id: "#{CLIENT_ID_TOKEN}#",
-    client_secret: "#{CLIENT_SECRET_TOKEN}#",
+    client_id: "CLIENT_ID_TOKEN",
+    client_secret: "CLIENT_SECRET_TOKEN",
     resource: "https://graph.windows.net"
   };
   return await request
