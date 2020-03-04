@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 // Libraries
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { PrimaryButton } from 'office-ui-fabric-react'
+import { PrimaryButton } from 'office-ui-fabric-react';
 import { SearchBox } from 'office-ui-fabric-react';
 
 import { Template, PostedTemplate } from 'adaptive-templating-service-typescript-node';
@@ -14,6 +14,7 @@ import { closeModal } from '../../../store/page/actions';
 
 // Components
 import AdaptiveCard from '../AdaptiveCard';
+import ModalHOC from '../../../utils/ModalHOC';
 
 // Styles
 import {
@@ -96,4 +97,4 @@ class PublishModal extends React.Component<Props> {
   }
 }
 
-export default connect(() => { return {} }, mapDispatchToProps)(PublishModal);
+export default ModalHOC(connect(() => { return {} }, mapDispatchToProps)(PublishModal));

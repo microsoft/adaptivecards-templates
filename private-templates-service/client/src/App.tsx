@@ -136,6 +136,7 @@ class App extends Component<Props, State> {
             </MainAppWrapper>
           </OuterAppWrapper>
         </Switch>
+        <div id="modal" />
       </Router >
     );
   }
