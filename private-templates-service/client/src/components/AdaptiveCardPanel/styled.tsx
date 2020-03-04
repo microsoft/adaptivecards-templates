@@ -2,14 +2,13 @@ import styled from "styled-components";
 import { COLORS } from "../../globalStyles";
 
 export const Container = styled.div`
-  flex: 1 1 0px;
+  flex: 1;
   display: flex;
   flex-direction: column;
   margin: 0 24px 24px 0;
 
   background: white;
   height: 200px;
-  // min-width: 300px;
   max-width: 350px;
 
   // -webkit-box-shadow: 0px 2px 6px 0px rgba(111, 111, 111, 0.4);

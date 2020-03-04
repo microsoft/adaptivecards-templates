@@ -1,46 +1,48 @@
 import styled from "styled-components";
 import { COLORS } from "../../../globalStyles";
-import { Card, RowWrapper, Title } from "../PreviewModal/TemplateInfo/styled";
+import { Card } from "../PreviewModal/TemplateInfo/styled";
 
 export const RecentlyViewedBodyRow = styled.div`
   &: hover {
-    background-color: #f3f3f3;
+    background-color: ${COLORS.GREYHOVER};
     cursor: pointer;
   }
   display: flex;
   flex-direction: row;
   flex: 1;
   padding-top: 20px;
-  padding-bottom: 5px;
-  padding-left: 97px; // WHY IS IT NOT THE SAMEEEEE
+  padding-left: 50px;
   justify-content: flex-start;
 `;
-export const RecentlyViewedHeaderItem = styled(Title)`
-  padding-bottom: 20px;
+export const RecentlyViewedHeaderItem = styled.h5`
   flex: 1;
 `;
-export const RecentlyViewedHeader = styled(RowWrapper)`
-  flex: 1;
-  padding-left: 100px;
+export const RecentlyViewedHeader = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: flex-start;
+  padding-left: 50px;
+  padding-top: 5px;
+  padding-bottom: 5px;
   border-bottom: 1px solid ${COLORS.BORDER};
 `;
 export const RecentlyViewedContainer = styled(Card)`
+  flex: 0 1 auto;
   border-radius: 5px;
   border-style: solid;
   border-color: ${COLORS.BORDER2};
   border-width: 1px;
-  display: flex;
-  flex-direction: column;
+  justify-content: flex-start;
 `;
 
 export const RecentlyViewedBody = styled.div`
-  flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: stretch;
-  // flex-wrap: wrap;
+  justify-content: flex-start;
 `;
 
-export const RecentlyViewedItem = styled.h5`
+export const RecentlyViewedItem = styled.h6`
+  font-family: Segoe UI Regular;
   flex: 1;
 `;

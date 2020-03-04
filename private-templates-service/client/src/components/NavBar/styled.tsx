@@ -39,7 +39,7 @@ export const Styledh1 = styled.div`
   color: ${COLORS.BLACK};
   letter-spacing: 0;
   opacity: 1;
-  font-size: 26px;
+  font-size: 30px;
   margin-bottom: 0;
   font-weight: 600;
 
@@ -57,7 +57,7 @@ export const Styledh2 = styled.div`
   padding-left: 16px;
   font-weight: 300;
 
-  @media only screen and (max-width: ${BREAK.SM}px){
+  @media only screen and (max-width: ${BREAK.SM}px) {
     font-size: 12px;
   }
 `;

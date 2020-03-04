@@ -1,6 +1,5 @@
 import React from "react";
 import { connect } from "react-redux";
-
 import { RootState } from "../../store/rootReducer";
 import { UserType } from "../../store/auth/types";
 import { AllTemplateState } from "../../store/templates/types";
@@ -9,17 +8,13 @@ import { setPage } from "../../store/page/actions";
 import { getAllTemplates } from "../../store/templates/actions";
 import { getTemplate } from "../../store/currentTemplate/actions";
 import { getRecentTemplates } from "../../store/recentTemplates/actions";
-
 import requireAuthentication from "../../utils/requireAuthentication";
 import Gallery from "../Gallery";
 import PreviewModal from "./PreviewModal";
 import SearchPage from "./SearchPage/SearchPage";
 import { setSearchBarVisible } from "../../store/search/actions";
-
-import { Title, DashboardContainer, OuterWindow, TagsContainer } from "./styled";
-import { VersionCardRow, VersionCardRowTitle, VersionCardRowText, CardTitle } from "./PreviewModal/TemplateInfo/VersionCard/styled";
-import { Card, CardBody, CardHeader, RowWrapper } from "./PreviewModal/TemplateInfo/styled";
-import { Template, UserList, User, TemplateList } from "adaptive-templating-service-typescript-node";
+import { Title, DashboardContainer, OuterWindow, TagsContainer, PlaceholderText } from "./styled";
+import { Template } from "adaptive-templating-service-typescript-node";
 import { RecentlyViewed } from "./RecentlyViewed/RecentlyViewed";
 import Tags from "../Common/Tags";
 const mapStateToProps = (state: RootState) => {
@@ -66,8 +61,6 @@ interface Props {
   setSearchBarVisible: (isSearchBarVisible: boolean) => void;
   getTemplates: () => void;
   getRecentTemplates: () => void;
-  // getRecentlyViewedTemplates(): () => void;
-  // getRecentlyEditedTemplates(): () => void;
   getTemplate: (templateID: string) => void;
   isSearch: boolean;
 }
@@ -78,7 +71,6 @@ class Dashboard extends React.Component<Props, State> {
     this.state = { isPreviewOpen: false };
     props.setPage("Dashboard", "Dashboard");
     props.setSearchBarVisible(true);
-    props.getTemplates();
     props.getRecentTemplates();
   }
 
@@ -99,28 +91,39 @@ class Dashboard extends React.Component<Props, State> {
       );
     }
     //TODO add sort functionality to separate templates displayed in recent vs draft
-    let templates = new Array<Template>();
-    let user: User;
     let recentTemplates = this.props.recentTemplates;
-    console.log(recentTemplates.recentlyViewed);
+    let recentlyEditedTemplates = new Array<Template>();
+    let recentlyViewedTemplates = new Array<Template>();
 
-    if (!this.props.templates.isFetching && this.props.templates.templates && this.props.templates.templates.templates) {
-      templates = this.props.templates.templates.templates;
+    if (!recentTemplates.isFetching && recentTemplates.recentlyEdited && recentTemplates.recentlyEdited.templates) {
+      recentlyEditedTemplates = recentTemplates.recentlyEdited.templates!;
     }
-    if (!this.props.recentTemplates.isFetching && this.props.recentTemplates.recentlyEdited && this.props.recentTemplates.recentlyViewed) {
-      console.log(this.props.recentTemplates);
-      // console.log(this.props.recentTemplates);
+    if (!recentTemplates.isFetching && recentTemplates.recentlyViewed && recentTemplates.recentlyViewed.templates) {
+      recentlyViewedTemplates = recentTemplates.recentlyViewed.templates!;
     }
-    const tags: string[] = ["tag1", "myTagNumberTwo", "myTagNumberThreeeeee"];
-    this.props.setPage("Dashboard", "Dashboard");
+    // TODO: Get tags and make them clickable
+    let tags: string[] = new Array();
     return (
       <OuterWindow>
         <DashboardContainer>
-          <Title>Recently Edited</Title>
-          <Gallery onClick={this.selectTemplate} templates={templates}></Gallery>
+          <React.Fragment>
+            <Title>Recently Edited</Title>
+            {recentlyEditedTemplates.length ? (
+              <Gallery onClick={this.selectTemplate} templates={recentlyEditedTemplates}></Gallery>
+            ) : (
+              <PlaceholderText>No edited templates yet. Create or edit one :)</PlaceholderText>
+            )}
+          </React.Fragment>
+
           <PreviewModal show={this.state.isPreviewOpen} toggleModal={this.toggleModal} />
-          <Title>Recently Viewed</Title>
-          <RecentlyViewed recentlyViewed={recentTemplates.recentlyViewed ? recentTemplates.recentlyViewed : new TemplateList()}></RecentlyViewed>
+          <React.Fragment>
+            <Title>Recently Viewed</Title>
+            {recentlyViewedTemplates.length ? (
+              <RecentlyViewed onClick={this.selectTemplate} recentlyViewed={recentlyViewedTemplates}></RecentlyViewed>
+            ) : (
+              <PlaceholderText>No recently viewed templates yet. Check out some templates:)</PlaceholderText>
+            )}
+          </React.Fragment>
         </DashboardContainer>
         <TagsContainer>
           <Title style={{ marginRight: "150px" }}>Tags</Title>
