@@ -1,5 +1,5 @@
 import { REQUEST_TEMPLATES_GET, REQUEST_TEMPLATE_GET_SUCCESS, REQUEST_TEMPLATE_GET_FAIL, AllTemplateAction } from "./types";
-import { TemplateApi, TemplateList, Template } from "adaptive-templating-service-typescript-node";
+import { TemplateApi, TemplateList, Template, UserApi } from "adaptive-templating-service-typescript-node";
 import { IncomingMessage } from "http";
 
 export function requestAllTemplates(): AllTemplateAction {
@@ -26,6 +26,7 @@ export function getAllTemplates() {
   return function(dispatch: any) {
     dispatch(requestAllTemplates());
     let api = new TemplateApi();
+    let api2 = new UserApi();
     // TODO dynamically fetch bearer token
     api.setApiKey(
       0,

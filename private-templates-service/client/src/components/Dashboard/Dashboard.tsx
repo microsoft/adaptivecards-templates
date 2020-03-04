@@ -16,15 +16,16 @@ import PreviewModal from "./PreviewModal";
 import SearchPage from "./SearchPage/SearchPage";
 import { setSearchBarVisible } from "../../store/search/actions";
 
-import { Title, DashboardContainer, OuterWindow, TagsContainer, RecentlyViewedContainer, RecentlyViewedHeader } from "./styled";
+import { Title, DashboardContainer, OuterWindow, TagsContainer } from "./styled";
 import { VersionCardRow, VersionCardRowTitle, VersionCardRowText, CardTitle } from "./PreviewModal/TemplateInfo/VersionCard/styled";
 import { Card, CardBody, CardHeader, RowWrapper } from "./PreviewModal/TemplateInfo/styled";
-import { Template, UserList, User } from "adaptive-templating-service-typescript-node";
+import { Template, UserList, User, TemplateList } from "adaptive-templating-service-typescript-node";
+import { RecentlyViewed } from "./RecentlyViewed/RecentlyViewed";
 import Tags from "../Common/Tags";
 const mapStateToProps = (state: RootState) => {
   return {
     isAuthenticated: state.auth.isAuthenticated,
-    user: state.auth.user,
+    user: state.auth.user, //
     templates: state.allTemplates,
     isSearch: state.search.isSearch,
     recentTemplates: state.recentTemplates
@@ -97,10 +98,11 @@ class Dashboard extends React.Component<Props, State> {
         </DashboardContainer>
       );
     }
-
     //TODO add sort functionality to separate templates displayed in recent vs draft
     let templates = new Array<Template>();
     let user: User;
+    let recentTemplates = this.props.recentTemplates;
+    console.log(recentTemplates.recentlyViewed);
 
     if (!this.props.templates.isFetching && this.props.templates.templates && this.props.templates.templates.templates) {
       templates = this.props.templates.templates.templates;
@@ -118,15 +120,7 @@ class Dashboard extends React.Component<Props, State> {
           <Gallery onClick={this.selectTemplate} templates={templates}></Gallery>
           <PreviewModal show={this.state.isPreviewOpen} toggleModal={this.toggleModal} />
           <Title>Recently Viewed</Title>
-          <RecentlyViewedContainer>
-            <RecentlyViewedHeader>
-              <CardTitle>Name</CardTitle>
-              <CardTitle>Date Modified</CardTitle>
-              <CardTitle>Status</CardTitle>
-              <CardTitle>Owner</CardTitle>
-            </RecentlyViewedHeader>
-            <CardBody></CardBody>
-          </RecentlyViewedContainer>
+          <RecentlyViewed recentlyViewed={recentTemplates.recentlyViewed ? recentTemplates.recentlyViewed : new TemplateList()}></RecentlyViewed>
         </DashboardContainer>
         <TagsContainer>
           <Title style={{ marginRight: "150px" }}>Tags</Title>
