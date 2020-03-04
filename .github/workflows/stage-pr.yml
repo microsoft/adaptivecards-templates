@@ -8,10 +8,9 @@ jobs:
         name: Run Tests and Build 
         runs-on: ubuntu-latest
         steps:
-            - name: Checkout
-              uses: actions/checkout@v2.0.0
+            - uses: actions/checkout@v2
               with:
-                  ref: stage
+                ref: ${{ github.event.pull_request.head.sha }}
             - name: Use Node.js ${{ env.NODE_VERSION }}
               uses: actions/setup-node@v1
               with:
