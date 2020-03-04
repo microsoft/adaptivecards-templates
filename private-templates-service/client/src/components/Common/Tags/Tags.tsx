@@ -26,7 +26,7 @@ const mapStateToProps = (state: RootState) => {
 const mapDispatchToProps = (dispatch: any) => {
   return {
     updateTags: (tags: string[]) => {
-      dispatch(updateTemplate(undefined, undefined, undefined, undefined, undefined, tags))
+      dispatch(updateTemplate(undefined, undefined, undefined, undefined, undefined, undefined, tags))
     }
   }
 }
