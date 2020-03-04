@@ -22,12 +22,12 @@ jobs:
               env:
                 CLIENT_SECRET_TOKEN: ${{ secrets.AZURE_ADAPTIVECMS_DEV_CLIENT_SECRET }}
                 CLIENT_ID_TOKEN: ${{ secrets.AZURE_ADAPTIVECMS_DEV_CLIENT_ID }}
-            # - name: Find and Replace http://localhost:5000
-            #   uses: cschleiden/replace-tokens@v1
-            #   with:
-            #     tokenPrefix: 'http://'
-            #     tokenSuffix: ':5000'
-            #     files: '["**/*.ts"]'
+            - name: Find and Replace http://localhost:5000
+              uses: cschleiden/replace-tokens@v1
+              with:
+                tokenPrefix: 'http://'
+                tokenSuffix: ':5000'
+                files: '["**/*.ts"]'
               env:
                 localhost: https://adaptivecms.azurewebsites.net
             - name: Adaptive Cards Templating Service Test
