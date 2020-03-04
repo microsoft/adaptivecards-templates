@@ -37,7 +37,7 @@ jobs:
               env:
                 CLIENT_SECRET_TOKEN: ${{ secrets.AZURE_ADAPTIVECMS_STAGE_CLIENT_SECRET }}
                 DB_CONNECTION_TOKEN: ${{ secrets.AZURE_ADAPTIVECMS_DB_CONNECTION_STRING }}
-                CLIENT_ID_TOKEN: ${{ secrets.AZURE_ADAPTIVECMS_DB_CONNECTION_STRING }}
+                CLIENT_ID_TOKEN: ${{ secrets.AZURE_ADAPTIVECMS_STAGE_CLIENT_ID }}
             - name: Find and Replace http://localhost:5000
               uses: cschleiden/replace-tokens@v1
               with:
