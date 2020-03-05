@@ -21,6 +21,7 @@ export const ACPanel = styled.div`
 
 export const ACWrapper = styled.div`
   padding-bottom: 160px;
+  max-width: 100%;
 `;
 
 export const DescriptorWrapper = styled.div`
