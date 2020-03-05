@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 // Libraries
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { PrimaryButton, ThemeSettingName } from 'office-ui-fabric-react'
+import { PrimaryButton } from 'office-ui-fabric-react';
 import { SearchBox } from 'office-ui-fabric-react';
 
 import { Template, PostedTemplate } from 'adaptive-templating-service-typescript-node';
@@ -13,6 +13,7 @@ import { updateTemplate } from '../../../store/currentTemplate/actions';
 
 // Components
 import AdaptiveCard from '../AdaptiveCard';
+import ModalHOC from '../../../utils/ModalHOC';
 
 // Styles
 import {
@@ -36,13 +37,13 @@ interface Props {
   template: Template;
   templateVersion: string;
   toggleModal: () => void;
-  publishTemplate: () => void;
+  publishTemplate: (templateVersion: string) => void;
 }
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    publishTemplate: () => {
-      dispatch(updateTemplate(undefined, undefined, undefined, undefined, PostedTemplate.StateEnum.Live));
+    publishTemplate: (templateVersion: string) => {
+      dispatch(updateTemplate(undefined, templateVersion, undefined, undefined, undefined, PostedTemplate.StateEnum.Live));
     }
   }
 }
@@ -51,7 +52,7 @@ class PublishModal extends React.Component<Props> {
 
   publish = () => {
     // TODO: kodyang, grzhang PUBLISH CURRENT VERSION, NOT 1ST VERSION
-    this.props.publishTemplate();
+    this.props.publishTemplate(this.props.templateVersion);
     this.props.toggleModal();
   }
 
@@ -92,4 +93,4 @@ class PublishModal extends React.Component<Props> {
   }
 }
 
-export default connect(() => { return {} }, mapDispatchToProps)(PublishModal);
+export default ModalHOC(connect(() => { return {} }, mapDispatchToProps)(PublishModal));

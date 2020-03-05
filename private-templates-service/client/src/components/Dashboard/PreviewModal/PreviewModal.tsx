@@ -56,6 +56,15 @@ class PreviewModal extends React.Component<Props, State> {
         this.props.show && this.props.template && this.props.template.name ? this.props.template.name : "Dashboard"
       );
     }
+    if (
+      prevProps.template !== this.props.template &&
+      this.props.template &&
+      this.props.template.instances &&
+      this.props.template.instances[0] &&
+      this.props.template.instances[0].version
+    ) {
+      this.setState({ templateVersion: this.props.template.instances[0].version });
+    }
   }
 
   render() {
