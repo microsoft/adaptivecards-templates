@@ -1,13 +1,14 @@
 import React from 'react';
 import * as AdaptiveCards from "adaptivecards";
+import * as ACData from "adaptivecards-templating";
 import { Card } from './styled';
 import markdownit from "markdown-it";
 import { Template, TemplateInstance } from 'adaptive-templating-service-typescript-node';
 
 interface Props {
   onClick?: () => void;
-  cardtemplate: Template,
-  templateVersion: string,
+  cardtemplate: Template;
+  templateVersion: string;
 }
 
 function renderingSetup(): AdaptiveCards.AdaptiveCard {
@@ -48,11 +49,39 @@ export function renderAdaptiveCard(template: Template): any {
   }
 }
 
+function setContextRoot(data: string, context: ACData.EvaluationContext) {
+  try {
+    let dataString = JSON.stringify(data);
+    let dataJSON: JSON = JSON.parse(dataString);
+    context.$root = dataJSON;
+  }
+  catch (e) {
+    console.log(e);
+  }
+}
+
+// bindData binds the data to the adaptive card template
+function bindData(temp: TemplateInstance): TemplateInstance {
+  let jsonTemp = cleanTemplate(temp);
+  let template: ACData.Template = new ACData.Template(jsonTemp);
+  let context: ACData.EvaluationContext = new ACData.EvaluationContext()
+  if (temp.data && temp.data[0]) {
+    setContextRoot(temp.data[0], context);
+  }
+  try {
+    let card = template.expand(context);
+    return card;
+  }
+  catch (e) {
+    console.log("Error parsing data: ", e);
+    return temp;
+  }
+}
+
 /*
 cleanTemplate accepts a template object. This method strips the object of the unncessary '\\\' contained in the object and removes the 
 extra characters before and after the actual JSON object. It then parses the string into JSON and returns the JSON object.  
 */
-
 function cleanTemplate(temp: TemplateInstance): Template {
   const json = JSON.stringify(temp.json);
   let jsonTemp = {};
@@ -62,29 +91,37 @@ function cleanTemplate(temp: TemplateInstance): Template {
   } catch {
     console.log("Invalid Adaptive Cards JSON. Card not parsed.");
     const errorMessageJSON = JSON.stringify(require('../../../assets/default-adaptivecards/defaultErrorCard.json'));
+
     jsonTemp = errorMessageJSON;
   }
   return jsonTemp;
 }
 
 function processTemplate(temp: TemplateInstance): any {
-  const jsonTemp = cleanTemplate(temp);
+  const jsonTemp = bindData(temp);
   const template = renderAdaptiveCard(jsonTemp);
   return template;
 }
 
+let isTemplateProcessed: boolean = false;
 class AdaptiveCard extends React.Component<Props> {
+
   render() {
     let template: any = [];
-    if (this.props.cardtemplate && this.props.cardtemplate && this.props.cardtemplate.instances) {
+    if (this.props.cardtemplate && this.props.cardtemplate.instances) {
       for (let instance of this.props.cardtemplate.instances) {
-        if (instance.version === this.props.templateVersion){
+        if (instance.version === this.props.templateVersion) {
           template = processTemplate(instance);
         }
       }
-      if (template.length === 0) { 
+      if (template.length === 0) {
         template = processTemplate(this.props.cardtemplate.instances[0]);
       }
+    }
+    else {
+      return (
+        <div></div>
+      );
     }
     return (
       <Card

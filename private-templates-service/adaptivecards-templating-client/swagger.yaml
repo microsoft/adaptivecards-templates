@@ -51,6 +51,10 @@ paths:
           name: isPublished
           type: boolean
           description: Query based on if template is published
+        - name: isClient
+          in: query
+          type: boolean
+          description: If true, ignores updating hits on template
         - in: query
           name: name
           type: string
@@ -129,6 +133,10 @@ paths:
           in: query
           type: boolean
           description: Query based on if template is published
+        - name: isClient
+          in: query
+          type: boolean
+          description: If true, ignores updating hits on template
         - name: version
           in: query
           type: string
@@ -381,7 +389,8 @@ definitions:
       data: 
         type: array
         items: 
-          type: string
+          type: object
+          format: JSON
       updatedAt:
         type: string
         format: Date
@@ -393,7 +402,7 @@ definitions:
     properties: 
       name: 
         type: string
-      version: 
+      version:
         type: string
       template: 
         type: object
@@ -415,8 +424,10 @@ definitions:
       data: 
         type: array
         items: 
-          type: string
+          type: object
           format: JSON
+      isClient: 
+          type: boolean
   UserList:
     type: object
     properties:
@@ -501,7 +512,7 @@ definitions:
       data: 
         type: array
         items:  
-          type: string
+          type: object
           format: JSON
   TemplatePreviewUser: 
     type: object

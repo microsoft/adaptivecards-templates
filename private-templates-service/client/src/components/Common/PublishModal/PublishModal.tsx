@@ -3,17 +3,17 @@ import { connect } from 'react-redux';
 
 // Libraries
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { PrimaryButton, ThemeSettingName } from 'office-ui-fabric-react'
+import { PrimaryButton } from 'office-ui-fabric-react';
 import { SearchBox } from 'office-ui-fabric-react';
 
-import { Template } from 'adaptive-templating-service-typescript-node';
+import { Template, PostedTemplate } from 'adaptive-templating-service-typescript-node';
 
 // Redux
 import { updateTemplate } from '../../../store/currentTemplate/actions';
 
 // Components
 import AdaptiveCard from '../AdaptiveCard';
-import processTemplate from '../../../Services/ProcessTemplate';
+import ModalHOC from '../../../utils/ModalHOC';
 
 // Styles
 import {
@@ -37,13 +37,13 @@ interface Props {
   template: Template;
   templateVersion: string;
   toggleModal: () => void;
-  publishTemplate: (templateID: string, templateJSON: string, sampleDataJSON: string, templateName: string) => void;
+  publishTemplate: (templateVersion: string) => void;
 }
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    publishTemplate: (templateID: string, templateJSON: string, sampleDataJSON: string, templateName: string) => {
-      dispatch(updateTemplate(templateID, templateJSON, sampleDataJSON, templateName, true));
+    publishTemplate: (templateVersion: string) => {
+      dispatch(updateTemplate(undefined, templateVersion, undefined, undefined, undefined, PostedTemplate.StateEnum.Live));
     }
   }
 }
@@ -51,17 +51,9 @@ const mapDispatchToProps = (dispatch: any) => {
 class PublishModal extends React.Component<Props> {
 
   publish = () => {
-    const {
-      id,
-      name,
-      instances
-    } = this.props.template;
-    if (id && name && instances && instances.length === 1 && instances[0].json) {
-      const template = instances[0].json;
-      const parsedTemplate = processTemplate(template);
-      this.props.publishTemplate(id, parsedTemplate, "", name);
-      this.props.toggleModal();
-    }
+    // TODO: kodyang, grzhang PUBLISH CURRENT VERSION, NOT 1ST VERSION
+    this.props.publishTemplate(this.props.templateVersion);
+    this.props.toggleModal();
   }
 
   render() {
@@ -75,7 +67,7 @@ class PublishModal extends React.Component<Props> {
           <CenterPanelWrapper>
             <CenterPanelLeft>
               <AdaptiveCardPanel>
-                <AdaptiveCard cardtemplate={template} templateVersion={this.props.templateVersion}/>
+                <AdaptiveCard cardtemplate={template} templateVersion={this.props.templateVersion} />
               </AdaptiveCardPanel>
               <SemiBoldText>
                 Notified
@@ -101,4 +93,4 @@ class PublishModal extends React.Component<Props> {
   }
 }
 
-export default connect(() => { return {} }, mapDispatchToProps)(PublishModal);
+export default ModalHOC(connect(() => { return {} }, mapDispatchToProps)(PublishModal));

@@ -10,6 +10,8 @@ import { updateTemplate } from '../../store/currentTemplate/actions';
 import * as monaco from 'monaco-editor';
 import markdownit from 'markdown-it';
 import * as ACDesigner from 'adaptivecards-designer';
+import { setPage } from '../../store/page/actions';
+import { DesignerWrapper } from './styled';
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -24,8 +26,11 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    updateTemplate: (templateID: string, templateJSON: string, templateName: string, sampleDataJSON: string) => {
-      dispatch(updateTemplate(templateID, templateJSON, templateName, sampleDataJSON));
+    updateTemplate: (templateID: string, currentVersion: string, templateJSON: string, templateName: string, sampleDataJSON: string) => {
+      dispatch(updateTemplate(templateID, undefined, templateJSON, templateName, sampleDataJSON));
+    },
+    setPage: (currentPageTitle: string, currentPage: string) => {
+      dispatch(setPage(currentPageTitle, currentPage));
     }
   }
 }
@@ -37,12 +42,17 @@ interface DesignerProps {
   templateJSON: string;
   templateName: string;
   sampleDataJSON: string;
-  updateTemplate: (templateID: string, templateJSON: string, templateName: string, sampleDataJSON: string) => any;
+  updateTemplate: (templateID: string, currentVersion: string, templateJSON: string, templateName: string, sampleDataJSON: string) => any;
+  setPage: (currentPageTitle: string, currentPage: string) => void;
 }
 
 let designer: ACDesigner.CardDesigner;
 
 class Designer extends React.Component<DesignerProps> {
+  constructor(props: DesignerProps) {
+    super(props);
+    props.setPage(this.props.templateName, "Designer");
+  }
 
   componentWillMount() {
     ACDesigner.GlobalSettings.enableDataBindingSupport = true;
@@ -77,7 +87,7 @@ class Designer extends React.Component<DesignerProps> {
 
   render() {
     return (
-      <div id="designer-container" dangerouslySetInnerHTML={{ __html: "dangerouslySetACDesigner" }}></div>
+      <DesignerWrapper id="designer-container" dangerouslySetInnerHTML={{ __html: "dangerouslySetACDesigner" }}></DesignerWrapper>
     );
   }
 
@@ -107,7 +117,7 @@ function initDesigner(): ACDesigner.CardDesigner {
 
 function onSave(designer: ACDesigner.CardDesigner, props: DesignerProps): void {
   if (props.templateJSON !== JSON.stringify(designer.getCard()) || props.sampleDataJSON !== designer.sampleData) {
-    props.updateTemplate(props.templateID, JSON.stringify(designer.getCard()), props.templateName, designer.sampleData);
+    props.updateTemplate(props.templateID, "1.0", JSON.stringify(designer.getCard()), props.templateName, designer.sampleData);
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(requireAuthentication(Designer));
