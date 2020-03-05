@@ -35,8 +35,9 @@ import {
   StyledVersionDropdown,
   DropdownStyles,
 } from './styled';
-
-
+import { THEME } from '../../../../globalStyles';
+import VersionCard from './VersionCard';
+import UnpublishModal from '../../../Common/UnpublishModal';
 
 
 const buttons = [
@@ -54,6 +55,7 @@ const buttons = [
   },
   {
     text: 'Publish',
+    altText: 'Unpublish',
     icon: { iconName: 'PublishContent' }
   },
 ];
@@ -108,6 +110,15 @@ function getVersion(template: Template): string {
   }
   return "1.0"
 }
+
+function getTemplateState(template: Template, version: string): PostedTemplate.StateEnum {
+  if (!template.instances || template.instances.length === 0) return PostedTemplate.StateEnum.Draft;
+  for (let instance of template.instances) {
+    if (instance.version === version) return instance.state || PostedTemplate.StateEnum.Draft;
+  }
+  return PostedTemplate.StateEnum.Draft;
+}
+
 class TemplateInfo extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
@@ -176,7 +187,7 @@ class TemplateInfo extends React.Component<Props, State> {
                 onClick={((val.text === 'Publish' || val.text === 'Share') ?
                   () => { this.props.openModal(val.text.toLowerCase()) } :
                   () => { })}>
-                {val.text}
+                {val.text === 'Publish' && getTemplateState(this.props.template, this.state.version) === PostedTemplate.StateEnum.Live ? val.altText : val.text}
               </ActionButton>
             ))}
           </ActionsWrapper>
@@ -208,7 +219,8 @@ class TemplateInfo extends React.Component<Props, State> {
             <VersionCard template={this.props.template} templateVersion={this.state.version} />
           </RowWrapper>
         </MainContentWrapper>
-        {this.props.modalOpen === 'publish' && <PublishModal template={this.props.template} templateVersion={this.state.version} />}
+        {this.props.modalOpen === 'publish' && getTemplateState(this.props.template, this.state.version) === PostedTemplate.StateEnum.Draft && <PublishModal template={this.props.template} templateVersion={this.state.version} />}
+        {this.props.modalOpen === 'publish' && getTemplateState(this.props.template, this.state.version) === PostedTemplate.StateEnum.Live && <UnpublishModal template={this.props.template} templateVersion={this.state.version} />}
         {this.props.modalOpen === 'share' && <ShareModal template={this.props.template} templateVersion={this.state.version} />}
       </OuterWrapper>
     );
