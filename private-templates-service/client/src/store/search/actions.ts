@@ -42,7 +42,7 @@ export function querySearch(searchByTemplateName: string): (dispatch: any, getSt
     if (appState.auth.accessToken){
       api.setApiKey(0, `Bearer ${appState.auth.accessToken!.idToken.rawIdToken}`);
     }
-    return api.allTemplates(undefined, searchByTemplateName)
+    return api.allTemplates(undefined, true, searchByTemplateName)
       .then(response => {
         if (response.response && response.response.statusCode === 200) {
           dispatch(querySearchSuccess(response.body, searchByTemplateName));

@@ -29,6 +29,7 @@ import {
 } from './styled';
 import { THEME } from '../../../../globalStyles';
 import VersionCard from './VersionCard';
+import UnpublishModal from '../../../Common/UnpublishModal';
 
 
 const buttons = [
@@ -46,6 +47,7 @@ const buttons = [
   },
   {
     text: 'Publish',
+    altText: 'Unpublish',
     icon: { iconName: 'PublishContent' }
   },
 ];
@@ -66,7 +68,6 @@ const cards = [
 
 interface Props {
   template: Template;
-  onClose: () => void;
   onSwitchVersion: (templateVersion: string) => void;
 }
 
@@ -75,10 +76,26 @@ interface State {
   version: string;
 }
 
+function getVersion(template: Template): string {
+  if (template.instances && template.instances[0] && template.instances[0].version) {
+    return template.instances[0].version;
+  }
+  return "1.0"
+}
+
+function getTemplateState(template: Template, version: string): PostedTemplate.StateEnum {
+  if (!template.instances || template.instances.length === 0) return PostedTemplate.StateEnum.Draft;
+  for (let instance of template.instances){
+    if (instance.version === version) return instance.state || PostedTemplate.StateEnum.Draft;
+  }
+  return PostedTemplate.StateEnum.Draft;
+}
+
 class TemplateInfo extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { isPublishOpen: false, version: "1.0" }
+    const vers = getVersion(this.props.template);
+    this.state = { isPublishOpen: false, version: vers }
   }
 
   toggleModal = () => {
@@ -109,7 +126,6 @@ class TemplateInfo extends React.Component<Props, State> {
       createdAt,
       instances,
     } = this.props.template;
-    const { onClose } = this.props;
 
     let createdAtParsed = "";
 
@@ -132,18 +148,17 @@ class TemplateInfo extends React.Component<Props, State> {
                   styles={DropdownStyles}
                 />
               </Title>
-              <StatusIndicator state={isLive? PostedTemplate.StateEnum.Live : PostedTemplate.StateEnum.Draft} />
+              <StatusIndicator state={isLive ? PostedTemplate.StateEnum.Live : PostedTemplate.StateEnum.Draft} />
               <Status>{isLive ? 'Published' : 'Draft'}</Status>
             </TitleWrapper>
             <TimeStamp>
               Created {createdAtParsed}
             </TimeStamp>
-            <ActionButton iconProps={{ iconName: 'ChromeClose' }} onClick={onClose} >Close</ActionButton>
           </TopRowWrapper>
           <ActionsWrapper>
             {buttons.map((val) => (
               <ActionButton key={val.text} iconProps={val.icon} allowDisabledFocus onClick={val.text === 'Publish' ? this.toggleModal : () => { }} >
-                {val.text}
+                {val.text === 'Publish' && getTemplateState(this.props.template, this.state.version) === PostedTemplate.StateEnum.Live? val.altText : val.text}
               </ActionButton>
             ))}
           </ActionsWrapper>
@@ -172,10 +187,11 @@ class TemplateInfo extends React.Component<Props, State> {
             </CardBody>
           </Card>
           <RowWrapper>
-            <VersionCard template={this.props.template} templateVersion={this.state.version}/>
+            <VersionCard template={this.props.template} templateVersion={this.state.version} />
           </RowWrapper>
         </MainContentWrapper>
-        {this.state.isPublishOpen && <PublishModal toggleModal={this.toggleModal} template={this.props.template} templateVersion={this.state.version} />}
+        {this.state.isPublishOpen && getTemplateState(this.props.template, this.state.version) === PostedTemplate.StateEnum.Draft && <PublishModal toggleModal={this.toggleModal} template={this.props.template} templateVersion={this.state.version} />}
+        {this.state.isPublishOpen && getTemplateState(this.props.template, this.state.version) === PostedTemplate.StateEnum.Live && <UnpublishModal toggleModal={this.toggleModal} template={this.props.template} templateVersion={this.state.version} />}
       </OuterWrapper>
     );
   }

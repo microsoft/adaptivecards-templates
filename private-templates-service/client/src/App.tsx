@@ -16,6 +16,7 @@ import NavBar from "./components/NavBar/NavBar";
 import SideBar from "./components/SideBar";
 import Dashboard from "./components/Dashboard";
 import Shared from "./components/Shared/";
+import PreviewModal from './components/Dashboard/PreviewModal';
 import ErrorMessage, { ErrorMessageProps } from "./components/ErrorMessage/ErrorMessage";
 import config from "./Config";
 
@@ -129,13 +130,19 @@ class App extends Component<Props, State> {
               <NavBar />
               <MainApp>
                 {error}
-                <Route exact path="/">
-                  <Dashboard authButtonMethod={this.login} />
-                </Route>
+                <Switch>
+                  <Route exact path="/">
+                    <Dashboard authButtonMethod={this.login} />
+                  </Route>
+                  <Route path="/template/:uuid">
+                    <PreviewModal />
+                  </Route>
+                </Switch>
               </MainApp>
             </MainAppWrapper>
           </OuterAppWrapper>
         </Switch>
+        <div id="modal" />
       </Router >
     );
   }

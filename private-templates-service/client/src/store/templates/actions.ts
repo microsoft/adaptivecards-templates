@@ -31,7 +31,7 @@ export function getAllTemplates() {
     if (appState.auth.accessToken) {
       api.setApiKey(0, `Bearer ${appState.auth.accessToken!.idToken.rawIdToken}`);
     }
-    return api.allTemplates()
+    return api.allTemplates(undefined, true)
       .then(response => {
         if (response.response.statusCode && response.response.statusCode == 200) {
           dispatch(receiveAllTemplates(response.body))
