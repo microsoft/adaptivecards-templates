@@ -88,7 +88,7 @@ describe("Basic Post Templates", () => {
         template: {},
         isPublished: false
       });
-    expect(res.status).toEqual(402);
+    expect(res.status).toEqual(401);
   });
 
   // Authenticated post request
