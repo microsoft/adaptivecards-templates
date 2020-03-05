@@ -1,7 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
 import { withRouter, RouteComponentProps } from "react-router-dom";
-
 import { RootState } from "../../store/rootReducer";
 import { UserType } from "../../store/auth/types";
 import { AllTemplateState } from "../../store/templates/types";
@@ -10,25 +9,29 @@ import { setPage } from "../../store/page/actions";
 import { getAllTemplates } from "../../store/templates/actions";
 import { getTemplate } from "../../store/currentTemplate/actions";
 import { getRecentTemplates } from "../../store/recentTemplates/actions";
+import { setSearchBarVisible } from "../../store/search/actions";
 import requireAuthentication from "../../utils/requireAuthentication";
 import Gallery from "../Gallery";
-import PreviewModal from "./PreviewModal";
 import SearchPage from "./SearchPage/SearchPage";
-import { setSearchBarVisible } from "../../store/search/actions";
-import { Title, DashboardContainer, OuterWindow, TagsContainer, PlaceholderText } from "./styled";
 import { Template } from "adaptive-templating-service-typescript-node";
 import { RecentlyViewed } from "./RecentlyViewed/RecentlyViewed";
 import Tags from "../Common/Tags";
+import {
+  Title,
+  DashboardContainer,
+  OuterWindow,
+  TagsContainer,
+  PlaceholderText
+} from "./styled";
 const mapStateToProps = (state: RootState) => {
   return {
     isAuthenticated: state.auth.isAuthenticated,
-    user: state.auth.user, //
+    user: state.auth.user,
     templates: state.allTemplates,
     isSearch: state.search.isSearch,
     recentTemplates: state.recentTemplates
   };
 };
-
 const mapDispatchToProps = (dispatch: any) => {
   return {
     setPage: (currentPageTitle: string, currentPage: string) => {
@@ -48,7 +51,6 @@ const mapDispatchToProps = (dispatch: any) => {
     }
   };
 };
-
 interface Props extends RouteComponentProps {
   isAuthenticated: boolean;
   user?: UserType;
@@ -61,7 +63,6 @@ interface Props extends RouteComponentProps {
   getTemplate: (templateID: string) => void;
   isSearch: boolean;
 }
-
 class Dashboard extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
@@ -69,7 +70,6 @@ class Dashboard extends React.Component<Props> {
     props.setSearchBarVisible(true);
     props.getRecentTemplates();
   }
-
   componentDidUpdate(prevProps: Props) {
     if (this.props.isSearch !== prevProps.isSearch) {
       if (this.props.isSearch) {
@@ -79,11 +79,9 @@ class Dashboard extends React.Component<Props> {
       }
     }
   }
-
   selectTemplate = (templateID: string) => {
     this.props.history.push("template/" + templateID);
   };
-
   render() {
     if (this.props.isSearch) {
       return (
@@ -97,10 +95,18 @@ class Dashboard extends React.Component<Props> {
     let recentlyEditedTemplates = new Array<Template>();
     let recentlyViewedTemplates = new Array<Template>();
 
-    if (!recentTemplates.isFetching && recentTemplates.recentlyEdited && recentTemplates.recentlyEdited.templates) {
+    if (
+      !recentTemplates.isFetching &&
+      recentTemplates.recentlyEdited &&
+      recentTemplates.recentlyEdited.templates
+    ) {
       recentlyEditedTemplates = recentTemplates.recentlyEdited.templates;
     }
-    if (!recentTemplates.isFetching && recentTemplates.recentlyViewed && recentTemplates.recentlyViewed.templates) {
+    if (
+      !recentTemplates.isFetching &&
+      recentTemplates.recentlyViewed &&
+      recentTemplates.recentlyViewed.templates
+    ) {
       recentlyViewedTemplates = recentTemplates.recentlyViewed.templates;
     }
     // TODO: Get tags and make them clickable
@@ -111,17 +117,27 @@ class Dashboard extends React.Component<Props> {
           <React.Fragment>
             <Title>Recently Edited</Title>
             {recentlyEditedTemplates.length ? (
-              <Gallery onClick={this.selectTemplate} templates={recentlyEditedTemplates}></Gallery>
+              <Gallery
+                onClick={this.selectTemplate}
+                templates={recentlyEditedTemplates}
+              ></Gallery>
             ) : (
-              <PlaceholderText>No edited templates yet. Create or edit one :)</PlaceholderText>
+              <PlaceholderText>
+                No edited templates yet. Create or edit one :)
+              </PlaceholderText>
             )}
           </React.Fragment>
           <React.Fragment>
             <Title>Recently Viewed</Title>
             {recentlyViewedTemplates.length ? (
-              <RecentlyViewed onClick={this.selectTemplate} recentlyViewed={recentlyViewedTemplates}></RecentlyViewed>
+              <RecentlyViewed
+                onClick={this.selectTemplate}
+                recentlyViewed={recentlyViewedTemplates}
+              ></RecentlyViewed>
             ) : (
-              <PlaceholderText>No recently viewed templates yet. Check out some templates:)</PlaceholderText>
+              <PlaceholderText>
+                No recently viewed templates yet. Check out some templates:)
+              </PlaceholderText>
             )}
           </React.Fragment>
         </DashboardContainer>
@@ -134,4 +150,7 @@ class Dashboard extends React.Component<Props> {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(requireAuthentication(withRouter(Dashboard)));
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(requireAuthentication(withRouter(Dashboard)));
