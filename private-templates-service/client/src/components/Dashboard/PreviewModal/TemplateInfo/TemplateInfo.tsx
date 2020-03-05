@@ -67,7 +67,6 @@ const cards = [
 
 interface Props {
   template: Template;
-  onClose: () => void;
   onSwitchVersion: (templateVersion: string) => void;
 }
 
@@ -121,7 +120,6 @@ class TemplateInfo extends React.Component<Props, State> {
 
   render() {
     const { isLive, tags, createdAt, instances } = this.props.template;
-    const { onClose } = this.props;
 
     let createdAtParsed = "";
 
@@ -148,9 +146,6 @@ class TemplateInfo extends React.Component<Props, State> {
               <Status>{isLive ? "Published" : "Draft"}</Status>
             </TitleWrapper>
             <TimeStamp>Created {createdAtParsed}</TimeStamp>
-            <ActionButton iconProps={{ iconName: "ChromeClose" }} onClick={onClose}>
-              Close
-            </ActionButton>
           </TopRowWrapper>
           <ActionsWrapper>
             {buttons.map(val => (

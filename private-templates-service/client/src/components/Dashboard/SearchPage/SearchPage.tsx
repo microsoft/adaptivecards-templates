@@ -1,16 +1,17 @@
 import React from 'react';
-import Filter from './Filter/Filter';
-import Sort from './Sort/Sort';
-import { RootState } from '../../../store/rootReducer';
 import { connect } from 'react-redux';
-import { SearchAndFilter, SearchResultBanner, StyledSearchText, StyledSpinner } from './styled';
-import Gallery from '../../Gallery';
-import PreviewModal from "../PreviewModal";
-import { setPage } from "../../../store/page/actions";
-import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
+import { RootState } from '../../../store/rootReducer';
 import { getTemplate } from '../../../store/currentTemplate/actions';
 
+import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import { Template, TemplateList } from "adaptive-templating-service-typescript-node";
+
+import Filter from './Filter/Filter';
+import Sort from './Sort/Sort';
+import Gallery from '../../Gallery';
+
+import { SearchAndFilter, SearchResultBanner, StyledSearchText, StyledSpinner } from './styled';
+
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -25,9 +26,6 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    setPage: (currentPageTitle: string, currentPage: string) => {
-      dispatch(setPage(currentPageTitle, currentPage));
-    },
     getTemplate: (templateID: string) => {
       dispatch(getTemplate(templateID));
     }
@@ -41,8 +39,8 @@ interface Props {
   sortType: string;
   loading: boolean;
   templates?: TemplateList;
-  setPage: (currentPageTitle: string, currentPage: string) => void;
   getTemplate: (templateID: string) => void;
+  selectTemplate: (templateID: string) => void;
 }
 
 interface State {
@@ -53,12 +51,8 @@ class SearchPage extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = { isPreviewOpen: false };
-    props.setPage("Templates", "searchPage");
   };
-  selectTemplate = (templateID: string) => {
-    this.props.getTemplate(templateID);
-    this.toggleModal();
-  }
+
   toggleModal = () => {
     this.setState({ isPreviewOpen: !this.state.isPreviewOpen });
   };
@@ -79,9 +73,9 @@ class SearchPage extends React.Component<Props, State> {
     }
 
     if (this.props.templates?.templates?.length === 0) {
-      searchText = "No Results Found For " + "'" + this.props.searchByTemplateName + "'";
+      searchText = "No Results Found For '" + this.props.searchByTemplateName + "'";
     } else {
-      searchText = "Template Results For " + "'" + this.props.searchByTemplateName + "'";
+      searchText = "Template Results For '" + this.props.searchByTemplateName + "'";
     }
 
     return (
@@ -95,8 +89,7 @@ class SearchPage extends React.Component<Props, State> {
         </SearchResultBanner>
         <h1>filter value: {this.props.filterType}</h1>
         <h1>sort value: {this.props.sortType}</h1>
-        <Gallery onClick={this.selectTemplate} templates={templates}></Gallery>
-        <PreviewModal show={this.state.isPreviewOpen} toggleModal={this.toggleModal} />
+        <Gallery onClick={this.props.selectTemplate} templates={templates} />
       </div>
     );
   }

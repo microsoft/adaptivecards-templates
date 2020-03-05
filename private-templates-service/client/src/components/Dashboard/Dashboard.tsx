@@ -1,5 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
+import { withRouter, RouteComponentProps } from "react-router-dom";
+
 import { RootState } from "../../store/rootReducer";
 import { UserType } from "../../store/auth/types";
 import { AllTemplateState } from "../../store/templates/types";
@@ -47,16 +49,11 @@ const mapDispatchToProps = (dispatch: any) => {
   };
 };
 
-interface State {
-  isPreviewOpen: boolean;
-}
-
-interface Props {
+interface Props extends RouteComponentProps {
   isAuthenticated: boolean;
   user?: UserType;
   recentTemplates: RecentTemplatesState;
   templates: AllTemplateState;
-  authButtonMethod: () => Promise<void>;
   setPage: (currentPageTitle: string, currentPage: string) => void;
   setSearchBarVisible: (isSearchBarVisible: boolean) => void;
   getTemplates: () => void;
@@ -65,28 +62,33 @@ interface Props {
   isSearch: boolean;
 }
 
-class Dashboard extends React.Component<Props, State> {
+class Dashboard extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
-    this.state = { isPreviewOpen: false };
     props.setPage("Dashboard", "Dashboard");
     props.setSearchBarVisible(true);
     props.getRecentTemplates();
   }
 
+  componentDidUpdate(prevProps: Props) {
+    if (this.props.isSearch !== prevProps.isSearch) {
+      if (this.props.isSearch) {
+        this.props.setPage("Templates", "searchPage");
+      } else {
+        this.props.setPage("Dashboard", "Dashboard");
+      }
+    }
+  }
+
   selectTemplate = (templateID: string) => {
-    this.props.getTemplate(templateID);
-    this.toggleModal();
+    this.props.history.push("template/" + templateID);
   };
 
-  toggleModal = () => {
-    this.setState({ isPreviewOpen: !this.state.isPreviewOpen });
-  };
   render() {
     if (this.props.isSearch) {
       return (
         <DashboardContainer>
-          <SearchPage />
+          <SearchPage selectTemplate={this.selectTemplate} />
         </DashboardContainer>
       );
     }
@@ -114,8 +116,6 @@ class Dashboard extends React.Component<Props, State> {
               <PlaceholderText>No edited templates yet. Create or edit one :)</PlaceholderText>
             )}
           </React.Fragment>
-
-          <PreviewModal show={this.state.isPreviewOpen} toggleModal={this.toggleModal} />
           <React.Fragment>
             <Title>Recently Viewed</Title>
             {recentlyViewedTemplates.length ? (
@@ -134,4 +134,4 @@ class Dashboard extends React.Component<Props, State> {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(requireAuthentication(Dashboard));
+export default connect(mapStateToProps, mapDispatchToProps)(requireAuthentication(withRouter(Dashboard)));
