@@ -21,6 +21,7 @@ import {
   LinkRow,
   TextFieldContainer
 } from './styled';
+import ModalHOC from '../../../utils/ModalHOC';
 
 interface ShareModalProps {
   template: Template;
@@ -79,4 +80,4 @@ function onCopy(props: ShareModalProps) {
   copyCode.remove();
 }
 
-export default connect(undefined, mapDispatchToProps)(ShareModal);
+export default ModalHOC(connect(undefined, mapDispatchToProps)(ShareModal));
