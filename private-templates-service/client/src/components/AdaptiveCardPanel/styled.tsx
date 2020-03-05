@@ -2,12 +2,13 @@ import styled from "styled-components";
 import { COLORS } from "../../globalStyles";
 
 export const Container = styled.div`
-  flex: 1;
+  flex: 1 1 0px;
   display: flex;
   flex-direction: column;
   margin: 0 24px 24px 0;
   background: white;
   height: 200px;
+  min-width: 300px;
   max-width: 350px;
   border-radius: 5px;
   border-style: solid;
