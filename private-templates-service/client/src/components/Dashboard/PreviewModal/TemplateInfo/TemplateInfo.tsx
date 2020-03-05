@@ -96,7 +96,6 @@ class TemplateInfo extends React.Component<Props, State> {
     super(props);
     const vers = getVersion(this.props.template);
     this.state = { isPublishOpen: false, version: vers }
-
   }
 
   toggleModal = () => {
