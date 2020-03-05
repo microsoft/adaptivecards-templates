@@ -42,7 +42,7 @@ jobs:
                   cd private-templates-service/adaptivecards-templating-client/typescript
                   npm install
                   npm run build
-                  npm link
+                  sudo npm link
                   cd ../../client
                   npm link adaptive-templating-service-typescript-node
                   npm install
@@ -54,7 +54,7 @@ jobs:
             - name: Install in server
               run: |
                   cd private-templates-service/adaptivecards-templating-service
-                  npm link
+                  sudo npm link
                   cd ../server
                   npm link adaptivecards-templating-service
                   npm install
