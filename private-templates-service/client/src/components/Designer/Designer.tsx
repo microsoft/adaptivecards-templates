@@ -117,7 +117,7 @@ function initDesigner(): ACDesigner.CardDesigner {
 
 function onSave(designer: ACDesigner.CardDesigner, props: DesignerProps): void {
   if (props.templateJSON !== JSON.stringify(designer.getCard()) || props.sampleDataJSON !== designer.sampleData) {
-    props.updateTemplate(props.templateID, "1.0", JSON.stringify(designer.getCard()), props.templateName, designer.sampleData); // TODO: get the version dynamically
+    props.updateTemplate(props.templateID, "1.0", JSON.stringify(designer.getCard()), props.templateName, designer.sampleData); // TODO: get the version dynamically @guptaharsh25
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(requireAuthentication(Designer));
