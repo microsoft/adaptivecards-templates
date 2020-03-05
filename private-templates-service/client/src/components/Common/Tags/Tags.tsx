@@ -16,7 +16,6 @@ import {
   TagSubmitButton,
   TagSubmitIcon,
 } from './styled';
-import { runInThisContext } from 'vm';
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -46,13 +45,9 @@ interface State {
   newTagName: string;
 }
 
-interface RefsDict {
-  [ref: string]: HTMLDivElement;
-}
-
 class Tags extends React.Component<Props, State>  {
   addTagInput = React.createRef<HTMLInputElement>();
-  tagRefs: RefsDict;
+  tagRefs: {[ref: string]: HTMLDivElement};
 
   constructor(props: Props) {
     super(props);
