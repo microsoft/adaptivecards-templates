@@ -6,15 +6,9 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   margin: 0 24px 24px 0;
-
   background: white;
   height: 200px;
   max-width: 350px;
-
-  // -webkit-box-shadow: 0px 2px 6px 0px rgba(111, 111, 111, 0.4);
-  // -moz-box-shadow: 0px 2px 6px 0px rgba(111, 111, 111, 0.4);
-  // box-shadow: 0px 2px 6px 0px rgba(111, 111, 111, 0.4);
-
   border-radius: 5px;
   border-style: solid;
   border-color: ${COLORS.BORDER2};
