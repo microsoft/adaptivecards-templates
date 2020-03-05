@@ -16,6 +16,7 @@ import {
   TagSubmitButton,
   TagSubmitIcon,
 } from './styled';
+import { runInThisContext } from 'vm';
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -115,6 +116,14 @@ class Tags extends React.Component<Props, State>  {
 
   closeAddTag = () => {
     this.setState({ isAdding: false });
+    this.setState({newTagName: ""});
+  }
+
+  onKeyDown = (keyStroke: any) => {
+    console.log(keyStroke);
+    if(keyStroke.keyCode === 27){
+      this.closeAddTag();
+    }
   }
 
   render() {
@@ -136,7 +145,7 @@ class Tags extends React.Component<Props, State>  {
           </Tag>
         ))}
         {allowAddTag && <AddTagWrapper onSubmit={this.submitNewTag} open={isAdding}>
-          <AddTagInput ref={this.addTagInput} open={isAdding} value={this.state.newTagName} onChange={this.handleChange} />
+          <AddTagInput ref={this.addTagInput} open={isAdding} value={this.state.newTagName} onChange={this.handleChange} onBlur={this.closeAddTag} onKeyDown={this.onKeyDown} />
           <TagAddIcon iconName="Add" onClick={this.openNewTag} open={isAdding} />
           <TagSubmitButton type="submit" open={isAdding}>
             <TagSubmitIcon iconName="CheckMark" />
