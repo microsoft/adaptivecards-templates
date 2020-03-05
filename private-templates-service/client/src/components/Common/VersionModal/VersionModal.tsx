@@ -41,6 +41,7 @@ import {
 } from '../../Dashboard/PreviewModal/TemplateInfo/styled';
 
 import { getDateString } from '../../../utils/versionUtils';
+import ModalHOC from '../../../utils/ModalHOC';
 
 interface Props {
   template: Template;
@@ -52,7 +53,7 @@ interface Props {
 const mapDispatchToProps = (dispatch: any) => {
   return {
     updateTemplateState: (templateJSON: string, state: PostedTemplate.StateEnum, version: string) => {
-      dispatch(updateTemplate(undefined, templateJSON, undefined, undefined, state, undefined, version));
+      dispatch(updateTemplate(undefined, version, templateJSON, undefined, undefined, state, undefined));
     },
     deleteTemplateVersion: (version: string) => {
       dispatch(deleteTemplateVersion(version, undefined))
@@ -156,4 +157,4 @@ class VersionModal extends React.Component<Props, State> {
   }
 }
 
-export default connect(() => { return {} }, mapDispatchToProps)(VersionModal);
+export default ModalHOC(connect(() => { return {} }, mapDispatchToProps)(VersionModal));

@@ -36,6 +36,7 @@ import {
   ButtonGroup,
   CancelButton,
 } from '../../Common/PublishModal/styled';
+import ModalHOC from '../../../utils/ModalHOC';
 
 interface Props {
   template: Template;
@@ -88,4 +89,4 @@ class UnpublishModal extends React.Component<Props> {
   }
 }
 
-export default connect(() => { return {} }, mapDispatchToProps)(UnpublishModal);
+export default ModalHOC(connect(() => { return {} }, mapDispatchToProps)(UnpublishModal));

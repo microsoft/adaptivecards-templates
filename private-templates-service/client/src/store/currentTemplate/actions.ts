@@ -149,7 +149,7 @@ export function updateTemplate(templateID?: string, currentVersion?: string, tem
     newTemplate.name = templateName;
     newTemplate.state = state;
     newTemplate.tags = tags;
-    newTemplate.version = currentVersion;
+    newTemplate.version = version;
 
     if (id === null || id === undefined || id === "") {
       dispatch(requestNewTemplateUpdate());

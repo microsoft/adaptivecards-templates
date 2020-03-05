@@ -722,7 +722,7 @@ export class TemplateServiceClient {
     if (templateId && templates.length > 0) {
       await this._updateRecentTemplate(templateId, true);
 
-      if (!isClient) {
+      if (isClient === false) {
         // Update hit counter for template
         this._incrementTemplateHits(templateId, templates![0], version);
       }
