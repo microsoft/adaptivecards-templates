@@ -24,7 +24,6 @@ export const OuterWindow = styled.div`
   display: flex;
   flex-direction: row;
   align-items: stretch;
-  border-style: solid;
   justify-content: space-between;
   height: 100%;
 `;
