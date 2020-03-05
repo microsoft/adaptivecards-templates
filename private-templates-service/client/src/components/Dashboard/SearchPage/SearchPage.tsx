@@ -8,6 +8,7 @@ import Gallery from '../../Gallery';
 import PreviewModal from "../PreviewModal";
 import { setPage } from "../../../store/page/actions";
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
+import { getTemplate } from '../../../store/currentTemplate/actions';
 
 import { Template, TemplateList } from "adaptive-templating-service-typescript-node";
 
@@ -26,6 +27,9 @@ const mapDispatchToProps = (dispatch: any) => {
   return {
     setPage: (currentPageTitle: string, currentPage: string) => {
       dispatch(setPage(currentPageTitle, currentPage));
+    },
+    getTemplate: (templateID: string) => {
+      dispatch(getTemplate(templateID));
     }
   }
 }
@@ -38,6 +42,7 @@ interface Props {
   loading: boolean;
   templates?: TemplateList;
   setPage: (currentPageTitle: string, currentPage: string) => void;
+  getTemplate: (templateID: string) => void;
 }
 
 interface State {
@@ -50,6 +55,10 @@ class SearchPage extends React.Component<Props, State> {
     this.state = { isPreviewOpen: false };
     props.setPage("Templates", "searchPage");
   };
+  selectTemplate = (templateID: string) => {
+    this.props.getTemplate(templateID);
+    this.toggleModal();
+  }
   toggleModal = () => {
     this.setState({ isPreviewOpen: !this.state.isPreviewOpen });
   };
@@ -86,10 +95,9 @@ class SearchPage extends React.Component<Props, State> {
         </SearchResultBanner>
         <h1>filter value: {this.props.filterType}</h1>
         <h1>sort value: {this.props.sortType}</h1>
-        <Gallery onClick={this.toggleModal} templates={templates}></Gallery>
+        <Gallery onClick={this.selectTemplate} templates={templates}></Gallery>
         <PreviewModal show={this.state.isPreviewOpen} toggleModal={this.toggleModal} />
       </div>
-      // TODO: add ability to see templates that are searched 
     );
   }
 }
