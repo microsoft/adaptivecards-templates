@@ -51,7 +51,6 @@ const mapDispatchToProps = (dispatch: any) => {
 class PublishModal extends React.Component<Props> {
 
   publish = () => {
-    // TODO: kodyang, grzhang PUBLISH CURRENT VERSION, NOT 1ST VERSION
     this.props.publishTemplate(this.props.templateVersion);
     this.props.toggleModal();
   }
