@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { openModal, closeModal } from '../../../../store/page/actions';
 
 import PublishModal from '../../../Common/PublishModal';
+import UnpublishModal from '../../../Common/UnpublishModal';
 import Tags from '../../../Common/Tags';
 import ShareModal from '../../../Common/ShareModal';
 import VersionCard from './VersionCard';
@@ -35,10 +36,6 @@ import {
   StyledVersionDropdown,
   DropdownStyles,
 } from './styled';
-import { THEME } from '../../../../globalStyles';
-import VersionCard from './VersionCard';
-import UnpublishModal from '../../../Common/UnpublishModal';
-
 
 const buttons = [
   {
@@ -184,9 +181,7 @@ class TemplateInfo extends React.Component<Props, State> {
           <ActionsWrapper>
             {buttons.map((val) => (
               <ActionButton key={val.text} iconProps={val.icon} allowDisabledFocus
-                onClick={((val.text === 'Publish' || val.text === 'Share') ?
-                  () => { this.props.openModal(val.text.toLowerCase()) } :
-                  () => { })}>
+                onClick={() => { onActionButtonClick(this.props, this.state, val) }}>
                 {val.text === 'Publish' && getTemplateState(this.props.template, this.state.version) === PostedTemplate.StateEnum.Live ? val.altText : val.text}
               </ActionButton>
             ))}
@@ -220,10 +215,30 @@ class TemplateInfo extends React.Component<Props, State> {
           </RowWrapper>
         </MainContentWrapper>
         {this.props.modalOpen === 'publish' && getTemplateState(this.props.template, this.state.version) === PostedTemplate.StateEnum.Draft && <PublishModal template={this.props.template} templateVersion={this.state.version} />}
-        {this.props.modalOpen === 'publish' && getTemplateState(this.props.template, this.state.version) === PostedTemplate.StateEnum.Live && <UnpublishModal template={this.props.template} templateVersion={this.state.version} />}
+        {this.props.modalOpen === 'unpublish' && getTemplateState(this.props.template, this.state.version) === PostedTemplate.StateEnum.Live && <UnpublishModal template={this.props.template} templateVersion={this.state.version} />}
         {this.props.modalOpen === 'share' && <ShareModal template={this.props.template} templateVersion={this.state.version} />}
       </OuterWrapper>
     );
+  }
+}
+
+function onActionButtonClick(props: Props, state: State, val: any) {
+  if (val.text === 'Share') {
+    props.openModal(val.text.toLowerCase());
+  }
+  else if (val.text === 'Publish') {
+    if (getTemplateState(props.template, state.version) === PostedTemplate.StateEnum.Draft) {
+      props.openModal(val.text.toLowerCase());
+    }
+    else if (getTemplateState(props.template, state.version) === PostedTemplate.StateEnum.Live) {
+      props.openModal(val.altText.toLowerCase());
+    }
+    else {
+      return;
+    }
+  }
+  else {
+    return;
   }
 }
 
