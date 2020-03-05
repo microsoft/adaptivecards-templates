@@ -88,9 +88,13 @@ class Tags extends React.Component<Props, State>  {
     e.preventDefault();
     if (this.addTagInput && this.addTagInput.current && this.props.template && this.props.template.tags) {
       const tag = this.addTagInput.current.value;
-
-      if(!this.props.template.tags.includes(tag) && tag !== ""){
-        this.props.updateTags([...this.props.template.tags, tag]);
+      if(!this.props.template.tags.includes(tag)){
+        if(tag === ""){
+          this.closeAddTag();
+        }
+        else{
+          this.props.updateTags([...this.props.template.tags, tag]);
+       }
       }
       else{
         this.highlightTag(tag,this.props.template.tags)
