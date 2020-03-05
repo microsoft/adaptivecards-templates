@@ -1004,10 +1004,6 @@ export class TemplateServiceClient {
       let isPublished: boolean | undefined = req.query.isPublished ? req.query.isPublished.toLowerCase() === "true" : undefined;
       let owned: boolean | undefined = req.query.owned ? req.query.owned.toLowerCase() === "true" : undefined;
       let isClient: boolean | undefined = req.query.isClient ? req.query.isClient.toLowerCase() === "true" : undefined;
-      
-      if (!req.is("application/json")) {
-        isClient = req.body.isClient && req.body.isClient.toLowerCase() === "true";
-      }
 
       let tagList: string[] = req.query.tags? req.query.tags.split(",") : undefined;
 
