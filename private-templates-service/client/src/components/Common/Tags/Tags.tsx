@@ -120,7 +120,6 @@ class Tags extends React.Component<Props, State>  {
   }
 
   onKeyDown = (keyStroke: any) => {
-    console.log(keyStroke);
     if(keyStroke.keyCode === 27){
       this.closeAddTag();
     }
