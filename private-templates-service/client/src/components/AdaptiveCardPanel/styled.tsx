@@ -7,7 +7,7 @@ export const Container = styled.div`
   flex-direction: column;
   margin: 0 24px 24px 0;
   background: white;
-  height: 200px;
+  height: 220px;
   min-width: 300px;
   max-width: 350px;
   border: 1px solid ${COLORS.BORDER2};
