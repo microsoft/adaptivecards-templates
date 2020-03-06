@@ -1,5 +1,9 @@
 import React from "react";
-import { StyledSearchBox, GREY_SEARCH_BAR_LIGHT, GREY_SEARCH_BAR_DARK } from "./styled";
+import {
+  StyledSearchBox,
+  GREY_SEARCH_BAR_LIGHT,
+  GREY_SEARCH_BAR_DARK
+} from "./styled";
 import { RootState } from "../../../store/rootReducer";
 import { connect } from "react-redux";
 import { querySearch, clearSearch } from "../../../store/search/actions";
@@ -111,7 +115,7 @@ class SearchBar extends React.Component<Props, State> {
     }
 
     // return empty
-    return <React.Fragment />;
+    return null;
   }
 }
 
