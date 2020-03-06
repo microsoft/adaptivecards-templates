@@ -114,10 +114,6 @@ class App extends Component<Props, State> {
           <Route exact path="/preview/:uuid/:version">
             <Shared authButtonMethod={this.login}></Shared>
           </Route>
-          <Route exact path="/designer">
-            <NavBar />
-            <Designer authButtonMethod={this.login} />
-          </Route>
           <OuterAppWrapper>
             <SideBar
               authButtonMethod={
@@ -133,6 +129,9 @@ class App extends Component<Props, State> {
                 <Switch>
                   <Route exact path="/">
                     <Dashboard authButtonMethod={this.login} />
+                  </Route>
+                  <Route exact path="/designer">
+                    <Designer authButtonMethod={this.login} />
                   </Route>
                   <Route path="/template/:uuid">
                     <PreviewModal />
