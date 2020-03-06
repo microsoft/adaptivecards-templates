@@ -1,15 +1,10 @@
 import React from "react";
-import {
-  StyledSearchBox,
-  GREY_SEARCH_BAR_LIGHT,
-  GREY_SEARCH_BAR_DARK
-} from "./styled";
+import { StyledSearchBox } from "./styled";
 import { RootState } from "../../../store/rootReducer";
 import { connect } from "react-redux";
 import { querySearch, clearSearch } from "../../../store/search/actions";
 import { initializeIcons } from "office-ui-fabric-react/lib/Icons";
-import { COLORS, THEME, BREAK } from "../../../globalStyles";
-import { IStyle } from "office-ui-fabric-react";
+import { COLORS, BREAK } from "../../../globalStyles";
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -49,16 +44,16 @@ const placeHolderStyles = {
   field: {
     selectors: {
       "::-webkit-input-placeholder": {
-        color: GREY_SEARCH_BAR_DARK
+        color: COLORS.GREY_SEARCH_BAR_DARK
       },
       ":-ms-input-placeholder": {
-        color: GREY_SEARCH_BAR_DARK
+        color: COLORS.GREY_SEARCH_BAR_DARK
       },
       "::-moz-placeholder": {
-        color: GREY_SEARCH_BAR_DARK
+        color: COLORS.GREY_SEARCH_BAR_DARK
       },
       ":-moz-placeholder": {
-        color: GREY_SEARCH_BAR_DARK
+        color: COLORS.GREY_SEARCH_BAR_DARK
       }
     }
   }
@@ -66,7 +61,7 @@ const placeHolderStyles = {
 
 const searchIconProps = {
   style: {
-    color: GREY_SEARCH_BAR_DARK
+    color: COLORS.GREY_SEARCH_BAR_DARK
   }
 };
 
