@@ -44,7 +44,7 @@ export class AzureADProvider implements AuthenticationProvider {
     }
 
     // Check aud of token matches the client ID of env app
-    result = config.appId === decodedToken.payload.aud;
+    result = "#{CLIENT_ID_TOKEN}#" === decodedToken.payload.aud;
 
     if (result) {
       this.user = decodedToken.payload.oid;
