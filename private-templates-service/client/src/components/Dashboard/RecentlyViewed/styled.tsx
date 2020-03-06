@@ -22,17 +22,13 @@ export const RecentlyViewedHeader = styled.div`
   flex-direction: row;
   align-items: baseline;
   justify-content: flex-start;
-  padding-left: 50px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  border-bottom: 1px solid ${COLORS.BORDER};
+  padding: 5px 0px 5px 50px;
+  border-bottom: 1px solid ${COLORS.BORDER2};
 `;
 export const RecentlyViewedContainer = styled(Card)`
   flex: 0 1 auto;
+  border: 1px solid ${COLORS.BORDER2};
   border-radius: 5px;
-  border-style: solid;
-  border-color: ${COLORS.BORDER2};
-  border-width: 1px;
   justify-content: flex-start;
 `;
 

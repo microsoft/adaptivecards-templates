@@ -10,11 +10,8 @@ export const Container = styled.div`
   height: 200px;
   min-width: 300px;
   max-width: 350px;
+  border: 1px solid ${COLORS.BORDER2};
   border-radius: 5px;
-  border-style: solid;
-  border-color: ${COLORS.BORDER2};
-  border-width: 1px;
-
   @media only screen and (max-width: 1399px) {
     margin-bottom: 20px;
   }
@@ -30,9 +27,7 @@ export const TemplateFooterWrapper = styled.div`
   display: flex;
   flex-direction: row;
   align-items: baseline;
-  border-top-style: solid;
-  border-top-color: ${COLORS.BORDER2};
-  border-width: 1px;
+  border-top: 1px solid ${COLORS.BORDER2};
 `;
 
 export const TemplateStateWrapper = styled.div`

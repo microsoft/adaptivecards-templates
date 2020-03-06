@@ -11,9 +11,9 @@ export const OuterSideBarWrapper = styled.div`
   min-width: 260px;
 
   z-index: 2;
-  -webkit-box-shadow: 3px 0px 3px 0px rgba(228, 228, 228, 1);
-  -moz-box-shadow: 3px 0px 3px 0px rgba(228, 228, 228, 1);
-  box-shadow: 3px 0px 3px 0px rgba(228, 228, 228, 1);
+  -webkit-box-shadow: 3px 0px 3px 0px ${COLORS.GREY_BOX_SHADOW};
+  -moz-box-shadow: 3px 0px 3px 0px ${COLORS.GREY_BOX_SHADOW};
+  box-shadow: 3px 0px 3px 0px ${COLORS.GREY_BOX_SHADOW};
 
   @media only screen and (max-width: ${BREAK.SM}px) {
     display: none;

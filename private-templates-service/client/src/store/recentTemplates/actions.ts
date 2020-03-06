@@ -1,24 +1,41 @@
-import { User, UserApi, UserList, Template, TemplateList, TemplateApi } from "adaptive-templating-service-typescript-node";
+import {
+  User,
+  UserApi,
+  UserList,
+  Template,
+  TemplateList,
+  TemplateApi
+} from "adaptive-templating-service-typescript-node";
 import { IncomingMessage } from "http";
-import { RecentTemplatesActionsTypes, RecentTemplatesAction } from "./types";
+import {
+  REQUEST_RECENT_TEMPLATES_GET,
+  REQUEST_RECENT_TEMPLATES_GET_SUCCESS,
+  REQUEST_RECENT_TEMPLATES_GET_FAIL,
+  RecentTemplatesAction
+} from "./types";
 
 export function requestRecentTemplates(): RecentTemplatesAction {
   return {
-    type: RecentTemplatesActionsTypes.REQUEST_RECENT_TEMPLATES_GET
+    type: REQUEST_RECENT_TEMPLATES_GET
   };
 }
 
-export function receiveRecentTemplates(recentlyEdited: TemplateList, recentlyViewed: TemplateList): RecentTemplatesAction {
+export function requestRecentTemplatesSuccess(
+  recentlyEdited: TemplateList,
+  recentlyViewed: TemplateList
+): RecentTemplatesAction {
   return {
-    type: RecentTemplatesActionsTypes.REQUEST_RECENT_TEMPLATES_GET_SUCCESS,
+    type: REQUEST_RECENT_TEMPLATES_GET_SUCCESS,
     recentlyEdited: recentlyEdited,
     recentlyViewed: recentlyViewed
   };
 }
 
-export function failGetRecentTemplates(error: IncomingMessage): RecentTemplatesAction {
+export function requestRecentTemplatesFailure(
+  error: IncomingMessage
+): RecentTemplatesAction {
   return {
-    type: RecentTemplatesActionsTypes.REQUEST_RECENT_TEMPLATES_GET_FAIL,
+    type: REQUEST_RECENT_TEMPLATES_GET_FAIL,
     error: error
   };
 }
@@ -26,7 +43,7 @@ export function failGetRecentTemplates(error: IncomingMessage): RecentTemplatesA
 export function getRecentTemplates() {
   return function(dispatch: any) {
     dispatch(requestRecentTemplates());
-    let api = new TemplateApi(); 
+    let api = new TemplateApi();
     // TODO dynamically fetch bearer token
     api.setApiKey(
       0,
@@ -36,12 +53,17 @@ export function getRecentTemplates() {
     return api.getRecent().then(response => {
       if (response.response.statusCode && response.response.statusCode == 200) {
         if (response.body.recentlyEdited && response.body.recentlyViewed) {
-          dispatch(receiveRecentTemplates(response.body.recentlyEdited, response.body.recentlyViewed));
+          dispatch(
+            requestRecentTemplatesSuccess(
+              response.body.recentlyEdited,
+              response.body.recentlyViewed
+            )
+          );
         } else {
-          dispatch(failGetRecentTemplates(response.response));
+          dispatch(requestRecentTemplatesFailure(response.response));
         }
       } else {
-        dispatch(failGetRecentTemplates(response.response));
+        dispatch(requestRecentTemplatesFailure(response.response));
       }
     });
   };
