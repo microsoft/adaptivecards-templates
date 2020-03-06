@@ -1,9 +1,9 @@
-import styled from "styled-components";
-import { COLORS } from "../../../../globalStyles";
+import styled from 'styled-components';
+import { COLORS } from '../../../../globalStyles';
 
-import { Icon, IDropdownStyles, FontWeights, IDropdownSubComponentStyles } from "office-ui-fabric-react";
+import { Icon, IDropdownStyles, FontWeights, IDropdownSubComponentStyles } from 'office-ui-fabric-react';
 import { Dropdown } from "office-ui-fabric-react";
-import { PostedTemplate } from "adaptive-templating-service-typescript-node";
+import { PostedTemplate } from 'adaptive-templating-service-typescript-node';
 
 export const StyledVersionDropdown = styled(Dropdown)`
   display: flex
@@ -17,11 +17,11 @@ export const DropdownStyles: Partial<IDropdownStyles> = {
   title: {
     marginLeft: 10,
     marginRight: 10,
-    marginTop: 5,
+    marginTop: 5, 
     marginBottom: 5,
-    borderWidth: 0
-  }
-};
+    borderWidth: 0,
+  },
+}
 
 export const OuterWrapper = styled.div`
   flex: 1 0 auto;
@@ -58,18 +58,19 @@ export const Title = styled.div`
 `;
 
 export const StatusIndicator = styled.div<{ state?: PostedTemplate.StateEnum }>`
-  background-color: ${props =>
-    props.state === PostedTemplate.StateEnum.Live ? COLORS.GREEN : props.state === PostedTemplate.StateEnum.Draft ? COLORS.YELLOW : COLORS.GREY3};
+  background-color: ${props => 
+    props.state === PostedTemplate.StateEnum.Live ? COLORS.GREEN : 
+    props.state === PostedTemplate.StateEnum.Draft ? COLORS.YELLOW : COLORS.GREY3};
   width: 10px;
   height: 10px;
   border-radius: 50%;
   margin: 0 4px 2px 8px;
-`;
+`
 
 export const Status = styled.div`
   font-size: 14px;
   font-weight: 400;
-`;
+`
 export const TimeStamp = styled.div`
   font-size: 14px;
   font-weight: 400;

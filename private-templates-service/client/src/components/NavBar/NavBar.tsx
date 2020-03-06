@@ -2,8 +2,9 @@ import React from "react";
 import { connect } from "react-redux";
 import { RootState } from "../../store/rootReducer";
 import SearchBar from "./SearchBar";
-import { Banner, Styledh1, StyledLogo, MobileBanner, StyledButton, Styledh2, StyledButtonContent } from "./styled";
-import Logo from "../../assets/adaptive-cards-100-logo.png";
+import { Banner, Styledh1, StyledLogo, MobileBanner, StyledButton, Styledh2, StyledButtonContent } from './styled';
+import Logo from '../../assets/adaptive-cards-100-logo.png'
+import { DefaultSerializer } from "v8";
 import { ActionButton } from "office-ui-fabric-react";
 import { useHistory } from "react-router-dom";
 import { Template } from "adaptive-templating-service-typescript-node";
@@ -13,8 +14,8 @@ const mapStateToProps = (state: RootState) => {
     currentPageTitle: state.page.currentPageTitle,
     currentPage: state.page.currentPage,
     template: state.currentTemplate.template
-  };
-};
+  }
+}
 
 interface NavBarProps {
   currentPageTitle: string;
@@ -23,7 +24,9 @@ interface NavBarProps {
   version?: string;
 }
 
+
 const NavBar = (props: NavBarProps) => {
+
   let history = useHistory();
 
   switch (props.currentPage.toLowerCase()) {
@@ -55,13 +58,11 @@ const NavBar = (props: NavBarProps) => {
             <Styledh1>{props.template ? props.template.name : props.currentPageTitle}</Styledh1>
             <Styledh2>{props.version ? "Version " + props.version : ""}</Styledh2>
           </MobileBanner>
-          <ActionButton
-            onClick={() => {
-              history.push("/");
-            }}
-          >
+          <ActionButton onClick={() => { history.push("/") }}>
             <StyledButton>
-              <StyledButtonContent>Finish</StyledButtonContent>
+              <StyledButtonContent>
+                Finish
+              </StyledButtonContent>
             </StyledButton>
           </ActionButton>
         </Banner>
@@ -86,6 +87,7 @@ const NavBar = (props: NavBarProps) => {
         </Banner>
       );
   }
-};
+}
+
 
 export default connect(mapStateToProps)(NavBar);
