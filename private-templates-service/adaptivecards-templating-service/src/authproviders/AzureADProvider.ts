@@ -2,7 +2,6 @@ import { AuthenticationProvider } from "./IAuthenticationProvider";
 import jws, { Algorithm, Signature } from "jws";
 import axios from "axios";
 import { AuthIssuer } from "../models/models";
-import config from "./Config";
 
 /**
  * @class
