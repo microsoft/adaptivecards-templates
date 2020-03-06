@@ -6,7 +6,16 @@ import { RootState } from "../../../store/rootReducer";
 
 import { Template } from "adaptive-templating-service-typescript-node";
 
-import { Tag, TagCloseIcon, TagText, AddTagWrapper, AddTagInput, TagAddIcon, TagSubmitButton, TagSubmitIcon } from "./styled";
+import {
+  Tag,
+  TagCloseIcon,
+  TagText,
+  AddTagWrapper,
+  AddTagInput,
+  TagAddIcon,
+  TagSubmitButton,
+  TagSubmitIcon
+} from "./styled";
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -17,7 +26,17 @@ const mapStateToProps = (state: RootState) => {
 const mapDispatchToProps = (dispatch: any) => {
   return {
     updateTags: (tags: string[]) => {
-      dispatch(updateTemplate(undefined, undefined, undefined, undefined, undefined, undefined, tags))
+      dispatch(
+        updateTemplate(
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          tags
+        )
+      );
     }
   };
 };
@@ -48,8 +67,14 @@ class Tags extends React.Component<Props, State> {
   }
 
   tagRemove = (tag: string) => {
-    if (this.props.allowEdit && this.props.template && this.props.template.tags) {
-      const newTags = this.props.template.tags.filter((existingTag: string) => existingTag !== tag);
+    if (
+      this.props.allowEdit &&
+      this.props.template &&
+      this.props.template.tags
+    ) {
+      const newTags = this.props.template.tags.filter(
+        (existingTag: string) => existingTag !== tag
+      );
       this.props.updateTags(newTags);
     }
   };
@@ -70,7 +95,12 @@ class Tags extends React.Component<Props, State> {
 
   submitNewTag = (e: any): void => {
     e.preventDefault();
-    if (this.addTagInput && this.addTagInput.current && this.props.template && this.props.template.tags) {
+    if (
+      this.addTagInput &&
+      this.addTagInput.current &&
+      this.props.template &&
+      this.props.template.tags
+    ) {
       const tag = this.addTagInput.current.value;
       this.props.updateTags([...this.props.template.tags, tag]);
     }
@@ -91,13 +121,28 @@ class Tags extends React.Component<Props, State> {
           tags.map((tag: string) => (
             <Tag key={tag}>
               <TagText>{tag}</TagText>
-              {allowEdit && <TagCloseIcon key={tag} iconName="ChromeClose" onClick={() => this.tagRemove(tag)} />}
+              {allowEdit && (
+                <TagCloseIcon
+                  key={tag}
+                  iconName="ChromeClose"
+                  onClick={() => this.tagRemove(tag)}
+                />
+              )}
             </Tag>
           ))}
         {allowAddTag && (
           <AddTagWrapper onSubmit={this.submitNewTag} open={isAdding}>
-            <AddTagInput ref={this.addTagInput} open={isAdding} value={this.state.newTagName} onChange={this.handleChange} />
-            <TagAddIcon iconName="Add" onClick={this.openNewTag} open={isAdding} />
+            <AddTagInput
+              ref={this.addTagInput}
+              open={isAdding}
+              value={this.state.newTagName}
+              onChange={this.handleChange}
+            />
+            <TagAddIcon
+              iconName="Add"
+              onClick={this.openNewTag}
+              open={isAdding}
+            />
             <TagSubmitButton type="submit" open={isAdding}>
               <TagSubmitIcon iconName="CheckMark" />
             </TagSubmitButton>
