@@ -109,13 +109,13 @@ export function updateTemplate(templateID?: string, currentVersion?: string, tem
     if (appState.auth.accessToken) {
       api.setApiKey(0, `Bearer ${appState.auth.accessToken!.idToken.rawIdToken}`);
     }
-    
+
     let newTemplate = new PostedTemplate();
     const id = templateID || appState.currentTemplate.templateID;
-    
-    const version = currentVersion || 
-    (appState.currentTemplate.template && appState.currentTemplate.template.instances && appState.currentTemplate.template.instances.length > 0 ?
-    appState.currentTemplate.template!.instances![0].version : "1.0");
+
+    const version = currentVersion ||
+      (appState.currentTemplate.template && appState.currentTemplate.template.instances && appState.currentTemplate.template.instances.length > 0 ?
+        appState.currentTemplate.template!.instances![0].version : "1.0");
 
     if (templateJSON) {
       newTemplate.template = JSON.parse(templateJSON);
@@ -172,7 +172,7 @@ export function getTemplate(templateID: string) {
               templateObject,
               templateObject.instances[0].json,
               templateObject.name,
-              ""
+              templateObject.instances[0].data[0],
             ))
         }
         dispatch(requestTemplateFailure());

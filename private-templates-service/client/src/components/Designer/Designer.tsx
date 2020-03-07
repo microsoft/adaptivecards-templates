@@ -62,7 +62,6 @@ class Designer extends React.Component<DesignerProps> {
       result.outputHtml = new markdownit().render(text);
       result.didProcess = true;
     }
-
     designer = initDesigner();
 
     let publishButton = new ACDesigner.ToolbarButton("publishButton", "Publish", "", (sender) => (alert("Published!")));
@@ -72,8 +71,6 @@ class Designer extends React.Component<DesignerProps> {
     let saveButton = new ACDesigner.ToolbarButton("saveButton", "Save", "", (sender) => (onSave(designer, this.props)));
     saveButton.separator = true;
     designer.toolbar.insertElementAfter(saveButton, ACDesigner.CardDesigner.ToolbarCommands.TogglePreview);
-
-    designer.sampleData = "";
   }
 
   componentDidMount() {
@@ -81,8 +78,23 @@ class Designer extends React.Component<DesignerProps> {
     if (element) {
       designer.attachTo(element);
     }
-
     designer.monacoModuleLoaded(monaco);
+    console.log(this.props);
+
+    if (this.props.templateJSON) {
+      let stringTemp: string = JSON.stringify(this.props.templateJSON);
+      let jsonTemp: JSON = JSON.parse(stringTemp);
+      designer.setCard(jsonTemp);
+    }
+
+    if (this.props.sampleDataJSON) {
+      let stringTemp: string = JSON.stringify(this.props.sampleDataJSON);
+      let jsonTemp: JSON = JSON.parse(stringTemp);
+      designer.sampleData = jsonTemp;
+    }
+    else {
+      designer.sampleData = "";
+    }
   }
 
   render() {
