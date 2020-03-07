@@ -23,6 +23,7 @@ export const ACWrapper = styled.div`
 `;
 
 export const TemplateFooterWrapper = styled.div`
+  padding: 10px 0px 10px 20px;
   flex: 1;
   display: flex;
   flex-direction: row;
@@ -45,7 +46,6 @@ export const TemplateNameAndDateWrapper = styled.div`
   justify-content: flex-start;
 `;
 export const TemplateName = styled.div`
-  padding: 10px 0px 0px 20px;
   font-size: 0.95rem;
   font-family: Segoe UI Semibold;
   color: black;
@@ -53,7 +53,6 @@ export const TemplateName = styled.div`
 export const TemplateUpdatedAt = styled.div`
   font-family: Segoe UI Regular;
   font-size: 0.8rem;
-  padding: 0px 0 10px 20px;
   color: grey;
 `;
 
