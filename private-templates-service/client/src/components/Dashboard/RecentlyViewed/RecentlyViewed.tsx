@@ -63,10 +63,6 @@ export class RecentlyViewed extends Component<Props> {
     return rows;
   }
 
-  constructor(props: Props) {
-    super(props);
-  }
-
   render() {
     const rows = this.constructRecentlyViewedRows(
       this.props.recentlyViewed,
