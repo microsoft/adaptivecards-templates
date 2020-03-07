@@ -8,9 +8,15 @@ import {
   TemplateNameAndDateWrapper,
   TemplateUpdatedAt
 } from "./styled";
-import { StatusIndicator, Status } from "../Dashboard/PreviewModal/TemplateInfo/styled";
+import {
+  StatusIndicator,
+  Status
+} from "../Dashboard/PreviewModal/TemplateInfo/styled";
 import AdaptiveCard from "../Common/AdaptiveCard";
-import { Template, PostedTemplate } from "adaptive-templating-service-typescript-node";
+import {
+  Template,
+  PostedTemplate
+} from "adaptive-templating-service-typescript-node";
 import { getDateString } from "../../utils/versionUtils";
 
 interface Props {
@@ -35,11 +41,17 @@ class AdaptiveCardPanel extends React.Component<Props> {
         <TemplateFooterWrapper>
           <TemplateNameAndDateWrapper>
             <TemplateName>{template.name}</TemplateName>
-            <TemplateUpdatedAt>{template.updatedAt ? getDateString(template.updatedAt) : "N/A"}</TemplateUpdatedAt>
+            <TemplateUpdatedAt>
+              {template.updatedAt ? getDateString(template.updatedAt) : "N/A"}
+            </TemplateUpdatedAt>
           </TemplateNameAndDateWrapper>
-          <TemplateStateWrapper>
+          <TemplateStateWrapper style={{ justifyContent: "center" }}>
             <StatusIndicator
-              state={template.isLive ? PostedTemplate.StateEnum.Live : PostedTemplate.StateEnum.Draft}
+              state={
+                template.isLive
+                  ? PostedTemplate.StateEnum.Live
+                  : PostedTemplate.StateEnum.Draft
+              }
               style={{ marginRight: "10px" }}
             />
             <Status>{template.isLive ? "Published" : "Draft"}</Status>
