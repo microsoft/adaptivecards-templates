@@ -4,9 +4,9 @@ import { IncomingMessage } from "http";
 
 export interface CurrentTemplateState {
   templateID?: string;
-  templateJSON?: string;
+  templateJSON?: object;
   templateName?: string;
-  sampleDataJSON?: string;
+  sampleDataJSON?: object;
   template?: Template;
   isFetching: boolean;
 }
@@ -40,9 +40,9 @@ export interface CurrentTemplateAction {
   type: CurrentTemplateActionTypes;
   text: string;
   templateID?: string;
-  templateJSON?: string;
+  templateJSON?: object;
   templateName?: string;
-  sampleDataJSON?: string;
+  sampleDataJSON?: object;
   template?: Template;
   error?: IncomingMessage;
 }

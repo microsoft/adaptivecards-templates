@@ -92,20 +92,6 @@ function getTemplateState(template: Template, version: string): PostedTemplate.S
   return PostedTemplate.StateEnum.Draft;
 }
 
-// REWRITE THIS TO BE INSIDE TEMPLATEINFO
-
-// function handleClick(val: string, toggleModal: () => {}, redirectToDesigner: () => {}) {
-//   switch (val) {
-//     case 'Publish': {
-//       toggleModal();
-//     }
-//     case 'Edit in Designer' {
-//       redirectToDesigner();
-//     }
-//   }
-// }
-
-
 class TemplateInfo extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
@@ -120,6 +106,14 @@ class TemplateInfo extends React.Component<Props, State> {
 
   toggleModal = () => {
     this.setState({ isPublishOpen: !this.state.isPublishOpen });
+  }
+
+  handleClick = (val: string) => {
+    if (val == 'Publish') {
+      this.toggleModal();
+    } else if (val == 'Edit in designer') {
+      this.redirectToDesigner();
+    }
   }
 
   versionList = (instances: TemplateInstance[] | undefined): IDropdownOption[] => {
@@ -181,7 +175,7 @@ class TemplateInfo extends React.Component<Props, State> {
             </TopRowWrapper>
             <ActionsWrapper>
               {buttons.map((val) => (
-                <ActionButton key={val.text} iconProps={val.icon} allowDisabledFocus onClick={val.text === 'Edit in designer' ? this.redirectToDesigner : () => { }} >
+                <ActionButton key={val.text} iconProps={val.icon} allowDisabledFocus onClick={val.text ? () => this.handleClick(val.text) : () => { }} >
                   {val.text === 'Publish' && getTemplateState(this.props.template, this.state.version) === PostedTemplate.StateEnum.Live ? val.altText : val.text}
                 </ActionButton>
               ))}
@@ -218,7 +212,7 @@ class TemplateInfo extends React.Component<Props, State> {
           {this.state.isPublishOpen && getTemplateState(this.props.template, this.state.version) === PostedTemplate.StateEnum.Live && <UnpublishModal toggleModal={this.toggleModal} template={this.props.template} templateVersion={this.state.version} />}
         </OuterWrapper >
         :
-        <div>Oh nooo</div>
+        <div>Error loading page</div>
     );
   }
 }

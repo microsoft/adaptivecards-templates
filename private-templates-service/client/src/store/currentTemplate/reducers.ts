@@ -27,9 +27,9 @@ export function currentTemplateReducer(state = initialState, action: CurrentTemp
       return {
         ...state,
         templateID: "",
-        templateJSON: JSON.stringify(require('../../assets/default-adaptivecards/defaultAdaptiveCard.json')),
+        templateJSON: require('../../assets/default-adaptivecards/defaultAdaptiveCard.json'),
         templateName: "Untitled",
-        sampleDataJSON: "",
+        sampleDataJSON: JSON.parse("{}"),
         isFetching: false
       };
     case REQUEST_NEW_TEMPLATE_UPDATE:

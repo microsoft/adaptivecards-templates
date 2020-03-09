@@ -31,7 +31,7 @@ function requestNewTemplateUpdate(): CurrentTemplateAction {
   };
 }
 
-function receiveNewTemplateUpdate(templateID?: string, templateJSON?: string, templateName?: string, sampleDataJSON?: string): CurrentTemplateAction {
+function receiveNewTemplateUpdate(templateID?: string, templateJSON?: object, templateName?: string, sampleDataJSON?: object): CurrentTemplateAction {
   return {
     type: RECEIVE_NEW_TEMPLATE_UPDATE,
     text: "receiving post new template on save",
@@ -57,7 +57,7 @@ function requestExistingTemplateUpdate(): CurrentTemplateAction {
   };
 }
 
-function receiveExistingTemplateUpdate(templateJSON?: string, templateName?: string, sampleDataJSON?: string): CurrentTemplateAction {
+function receiveExistingTemplateUpdate(templateJSON?: object, templateName?: string, sampleDataJSON?: object): CurrentTemplateAction {
   return {
     type: RECEIVE_EXISTING_TEMPLATE_UPDATE,
     text: "receiving post existing template on save",
@@ -83,7 +83,7 @@ function requestTemplate(templateID: string): CurrentTemplateAction {
   }
 }
 
-function requestTemplateSuccess(template: Template, templateJSON: string, templateName: string, sampleDataJSON: string): CurrentTemplateAction {
+function requestTemplateSuccess(template: Template, templateJSON: object, templateName: string, sampleDataJSON: object): CurrentTemplateAction {
   return {
     type: GET_TEMPLATE_SUCCESS,
     text: "get single template success",
@@ -101,7 +101,7 @@ function requestTemplateFailure(): CurrentTemplateAction {
   }
 }
 
-export function updateTemplate(templateID?: string, currentVersion?: string, templateJSON?: string, sampleDataJSON?: string, templateName?: string, state?: PostedTemplate.StateEnum, tags?: string[]) {
+export function updateTemplate(templateID?: string, currentVersion?: string, templateJSON?: object, sampleDataJSON?: object, templateName?: string, state?: PostedTemplate.StateEnum, tags?: string[]) {
   return function (dispatch: any, getState: () => RootState) {
     const appState = getState();
 
@@ -118,7 +118,7 @@ export function updateTemplate(templateID?: string, currentVersion?: string, tem
         appState.currentTemplate.template!.instances![0].version : "1.0");
 
     if (templateJSON) {
-      newTemplate.template = JSON.parse(templateJSON);
+      newTemplate.template = templateJSON;
     } else {
       newTemplate.template = appState.currentTemplate.templateJSON;
     }

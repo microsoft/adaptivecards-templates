@@ -26,8 +26,8 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    updateTemplate: (templateID: string, currentVersion: string, templateJSON: string, templateName: string, sampleDataJSON: string) => {
-      dispatch(updateTemplate(templateID, undefined, templateJSON, templateName, sampleDataJSON));
+    updateTemplate: (templateID: string, currentVersion: string, templateJSON: object, templateName: string, sampleDataJSON: object) => {
+      dispatch(updateTemplate(templateID, undefined, templateJSON, sampleDataJSON, templateName));
     },
     setPage: (currentPageTitle: string, currentPage: string) => {
       dispatch(setPage(currentPageTitle, currentPage));
@@ -39,10 +39,10 @@ interface DesignerProps {
   isAuthenticated: boolean;
   user?: UserType;
   templateID: string;
-  templateJSON: string;
+  templateJSON: object;
   templateName: string;
-  sampleDataJSON: string;
-  updateTemplate: (templateID: string, currentVersion: string, templateJSON: string, templateName: string, sampleDataJSON: string) => any;
+  sampleDataJSON: object;
+  updateTemplate: (templateID: string, currentVersion: string, templateJSON: object, templateName: string, sampleDataJSON: object) => any;
   setPage: (currentPageTitle: string, currentPage: string) => void;
 }
 
@@ -79,21 +79,17 @@ class Designer extends React.Component<DesignerProps> {
       designer.attachTo(element);
     }
     designer.monacoModuleLoaded(monaco);
-    console.log(this.props);
 
     if (this.props.templateJSON) {
-      let stringTemp: string = JSON.stringify(this.props.templateJSON);
-      let jsonTemp: JSON = JSON.parse(stringTemp);
-      designer.setCard(jsonTemp);
+      designer.setCard(this.props.templateJSON);
     }
+    console.log(this.props.sampleDataJSON);
 
     if (this.props.sampleDataJSON) {
-      let stringTemp: string = JSON.stringify(this.props.sampleDataJSON);
-      let jsonTemp: JSON = JSON.parse(stringTemp);
-      designer.sampleData = jsonTemp;
+      designer.sampleData = this.props.sampleDataJSON;
     }
     else {
-      designer.sampleData = "";
+      designer.sampleData = JSON.parse("{}");
     }
   }
 
@@ -128,8 +124,8 @@ function initDesigner(): ACDesigner.CardDesigner {
 }
 
 function onSave(designer: ACDesigner.CardDesigner, props: DesignerProps): void {
-  if (props.templateJSON !== JSON.stringify(designer.getCard()) || props.sampleDataJSON !== designer.sampleData) {
-    props.updateTemplate(props.templateID, "1.0", JSON.stringify(designer.getCard()), props.templateName, designer.sampleData);
+  if (JSON.stringify(props.templateJSON) !== JSON.stringify(designer.getCard()) || props.sampleDataJSON !== designer.sampleData) {
+    props.updateTemplate(props.templateID, "1.0", designer.getCard(), props.templateName, designer.sampleData);
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(requireAuthentication(Designer));
