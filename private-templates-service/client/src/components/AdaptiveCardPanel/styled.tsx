@@ -32,7 +32,6 @@ export const TemplateFooterWrapper = styled.div`
 `;
 
 export const TemplateStateWrapper = styled.div`
-  border-style: solid;
   flex: 0.8;
   display: flex;
   flex-direction: row;

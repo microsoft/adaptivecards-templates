@@ -1,9 +1,12 @@
-import React from 'react';
+import React from "react";
 import * as AdaptiveCards from "adaptivecards";
 import * as ACData from "adaptivecards-templating";
-import { Card } from './styled';
+import { Card } from "./styled";
 import markdownit from "markdown-it";
-import { Template, TemplateInstance } from 'adaptive-templating-service-typescript-node';
+import {
+  Template,
+  TemplateInstance
+} from "adaptive-templating-service-typescript-node";
 
 interface Props {
   onClick?: () => void;
@@ -12,10 +15,13 @@ interface Props {
 }
 
 function renderingSetup(): AdaptiveCards.AdaptiveCard {
-  AdaptiveCards.AdaptiveCard.onProcessMarkdown = function (text: string, result: { didProcess: boolean, outputHtml?: string }) {
+  AdaptiveCards.AdaptiveCard.onProcessMarkdown = function(
+    text: string,
+    result: { didProcess: boolean; outputHtml?: string }
+  ) {
     result.outputHtml = new markdownit().render(text);
     result.didProcess = true;
-  }
+  };
   let adaptiveCard = new AdaptiveCards.AdaptiveCard();
   // Set its hostConfig property unless you want to use the default Host Config
   // Host Config defines the style and behavior of a card
@@ -31,9 +37,8 @@ function parseCardTemplate(template: Template): AdaptiveCards.AdaptiveCard {
     // Parse the card payload
     adaptiveCard.parse(template);
     return adaptiveCard;
-  }
-  catch (e) {
-    return new AdaptiveCards.AdaptiveCard;
+  } catch (e) {
+    return new AdaptiveCards.AdaptiveCard();
   }
 }
 
@@ -43,8 +48,7 @@ export function renderAdaptiveCard(template: Template): any {
     // Render the card to an HTML element
     let renderedCard = adaptiveCard.render();
     return renderedCard;
-  }
-  catch (e) {
+  } catch (e) {
     return <div>Error</div>;
   }
 }
@@ -54,8 +58,7 @@ function setContextRoot(data: string, context: ACData.EvaluationContext) {
     let dataString = JSON.stringify(data);
     let dataJSON: JSON = JSON.parse(dataString);
     context.$root = dataJSON;
-  }
-  catch (e) {
+  } catch (e) {
     console.log(e);
   }
 }
@@ -64,15 +67,14 @@ function setContextRoot(data: string, context: ACData.EvaluationContext) {
 function bindData(temp: TemplateInstance): TemplateInstance {
   let jsonTemp = cleanTemplate(temp);
   let template: ACData.Template = new ACData.Template(jsonTemp);
-  let context: ACData.EvaluationContext = new ACData.EvaluationContext()
+  let context: ACData.EvaluationContext = new ACData.EvaluationContext();
   if (temp.data && temp.data[0]) {
     setContextRoot(temp.data[0], context);
   }
   try {
     let card = template.expand(context);
     return card;
-  }
-  catch (e) {
+  } catch (e) {
     console.log("Error parsing data: ", e);
     return temp;
   }
@@ -90,7 +92,9 @@ function cleanTemplate(temp: TemplateInstance): Template {
     jsonTemp = JSON.parse(json);
   } catch {
     console.log("Invalid Adaptive Cards JSON. Card not parsed.");
-    const errorMessageJSON = JSON.stringify(require('../../../assets/default-adaptivecards/defaultErrorCard.json'));
+    const errorMessageJSON = JSON.stringify(
+      require("../../../assets/default-adaptivecards/defaultErrorCard.json")
+    );
 
     jsonTemp = errorMessageJSON;
   }
@@ -105,7 +109,6 @@ function processTemplate(temp: TemplateInstance): any {
 
 let isTemplateProcessed: boolean = false;
 class AdaptiveCard extends React.Component<Props> {
-
   render() {
     let template: any = [];
     if (this.props.cardtemplate && this.props.cardtemplate.instances) {
@@ -117,11 +120,8 @@ class AdaptiveCard extends React.Component<Props> {
       if (template.length === 0) {
         template = processTemplate(this.props.cardtemplate.instances[0]);
       }
-    }
-    else {
-      return (
-        <div></div>
-      );
+    } else {
+      return <div></div>;
     }
     return (
       <Card
@@ -132,7 +132,7 @@ class AdaptiveCard extends React.Component<Props> {
           n && n.appendChild(template);
         }}
       />
-    )
+    );
   }
 }
 
