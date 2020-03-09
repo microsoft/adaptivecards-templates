@@ -88,7 +88,7 @@ class Designer extends React.Component<DesignerProps> {
       designer.sampleData = this.props.sampleDataJSON;
     }
     else {
-      designer.sampleData = JSON.parse("{}");
+      designer.sampleData = {};
     }
   }
 

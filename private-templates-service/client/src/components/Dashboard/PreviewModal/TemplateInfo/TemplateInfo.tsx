@@ -66,10 +66,9 @@ const cards = [
   }
 ];
 
-interface Props extends RouteComponentProps<any> {
+interface Props extends RouteComponentProps {
   template: Template;
   onSwitchVersion: (templateVersion: string) => void;
-  history: any;
 }
 
 interface State {
@@ -151,8 +150,10 @@ class TemplateInfo extends React.Component<Props, State> {
     const { history } = this.props;
 
     return (
-      (history)
+      (!history)
         ?
+        <div>Error loading page</div>
+        :
         < OuterWrapper >
           <HeaderWrapper>
             <TopRowWrapper>
@@ -211,8 +212,6 @@ class TemplateInfo extends React.Component<Props, State> {
           {this.state.isPublishOpen && getTemplateState(this.props.template, this.state.version) === PostedTemplate.StateEnum.Draft && <PublishModal toggleModal={this.toggleModal} template={this.props.template} templateVersion={this.state.version} />}
           {this.state.isPublishOpen && getTemplateState(this.props.template, this.state.version) === PostedTemplate.StateEnum.Live && <UnpublishModal toggleModal={this.toggleModal} template={this.props.template} templateVersion={this.state.version} />}
         </OuterWrapper >
-        :
-        <div>Error loading page</div>
     );
   }
 }

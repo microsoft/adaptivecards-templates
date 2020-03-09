@@ -29,7 +29,7 @@ export function currentTemplateReducer(state = initialState, action: CurrentTemp
         templateID: "",
         templateJSON: require('../../assets/default-adaptivecards/defaultAdaptiveCard.json'),
         templateName: "Untitled",
-        sampleDataJSON: JSON.parse("{}"),
+        sampleDataJSON: {},
         isFetching: false
       };
     case REQUEST_NEW_TEMPLATE_UPDATE:
