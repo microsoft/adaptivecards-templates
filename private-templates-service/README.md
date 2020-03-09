@@ -1,4 +1,4 @@
-# Running the frontend and backend of Adaptive Cards CMS Client Locally
+# Running the frontend and backend of Adaptive Cards CMS Locally
 
 To run this web application locally, you must have the following installed on your system:
 
