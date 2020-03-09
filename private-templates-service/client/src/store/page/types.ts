@@ -15,7 +15,7 @@ export const NAVIGATION = "NAVIGATION";
 export const OPEN_MODAL = "OPEN_MODAL";
 export const CLOSE_MODAL = "CLOSE_MODAL";
 
-// Actions 
+// Actions
 export interface PageAction {
   type: typeof NAVIGATION | typeof OPEN_MODAL | typeof CLOSE_MODAL;
   text: string;

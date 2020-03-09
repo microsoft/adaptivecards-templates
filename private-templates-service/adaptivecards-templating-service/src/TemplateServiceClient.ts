@@ -385,7 +385,6 @@ export class TemplateServiceClient {
     if(!version){
       version = incrementVersion(existingTemplate);
     }
- 
     let templateInstance: ITemplateInstance = {
       json: template ? template : JSON.parse("{}"),
       version: version || "1.0",

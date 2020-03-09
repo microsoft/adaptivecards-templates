@@ -92,7 +92,8 @@ class Tags extends React.Component<Props, State>  {
   render() {
     const {
       tags,
-      allowAddTag
+      allowAddTag,
+      allowEdit
     } = this.props;
 
     const {
@@ -104,7 +105,8 @@ class Tags extends React.Component<Props, State>  {
         {tags && tags.map((tag: string) => (
           <Tag key={tag}>
             <TagText>{tag}</TagText>
-            <TagCloseIcon key={tag} iconName="ChromeClose" onClick={() => this.tagRemove(tag)} />
+	    {allowEdit &&
+            <TagCloseIcon key={tag} iconName="ChromeClose" onClick={() => this.tagRemove(tag)} />}
           </Tag>
         ))}
         {allowAddTag && <AddTagWrapper onSubmit={this.submitNewTag} open={isAdding}>

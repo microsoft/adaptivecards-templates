@@ -25,11 +25,11 @@ const requireAuthentication = <P extends object>(Component: React.ComponentType<
 
     render() {
       return (
-        <div>
+        <React.Fragment>
           {this.isAuth() ?
             <Component {...this.props} /> :
             <Welcome {...this.props} />}
-        </div>
+        </React.Fragment>
       );
     }
   };
