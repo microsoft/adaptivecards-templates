@@ -83,4 +83,4 @@ function getShareURL(props: ShareModalProps): string {
   return "/preview/" + props.template.id + "/" + props.templateVersion;
 }
 
-export default ModalHOC(connect(undefined, mapDispatchToProps)(ShareModal));
+export default ModalHOC(connect(() => { return {} }, mapDispatchToProps)(ShareModal));
