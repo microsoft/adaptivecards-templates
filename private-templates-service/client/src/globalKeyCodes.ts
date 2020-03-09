@@ -1,6 +1,6 @@
-enum Key {
+enum KeyCode {
   ESC = 27,
   END = 35
 }
 
-export default Key
+export default KeyCode

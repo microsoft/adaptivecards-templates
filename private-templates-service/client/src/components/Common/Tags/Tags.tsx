@@ -6,7 +6,7 @@ import { RootState } from '../../../store/rootReducer';
 
 import { Template } from 'adaptive-templating-service-typescript-node';
 
-import Key  from '../../../globalKeyCodes';
+import KeyCode from '../../../globalKeyCodes';
 
 import {
   Tag,
@@ -85,16 +85,14 @@ class Tags extends React.Component<Props, State>  {
     e.preventDefault();
     if (this.addTagInput && this.addTagInput.current && this.props.template && this.props.template.tags) {
       const tag = this.addTagInput.current.value;
-      if(!this.props.template.tags.includes(tag)){
-        if(tag === ""){
-          this.closeAddTag();
-        }
-        else{
-          this.props.updateTags([...this.props.template.tags, tag]);
-       }
+      if(this.props.template.tags.includes(tag)){
+        this.highlightTag(tag, this.props.template.tags);
+      }
+      else if(tag === ""){
+        this.closeAddTag();
       }
       else{
-        this.highlightTag(tag,this.props.template.tags)
+        this.props.updateTags([...this.props.template.tags, tag]);
       }
     }
   }
@@ -119,7 +117,7 @@ class Tags extends React.Component<Props, State>  {
   }
 
   onKeyDown = (keyStroke: any) => {
-    if(keyStroke.keyCode === Key.ESC){
+    if(keyStroke.keyCode === KeyCode.ESC){
       this.closeAddTag();
     }
   }
@@ -143,7 +141,7 @@ class Tags extends React.Component<Props, State>  {
           </Tag>
         ))}
         {allowAddTag && <AddTagWrapper onSubmit={this.submitNewTag} open={isAdding}>
-          <AddTagInput ref={this.addTagInput} open={isAdding} value={this.state.newTagName} onChange={this.handleChange} onBlur={this.closeAddTag} onKeyDown={this.onKeyDown} />
+          <AddTagInput ref={this.addTagInput} open={isAdding} value={this.state.newTagName} onChange={this.handleChange} onKeyDown={this.onKeyDown} />
           <TagAddIcon iconName="Add" onClick={this.openNewTag} open={isAdding} />
           <TagSubmitButton type="submit" open={isAdding}>
             <TagSubmitIcon iconName="CheckMark" />
