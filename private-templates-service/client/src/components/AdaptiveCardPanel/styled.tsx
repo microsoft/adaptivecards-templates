@@ -1,35 +1,57 @@
 import styled from "styled-components";
-import { COLORS } from '../../globalStyles';
+import { COLORS } from "../../globalStyles";
 
 export const Container = styled.div`
+  flex: 1 1 0px;
   display: flex;
   flex-direction: column;
   margin: 0 24px 24px 0;
-
   background: white;
+  height: 220px;
+  min-width: 300px;
+  max-width: 350px;
+  border: 1px solid ${COLORS.BORDER2};
   border-radius: 5px;
-  width: 350px;
-
-  -webkit-box-shadow: 0px 2px 6px 0px rgba(111,111,111,0.4);
-  -moz-box-shadow: 0px 2px 6px 0px rgba(111,111,111,0.4);
-  box-shadow: 0px 2px 6px 0px rgba(111,111,111,0.4);
-
   @media only screen and (max-width: 1399px) {
     margin-bottom: 20px;
   }
 `;
 
 export const ACWrapper = styled.div`
-  padding: 16px 16px 0;
-  border-radius: 5px 5px 0 0;
+  flex: 4;
+  overflow: hidden;
 `;
 
-export const TemplateName = styled.h2`
-  border-top-style: solid;
-  border-top-color: ${COLORS.BORDER};
-  border-width: 1px;
-  padding: 10px 0 5px 10px;
-  font-size: 0.75rem;
+export const TemplateFooterWrapper = styled.div`
+  padding: 10px 0px 10px 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  border-top: 1px solid ${COLORS.BORDER2};
+`;
+
+export const TemplateStateWrapper = styled.div`
+  flex: 0.8;
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+`;
+
+export const TemplateNameAndDateWrapper = styled.div`
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+`;
+export const TemplateName = styled.div`
+  font-size: 0.95rem;
+  font-family: Segoe UI Semibold;
+  color: black;
+`;
+export const TemplateUpdatedAt = styled.div`
+  font-family: Segoe UI Regular;
+  font-size: 0.8rem;
   color: grey;
 `;
 
