@@ -1,4 +1,4 @@
-# Running the Adaptive Cards CMS Client Locally
+# Running the frontend and backend of Adaptive Cards CMS Locally
 
 To run this web application locally, you must have the following installed on your system:
 
@@ -9,14 +9,80 @@ To run this web application locally, you must have the following installed on yo
 
 **2. Switch to the appropriate branch.**
 
-**3. Modify the `Config.tsx` file.**
+**3. In the `adaptivecards-templates/private-templates-service/server/app.ts` file, add the following:**
+`
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, Content-Type, Accept, Authorization, api_key"
+  );
+  res.header(
+    "Access-Control-Allow-Methods",
+    "GET, POST, OPTIONS, DELETE"
+  );
+  next();
+});`
 
-The Adaptive Cards Admin Portal lives under `adaptivecards-templates/private-templates-service`.
-Modify the file `adaptivecards-templates/private-templates-service/client/src/Config.tsx` such that the redirectUri points to `http:\\localhost:3000`.
+**4. In the `adaptivecards-templates/private-templates-service/server/app.ts` file, replace ` "#{DB_CONNECTION_TOKEN}#"` with the real DB connection string. Make sure to NOT commit this file.**
 
-**4. Inside of `adaptivecards-templates/private-templates-service/client` run `npm install`.**
+**5. Under the `adaptivecards-templates/private-templates-service/server`, run `npm run link-client`. Please note you may have to remove the command `sudo` from `private-templates-service\server\package.json`.**
 
-**5. Finally, run ``npm start` to launch the application in your default browser.**
+**6. Inside of `adaptivecards-templates/private-templates-service/server` run `npm install`, run `tsc`, and run `npm run dev` to launch the client and server in your default browser.**
+
+**You're good to go!**
+
+# Running the backend
+
+To run this web application locally, you must have the following installed on your system:
+
+-   Git
+-   [Node v12](https://nodejs.org/en/download/)
+
+**1. Clone the repository.**
+
+**2. Switch to the appropriate branch.**
+
+**3. In the `adaptivecards-templates/private-templates-service/server/app.ts` file, add the following:
+`
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, Content-Type, Accept, Authorization, api_key"
+  );
+  res.header(
+    "Access-Control-Allow-Methods",
+    "GET, POST, OPTIONS, DELETE"
+  );
+  next();
+});
+`**
+
+**4.  In the `adaptivecards-templates/private-templates-service/server/app.ts` file, replace ` "#{DB_CONNECTION_TOKEN}#"` with the real DB connection string. Make sure to not commit this file.**
+
+**5. Under the `private-templates-service\adaptivecards-templating-service` directory, run `npm link`.**
+
+**6. Under the `adaptivecards-templates/private-templates-service/server` directory, run `npm link adaptivecards-templating-service`, run `npm install`, run `tsc`, and run `npm run start`.**
+
+**You're good to go!**
+
+# Running the frontend
+
+To run this web application locally, you must have the following installed on your system:
+
+-   Git
+-   [Node v12](https://nodejs.org/en/download/)
+
+**1. Clone the repository.**
+
+**2. Switch to the appropriate branch.**
+
+**3. In the `private-templates-service\adaptivecards-templating-client\typescript\api.ts` file, replace `http://localhost:5000` (defaultBasePath) with `https://adaptivecms.azurewebsites.net`.**
+
+**4.  Under the `private-templates-service\server` directory, run `npm run link-client`.**
+
+**5. Under the `private-templates-service\client` directory, run `npm install` and `npm run start`.**
 
 **You're good to go!**
 
