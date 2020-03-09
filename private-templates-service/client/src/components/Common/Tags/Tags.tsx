@@ -6,6 +6,8 @@ import { RootState } from '../../../store/rootReducer';
 
 import { Template } from 'adaptive-templating-service-typescript-node';
 
+import Key  from '../../../globalKeyCodes';
+
 import {
   Tag,
   TagCloseIcon,
@@ -99,10 +101,8 @@ class Tags extends React.Component<Props, State>  {
 
   highlightTag = (tagToHighlight: string, currentTags: string[]): void => {
     for(let tag of currentTags){
-      if(tag === tagToHighlight){
-        if (tag in this.tagRefs) {
+      if(tag === tagToHighlight && tag in this.tagRefs){
           this.tagRefs[tag].classList.add('duplicate'); // Add the class that renders an animation
-        }
       }
     }
   }
@@ -119,7 +119,7 @@ class Tags extends React.Component<Props, State>  {
   }
 
   onKeyDown = (keyStroke: any) => {
-    if(keyStroke.keyCode === 27){
+    if(keyStroke.keyCode === Key.ESC){
       this.closeAddTag();
     }
   }
