@@ -74,7 +74,6 @@ const cards = [
 
 interface Props {
   template: Template;
-  onClose: () => void;
   onSwitchVersion: (templateVersion: string) => void;
   modalState?: ModalState;
   openModal: (modalState: ModalState) => void;
@@ -148,7 +147,6 @@ class TemplateInfo extends React.Component<Props, State> {
       createdAt,
       instances,
     } = this.props.template;
-    const { onClose } = this.props;
 
     let createdAtParsed = "";
 
@@ -177,7 +175,6 @@ class TemplateInfo extends React.Component<Props, State> {
             <TimeStamp>
               Created {createdAtParsed}
             </TimeStamp>
-            <ActionButton iconProps={{ iconName: 'ChromeClose' }} onClick={onClose} >Close</ActionButton>
           </TopRowWrapper>
           <ActionsWrapper>
             {buttons.map((val) => (
