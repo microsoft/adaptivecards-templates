@@ -15,7 +15,7 @@ export default async function getToken(): Promise<string> {
     grant_type: "client_credentials",
     client_id: "#{CLIENT_ID_TOKEN}#",
     client_secret: "#{CLIENT_SECRET_TOKEN}#",
-    resource: "https://graph.windows.net"
+    resource: "#{CLIENT_ID_TOKEN}#"
   };
   return await request
     .post({ url: endpoint, form: requestParams }) // put in try catch
