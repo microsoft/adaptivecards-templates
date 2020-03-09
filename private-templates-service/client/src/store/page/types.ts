@@ -1,7 +1,13 @@
 export interface PageState {
   currentPageTitle?: string;
   currentPage?: string;
-  modalOpen?: string;
+  modalState?: ModalState;
+}
+
+export enum ModalState {
+  Share,
+  Publish,
+  Unpublish
 }
 
 // Action Types
@@ -15,5 +21,5 @@ export interface PageAction {
   text: string;
   currentPageTitle?: string;
   currentPage?: string;
-  modalOpen?: string;
+  modalState?: ModalState;
 }

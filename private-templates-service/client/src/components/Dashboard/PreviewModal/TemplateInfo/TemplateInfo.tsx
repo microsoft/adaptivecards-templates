@@ -3,6 +3,7 @@ import React from 'react';
 import { RootState } from '../../../../store/rootReducer';
 import { connect } from 'react-redux';
 import { openModal, closeModal } from '../../../../store/page/actions';
+import { ModalState } from '../../../../store/page/types';
 
 import PublishModal from '../../../Common/PublishModal';
 import UnpublishModal from '../../../Common/UnpublishModal';
@@ -75,8 +76,8 @@ interface Props {
   template: Template;
   onClose: () => void;
   onSwitchVersion: (templateVersion: string) => void;
-  modalOpen?: string;
-  openModal: (modalName: string) => void;
+  modalState?: ModalState;
+  openModal: (modalState: ModalState) => void;
   closeModal: () => void;
 }
 
@@ -86,14 +87,14 @@ interface State {
 
 const mapStateToProps = (state: RootState) => {
   return {
-    modalOpen: state.page.modalOpen
+    modalState: state.page.modalState
   };
 };
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    openModal: (modalName: string) => {
-      dispatch(openModal(modalName));
+    openModal: (modalState: ModalState) => {
+      dispatch(openModal(modalState));
     },
     closeModal: () => {
       dispatch(closeModal());
@@ -119,8 +120,8 @@ function getTemplateState(template: Template, version: string): PostedTemplate.S
 class TemplateInfo extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    const vers = getVersion(this.props.template);
-    this.state = { version: vers };
+    const version = getVersion(this.props.template);
+    this.state = { version: version };
   }
 
   versionList = (instances: TemplateInstance[] | undefined): IDropdownOption[] => {
@@ -214,9 +215,9 @@ class TemplateInfo extends React.Component<Props, State> {
             <VersionCard template={this.props.template} templateVersion={this.state.version} />
           </RowWrapper>
         </MainContentWrapper>
-        {this.props.modalOpen === 'publish' && getTemplateState(this.props.template, this.state.version) === PostedTemplate.StateEnum.Draft && <PublishModal template={this.props.template} templateVersion={this.state.version} />}
-        {this.props.modalOpen === 'unpublish' && getTemplateState(this.props.template, this.state.version) === PostedTemplate.StateEnum.Live && <UnpublishModal template={this.props.template} templateVersion={this.state.version} />}
-        {this.props.modalOpen === 'share' && <ShareModal template={this.props.template} templateVersion={this.state.version} />}
+        {this.props.modalState === ModalState.Publish && getTemplateState(this.props.template, this.state.version) === PostedTemplate.StateEnum.Draft && <PublishModal template={this.props.template} templateVersion={this.state.version} />}
+        {this.props.modalState === ModalState.Unpublish && getTemplateState(this.props.template, this.state.version) === PostedTemplate.StateEnum.Live && <UnpublishModal template={this.props.template} templateVersion={this.state.version} />}
+        {this.props.modalState === ModalState.Share && <ShareModal template={this.props.template} templateVersion={this.state.version} />}
       </OuterWrapper>
     );
   }
@@ -224,14 +225,14 @@ class TemplateInfo extends React.Component<Props, State> {
 
 function onActionButtonClick(props: Props, state: State, val: any) {
   if (val.text === 'Share') {
-    props.openModal(val.text.toLowerCase());
+    props.openModal(ModalState.Share);
   }
   else if (val.text === 'Publish') {
     if (getTemplateState(props.template, state.version) === PostedTemplate.StateEnum.Draft) {
-      props.openModal(val.text.toLowerCase());
+      props.openModal(ModalState.Publish);
     }
     else if (getTemplateState(props.template, state.version) === PostedTemplate.StateEnum.Live) {
-      props.openModal(val.altText.toLowerCase());
+      props.openModal(ModalState.Unpublish);
     }
     else {
       return;

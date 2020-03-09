@@ -56,7 +56,6 @@ const requireShared = <P extends object>(Component: React.ComponentType<P>) => {
     }
 
     render() {
-      console.log(this.props.template);
       return (
         <React.Fragment>
           {this.isShared() ?

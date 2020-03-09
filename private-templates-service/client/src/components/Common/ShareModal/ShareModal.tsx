@@ -52,15 +52,15 @@ class ShareModal extends React.Component<ShareModalProps> {
                 <TextFieldContainer>
                   <TextField readOnly={true}
                     prefix={Config.redirectUri}
-                    defaultValue={"/preview/" + this.props.template.id + "/" + this.props.templateVersion}
+                    defaultValue={getShareURL(this.props)}
                     width={100} />
                 </TextFieldContainer>
-                <Button iconProps={{ iconName: 'Copy' }} onClick={() => { onCopy(this.props) }}>
+                <Button iconProps={{ iconName: 'Copy' }} onClick={() => { onCopyURL(this.props) }}>
                   Copy
                 </Button>
               </LinkRow>
             </ShareLinkPanel>
-            <ShareModalForm shareURL={Config.redirectUri + "/preview/" + this.props.template.id + "/" + this.props.templateVersion} templateVersion={this.props.templateVersion} />
+            <ShareModalForm shareURL={Config.redirectUri + getShareURL(this.props)} templateVersion={this.props.templateVersion} />
           </CenterPanelWrapper>
         </Modal>
 
@@ -70,14 +70,17 @@ class ShareModal extends React.Component<ShareModalProps> {
   }
 }
 
-function onCopy(props: ShareModalProps) {
+function onCopyURL(props: ShareModalProps) {
   let copyCode = document.createElement('textarea');
-  copyCode.innerText = Config.redirectUri + "/preview/" +
-    props.template.id + "/" + props.templateVersion;
+  copyCode.innerText = Config.redirectUri + getShareURL(props);
   document.body.appendChild(copyCode);
   copyCode.select();
   document.execCommand('copy');
   copyCode.remove();
+}
+
+function getShareURL(props: ShareModalProps): string {
+  return "/preview/" + props.template.id + "/" + props.templateVersion;
 }
 
 export default ModalHOC(connect(undefined, mapDispatchToProps)(ShareModal));

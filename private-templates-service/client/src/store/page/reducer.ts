@@ -8,7 +8,8 @@ import {
 
 const initalState: PageState = {
   currentPageTitle: "",
-  currentPage: ""
+  currentPage: "",
+  modalState: undefined
 }
 
 export function pageReducer(state = initalState, action: PageAction): PageState {
@@ -22,12 +23,12 @@ export function pageReducer(state = initalState, action: PageAction): PageState 
     case OPEN_MODAL:
       return {
         ...state,
-        modalOpen: action.modalOpen
+        modalState: action.modalState
       };
     case CLOSE_MODAL:
       return {
         ...state,
-        modalOpen: undefined
+        modalState: undefined
       };
     default:
       return state;

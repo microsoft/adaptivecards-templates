@@ -37,7 +37,7 @@ import {
 
 interface Props {
   template: Template;
-  templateVersion?: string;
+  templateVersion: string;
   publishTemplate: (templateVersion: string) => void;
   closeModal: () => void;
 }
