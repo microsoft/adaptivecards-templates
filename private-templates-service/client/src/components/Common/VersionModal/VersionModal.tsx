@@ -97,7 +97,7 @@ class VersionModal extends React.Component<Props, State> {
     }
   }
 
-  addVersion = (isChecked?: boolean, version?: string) => {
+  updateVersionList = (isChecked?: boolean, version?: string) => {
     if (!isChecked || !version) return;
     let versionList = this.state.versionList;
     if (isChecked === true) {
@@ -137,7 +137,7 @@ class VersionModal extends React.Component<Props, State> {
                 <StatusIndicator state={instance.state}/>
                 <Status>{instance.state && instance.state.toString().charAt(0).toUpperCase() + instance.state.toString().slice(1)}</Status>
               </StatusWrapper>
-              <CheckboxWrapper><Checkbox defaultChecked={false} onChange={(e, checked) => this.addVersion(checked, instance.version)}/></CheckboxWrapper>
+              <CheckboxWrapper><Checkbox defaultChecked={false} onChange={(e, checked) => this.updateVersionList(checked, instance.version)}/></CheckboxWrapper>
             </VersionCardRow>
             ))}     
               </CardBody>
