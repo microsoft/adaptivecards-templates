@@ -88,7 +88,9 @@ To run this web application locally, you must have the following installed on yo
 
 ## Development
 
-Assuming you have performed `npm install` for both directories, run `npm run dev` in `adaptivecards-templates/private-templates-service/` to have both client and server running in a single terminal. It performs autoloading for both environments. Open `localhost:3000` in your browser.
+**1. Run the command `npm install` in both the `server` and the `client` diretories.**
+**2. Navigate to the `server` folder and run the follwing command `npm run link-client`. If you are getting an error about permission, run the command `sudo npm run link-client`.**
+**3. Inside the `server` folder, run the command `npm run dev`. This will run both the frontend and the backend together. You may now navigate to `localhost:3000` in your browser.**
 
 ## Troubleshooting
 
