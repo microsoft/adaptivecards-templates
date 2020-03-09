@@ -87,7 +87,7 @@ class PublishModal extends React.Component<Props> {
               FACES HERE
             </NotifiedGroup>
             <ButtonGroup>
-              <CancelButton text="Cancel" onClick={() => { this.props.closeModal() }} />
+              <CancelButton text="Cancel" onClick={this.props.closeModal} />
               <PrimaryButton text="Publish" onClick={this.publish} />
             </ButtonGroup>
           </BottomRow>

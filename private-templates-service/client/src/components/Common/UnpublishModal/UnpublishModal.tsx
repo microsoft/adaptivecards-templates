@@ -83,7 +83,7 @@ class UnpublishModal extends React.Component<Props> {
           </CenterPanelWrapper>
           <BottomRow>
             <ButtonGroup>
-              <CancelButton text="Cancel" onClick={() => { this.props.closeModal() }} />
+              <CancelButton text="Cancel" onClick={this.props.closeModal} />
               <PrimaryButton text="Unpublish" onClick={this.unpublish} />
             </ButtonGroup>
           </BottomRow>

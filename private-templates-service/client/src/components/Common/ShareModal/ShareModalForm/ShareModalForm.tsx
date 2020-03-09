@@ -67,7 +67,7 @@ class ShareModalForm extends React.Component<ShareModalFormProps, State> {
           </EmailPanel>
           <BottomRow>
             <ButtonGroup>
-              <CancelButton text="Cancel" onClick={() => { this.props.closeModal() }} />
+              <CancelButton text="Cancel" onClick={this.props.closeModal} />
               <PrimaryButton type="submit" value="Submit" text="Share" />
             </ButtonGroup>
           </BottomRow>

@@ -155,6 +155,8 @@ class TemplateInfo extends React.Component<Props, State> {
       createdAtParsed = createdAtDate.toLocaleString();
     }
 
+    let templateState = getTemplateState(this.props.template, this.state.version);
+
     return (
       <OuterWrapper>
         <HeaderWrapper>
@@ -180,7 +182,7 @@ class TemplateInfo extends React.Component<Props, State> {
             {buttons.map((val) => (
               <ActionButton key={val.text} iconProps={val.icon} allowDisabledFocus
                 onClick={() => { onActionButtonClick(this.props, this.state, val) }}>
-                {val.text === 'Publish' && getTemplateState(this.props.template, this.state.version) === PostedTemplate.StateEnum.Live ? val.altText : val.text}
+                {val.text === 'Publish' && templateState === PostedTemplate.StateEnum.Live ? val.altText : val.text}
               </ActionButton>
             ))}
           </ActionsWrapper>
@@ -212,8 +214,8 @@ class TemplateInfo extends React.Component<Props, State> {
             <VersionCard template={this.props.template} templateVersion={this.state.version} />
           </RowWrapper>
         </MainContentWrapper>
-        {this.props.modalState === ModalState.Publish && getTemplateState(this.props.template, this.state.version) === PostedTemplate.StateEnum.Draft && <PublishModal template={this.props.template} templateVersion={this.state.version} />}
-        {this.props.modalState === ModalState.Unpublish && getTemplateState(this.props.template, this.state.version) === PostedTemplate.StateEnum.Live && <UnpublishModal template={this.props.template} templateVersion={this.state.version} />}
+        {this.props.modalState === ModalState.Publish && <PublishModal template={this.props.template} templateVersion={this.state.version} />}
+        {this.props.modalState === ModalState.Unpublish && <UnpublishModal template={this.props.template} templateVersion={this.state.version} />}
         {this.props.modalState === ModalState.Share && <ShareModal template={this.props.template} templateVersion={this.state.version} />}
       </OuterWrapper>
     );
@@ -221,14 +223,17 @@ class TemplateInfo extends React.Component<Props, State> {
 }
 
 function onActionButtonClick(props: Props, state: State, val: any) {
+
+  let templateState = getTemplateState(props.template, state.version);
+
   if (val.text === 'Share') {
     props.openModal(ModalState.Share);
   }
   else if (val.text === 'Publish') {
-    if (getTemplateState(props.template, state.version) === PostedTemplate.StateEnum.Draft) {
+    if (templateState === PostedTemplate.StateEnum.Draft) {
       props.openModal(ModalState.Publish);
     }
-    else if (getTemplateState(props.template, state.version) === PostedTemplate.StateEnum.Live) {
+    else if (templateState === PostedTemplate.StateEnum.Live) {
       props.openModal(ModalState.Unpublish);
     }
     else {

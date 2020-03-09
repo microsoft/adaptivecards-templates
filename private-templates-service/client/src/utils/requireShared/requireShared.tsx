@@ -38,7 +38,6 @@ const requireShared = <P extends object>(Component: React.ComponentType<P>) => {
     constructor(props: P & RequireSharedProps) {
       super(props);
       if (!this.props.template) {
-        console.log("hit");
         const uuid = this.props.match.params.uuid;
         this.props.getTemplate(uuid ? uuid : "");
       }
@@ -60,7 +59,7 @@ const requireShared = <P extends object>(Component: React.ComponentType<P>) => {
         <React.Fragment>
           {this.isShared() ?
             <Component {...this.props} /> :
-            <React.Fragment>Not shared yet.</React.Fragment>}
+            <React.Fragment>You do not have permission to view this page.</React.Fragment>}
         </React.Fragment>
       );
     }

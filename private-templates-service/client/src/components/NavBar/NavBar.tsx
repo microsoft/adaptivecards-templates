@@ -39,7 +39,7 @@ const NavBar = (props: NavBarProps) => {
       <Banner>
         <MobileBanner>
           <StyledLogo src={Logo} />
-          <Styledh1>{props.currentPageTitle ? props.currentPageTitle : ""}</Styledh1>
+          <Styledh1>{props.currentPageTitle || ""}</Styledh1>
         </MobileBanner>
       </Banner>
     );
