@@ -149,69 +149,68 @@ class TemplateInfo extends React.Component<Props, State> {
 
     const { history } = this.props;
 
+    if (!history) {
+      return (<div>Error loading page</div>)
+    }
     return (
-      (!history)
-        ?
-        <div>Error loading page</div>
-        :
-        < OuterWrapper >
-          <HeaderWrapper>
-            <TopRowWrapper>
-              <TitleWrapper>
-                <Title>
-                  <StyledVersionDropdown
-                    placeholder={`Version ${this.state.version}`}
-                    options={this.versionList(instances)}
-                    onChange={this.onVersionChange}
-                    theme={THEME.LIGHT}
-                    styles={DropdownStyles}
-                  />
-                </Title>
-                <StatusIndicator state={isLive ? PostedTemplate.StateEnum.Live : PostedTemplate.StateEnum.Draft} />
-                <Status>{isLive ? 'Published' : 'Draft'}</Status>
-              </TitleWrapper>
-              <TimeStamp>
-                Created {createdAtParsed}
-              </TimeStamp>
-            </TopRowWrapper>
-            <ActionsWrapper>
-              {buttons.map((val) => (
-                <ActionButton key={val.text} iconProps={val.icon} allowDisabledFocus onClick={val.text ? () => this.handleClick(val.text) : () => { }} >
-                  {val.text === 'Publish' && getTemplateState(this.props.template, this.state.version) === PostedTemplate.StateEnum.Live ? val.altText : val.text}
-                </ActionButton>
-              ))}
-            </ActionsWrapper>
-          </HeaderWrapper>
-          <MainContentWrapper>
-            <RowWrapper>
-              {cards.map((val) => (
-                <Card key={val.header}>
-                  <CardHeader>
-                    {val.header}
-                  </CardHeader>
-                  <CardBody>
-                    {val.iconName && <IconWrapper iconName={val.iconName}></IconWrapper>}
-                    {val.body}
-                    {val.bodyText}
-                  </CardBody>
-                </Card>
-              ))}
-            </RowWrapper>
-            <Card>
-              <CardHeader>Tags</CardHeader>
-              <CardBody>
-                <TagsWrapper>
-                  <Tags tags={tags} allowAddTag={true} allowEdit={true} />
-                </TagsWrapper>
-              </CardBody>
-            </Card>
-            <RowWrapper>
-              <VersionCard template={this.props.template} templateVersion={this.state.version} />
-            </RowWrapper>
-          </MainContentWrapper>
-          {this.state.isPublishOpen && getTemplateState(this.props.template, this.state.version) === PostedTemplate.StateEnum.Draft && <PublishModal toggleModal={this.toggleModal} template={this.props.template} templateVersion={this.state.version} />}
-          {this.state.isPublishOpen && getTemplateState(this.props.template, this.state.version) === PostedTemplate.StateEnum.Live && <UnpublishModal toggleModal={this.toggleModal} template={this.props.template} templateVersion={this.state.version} />}
-        </OuterWrapper >
+      < OuterWrapper >
+        <HeaderWrapper>
+          <TopRowWrapper>
+            <TitleWrapper>
+              <Title>
+                <StyledVersionDropdown
+                  placeholder={`Version ${this.state.version}`}
+                  options={this.versionList(instances)}
+                  onChange={this.onVersionChange}
+                  theme={THEME.LIGHT}
+                  styles={DropdownStyles}
+                />
+              </Title>
+              <StatusIndicator state={isLive ? PostedTemplate.StateEnum.Live : PostedTemplate.StateEnum.Draft} />
+              <Status>{isLive ? 'Published' : 'Draft'}</Status>
+            </TitleWrapper>
+            <TimeStamp>
+              Created {createdAtParsed}
+            </TimeStamp>
+          </TopRowWrapper>
+          <ActionsWrapper>
+            {buttons.map((val) => (
+              <ActionButton key={val.text} iconProps={val.icon} allowDisabledFocus onClick={val.text ? () => this.handleClick(val.text) : () => { }} >
+                {val.text === 'Publish' && getTemplateState(this.props.template, this.state.version) === PostedTemplate.StateEnum.Live ? val.altText : val.text}
+              </ActionButton>
+            ))}
+          </ActionsWrapper>
+        </HeaderWrapper>
+        <MainContentWrapper>
+          <RowWrapper>
+            {cards.map((val) => (
+              <Card key={val.header}>
+                <CardHeader>
+                  {val.header}
+                </CardHeader>
+                <CardBody>
+                  {val.iconName && <IconWrapper iconName={val.iconName}></IconWrapper>}
+                  {val.body}
+                  {val.bodyText}
+                </CardBody>
+              </Card>
+            ))}
+          </RowWrapper>
+          <Card>
+            <CardHeader>Tags</CardHeader>
+            <CardBody>
+              <TagsWrapper>
+                <Tags tags={tags} allowAddTag={true} allowEdit={true} />
+              </TagsWrapper>
+            </CardBody>
+          </Card>
+          <RowWrapper>
+            <VersionCard template={this.props.template} templateVersion={this.state.version} />
+          </RowWrapper>
+        </MainContentWrapper>
+        {this.state.isPublishOpen && getTemplateState(this.props.template, this.state.version) === PostedTemplate.StateEnum.Draft && <PublishModal toggleModal={this.toggleModal} template={this.props.template} templateVersion={this.state.version} />}
+        {this.state.isPublishOpen && getTemplateState(this.props.template, this.state.version) === PostedTemplate.StateEnum.Live && <UnpublishModal toggleModal={this.toggleModal} template={this.props.template} templateVersion={this.state.version} />}
+      </OuterWrapper >
     );
   }
 }
