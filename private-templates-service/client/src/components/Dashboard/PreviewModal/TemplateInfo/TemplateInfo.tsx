@@ -5,17 +5,16 @@ import { updateCurrentTemplateVersion } from '../../../../store/currentTemplate/
 import { ActionButton, IDropdownOption } from 'office-ui-fabric-react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { Template, TemplateInstance, PostedTemplate } from 'adaptive-templating-service-typescript-node';
-
 import { openModal, closeModal } from '../../../../store/page/actions';
 import { ModalState } from '../../../../store/page/types';
-import { THEME } from '../../../../globalStyles'
-
 import PublishModal from '../../../Common/PublishModal';
 import UnpublishModal from '../../../Common/UnpublishModal';
 import Tags from '../../../Common/Tags';
 import ShareModal from '../../../Common/ShareModal';
 import VersionCard from './VersionCard';
 
+
+import { THEME } from '../../../../globalStyles';
 import {
   OuterWrapper,
   HeaderWrapper,
@@ -89,7 +88,7 @@ interface State {
 const mapStateToProps = (state: RootState) => {
   return {
     modalState: state.page.modalState,
-    version: state.currentTemplate.version,
+    version: state.currentTemplate.version
   };
 };
 
@@ -127,7 +126,6 @@ class TemplateInfo extends React.Component<Props, State> {
     super(props);
     const vers = getVersion(this.props.template);
     this.state = { version: vers }
-    this.props.updateCurrentTemplateVersion(this.props.template, vers);
   }
 
   versionList = (instances: TemplateInstance[] | undefined): IDropdownOption[] => {
@@ -236,7 +234,6 @@ class TemplateInfo extends React.Component<Props, State> {
 }
 
 function onActionButtonClick(props: Props, state: State, val: any) {
-
   let templateState = getTemplateState(props.template, state.version);
 
   switch (val.text) {
