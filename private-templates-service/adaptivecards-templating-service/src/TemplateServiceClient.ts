@@ -987,7 +987,7 @@ export class TemplateServiceClient {
     var router = express.Router();
 
     // Verify signature of access token before requests.
-    router.all("/", this._routerAuthentication);
+    router.all("/*", this._routerAuthentication);
 
     router.get("/", (req: Request, res: Response, _next: NextFunction) => {
       if (req.query.sortBy && !(req.query.sortBy in SortBy)) {
