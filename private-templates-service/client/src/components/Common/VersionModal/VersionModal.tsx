@@ -62,53 +62,42 @@ const mapDispatchToProps = (dispatch: any) => {
 }
 
 interface State {
-  versionList: string[];
+  versionList: boolean[];
 }
 
 class VersionModal extends React.Component<Props, State> {
   constructor(props: Props){
     super(props);
-    this.state = { versionList: [] }
+    this.state = { versionList: this.props.template.instances? new Array(this.props.template.instances.length) : new Array() }
   }
   
   delete = () => {
-    for (let instance of this.props.template.instances!) {
-      if (!instance.version || !this.state.versionList.includes(instance.version!)) continue;
-      this.props.deleteTemplateVersion(instance.version!);
+    let list = this.props.template.instances!;
+    for (let i = 0; i < list.length; i++) {
+      if (!this.state.versionList[i]) continue;
+      this.props.deleteTemplateVersion(list[i].version!);
       this.props.toggleModal();
     }
   }
 
   publish = () => {
-    for (let instance of this.props.template.instances!){
-      if (!this.state.versionList.includes(instance.version!)) continue;
-      const template = JSON.stringify(instance.json);
-      this.props.updateTemplateState(template, PostedTemplate.StateEnum.Live, instance.version!);
+    let list = this.props.template.instances!;
+    for (let i = 0; i < list.length; i++) {
+      if (!this.state.versionList[i]) continue;
+      const template = JSON.stringify(list[i].json);
+      this.props.updateTemplateState(template, PostedTemplate.StateEnum.Live, list[i].version!);
       this.props.toggleModal();
     }
   }
 
   unpublish = () => {
-    for (let instance of this.props.template.instances!){
-      if (!this.state.versionList.includes(instance.version!)) continue;
-      const template = JSON.stringify(instance.json);
-      this.props.updateTemplateState(template, PostedTemplate.StateEnum.Deprecated, instance.version!);
+    let list = this.props.template.instances!;
+    for (let i = 0; i < list.length; i++) {
+      if (!this.state.versionList[i]) continue;
+      const template = JSON.stringify(list[i].json);
+      this.props.updateTemplateState(template, PostedTemplate.StateEnum.Deprecated, list[i].version!);
       this.props.toggleModal();
     }
-  }
-
-  updateVersionList = (isChecked?: boolean, version?: string) => {
-    if (!isChecked || !version) return;
-    let versionList = this.state.versionList;
-    if (isChecked === true) {
-      if (versionList.includes(version)) return;
-      versionList.push(version);
-    } else {
-      if (!version.includes(version)) return;
-      let index = versionList.indexOf(version);
-      versionList.splice(index, 1);
-    }
-    this.setState({ versionList: versionList });
   }
 
   render() {
@@ -124,10 +113,10 @@ class VersionModal extends React.Component<Props, State> {
                 <CardHeaderText>Version</CardHeaderText>
                 <CardHeaderText>Published</CardHeaderText>
                 <CardHeaderText>Status</CardHeaderText>
-                <CardHeaderText>{`${this.state.versionList!.length} Selected`}</CardHeaderText>
+                <CardHeaderText>{`${this.state.versionList.filter(function(s) { return s; }).length} Selected`}</CardHeaderText>
               </CardHeaderRow>
               <CardBody>
-              {this.props.template.instances && this.props.template.instances.map((instance: TemplateInstance) => (
+              {this.props.template.instances && this.props.template.instances.map((instance: TemplateInstance, index: number) => (
             <VersionCardRow>
               <VersionWrapper>
                 {instance.version}
@@ -137,7 +126,11 @@ class VersionModal extends React.Component<Props, State> {
                 <StatusIndicator state={instance.state}/>
                 <Status>{instance.state && instance.state.toString().charAt(0).toUpperCase() + instance.state.toString().slice(1)}</Status>
               </StatusWrapper>
-              <CheckboxWrapper><Checkbox defaultChecked={false} onChange={(e, checked) => this.updateVersionList(checked, instance.version)}/></CheckboxWrapper>
+              <CheckboxWrapper><Checkbox defaultChecked={false} onChange={(e, checked) => {
+                let updatedVersion = this.state.versionList;
+                updatedVersion[index] = checked || false;
+                this.setState({ versionList: updatedVersion });
+              }}/></CheckboxWrapper>
             </VersionCardRow>
             ))}     
               </CardBody>
