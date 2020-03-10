@@ -226,22 +226,23 @@ function onActionButtonClick(props: Props, state: State, val: any) {
 
   let templateState = getTemplateState(props.template, state.version);
 
-  if (val.text === 'Share') {
-    props.openModal(ModalState.Share);
-  }
-  else if (val.text === 'Publish') {
-    if (templateState === PostedTemplate.StateEnum.Draft) {
-      props.openModal(ModalState.Publish);
-    }
-    else if (templateState === PostedTemplate.StateEnum.Live) {
-      props.openModal(ModalState.Unpublish);
-    }
-    else {
-      return;
-    }
-  }
-  else {
-    return;
+  switch (val.text) {
+    case 'Share':
+      props.openModal(ModalState.Share);
+      break;
+    case 'Publish':
+      switch (templateState) {
+        case PostedTemplate.StateEnum.Draft:
+          props.openModal(ModalState.Publish);
+          break;
+        case PostedTemplate.StateEnum.Live:
+          props.openModal(ModalState.Unpublish);
+          break;
+        default:
+          break;
+      }
+    default:
+      break;
   }
 }
 
