@@ -959,8 +959,8 @@ export class TemplateServiceClient {
    * Async function for authenticating users before running endpoint code.
    */
   private _routerAuthentication = async (req: Request, res: Response, next: NextFunction) => {
-    if (req.method === "OPTIONS") {
-      next();
+    if (req.method === "OPTIONS" || req.path.includes('preview')) {
+      return next();
     }
 
     if (!req.headers.authorization) {
@@ -987,17 +987,17 @@ export class TemplateServiceClient {
     var router = express.Router();
 
     // Verify signature of access token before requests.
-    router.all("/*", this._routerAuthentication);
+    router.all("*", this._routerAuthentication);
 
     router.get("/", (req: Request, res: Response, _next: NextFunction) => {
       if (req.query.sortBy && !(req.query.sortBy in SortBy)) {
         const err = new TemplateError(ApiError.InvalidQueryParam, "Sort by value is not valid.");
-        res.status(400).json({ error: err });
+        return res.status(400).json({ error: err });
       }
 
       if (req.query.sortOrder && !(req.query.sortOrder in SortOrder)) {
         const err = new TemplateError(ApiError.InvalidQueryParam, "Sort order value is not valid.");
-        res.status(400).json({ error: err });
+        return res.status(400).json({ error: err });
       }
 
       let isPublished: boolean | undefined = req.query.isPublished ? req.query.isPublished.toLowerCase() === "true" : undefined;
