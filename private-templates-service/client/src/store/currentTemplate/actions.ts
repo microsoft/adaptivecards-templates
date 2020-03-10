@@ -134,7 +134,7 @@ export function updateCurrentTemplateVersion(template: Template, version: string
     if (template.instances) {
       let numInstances = template.instances.length;
       for (let j = 0; j < numInstances; j++) {
-        if (template.instances[j] && template.instances[j].version && typeof (template.instances[j].version) !== 'undefined' && template.instances[j].version == version) {
+        if (template.instances[j] && template.instances[j].version && template.instances[j].version == version) {
           return dispatch(
             receiveUpdateCurrentTemplateVersion(
               template.instances[j].version,

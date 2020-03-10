@@ -18,6 +18,7 @@ import VersionCard from './VersionCard';
 
 import { ActionButton, IDropdownOption } from 'office-ui-fabric-react';
 
+import { EDIT_IN_DESIGNER, DELETE, SHARE, PUBLISH, UNPUBLISH } from "../../../../assets/strings"
 import { THEME } from '../../../../globalStyles';
 import {
   OuterWrapper,
@@ -43,20 +44,20 @@ import {
 
 const buttons = [
   {
-    text: 'Edit in designer',
+    text: EDIT_IN_DESIGNER,
     icon: { iconName: 'SingleColumnEdit' }
   },
   {
-    text: 'Delete',
+    text: DELETE,
     icon: { iconName: 'Delete' }
   },
   {
-    text: 'Share',
+    text: SHARE,
     icon: { iconName: 'AddFriend' }
   },
   {
-    text: 'Publish',
-    altText: 'Unpublish',
+    text: PUBLISH,
+    altText: UNPUBLISH,
     icon: { iconName: 'PublishContent' }
   },
 ];
@@ -239,14 +240,14 @@ function onActionButtonClick(props: Props, state: State, val: any) {
   let templateState = getTemplateState(props.template, state.version);
 
   switch (val.text) {
-    case 'Share':
+    case SHARE:
       props.openModal(ModalState.Share);
       break;
-    case 'Edit in designer':
+    case EDIT_IN_DESIGNER:
       const { history } = props;
       if (history) history.push('/designer');
       break;
-    case 'Publish':
+    case PUBLISH:
       switch (templateState) {
         case PostedTemplate.StateEnum.Draft:
           props.openModal(ModalState.Publish);
