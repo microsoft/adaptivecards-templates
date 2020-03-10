@@ -8,6 +8,7 @@ import { Template, PostedTemplate } from 'adaptive-templating-service-typescript
 
 // Redux
 import { updateTemplate } from '../../../store/currentTemplate/actions';
+import { closeModal } from '../../../store/page/actions';
 
 // Components
 import AdaptiveCard from '../AdaptiveCard';
@@ -37,17 +38,21 @@ import {
   CancelButton,
 } from '../../Common/PublishModal/styled';
 
+
 interface Props {
   template: Template;
   templateVersion: string;
-  toggleModal: () => void;
   unpublishTemplate: (templateVersion: string) => void;
+  closeModal: () => void;
 }
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
     unpublishTemplate: (templateVersion: string) => {
       dispatch(updateTemplate(undefined, templateVersion, undefined, undefined, undefined, PostedTemplate.StateEnum.Deprecated));
+    },
+    closeModal: () => {
+      dispatch(closeModal());
     }
   }
 }
@@ -56,7 +61,7 @@ class UnpublishModal extends React.Component<Props> {
 
   unpublish = () => {
     this.props.unpublishTemplate(this.props.templateVersion);
-    this.props.toggleModal();
+    this.props.closeModal();
   }
 
   render() {
@@ -78,7 +83,7 @@ class UnpublishModal extends React.Component<Props> {
           </CenterPanelWrapper>
           <BottomRow>
             <ButtonGroup>
-              <CancelButton text="Cancel" onClick={this.props.toggleModal} />
+              <CancelButton text="Cancel" onClick={this.props.closeModal} />
               <PrimaryButton text="Unpublish" onClick={this.unpublish} />
             </ButtonGroup>
           </BottomRow>

@@ -97,7 +97,6 @@ export function currentTemplateReducer(state = initialState, action: CurrentTemp
       return {
         ...state,
         templateID: action.templateID,
-        template: undefined,
         templateJSON: undefined,
         templateName: undefined,
         sampleDataJSON: undefined,

@@ -149,7 +149,7 @@ export function updateCurrentTemplateVersion(template: Template, version: string
   }
 }
 
-export function updateTemplate(templateID?: string, currentVersion?: string, templateJSON?: object, sampleDataJSON?: object, templateName?: string, state?: PostedTemplate.StateEnum, tags?: string[]) {
+export function updateTemplate(templateID?: string, currentVersion?: string, templateJSON?: object, sampleDataJSON?: object, templateName?: string, state?: PostedTemplate.StateEnum, tags?: string[], isShareable?: boolean) {
   return function (dispatch: any, getState: () => RootState) {
     const appState = getState();
 
@@ -170,11 +170,11 @@ export function updateTemplate(templateID?: string, currentVersion?: string, tem
     } else {
       newTemplate.template = appState.currentTemplate.templateJSON;
     }
-
+    newTemplate.version = version;
     newTemplate.name = templateName;
     newTemplate.state = state;
     newTemplate.tags = tags;
-    newTemplate.version = version;
+    newTemplate.isShareable = isShareable;
 
     if (id === null || id === undefined || id === "") {
       dispatch(requestNewTemplateUpdate());
