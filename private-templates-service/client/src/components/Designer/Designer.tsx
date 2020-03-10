@@ -27,7 +27,7 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    updateTemplate: (templateID: string, currentVersion: string, templateJSON: object, templateName: string, sampleDataJSON: object) => {
+    updateTemplate: (templateID: string, currentVersion: string, templateJSON: object, sampleDataJSON: object, templateName: string) => {
       dispatch(updateTemplate(templateID, currentVersion, templateJSON, sampleDataJSON, templateName));
     },
     setPage: (currentPageTitle: string, currentPage: string) => {
@@ -44,7 +44,7 @@ interface DesignerProps {
   templateName: string;
   sampleDataJSON: object;
   version: string;
-  updateTemplate: (templateID: string, currentVersion: string, templateJSON: object, templateName: string, sampleDataJSON: object) => any;
+  updateTemplate: (templateID: string, currentVersion: string, templateJSON: object, sampleDataJSON: object, templateName: string) => any;
   setPage: (currentPageTitle: string, currentPage: string) => void;
 }
 
@@ -126,7 +126,7 @@ function initDesigner(): ACDesigner.CardDesigner {
 
 function onSave(designer: ACDesigner.CardDesigner, props: DesignerProps): void {
   if (JSON.stringify(props.templateJSON) !== JSON.stringify(designer.getCard()) || props.sampleDataJSON !== designer.sampleData) {
-    props.updateTemplate(props.templateID, props.version, designer.getCard(), props.templateName, designer.sampleData);
+    props.updateTemplate(props.templateID, props.version, designer.getCard(), designer.sampleData, props.templateName);
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(requireAuthentication(Designer));
