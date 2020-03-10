@@ -207,7 +207,8 @@ describe("Basic Post Templates", () => {
   afterAll(async () => {
     await mongoose.connection.close();
     for (let id of idsToDelete) {
-      await request(app).delete(`/template/${id}`);
+      await request(app).delete(`/template/${id}`)
+      .set({ Authorization: "Bearer " + token });
     }
   });
 });
@@ -293,7 +294,8 @@ describe("Basic Get Templates", () => {
 
   afterAll(async () => {
     for (let id of idsToDelete) {
-      await request(app).delete(`/template/${id}`);
+      await request(app).delete(`/template/${id}`)
+      .set({ Authorization: "Bearer " + token });
     }
   });
 });
@@ -367,7 +369,8 @@ describe("Preview Templates", () => {
     id = res.body.id;
     idsToDelete.push(id);
 
-    res = await request(app).get(`/template/${id}`);
+    res = await request(app).get(`/template/${id}`)
+      .set({ Authorization: "Bearer " + token });
     expect(res.status).toEqual(200);
     expect(res.body).toHaveProperty("templates");
     expect(res.body.templates).toHaveLength(1);
@@ -382,7 +385,8 @@ describe("Preview Templates", () => {
 
   afterAll(async () => {
     for (let id of idsToDelete) {
-      await request(app).delete(`/template/${id}`);
+      await request(app).delete(`/template/${id}`)
+      .set({ Authorization: "Bearer " + token });
     }
   });
 });
@@ -413,10 +417,12 @@ describe("Delete Templates", () => {
     expect(res.body).toHaveProperty("id");
     id = res.body.id;
 
-    res = await request(app).delete(`/template/${id}`);
+    res = await request(app).delete(`/template/${id}`)
+    .set({ Authorization: "Bearer " + token });
     expect(res.status).toEqual(204);
 
-    res = await request(app).get(`/template/${id}`);
+    res = await request(app).get(`/template/${id}`)
+    .set({ Authorization: "Bearer " + token });
     expect(res.status).toEqual(404);
   });
 
@@ -441,20 +447,24 @@ describe("Delete Templates", () => {
       });
     expect(res.status).toEqual(201);
 
-    res = await request(app).delete(`/template/${id}?version=1.4`);
+    res = await request(app).delete(`/template/${id}?version=1.4`)
+    .set({ Authorization: "Bearer " + token });
     expect(res.status).toEqual(204);
 
-    res = await request(app).get(`/template/${id}?version=1.4`);
+    res = await request(app).get(`/template/${id}?version=1.4`)
+    .set({ Authorization: "Bearer " + token });
     expect(res.status).toEqual(404);
 
-    res = await request(app).get(`/template/${id}`);
+    res = await request(app).get(`/template/${id}`)
+    .set({ Authorization: "Bearer " + token });
     expect(res.status).toEqual(200);
     expect(res.body.templates[0].instances[0].version).toEqual("1.0");
   });
 
   afterAll(async () => {
     for (let id of idsToDelete) {
-      await request(app).delete(`/template/${id}`);
+      await request(app).delete(`/template/${id}`)
+      .set({ Authorization: "Bearer " + token });
     }
   });
 });
@@ -506,7 +516,8 @@ describe("Filtering Templates", () => {
 
   afterAll(async () => {
     for (let id of idsToDelete) {
-      await request(app).delete(`/template/${id}`);
+      await request(app).delete(`/template/${id}`)
+      .set({ Authorization: "Bearer " + token });
     }
   });
 });
@@ -540,7 +551,8 @@ describe("Get Tags", () => {
     id = res.body.id;
     idsToDelete.push(id);
 
-    res = await request(app).get(`/template/${id}`);
+    res = await request(app).get(`/template/${id}`)
+    .set({ Authorization: "Bearer " + token });
     expect(res.body).toHaveProperty("templates");
     expect(res.body.templates).toHaveLength(1);
     let template = res.body.templates[0];
@@ -563,7 +575,8 @@ describe("Get Tags", () => {
 
   // Authenticated post request
   it("should try to get the list of owners and all tags and succeed", async () => {
-    let res = await request(app).get("/template/tag");
+    let res = await request(app).get("/template/tag")
+    .set({ Authorization: "Bearer " + token });
     expect(res.status).toEqual(200);
     expect(res.body).toHaveProperty("ownedTags");
     expect(res.body).toHaveProperty("allTags");
@@ -576,7 +589,8 @@ describe("Get Tags", () => {
 
   afterAll(async () => {
     for (let id of idsToDelete) {
-      await request(app).delete(`/template/${id}`);
+      await request(app).delete(`/template/${id}`)
+      .set({ Authorization: "Bearer " + token });
     }
   });
 });
@@ -783,7 +797,8 @@ describe("Post Templates, and increment version", () => {
   afterAll(async () => {
     await mongoose.connection.close();
     for (let id of idsToDelete) {
-      await request(app).delete(`/template/${id}`);
+      await request(app).delete(`/template/${id}`)
+      .set({ Authorization: "Bearer " + token });
     }
   });
 });
