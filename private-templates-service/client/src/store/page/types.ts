@@ -6,7 +6,7 @@ export interface PageState {
 // Action Types
 export const NAVIGATION = "NAVIGATION";
 
-// Actions 
+// Actions
 export interface PageAction {
   type: typeof NAVIGATION;
   text: string;

@@ -12,7 +12,7 @@
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "server": "nodemon --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' --exec ts-node src/server.ts | bunyan",
     "client": "cd ../client && npm start",
-    "link-client": "cd ../adaptivecards-templating-client/typescript && npm install && npm run build && sudo npm link && cd ../../client && npm link adaptive-templating-service-typescript-node && npm install && cd src && npm link adaptive-templating-service-typescript-node"
+    "link-client": "cd ../adaptivecards-templating-client/typescript && npm install && npm run build && npm link && cd ../../client && npm link adaptive-templating-service-typescript-node && npm install && cd src && npm link adaptive-templating-service-typescript-node"
   },
   "author": "",
   "license": "ISC",

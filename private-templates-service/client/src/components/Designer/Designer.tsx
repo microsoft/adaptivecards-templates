@@ -27,7 +27,7 @@ const mapStateToProps = (state: RootState) => {
 const mapDispatchToProps = (dispatch: any) => {
   return {
     updateTemplate: (templateID: string, currentVersion: string, templateJSON: string, templateName: string, sampleDataJSON: string) => {
-      dispatch(updateTemplate(templateID, undefined, templateJSON, templateName, sampleDataJSON));
+      dispatch(updateTemplate(templateID, undefined, templateJSON, templateName, sampleDataJSON)); // TODO: get the version dynamically @guptaharsh25
     },
     setPage: (currentPageTitle: string, currentPage: string) => {
       dispatch(setPage(currentPageTitle, currentPage));
@@ -117,7 +117,7 @@ function initDesigner(): ACDesigner.CardDesigner {
 
 function onSave(designer: ACDesigner.CardDesigner, props: DesignerProps): void {
   if (props.templateJSON !== JSON.stringify(designer.getCard()) || props.sampleDataJSON !== designer.sampleData) {
-    props.updateTemplate(props.templateID, "1.0", JSON.stringify(designer.getCard()), props.templateName, designer.sampleData);
+    props.updateTemplate(props.templateID, "1.0", JSON.stringify(designer.getCard()), props.templateName, designer.sampleData); // TODO: get the version dynamically @guptaharsh25
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(requireAuthentication(Designer));
