@@ -1,11 +1,21 @@
 import React from 'react';
-import { ActionButton, IDropdownOption } from 'office-ui-fabric-react';
+
+import { RootState } from '../../../../store/rootReducer';
+import { connect } from 'react-redux';
+import { openModal, closeModal } from '../../../../store/page/actions';
+import { ModalState } from '../../../../store/page/types';
+
+import PublishModal from '../../../Common/PublishModal';
+import UnpublishModal from '../../../Common/UnpublishModal';
+import Tags from '../../../Common/Tags';
+import ShareModal from '../../../Common/ShareModal';
+import VersionCard from './VersionCard';
 
 import { Template, TemplateInstance, PostedTemplate } from 'adaptive-templating-service-typescript-node';
 
-import PublishModal from '../../../Common/PublishModal';
-import Tags from '../../../Common/Tags';
+import { ActionButton, IDropdownOption } from 'office-ui-fabric-react';
 
+import { THEME } from '../../../../globalStyles';
 import {
   OuterWrapper,
   HeaderWrapper,
@@ -27,10 +37,6 @@ import {
   StyledVersionDropdown,
   DropdownStyles,
 } from './styled';
-import { THEME } from '../../../../globalStyles';
-import VersionCard from './VersionCard';
-import UnpublishModal from '../../../Common/UnpublishModal';
-
 
 const buttons = [
   {
@@ -69,12 +75,31 @@ const cards = [
 interface Props {
   template: Template;
   onSwitchVersion: (templateVersion: string) => void;
+  modalState?: ModalState;
+  openModal: (modalState: ModalState) => void;
+  closeModal: () => void;
 }
 
 interface State {
-  isPublishOpen: boolean;
   version: string;
 }
+
+const mapStateToProps = (state: RootState) => {
+  return {
+    modalState: state.page.modalState
+  };
+};
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    openModal: (modalState: ModalState) => {
+      dispatch(openModal(modalState));
+    },
+    closeModal: () => {
+      dispatch(closeModal());
+    }
+  }
+};
 
 function getVersion(template: Template): string {
   if (template.instances && template.instances[0] && template.instances[0].version) {
@@ -85,7 +110,7 @@ function getVersion(template: Template): string {
 
 function getTemplateState(template: Template, version: string): PostedTemplate.StateEnum {
   if (!template.instances || template.instances.length === 0) return PostedTemplate.StateEnum.Draft;
-  for (let instance of template.instances){
+  for (let instance of template.instances) {
     if (instance.version === version) return instance.state || PostedTemplate.StateEnum.Draft;
   }
   return PostedTemplate.StateEnum.Draft;
@@ -94,12 +119,8 @@ function getTemplateState(template: Template, version: string): PostedTemplate.S
 class TemplateInfo extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    const vers = getVersion(this.props.template);
-    this.state = { isPublishOpen: false, version: vers }
-  }
-
-  toggleModal = () => {
-    this.setState({ isPublishOpen: !this.state.isPublishOpen });
+    const version = getVersion(this.props.template);
+    this.state = { version: version };
   }
 
   versionList = (instances: TemplateInstance[] | undefined): IDropdownOption[] => {
@@ -134,6 +155,8 @@ class TemplateInfo extends React.Component<Props, State> {
       createdAtParsed = createdAtDate.toLocaleString();
     }
 
+    let templateState = getTemplateState(this.props.template, this.state.version);
+
     return (
       <OuterWrapper>
         <HeaderWrapper>
@@ -157,8 +180,9 @@ class TemplateInfo extends React.Component<Props, State> {
           </TopRowWrapper>
           <ActionsWrapper>
             {buttons.map((val) => (
-              <ActionButton key={val.text} iconProps={val.icon} allowDisabledFocus onClick={val.text === 'Publish' ? this.toggleModal : () => { }} >
-                {val.text === 'Publish' && getTemplateState(this.props.template, this.state.version) === PostedTemplate.StateEnum.Live? val.altText : val.text}
+              <ActionButton key={val.text} iconProps={val.icon} allowDisabledFocus
+                onClick={() => { onActionButtonClick(this.props, this.state, val) }}>
+                {val.text === 'Publish' && templateState === PostedTemplate.StateEnum.Live ? val.altText : val.text}
               </ActionButton>
             ))}
           </ActionsWrapper>
@@ -190,11 +214,36 @@ class TemplateInfo extends React.Component<Props, State> {
             <VersionCard template={this.props.template} templateVersion={this.state.version} />
           </RowWrapper>
         </MainContentWrapper>
-        {this.state.isPublishOpen && getTemplateState(this.props.template, this.state.version) === PostedTemplate.StateEnum.Draft && <PublishModal toggleModal={this.toggleModal} template={this.props.template} templateVersion={this.state.version} />}
-        {this.state.isPublishOpen && getTemplateState(this.props.template, this.state.version) === PostedTemplate.StateEnum.Live && <UnpublishModal toggleModal={this.toggleModal} template={this.props.template} templateVersion={this.state.version} />}
+        {this.props.modalState === ModalState.Publish && <PublishModal template={this.props.template} templateVersion={this.state.version} />}
+        {this.props.modalState === ModalState.Unpublish && <UnpublishModal template={this.props.template} templateVersion={this.state.version} />}
+        {this.props.modalState === ModalState.Share && <ShareModal template={this.props.template} templateVersion={this.state.version} />}
       </OuterWrapper>
     );
   }
 }
 
-export default TemplateInfo;
+function onActionButtonClick(props: Props, state: State, val: any) {
+
+  let templateState = getTemplateState(props.template, state.version);
+
+  switch (val.text) {
+    case 'Share':
+      props.openModal(ModalState.Share);
+      break;
+    case 'Publish':
+      switch (templateState) {
+        case PostedTemplate.StateEnum.Draft:
+          props.openModal(ModalState.Publish);
+          break;
+        case PostedTemplate.StateEnum.Live:
+          props.openModal(ModalState.Unpublish);
+          break;
+        default:
+          break;
+      }
+    default:
+      break;
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TemplateInfo);

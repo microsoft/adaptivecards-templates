@@ -65,7 +65,7 @@ interface Props {
   userLogout: () => void;
   isAuthenticated: boolean;
   user?: UserType;
-  searchByTemplateName: string
+  searchByTemplateName: string;
 }
 
 class App extends Component<Props, State> {

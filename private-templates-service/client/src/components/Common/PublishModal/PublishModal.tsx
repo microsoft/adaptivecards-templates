@@ -10,6 +10,7 @@ import { Template, PostedTemplate } from 'adaptive-templating-service-typescript
 
 // Redux
 import { updateTemplate } from '../../../store/currentTemplate/actions';
+import { closeModal } from '../../../store/page/actions';
 
 // Components
 import AdaptiveCard from '../AdaptiveCard';
@@ -33,17 +34,21 @@ import {
   CancelButton,
 } from './styled';
 
+
 interface Props {
   template: Template;
   templateVersion: string;
-  toggleModal: () => void;
   publishTemplate: (templateVersion: string) => void;
+  closeModal: () => void;
 }
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
     publishTemplate: (templateVersion: string) => {
       dispatch(updateTemplate(undefined, templateVersion, undefined, undefined, undefined, PostedTemplate.StateEnum.Live));
+    },
+    closeModal: () => {
+      dispatch(closeModal());
     }
   }
 }
@@ -51,9 +56,8 @@ const mapDispatchToProps = (dispatch: any) => {
 class PublishModal extends React.Component<Props> {
 
   publish = () => {
-    // TODO: kodyang, grzhang PUBLISH CURRENT VERSION, NOT 1ST VERSION
-    this.props.publishTemplate(this.props.templateVersion);
-    this.props.toggleModal();
+    this.props.publishTemplate(this.props.templateVersion ? this.props.templateVersion : "1.0");
+    this.props.closeModal();
   }
 
   render() {
@@ -83,7 +87,7 @@ class PublishModal extends React.Component<Props> {
               FACES HERE
             </NotifiedGroup>
             <ButtonGroup>
-              <CancelButton text="Cancel" onClick={this.props.toggleModal} />
+              <CancelButton text="Cancel" onClick={this.props.closeModal} />
               <PrimaryButton text="Publish" onClick={this.publish} />
             </ButtonGroup>
           </BottomRow>

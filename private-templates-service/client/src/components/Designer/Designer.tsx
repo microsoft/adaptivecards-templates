@@ -27,7 +27,8 @@ const mapStateToProps = (state: RootState) => {
 const mapDispatchToProps = (dispatch: any) => {
   return {
     updateTemplate: (templateID: string, currentVersion: string, templateJSON: string, templateName: string, sampleDataJSON: string) => {
-      dispatch(updateTemplate(templateID, undefined, templateJSON, templateName, sampleDataJSON)); // TODO: get the version dynamically @guptaharsh25
+      //TODO: hagupt, damott when templates are editable we need to change the version field here. Right now it's always 1.0
+      dispatch(updateTemplate(templateID, undefined, templateJSON, templateName, sampleDataJSON));
     },
     setPage: (currentPageTitle: string, currentPage: string) => {
       dispatch(setPage(currentPageTitle, currentPage));

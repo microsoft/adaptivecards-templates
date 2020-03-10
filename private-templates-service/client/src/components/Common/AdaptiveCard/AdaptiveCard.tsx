@@ -1,12 +1,12 @@
-import React from "react";
+import React from 'react';
+
+import { Template, TemplateInstance } from 'adaptive-templating-service-typescript-node';
+
 import * as AdaptiveCards from "adaptivecards";
 import * as ACData from "adaptivecards-templating";
-import { Card } from "./styled";
 import markdownit from "markdown-it";
-import {
-  Template,
-  TemplateInstance
-} from "adaptive-templating-service-typescript-node";
+
+import { Card } from './styled';
 
 interface Props {
   onClick?: () => void;
@@ -15,7 +15,7 @@ interface Props {
 }
 
 function renderingSetup(): AdaptiveCards.AdaptiveCard {
-  AdaptiveCards.AdaptiveCard.onProcessMarkdown = function(
+  AdaptiveCards.AdaptiveCard.onProcessMarkdown = function (
     text: string,
     result: { didProcess: boolean; outputHtml?: string }
   ) {
@@ -107,7 +107,6 @@ function processTemplate(temp: TemplateInstance): any {
   return template;
 }
 
-let isTemplateProcessed: boolean = false;
 class AdaptiveCard extends React.Component<Props> {
   render() {
     let template: any = [];
