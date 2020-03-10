@@ -22,7 +22,7 @@ import {
 } from './styled';
 
 import {
-  Container, 
+  Container,
   ACWrapper,
   TemplateName
 } from '../../AdaptiveCardPanel/styled'
@@ -66,12 +66,12 @@ class UnpublishModal extends React.Component<Props> {
       <BackDrop>
         <Modal>
           <Header>Unpublish Template</Header>
-    <Description style={{marginBottom: 0}}>{STRINGS.UNPUBLISH_CONFIRMATION}<DescriptionAccent>{template.name} - {this.props.templateVersion}</DescriptionAccent>?</Description>
+          <Description style={{ marginBottom: 0 }}>{STRINGS.UNPUBLISH_CONFIRMATION}<DescriptionAccent>{template.name} - {this.props.templateVersion}</DescriptionAccent>?</Description>
           <Description>{STRINGS.UNPUBLISH_WARNING}</Description>
           <CenterPanelWrapper>
             <Container>
               <ACWrapper>
-                <AdaptiveCard cardtemplate={template} templateVersion={"1.0"}/>
+                <AdaptiveCard cardtemplate={template} templateVersion={this.props.templateVersion} />
               </ACWrapper>
               <TemplateName>{template.name}</TemplateName>
             </Container>

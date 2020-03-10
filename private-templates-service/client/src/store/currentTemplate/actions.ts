@@ -7,6 +7,9 @@ import {
   REQUEST_EXISTING_TEMPLATE_UPDATE,
   RECEIVE_EXISTING_TEMPLATE_UPDATE,
   FAILURE_EXISTING_TEMPLATE_UPDATE,
+  REQUEST_UPDATE_CURRENT_TEMPLATE_VERSION,
+  RECEIVE_UPDATE_CURRENT_TEMPLATE_VERSION,
+  FAILURE_UPDATE_CURRENT_TEMPLATE_VERSION,
   GET_TEMPLATE,
   GET_TEMPLATE_SUCCESS,
   GET_TEMPLATE_FAILURE,
@@ -98,6 +101,51 @@ function requestTemplateFailure(): CurrentTemplateAction {
   return {
     type: GET_TEMPLATE_FAILURE,
     text: "get single template failure",
+  }
+}
+
+function failureUpdateCurrentTemplateVersion(): CurrentTemplateAction {
+  return {
+    type: FAILURE_UPDATE_CURRENT_TEMPLATE_VERSION,
+    text: "failure to update current template version"
+  }
+}
+
+function receiveUpdateCurrentTemplateVersion(version?: string, templateJSON?: object, sampleDataJSON?: object): CurrentTemplateAction {
+  return {
+    type: RECEIVE_UPDATE_CURRENT_TEMPLATE_VERSION,
+    text: "receive update current template version",
+    templateJSON: templateJSON,
+    sampleDataJSON: sampleDataJSON,
+    version: version,
+  }
+}
+
+function requestUpdateCurrentTemplateVersion(): CurrentTemplateAction {
+  return {
+    type: REQUEST_UPDATE_CURRENT_TEMPLATE_VERSION,
+    text: "request update current template version",
+  }
+}
+
+export function updateCurrentTemplateVersion(template: Template, version: string) {
+  return function (dispatch: any) {
+    dispatch(requestUpdateCurrentTemplateVersion());
+    if (template.instances) {
+      let numInstances = template.instances.length;
+      for (let j = 0; j < numInstances; j++) {
+        if (template.instances[j] && template.instances[j].version && typeof (template.instances[j].version) !== 'undefined' && template.instances[j].version == version) {
+          return dispatch(
+            receiveUpdateCurrentTemplateVersion(
+              template.instances[j].version,
+              template.instances[j].json,
+              template.instances[j].data,
+            )
+          )
+        }
+      }
+    }
+    dispatch(failureUpdateCurrentTemplateVersion());
   }
 }
 

@@ -8,6 +8,9 @@ import {
   REQUEST_EXISTING_TEMPLATE_UPDATE,
   RECEIVE_EXISTING_TEMPLATE_UPDATE,
   FAILURE_EXISTING_TEMPLATE_UPDATE,
+  FAILURE_UPDATE_CURRENT_TEMPLATE_VERSION,
+  RECEIVE_UPDATE_CURRENT_TEMPLATE_VERSION,
+  REQUEST_UPDATE_CURRENT_TEMPLATE_VERSION,
   GET_TEMPLATE,
   GET_TEMPLATE_SUCCESS,
   GET_TEMPLATE_FAILURE
@@ -18,6 +21,7 @@ const initialState: CurrentTemplateState = {
   templateJSON: undefined,
   templateName: undefined,
   sampleDataJSON: undefined,
+  version: undefined,
   isFetching: false
 };
 
@@ -30,6 +34,7 @@ export function currentTemplateReducer(state = initialState, action: CurrentTemp
         templateJSON: require('../../assets/default-adaptivecards/defaultAdaptiveCard.json'),
         templateName: "Untitled",
         sampleDataJSON: {},
+        version: "",
         isFetching: false
       };
     case REQUEST_NEW_TEMPLATE_UPDATE:
@@ -49,6 +54,7 @@ export function currentTemplateReducer(state = initialState, action: CurrentTemp
         templateJSON: action.templateJSON,
         templateName: action.templateName,
         sampleDataJSON: action.sampleDataJSON,
+        version: action.version,
         isFetching: false
       };
     case REQUEST_EXISTING_TEMPLATE_UPDATE:
@@ -67,8 +73,26 @@ export function currentTemplateReducer(state = initialState, action: CurrentTemp
         templateJSON: action.templateJSON,
         templateName: action.templateName,
         sampleDataJSON: action.sampleDataJSON,
+        version: action.version,
         isFetching: false
       };
+    case FAILURE_UPDATE_CURRENT_TEMPLATE_VERSION:
+      return {
+        ...state,
+        isFetching: false
+      }
+    case REQUEST_UPDATE_CURRENT_TEMPLATE_VERSION:
+      return {
+        ...state,
+        isFetching: false
+      }
+    case RECEIVE_UPDATE_CURRENT_TEMPLATE_VERSION:
+      return {
+        ...state,
+        templateJSON: action.templateJSON,
+        sampleDataJSON: action.sampleDataJSON,
+        version: action.version
+      }
     case GET_TEMPLATE:
       return {
         ...state,
@@ -77,6 +101,7 @@ export function currentTemplateReducer(state = initialState, action: CurrentTemp
         templateJSON: undefined,
         templateName: undefined,
         sampleDataJSON: undefined,
+        version: undefined,
         isFetching: true,
       }
     case GET_TEMPLATE_SUCCESS:
@@ -86,6 +111,7 @@ export function currentTemplateReducer(state = initialState, action: CurrentTemp
         templateJSON: action.templateJSON,
         templateName: action.templateName,
         sampleDataJSON: action.sampleDataJSON,
+        version: action.version,
         isFetching: false,
       }
     case GET_TEMPLATE_FAILURE:

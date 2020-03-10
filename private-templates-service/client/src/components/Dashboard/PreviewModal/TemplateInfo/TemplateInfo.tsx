@@ -1,4 +1,7 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { RootState } from '../../../../store/rootReducer';
+import { updateCurrentTemplateVersion } from '../../../../store/currentTemplate/actions';
 import { ActionButton, IDropdownOption } from 'office-ui-fabric-react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { Template, TemplateInstance, PostedTemplate } from 'adaptive-templating-service-typescript-node';
@@ -31,6 +34,19 @@ import { THEME } from '../../../../globalStyles';
 import VersionCard from './VersionCard';
 import UnpublishModal from '../../../Common/UnpublishModal';
 
+const mapStateToProps = (state: RootState) => {
+  return {
+    version: state.currentTemplate.version,
+  }
+}
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    updateCurrentTemplateVersion: (template: Template, version: string) => {
+      dispatch(updateCurrentTemplateVersion(template, version))
+    }
+  }
+}
 
 const buttons = [
   {
@@ -69,6 +85,7 @@ const cards = [
 interface Props extends RouteComponentProps {
   template: Template;
   onSwitchVersion: (templateVersion: string) => void;
+  updateCurrentTemplateVersion: (template: Template, version: string) => void;
 }
 
 interface State {
@@ -96,6 +113,7 @@ class TemplateInfo extends React.Component<Props, State> {
     super(props);
     const vers = getVersion(this.props.template);
     this.state = { isPublishOpen: false, version: vers }
+    this.props.updateCurrentTemplateVersion(this.props.template, vers);
   }
 
   redirectToDesigner = () => {
@@ -129,6 +147,7 @@ class TemplateInfo extends React.Component<Props, State> {
     if (!option) return;
     let version = option.key.toString();
     this.setState({ version: version });
+    this.props.updateCurrentTemplateVersion(this.props.template, version);
     this.props.onSwitchVersion(version);
   }
 
@@ -215,4 +234,4 @@ class TemplateInfo extends React.Component<Props, State> {
   }
 }
 
-export default withRouter(TemplateInfo)
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(TemplateInfo));

@@ -86,7 +86,7 @@ const Shared = (props: SharedComponentProps) => {
             </ACWrapper>
           </ACPanel>
           <DescriptorWrapper>
-            <TemplateSourceInfo templateJSON={templateInstance !== undefined ? templateInstance['json'] : ''}>
+            <TemplateSourceInfo templateJSON={templateInstance !== undefined ? templateInstance['json'] : {}}>
             </TemplateSourceInfo>
           </DescriptorWrapper>
         </ModalWrapper>
