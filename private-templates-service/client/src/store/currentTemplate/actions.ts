@@ -104,6 +104,7 @@ function requestTemplateFailure(): CurrentTemplateAction {
   }
 }
 
+<<<<<<< HEAD
 function failureUpdateCurrentTemplateVersion(): CurrentTemplateAction {
   return {
     type: FAILURE_UPDATE_CURRENT_TEMPLATE_VERSION,
@@ -150,6 +151,9 @@ export function updateCurrentTemplateVersion(template: Template, version: string
 }
 
 export function updateTemplate(templateID?: string, currentVersion?: string, templateJSON?: object, sampleDataJSON?: object, templateName?: string, state?: PostedTemplate.StateEnum, tags?: string[]) {
+=======
+export function updateTemplate(templateID?: string, currentVersion?: string, templateJSON?: string, sampleDataJSON?: string, templateName?: string, state?: PostedTemplate.StateEnum, tags?: string[], isShareable?: boolean) {
+>>>>>>> f54df5532590b862120ae04d0ee6f47e2240b632
   return function (dispatch: any, getState: () => RootState) {
     const appState = getState();
 
@@ -170,11 +174,11 @@ export function updateTemplate(templateID?: string, currentVersion?: string, tem
     } else {
       newTemplate.template = appState.currentTemplate.templateJSON;
     }
-
+    newTemplate.version = version;
     newTemplate.name = templateName;
     newTemplate.state = state;
     newTemplate.tags = tags;
-    newTemplate.version = version;
+    newTemplate.isShareable = isShareable;
 
     if (id === null || id === undefined || id === "") {
       dispatch(requestNewTemplateUpdate());

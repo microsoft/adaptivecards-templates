@@ -1,15 +1,16 @@
 import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 import AdaptiveCard from '../Common/AdaptiveCard';
 import NavBar from '../NavBar/NavBar';
 import TemplateSourceInfo from './TemplateSourceInfo';
 import requireAuthentication from '../../utils/requireAuthentication';
+import requireShared from '../../utils/requireShared/requireShared';
 
 import { connect } from "react-redux";
 import { setPage } from '../../store/page/actions';
 import { RootState } from '../../store/rootReducer';
-import { setSearchBarVisible } from '../../store/search/actions';
 import { getTemplate } from '../../store/currentTemplate/actions';
 
 import { ModalBackdrop, ModalWrapper, ACPanel, ACWrapper, DescriptorWrapper } from './styled';
@@ -28,35 +29,45 @@ const mapDispatchToProps = (dispatch: any) => {
     setPage: (currentPageTitle: string, currentPage: string) => {
       dispatch(setPage(currentPageTitle, currentPage));
     },
-    setSearchBarVisible: (isSearchBarVisible: boolean) => {
-      dispatch(setSearchBarVisible(isSearchBarVisible));
-    },
     getTemplate: (templateID: string) => {
       dispatch(getTemplate(templateID));
     }
   };
 };
 
-interface SharedComponentProps {
-  currentPageTitle: string;
-  template: Template;
+interface MatchParams {
+  uuid: string;
+  version: string;
+}
+
+interface SharedComponentProps extends RouteComponentProps<MatchParams> {
   authButtonMethod: () => Promise<void>;
+  currentPageTitle?: string;
+  template?: Template;
   setPage: (currentPageTitle: string, currentPage: string) => void;
-  setSearchBarVisible: (isSearchBarVisible: boolean) => void;
   getTemplate: (templateID: string) => void;
 }
 
 const Shared = (props: SharedComponentProps) => {
 
-  let { uuid, version } = useParams();
   let templateInstance: TemplateInstance | undefined = undefined;
-  props.setPage((props.template !== undefined && props.template.name &&
-    props.template.name !== "") ? props.template.name : "Preview", "sharedPage");
-  props.setSearchBarVisible(false);
+  let uuid: string | undefined = undefined;
+  let version: string | undefined = undefined;
+
+  useEffect(() => {
+    uuid = props.match.params.uuid;
+    version = props.match.params.version;
+
+    props.setPage((props.template !== undefined && props.template.name &&
+      props.template.name !== "") ? props.template.name : "Preview", "sharedPage");
+
+    if (uuid) {
+      props.getTemplate(uuid);
+    }
+  }, []);
 
   useEffect(() => {
     if (uuid !== undefined) {
-      console.log(uuid);
       props.getTemplate(uuid);
     }
   }, [uuid]);
@@ -82,7 +93,7 @@ const Shared = (props: SharedComponentProps) => {
         <ModalWrapper>
           <ACPanel>
             <ACWrapper>
-              <AdaptiveCard cardtemplate={props.template} templateVersion={version ? version : ""}></AdaptiveCard>
+              <AdaptiveCard cardtemplate={props.template ? props.template : new Template()} templateVersion={version ? version : ""}></AdaptiveCard>
             </ACWrapper>
           </ACPanel>
           <DescriptorWrapper>
@@ -95,4 +106,4 @@ const Shared = (props: SharedComponentProps) => {
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(requireAuthentication(Shared));
+export default connect(mapStateToProps, mapDispatchToProps)(requireAuthentication(requireShared(withRouter(Shared))));

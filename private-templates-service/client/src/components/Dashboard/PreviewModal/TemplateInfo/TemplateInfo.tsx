@@ -5,10 +5,16 @@ import { updateCurrentTemplateVersion } from '../../../../store/currentTemplate/
 import { ActionButton, IDropdownOption } from 'office-ui-fabric-react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { Template, TemplateInstance, PostedTemplate } from 'adaptive-templating-service-typescript-node';
-
+import { openModal, closeModal } from '../../../../store/page/actions';
+import { ModalState } from '../../../../store/page/types';
 import PublishModal from '../../../Common/PublishModal';
+import UnpublishModal from '../../../Common/UnpublishModal';
 import Tags from '../../../Common/Tags';
+import ShareModal from '../../../Common/ShareModal';
+import VersionCard from './VersionCard';
 
+
+import { THEME } from '../../../../globalStyles';
 import {
   OuterWrapper,
   HeaderWrapper,
@@ -31,22 +37,6 @@ import {
   DropdownStyles,
 } from './styled';
 import { THEME } from '../../../../globalStyles';
-import VersionCard from './VersionCard';
-import UnpublishModal from '../../../Common/UnpublishModal';
-
-const mapStateToProps = (state: RootState) => {
-  return {
-    version: state.currentTemplate.version,
-  }
-}
-
-const mapDispatchToProps = (dispatch: any) => {
-  return {
-    updateCurrentTemplateVersion: (template: Template, version: string) => {
-      dispatch(updateCurrentTemplateVersion(template, version))
-    }
-  }
-}
 
 const buttons = [
   {
@@ -86,12 +76,35 @@ interface Props extends RouteComponentProps {
   template: Template;
   onSwitchVersion: (templateVersion: string) => void;
   updateCurrentTemplateVersion: (template: Template, version: string) => void;
+  modalState?: ModalState;
+  openModal: (modalState: ModalState) => void;
+  closeModal: () => void;
 }
 
 interface State {
-  isPublishOpen: boolean;
   version: string;
 }
+
+const mapStateToProps = (state: RootState) => {
+  return {
+    modalState: state.page.modalState,
+    version: state.currentTemplate.version
+  };
+};
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    openModal: (modalState: ModalState) => {
+      dispatch(openModal(modalState));
+    },
+    closeModal: () => {
+      dispatch(closeModal());
+    },
+    updateCurrentTemplateVersion: (template: Template, version: string) => {
+      dispatch(updateCurrentTemplateVersion(template, version))
+    }
+  }
+};
 
 function getVersion(template: Template): string {
   if (template.instances && template.instances[0] && template.instances[0].version) {
@@ -112,25 +125,7 @@ class TemplateInfo extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     const vers = getVersion(this.props.template);
-    this.state = { isPublishOpen: false, version: vers }
-    this.props.updateCurrentTemplateVersion(this.props.template, vers);
-  }
-
-  redirectToDesigner = () => {
-    const { history } = this.props;
-    if (history) history.push('/designer');
-  }
-
-  toggleModal = () => {
-    this.setState({ isPublishOpen: !this.state.isPublishOpen });
-  }
-
-  handleClick = (val: string) => {
-    if (val == 'Publish') {
-      this.toggleModal();
-    } else if (val == 'Edit in designer') {
-      this.redirectToDesigner();
-    }
+    this.state = { version: vers }
   }
 
   versionList = (instances: TemplateInstance[] | undefined): IDropdownOption[] => {
@@ -171,6 +166,8 @@ class TemplateInfo extends React.Component<Props, State> {
     if (!history) {
       return (<div>Error loading page</div>)
     }
+    let templateState = getTemplateState(this.props.template, this.state.version);
+
     return (
       < OuterWrapper >
         <HeaderWrapper>
@@ -194,8 +191,9 @@ class TemplateInfo extends React.Component<Props, State> {
           </TopRowWrapper>
           <ActionsWrapper>
             {buttons.map((val) => (
-              <ActionButton key={val.text} iconProps={val.icon} allowDisabledFocus onClick={val.text ? () => this.handleClick(val.text) : () => { }} >
-                {val.text === 'Publish' && getTemplateState(this.props.template, this.state.version) === PostedTemplate.StateEnum.Live ? val.altText : val.text}
+              <ActionButton key={val.text} iconProps={val.icon} allowDisabledFocus
+                onClick={() => { onActionButtonClick(this.props, this.state, val) }}>
+                {val.text === 'Publish' && templateState === PostedTemplate.StateEnum.Live ? val.altText : val.text}
               </ActionButton>
             ))}
           </ActionsWrapper>
@@ -227,10 +225,38 @@ class TemplateInfo extends React.Component<Props, State> {
             <VersionCard template={this.props.template} templateVersion={this.state.version} />
           </RowWrapper>
         </MainContentWrapper>
-        {this.state.isPublishOpen && getTemplateState(this.props.template, this.state.version) === PostedTemplate.StateEnum.Draft && <PublishModal toggleModal={this.toggleModal} template={this.props.template} templateVersion={this.state.version} />}
-        {this.state.isPublishOpen && getTemplateState(this.props.template, this.state.version) === PostedTemplate.StateEnum.Live && <UnpublishModal toggleModal={this.toggleModal} template={this.props.template} templateVersion={this.state.version} />}
-      </OuterWrapper >
+        {this.props.modalState === ModalState.Publish && <PublishModal template={this.props.template} templateVersion={this.state.version} />}
+        {this.props.modalState === ModalState.Unpublish && <UnpublishModal template={this.props.template} templateVersion={this.state.version} />}
+        {this.props.modalState === ModalState.Share && <ShareModal template={this.props.template} templateVersion={this.state.version} />}
+      </OuterWrapper>
     );
+  }
+}
+
+function onActionButtonClick(props: Props, state: State, val: any) {
+  let templateState = getTemplateState(props.template, state.version);
+
+  switch (val.text) {
+    case 'Share':
+      props.openModal(ModalState.Share);
+      break;
+    case 'Publish':
+      switch (templateState) {
+        case PostedTemplate.StateEnum.Draft:
+          props.openModal(ModalState.Publish);
+          break;
+        case PostedTemplate.StateEnum.Live:
+          props.openModal(ModalState.Unpublish);
+          break;
+        default:
+          break;
+      }
+    case 'Edit in designer':
+      const { history } = props;
+      if (history) history.push('/designer');
+      break;
+    default:
+      break;
   }
 }
 

@@ -1,12 +1,15 @@
 import {
   PageState,
   NAVIGATION,
-  PageAction
+  PageAction,
+  OPEN_MODAL,
+  CLOSE_MODAL
 } from './types';
 
 const initalState: PageState = {
   currentPageTitle: "",
-  currentPage: ""
+  currentPage: "",
+  modalState: undefined
 }
 
 export function pageReducer(state = initalState, action: PageAction): PageState {
@@ -16,7 +19,17 @@ export function pageReducer(state = initalState, action: PageAction): PageState 
         ...state,
         currentPageTitle: action.currentPageTitle,
         currentPage: action.currentPage
-      }
+      };
+    case OPEN_MODAL:
+      return {
+        ...state,
+        modalState: action.modalState
+      };
+    case CLOSE_MODAL:
+      return {
+        ...state,
+        modalState: undefined
+      };
     default:
       return state;
   }
