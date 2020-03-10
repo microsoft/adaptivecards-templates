@@ -1,8 +1,6 @@
-import styled from 'styled-components';
-import { COLORS } from '../../../globalStyles';
+import styled from "styled-components";
 
 export const Card = styled.div`
-	/* Disables buttons on adaptive card */
-	pointer-events: none;
-	background: ${COLORS.GREY2};
+  /* Disables buttons on adaptive card */
+  pointer-events: none;
 `;

@@ -126,7 +126,7 @@ function deleteTemplateFailure(): CurrentTemplateAction {
   }
 }
 
-export function updateTemplate(templateID?: string, currentVersion?: string, templateJSON?: string, sampleDataJSON?: string, templateName?: string, state?: PostedTemplate.StateEnum, tags?: string[]) {
+export function updateTemplate(templateID?: string, currentVersion?: string, templateJSON?: string, sampleDataJSON?: string, templateName?: string, state?: PostedTemplate.StateEnum, tags?: string[], isShareable?: boolean) {
   return function (dispatch: any, getState: () => RootState) {
     const appState = getState();
 
@@ -137,21 +137,21 @@ export function updateTemplate(templateID?: string, currentVersion?: string, tem
     
     let newTemplate = new PostedTemplate();
     const id = templateID || appState.currentTemplate.templateID;
-    
-    const version = currentVersion || 
-    (appState.currentTemplate.template && appState.currentTemplate.template.instances && appState.currentTemplate.template.instances.length > 0 ?
-    appState.currentTemplate.template!.instances![0].version : "1.0");
+
+    const version = currentVersion ||
+      (appState.currentTemplate.template && appState.currentTemplate.template.instances && appState.currentTemplate.template.instances.length > 0 ?
+        appState.currentTemplate.template!.instances![0].version : "1.0");
 
     if (templateJSON) {
       newTemplate.template = JSON.parse(templateJSON);
     } else {
       newTemplate.template = appState.currentTemplate.templateJSON;
     }
-
+    newTemplate.version = version;
     newTemplate.name = templateName;
     newTemplate.state = state;
     newTemplate.tags = tags;
-    newTemplate.version = version;
+    newTemplate.isShareable = isShareable;
 
     if (id === null || id === undefined || id === "") {
       dispatch(requestNewTemplateUpdate());
@@ -217,7 +217,10 @@ export function deleteTemplateVersion(templateVersion: string, templateID?: stri
     dispatch(deleteTemplate());
 
     const api = new TemplateApi();
-    api.setApiKey(0, "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IkhsQzBSMTJza3hOWjFXUXdtak9GXzZ0X3RERSJ9.eyJhdWQiOiI4NjMxY2E0ZS1hMjVkLTQ5YWUtYmQ5OC1mZjNlMWRkZDQ0MTgiLCJpc3MiOiJodHRwczovL2xvZ2luLm1pY3Jvc29mdG9ubGluZS5jb20vNzJmOTg4YmYtODZmMS00MWFmLTkxYWItMmQ3Y2QwMTFkYjQ3L3YyLjAiLCJpYXQiOjE1ODEzNjA2MTgsIm5iZiI6MTU4MTM2MDYxOCwiZXhwIjoxNTgxMzY0NTE4LCJhaW8iOiI0Mk5nWUdDVzk3Qm1NamRrY3pQK1pLSGZMeFlPQUE9PSIsImF6cCI6Ijg2MzFjYTRlLWEyNWQtNDlhZS1iZDk4LWZmM2UxZGRkNDQxOCIsImF6cGFjciI6IjEiLCJvaWQiOiI4YWRiZWRhNi00ZDdkLTQ1N2ItOTNkZC1jMTVmMWE1Y2NiMzEiLCJzdWIiOiI4YWRiZWRhNi00ZDdkLTQ1N2ItOTNkZC1jMTVmMWE1Y2NiMzEiLCJ0aWQiOiI3MmY5ODhiZi04NmYxLTQxYWYtOTFhYi0yZDdjZDAxMWRiNDciLCJ1dGkiOiJ6SDlkcHVQNnprcUJidC1MUnVGYkFBIiwidmVyIjoiMi4wIn0.WhdvkqeJymW-Ayeht6tafd8Z1muoMnyPhKoYq6KGrHdv6psfYQtmK0P0-TA5_zgOOHNNJvpVqH2LPnZTbpK4qgKLByR9umELHgD2FW9v5Djg1NAKqmQEGg_-Th__SGE3L9_WI58Wh0_Toh3f7fpLDzNBiC5iYDdGSaTilwxaYMGbXnJO2Y6Tow83GQATKGA3B27Xz2iBO9UFmEy9rte4DyLUAEIE6SCKwg-3YuD0zKfpgyd-lvhZZr37HeE9Y6hyOm_M4b_jwWI7oK0uZASuQer83W5jsSZNtiXg_T0euXJcvI9lL6R4oJDI_N6Y42RdDioIwX6FzOA4vRzTySZjBw");
+
+    if (appState.auth.accessToken) {
+      api.setApiKey(0, `Bearer ${appState.auth.accessToken!.idToken.rawIdToken}`);
+    }
     
     if (!id || id === "") {
       dispatch(deleteTemplateFailure());
