@@ -1,18 +1,22 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { RootState } from '../../../../store/rootReducer';
-import { updateCurrentTemplateVersion } from '../../../../store/currentTemplate/actions';
-import { ActionButton, IDropdownOption } from 'office-ui-fabric-react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
-import { Template, TemplateInstance, PostedTemplate } from 'adaptive-templating-service-typescript-node';
+
+import { RootState } from '../../../../store/rootReducer';
 import { openModal, closeModal } from '../../../../store/page/actions';
 import { ModalState } from '../../../../store/page/types';
+import { updateCurrentTemplateVersion } from '../../../../store/currentTemplate/actions';
+
+import { Template, TemplateInstance, PostedTemplate } from 'adaptive-templating-service-typescript-node';
+
 import PublishModal from '../../../Common/PublishModal';
 import UnpublishModal from '../../../Common/UnpublishModal';
 import Tags from '../../../Common/Tags';
 import ShareModal from '../../../Common/ShareModal';
+
 import VersionCard from './VersionCard';
 
+import { ActionButton, IDropdownOption } from 'office-ui-fabric-react';
 
 import { THEME } from '../../../../globalStyles';
 import {
@@ -124,8 +128,8 @@ function getTemplateState(template: Template, version: string): PostedTemplate.S
 class TemplateInfo extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    const vers = getVersion(this.props.template);
-    this.state = { version: vers }
+    const currentVersion = getVersion(this.props.template);
+    this.state = { version: currentVersion }
   }
 
   versionList = (instances: TemplateInstance[] | undefined): IDropdownOption[] => {
@@ -162,12 +166,10 @@ class TemplateInfo extends React.Component<Props, State> {
     }
 
     const { history } = this.props;
-
     if (!history) {
       return (<div>Error loading page</div>)
     }
     let templateState = getTemplateState(this.props.template, this.state.version);
-
     return (
       < OuterWrapper >
         <HeaderWrapper>
