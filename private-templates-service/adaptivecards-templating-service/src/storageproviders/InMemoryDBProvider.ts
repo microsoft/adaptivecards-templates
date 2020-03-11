@@ -124,11 +124,7 @@ export class InMemoryDBProvider implements StorageProvider {
     return Promise.resolve({ success: false });
   }
 
-  protected async _matchTemplates(
-    query: Partial<ITemplate>,
-    sortBy?: SortBy,
-    sortOrder?: SortOrder
-  ): Promise<JSONResponse<ITemplate[]>> {
+  protected async _matchTemplates(query: Partial<ITemplate>, sortBy?: SortBy, sortOrder?: SortOrder): Promise<JSONResponse<ITemplate[]>> {
     let res: ITemplate[] = new Array();
     this.templates.forEach(template => {
       if (this._matchTemplate(query, template)) {
