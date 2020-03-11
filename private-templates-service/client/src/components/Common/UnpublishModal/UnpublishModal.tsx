@@ -76,7 +76,7 @@ class UnpublishModal extends React.Component<Props> {
           <CenterPanelWrapper>
             <Container>
               <ACWrapper>
-                <AdaptiveCard cardtemplate={template} templateVersion={"1.0"} />
+                <AdaptiveCard cardtemplate={template} templateVersion={this.props.templateVersion} />
               </ACWrapper>
               <TemplateName>{template.name}</TemplateName>
             </Container>
