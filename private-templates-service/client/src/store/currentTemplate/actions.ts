@@ -34,14 +34,15 @@ function requestNewTemplateUpdate(): CurrentTemplateAction {
   };
 }
 
-function receiveNewTemplateUpdate(templateID?: string, templateJSON?: object, templateName?: string, sampleDataJSON?: object): CurrentTemplateAction {
+function receiveNewTemplateUpdate(templateID?: string, templateJSON?: object, templateName?: string, sampleDataJSON?: object, version?: string): CurrentTemplateAction {
   return {
     type: RECEIVE_NEW_TEMPLATE_UPDATE,
     text: "receiving post new template on save",
     templateID: templateID,
     templateJSON: templateJSON,
     templateName: templateName,
-    sampleDataJSON: sampleDataJSON
+    sampleDataJSON: sampleDataJSON,
+    version: "1.0",
   };
 }
 
@@ -60,13 +61,14 @@ function requestExistingTemplateUpdate(): CurrentTemplateAction {
   };
 }
 
-function receiveExistingTemplateUpdate(templateJSON?: object, templateName?: string, sampleDataJSON?: object): CurrentTemplateAction {
+function receiveExistingTemplateUpdate(templateJSON?: object, templateName?: string, sampleDataJSON?: object, version?: string): CurrentTemplateAction {
   return {
     type: RECEIVE_EXISTING_TEMPLATE_UPDATE,
     text: "receiving post existing template on save",
     templateJSON: templateJSON,
     templateName: templateName,
-    sampleDataJSON: sampleDataJSON
+    sampleDataJSON: sampleDataJSON,
+    version: version,
   };
 }
 
@@ -86,7 +88,7 @@ function requestTemplate(templateID: string): CurrentTemplateAction {
   }
 }
 
-function requestTemplateSuccess(template: Template, templateJSON: object, templateName: string, sampleDataJSON: object): CurrentTemplateAction {
+function requestTemplateSuccess(template: Template, templateJSON: object, templateName: string, sampleDataJSON: object, version: string): CurrentTemplateAction {
   return {
     type: GET_TEMPLATE_SUCCESS,
     text: "get single template success",
@@ -94,6 +96,7 @@ function requestTemplateSuccess(template: Template, templateJSON: object, templa
     templateJSON,
     templateName,
     sampleDataJSON,
+    version
   }
 }
 
@@ -111,7 +114,7 @@ function failureUpdateCurrentTemplateVersion(): CurrentTemplateAction {
   }
 }
 
-function receiveUpdateCurrentTemplateVersion(version?: string, templateJSON?: object, sampleDataJSON?: object): CurrentTemplateAction {
+function receiveUpdateCurrentTemplateVersion(templateJSON?: object, sampleDataJSON?: object, version?: string): CurrentTemplateAction {
   return {
     type: RECEIVE_UPDATE_CURRENT_TEMPLATE_VERSION,
     text: "receive update current template version",
@@ -137,9 +140,9 @@ export function updateCurrentTemplateVersion(template: Template, version: string
         if (template.instances[j] && template.instances[j].version && template.instances[j].version == version) {
           return dispatch(
             receiveUpdateCurrentTemplateVersion(
-              template.instances[j].version,
               template.instances[j].json,
               template.instances[j].data,
+              template.instances[j].version,
             )
           )
         }
@@ -190,7 +193,7 @@ export function updateTemplate(templateID?: string, currentVersion?: string, tem
       dispatch(requestExistingTemplateUpdate());
       return api.postTemplateById(id, newTemplate).then(response => {
         if (response.response.statusCode && response.response.statusCode === 201) {
-          dispatch(receiveExistingTemplateUpdate(templateJSON, templateName, sampleDataJSON));
+          dispatch(receiveExistingTemplateUpdate(templateJSON, templateName, sampleDataJSON, version));
           dispatch(getTemplate(id));
         }
         else {
@@ -221,6 +224,7 @@ export function getTemplate(templateID: string) {
               templateObject.instances[0].json,
               templateObject.name,
               templateObject.instances[0].data[0],
+              templateObject.instances[0].version,
             ))
         }
         dispatch(requestTemplateFailure());
