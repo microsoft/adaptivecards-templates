@@ -40,10 +40,6 @@ interface Props {
   openModal: (modalState: ModalState) => void;
 }
 
-interface State {
-  isVersionOpen: boolean;
-}
-
 const mapStateToProps = (state: RootState) => {
   return {
     modalState: state.page.modalState,
@@ -58,16 +54,7 @@ const mapDispatchToProps = (dispatch: any) => {
   }
 };
 
-class VersionCard extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = { isVersionOpen: false }
-  }
-
-  toggleModal = () => {
-    this.setState({ isVersionOpen: !this.state.isVersionOpen });
-  }
-
+class VersionCard extends React.Component<Props> {
   render() {
     return (
       <Card key="Recent Releases" style={{width: `100%`}}>
