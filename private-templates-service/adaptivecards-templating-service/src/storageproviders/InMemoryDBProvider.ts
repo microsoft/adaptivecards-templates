@@ -1,12 +1,4 @@
-import {
-  JSONResponse,
-  IUser,
-  ITemplate,
-  SortBy,
-  SortOrder,
-  ITemplateInstance,
-  TemplateState
-} from "../models/models";
+import { JSONResponse, IUser, ITemplate, SortBy, SortOrder, ITemplateInstance, TemplateState } from "../models/models";
 import { StorageProvider } from "./IStorageProvider";
 import * as Utils from "../util/inmemorydbutils/inmemorydbutils";
 import uuidv4 from "uuid/v4";
@@ -21,18 +13,12 @@ export class InMemoryDBProvider implements StorageProvider {
     this.users.set(user._id!, { ...user, ...updateQuery });
   }
 
-  private _updateTemplate(
-    template: ITemplate,
-    updateQuery: Partial<ITemplate>
-  ): void {
+  private _updateTemplate(template: ITemplate, updateQuery: Partial<ITemplate>): void {
     template.updatedAt = new Date(Date.now());
     this.templates.set(template._id!, { ...template, ...updateQuery });
   }
 
-  async updateUser(
-    query: Partial<IUser>,
-    updateQuery: Partial<IUser>
-  ): Promise<JSONResponse<Number>> {
+  async updateUser(query: Partial<IUser>, updateQuery: Partial<IUser>): Promise<JSONResponse<Number>> {
     let updateCount: number = 0;
     await this._matchUsers(query).then(response => {
       if (response.success) {
@@ -50,10 +36,7 @@ export class InMemoryDBProvider implements StorageProvider {
       errorMessage: "No users found matching given criteria"
     });
   }
-  async updateTemplate(
-    query: Partial<ITemplate>,
-    updateQuery: Partial<ITemplate>
-  ): Promise<JSONResponse<Number>> {
+  async updateTemplate(query: Partial<ITemplate>, updateQuery: Partial<ITemplate>): Promise<JSONResponse<Number>> {
     let updateCount: number = 0;
     let response = await this._matchTemplates(query);
     if (response.success) {
@@ -72,19 +55,11 @@ export class InMemoryDBProvider implements StorageProvider {
   }
 
   async insertUser(doc: IUser): Promise<JSONResponse<string>> {
-    return this._insert(
-      doc,
-      this.users,
-      this._autoCompleteUserModel.bind(this)
-    );
+    return this._insert(doc, this.users, this._autoCompleteUserModel.bind(this));
   }
 
   async insertTemplate(doc: ITemplate): Promise<JSONResponse<string>> {
-    return this._insert(
-      doc,
-      this.templates,
-      this._autoCompleteTemplateModel.bind(this)
-    );
+    return this._insert(doc, this.templates, this._autoCompleteTemplateModel.bind(this));
   }
 
   async getUsers(query: Partial<IUser>): Promise<JSONResponse<IUser[]>> {
@@ -116,9 +91,7 @@ export class InMemoryDBProvider implements StorageProvider {
       errorMessage: "No users found matching given criteria"
     });
   }
-  async removeTemplate(
-    query: Partial<ITemplate>
-  ): Promise<JSONResponse<Number>> {
+  async removeTemplate(query: Partial<ITemplate>): Promise<JSONResponse<Number>> {
     let removeCount: number = 0;
     await this._matchTemplates(query).then(response => {
       if (response.success) {
@@ -138,9 +111,7 @@ export class InMemoryDBProvider implements StorageProvider {
     });
   }
 
-  protected async _matchUsers(
-    query: Partial<ITemplate>
-  ): Promise<JSONResponse<IUser[]>> {
+  protected async _matchUsers(query: Partial<ITemplate>): Promise<JSONResponse<IUser[]>> {
     let res: IUser[] = new Array();
     this.users.forEach(user => {
       if (this._matchUser(query, user)) {
@@ -186,9 +157,7 @@ export class InMemoryDBProvider implements StorageProvider {
     this._setID(user);
   }
 
-  protected _autoCompleteTemplateInstanceModel(
-    instance: ITemplateInstance
-  ): void {
+  protected _autoCompleteTemplateInstanceModel(instance: ITemplateInstance): void {
     if (!instance.state) {
       instance.state = TemplateState.draft;
     }
@@ -246,8 +215,7 @@ export class InMemoryDBProvider implements StorageProvider {
     } else {
       return Promise.resolve({
         success: false,
-        errorMessage:
-          "Object with id: " + doc._id! + "already exists. Insertion failed"
+        errorMessage: "Object with id: " + doc._id! + "already exists. Insertion failed"
       });
     }
   }
@@ -284,21 +252,13 @@ export class InMemoryDBProvider implements StorageProvider {
     return true;
   }
 
-  protected _matchTemplate(
-    query: Partial<ITemplate>,
-    template: ITemplate
-  ): boolean {
+  protected _matchTemplate(query: Partial<ITemplate>, template: ITemplate): boolean {
     if (
-      (query.name &&
-        !template.name
-          .toLocaleUpperCase()
-          .includes(query.name.toLocaleUpperCase())) ||
+      (query.name && !template.name.toLocaleUpperCase().includes(query.name.toLocaleUpperCase())) ||
       (query.owner && !(query.owner === template.owner)) ||
       (query._id && !(query._id === template._id)) ||
       (query.isLive && !(query.isLive === template.isLive)) ||
-      (query.tags &&
-        template.tags &&
-        !Utils.ifContainsList(template.tags, query.tags))
+      (query.tags && template.tags && !Utils.ifContainsList(template.tags, query.tags))
     ) {
       return false;
     }
