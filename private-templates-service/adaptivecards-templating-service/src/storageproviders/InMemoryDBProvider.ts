@@ -223,8 +223,6 @@ export class InMemoryDBProvider implements StorageProvider {
     }
   }
 
-  // protected _setT;
-
   protected _setTimestamps(doc: ITemplate): void {
     let currentDate: Date = new Date(Date.now());
     doc.createdAt = currentDate;
