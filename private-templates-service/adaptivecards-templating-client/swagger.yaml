@@ -459,18 +459,6 @@ definitions:
         type: string
       authIssuer:
         type: string
-      firstName: 
-        type: string
-      lastName: 
-        type: string
-      team: 
-        type: array
-        items: 
-          type: string
-      org: 
-        type: array
-        items: 
-          type: string
       recentlyViewed: 
         type: array
         items: 
@@ -517,18 +505,8 @@ definitions:
   TemplatePreviewUser: 
     type: object
     properties:
-      firstName: 
+      authId: 
         type: string
-      lastName: 
-        type: string
-      team: 
-        type: array
-        items: 
-          type: string
-      org: 
-        type: array
-        items: 
-          type: string
   TemplateInfo: 
     type: object
     properties:
