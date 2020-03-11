@@ -10,13 +10,12 @@ import { ITemplate, ITemplateInstance } from "../models/models";
 
 export default async function getToken(): Promise<string> {
   const request = require("request-promise");
-  const endpoint =
-    "https://login.microsoftonline.com/72f988bf-86f1-41af-91ab-2d7cd011db47/oauth2/token";
+  const endpoint = "https://login.microsoftonline.com/72f988bf-86f1-41af-91ab-2d7cd011db47/oauth2/token";
   const requestParams = {
     grant_type: "client_credentials",
-    client_id: "cc02a0f4-ef1b-4513-a431-9aca7b2f7fca",
-    client_secret: "_6N?rxXVuRyR_@ZCMxdp73V5D4:KFqNL",
-    resource: "cc02a0f4-ef1b-4513-a431-9aca7b2f7fca"
+    client_id: "#{CLIENT_ID_TOKEN}#",
+    client_secret: "#{CLIENT_SECRET_TOKEN}#",
+    resource: "#{CLIENT_ID_TOKEN}#"
   };
   return await request
     .post({ url: endpoint, form: requestParams }) // put in try catch
@@ -54,9 +53,7 @@ export function testDefaultTemplateParameters(template: ITemplate) {
   expect(template).toHaveProperty("instances");
 }
 
-export function testDefaultTemplateInstanceParameters(
-  instance: ITemplateInstance
-) {
+export function testDefaultTemplateInstanceParameters(instance: ITemplateInstance) {
   expect(instance).toHaveProperty("json");
   expect(instance).toHaveProperty("version");
   expect(instance).toHaveProperty("state");
@@ -210,9 +207,8 @@ describe("Basic Post Templates", () => {
   afterAll(async () => {
     await mongoose.connection.close();
     for (let id of idsToDelete) {
-      await request(app)
-        .delete(`/template/${id}`)
-        .set({ Authorization: "Bearer " + token });
+      await request(app).delete(`/template/${id}`)
+      .set({ Authorization: "Bearer " + token });
     }
   });
 });
@@ -298,9 +294,8 @@ describe("Basic Get Templates", () => {
 
   afterAll(async () => {
     for (let id of idsToDelete) {
-      await request(app)
-        .delete(`/template/${id}`)
-        .set({ Authorization: "Bearer " + token });
+      await request(app).delete(`/template/${id}`)
+      .set({ Authorization: "Bearer " + token });
     }
   });
 });
@@ -371,8 +366,7 @@ describe("Preview Templates", () => {
     id = res.body.id;
     idsToDelete.push(id);
 
-    res = await request(app)
-      .get(`/template/${id}`)
+    res = await request(app).get(`/template/${id}`)
       .set({ Authorization: "Bearer " + token });
     expect(res.status).toEqual(200);
     expect(res.body).toHaveProperty("templates");
@@ -388,9 +382,8 @@ describe("Preview Templates", () => {
 
   afterAll(async () => {
     for (let id of idsToDelete) {
-      await request(app)
-        .delete(`/template/${id}`)
-        .set({ Authorization: "Bearer " + token });
+      await request(app).delete(`/template/${id}`)
+      .set({ Authorization: "Bearer " + token });
     }
   });
 });
@@ -421,14 +414,12 @@ describe("Delete Templates", () => {
     expect(res.body).toHaveProperty("id");
     id = res.body.id;
 
-    res = await request(app)
-      .delete(`/template/${id}`)
-      .set({ Authorization: "Bearer " + token });
+    res = await request(app).delete(`/template/${id}`)
+    .set({ Authorization: "Bearer " + token });
     expect(res.status).toEqual(204);
 
-    res = await request(app)
-      .get(`/template/${id}`)
-      .set({ Authorization: "Bearer " + token });
+    res = await request(app).get(`/template/${id}`)
+    .set({ Authorization: "Bearer " + token });
     expect(res.status).toEqual(404);
   });
 
@@ -453,28 +444,24 @@ describe("Delete Templates", () => {
       });
     expect(res.status).toEqual(201);
 
-    res = await request(app)
-      .delete(`/template/${id}?version=1.4`)
-      .set({ Authorization: "Bearer " + token });
+    res = await request(app).delete(`/template/${id}?version=1.4`)
+    .set({ Authorization: "Bearer " + token });
     expect(res.status).toEqual(204);
 
-    res = await request(app)
-      .get(`/template/${id}?version=1.4`)
-      .set({ Authorization: "Bearer " + token });
+    res = await request(app).get(`/template/${id}?version=1.4`)
+    .set({ Authorization: "Bearer " + token });
     expect(res.status).toEqual(404);
 
-    res = await request(app)
-      .get(`/template/${id}`)
-      .set({ Authorization: "Bearer " + token });
+    res = await request(app).get(`/template/${id}`)
+    .set({ Authorization: "Bearer " + token });
     expect(res.status).toEqual(200);
     expect(res.body.templates[0].instances[0].version).toEqual("1.0");
   });
 
   afterAll(async () => {
     for (let id of idsToDelete) {
-      await request(app)
-        .delete(`/template/${id}`)
-        .set({ Authorization: "Bearer " + token });
+      await request(app).delete(`/template/${id}`)
+      .set({ Authorization: "Bearer " + token });
     }
   });
 });
@@ -526,9 +513,8 @@ describe("Filtering Templates", () => {
 
   afterAll(async () => {
     for (let id of idsToDelete) {
-      await request(app)
-        .delete(`/template/${id}`)
-        .set({ Authorization: "Bearer " + token });
+      await request(app).delete(`/template/${id}`)
+      .set({ Authorization: "Bearer " + token });
     }
   });
 });
@@ -562,9 +548,8 @@ describe("Get Tags", () => {
     id = res.body.id;
     idsToDelete.push(id);
 
-    res = await request(app)
-      .get(`/template/${id}`)
-      .set({ Authorization: "Bearer " + token });
+    res = await request(app).get(`/template/${id}`)
+    .set({ Authorization: "Bearer " + token });
     expect(res.body).toHaveProperty("templates");
     expect(res.body.templates).toHaveLength(1);
     let template = res.body.templates[0];
@@ -587,9 +572,8 @@ describe("Get Tags", () => {
 
   // Authenticated post request
   it("should try to get the list of owners and all tags and succeed", async () => {
-    let res = await request(app)
-      .get("/template/tag")
-      .set({ Authorization: "Bearer " + token });
+    let res = await request(app).get("/template/tag")
+    .set({ Authorization: "Bearer " + token });
     expect(res.status).toEqual(200);
     expect(res.body).toHaveProperty("ownedTags");
     expect(res.body).toHaveProperty("allTags");
@@ -602,9 +586,8 @@ describe("Get Tags", () => {
 
   afterAll(async () => {
     for (let id of idsToDelete) {
-      await request(app)
-        .delete(`/template/${id}`)
-        .set({ Authorization: "Bearer " + token });
+      await request(app).delete(`/template/${id}`)
+      .set({ Authorization: "Bearer " + token });
     }
   });
 });
@@ -691,7 +674,7 @@ describe("Post Templates, and increment version", () => {
   });
 
   // Authenticated post request
-  // send first instance
+  // send first instance 
   it("should try to post multiple versions of a template", async () => {
     let res = await request(app)
       .post("/template")
@@ -705,7 +688,7 @@ describe("Post Templates, and increment version", () => {
     id = res.body.id;
     idsToDelete.push(id);
 
-    // send second instance
+    // send second instance 
     res = await request(app)
       .post(`/template/${id}`)
       .set({ Authorization: "Bearer " + token })
@@ -715,7 +698,7 @@ describe("Post Templates, and increment version", () => {
     expect(res.status).toEqual(201);
     idsToDelete.push(res.body.id);
 
-    // send third instance
+    // send third instance 
     res = await request(app)
       .post(`/template/${id}`)
       .set({ Authorization: "Bearer " + token })
@@ -725,19 +708,20 @@ describe("Post Templates, and increment version", () => {
     expect(res.status).toEqual(201);
     idsToDelete.push(res.body.id);
 
-    //recive instances
+    //recive instances 
     res = await request(app)
       .get(`/template/${id}`)
       .set({ Authorization: "Bearer " + token });
     expect(res.status).toEqual(200);
     expect(res.body).toHaveProperty("templates");
-    let instances = res.body.templates[0].instances;
-    expect(instances[0].version).toEqual("1.2");
-    expect(instances[0].state).toEqual("draft");
-    expect(instances[1].version).toEqual("1.1");
-    expect(instances[1].state).toEqual("draft");
-    expect(instances[2].version).toEqual("1.0");
-    expect(instances[2].state).toEqual("live");
+    let instances = res.body.templates[0].instances
+    expect(instances[0].version).toEqual("1.2")
+    expect(instances[0].state).toEqual("draft")
+    expect(instances[1].version).toEqual("1.1")
+    expect(instances[1].state).toEqual("draft")
+    expect(instances[2].version).toEqual("1.0")
+    expect(instances[2].state).toEqual("live")
+
 
     //edit first instance
     res = await request(app)
@@ -751,13 +735,13 @@ describe("Post Templates, and increment version", () => {
     expect(res.status).toEqual(201);
     idsToDelete.push(res.body.id);
 
-    //edit third instance which is deprecated, should create a new instance 1.3
+    //edit third instance which is deprecated, should create a new instance 1.3 
     res = await request(app)
       .post(`/template/${id}`)
       .set({ Authorization: "Bearer " + token })
       .send({
         template: {},
-        version: "1.0"
+        version: "1.0",
       });
     expect(res.status).toEqual(201);
     idsToDelete.push(res.body.id);
@@ -767,15 +751,15 @@ describe("Post Templates, and increment version", () => {
       .set({ Authorization: "Bearer " + token });
     expect(res.status).toEqual(200);
     expect(res.body).toHaveProperty("templates");
-    let instancesAfter = res.body.templates[0].instances;
-    expect(instancesAfter[0].version).toEqual("1.3");
-    expect(instancesAfter[0].state).toEqual("draft");
-    expect(instancesAfter[1].version).toEqual("1.2");
-    expect(instancesAfter[1].state).toEqual("draft");
-    expect(instancesAfter[2].version).toEqual("1.1");
-    expect(instancesAfter[2].state).toEqual("draft");
-    expect(instancesAfter[3].version).toEqual("1.0");
-    expect(instancesAfter[3].state).toEqual("deprecated");
+    let instancesAfter = res.body.templates[0].instances
+    expect(instancesAfter[0].version).toEqual("1.3")
+    expect(instancesAfter[0].state).toEqual("draft")
+    expect(instancesAfter[1].version).toEqual("1.2")
+    expect(instancesAfter[1].state).toEqual("draft")
+    expect(instancesAfter[2].version).toEqual("1.1")
+    expect(instancesAfter[2].state).toEqual("draft")
+    expect(instancesAfter[3].version).toEqual("1.0")
+    expect(instancesAfter[3].state).toEqual("deprecated")
   });
 
   it("should try to delete existing user and succeed", async () => {
@@ -795,7 +779,7 @@ describe("Post Templates, and increment version", () => {
       .expect({ templates: [] });
   });
 
-  // request with invalid template
+  // Authenticated post request with invalid template
   it("should try to post with invalid template and fail", async () => {
     const res = await request(app)
       .post("/template")
@@ -810,9 +794,8 @@ describe("Post Templates, and increment version", () => {
   afterAll(async () => {
     await mongoose.connection.close();
     for (let id of idsToDelete) {
-      await request(app)
-        .delete(`/template/${id}`)
-        .set({ Authorization: "Bearer " + token });
+      await request(app).delete(`/template/${id}`)
+      .set({ Authorization: "Bearer " + token });
     }
   });
 });
