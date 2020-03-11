@@ -11,7 +11,8 @@ import { AuthIssuer } from "../models/models";
 export class AzureADProvider implements AuthenticationProvider {
   public issuer: AuthIssuer = AuthIssuer.AzureAD;
   private user: string = "";
-  private static CERT_URL: string = "https://login.microsoftonline.com/common/discovery/keys";
+  private static CERT_URL: string =
+    "https://login.microsoftonline.com/common/discovery/keys";
 
   async isValid(accessToken: string): Promise<boolean> {
     let bearer = accessToken.split(/[ ]+/).pop();
@@ -36,14 +37,18 @@ export class AzureADProvider implements AuthenticationProvider {
     let result = false;
     for (const key of response.data.keys) {
       if (key.kid === kid) {
-        const cert = "-----BEGIN CERTIFICATE-----\n" + key.x5c[0] + "\n-----END CERTIFICATE-----";
+        const cert =
+          "-----BEGIN CERTIFICATE-----\n" +
+          key.x5c[0] +
+          "\n-----END CERTIFICATE-----";
         result = jws.verify(accessToken, algorithm, cert);
         break;
       }
     }
 
     // Check aud of token matches the client ID of env app
-    result = "#{CLIENT_ID_TOKEN}#" === decodedToken.payload.aud;
+    result =
+      "cc02a0f4-ef1b-4513-a431-9aca7b2f7fca" === decodedToken.payload.aud;
 
     if (result) {
       this.user = decodedToken.payload.oid;

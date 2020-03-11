@@ -1,4 +1,12 @@
-import { JSONResponse, IUser, ITemplate, SortBy, SortOrder, ITemplateInstance, TemplateState } from "../models/models";
+import {
+  JSONResponse,
+  IUser,
+  ITemplate,
+  SortBy,
+  SortOrder,
+  ITemplateInstance,
+  TemplateState
+} from "../models/models";
 import { StorageProvider } from "./IStorageProvider";
 import * as Utils from "../util/inmemorydbutils/inmemorydbutils";
 import uuidv4 from "uuid/v4";
@@ -13,12 +21,18 @@ export class InMemoryDBProvider implements StorageProvider {
     this.users.set(user._id!, { ...user, ...updateQuery });
   }
 
-  private _updateTemplate(template: ITemplate, updateQuery: Partial<ITemplate>): void {
+  private _updateTemplate(
+    template: ITemplate,
+    updateQuery: Partial<ITemplate>
+  ): void {
     template.updatedAt = new Date(Date.now());
     this.templates.set(template._id!, { ...template, ...updateQuery });
   }
 
-  async updateUser(query: Partial<IUser>, updateQuery: Partial<IUser>): Promise<JSONResponse<Number>> {
+  async updateUser(
+    query: Partial<IUser>,
+    updateQuery: Partial<IUser>
+  ): Promise<JSONResponse<Number>> {
     let updateCount: number = 0;
     await this._matchUsers(query).then(response => {
       if (response.success) {
@@ -36,7 +50,10 @@ export class InMemoryDBProvider implements StorageProvider {
       errorMessage: "No users found matching given criteria"
     });
   }
-  async updateTemplate(query: Partial<ITemplate>, updateQuery: Partial<ITemplate>): Promise<JSONResponse<Number>> {
+  async updateTemplate(
+    query: Partial<ITemplate>,
+    updateQuery: Partial<ITemplate>
+  ): Promise<JSONResponse<Number>> {
     let updateCount: number = 0;
     let response = await this._matchTemplates(query);
     if (response.success) {
@@ -55,18 +72,30 @@ export class InMemoryDBProvider implements StorageProvider {
   }
 
   async insertUser(doc: IUser): Promise<JSONResponse<string>> {
-    return this._insert(doc, this.users, this._autoCompleteUserModel.bind(this));
+    return this._insert(
+      doc,
+      this.users,
+      this._autoCompleteUserModel.bind(this)
+    );
   }
 
   async insertTemplate(doc: ITemplate): Promise<JSONResponse<string>> {
-    return this._insert(doc, this.templates, this._autoCompleteTemplateModel.bind(this));
+    return this._insert(
+      doc,
+      this.templates,
+      this._autoCompleteTemplateModel.bind(this)
+    );
   }
 
   async getUsers(query: Partial<IUser>): Promise<JSONResponse<IUser[]>> {
     return this._matchUsers(query);
   }
 
-  async getTemplates(query: Partial<ITemplate>, sortBy: SortBy = SortBy.alphabetical, sortOrder: SortOrder = SortOrder.ascending): Promise<JSONResponse<ITemplate[]>> {
+  async getTemplates(
+    query: Partial<ITemplate>,
+    sortBy: SortBy = SortBy.alphabetical,
+    sortOrder: SortOrder = SortOrder.ascending
+  ): Promise<JSONResponse<ITemplate[]>> {
     return this._matchTemplates(query, sortBy, sortOrder);
   }
 
@@ -87,7 +116,9 @@ export class InMemoryDBProvider implements StorageProvider {
       errorMessage: "No users found matching given criteria"
     });
   }
-  async removeTemplate(query: Partial<ITemplate>): Promise<JSONResponse<Number>> {
+  async removeTemplate(
+    query: Partial<ITemplate>
+  ): Promise<JSONResponse<Number>> {
     let removeCount: number = 0;
     await this._matchTemplates(query).then(response => {
       if (response.success) {
@@ -107,7 +138,9 @@ export class InMemoryDBProvider implements StorageProvider {
     });
   }
 
-  protected async _matchUsers(query: Partial<ITemplate>): Promise<JSONResponse<IUser[]>> {
+  protected async _matchUsers(
+    query: Partial<ITemplate>
+  ): Promise<JSONResponse<IUser[]>> {
     let res: IUser[] = new Array();
     this.users.forEach(user => {
       if (this._matchUser(query, user)) {
@@ -120,7 +153,11 @@ export class InMemoryDBProvider implements StorageProvider {
     return Promise.resolve({ success: false });
   }
 
-  protected async _matchTemplates(query: Partial<ITemplate>, sortBy?: SortBy, sortOrder?: SortOrder): Promise<JSONResponse<ITemplate[]>> {
+  protected async _matchTemplates(
+    query: Partial<ITemplate>,
+    sortBy?: SortBy,
+    sortOrder?: SortOrder
+  ): Promise<JSONResponse<ITemplate[]>> {
     let res: ITemplate[] = new Array();
     this.templates.forEach(template => {
       if (this._matchTemplate(query, template)) {
@@ -137,18 +174,6 @@ export class InMemoryDBProvider implements StorageProvider {
   }
 
   protected _autoCompleteUserModel(user: IUser): void {
-    if (!user.firstName) {
-      user.firstName = "";
-    }
-    if (!user.lastName) {
-      user.lastName = "";
-    }
-    if (!user.team) {
-      user.team = [];
-    }
-    if (!user.org) {
-      user.org = [];
-    }
     if (!user.recentlyViewedTemplates) {
       user.recentlyViewedTemplates = [];
     }
@@ -161,7 +186,9 @@ export class InMemoryDBProvider implements StorageProvider {
     this._setID(user);
   }
 
-  protected _autoCompleteTemplateInstanceModel(instance: ITemplateInstance): void {
+  protected _autoCompleteTemplateInstanceModel(
+    instance: ITemplateInstance
+  ): void {
     if (!instance.state) {
       instance.state = TemplateState.draft;
     }
@@ -206,7 +233,11 @@ export class InMemoryDBProvider implements StorageProvider {
     this._setID(template);
   }
 
-  protected async _insert<T extends ITemplate | IUser>(doc: T, collection: Map<String, T>, autoComplete: (doc: T) => void): Promise<JSONResponse<string>> {
+  protected async _insert<T extends ITemplate | IUser>(
+    doc: T,
+    collection: Map<String, T>,
+    autoComplete: (doc: T) => void
+  ): Promise<JSONResponse<string>> {
     let docToInsert: T = Utils.clone(doc);
     autoComplete(docToInsert);
     if (!collection.has(docToInsert._id!)) {
@@ -215,7 +246,8 @@ export class InMemoryDBProvider implements StorageProvider {
     } else {
       return Promise.resolve({
         success: false,
-        errorMessage: "Object with id: " + doc._id! + "already exists. Insertion failed"
+        errorMessage:
+          "Object with id: " + doc._id! + "already exists. Insertion failed"
       });
     }
   }
@@ -243,26 +275,30 @@ export class InMemoryDBProvider implements StorageProvider {
 
   protected _matchUser(query: Partial<IUser>, user: IUser): boolean {
     if (
-      (query.lastName && !(query.lastName === user.lastName)) ||
-      (query.firstName && !(query.firstName === user.firstName)) ||
       (query._id && !(query._id === user._id)) ||
       (query.authId && !(query.authId === user.authId)) ||
-      (query.authIssuer && !(query.authIssuer === user.authIssuer)) ||
-      (query.org && user.org && !Utils.ifContainsList(user.org, query.org)) ||
-      (query.team && user.team && !Utils.ifContainsList(user.team, query.team))
+      (query.authIssuer && !(query.authIssuer === user.authIssuer))
     ) {
       return false;
     }
     return true;
   }
 
-  protected _matchTemplate(query: Partial<ITemplate>, template: ITemplate): boolean {
+  protected _matchTemplate(
+    query: Partial<ITemplate>,
+    template: ITemplate
+  ): boolean {
     if (
-      (query.name && !template.name.toLocaleUpperCase().includes(query.name.toLocaleUpperCase())) ||
+      (query.name &&
+        !template.name
+          .toLocaleUpperCase()
+          .includes(query.name.toLocaleUpperCase())) ||
       (query.owner && !(query.owner === template.owner)) ||
       (query._id && !(query._id === template._id)) ||
       (query.isLive && !(query.isLive === template.isLive)) ||
-      (query.tags && template.tags && !Utils.ifContainsList(template.tags, query.tags))
+      (query.tags &&
+        template.tags &&
+        !Utils.ifContainsList(template.tags, query.tags))
     ) {
       return false;
     }

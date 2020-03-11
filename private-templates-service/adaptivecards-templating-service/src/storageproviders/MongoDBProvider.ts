@@ -1,5 +1,12 @@
 import { StorageProvider } from "./IStorageProvider";
-import { IUser, ITemplate, JSONResponse, SortBy, SortOrder, ITemplateInstance } from "../models/models";
+import {
+  IUser,
+  ITemplate,
+  JSONResponse,
+  SortBy,
+  SortOrder,
+  ITemplateInstance
+} from "../models/models";
 import { MongoConnectionParams } from "../models/mongo/MongoConnectionParams";
 import { MongoWorker } from "../util/mongoutils/MongoWorker";
 import { MongoUtils } from "../util/mongoutils/mongoutils";
@@ -19,12 +26,6 @@ export class MongoDBProvider implements StorageProvider {
   // to make sure they're both in the returned user 'team' field
   private _constructUserQuery(query: Partial<IUser>): any {
     let userQuery: any = MongoUtils.removeUndefinedFields(query);
-    if (query.team && query.team.length) {
-      userQuery.team = { $all: query.team };
-    }
-    if (query.org && query.org.length) {
-      userQuery.org = { $all: query.org };
-    }
     return userQuery;
   }
   private _constructTemplateQuery(query: Partial<ITemplate>): any {
@@ -93,7 +94,10 @@ export class MongoDBProvider implements StorageProvider {
       });
   }
   // Updates Only one user
-  async updateUser(query: Partial<IUser>, updateQuery: Partial<IUser>): Promise<JSONResponse<Number>> {
+  async updateUser(
+    query: Partial<IUser>,
+    updateQuery: Partial<IUser>
+  ): Promise<JSONResponse<Number>> {
     let userQuery: any = this._constructUserQuery(query);
     updateQuery = MongoUtils.removeUndefinedFields(updateQuery);
     return await this.worker.User.findOneAndUpdate(userQuery, updateQuery)
@@ -116,10 +120,16 @@ export class MongoDBProvider implements StorageProvider {
         });
       });
   }
-  async updateTemplate(query: Partial<ITemplate>, updateQuery: Partial<ITemplate>): Promise<JSONResponse<Number>> {
+  async updateTemplate(
+    query: Partial<ITemplate>,
+    updateQuery: Partial<ITemplate>
+  ): Promise<JSONResponse<Number>> {
     let templateQuery: any = this._constructTemplateQuery(query);
     updateQuery = MongoUtils.removeUndefinedFields(updateQuery);
-    return await this.worker.Template.findOneAndUpdate(templateQuery, updateQuery)
+    return await this.worker.Template.findOneAndUpdate(
+      templateQuery,
+      updateQuery
+    )
       .lean()
       .then(result => {
         if (result) {
@@ -150,7 +160,9 @@ export class MongoDBProvider implements StorageProvider {
       });
   }
   async insertTemplate(template: ITemplate): Promise<JSONResponse<string>> {
-    return await this.worker.Template.create(MongoUtils.removeUndefinedFields(template))
+    return await this.worker.Template.create(
+      MongoUtils.removeUndefinedFields(template)
+    )
       .then(result => {
         return Promise.resolve({ success: true, result: result.id });
       })
@@ -182,7 +194,9 @@ export class MongoDBProvider implements StorageProvider {
         });
       });
   }
-  async removeTemplate(query: Partial<ITemplate>): Promise<JSONResponse<Number>> {
+  async removeTemplate(
+    query: Partial<ITemplate>
+  ): Promise<JSONResponse<Number>> {
     let templateQuery: any = this._constructTemplateQuery(query);
     return await this.worker.Template.deleteOne(templateQuery)
       .then(result => {
