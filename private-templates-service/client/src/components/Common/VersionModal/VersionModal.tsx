@@ -42,17 +42,21 @@ import {
 
 import { getDateString } from '../../../utils/versionUtils';
 import ModalHOC from '../../../utils/ModalHOC';
+import { openModal, closeModal } from '../../../store/page/actions';
 
 interface Props {
   template: Template;
-  toggleModal: () => void;
-  updateTemplateState: (templateJSON: string, state: PostedTemplate.StateEnum, version: string) => void;
+  closeModal: () => void;
+  updateTemplateState: (state: PostedTemplate.StateEnum, version: string, templateJSON?: object) => void;
   deleteTemplateVersion: (version: string) => void;
 }
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    updateTemplateState: (templateJSON: string, state: PostedTemplate.StateEnum, version: string) => {
+    closeModal: () => {
+      dispatch(closeModal());
+    },
+    updateTemplateState: (state: PostedTemplate.StateEnum, version: string, templateJSON?: object) => {
       dispatch(updateTemplate(undefined, version, templateJSON, undefined, undefined, state, undefined));
     },
     deleteTemplateVersion: (version: string) => {
@@ -76,7 +80,7 @@ class VersionModal extends React.Component<Props, State> {
     for (let i = 0; i < list.length; i++) {
       if (!this.state.versionList[i]) continue;
       this.props.deleteTemplateVersion(list[i].version!);
-      this.props.toggleModal();
+      this.props.closeModal();
     }
   }
 
@@ -84,9 +88,8 @@ class VersionModal extends React.Component<Props, State> {
     let list = this.props.template.instances!;
     for (let i = 0; i < list.length; i++) {
       if (!this.state.versionList[i]) continue;
-      const template = JSON.stringify(list[i].json);
-      this.props.updateTemplateState(template, PostedTemplate.StateEnum.Live, list[i].version!);
-      this.props.toggleModal();
+      this.props.updateTemplateState(PostedTemplate.StateEnum.Live, list[i].version!, list[i].json );
+      this.props.closeModal();
     }
   }
 
@@ -94,9 +97,8 @@ class VersionModal extends React.Component<Props, State> {
     let list = this.props.template.instances!;
     for (let i = 0; i < list.length; i++) {
       if (!this.state.versionList[i]) continue;
-      const template = JSON.stringify(list[i].json);
-      this.props.updateTemplateState(template, PostedTemplate.StateEnum.Deprecated, list[i].version!);
-      this.props.toggleModal();
+      this.props.updateTemplateState(PostedTemplate.StateEnum.Deprecated, list[i].version!, list[i].json);
+      this.props.closeModal();
     }
   }
 
@@ -138,7 +140,7 @@ class VersionModal extends React.Component<Props, State> {
           </CenterPanelWrapper>
           <BottomRow>
             <ButtonGroup>
-              <LightButton text="Cancel" onClick={this.props.toggleModal} />
+              <LightButton text="Cancel" onClick={this.props.closeModal} />
               <LightButton text="Delete" onClick={this.delete} />
               <PrimaryStyleButton text="Unpublish" onClick={this.unpublish} />
               <PrimaryStyleButton text="Publish" onClick={this.publish} />

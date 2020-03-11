@@ -8,12 +8,15 @@ import {
   REQUEST_EXISTING_TEMPLATE_UPDATE,
   RECEIVE_EXISTING_TEMPLATE_UPDATE,
   FAILURE_EXISTING_TEMPLATE_UPDATE,
+  FAILURE_UPDATE_CURRENT_TEMPLATE_VERSION,
+  RECEIVE_UPDATE_CURRENT_TEMPLATE_VERSION,
+  REQUEST_UPDATE_CURRENT_TEMPLATE_VERSION,
   GET_TEMPLATE,
   GET_TEMPLATE_SUCCESS,
   GET_TEMPLATE_FAILURE,
-  DELETE_TEMPLATE,
-  DELETE_TEMPLATE_SUCCESS,
-  DELETE_TEMPLATE_FAILURE
+  DELETE_TEMPLATE_INSTANCE,
+  DELETE_TEMPLATE_INSTANCE_SUCCESS,
+  DELETE_TEMPLATE_INSTANCE_FAILURE
 } from './types';
 
 import { Template } from 'adaptive-templating-service-typescript-node';
@@ -23,6 +26,7 @@ const initialState: CurrentTemplateState = {
   templateJSON: undefined,
   templateName: undefined,
   sampleDataJSON: undefined,
+  version: undefined,
   isFetching: false
 };
 
@@ -32,9 +36,10 @@ export function currentTemplateReducer(state = initialState, action: CurrentTemp
       return {
         ...state,
         templateID: "",
-        templateJSON: JSON.stringify(require('../../assets/default-adaptivecards/defaultAdaptiveCard.json')),
+        templateJSON: require('../../assets/default-adaptivecards/defaultAdaptiveCard.json'),
         templateName: "Untitled",
-        sampleDataJSON: "",
+        sampleDataJSON: {},
+        version: "",
         isFetching: false
       };
     case REQUEST_NEW_TEMPLATE_UPDATE:
@@ -54,6 +59,7 @@ export function currentTemplateReducer(state = initialState, action: CurrentTemp
         templateJSON: action.templateJSON,
         templateName: action.templateName,
         sampleDataJSON: action.sampleDataJSON,
+        version: action.version,
         isFetching: false
       };
     case REQUEST_EXISTING_TEMPLATE_UPDATE:
@@ -72,8 +78,24 @@ export function currentTemplateReducer(state = initialState, action: CurrentTemp
         templateJSON: action.templateJSON,
         templateName: action.templateName,
         sampleDataJSON: action.sampleDataJSON,
-        isFetching: false
+        version: action.version,
       };
+    case FAILURE_UPDATE_CURRENT_TEMPLATE_VERSION:
+      return {
+        ...state,
+      }
+    case REQUEST_UPDATE_CURRENT_TEMPLATE_VERSION:
+      return {
+        ...state,
+        isFetching: false
+      }
+    case RECEIVE_UPDATE_CURRENT_TEMPLATE_VERSION:
+      return {
+        ...state,
+        templateJSON: action.templateJSON,
+        sampleDataJSON: action.sampleDataJSON,
+        version: action.version
+      }
     case GET_TEMPLATE:
       return {
         ...state,
@@ -81,6 +103,7 @@ export function currentTemplateReducer(state = initialState, action: CurrentTemp
         templateJSON: undefined,
         templateName: undefined,
         sampleDataJSON: undefined,
+        version: undefined,
         isFetching: true,
       }
     case GET_TEMPLATE_SUCCESS:
@@ -90,6 +113,7 @@ export function currentTemplateReducer(state = initialState, action: CurrentTemp
         templateJSON: action.templateJSON,
         templateName: action.templateName,
         sampleDataJSON: action.sampleDataJSON,
+        version: action.version,
         isFetching: false,
       }
     case GET_TEMPLATE_FAILURE:
@@ -98,18 +122,18 @@ export function currentTemplateReducer(state = initialState, action: CurrentTemp
         templateID: undefined,
         isFetching: false,
       }
-    case DELETE_TEMPLATE: 
+    case DELETE_TEMPLATE_INSTANCE: 
       return {
         ...state,
         isFetching: true
       }
-    case DELETE_TEMPLATE_SUCCESS:
+    case DELETE_TEMPLATE_INSTANCE_SUCCESS:
       return {
         ...state, 
         template: action.template,
         isFetching: false
       }
-    case DELETE_TEMPLATE_FAILURE: 
+    case DELETE_TEMPLATE_INSTANCE_FAILURE: 
       return {
         ...state, 
         isFetching: false
