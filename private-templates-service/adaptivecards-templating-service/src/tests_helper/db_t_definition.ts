@@ -1,11 +1,5 @@
 import { StorageProvider } from "../storageproviders/IStorageProvider";
-import {
-  IUser,
-  ITemplate,
-  ITemplateInstance,
-  JSONResponse,
-  TemplateState
-} from "../models/models";
+import { IUser, ITemplate, ITemplateInstance, JSONResponse, TemplateState } from "../models/models";
 
 function autoCompleteUserModel(user: IUser): void {
   if (!user.recentlyViewedTemplates) {
@@ -93,19 +87,12 @@ export function validateMatchingTemplates(a: ITemplate, b: ITemplate): void {
 export function validateMatchingUsers(a: IUser, b: IUser): void {
   expect(a.authIssuer).toEqual(b.authIssuer);
   expect(a.authId).toEqual(b.authId);
-  expect(a.recentlyViewedTemplates).toEqual(
-    Array.from(b.recentlyViewedTemplates!)
-  );
-  expect(a.recentlyEditedTemplates).toEqual(
-    Array.from(b.recentlyEditedTemplates!)
-  );
+  expect(a.recentlyViewedTemplates).toEqual(Array.from(b.recentlyViewedTemplates!));
+  expect(a.recentlyEditedTemplates).toEqual(Array.from(b.recentlyEditedTemplates!));
   expect(a.recentTags).toEqual(Array.from(b.recentTags!));
 }
 
-async function insertAndValidateUser(
-  db: StorageProvider,
-  user: IUser
-): Promise<void> {
+async function insertAndValidateUser(db: StorageProvider, user: IUser): Promise<void> {
   let userId: string;
   await db.insertUser(user).then(result => {
     validateResult(result);
@@ -120,10 +107,7 @@ async function insertAndValidateUser(
   });
 }
 
-async function insertAndValidateTemplate(
-  db: StorageProvider,
-  template: ITemplate
-): Promise<void> {
+async function insertAndValidateTemplate(db: StorageProvider, template: ITemplate): Promise<void> {
   let templateId: string;
   await db.insertTemplate(template).then(result => {
     validateResult(result);
