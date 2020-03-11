@@ -21,8 +21,10 @@ import {
   DashboardContainer,
   OuterWindow,
   TagsContainer,
-  PlaceholderText
+  PlaceholderText,
+  OuterDashboardContainer
 } from "./styled";
+import Footer from "./Footer";
 const mapStateToProps = (state: RootState) => {
   return {
     isAuthenticated: state.auth.isAuthenticated,
@@ -112,40 +114,44 @@ class Dashboard extends React.Component<Props> {
     // TODO: Get tags and make them clickable
     let tags: string[] = new Array();
     return (
-      <OuterWindow>
-        <DashboardContainer>
-          <React.Fragment>
-            <Title>Recently Edited</Title>
-            {recentlyEditedTemplates.length ? (
-              <Gallery
-                onClick={this.selectTemplate}
-                templates={recentlyEditedTemplates}
-              ></Gallery>
-            ) : (
-              <PlaceholderText>
-                No edited templates yet. Create or edit one :)
-              </PlaceholderText>
-            )}
-          </React.Fragment>
-          <React.Fragment>
-            <Title>Recently Viewed</Title>
-            {recentlyViewedTemplates.length ? (
-              <RecentlyViewed
-                onClick={this.selectTemplate}
-                recentlyViewed={recentlyViewedTemplates}
-              ></RecentlyViewed>
-            ) : (
-              <PlaceholderText>
-                No recently viewed templates yet. Check out some templates:)
-              </PlaceholderText>
-            )}
-          </React.Fragment>
-        </DashboardContainer>
-        <TagsContainer>
-          <Title style={{ marginRight: "150px" }}>Tags</Title>
-          <Tags tags={tags} allowEdit={false}></Tags>
-        </TagsContainer>
-      </OuterWindow>
+      <OuterDashboardContainer>
+        <OuterWindow>
+          <DashboardContainer>
+            <React.Fragment>
+              <Title>Recently Edited</Title>
+              {recentlyEditedTemplates.length ? (
+                <Gallery
+                  onClick={this.selectTemplate}
+                  templates={recentlyEditedTemplates}
+                ></Gallery>
+              ) : (
+                  <PlaceholderText>
+                    No edited templates yet. Create or edit one :)
+                </PlaceholderText>
+                )}
+            </React.Fragment>
+            <React.Fragment>
+              <Title>Recently Viewed</Title>
+              {recentlyViewedTemplates.length ? (
+                <RecentlyViewed
+                  onClick={this.selectTemplate}
+                  recentlyViewed={recentlyViewedTemplates}
+                ></RecentlyViewed>
+              ) : (
+                  <PlaceholderText>
+                    No recently viewed templates yet. Check out some templates:)
+                </PlaceholderText>
+                )}
+            </React.Fragment>
+          </DashboardContainer>
+          <TagsContainer>
+            <Title style={{ marginRight: "150px" }}>Tags</Title>
+            <Tags tags={tags} allowEdit={false}></Tags>
+          </TagsContainer>
+        </OuterWindow>
+        <Footer />
+      </OuterDashboardContainer>
+
     );
   }
 }
