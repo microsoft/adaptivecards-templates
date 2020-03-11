@@ -128,10 +128,11 @@ class VersionModal extends React.Component<Props, State> {
                 <StatusIndicator state={instance.state}/>
                 <Status>{instance.state && instance.state.toString().charAt(0).toUpperCase() + instance.state.toString().slice(1)}</Status>
               </StatusWrapper>
-              <CheckboxWrapper><Checkbox defaultChecked={false} onChange={(e, checked) => {
-                let updatedVersion = this.state.versionList;
-                updatedVersion[index] = checked || false;
-                this.setState({ versionList: updatedVersion });
+              <CheckboxWrapper><Checkbox checked={this.state.versionList[index]} 
+                onChange={() => {
+                  let updatedVersion = this.state.versionList;
+                  updatedVersion[index] = !updatedVersion[index];
+                  this.setState({ versionList: updatedVersion });
               }}/></CheckboxWrapper>
             </VersionCardRow>
             ))}     
