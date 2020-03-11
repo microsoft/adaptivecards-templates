@@ -17,10 +17,7 @@ import {
 
 import { Template, TemplateApi, PostedTemplate } from "adaptive-templating-service-typescript-node";
 
-import { IncomingMessage } from "http";
 import { RootState } from '../rootReducer';
-import StateBlock from 'markdown-it/lib/rules_block/state_block';
-import { CombinedState } from 'redux';
 
 export function newTemplate(): CurrentTemplateAction {
   return {
@@ -190,19 +187,15 @@ export function updateTemplate(templateID?: string, currentVersion?: string, tem
     }
     else {
       dispatch(requestExistingTemplateUpdate());
-      console.log("posting existing");
       return api.postTemplateById(id, newTemplate).then(response => {
         if (response.response.statusCode && response.response.statusCode === 201) {
-          console.log("success, getting template again");
           dispatch(receiveExistingTemplateUpdate(templateJSON, templateName, sampleDataJSON, version));
           dispatch(getTemplate(id));
         }
         else {
-          console.log("fail, ", appState.currentTemplate.isFetching, appState.currentTemplate.template)
           dispatch(failureExistingTemplateUpdate());
         }
       }).catch((error: any) => {
-        console.log("catch", error)
         dispatch(failureExistingTemplateUpdate());
       });
     }
@@ -217,7 +210,6 @@ export function getTemplate(templateID: string) {
     const api = initClientSDK(dispatch, getState);
 
     try {
-      console.log("getting template")
       api.templateById(templateID, undefined, true).then((resp: any) => {
         if (resp.body.templates.length === 1) {
           const templateObject = resp.body.templates[0];
@@ -230,12 +222,10 @@ export function getTemplate(templateID: string) {
               templateObject.instances[0].version,
             ))
         }
-        console.log("fail", appState.currentTemplate.isFetching, appState.currentTemplate.template)
         dispatch(requestTemplateFailure());
       })
     }
     catch {
-      console.log("fail", appState.currentTemplate.isFetching, appState.currentTemplate.template)
       dispatch(requestTemplateFailure());
     }
   }

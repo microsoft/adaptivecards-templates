@@ -33,8 +33,7 @@ const mapStateToProps = (state: RootState) => {
   return {
     isAuthenticated: state.auth.isAuthenticated,
     user: state.auth.user,
-    searchByTemplateName: state.search.searchByTemplateName,
-    state: state
+    searchByTemplateName: state.search.searchByTemplateName
   };
 };
 
@@ -67,7 +66,6 @@ interface Props {
   isAuthenticated: boolean;
   user?: UserType;
   searchByTemplateName: string;
-  state: any;
 }
 
 class App extends Component<Props, State> {
@@ -100,7 +98,6 @@ class App extends Component<Props, State> {
   }
 
   render() {
-    console.log(this.props.state.currentTemplate.template);
     let error = null;
     if (this.state.error) {
       error = (

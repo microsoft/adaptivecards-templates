@@ -20,19 +20,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, Content-Type, Accept, Authorization, api_key"
-  );
-  res.header(
-    "Access-Control-Allow-Methods",
-    "GET, POST, OPTIONS, DELETE"
-  );
-  next();
-});
-let mongoDB = new MongoDBProvider();
+
+let mongoDB = new MongoDBProvider({ connectionString: "#{DB_CONNECTION_TOKEN}#" });
 mongoDB.connect()
   .then(
     (res) => {
