@@ -19,6 +19,8 @@ import { Template, TemplateApi, PostedTemplate } from "adaptive-templating-servi
 
 import { IncomingMessage } from "http";
 import { RootState } from '../rootReducer';
+import StateBlock from 'markdown-it/lib/rules_block/state_block';
+import { CombinedState } from 'redux';
 
 export function newTemplate(): CurrentTemplateAction {
   return {
@@ -46,11 +48,10 @@ function receiveNewTemplateUpdate(templateID?: string, templateJSON?: object, te
   };
 }
 
-function failureNewTemplateUpdate(error: IncomingMessage): CurrentTemplateAction {
+function failureNewTemplateUpdate(): CurrentTemplateAction {
   return {
     type: FAILURE_NEW_TEMPLATE_UPDATE,
-    text: "failure post new template on save",
-    error: error
+    text: "failure post new template on save"
   };
 }
 
@@ -72,11 +73,10 @@ function receiveExistingTemplateUpdate(templateJSON?: object, templateName?: str
   };
 }
 
-function failureExistingTemplateUpdate(error: IncomingMessage): CurrentTemplateAction {
+function failureExistingTemplateUpdate(): CurrentTemplateAction {
   return {
     type: FAILURE_EXISTING_TEMPLATE_UPDATE,
-    text: "failure post existing template on save",
-    error: error
+    text: "failure post existing template on save"
   };
 }
 
@@ -156,10 +156,7 @@ export function updateTemplate(templateID?: string, currentVersion?: string, tem
   return function (dispatch: any, getState: () => RootState) {
     const appState = getState();
 
-    let api = new TemplateApi();
-    if (appState.auth.accessToken) {
-      api.setApiKey(0, `Bearer ${appState.auth.accessToken!.idToken.rawIdToken}`);
-    }
+    const api = initClientSDK(dispatch, getState);
 
     let newTemplate = new PostedTemplate();
     const id = templateID || appState.currentTemplate.templateID;
@@ -170,7 +167,8 @@ export function updateTemplate(templateID?: string, currentVersion?: string, tem
 
     if (templateJSON) {
       newTemplate.template = templateJSON;
-    } else {
+    }
+    else {
       newTemplate.template = appState.currentTemplate.templateJSON;
     }
     newTemplate.version = version;
@@ -184,21 +182,28 @@ export function updateTemplate(templateID?: string, currentVersion?: string, tem
       return api.createTemplate(newTemplate).then(response => {
         if (response.response.statusCode && response.response.statusCode === 201 && response.body.id) {
           dispatch(receiveNewTemplateUpdate(response.body.id, templateJSON, templateName, sampleDataJSON));
-        } else {
-          dispatch(failureNewTemplateUpdate(response.response));
+        }
+        else {
+          dispatch(failureNewTemplateUpdate());
         }
       });
     }
     else {
       dispatch(requestExistingTemplateUpdate());
+      console.log("posting existing");
       return api.postTemplateById(id, newTemplate).then(response => {
         if (response.response.statusCode && response.response.statusCode === 201) {
+          console.log("success, getting template again");
           dispatch(receiveExistingTemplateUpdate(templateJSON, templateName, sampleDataJSON, version));
           dispatch(getTemplate(id));
         }
         else {
-          dispatch(failureExistingTemplateUpdate(response.response));
+          console.log("fail, ", appState.currentTemplate.isFetching, appState.currentTemplate.template)
+          dispatch(failureExistingTemplateUpdate());
         }
+      }).catch((error: any) => {
+        console.log("catch", error)
+        dispatch(failureExistingTemplateUpdate());
       });
     }
   };
@@ -209,12 +214,10 @@ export function getTemplate(templateID: string) {
     const appState = getState();
     dispatch(requestTemplate(templateID));
 
-    const api = new TemplateApi();
-    if (!appState.auth.accessToken) {
-      dispatch(requestTemplateFailure());
-    }
-    api.setApiKey(0, `Bearer ${appState.auth.accessToken!.idToken.rawIdToken}`);
+    const api = initClientSDK(dispatch, getState);
+
     try {
+      console.log("getting template")
       api.templateById(templateID, undefined, true).then((resp: any) => {
         if (resp.body.templates.length === 1) {
           const templateObject = resp.body.templates[0];
@@ -227,11 +230,22 @@ export function getTemplate(templateID: string) {
               templateObject.instances[0].version,
             ))
         }
+        console.log("fail", appState.currentTemplate.isFetching, appState.currentTemplate.template)
         dispatch(requestTemplateFailure());
       })
     }
     catch {
+      console.log("fail", appState.currentTemplate.isFetching, appState.currentTemplate.template)
       dispatch(requestTemplateFailure());
     }
   }
+}
+
+function initClientSDK(dispatch: any, getState: () => RootState, ): TemplateApi {
+  const api = new TemplateApi();
+  const state = getState();
+  if (state.auth.accessToken) {
+    api.setApiKey(0, `Bearer ${state.auth.accessToken!.idToken.rawIdToken}`);
+  }
+  return api;
 }

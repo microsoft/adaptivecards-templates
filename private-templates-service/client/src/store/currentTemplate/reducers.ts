@@ -74,6 +74,7 @@ export function currentTemplateReducer(state = initialState, action: CurrentTemp
         templateName: action.templateName,
         sampleDataJSON: action.sampleDataJSON,
         version: action.version,
+        isFetching: false
       };
     case FAILURE_UPDATE_CURRENT_TEMPLATE_VERSION:
       return {
