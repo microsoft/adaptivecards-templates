@@ -11,4 +11,5 @@ export const EDIT_IN_DESIGNER = 'Edit in designer';
 export const DELETE = 'Delete';
 export const SHARE = 'Share';
 export const PUBLISH = 'Publish';
-export const UNPUBLISH = 'Unpublish'
+export const UNPUBLISH = 'Unpublish';
+export const MANAGE = 'Manage';

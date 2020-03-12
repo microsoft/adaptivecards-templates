@@ -13,6 +13,9 @@ import {
   GET_TEMPLATE,
   GET_TEMPLATE_SUCCESS,
   GET_TEMPLATE_FAILURE,
+  DELETE_TEMPLATE_INSTANCE, 
+  DELETE_TEMPLATE_INSTANCE_SUCCESS,
+  DELETE_TEMPLATE_INSTANCE_FAILURE
 } from './types';
 
 import { Template, TemplateApi, PostedTemplate } from "adaptive-templating-service-typescript-node";
@@ -101,6 +104,28 @@ function requestTemplateFailure(): CurrentTemplateAction {
   return {
     type: GET_TEMPLATE_FAILURE,
     text: "get single template failure",
+  }
+}
+
+function deleteTemplateInstance(): CurrentTemplateAction {
+  return {
+    type: DELETE_TEMPLATE_INSTANCE, 
+    text: "delete specific template version"
+  }
+}
+
+function deleteTemplateInstanceSuccess(template?: Template): CurrentTemplateAction {
+  return {
+    type: DELETE_TEMPLATE_INSTANCE_SUCCESS, 
+    text: "delete specific template version success",
+    template
+  }
+}
+
+function deleteTemplateInstanceFailure(): CurrentTemplateAction {
+  return {
+    type: DELETE_TEMPLATE_INSTANCE_FAILURE, 
+    text: "delete specific template version failure",
   }
 }
 
@@ -229,6 +254,54 @@ export function getTemplate(templateID: string) {
       dispatch(requestTemplateFailure());
     }
   }
+}
+
+export function deleteTemplateVersion(templateVersion: string, templateID?: string) {
+  return function (dispatch: any, getState: () => RootState) {
+    const appState = getState();
+    const id = templateID || appState.currentTemplate.templateID;
+
+    dispatch(deleteTemplateInstance());
+
+    const api = new TemplateApi();
+
+    if (appState.auth.accessToken) {
+      api.setApiKey(0, `Bearer ${appState.auth.accessToken!.idToken.rawIdToken}`);
+    }
+    
+    if (!id || id === "") {
+      dispatch(deleteTemplateInstanceFailure());
+    }
+
+    try {
+      api.deleteTemplateById(id!, templateVersion).then((resp: any) => {
+        if (resp.response.statusCode && resp.response.statusCode === 204) {
+          let template = appState.currentTemplate.template;
+          if (template){
+            removeSpecificTemplateVersion(template, templateVersion);
+            if (template.instances && template.instances.length === 0){
+              template = undefined;
+            }
+          }
+          return dispatch(deleteTemplateInstanceSuccess(template));
+        }
+        return dispatch(deleteTemplateInstanceFailure());
+      })
+    }
+    catch {
+      dispatch(deleteTemplateInstanceFailure());
+    }
+  }
+}
+
+function removeSpecificTemplateVersion(template: Template, version: string) {
+  if (!template.instances) return;
+  let instanceList = [];
+  for (let instance of template.instances){
+    if (instance.version === version) continue;
+    instanceList.push(instance);
+  }
+  template.instances = instanceList;
 }
 
 function initClientSDK(dispatch: any, getState: () => RootState, ): TemplateApi {
