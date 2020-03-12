@@ -13,7 +13,7 @@ import {
   Status
 } from "../Dashboard/PreviewModal/TemplateInfo/styled";
 import AdaptiveCard from "../Common/AdaptiveCard";
-import getVersion from "../../utils/getVersion";
+import { getVersion, getLatestTemplateInstanceState } from "../../utils/TemplateUtil";
 import {
   Template,
   PostedTemplate,
@@ -23,25 +23,6 @@ import { getDateString } from "../../utils/versionUtils";
 interface Props {
   onClick?: (templateID: string) => void;
   template: Template;
-}
-
-function retrieveStateValue(template: Template): string {
-  if (template.instances && template.instances[0] && template.instances[0].state) {
-    let state = template.instances[0].state;
-    switch (state) {
-      case (PostedTemplate.StateEnum.Live): {
-        return "Published";
-      }
-      case (PostedTemplate.StateEnum.Draft): {
-        return "Draft";
-      }
-      case (PostedTemplate.StateEnum.Deprecated): {
-        return "Deprecated";
-      }
-    }
-  }
-  // should never reach the next line
-  return "";
 }
 
 class AdaptiveCardPanel extends React.Component<Props> {
@@ -54,6 +35,7 @@ class AdaptiveCardPanel extends React.Component<Props> {
   render() {
     let template = this.props.template;
     let version = getVersion(this.props.template);
+    let state = getLatestTemplateInstanceState(template)
     return (
       <Container onClick={this.onClick}>
         <ACWrapper>
@@ -68,17 +50,14 @@ class AdaptiveCardPanel extends React.Component<Props> {
           </TemplateNameAndDateWrapper>
           <TemplateStateWrapper style={{ justifyContent: "center" }}>
             <StatusIndicator
-              state={
-                (template.instances && template.instances[0] && template.instances[0].state)
-                  ?
-                  template.instances[0].state
-                  :
-                  // should never reach the next line
-                  PostedTemplate.StateEnum.Draft
+              //  should never reach else statement
+              state={template.instances && template.instances[0] && template.instances[0].state
+                ? template.instances[0].state
+                : PostedTemplate.StateEnum.Draft
               }
               style={{ marginRight: "10px" }}
             />
-            <Status>{retrieveStateValue(template)}
+            <Status>{state}
             </Status>
           </TemplateStateWrapper>
         </TemplateFooterWrapper>

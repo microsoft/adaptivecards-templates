@@ -9,7 +9,7 @@ import { updateCurrentTemplateVersion } from '../../../../store/currentTemplate/
 
 import { Template, TemplateInstance, PostedTemplate } from 'adaptive-templating-service-typescript-node';
 
-import getVersion from "../../../../utils/getVersion";
+import { getVersion } from "../../../../utils/TemplateUtil";
 
 import PublishModal from '../../../Common/PublishModal';
 import UnpublishModal from '../../../Common/UnpublishModal';

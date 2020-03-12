@@ -20,10 +20,10 @@ import {
   BottomRow,
   ButtonGroup,
   LightButton,
-  PrimaryStyleButton, 
-  Card, 
+  PrimaryStyleButton,
+  Card,
   CardHeaderRow,
-  CardHeaderText, 
+  CardHeaderText,
   CardBody,
   VersionWrapper,
   DateWrapper,
@@ -70,11 +70,11 @@ interface State {
 }
 
 class VersionModal extends React.Component<Props, State> {
-  constructor(props: Props){
+  constructor(props: Props) {
     super(props);
-    this.state = { versionList: this.props.template.instances? new Array(this.props.template.instances.length) : new Array() }
+    this.state = { versionList: this.props.template.instances ? new Array(this.props.template.instances.length) : new Array() }
   }
-  
+
   delete = () => {
     let list = this.props.template.instances!;
     for (let i = 0; i < list.length; i++) {
@@ -88,7 +88,7 @@ class VersionModal extends React.Component<Props, State> {
     let list = this.props.template.instances!;
     for (let i = 0; i < list.length; i++) {
       if (!this.state.versionList[i]) continue;
-      this.props.updateTemplateState(PostedTemplate.StateEnum.Live, list[i].version!, list[i].json );
+      this.props.updateTemplateState(PostedTemplate.StateEnum.Live, list[i].version!, list[i].json);
       this.props.closeModal();
     }
   }
@@ -115,27 +115,32 @@ class VersionModal extends React.Component<Props, State> {
                 <CardHeaderText>Version</CardHeaderText>
                 <CardHeaderText>Published</CardHeaderText>
                 <CardHeaderText>Status</CardHeaderText>
-                <CardHeaderText>{`${this.state.versionList.filter(function(s) { return s; }).length} Selected`}</CardHeaderText>
+                <CardHeaderText>{`${this.state.versionList.filter(function (s) { return s; }).length} Selected`}</CardHeaderText>
               </CardHeaderRow>
               <CardBody>
-              {this.props.template.instances && this.props.template.instances.map((instance: TemplateInstance, index: number) => (
-            <VersionCardRow>
-              <VersionWrapper>
-                {instance.version}
-              </VersionWrapper>      
-              <DateWrapper>{instance.publishedAt? getDateString(instance.publishedAt) : "Not published"}</DateWrapper>
-              <StatusWrapper>
-                <StatusIndicator state={instance.state}/>
-                <Status>{instance.state && instance.state.toString().charAt(0).toUpperCase() + instance.state.toString().slice(1)}</Status>
-              </StatusWrapper>
-              <CheckboxWrapper><Checkbox checked={this.state.versionList[index]} 
-                onChange={() => {
-                  let updatedVersion = this.state.versionList;
-                  updatedVersion[index] = !updatedVersion[index];
-                  this.setState({ versionList: updatedVersion });
-              }}/></CheckboxWrapper>
-            </VersionCardRow>
-            ))}     
+                {this.props.template.instances && this.props.template.instances.map((instance: TemplateInstance, index: number) => (
+                  <VersionCardRow>
+                    <VersionWrapper>
+                      {instance.version}
+                    </VersionWrapper>
+                    <DateWrapper>{instance.publishedAt ? getDateString(instance.publishedAt) : "Not published"}</DateWrapper>
+                    <StatusWrapper>
+                      <StatusIndicator state={
+                        // should never reach else statement
+                        instance.state
+                          ? instance.state
+                          : PostedTemplate.StateEnum.Draft
+                      } />
+                      <Status>{instance.state && instance.state.toString().charAt(0).toUpperCase() + instance.state.toString().slice(1)}</Status>
+                    </StatusWrapper>
+                    <CheckboxWrapper><Checkbox checked={this.state.versionList[index]}
+                      onChange={() => {
+                        let updatedVersion = this.state.versionList;
+                        updatedVersion[index] = !updatedVersion[index];
+                        this.setState({ versionList: updatedVersion });
+                      }} /></CheckboxWrapper>
+                  </VersionCardRow>
+                ))}
               </CardBody>
             </Card>
           </CenterPanelWrapper>
