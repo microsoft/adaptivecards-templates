@@ -9,6 +9,8 @@ import { updateCurrentTemplateVersion } from '../../../../store/currentTemplate/
 
 import { Template, TemplateInstance, PostedTemplate } from 'adaptive-templating-service-typescript-node';
 
+import getVersion from "../../../../utils/getVersion";
+
 import PublishModal from '../../../Common/PublishModal';
 import UnpublishModal from '../../../Common/UnpublishModal';
 import Tags from '../../../Common/Tags';
@@ -110,13 +112,6 @@ const mapDispatchToProps = (dispatch: any) => {
     }
   }
 };
-
-function getVersion(template: Template): string {
-  if (template.instances && template.instances[0] && template.instances[0].version) {
-    return template.instances[0].version;
-  }
-  return "1.0"
-}
 
 function getTemplateState(template: Template, version: string): PostedTemplate.StateEnum {
   if (!template.instances || template.instances.length === 0) return PostedTemplate.StateEnum.Draft;
