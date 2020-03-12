@@ -185,8 +185,8 @@ class TemplateInfo extends React.Component<Props, State> {
                   styles={DropdownStyles}
                 />
               </Title>
-              <StatusIndicator state={getTemplateState(this.props.template, this.state.version)} />
-              <Status>{PostedTemplate.StateEnum[getTemplateState(this.props.template, this.state.version)]}</Status>
+              <StatusIndicator state={templateState} />
+              <Status>{PostedTemplate.StateEnum[templateState]}</Status>
             </TitleWrapper>
             <TimeStamp>
               Created {createdAtParsed}
