@@ -1,28 +1,28 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { 
-  Template, 
-  TemplateInstance 
+import {
+  Template,
+  TemplateInstance
 } from 'adaptive-templating-service-typescript-node';
 
 import {
   CardManageButton,
   CardTitle,
-  VersionCardHeader, 
+  VersionCardHeader,
   VersionCardRowTitle,
   DateWrapper,
   VersionCardRow,
   StatusWrapper,
-  VersionIcon, 
+  VersionIcon,
   VersionWrapper
 } from './styled'
 
 import {
   Card,
   CardHeader,
-  CardBody, 
-  StatusIndicator, 
+  CardBody,
+  StatusIndicator,
   Status
 } from './../styled';
 
@@ -57,34 +57,34 @@ const mapDispatchToProps = (dispatch: any) => {
 class VersionCard extends React.Component<Props> {
   render() {
     return (
-      <Card key="Recent Releases" style={{width: `100%`}}>
+      <Card key="Recent Releases" style={{ width: `100%` }}>
         <CardHeader>
           <VersionCardHeader>
             <CardTitle>Recent Releases</CardTitle>
-    <CardManageButton onClick={() => {this.props.openModal(ModalState.Version)}}>{MANAGE}</CardManageButton>
+            <CardManageButton onClick={() => { this.props.openModal(ModalState.Version) }}>{MANAGE}</CardManageButton>
           </VersionCardHeader>
         </CardHeader>
         <CardBody>
           <VersionCardRow>
-            <VersionCardRowTitle style={{flexBasis: `15%`}}>Version</VersionCardRowTitle>
-            <VersionCardRowTitle style={{flexBasis: `25%`}}>Updated</VersionCardRowTitle>
-            <VersionCardRowTitle style={{flexBasis: `20%`}}>Status</VersionCardRowTitle>
-          </VersionCardRow>  
+            <VersionCardRowTitle style={{ flexBasis: `15%` }}>Version</VersionCardRowTitle>
+            <VersionCardRowTitle style={{ flexBasis: `25%` }}>Updated</VersionCardRowTitle>
+            <VersionCardRowTitle style={{ flexBasis: `20%` }}>Status</VersionCardRowTitle>
+          </VersionCardRow>
           {this.props.template.instances && this.props.template.instances.map((instance: TemplateInstance) => (
             <VersionCardRow>
               <VersionWrapper>
                 {instance.version}
-                {instance.version === this.props.templateVersion && <VersionIcon iconName={'View'}/>}
-              </VersionWrapper>      
-              <DateWrapper>{instance.updatedAt? getDateString(instance.updatedAt) : "N/A"}</DateWrapper>
+                {instance.version === this.props.templateVersion && <VersionIcon iconName={'View'} />}
+              </VersionWrapper>
+              <DateWrapper>{instance.updatedAt ? getDateString(instance.updatedAt) : "N/A"}</DateWrapper>
               <StatusWrapper>
-                <StatusIndicator state={instance.state}/>
+                <StatusIndicator state={instance.state} />
                 <Status>{instance.state && instance.state.toString().charAt(0).toUpperCase() + instance.state.toString().slice(1)}</Status>
               </StatusWrapper>
             </VersionCardRow>
-          ))}       
+          ))}
         </CardBody>
-      {this.props.modalState === ModalState.Version && <VersionModal template={this.props.template} />}
+        {this.props.modalState === ModalState.Version && <VersionModal template={this.props.template} />}
       </Card>
     );
   }

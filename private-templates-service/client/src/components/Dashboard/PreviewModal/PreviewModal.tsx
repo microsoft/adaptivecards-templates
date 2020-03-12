@@ -7,6 +7,8 @@ import { setPage } from '../../../store/page/actions';
 import { RootState } from '../../../store/rootReducer';
 import { getTemplate } from "../../../store/currentTemplate/actions";
 
+import { getLatestVersion } from "../../../utils/TemplateUtil";
+
 import AdaptiveCard from '../../Common/AdaptiveCard'
 import TemplateInfo from './TemplateInfo';
 
@@ -51,7 +53,7 @@ interface State {
 class PreviewModal extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { templateVersion: "1.0" }
+    this.state = { templateVersion: getLatestVersion(this.props.template) };
     this.props.getTemplate(this.props.match.params.uuid);
   }
 
@@ -66,7 +68,7 @@ class PreviewModal extends React.Component<Props, State> {
   };
 
   componentDidUpdate(prevProps: Props) {
-    if (!this.props.isFetching && (!this.props.template || !this.props.template.instances ||  this.props.template.instances.length === 0)) {
+    if (!this.props.isFetching && (!this.props.template || !this.props.template.instances || this.props.template.instances.length === 0)) {
       const history = this.props.history;
       if (history) history.push("/");
     }
@@ -99,7 +101,7 @@ class PreviewModal extends React.Component<Props, State> {
             </DescriptorWrapper>
           </React.Fragment>
           : <CenteredSpinner size={SpinnerSize.large} />
-        } 
+        }
       </ModalWrapper>
     )
   }

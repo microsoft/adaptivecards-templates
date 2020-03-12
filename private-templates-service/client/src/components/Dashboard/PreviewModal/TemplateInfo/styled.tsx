@@ -17,7 +17,7 @@ export const DropdownStyles: Partial<IDropdownStyles> = {
   title: {
     marginLeft: 10,
     marginRight: 10,
-    marginTop: 5, 
+    marginTop: 5,
     marginBottom: 5,
     borderWidth: 0,
   },
@@ -58,9 +58,9 @@ export const Title = styled.div`
 `;
 
 export const StatusIndicator = styled.div<{ state?: PostedTemplate.StateEnum }>`
-  background-color: ${props => 
-    props.state === PostedTemplate.StateEnum.Live ? COLORS.GREEN : 
-    props.state === PostedTemplate.StateEnum.Draft ? COLORS.YELLOW : COLORS.GREY3};
+  background-color: ${props =>
+    props.state === PostedTemplate.StateEnum.Live ? COLORS.GREEN :
+      props.state === PostedTemplate.StateEnum.Draft ? COLORS.YELLOW : COLORS.GREY3};
   width: 10px;
   height: 10px;
   border-radius: 50%;
