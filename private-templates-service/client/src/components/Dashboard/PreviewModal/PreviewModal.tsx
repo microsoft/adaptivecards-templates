@@ -73,6 +73,10 @@ class PreviewModal extends React.Component<Props, State> {
   };
 
   componentDidUpdate(prevProps: Props) {
+    if (!this.props.isFetching && (!this.props.template || !this.props.template.instances ||  this.props.template.instances.length === 0)) {
+      const history = this.props.history;
+      if (history) history.push("/");
+    }
     if (prevProps.template === undefined && this.props.template && this.props.template.name) {
       this.props.setPage(this.props.template.name, 'Template');
     }
@@ -102,7 +106,7 @@ class PreviewModal extends React.Component<Props, State> {
             </DescriptorWrapper>
           </React.Fragment>
           : <CenteredSpinner size={SpinnerSize.large} />
-        }
+        } 
       </ModalWrapper>
     )
   }

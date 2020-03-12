@@ -180,8 +180,8 @@ class TemplateInfo extends React.Component<Props, State> {
                   styles={DropdownStyles}
                 />
               </Title>
-              <StatusIndicator state={isLive ? PostedTemplate.StateEnum.Live : PostedTemplate.StateEnum.Draft} />
-              <Status>{isLive ? 'Published' : 'Draft'}</Status>
+              <StatusIndicator state={templateState} />
+              <Status>{PostedTemplate.StateEnum[templateState]}</Status>
             </TitleWrapper>
             <TimeStamp>
               Created {createdAtParsed}
@@ -249,6 +249,9 @@ function onActionButtonClick(props: Props, state: State, val: any) {
           break;
         case PostedTemplate.StateEnum.Live:
           props.openModal(ModalState.Unpublish);
+          break;
+        case PostedTemplate.StateEnum.Deprecated:
+          props.openModal(ModalState.Publish);
           break;
         default:
           break;
