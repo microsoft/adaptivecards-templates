@@ -9,8 +9,6 @@ import { updateCurrentTemplateVersion } from '../../../../store/currentTemplate/
 
 import { Template, TemplateInstance, PostedTemplate } from 'adaptive-templating-service-typescript-node';
 
-import getVersion from "../../../../utils/getVersion";
-
 import PublishModal from '../../../Common/PublishModal';
 import UnpublishModal from '../../../Common/UnpublishModal';
 import Tags from '../../../Common/Tags';
@@ -113,30 +111,19 @@ const mapDispatchToProps = (dispatch: any) => {
   }
 };
 
+function getVersion(template: Template): string {
+  if (template.instances && template.instances[0] && template.instances[0].version) {
+    return template.instances[0].version;
+  }
+  return "1.0"
+}
+
 function getTemplateState(template: Template, version: string): PostedTemplate.StateEnum {
   if (!template.instances || template.instances.length === 0) return PostedTemplate.StateEnum.Draft;
   for (let instance of template.instances) {
     if (instance.version === version) return instance.state || PostedTemplate.StateEnum.Draft;
   }
   return PostedTemplate.StateEnum.Draft;
-}
-
-function retrieveStateValue(template: Template, version: string): string {
-  let state = getTemplateState(template, version);
-  switch (state) {
-    case (PostedTemplate.StateEnum.Live): {
-      return "Published";
-    }
-    case (PostedTemplate.StateEnum.Draft): {
-      return "Draft";
-    }
-    case (PostedTemplate.StateEnum.Deprecated): {
-      return "Deprecated";
-    }
-    default:
-      // should never reach the next line
-      return "";
-  }
 }
 
 class TemplateInfo extends React.Component<Props, State> {
@@ -198,8 +185,8 @@ class TemplateInfo extends React.Component<Props, State> {
                   styles={DropdownStyles}
                 />
               </Title>
-              <StatusIndicator state={templateState} />
-              <Status>{retrieveStateValue(this.props.template, this.state.version)}</Status>
+              <StatusIndicator state={isLive ? PostedTemplate.StateEnum.Live : PostedTemplate.StateEnum.Draft} />
+              <Status>{isLive ? 'Published' : 'Draft'}</Status>
             </TitleWrapper>
             <TimeStamp>
               Created {createdAtParsed}
