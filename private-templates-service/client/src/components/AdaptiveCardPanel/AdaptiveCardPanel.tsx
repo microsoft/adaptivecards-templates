@@ -50,9 +50,10 @@ class AdaptiveCardPanel extends React.Component<Props> {
           </TemplateNameAndDateWrapper>
           <TemplateStateWrapper style={{ justifyContent: "center" }}>
             <StatusIndicator
-              //  should never reach else statement
+
               state={template.instances && template.instances[0] && template.instances[0].state
                 ? template.instances[0].state
+                //  should never reach else statement
                 : PostedTemplate.StateEnum.Draft
               }
               style={{ marginRight: "10px" }}

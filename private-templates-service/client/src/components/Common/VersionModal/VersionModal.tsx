@@ -126,9 +126,9 @@ class VersionModal extends React.Component<Props, State> {
                     <DateWrapper>{instance.publishedAt ? getDateString(instance.publishedAt) : "Not published"}</DateWrapper>
                     <StatusWrapper>
                       <StatusIndicator state={
-                        // should never reach else statement
                         instance.state
                           ? instance.state
+                          // should never reach else statement
                           : PostedTemplate.StateEnum.Draft
                       } />
                       <Status>{instance.state && instance.state.toString().charAt(0).toUpperCase() + instance.state.toString().slice(1)}</Status>
