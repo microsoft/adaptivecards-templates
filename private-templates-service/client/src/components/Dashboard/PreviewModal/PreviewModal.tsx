@@ -47,11 +47,18 @@ interface State {
   templateVersion: string;
 }
 
+function getVersion(template?: Template): string {
+  if (template && template.instances && template.instances[0] && template.instances[0].version) {
+    return template.instances[0].version;
+  }
+  return "1.0"
+}
+
 
 class PreviewModal extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { templateVersion: "1.0" }
+    this.state = { templateVersion: getVersion(this.props.template) };
     this.props.getTemplate(this.props.match.params.uuid);
   }
 

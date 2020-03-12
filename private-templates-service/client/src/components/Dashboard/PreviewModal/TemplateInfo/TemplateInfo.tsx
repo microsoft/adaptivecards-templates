@@ -126,6 +126,23 @@ function getTemplateState(template: Template, version: string): PostedTemplate.S
   return PostedTemplate.StateEnum.Draft;
 }
 
+function retrieveStateValue(state: PostedTemplate.StateEnum): string {
+  switch (state) {
+    case (PostedTemplate.StateEnum.Live): {
+      return "Published";
+    }
+    case (PostedTemplate.StateEnum.Draft): {
+      return "Draft";
+    }
+    case (PostedTemplate.StateEnum.Deprecated): {
+      return "Deprecated";
+    }
+    default:
+      // should never reach the next line
+      return "";
+  }
+}
+
 class TemplateInfo extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
@@ -171,6 +188,7 @@ class TemplateInfo extends React.Component<Props, State> {
       return (<div>Error loading page</div>)
     }
     let templateState = getTemplateState(this.props.template, this.state.version);
+    console.log(templateState);
     return (
       < OuterWrapper >
         <HeaderWrapper>
@@ -185,8 +203,8 @@ class TemplateInfo extends React.Component<Props, State> {
                   styles={DropdownStyles}
                 />
               </Title>
-              <StatusIndicator state={isLive ? PostedTemplate.StateEnum.Live : PostedTemplate.StateEnum.Draft} />
-              <Status>{isLive ? 'Published' : 'Draft'}</Status>
+              <StatusIndicator state={templateState} />
+              <Status>{retrieveStateValue(getTemplateState(this.props.template, this.state.version))}</Status>
             </TitleWrapper>
             <TimeStamp>
               Created {createdAtParsed}
