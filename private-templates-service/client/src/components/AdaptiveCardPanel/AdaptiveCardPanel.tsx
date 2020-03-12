@@ -13,7 +13,7 @@ import {
   Status
 } from "../Dashboard/PreviewModal/TemplateInfo/styled";
 import AdaptiveCard from "../Common/AdaptiveCard";
-import { getVersion, getLatestTemplateInstanceState } from "../../utils/TemplateUtil";
+import { getLatestVersion, getLatestTemplateInstanceState } from "../../utils/TemplateUtil";
 import {
   Template,
   PostedTemplate,
@@ -34,7 +34,7 @@ class AdaptiveCardPanel extends React.Component<Props> {
 
   render() {
     let template = this.props.template;
-    let version = getVersion(this.props.template);
+    let version = getLatestVersion(this.props.template);
     let state = getLatestTemplateInstanceState(template)
     return (
       <Container onClick={this.onClick}>

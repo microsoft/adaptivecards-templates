@@ -7,7 +7,7 @@ import { setPage } from '../../../store/page/actions';
 import { RootState } from '../../../store/rootReducer';
 import { getTemplate } from "../../../store/currentTemplate/actions";
 
-import { getVersion } from "../../../utils/TemplateUtil";
+import { getLatestVersion } from "../../../utils/TemplateUtil";
 
 import AdaptiveCard from '../../Common/AdaptiveCard'
 import TemplateInfo from './TemplateInfo';
@@ -53,7 +53,7 @@ interface State {
 class PreviewModal extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { templateVersion: getVersion(this.props.template) };
+    this.state = { templateVersion: getLatestVersion(this.props.template) };
     this.props.getTemplate(this.props.match.params.uuid);
   }
 

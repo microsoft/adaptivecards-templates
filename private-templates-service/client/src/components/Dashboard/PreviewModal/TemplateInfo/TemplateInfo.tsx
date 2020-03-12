@@ -9,7 +9,7 @@ import { updateCurrentTemplateVersion } from '../../../../store/currentTemplate/
 
 import { Template, TemplateInstance, PostedTemplate } from 'adaptive-templating-service-typescript-node';
 
-import { getVersion } from "../../../../utils/TemplateUtil";
+import { getLatestVersion } from "../../../../utils/TemplateUtil";
 
 import PublishModal from '../../../Common/PublishModal';
 import UnpublishModal from '../../../Common/UnpublishModal';
@@ -124,7 +124,7 @@ function getTemplateState(template: Template, version: string): PostedTemplate.S
 class TemplateInfo extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    const currentVersion = getVersion(this.props.template);
+    const currentVersion = getLatestVersion(this.props.template);
     this.state = { version: currentVersion }
   }
 
