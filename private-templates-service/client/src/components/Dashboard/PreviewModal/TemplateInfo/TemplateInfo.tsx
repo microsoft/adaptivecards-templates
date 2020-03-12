@@ -9,6 +9,8 @@ import { updateCurrentTemplateVersion } from '../../../../store/currentTemplate/
 
 import { Template, TemplateInstance, PostedTemplate } from 'adaptive-templating-service-typescript-node';
 
+import getVersion from "../../../../utils/getVersion";
+
 import PublishModal from '../../../Common/PublishModal';
 import UnpublishModal from '../../../Common/UnpublishModal';
 import Tags from '../../../Common/Tags';
@@ -111,13 +113,6 @@ const mapDispatchToProps = (dispatch: any) => {
   }
 };
 
-function getVersion(template: Template): string {
-  if (template.instances && template.instances[0] && template.instances[0].version) {
-    return template.instances[0].version;
-  }
-  return "1.0"
-}
-
 function getTemplateState(template: Template, version: string): PostedTemplate.StateEnum {
   if (!template.instances || template.instances.length === 0) return PostedTemplate.StateEnum.Draft;
   for (let instance of template.instances) {
@@ -126,7 +121,8 @@ function getTemplateState(template: Template, version: string): PostedTemplate.S
   return PostedTemplate.StateEnum.Draft;
 }
 
-function retrieveStateValue(state: PostedTemplate.StateEnum): string {
+function retrieveStateValue(template: Template, version: string): string {
+  let state = getTemplateState(template, version);
   switch (state) {
     case (PostedTemplate.StateEnum.Live): {
       return "Published";
@@ -188,7 +184,6 @@ class TemplateInfo extends React.Component<Props, State> {
       return (<div>Error loading page</div>)
     }
     let templateState = getTemplateState(this.props.template, this.state.version);
-    console.log(templateState);
     return (
       < OuterWrapper >
         <HeaderWrapper>
@@ -204,7 +199,7 @@ class TemplateInfo extends React.Component<Props, State> {
                 />
               </Title>
               <StatusIndicator state={templateState} />
-              <Status>{retrieveStateValue(getTemplateState(this.props.template, this.state.version))}</Status>
+              <Status>{retrieveStateValue(this.props.template, this.state.version)}</Status>
             </TitleWrapper>
             <TimeStamp>
               Created {createdAtParsed}

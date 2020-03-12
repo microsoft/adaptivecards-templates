@@ -13,6 +13,7 @@ import {
   Status
 } from "../Dashboard/PreviewModal/TemplateInfo/styled";
 import AdaptiveCard from "../Common/AdaptiveCard";
+import getVersion from "../../utils/getVersion";
 import {
   Template,
   PostedTemplate,
@@ -22,13 +23,6 @@ import { getDateString } from "../../utils/versionUtils";
 interface Props {
   onClick?: (templateID: string) => void;
   template: Template;
-}
-
-function getVersion(template: Template): string {
-  if (template.instances && template.instances[0] && template.instances[0].version) {
-    return template.instances[0].version;
-  }
-  return "1.0"
 }
 
 function retrieveStateValue(template: Template): string {
@@ -59,7 +53,6 @@ class AdaptiveCardPanel extends React.Component<Props> {
 
   render() {
     let template = this.props.template;
-    console.log(template);
     let version = getVersion(this.props.template);
     return (
       <Container onClick={this.onClick}>
