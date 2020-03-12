@@ -125,12 +125,7 @@ class VersionModal extends React.Component<Props, State> {
                     </VersionWrapper>
                     <DateWrapper>{instance.publishedAt ? getDateString(instance.publishedAt) : "Not published"}</DateWrapper>
                     <StatusWrapper>
-                      <StatusIndicator state={
-                        instance.state
-                          ? instance.state
-                          // should never reach else statement
-                          : PostedTemplate.StateEnum.Draft
-                      } />
+                      <StatusIndicator state={instance.state!} />
                       <Status>{instance.state && instance.state.toString().charAt(0).toUpperCase() + instance.state.toString().slice(1)}</Status>
                     </StatusWrapper>
                     <CheckboxWrapper><Checkbox checked={this.state.versionList[index]}
