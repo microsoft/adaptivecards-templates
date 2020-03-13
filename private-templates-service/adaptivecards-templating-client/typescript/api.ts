@@ -448,13 +448,13 @@ export class TemplateInfo {
 
 export class TemplateInstance {
   'id'?: string;
-  'json'?: string;
+  'json'?: object;
   'version'?: string;
   'publishedAt'?: string;
   'state'?: TemplateInstance.StateEnum;
   'isShareable'?: boolean;
   'numHits'?: number;
-  'data'?: Array<any>;
+  'data'?: Array<object>;
   'updatedAt'?: string;
   'createdAt'?: string;
 

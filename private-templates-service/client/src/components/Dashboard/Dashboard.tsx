@@ -122,10 +122,10 @@ class Dashboard extends React.Component<Props> {
                 templates={recentlyEditedTemplates}
               ></Gallery>
             ) : (
-              <PlaceholderText>
-                No edited templates yet. Create or edit one :)
+                <PlaceholderText>
+                  No edited templates yet. Create or edit one :)
               </PlaceholderText>
-            )}
+              )}
           </React.Fragment>
           <React.Fragment>
             <Title>Recently Viewed</Title>
@@ -135,10 +135,10 @@ class Dashboard extends React.Component<Props> {
                 recentlyViewed={recentlyViewedTemplates}
               ></RecentlyViewed>
             ) : (
-              <PlaceholderText>
-                No recently viewed templates yet. Check out some templates:)
+                <PlaceholderText>
+                  No recently viewed templates yet. Check out some templates:)
               </PlaceholderText>
-            )}
+              )}
           </React.Fragment>
         </DashboardContainer>
         <TagsContainer>

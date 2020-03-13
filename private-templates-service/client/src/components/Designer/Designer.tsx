@@ -21,15 +21,15 @@ const mapStateToProps = (state: RootState) => {
     templateJSON: state.currentTemplate.templateJSON,
     templateName: state.currentTemplate.templateName,
     sampleDataJSON: state.currentTemplate.sampleDataJSON,
-    modalState: state.page.modalState
+    modalState: state.page.modalState,
+    version: state.currentTemplate.version
   };
 };
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    updateTemplate: (templateID: string, currentVersion: string, templateJSON: string, templateName: string, sampleDataJSON: string) => {
-      //TODO: hagupt, damott when templates are editable we need to change the version field here. Right now it's always 1.0
-      dispatch(updateTemplate(templateID, undefined, templateJSON, templateName, sampleDataJSON));
+    updateTemplate: (templateID: string, currentVersion: string, templateJSON: object, sampleDataJSON: object, templateName: string) => {
+      dispatch(updateTemplate(templateID, currentVersion, templateJSON, sampleDataJSON, templateName));
     },
     setPage: (currentPageTitle: string, currentPage: string) => {
       dispatch(setPage(currentPageTitle, currentPage));
@@ -42,10 +42,11 @@ const mapDispatchToProps = (dispatch: any) => {
 
 interface DesignerProps {
   templateID: string;
-  templateJSON: string;
+  templateJSON: object;
   templateName: string;
-  sampleDataJSON: string;
-  updateTemplate: (templateID: string, currentVersion: string, templateJSON: string, templateName: string, sampleDataJSON: string) => any;
+  sampleDataJSON: object;
+  version: string;
+  updateTemplate: (templateID: string, currentVersion: string, templateJSON: object, sampleDataJSON: object, templateName: string) => any;
   setPage: (currentPageTitle: string, currentPage: string) => void;
   toggleModal: () => void;
   openModal: (modalState: ModalState) => void;
@@ -73,7 +74,6 @@ class Designer extends React.Component<DesignerProps> {
       result.outputHtml = new markdownit().render(text);
       result.didProcess = true;
     }
-
     designer = initDesigner();
 
     let publishButton = new ACDesigner.ToolbarButton("publishButton", "Publish", "", (sender) => (alert("Published!")));
@@ -83,8 +83,6 @@ class Designer extends React.Component<DesignerProps> {
     let saveButton = new ACDesigner.ToolbarButton("saveButton", "Save", "", (sender) => (onSave(designer, this.props)));
     saveButton.separator = true;
     designer.toolbar.insertElementAfter(saveButton, ACDesigner.CardDesigner.ToolbarCommands.TogglePreview);
-
-    designer.sampleData = "";
   }
 
   componentDidMount() {
@@ -92,8 +90,18 @@ class Designer extends React.Component<DesignerProps> {
     if (element) {
       designer.attachTo(element);
     }
-
     designer.monacoModuleLoaded(monaco);
+
+    if (this.props.templateJSON) {
+      designer.setCard(this.props.templateJSON);
+    }
+
+    if (this.props.sampleDataJSON) {
+      designer.sampleData = this.props.sampleDataJSON;
+    }
+    else {
+      designer.sampleData = {};
+    }
   }
 
   render() {
@@ -127,12 +135,11 @@ function initDesigner(): ACDesigner.CardDesigner {
 }
 
 function onSave(designer: ACDesigner.CardDesigner, props: DesignerProps): void {
-  if (props.templateJSON !== JSON.stringify(designer.getCard()) || props.sampleDataJSON !== designer.sampleData) {
+  if (JSON.stringify(props.templateJSON) !== JSON.stringify(designer.getCard()) || props.sampleDataJSON !== designer.sampleData) {
     props.openModal(ModalState.Save);
     //console.log(props.modalState,"modalstate");
     
-    props.updateTemplate(props.templateID, "1.0", JSON.stringify(designer.getCard()), props.templateName, designer.sampleData); // TODO: get the version dynamically @guptaharsh25\
-
+    props.updateTemplate(props.templateID, props.version, designer.getCard(), designer.sampleData,props.templateName, ); 
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(requireAuthentication(Designer));
