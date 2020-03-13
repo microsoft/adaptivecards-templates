@@ -63,8 +63,7 @@ function setContextRoot(data: object, context: ACData.EvaluationContext) {
 
 // bindData binds the data to the adaptive card template
 function bindData(temp: TemplateInstance): TemplateInstance {
-  let jsonTemp = cleanTemplate(temp);
-  let template: ACData.Template = new ACData.Template(jsonTemp);
+  let template: ACData.Template = new ACData.Template(temp.json);
   let context: ACData.EvaluationContext = new ACData.EvaluationContext();
   if (temp.data && temp.data[0]) {
     setContextRoot(temp.data[0], context);
@@ -76,27 +75,6 @@ function bindData(temp: TemplateInstance): TemplateInstance {
     console.log("Error parsing data: ", e);
     return temp;
   }
-}
-
-/*
-cleanTemplate accepts a template object. This method strips the object of the unncessary '\\\' contained in the object and removes the 
-extra characters before and after the actual JSON object. It then parses the string into JSON and returns the JSON object.  
-*/
-function cleanTemplate(temp: TemplateInstance): Template {
-  const json = JSON.stringify(temp.json);
-  let jsonTemp = {};
-
-  try {
-    jsonTemp = JSON.parse(json);
-  } catch {
-    console.log("Invalid Adaptive Cards JSON. Card not parsed.");
-    const errorMessageJSON = JSON.stringify(
-      require("../../../assets/default-adaptivecards/defaultErrorCard.json")
-    );
-
-    jsonTemp = errorMessageJSON;
-  }
-  return jsonTemp;
 }
 
 function processTemplate(temp: TemplateInstance): any {
