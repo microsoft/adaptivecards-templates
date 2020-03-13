@@ -3,24 +3,25 @@ import requireAuthentication from '../../utils/requireAuthentication';
 
 import { RootState } from '../../store/rootReducer';
 import { connect } from 'react-redux';
-import { UserType } from '../../store/auth/types';
 import { updateTemplate } from '../../store/currentTemplate/actions';
 
 //ACDesigner
 import * as monaco from 'monaco-editor';
 import markdownit from 'markdown-it';
 import * as ACDesigner from 'adaptivecards-designer';
-import { setPage } from '../../store/page/actions';
+import { setPage, openModal } from '../../store/page/actions';
 import { DesignerWrapper } from './styled';
+
+import SaveModal from './SaveModal/SaveModal';
+import { ModalState } from '../../store/page/types';
 
 const mapStateToProps = (state: RootState) => {
   return {
-    isAuthenticated: state.auth.isAuthenticated,
-    user: state.auth.user,
     templateID: state.currentTemplate.templateID,
     templateJSON: state.currentTemplate.templateJSON,
     templateName: state.currentTemplate.templateName,
-    sampleDataJSON: state.currentTemplate.sampleDataJSON
+    sampleDataJSON: state.currentTemplate.sampleDataJSON,
+    modalState: state.page.modalState
   };
 };
 
@@ -32,19 +33,24 @@ const mapDispatchToProps = (dispatch: any) => {
     },
     setPage: (currentPageTitle: string, currentPage: string) => {
       dispatch(setPage(currentPageTitle, currentPage));
+    },
+    openModal: (modalState: ModalState) => {
+      dispatch(openModal(modalState));
     }
   }
 }
 
 interface DesignerProps {
-  isAuthenticated: boolean;
-  user?: UserType;
   templateID: string;
   templateJSON: string;
   templateName: string;
   sampleDataJSON: string;
   updateTemplate: (templateID: string, currentVersion: string, templateJSON: string, templateName: string, sampleDataJSON: string) => any;
   setPage: (currentPageTitle: string, currentPage: string) => void;
+  toggleModal: () => void;
+  openModal: (modalState: ModalState) => void;
+  isSaveOpen: boolean;
+  modalState?: ModalState;
 }
 
 let designer: ACDesigner.CardDesigner;
@@ -53,8 +59,12 @@ class Designer extends React.Component<DesignerProps> {
   constructor(props: DesignerProps) {
     super(props);
     props.setPage(this.props.templateName, "Designer");
+    this.setState({isSaveOpen: false});
   }
 
+  toggleModal = () => {
+    this.setState({isSaveOpen: !this.props.isSaveOpen});
+  }
   componentWillMount() {
     ACDesigner.GlobalSettings.enableDataBindingSupport = true;
     ACDesigner.GlobalSettings.showSampleDataEditorToolbox = true;
@@ -87,13 +97,13 @@ class Designer extends React.Component<DesignerProps> {
   }
 
   render() {
+    console.log(this.props.modalState,"modalstate insider redner");
     return (
-      <DesignerWrapper id="designer-container" dangerouslySetInnerHTML={{ __html: "dangerouslySetACDesigner" }}></DesignerWrapper>
+      <React.Fragment>
+        <DesignerWrapper id="designer-container" dangerouslySetInnerHTML={{ __html: "dangerouslySetACDesigner" }}></DesignerWrapper>
+        {this.props.modalState===ModalState.Save && <SaveModal sampleData = {designer.sampleData} templateJSON = {JSON.stringify(designer.getCard())}/>}
+      </React.Fragment>
     );
-  }
-
-  shouldComponentUpdate() {
-    return false;
   }
 }
 
@@ -118,7 +128,11 @@ function initDesigner(): ACDesigner.CardDesigner {
 
 function onSave(designer: ACDesigner.CardDesigner, props: DesignerProps): void {
   if (props.templateJSON !== JSON.stringify(designer.getCard()) || props.sampleDataJSON !== designer.sampleData) {
-    props.updateTemplate(props.templateID, "1.0", JSON.stringify(designer.getCard()), props.templateName, designer.sampleData); // TODO: get the version dynamically @guptaharsh25
+    props.openModal(ModalState.Save);
+    //console.log(props.modalState,"modalstate");
+    
+    props.updateTemplate(props.templateID, "1.0", JSON.stringify(designer.getCard()), props.templateName, designer.sampleData); // TODO: get the version dynamically @guptaharsh25\
+
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(requireAuthentication(Designer));

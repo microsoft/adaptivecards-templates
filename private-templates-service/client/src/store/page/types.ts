@@ -7,7 +7,8 @@ export interface PageState {
 export enum ModalState {
   Share,
   Publish,
-  Unpublish
+  Unpublish,
+  Save
 }
 
 // Action Types
