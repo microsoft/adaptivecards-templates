@@ -174,7 +174,7 @@ export function updateCurrentTemplateVersion(template: Template, version: string
   }
 }
 
-export function updateTemplate(templateID?: string, currentVersion?: string, templateJSON?: object, sampleDataJSON?: any, templateName?: string, state?: PostedTemplate.StateEnum, tags?: string[], isShareable?: boolean) {
+export function updateTemplate(templateID?: string, currentVersion?: string, templateJSON?: object, sampleDataJSON?: object, templateName?: string, state?: PostedTemplate.StateEnum, tags?: string[], isShareable?: boolean) {
   return function (dispatch: any, getState: () => RootState) {
     const appState = getState();
 
@@ -195,7 +195,8 @@ export function updateTemplate(templateID?: string, currentVersion?: string, tem
     }
 
     if (sampleDataJSON) {
-      newTemplate.data = Array(sampleDataJSON);
+      // TODO the clientSDK, backend, and DB adapter should be refactored to be json object and not an array of objects
+      newTemplate.data = new Array(sampleDataJSON);
     }
 
     newTemplate.version = version;

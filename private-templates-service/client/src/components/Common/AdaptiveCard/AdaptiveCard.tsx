@@ -47,19 +47,17 @@ export function renderAdaptiveCard(template: Template): any {
   try {
     // Render the card to an HTML element
     let renderedCard = adaptiveCard.render();
+
     return renderedCard;
   } catch (e) {
     return <div>Error</div>;
   }
 }
 
-function setContextRoot(data: string, context: ACData.EvaluationContext) {
+function setContextRoot(data: object, context: ACData.EvaluationContext) {
   try {
-    let dataString = JSON.stringify(data);
-    let dataJSON: JSON = JSON.parse(dataString);
-    context.$root = dataJSON;
+    context.$root = data;
   } catch (e) {
-    console.log(e);
   }
 }
 
@@ -69,7 +67,7 @@ function bindData(temp: TemplateInstance): TemplateInstance {
   let template: ACData.Template = new ACData.Template(jsonTemp);
   let context: ACData.EvaluationContext = new ACData.EvaluationContext();
   if (temp.data && temp.data[0]) {
-    setContextRoot(JSON.stringify(temp.data[0]), context);
+    setContextRoot(temp.data[0], context);
   }
   try {
     let card = template.expand(context);
