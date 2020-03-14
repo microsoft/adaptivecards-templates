@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 import { 
   Template, 
@@ -26,25 +27,41 @@ import {
 } from './../styled';
 
 import { getDateString } from '../../../../../utils/versionUtils';
+import { ModalState } from '../../../../../store/page/types';
+import { openModal } from '../../../../../store/page/actions';
+import VersionModal from '../../../../Common/VersionModal';
+import { MANAGE } from '../../../../../assets/strings';
+import { RootState } from '../../../../../store/rootReducer';
 
 interface Props {
   template: Template;
   templateVersion: string;
+  modalState?: ModalState;
+  openModal: (modalState: ModalState) => void;
 }
 
+const mapStateToProps = (state: RootState) => {
+  return {
+    modalState: state.page.modalState,
+  }
+}
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    openModal: (modalState: ModalState) => {
+      dispatch(openModal(modalState));
+    }
+  }
+};
 
 class VersionCard extends React.Component<Props> {
-  constructor(props: Props) {
-    super(props);
-  }
-
   render() {
     return (
       <Card key="Recent Releases" style={{width: `100%`}}>
         <CardHeader>
           <VersionCardHeader>
             <CardTitle>Recent Releases</CardTitle>
-            <CardManageButton>Manage</CardManageButton>
+    <CardManageButton onClick={() => {this.props.openModal(ModalState.Version)}}>{MANAGE}</CardManageButton>
           </VersionCardHeader>
         </CardHeader>
         <CardBody>
@@ -67,9 +84,11 @@ class VersionCard extends React.Component<Props> {
             </VersionCardRow>
           ))}       
         </CardBody>
+      {this.props.modalState === ModalState.Version && <VersionModal template={this.props.template} />}
       </Card>
     );
   }
 }
 
-export default VersionCard;
+export default connect(mapStateToProps, mapDispatchToProps)(VersionCard);
+

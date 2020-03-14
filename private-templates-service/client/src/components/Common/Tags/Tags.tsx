@@ -6,6 +6,8 @@ import { RootState } from '../../../store/rootReducer';
 
 import { Template } from 'adaptive-templating-service-typescript-node';
 
+import KeyCode from '../../../globalKeyCodes';
+
 import {
   Tag,
   TagCloseIcon,
@@ -47,6 +49,7 @@ interface State {
 
 class Tags extends React.Component<Props, State>  {
   addTagInput = React.createRef<HTMLInputElement>();
+  tagRefs: {[ref: string]: HTMLDivElement};
 
   constructor(props: Props) {
     super(props);
@@ -54,6 +57,7 @@ class Tags extends React.Component<Props, State>  {
       isAdding: false,
       newTagName: '',
     }
+    this.tagRefs = {};
   }
 
   tagRemove = (tag: string) => {
@@ -81,12 +85,41 @@ class Tags extends React.Component<Props, State>  {
     e.preventDefault();
     if (this.addTagInput && this.addTagInput.current && this.props.template && this.props.template.tags) {
       const tag = this.addTagInput.current.value;
-      this.props.updateTags([...this.props.template.tags, tag]);
+      if(this.props.template.tags.includes(tag)){
+        this.highlightTag(tag, this.props.template.tags);
+      }
+      else if(tag === ""){
+        this.closeAddTag();
+      }
+      else{
+        this.props.updateTags([...this.props.template.tags, tag]);
+      }
+    }
+  }
+
+  highlightTag = (tagToHighlight: string, currentTags: string[]): void => {
+    for(let tag of currentTags){
+      if(tag === tagToHighlight && tag in this.tagRefs){
+          this.tagRefs[tag].classList.add('duplicate'); // Add the class that renders an animation
+      }
+    }
+  }
+
+  onAnimationEnd = (event: any) => {
+    if (event && event.target) {
+      event.target.classList.remove('duplicate'); // Once the animation is complete, remove the class from the component
     }
   }
 
   closeAddTag = () => {
     this.setState({ isAdding: false });
+    this.setState({newTagName: ""});
+  }
+
+  onKeyDown = (keyStroke: any) => {
+    if(keyStroke.keyCode === KeyCode.ESC){
+      this.closeAddTag();
+    }
   }
 
   render() {
@@ -103,14 +136,14 @@ class Tags extends React.Component<Props, State>  {
     return (
       <React.Fragment>
         {tags && tags.map((tag: string) => (
-          <Tag key={tag}>
+          <Tag ref={(ref: HTMLDivElement) => this.tagRefs[tag] = ref} onAnimationEnd={this.onAnimationEnd} key={tag}>
             <TagText>{tag}</TagText>
 	    {allowEdit &&
             <TagCloseIcon key={tag} iconName="ChromeClose" onClick={() => this.tagRemove(tag)} />}
           </Tag>
         ))}
         {allowAddTag && <AddTagWrapper onSubmit={this.submitNewTag} open={isAdding}>
-          <AddTagInput ref={this.addTagInput} open={isAdding} value={this.state.newTagName} onChange={this.handleChange} />
+          <AddTagInput ref={this.addTagInput} open={isAdding} value={this.state.newTagName} onChange={this.handleChange} onKeyDown={this.onKeyDown} />
           <TagAddIcon iconName="Add" onClick={this.openNewTag} open={isAdding} />
           <TagSubmitButton type="submit" open={isAdding}>
             <TagSubmitIcon iconName="CheckMark" />

@@ -38,10 +38,12 @@ export function querySearch(searchByTemplateName: string): (dispatch: any, getSt
   return function (dispatch: any, getState: () => RootState) {
     const appState = getState();
     dispatch(querySearchBegin())
+    
     let api = new TemplateApi();
     if (appState.auth.accessToken){
       api.setApiKey(0, `Bearer ${appState.auth.accessToken!.idToken.rawIdToken}`);
     }
+    
     return api.allTemplates(undefined, true, searchByTemplateName)
       .then(response => {
         if (response.response && response.response.statusCode === 200) {

@@ -69,7 +69,7 @@ function bindData(temp: TemplateInstance): TemplateInstance {
   let template: ACData.Template = new ACData.Template(jsonTemp);
   let context: ACData.EvaluationContext = new ACData.EvaluationContext();
   if (temp.data && temp.data[0]) {
-    setContextRoot(temp.data[0], context);
+    setContextRoot(JSON.stringify(temp.data[0]), context);
   }
   try {
     let card = template.expand(context);

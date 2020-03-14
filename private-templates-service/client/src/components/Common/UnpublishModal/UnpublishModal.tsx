@@ -37,6 +37,7 @@ import {
   ButtonGroup,
   CancelButton,
 } from '../../Common/PublishModal/styled';
+import ModalHOC from '../../../utils/ModalHOC';
 
 
 interface Props {
@@ -76,7 +77,7 @@ class UnpublishModal extends React.Component<Props> {
           <CenterPanelWrapper>
             <Container>
               <ACWrapper>
-                <AdaptiveCard cardtemplate={template} templateVersion={"1.0"} />
+                <AdaptiveCard cardtemplate={template} templateVersion={this.props.templateVersion} />
               </ACWrapper>
               <TemplateName>{template.name}</TemplateName>
             </Container>
@@ -93,4 +94,4 @@ class UnpublishModal extends React.Component<Props> {
   }
 }
 
-export default connect(() => { return {} }, mapDispatchToProps)(UnpublishModal);
+export default ModalHOC(connect(() => { return {} }, mapDispatchToProps)(UnpublishModal));
