@@ -54,19 +54,12 @@ export function renderAdaptiveCard(template: Template): any {
   }
 }
 
-function setContextRoot(data: object, context: ACData.EvaluationContext) {
-  try {
-    context.$root = data;
-  } catch (e) {
-  }
-}
-
 // bindData binds the data to the adaptive card template
 function bindData(temp: TemplateInstance): TemplateInstance {
   let template: ACData.Template = new ACData.Template(temp.json);
   let context: ACData.EvaluationContext = new ACData.EvaluationContext();
   if (temp.data && temp.data[0]) {
-    setContextRoot(temp.data[0], context);
+    context.$root = temp.data[0];
   }
   try {
     let card = template.expand(context);
