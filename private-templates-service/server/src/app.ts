@@ -23,8 +23,7 @@ app.use(passport.session());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(helmet.hsts({
-  maxAge: 15552000,
-  includeSubDomains: false
+  maxAge: 15552000
 }));
 app.use(session({
   secret: '#{CLIENT_ID_TOKEN}#',
