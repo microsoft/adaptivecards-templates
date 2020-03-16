@@ -184,7 +184,7 @@ export class PostedTemplate {
   'isShareable'?: boolean;
   'isPublished'?: boolean;
   'tags'?: Array<string>;
-  'data'?: Array<any>;
+  'data'?: Array<object>;
 
   static discriminator: string | undefined = undefined;
 

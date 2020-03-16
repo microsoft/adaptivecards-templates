@@ -13,7 +13,7 @@ import {
   GET_TEMPLATE,
   GET_TEMPLATE_SUCCESS,
   GET_TEMPLATE_FAILURE,
-  DELETE_TEMPLATE_INSTANCE, 
+  DELETE_TEMPLATE_INSTANCE,
   DELETE_TEMPLATE_INSTANCE_SUCCESS,
   DELETE_TEMPLATE_INSTANCE_FAILURE,
   CLEAR_TEMPLATE_PARAMS
@@ -123,14 +123,14 @@ function requestTemplateFailure(): CurrentTemplateAction {
 
 function deleteTemplateInstance(): CurrentTemplateAction {
   return {
-    type: DELETE_TEMPLATE_INSTANCE, 
+    type: DELETE_TEMPLATE_INSTANCE,
     text: "delete specific template version"
   }
 }
 
 function deleteTemplateInstanceSuccess(template?: Template): CurrentTemplateAction {
   return {
-    type: DELETE_TEMPLATE_INSTANCE_SUCCESS, 
+    type: DELETE_TEMPLATE_INSTANCE_SUCCESS,
     text: "delete specific template version success",
     template
   }
@@ -138,7 +138,7 @@ function deleteTemplateInstanceSuccess(template?: Template): CurrentTemplateActi
 
 function deleteTemplateInstanceFailure(): CurrentTemplateAction {
   return {
-    type: DELETE_TEMPLATE_INSTANCE_FAILURE, 
+    type: DELETE_TEMPLATE_INSTANCE_FAILURE,
     text: "delete specific template version failure",
   }
 }
@@ -207,6 +207,15 @@ export function updateTemplate(templateID?: string, currentVersion?: string, tem
     else {
       newTemplate.template = appState.currentTemplate.templateJSON;
     }
+
+    if (sampleDataJSON) {
+      // TODO: the clientSDK, backend, and DB adapter should be refactored such that the data is a json object and not an array of objects
+      newTemplate.data = new Array(sampleDataJSON);
+    }
+    else if (appState.currentTemplate.sampleDataJSON) {
+      newTemplate.data = new Array(appState.currentTemplate.sampleDataJSON);
+    }
+
     newTemplate.version = version;
     newTemplate.name = templateName;
     newTemplate.state = state;
@@ -282,7 +291,7 @@ export function deleteTemplateVersion(templateVersion: string, templateID?: stri
     if (appState.auth.accessToken) {
       api.setApiKey(0, `Bearer ${appState.auth.accessToken!.idToken.rawIdToken}`);
     }
-    
+
     if (!id || id === "") {
       dispatch(deleteTemplateInstanceFailure());
     }
@@ -291,9 +300,9 @@ export function deleteTemplateVersion(templateVersion: string, templateID?: stri
       api.deleteTemplateById(id!, templateVersion).then((resp: any) => {
         if (resp.response.statusCode && resp.response.statusCode === 204) {
           let template = appState.currentTemplate.template;
-          if (template){
+          if (template) {
             removeSpecificTemplateVersion(template, templateVersion);
-            if (template.instances && template.instances.length === 0){
+            if (template.instances && template.instances.length === 0) {
               template = undefined;
             }
           }
@@ -311,7 +320,7 @@ export function deleteTemplateVersion(templateVersion: string, templateID?: stri
 function removeSpecificTemplateVersion(template: Template, version: string) {
   if (!template.instances) return;
   let instanceList = [];
-  for (let instance of template.instances){
+  for (let instance of template.instances) {
     if (instance.version === version) continue;
     instanceList.push(instance);
   }
