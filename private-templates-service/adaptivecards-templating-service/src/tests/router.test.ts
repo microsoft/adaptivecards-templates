@@ -336,10 +336,6 @@ describe("Preview Templates", () => {
     expect(template).toHaveProperty("name");
     expect(template).toHaveProperty("owner");
     let owner = template.owner;
-    expect(owner).toHaveProperty("firstName");
-    expect(owner).toHaveProperty("lastName");
-    expect(owner).toHaveProperty("team");
-    expect(owner).toHaveProperty("org");
     expect(template).toHaveProperty("instance");
     let instance = template.instance;
     expect(instance).toHaveProperty("version");
