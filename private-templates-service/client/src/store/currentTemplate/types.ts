@@ -46,9 +46,9 @@ export type CurrentTemplateActionTypes = typeof NEW_TEMPLATE |
   typeof FAILURE_UPDATE_CURRENT_TEMPLATE_VERSION |
   typeof GET_TEMPLATE |
   typeof GET_TEMPLATE_SUCCESS |
-  typeof GET_TEMPLATE_FAILURE | 
-  typeof DELETE_TEMPLATE_INSTANCE | 
-  typeof DELETE_TEMPLATE_INSTANCE_SUCCESS | 
+  typeof GET_TEMPLATE_FAILURE |
+  typeof DELETE_TEMPLATE_INSTANCE |
+  typeof DELETE_TEMPLATE_INSTANCE_SUCCESS |
   typeof DELETE_TEMPLATE_INSTANCE_FAILURE;
 
 export interface CurrentTemplateAction {
