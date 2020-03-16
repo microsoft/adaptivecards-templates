@@ -866,7 +866,7 @@ export class TemplateServiceClient {
 
     let templateList = viewed ? user.recentlyViewedTemplates : user.recentlyEditedTemplates;
     for (let templateId of templateList!) {
-      let templateResponse = await this.getTemplates(token, templateId);
+      let templateResponse = await this.getTemplates(token, templateId, undefined, undefined, undefined, undefined, undefined, undefined, undefined, true);
       if (templateResponse.success && templateResponse.result && templateResponse.result.length === 1) {
         results.push(templateResponse.result[0]);
       }
