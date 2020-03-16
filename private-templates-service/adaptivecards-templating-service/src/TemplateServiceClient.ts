@@ -144,6 +144,26 @@ export class TemplateServiceClient {
 
   /**
    * @private
+   * Get user's public info.
+   * Used by the template preview.
+   */
+  private async _searchUserInfo(id: string): Promise<JSONResponse<string>> {
+    const query: Partial<IUser> = {
+      _id: id
+    };
+
+    let response = await this.storageProvider.getUsers(query);
+    if (!response.success || (response.result && response.result.length === 0)) {
+      return { success: false, errorMessage: ServiceErrorMessage.UserNotFound };
+    }
+
+    let user = response.result![0];
+
+    return { success: true, result: user.authId };
+  }
+
+  /**
+   * @private
    * Get own user info.
    * Will return success if user exists and is unique.
    * Creates a new user and returns user if user does not already exist. 
@@ -812,10 +832,15 @@ export class TemplateServiceClient {
       data: templateVersion.data ? templateVersion.data : []
     };
 
+    let userInfo = await this._searchUserInfo(template.owner);
+    if (!userInfo.success || !userInfo.result) {
+      return { success: false, errorMessage: ServiceErrorMessage.FailedToRetrievePreview };
+    }
+
     let templatePreview: TemplatePreview = {
       _id: templateId,
       name: template.name,
-      owner: template.owner,
+      owner: userInfo.result!,
       instance: templateInstance,
       tags: template.tags || []
     };
