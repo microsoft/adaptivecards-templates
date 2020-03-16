@@ -16,7 +16,8 @@ import {
   GET_TEMPLATE_FAILURE,
   DELETE_TEMPLATE_INSTANCE,
   DELETE_TEMPLATE_INSTANCE_SUCCESS,
-  DELETE_TEMPLATE_INSTANCE_FAILURE
+  DELETE_TEMPLATE_INSTANCE_FAILURE,
+  CLEAR_TEMPLATE_PARAMS
 } from './types';
 
 import { Template } from 'adaptive-templating-service-typescript-node';
@@ -137,6 +138,11 @@ export function currentTemplateReducer(state = initialState, action: CurrentTemp
     case DELETE_TEMPLATE_INSTANCE_FAILURE: 
       return {
         ...state, 
+        isFetching: false
+      }
+    case CLEAR_TEMPLATE_PARAMS:
+      return{
+        ...state,
         isFetching: false
       }
     default:

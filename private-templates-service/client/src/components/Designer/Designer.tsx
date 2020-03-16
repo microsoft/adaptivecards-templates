@@ -109,7 +109,7 @@ class Designer extends React.Component<DesignerProps> {
     return (
       <React.Fragment>
         <DesignerWrapper id="designer-container" dangerouslySetInnerHTML={{ __html: "dangerouslySetACDesigner" }}></DesignerWrapper>
-        {this.props.modalState===ModalState.Save && <SaveModal sampleData = {designer.sampleData} templateJSON = {JSON.stringify(designer.getCard())}/>}
+        {this.props.modalState===ModalState.Save && <SaveModal designerSampleData = {designer.sampleData} designerTemplateJSON = {JSON.stringify(designer.getCard())}/>}
       </React.Fragment>
     );
   }
@@ -135,11 +135,7 @@ function initDesigner(): ACDesigner.CardDesigner {
 }
 
 function onSave(designer: ACDesigner.CardDesigner, props: DesignerProps): void {
-  if (JSON.stringify(props.templateJSON) !== JSON.stringify(designer.getCard()) || props.sampleDataJSON !== designer.sampleData) {
-    props.openModal(ModalState.Save);
-    //console.log(props.modalState,"modalstate");
-    
-    props.updateTemplate(props.templateID, props.version, designer.getCard(), designer.sampleData,props.templateName, ); 
-  }
+  console.log("onSave in the designer ", props);
+  props.openModal(ModalState.Save);
 }
 export default connect(mapStateToProps, mapDispatchToProps)(requireAuthentication(Designer));

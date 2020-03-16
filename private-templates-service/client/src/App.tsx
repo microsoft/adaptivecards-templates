@@ -123,7 +123,7 @@ class App extends Component<Props, State> {
               }
             />
             <MainAppWrapper>
-              <NavBar />
+              <NavBar/>
               <MainApp>
                 {error}
                 <Switch>

@@ -12,6 +12,8 @@ import { ActionButton } from "office-ui-fabric-react";
 
 import Logo from '../../assets/adaptive-cards-100-logo.png';
 
+import { clearParams } from '../../store/currentTemplate/actions';
+
 import { Banner, Styledh1, StyledLogo, MobileBanner, StyledButton, Styledh2, StyledButtonContent } from './styled';
 
 const mapStateToProps = (state: RootState) => {
@@ -22,17 +24,31 @@ const mapStateToProps = (state: RootState) => {
   }
 }
 
+const dispatchStateToProps = (dispatch: any) => {
+  return {
+    clearParams: () =>{
+      dispatch(clearParams());
+    }
+  }
+}
+
 interface NavBarProps {
   currentPageTitle?: string;
   currentPage?: string;
   template?: Template;
   version?: string;
+  clearParams: () => void;
 }
 
 
 const NavBar = (props: NavBarProps) => {
 
   let history = useHistory();
+
+  const finishButton = () => {
+    props.clearParams();
+    history.push("/")
+  }
 
   if (!props.currentPage) {
     return (
@@ -74,7 +90,9 @@ const NavBar = (props: NavBarProps) => {
             <Styledh1>{props.template ? props.template.name : props.currentPageTitle}</Styledh1>
             <Styledh2>{props.version ? "Version " + props.version : ""}</Styledh2>
           </MobileBanner>
-          <ActionButton onClick={() => { history.push("/") }}>
+          <ActionButton onClick={finishButton}> 
+          {/* <ActionButton onClick={() => { history.push("/") }}>  */}
+          {/* set everything to undefiend for button press */}
             <StyledButton>
               <StyledButtonContent>
                 Finish
@@ -106,4 +124,4 @@ const NavBar = (props: NavBarProps) => {
 }
 
 
-export default connect(mapStateToProps)(NavBar);
+export default connect(mapStateToProps, dispatchStateToProps)(NavBar);

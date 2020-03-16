@@ -15,12 +15,26 @@ import {
   GET_TEMPLATE_FAILURE,
   DELETE_TEMPLATE_INSTANCE, 
   DELETE_TEMPLATE_INSTANCE_SUCCESS,
-  DELETE_TEMPLATE_INSTANCE_FAILURE
+  DELETE_TEMPLATE_INSTANCE_FAILURE,
+  CLEAR_TEMPLATE_PARAMS
 } from './types';
 
 import { Template, TemplateApi, PostedTemplate } from "adaptive-templating-service-typescript-node";
 
 import { RootState } from '../rootReducer';
+
+export function clearParams(): CurrentTemplateAction {
+  return {
+    type: CLEAR_TEMPLATE_PARAMS,
+    text: "template is cleared",
+    templateID: undefined,
+    templateJSON: undefined,
+    templateName: undefined,
+    sampleDataJSON: undefined,
+    version: undefined,
+    template: undefined
+  };
+}
 
 export function newTemplate(): CurrentTemplateAction {
   return {

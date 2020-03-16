@@ -7,25 +7,28 @@ import { RootState } from '../../../store/rootReducer';
 import { ModalState } from '../../../store/page/types';
 import { closeModal } from '../../../store/page/actions';
 import { updateTemplate } from '../../../store/currentTemplate/actions';
-import * as ACDesigner from 'adaptivecards-designer';
+import { version } from 'react-dom';
 
 const mapStateToProps = (state: RootState) => {
   return {
     templateID: state.currentTemplate.templateID,
     templateJSON: state.currentTemplate.templateJSON,
     templateName: state.currentTemplate.templateName,
-    sampleDataJSON: state.currentTemplate.sampleDataJSON
+    sampleDataJSON: state.currentTemplate.sampleDataJSON,
+    version: state.currentTemplate.version
   }
 }
 interface Props {
-  templateID: string;
-  templateName: string;
-  templateJSON: string;
-  sampleDataJSON: string;
+  templateID?: string;
+  templateName?: string;
+  sampleDataJSON?: object;
+  templateJSON?: object;
   closeModal: () => void;
-  updateTemplate: (templateID: string, currentVersion: string, templateJSON: string, templateName: string, sampleDataJSON: string) => any; 
+  updateTemplate: (templateID: string, currentVersion: string, templateJSON: object, sampleDataJSON: object,templateName: string,) => any; 
 
-  sampleData: string;
+  designerSampleData?: any;
+  designerTemplateJSON?: any;
+  version?: string;
 }
 
 const mapDispatchToProps = (dispatch: any) => {
@@ -33,20 +36,24 @@ const mapDispatchToProps = (dispatch: any) => {
     closeModal: () => {
       dispatch(closeModal());
     },
-    updateTemplate: (templateID: string, currentVersion: string, templateJSON: string, templateName: string, sampleDataJSON: string) => {
-      dispatch(updateTemplate(templateID, undefined, templateJSON,templateName,sampleDataJSON));
+    updateTemplate: (templateID: string, currentVersion: string, templateJSON: object, sampleDataJSON: object, templateName: string) => {
+      dispatch(updateTemplate(templateID, currentVersion, templateJSON, sampleDataJSON,templateName,));
     } 
   }
 }
 
 class SaveModal extends React.Component<Props> {
+  constructor(props: Props) {
+    super(props);
+  }
 
   onClick = () => {
-    if (this.props.templateJSON !== JSON.stringify(designer.getCard()) || this.props.sampleDataJSON !== designer.sampleData){
-    //this.props.updateTemplate(this.props.templateID, "1.0", JSON.stringify(designer.getCard()), this.props.templateName, designer.sampleData);
-    // do some stuff to save the template 
-    this.props.closeModal();
-  }
+    console.log("props before save",this.props);
+    if ((this.props.templateJSON !== this.props.designerTemplateJSON || this.props.sampleDataJSON !== this.props.designerTemplateJSON) && this.props.templateID && this.props.version && this.props.templateName){
+      this.props.updateTemplate(this.props.templateID, this.props.version, this.props.designerTemplateJSON, this.props.designerSampleData, this.props.templateName);
+      console.log("props after save ",this.props);
+      this.props.closeModal();
+    }
   }
   render(){ 
     return(
