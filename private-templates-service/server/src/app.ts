@@ -26,7 +26,9 @@ app.use(session({
   cookie: {
     httpOnly: true,
     secure: true
-  }
+  },
+  resave: false,
+  saveUninitialized: true
 }))
 
 let mongoDB = new MongoDBProvider({ connectionString: "#{DB_CONNECTION_TOKEN}#" });
