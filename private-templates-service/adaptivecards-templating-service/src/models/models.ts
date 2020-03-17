@@ -22,6 +22,7 @@ export interface ITemplateInstance {
   data?: JSON[];
   updatedAt?: Date;
   createdAt?: Date;
+  lastEditedUser?: string;
 }
 
 export interface ITemplate {
