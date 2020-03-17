@@ -47,29 +47,19 @@ export function renderAdaptiveCard(template: Template): any {
   try {
     // Render the card to an HTML element
     let renderedCard = adaptiveCard.render();
+
     return renderedCard;
   } catch (e) {
     return <div>Error</div>;
   }
 }
 
-function setContextRoot(data: string, context: ACData.EvaluationContext) {
-  try {
-    let dataString = JSON.stringify(data);
-    let dataJSON: JSON = JSON.parse(dataString);
-    context.$root = dataJSON;
-  } catch (e) {
-    console.log(e);
-  }
-}
-
 // bindData binds the data to the adaptive card template
 function bindData(temp: TemplateInstance): TemplateInstance {
-  let jsonTemp = cleanTemplate(temp);
-  let template: ACData.Template = new ACData.Template(jsonTemp);
+  let template: ACData.Template = new ACData.Template(temp.json);
   let context: ACData.EvaluationContext = new ACData.EvaluationContext();
   if (temp.data && temp.data[0]) {
-    setContextRoot(JSON.stringify(temp.data[0]), context);
+    context.$root = temp.data[0];
   }
   try {
     let card = template.expand(context);
@@ -78,27 +68,6 @@ function bindData(temp: TemplateInstance): TemplateInstance {
     console.log("Error parsing data: ", e);
     return temp;
   }
-}
-
-/*
-cleanTemplate accepts a template object. This method strips the object of the unncessary '\\\' contained in the object and removes the 
-extra characters before and after the actual JSON object. It then parses the string into JSON and returns the JSON object.  
-*/
-function cleanTemplate(temp: TemplateInstance): Template {
-  const json = JSON.stringify(temp.json);
-  let jsonTemp = {};
-
-  try {
-    jsonTemp = JSON.parse(json);
-  } catch {
-    console.log("Invalid Adaptive Cards JSON. Card not parsed.");
-    const errorMessageJSON = JSON.stringify(
-      require("../../../assets/default-adaptivecards/defaultErrorCard.json")
-    );
-
-    jsonTemp = errorMessageJSON;
-  }
-  return jsonTemp;
 }
 
 function processTemplate(temp: TemplateInstance): any {

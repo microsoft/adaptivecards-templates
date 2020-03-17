@@ -89,20 +89,12 @@ export interface TemplateInstancePreview {
 
 /**
  * @interface
- * User information that is viewable by client.
- */
-export interface UserPreview {
-  authId: string;
-}
-
-/**
- * @interface
  * Template preview.
  */
 export interface TemplatePreview {
   _id: string;
   name: string;
-  owner: UserPreview;
+  owner: string;
   instance: TemplateInstancePreview;
   tags: string[];
 }

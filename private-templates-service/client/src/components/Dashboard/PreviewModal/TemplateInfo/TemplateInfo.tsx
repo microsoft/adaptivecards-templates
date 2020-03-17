@@ -9,6 +9,8 @@ import { updateCurrentTemplateVersion } from '../../../../store/currentTemplate/
 
 import { Template, TemplateInstance, PostedTemplate } from 'adaptive-templating-service-typescript-node';
 
+import { getLatestVersion } from "../../../../utils/TemplateUtil";
+
 import PublishModal from '../../../Common/PublishModal';
 import UnpublishModal from '../../../Common/UnpublishModal';
 import Tags from '../../../Common/Tags';
@@ -111,13 +113,6 @@ const mapDispatchToProps = (dispatch: any) => {
   }
 };
 
-function getVersion(template: Template): string {
-  if (template.instances && template.instances[0] && template.instances[0].version) {
-    return template.instances[0].version;
-  }
-  return "1.0"
-}
-
 function getTemplateState(template: Template, version: string): PostedTemplate.StateEnum {
   if (!template.instances || template.instances.length === 0) return PostedTemplate.StateEnum.Draft;
   for (let instance of template.instances) {
@@ -129,7 +124,7 @@ function getTemplateState(template: Template, version: string): PostedTemplate.S
 class TemplateInfo extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    const currentVersion = getVersion(this.props.template);
+    const currentVersion = getLatestVersion(this.props.template);
     this.state = { version: currentVersion }
   }
 
@@ -185,8 +180,8 @@ class TemplateInfo extends React.Component<Props, State> {
                   styles={DropdownStyles}
                 />
               </Title>
-              <StatusIndicator state={isLive ? PostedTemplate.StateEnum.Live : PostedTemplate.StateEnum.Draft} />
-              <Status>{isLive ? 'Published' : 'Draft'}</Status>
+              <StatusIndicator state={templateState} />
+              <Status>{PostedTemplate.StateEnum[templateState]}</Status>
             </TitleWrapper>
             <TimeStamp>
               Created {createdAtParsed}
@@ -254,6 +249,9 @@ function onActionButtonClick(props: Props, state: State, val: any) {
           break;
         case PostedTemplate.StateEnum.Live:
           props.openModal(ModalState.Unpublish);
+          break;
+        case PostedTemplate.StateEnum.Deprecated:
+          props.openModal(ModalState.Publish);
           break;
         default:
           break;
