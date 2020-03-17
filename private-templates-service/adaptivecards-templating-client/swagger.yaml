@@ -474,11 +474,6 @@ definitions:
         items:  
           type: object
           format: JSON
-  TemplatePreviewUser: 
-    type: object
-    properties:
-      authId: 
-        type: string
   TemplateInfo: 
     type: object
     properties:
