@@ -78,7 +78,6 @@ class DeleteModal extends React.Component<Props> {
             <ACWrapper>
               <AdaptiveCard cardtemplate={template} templateVersion={this.props.templateVersion} />
             </ACWrapper>
-            <TemplateName>{template.name}</TemplateName>
           </Container>
         </CenterPanelWrapper>
         <BottomRow>

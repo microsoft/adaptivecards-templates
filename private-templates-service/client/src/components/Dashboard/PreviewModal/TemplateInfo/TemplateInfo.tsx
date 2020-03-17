@@ -243,6 +243,9 @@ function onActionButtonClick(props: Props, state: State, val: any) {
     case EDIT_IN_DESIGNER:
       const { history } = props;
       if (history) history.push('/designer');
+      break;      
+    case DELETE:
+      props.openModal(ModalState.Delete);
       break;
     case PUBLISH:
       switch (templateState) {
@@ -258,9 +261,6 @@ function onActionButtonClick(props: Props, state: State, val: any) {
         default:
           break;
       }
-    case DELETE:
-      props.openModal(ModalState.Delete);
-      break;
     default:
       break;
   }
