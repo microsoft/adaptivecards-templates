@@ -13,3 +13,9 @@ export const SHARE = 'Share';
 export const PUBLISH = 'Publish';
 export const UNPUBLISH = 'Unpublish';
 export const MANAGE = 'Manage';
+
+// EditNameModal.tsx
+export const EDIT_CARD_NAME = 'Edit Card Name'
+export const EDIT_CARD_SUBHEADER = 'The card will still be accessible at the same URLs.';
+export const CANCEL = 'Cancel'
+export const SAVE = 'Save';

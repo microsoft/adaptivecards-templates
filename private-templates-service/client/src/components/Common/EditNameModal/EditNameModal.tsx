@@ -4,6 +4,13 @@ import { RootState } from '../../../store/rootReducer';
 import { closeModal } from '../../../store/page/actions';
 import { updateTemplate } from '../../../store/currentTemplate/actions';
 
+import {
+  EDIT_CARD_NAME,
+  EDIT_CARD_SUBHEADER,
+  CANCEL,
+  SAVE,
+} from '../../../assets/strings';
+
 import { PrimaryButton } from 'office-ui-fabric-react';
 
 import {
@@ -61,14 +68,14 @@ const EditNameModal = (props: Props) => {
   return (
     <BackDrop>
       <Modal>
-        <Header>Edit Card Name</Header>
-        <Description>The card will still be accessible at the same URLs.</Description>
+        <Header>{EDIT_CARD_NAME}</Header>
+        <Description>{EDIT_CARD_SUBHEADER}</Description>
         <EditWrapper onSubmit={updateName} >
           <StyledInput value={name} onChange={onChange} />
         </EditWrapper>
         <ButtonGroup>
-          <CancelButton text="Cancel" onClick={props.closeModal} />
-          <PrimaryButton text="Save" onClick={updateName} />
+          <CancelButton text={CANCEL} onClick={props.closeModal} />
+          <PrimaryButton text={SAVE} onClick={updateName} />
         </ButtonGroup>
       </Modal>
     </BackDrop>
