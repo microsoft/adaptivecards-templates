@@ -49,10 +49,20 @@ class SaveModal extends React.Component<Props> {
 
   onClick = () => {
     console.log("props before save",this.props);
-    if ((this.props.templateJSON !== this.props.designerTemplateJSON || this.props.sampleDataJSON !== this.props.designerTemplateJSON) && this.props.templateID && this.props.version && this.props.templateName){
+    console.log(this.props.templateJSON === this.props.designerTemplateJSON, "template");
+    console.log(this.props.sampleDataJSON === this.props.designerSampleData, "JSON");
+    console.log(this.props.templateName, "name", this.props.version, "version", this.props.templateID,"id");
+    if ((this.props.templateJSON !== this.props.designerTemplateJSON || this.props.sampleDataJSON !== this.props.designerTemplateJSON)){
+      console.log("INSIDE")
+      
+      if (this.props.templateID && this.props.version && this.props.templateName){
+
+      
+
       this.props.updateTemplate(this.props.templateID, this.props.version, this.props.designerTemplateJSON, this.props.designerSampleData, this.props.templateName);
       console.log("props after save ",this.props);
       this.props.closeModal();
+      }
     }
   }
   render(){ 

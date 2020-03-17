@@ -27,11 +27,11 @@ export function clearParams(): CurrentTemplateAction {
   return {
     type: CLEAR_TEMPLATE_PARAMS,
     text: "template is cleared",
-    templateID: undefined,
+    templateID: "",
     templateJSON: undefined,
-    templateName: undefined,
+    templateName: "taestaset",
     sampleDataJSON: undefined,
-    version: undefined,
+    version: "",
     template: undefined
   };
 }

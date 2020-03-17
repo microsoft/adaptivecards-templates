@@ -135,7 +135,7 @@ function initDesigner(): ACDesigner.CardDesigner {
 }
 
 function onSave(designer: ACDesigner.CardDesigner, props: DesignerProps): void {
-  console.log("onSave in the designer ", props);
+  console.log("onSave in the designer ", props, "sampleData", designer.sampleData, "designer Template Json",JSON.stringify(designer.getCard()) );
   props.openModal(ModalState.Save);
 }
 export default connect(mapStateToProps, mapDispatchToProps)(requireAuthentication(Designer));

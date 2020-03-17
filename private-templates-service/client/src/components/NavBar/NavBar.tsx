@@ -46,7 +46,9 @@ const NavBar = (props: NavBarProps) => {
   let history = useHistory();
 
   const finishButton = () => {
-    props.clearParams();
+    //console.log("finish button triggered", props)
+    //props.clearParams();
+    //console.log("after clearParams triggered", props)
     history.push("/")
   }
 
