@@ -20,6 +20,10 @@ import Gallery from "../Gallery";
 import SearchPage from "./SearchPage/SearchPage";
 import RecentlyViewed from "./RecentlyViewed";
 import Tags from "../Common/Tags";
+import {
+  DASHBOARD_RECENTLY_EDITED_PLACEHOLDER,
+  DASHBOARD_RECENTLY_VIEWED_PLACEHOLDER,
+} from '../../assets/strings';
 
 
 import {
@@ -133,8 +137,8 @@ class Dashboard extends React.Component<Props> {
                 ></Gallery>
               ) : (
                   <PlaceholderText>
-                    No edited templates yet. Create or edit one :)
-              </PlaceholderText>
+                    {DASHBOARD_RECENTLY_EDITED_PLACEHOLDER}
+                  </PlaceholderText>
                 )}
           </React.Fragment>
           <React.Fragment>
@@ -148,8 +152,8 @@ class Dashboard extends React.Component<Props> {
                 ></RecentlyViewed>
               ) : (
                   <PlaceholderText>
-                    No recently viewed templates yet. Check out some templates:)
-              </PlaceholderText>
+                    {DASHBOARD_RECENTLY_VIEWED_PLACEHOLDER}
+                  </PlaceholderText>
                 )}
           </React.Fragment>
         </DashboardContainer>

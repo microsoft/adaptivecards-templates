@@ -13,3 +13,7 @@ export const SHARE = 'Share';
 export const PUBLISH = 'Publish';
 export const UNPUBLISH = 'Unpublish';
 export const MANAGE = 'Manage';
+
+// Dashboard.tsx
+export const DASHBOARD_RECENTLY_EDITED_PLACEHOLDER = 'No edited templates.';
+export const DASHBOARD_RECENTLY_VIEWED_PLACEHOLDER = 'No recently viewed templates.';
