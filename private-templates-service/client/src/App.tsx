@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { UserAgentApplication, ClientAuthError } from "msal";
 import { AuthResponse } from 'msal';
 import { initializeIcons } from '@uifabric/icons';
+import IdleTimer from 'react-idle-timer'
 
 // Redux
 import { connect } from "react-redux";
@@ -70,6 +71,7 @@ interface Props {
 
 class App extends Component<Props, State> {
   userAgentApplication: UserAgentApplication;
+  onIdle: () => any;
 
   constructor(props: Props) {
     super(props);
@@ -95,6 +97,7 @@ class App extends Component<Props, State> {
       // Enhance user object with data from Graph
       this.getUserInfo();
     }
+    this.onIdle = this._onIdle.bind(this);
   }
 
   render() {
@@ -110,6 +113,10 @@ class App extends Component<Props, State> {
 
     return (
       <Router>
+        <IdleTimer
+          element={document}
+          onIdle={this.onIdle}
+          timeout={1800000} />
         <Switch>
           <Route exact path="/preview/:uuid/:version">
             <Shared authButtonMethod={this.login}></Shared>
@@ -144,6 +151,12 @@ class App extends Component<Props, State> {
         <div id="modal" />
       </Router >
     );
+  }
+
+  _onIdle() {
+    if(this.props.isAuthenticated) {
+      this.logout();
+    }
   }
 
   login = async () => {
