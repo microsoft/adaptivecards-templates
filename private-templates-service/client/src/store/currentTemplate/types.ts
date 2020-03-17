@@ -37,7 +37,7 @@ export type CurrentTemplateActionTypes = typeof NEW_TEMPLATE |
   typeof GET_TEMPLATE_FAILURE;
 
 export interface CurrentTemplateAction {
-  type: CurrentTemplateActionTypes;
+  type: CurrentTemplateActionTypes
   text: string;
   templateID?: string;
   templateJSON?: string;

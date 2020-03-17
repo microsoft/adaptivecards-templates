@@ -2,8 +2,3 @@ dist/
 
 # dependencies
 node_modules/
-
-#client sdk
-adaptivecards-templating-client/typescript/api.d.ts
-adaptivecards-templating-client/typescript/api.js
-adaptivecards-templating-client/typescript/api.js.map

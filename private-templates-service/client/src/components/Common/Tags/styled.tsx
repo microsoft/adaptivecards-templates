@@ -7,7 +7,8 @@ export const Tag = styled.div`
   display: flex;
   flex-direction: row;
   align-items: baseline;
-  background-color: ${COLORS.GREY2};
+  color: white;
+  background-color: ${COLORS.BLUE};
   border-radius: 1em;
   margin: 0 16px 12px 0;
   padding: 4px 10px 4px 16px;
@@ -27,7 +28,7 @@ export const TagCloseIcon = styled(Icon)`
   }
 
   &:active {
-    background-color: ${COLORS.BORDER2};
+    background-color: ${COLORS.BLUE2};
   }
 `;
 
@@ -45,7 +46,8 @@ export const AddTagWrapper = styled.form<{ open: boolean }>`
   display: flex;
   flex-direction: row;
   align-items: baseline;
-  background-color: ${COLORS.GREY2};
+  color: white;
+  background-color: ${COLORS.BLUE};
   border-radius: 1em;
   padding: 6.5px;
   margin-bottom: 12px;
@@ -65,7 +67,8 @@ const ExpandInputKeyframe = keyframes`
 
 export const AddTagInput = styled.input<{ open: boolean }>`
   display: ${props => !props.open && 'none'};
-  background-color: ${COLORS.GREY2};
+  background-color: ${COLORS.BLUE};
+  color: white;
   border: none;
   outline: 0;
   ${props => (props.open && css`
@@ -86,7 +89,7 @@ export const TagAddIcon = styled(Icon) <{ open: boolean }>`
   }
 
   &: active {
-    background-color: ${ COLORS.BORDER2};
+    background-color: ${ COLORS.BLUE2};
   }
 `;
 
@@ -96,7 +99,8 @@ export const TagSubmitButton = styled.button<{ open: boolean }>`
   border: 0px;
   outline: 0px;
   padding: 0px;
-  background-color: ${COLORS.GREY2};
+  background-color: ${COLORS.BLUE};
+  color: ${COLORS.WHITE};
 
   &: active {
     outline: 0px;
@@ -119,7 +123,7 @@ export const TagSubmitIcon = styled(Icon)`
   }
 
   &: active {
-    background-color: ${ COLORS.BORDER2};
+    background-color: ${ COLORS.BLUE2};
   }
 `;
 

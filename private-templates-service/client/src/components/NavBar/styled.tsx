@@ -44,31 +44,3 @@ export const Styledh1 = styled.div`
     font-size: 18px;
   }
 `;
-
-export const Styledh2 = styled.div`
-  color: ${COLORS.WHITE};
-  letter-spacing: 0;
-  opacity: 1;
-  font-size: 12px;
-  margin-bottom: 0;
-  padding-left: 16px;
-  font-weight: 300;
-
-  @media only screen and (max-width: ${BREAK.SM}px){
-    font-size: 12px;
-  }
-`;
-
-export const StyledButton = styled.div`
-  background-color: ${COLORS.GREY1};
-  width: 100px;
-  display: table;
-  min-height: -webkit-fill-available;
-  border-radius: 3px;
-`;
-
-export const StyledButtonContent = styled.div`
-  display: table-cell;
-  vertical-align: middle;
-  text-align: center;
-`;
