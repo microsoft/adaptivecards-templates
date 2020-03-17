@@ -1,13 +1,62 @@
 import React from 'react';
-import { FooterContainer } from './styled';
+import { FooterOuterContainer, FooterContents, FooterLink, FooterContainer } from './styled';
+import * as STRINGS from '../../../assets/strings';
+
+const footerLinks = [
+  {
+    name: STRINGS.SITEMAP,
+    link: "https://www.microsoft.com/en-us/sitemap.aspx"
+  },
+  {
+    name: STRINGS.CONTACT,
+    link: "https://support.microsoft.com/en-us/contactus/"
+  },
+  {
+    name: STRINGS.PRIVACY,
+    link: "https://go.microsoft.com/fwlink/?LinkId=521839"
+  },
+  {
+    name: STRINGS.TERMS,
+    link: "https://www.microsoft.com/en-us/legal/intellectualproperty/copyright/default.aspx"
+  },
+  {
+    name: STRINGS.TRADEMARKS,
+    link: "https://www.microsoft.com/trademarks"
+  },
+  {
+    name: STRINGS.SAFETY,
+    link: "https://www.microsoft.com/en-us/devices/safety-and-eco"
+  },
+  {
+    name: STRINGS.ABOUT_ADS,
+    link: "https://choice.microsoft.com/"
+  },
+  {
+    name: STRINGS.MICROSOFT,
+    link: "https://www.microsoft.com/en-ca/"
+  }
+];
 
 class Footer extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <FooterContainer>
-          hi
-        </FooterContainer>
+        <FooterOuterContainer>
+          <FooterContainer>
+            <FooterContents>
+              {footerLinks.map((val) => (
+                <FooterLink href={val.link}>{val.name}</FooterLink>
+              ))}
+              {/* <FooterLink>Sitemap</FooterLink>
+              <FooterLink>Contact Microsoft</FooterLink>
+              <FooterLink href="https://go.microsoft.com/fwlink/?LinkId=521839">Privacy & Cookies</FooterLink>
+              <FooterLink>Terms of Use</FooterLink>
+              <FooterLink>Trademarks</FooterLink>
+              <FooterLink>Safety & Eco</FooterLink>
+              <FooterLink>© Microsoft 2020</FooterLink> */}
+            </FooterContents>
+          </FooterContainer>
+        </FooterOuterContainer>
       </React.Fragment>
     );
   }

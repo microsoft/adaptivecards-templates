@@ -13,8 +13,7 @@ export const Title = styled.h1`
 `;
 
 export const OuterDashboardContainer = styled.div`
-  display: flex;
-  flex-direction: column;
+  display: contents;
 `;
 
 export const DashboardContainer = styled.div`
