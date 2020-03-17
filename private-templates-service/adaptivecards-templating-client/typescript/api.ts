@@ -184,7 +184,7 @@ export class PostedTemplate {
   'isShareable'?: boolean;
   'isPublished'?: boolean;
   'tags'?: Array<string>;
-  'data'?: Array<any>;
+  'data'?: Array<object>;
 
   static discriminator: string | undefined = undefined;
 
@@ -448,13 +448,13 @@ export class TemplateInfo {
 
 export class TemplateInstance {
   'id'?: string;
-  'json'?: string;
+  'json'?: object;
   'version'?: string;
   'publishedAt'?: string;
   'state'?: TemplateInstance.StateEnum;
   'isShareable'?: boolean;
   'numHits'?: number;
-  'data'?: Array<any>;
+  'data'?: Array<object>;
   'updatedAt'?: string;
   'createdAt'?: string;
 

@@ -127,7 +127,7 @@ class Dashboard extends React.Component<Props> {
               ) : (
                   <PlaceholderText>
                     No edited templates yet. Create or edit one :)
-                </PlaceholderText>
+                  </PlaceholderText>
                 )}
             </React.Fragment>
             <React.Fragment>
@@ -140,7 +140,7 @@ class Dashboard extends React.Component<Props> {
               ) : (
                   <PlaceholderText>
                     No recently viewed templates yet. Check out some templates:)
-                </PlaceholderText>
+                  </PlaceholderText>
                 )}
             </React.Fragment>
           </DashboardContainer>
