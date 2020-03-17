@@ -93,23 +93,12 @@ export interface TemplateInstancePreview {
 
 /**
  * @interface
- * User information that is viewable by client.
- */
-export interface UserPreview {
-  firstName: string;
-  lastName: string;
-  team?: string[];
-  org?: string[];
-}
-
-/**
- * @interface
  * Template preview.
  */
 export interface TemplatePreview {
   _id: string;
   name: string;
-  owner: UserPreview;
+  owner: string;
   instance: TemplateInstancePreview;
   tags: string[];
 }

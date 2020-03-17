@@ -35,7 +35,7 @@ app.use(session({
   saveUninitialized: true
 }));
 
-let mongoDB = new MongoDBProvider({ connectionString: "mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass%20Community&ssl=false" });
+let mongoDB = new MongoDBProvider({ connectionString: "#{DB_CONNECTION_TOKEN}#" });
 mongoDB.connect()
   .then(
     (res) => {
