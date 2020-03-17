@@ -359,6 +359,8 @@ export class TemplateServiceClient {
     if (!version) {
       version = incrementVersion(existingTemplate);
     }
+    let authId = this.authProvider.getAuthIDFromToken(token || this.authProvider.token);
+
     let templateInstance: ITemplateInstance = {
       json: template ? template : JSON.parse("{}"),
       version: version || "1.0",
@@ -367,7 +369,8 @@ export class TemplateServiceClient {
       publishedAt: state === TemplateState.live ? new Date(Date.now()) : undefined,
       updatedAt: new Date(Date.now()),
       numHits: 0,
-      isShareable: isShareable
+      isShareable: isShareable,
+      lastEditedUser: authId
     };
     let templateInstances: ITemplateInstance[] = [];
     if (existingTemplate.instances) {
@@ -436,7 +439,7 @@ export class TemplateServiceClient {
     } else {
       templateInstances.push(templateInstance);
     }
-    let userResponse = await this._getUserID(this.authProvider.getAuthIDFromToken(token || this.authProvider.token));
+    let userResponse = await this._getUserID(authId);
     if (!userResponse.success) return { success: false, errorMessage: userResponse.errorMessage };
 
     const newTemplate: Partial<ITemplate> = {
@@ -548,7 +551,8 @@ export class TemplateServiceClient {
       isShareable: isShareable || false,
       numHits: 0,
       data: data ? (data instanceof Array ? data : [data]) : [],
-      updatedAt: new Date(Date.now())
+      updatedAt: new Date(Date.now()),
+      lastEditedUser: authId
     };
 
     let templateName = name || "Untitled Template";
@@ -704,7 +708,7 @@ export class TemplateServiceClient {
     }
 
     if (templateId && templates.length > 0) {
-      if (templates![0].owner !== userId) return { success: true, result: [] };
+      if (templates![0].owner !== userId && templates![0].isLive === false) return { success: true, result: [] };
 
       await this._updateRecentTemplate(authId, templateId, true);
 
@@ -866,7 +870,7 @@ export class TemplateServiceClient {
 
     let templateList = viewed ? user.recentlyViewedTemplates : user.recentlyEditedTemplates;
     for (let templateId of templateList!) {
-      let templateResponse = await this.getTemplates(token, templateId);
+      let templateResponse = await this.getTemplates(token, templateId, undefined, undefined, undefined, undefined, undefined, undefined, undefined, true);
       if (templateResponse.success && templateResponse.result && templateResponse.result.length === 1) {
         results.push(templateResponse.result[0]);
       }
