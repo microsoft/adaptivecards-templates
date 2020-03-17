@@ -3,19 +3,25 @@ import { connect } from "react-redux";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import { RootState } from "../../store/rootReducer";
 import { UserType } from "../../store/auth/types";
+import { getAllTemplates } from "../../store/templates/actions";
 import { AllTemplateState } from "../../store/templates/types";
+import { getRecentTemplates } from "../../store/recentTemplates/actions";
 import { RecentTemplatesState } from "../../store/recentTemplates/types";
 import { setPage } from "../../store/page/actions";
-import { getAllTemplates } from "../../store/templates/actions";
 import { getTemplate } from "../../store/currentTemplate/actions";
-import { getRecentTemplates } from "../../store/recentTemplates/actions";
 import { setSearchBarVisible } from "../../store/search/actions";
+
+import { Template } from "adaptive-templating-service-typescript-node";
+import { SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
+
 import requireAuthentication from "../../utils/requireAuthentication";
+
 import Gallery from "../Gallery";
 import SearchPage from "./SearchPage/SearchPage";
-import { Template } from "adaptive-templating-service-typescript-node";
-import { RecentlyViewed } from "./RecentlyViewed/RecentlyViewed";
+import RecentlyViewed from "./RecentlyViewed";
 import Tags from "../Common/Tags";
+
+
 import {
   Title,
   DashboardContainer,
@@ -119,7 +125,7 @@ class Dashboard extends React.Component<Props> {
           <React.Fragment>
             <Title>Recently Edited</Title>
             {recentTemplates.isFetching ?
-              <CenteredSpinner />
+              <CenteredSpinner size={SpinnerSize.large} />
               : recentlyEditedTemplates.length ? (
                 <Gallery
                   onClick={this.selectTemplate}
@@ -134,7 +140,7 @@ class Dashboard extends React.Component<Props> {
           <React.Fragment>
             <Title>Recently Viewed</Title>
             {recentTemplates.isFetching ?
-              <CenteredSpinner />
+              <CenteredSpinner size={SpinnerSize.large} />
               : recentlyViewedTemplates.length ? (
                 <RecentlyViewed
                   onClick={this.selectTemplate}
