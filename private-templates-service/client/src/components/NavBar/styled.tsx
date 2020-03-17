@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import { IconButton } from 'office-ui-fabric-react/lib/Button';
+
 import { BREAK, COLORS } from "../../globalStyles";
 
 export const Banner = styled.div`
@@ -24,6 +26,13 @@ export const MobileBanner = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
+`;
+
+export const BaselineBanner = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: baseline;
 `;
 
 export const StyledLogo = styled.img`
@@ -74,4 +83,8 @@ export const StyledButtonContent = styled.div`
   display: table-cell;
   vertical-align: middle;
   text-align: center;
+`;
+
+export const EditButton = styled(IconButton)`
+  margin-left: 16px;
 `;
