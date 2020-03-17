@@ -15,13 +15,15 @@ import Designer from "./components/Designer";
 import NavBar from "./components/NavBar/NavBar";
 import SideBar from "./components/SideBar";
 import Dashboard from "./components/Dashboard";
+import Shared from "./components/Shared/";
+import PreviewModal from './components/Dashboard/PreviewModal';
 import ErrorMessage, { ErrorMessageProps } from "./components/ErrorMessage/ErrorMessage";
 import config from "./Config";
 
 // CSS
 import "bootstrap/dist/css/bootstrap.css";
-
 import { OuterAppWrapper, MainAppWrapper, MainApp } from "./styled";
+
 
 interface State {
   error: ErrorMessageProps | null;
@@ -63,7 +65,7 @@ interface Props {
   userLogout: () => void;
   isAuthenticated: boolean;
   user?: UserType;
-  searchByTemplateName: string
+  searchByTemplateName: string;
 }
 
 class App extends Component<Props, State> {
@@ -108,30 +110,38 @@ class App extends Component<Props, State> {
 
     return (
       <Router>
-        <OuterAppWrapper>
-          <SideBar
-            authButtonMethod={
-              this.props.isAuthenticated
-                ? this.logout
-                : this.login
-            }
-          />
-          <MainAppWrapper>
-            <NavBar
+        <Switch>
+          <Route exact path="/preview/:uuid/:version">
+            <Shared authButtonMethod={this.login}></Shared>
+          </Route>
+          <OuterAppWrapper>
+            <SideBar
+              authButtonMethod={
+                this.props.isAuthenticated
+                  ? this.logout
+                  : this.login
+              }
             />
-            <MainApp>
-              {error}
-              <Switch>
-                <Route exact path="/">
-                  <Dashboard authButtonMethod={this.login} />
-                </Route>
-                <Route exact path="/designer">
-                  <Designer authButtonMethod={this.login} />
-                </Route>
-              </Switch>
-            </MainApp>
-          </MainAppWrapper>
-        </OuterAppWrapper>
+            <MainAppWrapper>
+              <NavBar />
+              <MainApp>
+                {error}
+                <Switch>
+                  <Route exact path="/">
+                    <Dashboard authButtonMethod={this.login} />
+                  </Route>
+                  <Route exact path="/designer">
+                    <Designer authButtonMethod={this.login} />
+                  </Route>
+                  <Route path="/template/:uuid">
+                    <PreviewModal />
+                  </Route>
+                </Switch>
+              </MainApp>
+            </MainAppWrapper>
+          </OuterAppWrapper>
+        </Switch>
+        <div id="modal" />
       </Router >
     );
   }

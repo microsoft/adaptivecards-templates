@@ -3,6 +3,7 @@ import { COLORS } from '../../../../globalStyles';
 
 import { Icon, IDropdownStyles, FontWeights, IDropdownSubComponentStyles } from 'office-ui-fabric-react';
 import { Dropdown } from "office-ui-fabric-react";
+import { PostedTemplate } from 'adaptive-templating-service-typescript-node';
 
 export const StyledVersionDropdown = styled(Dropdown)`
   display: flex
@@ -16,7 +17,7 @@ export const DropdownStyles: Partial<IDropdownStyles> = {
   title: {
     marginLeft: 10,
     marginRight: 10,
-    marginTop: 5, 
+    marginTop: 5,
     marginBottom: 5,
     borderWidth: 0,
   },
@@ -56,8 +57,10 @@ export const Title = styled.div`
   font-weight: 500;
 `;
 
-export const StatusIndicator = styled.div<{ isPublished?: boolean }>`
-  background-color: ${props => props.isPublished ? COLORS.GREEN : COLORS.YELLOW};
+export const StatusIndicator = styled.div<{ state?: PostedTemplate.StateEnum }>`
+  background-color: ${props =>
+    props.state === PostedTemplate.StateEnum.Live ? COLORS.GREEN :
+      props.state === PostedTemplate.StateEnum.Draft ? COLORS.YELLOW : COLORS.GREY3};
   width: 10px;
   height: 10px;
   border-radius: 50%;
@@ -91,6 +94,7 @@ export const RowWrapper = styled.div`
   display: flex;
   flex-direction: row;
   align-items: stretch;
+  margin-top: 20px;
   justify-content: space-between;
 `;
 

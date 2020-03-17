@@ -1,11 +1,27 @@
 import React from 'react';
-import { ActionButton, IDropdownOption } from 'office-ui-fabric-react';
+import { connect } from 'react-redux';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 
-import { Template, TemplateInstance } from 'adaptive-templating-service-typescript-node';
+import { RootState } from '../../../../store/rootReducer';
+import { openModal, closeModal } from '../../../../store/page/actions';
+import { ModalState } from '../../../../store/page/types';
+import { updateCurrentTemplateVersion } from '../../../../store/currentTemplate/actions';
+
+import { Template, TemplateInstance, PostedTemplate } from 'adaptive-templating-service-typescript-node';
+
+import { getLatestVersion } from "../../../../utils/TemplateUtil";
 
 import PublishModal from '../../../Common/PublishModal';
+import UnpublishModal from '../../../Common/UnpublishModal';
 import Tags from '../../../Common/Tags';
+import ShareModal from '../../../Common/ShareModal';
 
+import VersionCard from './VersionCard';
+
+import { ActionButton, IDropdownOption } from 'office-ui-fabric-react';
+
+import { EDIT_IN_DESIGNER, DELETE, SHARE, PUBLISH, UNPUBLISH } from "../../../../assets/strings"
+import { THEME } from '../../../../globalStyles';
 import {
   OuterWrapper,
   HeaderWrapper,
@@ -27,24 +43,23 @@ import {
   StyledVersionDropdown,
   DropdownStyles,
 } from './styled';
-import { THEME } from '../../../../globalStyles';
-
 
 const buttons = [
   {
-    text: 'Edit in designer',
+    text: EDIT_IN_DESIGNER,
     icon: { iconName: 'SingleColumnEdit' }
   },
   {
-    text: 'Delete',
+    text: DELETE,
     icon: { iconName: 'Delete' }
   },
   {
-    text: 'Share',
+    text: SHARE,
     icon: { iconName: 'AddFriend' }
   },
   {
-    text: 'Publish',
+    text: PUBLISH,
+    altText: UNPUBLISH,
     icon: { iconName: 'PublishContent' }
   },
 ];
@@ -63,41 +78,71 @@ const cards = [
   }
 ];
 
-interface Props {
+interface Props extends RouteComponentProps {
   template: Template;
-  onClose: () => void;
   onSwitchVersion: (templateVersion: string) => void;
+  updateCurrentTemplateVersion: (template: Template, version: string) => void;
+  modalState?: ModalState;
+  openModal: (modalState: ModalState) => void;
+  closeModal: () => void;
 }
 
 interface State {
-  isPublishOpen: boolean;
   version: string;
+}
+
+
+const mapStateToProps = (state: RootState) => {
+  return {
+    modalState: state.page.modalState,
+    version: state.currentTemplate.version
+  };
+};
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    openModal: (modalState: ModalState) => {
+      dispatch(openModal(modalState));
+    },
+    closeModal: () => {
+      dispatch(closeModal());
+    },
+    updateCurrentTemplateVersion: (template: Template, version: string) => {
+      dispatch(updateCurrentTemplateVersion(template, version))
+    }
+  }
+};
+
+function getTemplateState(template: Template, version: string): PostedTemplate.StateEnum {
+  if (!template.instances || template.instances.length === 0) return PostedTemplate.StateEnum.Draft;
+  for (let instance of template.instances) {
+    if (instance.version === version) return instance.state || PostedTemplate.StateEnum.Draft;
+  }
+  return PostedTemplate.StateEnum.Draft;
 }
 
 class TemplateInfo extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { isPublishOpen: false, version: "1.0" }
-  }
-
-  toggleModal = () => {
-    this.setState({ isPublishOpen: !this.state.isPublishOpen });
+    const currentVersion = getLatestVersion(this.props.template);
+    this.state = { version: currentVersion }
   }
 
   versionList = (instances: TemplateInstance[] | undefined): IDropdownOption[] => {
     if (!instances) return [];
     let options: IDropdownOption[] = [];
-    for (let instance of instances){
+    for (let instance of instances) {
       if (!instance.version) continue;
-      options.push({key: instance.version, text: `Version ${instance.version}`});
+      options.push({ key: instance.version, text: `Version ${instance.version}` });
     }
     return options;
   }
 
-  onVersionChange = (event: React.FormEvent<HTMLDivElement>, option?:IDropdownOption) => {
+  onVersionChange = (event: React.FormEvent<HTMLDivElement>, option?: IDropdownOption) => {
     if (!option) return;
     let version = option.key.toString();
     this.setState({ version: version });
+    this.props.updateCurrentTemplateVersion(this.props.template, version);
     this.props.onSwitchVersion(version);
   }
 
@@ -105,37 +150,48 @@ class TemplateInfo extends React.Component<Props, State> {
     const {
       isLive,
       tags,
-      createdAt, 
+      createdAt,
       instances,
     } = this.props.template;
-    const { onClose } = this.props;
 
+    let createdAtParsed = "";
+
+    if (createdAt) {
+      const createdAtDate = new Date(createdAt);
+      createdAtParsed = createdAtDate.toLocaleString();
+    }
+
+    const { history } = this.props;
+    if (!history) {
+      return (<div>Error loading page</div>)
+    }
+    let templateState = getTemplateState(this.props.template, this.state.version);
     return (
-      <OuterWrapper>
+      < OuterWrapper >
         <HeaderWrapper>
           <TopRowWrapper>
             <TitleWrapper>
-            <Title>
+              <Title>
                 <StyledVersionDropdown
-                  placeholder = {`Version ${this.state.version}`}
-                  options = {this.versionList(instances)}
-                  onChange = {this.onVersionChange}
-                  theme = {THEME.LIGHT}
-                  styles = {DropdownStyles}
+                  placeholder={`Version ${this.state.version}`}
+                  options={this.versionList(instances)}
+                  onChange={this.onVersionChange}
+                  theme={THEME.LIGHT}
+                  styles={DropdownStyles}
                 />
               </Title>
-              <StatusIndicator isPublished={isLive} />
-              <Status>{isLive ? 'Published' : 'Draft'}</Status>
+              <StatusIndicator state={templateState} />
+              <Status>{PostedTemplate.StateEnum[templateState]}</Status>
             </TitleWrapper>
             <TimeStamp>
-              Created {createdAt}
+              Created {createdAtParsed}
             </TimeStamp>
-            <ActionButton iconProps={{ iconName: 'ChromeClose' }} onClick={onClose} >Close</ActionButton>
           </TopRowWrapper>
           <ActionsWrapper>
             {buttons.map((val) => (
-              <ActionButton key={val.text} iconProps={val.icon} allowDisabledFocus onClick={val.text === 'Publish' ? this.toggleModal : () => { }} >
-                {val.text}
+              <ActionButton key={val.text} iconProps={val.icon} allowDisabledFocus
+                onClick={() => { onActionButtonClick(this.props, this.state, val) }}>
+                {val.text === 'Publish' && templateState === PostedTemplate.StateEnum.Live ? val.altText : val.text}
               </ActionButton>
             ))}
           </ActionsWrapper>
@@ -159,15 +215,50 @@ class TemplateInfo extends React.Component<Props, State> {
             <CardHeader>Tags</CardHeader>
             <CardBody>
               <TagsWrapper>
-                <Tags tags={tags} allowAddTag={true} />
+                <Tags tags={tags} allowAddTag={true} allowEdit={true} />
               </TagsWrapper>
             </CardBody>
           </Card>
+          <RowWrapper>
+            <VersionCard template={this.props.template} templateVersion={this.state.version} />
+          </RowWrapper>
         </MainContentWrapper>
-        {this.state.isPublishOpen && <PublishModal toggleModal={this.toggleModal} template={this.props.template} templateVersion={this.state.version}/>}
+        {this.props.modalState === ModalState.Publish && <PublishModal template={this.props.template} templateVersion={this.state.version} />}
+        {this.props.modalState === ModalState.Unpublish && <UnpublishModal template={this.props.template} templateVersion={this.state.version} />}
+        {this.props.modalState === ModalState.Share && <ShareModal template={this.props.template} templateVersion={this.state.version} />}
       </OuterWrapper>
     );
   }
 }
 
-export default TemplateInfo;
+function onActionButtonClick(props: Props, state: State, val: any) {
+  let templateState = getTemplateState(props.template, state.version);
+
+  switch (val.text) {
+    case SHARE:
+      props.openModal(ModalState.Share);
+      break;
+    case EDIT_IN_DESIGNER:
+      const { history } = props;
+      if (history) history.push('/designer');
+      break;
+    case PUBLISH:
+      switch (templateState) {
+        case PostedTemplate.StateEnum.Draft:
+          props.openModal(ModalState.Publish);
+          break;
+        case PostedTemplate.StateEnum.Live:
+          props.openModal(ModalState.Unpublish);
+          break;
+        case PostedTemplate.StateEnum.Deprecated:
+          props.openModal(ModalState.Publish);
+          break;
+        default:
+          break;
+      }
+    default:
+      break;
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(TemplateInfo));

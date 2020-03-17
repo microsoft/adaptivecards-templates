@@ -1,10 +1,38 @@
 import styled from "styled-components";
+import { COLORS } from "../../globalStyles";
+
+export const PlaceholderText = styled.h5`
+  font-family: Segoe UI Regular;
+  padding-top: 20px;
+`;
 
 export const Title = styled.h1`
-	padding-top: 15px;
-	font-size: 1.25rem;
+  padding-top: 15px;
+  font-size: 1.5rem;
+  font-weight: 700;
 `;
 
 export const DashboardContainer = styled.div`
-	margin: 0 40px;
+  flex: 1;
+  padding: 0px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+`;
+
+export const OuterWindow = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: space-between;
+  height: 100%;
+`;
+export const TagsContainer = styled.div`
+  background-color: ${COLORS.GREY1};
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: flex-start;
+  width: 300px;
+  padding-left: 30px;
 `;

@@ -51,6 +51,10 @@ paths:
           name: isPublished
           type: boolean
           description: Query based on if template is published
+        - name: isClient
+          in: query
+          type: boolean
+          description: If true, ignores updating hits on template
         - in: query
           name: name
           type: string
@@ -129,6 +133,10 @@ paths:
           in: query
           type: boolean
           description: Query based on if template is published
+        - name: isClient
+          in: query
+          type: boolean
+          description: If true, ignores updating hits on template
         - name: version
           in: query
           type: string
@@ -265,19 +273,6 @@ paths:
             $ref: "#/definitions/BaseError" 
       security:
         - bearer_auth: []
-    post:
-      tags:
-        - "user"
-      summary: "Update user's info"
-      produces:
-        - "application/json"
-      parameters:
-        - in: "body"
-          name: "body"
-          description: "User info to be added"
-          required: true
-          schema:
-            $ref: "#/definitions/PostedUser"
       responses: 
         200: 
           description: "successful operation"
@@ -381,7 +376,8 @@ definitions:
       data: 
         type: array
         items: 
-          type: string
+          type: object
+          format: JSON
       updatedAt:
         type: string
         format: Date
@@ -393,7 +389,7 @@ definitions:
     properties: 
       name: 
         type: string
-      version: 
+      version:
         type: string
       template: 
         type: object
@@ -415,30 +411,17 @@ definitions:
       data: 
         type: array
         items: 
-          type: string
+          type: object
           format: JSON
+      isClient: 
+          type: boolean
   UserList:
     type: object
     properties:
       user:
         type: array
         items:
-          $ref: "#/definitions/User"
-  PostedUser:
-    type: object
-    properties:
-      firstName: 
-        type: string
-      lastName: 
-        type: string
-      team: 
-        type: array
-        items: 
-          type: string
-      org: 
-        type: array
-        items: 
-          type: string     
+          $ref: "#/definitions/User"  
   User: 
     type: object  
     properties:
@@ -448,18 +431,6 @@ definitions:
         type: string
       authIssuer:
         type: string
-      firstName: 
-        type: string
-      lastName: 
-        type: string
-      team: 
-        type: array
-        items: 
-          type: string
-      org: 
-        type: array
-        items: 
-          type: string
       recentlyViewed: 
         type: array
         items: 
@@ -501,23 +472,8 @@ definitions:
       data: 
         type: array
         items:  
-          type: string
+          type: object
           format: JSON
-  TemplatePreviewUser: 
-    type: object
-    properties:
-      firstName: 
-        type: string
-      lastName: 
-        type: string
-      team: 
-        type: array
-        items: 
-          type: string
-      org: 
-        type: array
-        items: 
-          type: string
   TemplateInfo: 
     type: object
     properties:

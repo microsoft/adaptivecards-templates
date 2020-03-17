@@ -3,15 +3,28 @@ import { COLORS } from '../../../globalStyles';
 
 import { Icon } from 'office-ui-fabric-react';
 
+const DuplicateKeyFrame = keyframes`
+  from {
+    background-color: ${COLORS.BLUE};
+  }
+
+  to {
+    background-color: ${COLORS.GREY2};
+  }
+`;
+
 export const Tag = styled.div`
   display: flex;
   flex-direction: row;
   align-items: baseline;
-  color: white;
-  background-color: ${COLORS.BLUE};
+  background-color: ${COLORS.GREY2};
   border-radius: 1em;
   margin: 0 16px 12px 0;
   padding: 4px 10px 4px 16px;
+  
+  &.duplicate {
+    animation: ${DuplicateKeyFrame} 0.3s forwards;
+  }
 `;
 
 export const TagText = styled.div``;
@@ -28,7 +41,7 @@ export const TagCloseIcon = styled(Icon)`
   }
 
   &:active {
-    background-color: ${COLORS.BLUE2};
+    background-color: ${COLORS.BORDER2};
   }
 `;
 
@@ -46,8 +59,7 @@ export const AddTagWrapper = styled.form<{ open: boolean }>`
   display: flex;
   flex-direction: row;
   align-items: baseline;
-  color: white;
-  background-color: ${COLORS.BLUE};
+  background-color: ${COLORS.GREY2};
   border-radius: 1em;
   padding: 6.5px;
   margin-bottom: 12px;
@@ -67,8 +79,7 @@ const ExpandInputKeyframe = keyframes`
 
 export const AddTagInput = styled.input<{ open: boolean }>`
   display: ${props => !props.open && 'none'};
-  background-color: ${COLORS.BLUE};
-  color: white;
+  background-color: ${COLORS.GREY2};
   border: none;
   outline: 0;
   ${props => (props.open && css`
@@ -89,7 +100,7 @@ export const TagAddIcon = styled(Icon) <{ open: boolean }>`
   }
 
   &: active {
-    background-color: ${ COLORS.BLUE2};
+    background-color: ${ COLORS.BORDER2};
   }
 `;
 
@@ -99,8 +110,7 @@ export const TagSubmitButton = styled.button<{ open: boolean }>`
   border: 0px;
   outline: 0px;
   padding: 0px;
-  background-color: ${COLORS.BLUE};
-  color: ${COLORS.WHITE};
+  background-color: ${COLORS.GREY2};
 
   &: active {
     outline: 0px;
@@ -123,7 +133,7 @@ export const TagSubmitIcon = styled(Icon)`
   }
 
   &: active {
-    background-color: ${ COLORS.BLUE2};
+    background-color: ${ COLORS.BORDER2};
   }
 `;
 

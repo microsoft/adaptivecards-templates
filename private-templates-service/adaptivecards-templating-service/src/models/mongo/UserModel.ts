@@ -18,10 +18,6 @@ export const UserSchema: Schema = new Schema(
     _id: { type: String, required: true },
     authIssuer: { type: String, required: true },
     authId: { type: String, required: true },
-    firstName: { type: String, default: "" },
-    lastName: { type: String, default: "" },
-    team: { type: [String], default: [] },
-    org: { type: [String], default: [] },
     recentlyViewedTemplates: { type: [String], default: [] },
     recentlyEditedTemplates: { type: [String], default: [] }, // max size 5
     recentTags: { type: [String], default: [] } // max size 10

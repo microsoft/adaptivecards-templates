@@ -10,6 +10,8 @@ import { updateTemplate } from '../../store/currentTemplate/actions';
 import * as monaco from 'monaco-editor';
 import markdownit from 'markdown-it';
 import * as ACDesigner from 'adaptivecards-designer';
+import { setPage } from '../../store/page/actions';
+import { DesignerWrapper } from './styled';
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -18,14 +20,18 @@ const mapStateToProps = (state: RootState) => {
     templateID: state.currentTemplate.templateID,
     templateJSON: state.currentTemplate.templateJSON,
     templateName: state.currentTemplate.templateName,
-    sampleDataJSON: state.currentTemplate.sampleDataJSON
+    sampleDataJSON: state.currentTemplate.sampleDataJSON,
+    version: state.currentTemplate.version
   };
 };
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    updateTemplate: (templateID: string, templateJSON: string, templateName: string, sampleDataJSON: string) => {
-      dispatch(updateTemplate(templateID, templateJSON, templateName, sampleDataJSON));
+    updateTemplate: (templateID: string, currentVersion: string, templateJSON: object, sampleDataJSON: object, templateName: string) => {
+      dispatch(updateTemplate(templateID, currentVersion, templateJSON, sampleDataJSON, templateName));
+    },
+    setPage: (currentPageTitle: string, currentPage: string) => {
+      dispatch(setPage(currentPageTitle, currentPage));
     }
   }
 }
@@ -34,15 +40,21 @@ interface DesignerProps {
   isAuthenticated: boolean;
   user?: UserType;
   templateID: string;
-  templateJSON: string;
+  templateJSON: object;
   templateName: string;
-  sampleDataJSON: string;
-  updateTemplate: (templateID: string, templateJSON: string, templateName: string, sampleDataJSON: string) => any;
+  sampleDataJSON: object;
+  version: string;
+  updateTemplate: (templateID: string, currentVersion: string, templateJSON: object, sampleDataJSON: object, templateName: string) => any;
+  setPage: (currentPageTitle: string, currentPage: string) => void;
 }
 
 let designer: ACDesigner.CardDesigner;
 
 class Designer extends React.Component<DesignerProps> {
+  constructor(props: DesignerProps) {
+    super(props);
+    props.setPage(this.props.templateName, "Designer");
+  }
 
   componentWillMount() {
     ACDesigner.GlobalSettings.enableDataBindingSupport = true;
@@ -52,7 +64,6 @@ class Designer extends React.Component<DesignerProps> {
       result.outputHtml = new markdownit().render(text);
       result.didProcess = true;
     }
-
     designer = initDesigner();
 
     let publishButton = new ACDesigner.ToolbarButton("publishButton", "Publish", "", (sender) => (alert("Published!")));
@@ -62,8 +73,6 @@ class Designer extends React.Component<DesignerProps> {
     let saveButton = new ACDesigner.ToolbarButton("saveButton", "Save", "", (sender) => (onSave(designer, this.props)));
     saveButton.separator = true;
     designer.toolbar.insertElementAfter(saveButton, ACDesigner.CardDesigner.ToolbarCommands.TogglePreview);
-
-    designer.sampleData = "";
   }
 
   componentDidMount() {
@@ -71,13 +80,23 @@ class Designer extends React.Component<DesignerProps> {
     if (element) {
       designer.attachTo(element);
     }
-
     designer.monacoModuleLoaded(monaco);
+
+    if (this.props.templateJSON) {
+      designer.setCard(this.props.templateJSON);
+    }
+
+    if (this.props.sampleDataJSON) {
+      designer.sampleData = this.props.sampleDataJSON;
+    }
+    else {
+      designer.sampleData = {};
+    }
   }
 
   render() {
     return (
-      <div id="designer-container" dangerouslySetInnerHTML={{ __html: "dangerouslySetACDesigner" }}></div>
+      <DesignerWrapper id="designer-container" dangerouslySetInnerHTML={{ __html: "dangerouslySetACDesigner" }}></DesignerWrapper>
     );
   }
 
@@ -106,8 +125,8 @@ function initDesigner(): ACDesigner.CardDesigner {
 }
 
 function onSave(designer: ACDesigner.CardDesigner, props: DesignerProps): void {
-  if (props.templateJSON !== JSON.stringify(designer.getCard()) || props.sampleDataJSON !== designer.sampleData) {
-    props.updateTemplate(props.templateID, JSON.stringify(designer.getCard()), props.templateName, designer.sampleData);
+  if (JSON.stringify(props.templateJSON) !== JSON.stringify(designer.getCard()) || props.sampleDataJSON !== designer.sampleData) {
+    props.updateTemplate(props.templateID, props.version, designer.getCard(), designer.sampleData, props.templateName);
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(requireAuthentication(Designer));
