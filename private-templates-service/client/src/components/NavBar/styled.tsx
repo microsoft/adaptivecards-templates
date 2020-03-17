@@ -87,4 +87,10 @@ export const StyledButtonContent = styled.div`
 
 export const EditButton = styled(IconButton)`
   margin-left: 16px;
+  border: 0;
+  outline: 0;
+
+  &: focus {
+    outline: 0px;
+  }
 `;
