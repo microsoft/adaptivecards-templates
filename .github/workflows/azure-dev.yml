@@ -30,22 +30,13 @@ jobs:
               uses: actions/setup-node@v1
               with:
                   node-version: ${{ env.NODE_VERSION }}
-            - name: Find and Replace CLIENT_SECRET_TOKEN, DB_CONNECTION_TOKEN, and CLIENT_ID_TOKEN
+            - name: Find and Replace CLIENT_SECRET_TOKEN and DB_CONNECTION_TOKEN
               uses: cschleiden/replace-tokens@v1
               with:
                 files: '["**/*.ts"]'
               env:
-                CLIENT_SECRET_TOKEN: ${{ secrets.AZURE_ADAPTIVECMS_DEV_CLIENT_SECRET }}
+                CLIENT_SECRET_TOKEN: ${{ secrets.AZURE_ADAPTIVECMS_CLIENT_SECRET }}
                 DB_CONNECTION_TOKEN: ${{ secrets.AZURE_ADAPTIVECMS_DB_CONNECTION_STRING }}
-                CLIENT_ID_TOKEN: ${{ secrets.AZURE_ADAPTIVECMS_DEV_CLIENT_ID }}
-            - name: Find and Replace http://localhost:5000
-              uses: cschleiden/replace-tokens@v1
-              with:
-                tokenPrefix: 'http://'
-                tokenSuffix: ':5000'
-                files: '["**/*.ts"]'
-              env:
-                localhost: https://adaptivecms.azurewebsites.net
             - name: Adaptive Cards Templating Service Test
               run: |
                   cd private-templates-service/adaptivecards-templating-service

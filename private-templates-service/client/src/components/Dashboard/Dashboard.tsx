@@ -1,16 +1,16 @@
 import React from "react";
 import { connect } from "react-redux";
-import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 import { RootState } from "../../store/rootReducer";
 import { UserType } from "../../store/auth/types";
 import { AllTemplateState } from '../../store/templates/types';
 import { setPage } from "../../store/page/actions";
 import { getAllTemplates } from "../../store/templates/actions";
-import { setSearchBarVisible } from "../../store/search/actions";
+import { getTemplate } from "../../store/currentTemplate/actions";
 
 import requireAuthentication from "../../utils/requireAuthentication";
 import Gallery from "../Gallery";
+import PreviewModal from "./PreviewModal";
 import SearchPage from './SearchPage/SearchPage';
 
 import { Title, DashboardContainer } from "../Dashboard/styled";
@@ -28,71 +28,72 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    setPage: (currentPageTitle: string, currentPage: string) => {
-      dispatch(setPage(currentPageTitle, currentPage));
+    setPage: (currentPageTitle: string) => {
+      dispatch(setPage(currentPageTitle));
     },
-    setSearchBarVisible: (isSearchBarVisible: boolean) => {
-      dispatch(setSearchBarVisible(isSearchBarVisible));
-    },
-    getTemplates: () => {
-      dispatch(getAllTemplates());
+    getTemplates: () => { dispatch(getAllTemplates()) },
+    getTemplate: (templateID: string) => {
+      dispatch(getTemplate(templateID));
     }
   }
 }
 
-interface Props extends RouteComponentProps {
+interface State {
+  isPreviewOpen: boolean;
+}
+
+interface Props {
   isAuthenticated: boolean;
   user?: UserType;
   templates: AllTemplateState;
-  setPage: (currentPageTitle: string, currentPage: string) => void;
-  setSearchBarVisible: (isSearchBarVisible: boolean) => void;
+  authButtonMethod: () => Promise<void>;
+  setPage: (currentPageTitle: string) => void;
   getTemplates: () => void;
+  getTemplate: (templateID: string) => void;
   isSearch: boolean;
 }
 
-class Dashboard extends React.Component<Props> {
+class Dashboard extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    props.setPage("Dashboard", "Dashboard");
-    props.setSearchBarVisible(true);
+    this.state = { isPreviewOpen: false };
+    props.setPage("Dashboard");
     props.getTemplates();
   }
 
-  componentDidUpdate(prevProps: Props) {
-    if (this.props.isSearch !== prevProps.isSearch) {
-      if (this.props.isSearch) {
-        this.props.setPage("Templates", "searchPage");
-      } else {
-        this.props.setPage('Dashboard', 'Dashboard');
-      }
-    }
+  selectTemplate = (templateID: string) => {
+    this.props.getTemplate(templateID);
+    this.toggleModal();
   }
 
-  selectTemplate = (templateID: string) => {
-    this.props.history.push('template/' + templateID);
-  }
+  toggleModal = () => {
+    this.setState({ isPreviewOpen: !this.state.isPreviewOpen });
+  };
 
   render() {
     if (this.props.isSearch) {
       return (
         <DashboardContainer>
-          <SearchPage selectTemplate={this.selectTemplate} />
+          <SearchPage />
         </DashboardContainer>
       );
     }
     //TODO add sort functionality to separate templates displayed in recent vs draft
     let templates = new Array<Template>();
-    if (!this.props.templates.isFetching && this.props.templates.templates && this.props.templates.templates.templates) {
+    if (!this.props.templates.isFetching
+      && this.props.templates.templates
+      && this.props.templates.templates.templates) {
       templates = this.props.templates.templates.templates;
     }
-
+    this.props.setPage("Dashboard");
     return (
       <DashboardContainer>
         <Title>Recent</Title>
         <Gallery onClick={this.selectTemplate} templates={templates}></Gallery>
+        <PreviewModal show={this.state.isPreviewOpen} toggleModal={this.toggleModal} />
       </DashboardContainer>
     );
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(requireAuthentication(withRouter(Dashboard)));
+export default connect(mapStateToProps, mapDispatchToProps)(requireAuthentication(Dashboard));

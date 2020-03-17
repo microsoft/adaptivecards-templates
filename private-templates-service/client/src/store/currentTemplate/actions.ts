@@ -31,7 +31,7 @@ function requestNewTemplateUpdate(): CurrentTemplateAction {
   };
 }
 
-function receiveNewTemplateUpdate(templateID?: string, templateJSON?: string, templateName?: string, sampleDataJSON?: string): CurrentTemplateAction {
+function receiveNewTemplateUpdate(templateID: string, templateJSON: string, templateName: string, sampleDataJSON: string): CurrentTemplateAction {
   return {
     type: RECEIVE_NEW_TEMPLATE_UPDATE,
     text: "receiving post new template on save",
@@ -57,7 +57,7 @@ function requestExistingTemplateUpdate(): CurrentTemplateAction {
   };
 }
 
-function receiveExistingTemplateUpdate(templateJSON?: string, templateName?: string, sampleDataJSON?: string): CurrentTemplateAction {
+function receiveExistingTemplateUpdate(templateJSON: string, templateName: string, sampleDataJSON: string): CurrentTemplateAction {
   return {
     type: RECEIVE_EXISTING_TEMPLATE_UPDATE,
     text: "receiving post existing template on save",
@@ -101,32 +101,17 @@ function requestTemplateFailure(): CurrentTemplateAction {
   }
 }
 
-export function updateTemplate(templateID?: string, currentVersion?: string, templateJSON?: string, sampleDataJSON?: string, templateName?: string, state?: PostedTemplate.StateEnum, tags?: string[]) {
-  return function (dispatch: any, getState: () => RootState) {
-    const appState = getState();
-
+export function updateTemplate(templateID: string, templateJSON: string, sampleDataJSON: string, templateName: string, isPublished?: boolean) {
+  return function (dispatch: any) {
     let api = new TemplateApi();
     api.setApiKey(0, "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IkhsQzBSMTJza3hOWjFXUXdtak9GXzZ0X3RERSJ9.eyJhdWQiOiI4NjMxY2E0ZS1hMjVkLTQ5YWUtYmQ5OC1mZjNlMWRkZDQ0MTgiLCJpc3MiOiJodHRwczovL2xvZ2luLm1pY3Jvc29mdG9ubGluZS5jb20vNzJmOTg4YmYtODZmMS00MWFmLTkxYWItMmQ3Y2QwMTFkYjQ3L3YyLjAiLCJpYXQiOjE1ODEzNjA2MTgsIm5iZiI6MTU4MTM2MDYxOCwiZXhwIjoxNTgxMzY0NTE4LCJhaW8iOiI0Mk5nWUdDVzk3Qm1NamRrY3pQK1pLSGZMeFlPQUE9PSIsImF6cCI6Ijg2MzFjYTRlLWEyNWQtNDlhZS1iZDk4LWZmM2UxZGRkNDQxOCIsImF6cGFjciI6IjEiLCJvaWQiOiI4YWRiZWRhNi00ZDdkLTQ1N2ItOTNkZC1jMTVmMWE1Y2NiMzEiLCJzdWIiOiI4YWRiZWRhNi00ZDdkLTQ1N2ItOTNkZC1jMTVmMWE1Y2NiMzEiLCJ0aWQiOiI3MmY5ODhiZi04NmYxLTQxYWYtOTFhYi0yZDdjZDAxMWRiNDciLCJ1dGkiOiJ6SDlkcHVQNnprcUJidC1MUnVGYkFBIiwidmVyIjoiMi4wIn0.WhdvkqeJymW-Ayeht6tafd8Z1muoMnyPhKoYq6KGrHdv6psfYQtmK0P0-TA5_zgOOHNNJvpVqH2LPnZTbpK4qgKLByR9umELHgD2FW9v5Djg1NAKqmQEGg_-Th__SGE3L9_WI58Wh0_Toh3f7fpLDzNBiC5iYDdGSaTilwxaYMGbXnJO2Y6Tow83GQATKGA3B27Xz2iBO9UFmEy9rte4DyLUAEIE6SCKwg-3YuD0zKfpgyd-lvhZZr37HeE9Y6hyOm_M4b_jwWI7oK0uZASuQer83W5jsSZNtiXg_T0euXJcvI9lL6R4oJDI_N6Y42RdDioIwX6FzOA4vRzTySZjBw");
 
     let newTemplate = new PostedTemplate();
-    const id = templateID || appState.currentTemplate.templateID;
-    
-    const version = currentVersion || 
-    (appState.currentTemplate.template && appState.currentTemplate.template.instances && appState.currentTemplate.template.instances.length > 0 ?
-    appState.currentTemplate.template!.instances![0].version : "1.0");
-
-    if (templateJSON) {
-      newTemplate.template = JSON.parse(templateJSON);
-    } else {
-      newTemplate.template = appState.currentTemplate.templateJSON;
-    }
-
+    newTemplate.template = JSON.parse(templateJSON);
     newTemplate.name = templateName;
-    newTemplate.state = state;
-    newTemplate.tags = tags;
-    newTemplate.version = version;
+    newTemplate.isPublished = isPublished || false;
 
-    if (id === null || id === undefined || id === "") {
+    if (templateID === null || templateID === undefined || templateID === "") {
       dispatch(requestNewTemplateUpdate());
       return api.createTemplate(newTemplate).then(response => {
         if (response.response.statusCode && response.response.statusCode === 201 && response.body.id) {
@@ -138,10 +123,10 @@ export function updateTemplate(templateID?: string, currentVersion?: string, tem
     }
     else {
       dispatch(requestExistingTemplateUpdate());
-      return api.postTemplateById(id, newTemplate).then(response => {
+      return api.postTemplateById(templateID, newTemplate).then(response => {
         if (response.response.statusCode && response.response.statusCode === 201) {
           dispatch(receiveExistingTemplateUpdate(templateJSON, templateName, sampleDataJSON));
-          dispatch(getTemplate(id));
+          dispatch(getTemplate(templateID));
         }
         else {
           dispatch(failureExistingTemplateUpdate(response.response));
@@ -159,10 +144,10 @@ export function getTemplate(templateID: string) {
     api.setApiKey(0, "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IkhsQzBSMTJza3hOWjFXUXdtak9GXzZ0X3RERSJ9.eyJhdWQiOiI4NjMxY2E0ZS1hMjVkLTQ5YWUtYmQ5OC1mZjNlMWRkZDQ0MTgiLCJpc3MiOiJodHRwczovL2xvZ2luLm1pY3Jvc29mdG9ubGluZS5jb20vNzJmOTg4YmYtODZmMS00MWFmLTkxYWItMmQ3Y2QwMTFkYjQ3L3YyLjAiLCJpYXQiOjE1ODEzNjA2MTgsIm5iZiI6MTU4MTM2MDYxOCwiZXhwIjoxNTgxMzY0NTE4LCJhaW8iOiI0Mk5nWUdDVzk3Qm1NamRrY3pQK1pLSGZMeFlPQUE9PSIsImF6cCI6Ijg2MzFjYTRlLWEyNWQtNDlhZS1iZDk4LWZmM2UxZGRkNDQxOCIsImF6cGFjciI6IjEiLCJvaWQiOiI4YWRiZWRhNi00ZDdkLTQ1N2ItOTNkZC1jMTVmMWE1Y2NiMzEiLCJzdWIiOiI4YWRiZWRhNi00ZDdkLTQ1N2ItOTNkZC1jMTVmMWE1Y2NiMzEiLCJ0aWQiOiI3MmY5ODhiZi04NmYxLTQxYWYtOTFhYi0yZDdjZDAxMWRiNDciLCJ1dGkiOiJ6SDlkcHVQNnprcUJidC1MUnVGYkFBIiwidmVyIjoiMi4wIn0.WhdvkqeJymW-Ayeht6tafd8Z1muoMnyPhKoYq6KGrHdv6psfYQtmK0P0-TA5_zgOOHNNJvpVqH2LPnZTbpK4qgKLByR9umELHgD2FW9v5Djg1NAKqmQEGg_-Th__SGE3L9_WI58Wh0_Toh3f7fpLDzNBiC5iYDdGSaTilwxaYMGbXnJO2Y6Tow83GQATKGA3B27Xz2iBO9UFmEy9rte4DyLUAEIE6SCKwg-3YuD0zKfpgyd-lvhZZr37HeE9Y6hyOm_M4b_jwWI7oK0uZASuQer83W5jsSZNtiXg_T0euXJcvI9lL6R4oJDI_N6Y42RdDioIwX6FzOA4vRzTySZjBw");
 
     try {
-      api.templateById(templateID, undefined, true).then((resp: any) => {
+      api.templateById(templateID).then((resp: any) => {
         if (resp.body.templates.length === 1) {
           const templateObject = resp.body.templates[0];
-          return dispatch(
+          dispatch(
             requestTemplateSuccess(
               templateObject,
               templateObject.instances[0].json,

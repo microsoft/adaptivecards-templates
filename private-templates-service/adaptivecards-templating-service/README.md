@@ -398,7 +398,7 @@ Passing in data as a single entry will add the data to the current list.
 Passing an array of tags will replace all tags associated with the template instance. 
 Passing in a single tag will append to the existing list.
 
-<u>***When posting an update to a version of template to unpublish from live state, the client MUST specify deprecated" as the state as well as the version. Templates that are in "draft" or "live" can be deprecated by passing the version as well as "deprecated" as the state. If no version is specified, the version will default to incrementing the largest version. If a "deprecated" or "live" template is modified, a new template will be created with a vesrion that is auto incremented from the largest version.***</u> 
+<u>***When posting an update to a version of template to unpublish from live state, the client MUST specify which state the template should be in - either "draft" or "deprecated".***</u> 
 
 ###### Body
 ```json

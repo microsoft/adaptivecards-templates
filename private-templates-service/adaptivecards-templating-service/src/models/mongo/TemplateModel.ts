@@ -18,7 +18,7 @@ export const TemplateInstanceSchema: Schema = new Schema(
     publishedAt: { type: Date, default: null },
     state: { type: String, default: TemplateState.draft },
     isShareable: { type: Boolean, default: false },
-    numHits: { type: Number, default: 0 },
+    hits: { type: Number, default: 0 },
     data: { type: [String], default: [], set: MongoUtils.jsonArrayToString }
   },
   {
