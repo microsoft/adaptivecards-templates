@@ -51,6 +51,7 @@ mongoDB.connect()
 
         // Keep this request at the end so it has lowest priority
         app.get('*', (req, res) => {
+          res.header("Strict-Transport-Security", "max-age=15552000");
           res.sendFile(path.join(__dirname, RELATIVE_PATH_CLIENT + '/index.html'));
         })
       } else {
