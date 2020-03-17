@@ -21,4 +21,4 @@ export const TERMS = "Terms of Use";
 export const TRADEMARKS = "Trademarks";
 export const SAFETY = "Safety & Eco";
 export const ABOUT_ADS = "About our Ads";
-export const MICROSOFT = "© Microsoft 2020"
+export const MICROSOFT = "© Microsoft 2020";

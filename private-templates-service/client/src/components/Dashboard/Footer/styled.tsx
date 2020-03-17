@@ -18,9 +18,7 @@ export const FooterContainer = styled.div`
 export const FooterContents = styled.div`
   display: flex;
   flex-direction: row;
-
   width: fit-content;
-
   margin: auto;
 `;
 

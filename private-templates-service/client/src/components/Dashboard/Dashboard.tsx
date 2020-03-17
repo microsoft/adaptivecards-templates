@@ -16,6 +16,7 @@ import SearchPage from "./SearchPage/SearchPage";
 import { Template } from "adaptive-templating-service-typescript-node";
 import { RecentlyViewed } from "./RecentlyViewed/RecentlyViewed";
 import Tags from "../Common/Tags";
+import Footer from "./Footer";
 import {
   Title,
   DashboardContainer,
@@ -24,7 +25,7 @@ import {
   PlaceholderText,
   OuterDashboardContainer
 } from "./styled";
-import Footer from "./Footer";
+
 const mapStateToProps = (state: RootState) => {
   return {
     isAuthenticated: state.auth.isAuthenticated,
@@ -151,7 +152,6 @@ class Dashboard extends React.Component<Props> {
         </OuterWindow>
         <Footer />
       </OuterDashboardContainer>
-
     );
   }
 }
