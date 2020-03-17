@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
+
 import { COLORS } from "../../globalStyles";
 
 export const PlaceholderText = styled.h5`
@@ -35,4 +37,8 @@ export const TagsContainer = styled.div`
   justify-content: flex-start;
   width: 300px;
   padding-left: 30px;
+`;
+
+export const CenteredSpinner = styled(Spinner)`
+  margin: 120px auto;
 `;

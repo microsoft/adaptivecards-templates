@@ -21,15 +21,17 @@ import {
   DashboardContainer,
   OuterWindow,
   TagsContainer,
-  PlaceholderText
+  PlaceholderText,
+  CenteredSpinner,
 } from "./styled";
+
 const mapStateToProps = (state: RootState) => {
   return {
     isAuthenticated: state.auth.isAuthenticated,
     user: state.auth.user,
     templates: state.allTemplates,
     isSearch: state.search.isSearch,
-    recentTemplates: state.recentTemplates
+    recentTemplates: state.recentTemplates,
   };
 };
 const mapDispatchToProps = (dispatch: any) => {
@@ -116,29 +118,33 @@ class Dashboard extends React.Component<Props> {
         <DashboardContainer>
           <React.Fragment>
             <Title>Recently Edited</Title>
-            {recentlyEditedTemplates.length ? (
-              <Gallery
-                onClick={this.selectTemplate}
-                templates={recentlyEditedTemplates}
-              ></Gallery>
-            ) : (
-                <PlaceholderText>
-                  No edited templates yet. Create or edit one :)
+            {recentTemplates.isFetching ?
+              <CenteredSpinner />
+              : recentlyEditedTemplates.length ? (
+                <Gallery
+                  onClick={this.selectTemplate}
+                  templates={recentlyEditedTemplates}
+                ></Gallery>
+              ) : (
+                  <PlaceholderText>
+                    No edited templates yet. Create or edit one :)
               </PlaceholderText>
-              )}
+                )}
           </React.Fragment>
           <React.Fragment>
             <Title>Recently Viewed</Title>
-            {recentlyViewedTemplates.length ? (
-              <RecentlyViewed
-                onClick={this.selectTemplate}
-                recentlyViewed={recentlyViewedTemplates}
-              ></RecentlyViewed>
-            ) : (
-                <PlaceholderText>
-                  No recently viewed templates yet. Check out some templates:)
+            {recentTemplates.isFetching ?
+              <CenteredSpinner />
+              : recentlyViewedTemplates.length ? (
+                <RecentlyViewed
+                  onClick={this.selectTemplate}
+                  recentlyViewed={recentlyViewedTemplates}
+                ></RecentlyViewed>
+              ) : (
+                  <PlaceholderText>
+                    No recently viewed templates yet. Check out some templates:)
               </PlaceholderText>
-              )}
+                )}
           </React.Fragment>
         </DashboardContainer>
         <TagsContainer>
