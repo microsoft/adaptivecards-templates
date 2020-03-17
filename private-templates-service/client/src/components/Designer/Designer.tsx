@@ -92,6 +92,15 @@ class Designer extends React.Component<DesignerProps> {
     else {
       designer.sampleData = {};
     }
+
+    // TODO: REMOVE ONCE PUBLISH IS COMPLETED IN DESIGNER
+    const buttons = document.getElementsByClassName('acd-toolbar-button');
+    for (let i = 0; i < buttons.length; i++) {
+      if (buttons[i].innerHTML === 'Publish') {
+        console.log(buttons[i]);
+        (buttons[i] as HTMLElement).style.color = 'pink';
+      }
+    }
   }
 
   render() {
