@@ -35,7 +35,7 @@ app.use(session({
   saveUninitialized: true
 }));
 
-let mongoDB = new MongoDBProvider({ connectionString: "#{DB_CONNECTION_TOKEN}#" });
+let mongoDB = new MongoDBProvider({ connectionString: "mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass%20Community&ssl=false" });
 mongoDB.connect()
   .then(
     (res) => {
@@ -51,6 +51,7 @@ mongoDB.connect()
 
         // Keep this request at the end so it has lowest priority
         app.get('*', (req, res) => {
+          res.header("Strict-Transport-Security", "max-age=15552000");
           res.sendFile(path.join(__dirname, RELATIVE_PATH_CLIENT + '/index.html'));
         })
       } else {
