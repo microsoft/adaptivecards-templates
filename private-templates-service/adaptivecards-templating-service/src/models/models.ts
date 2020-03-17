@@ -22,6 +22,7 @@ export interface ITemplateInstance {
   data?: JSON[];
   updatedAt?: Date;
   createdAt?: Date;
+  lastEditedUser?: string;
 }
 
 export interface ITemplate {
@@ -40,10 +41,6 @@ export interface IUser {
   _id?: string;
   authIssuer: string;
   authId: string;
-  firstName?: string;
-  lastName?: string;
-  team?: string[];
-  org?: string[];
   recentlyViewedTemplates?: string[]; // size 5
   recentlyEditedTemplates?: string[]; // max size 5
   recentTags?: string[]; // max size 10
