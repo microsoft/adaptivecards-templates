@@ -169,6 +169,9 @@ export class InMemoryDBProvider implements StorageProvider {
     if (!instance.publishedAt) {
       instance.publishedAt = new Date("null");
     }
+    if(!instance.lastEditedUser) {
+      instance.lastEditedUser = "";
+    }
   }
   protected _autoCompleteTemplateModel(template: ITemplate): void {
     if (!template.tags) {
