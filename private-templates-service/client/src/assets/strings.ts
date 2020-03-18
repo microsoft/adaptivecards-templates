@@ -20,6 +20,10 @@ export const UNPUBLISH = 'Unpublish';
 export const MANAGE = 'Manage';
 export const CANCEL = 'Cancel';
 
+// Dashboard.tsx
+export const DASHBOARD_RECENTLY_EDITED_PLACEHOLDER = 'No edited templates.';
+export const DASHBOARD_RECENTLY_VIEWED_PLACEHOLDER = 'No recently viewed templates.';
+
 //Footer.tsx
 export const SITEMAP = "Sitemap";
 export const CONTACT = "Contact Microsoft";
