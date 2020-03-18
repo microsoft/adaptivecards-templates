@@ -39,6 +39,9 @@ import {
   CancelButton,
 } from '../../Common/PublishModal/styled';
 
+import { 
+  ConfirmationDescription
+} from './styled';
 
 interface Props {
   template: Template;
@@ -71,7 +74,7 @@ class DeleteModal extends React.Component<Props> {
       <BackDrop>
       <Modal>
         <Header>Delete Template</Header>
-        <Description style={{ marginBottom: 0 }}>{STRINGS.DELETE_CONFIRMATION}<DescriptionAccent>{template.name} - {this.props.templateVersion}</DescriptionAccent>?</Description>
+        <ConfirmationDescription>{STRINGS.DELETE_CONFIRMATION}<DescriptionAccent>{template.name} - {this.props.templateVersion}</DescriptionAccent>?</ConfirmationDescription>
         <Description>{STRINGS.DELETE_WARNING}</Description>
         <CenterPanelWrapper>
           <Container>
@@ -82,8 +85,8 @@ class DeleteModal extends React.Component<Props> {
         </CenterPanelWrapper>
         <BottomRow>
           <ButtonGroup>
-            <CancelButton text="Cancel" onClick={this.props.closeModal} />
-            <PrimaryButton text="Delete" onClick={this.delete} />
+            <CancelButton text={STRINGS.CANCEL} onClick={this.props.closeModal} />
+            <PrimaryButton text={STRINGS.DELETE} onClick={this.delete} />
           </ButtonGroup>
         </BottomRow>
       </Modal>
