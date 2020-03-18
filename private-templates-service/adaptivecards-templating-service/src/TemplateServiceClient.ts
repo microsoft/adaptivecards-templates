@@ -851,7 +851,6 @@ export class TemplateServiceClient {
       tags: template.tags || []
     };
 
-
     return { success: true, result: templatePreview };
   }
 
@@ -867,7 +866,6 @@ export class TemplateServiceClient {
     }
 
     let user: IUser = response.result![0];
-
     if ((viewed && !user.recentlyViewedTemplates) || (!viewed && !user.recentlyEditedTemplates)) {
       return { success: true, result: results };
     }
@@ -879,7 +877,6 @@ export class TemplateServiceClient {
         results.push(templateResponse.result[0]);
       }
     }
-
     return { success: true, result: results };
   }
   /**
