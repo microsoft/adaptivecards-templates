@@ -25,6 +25,9 @@ import config from "./Config";
 import "bootstrap/dist/css/bootstrap.css";
 import { OuterAppWrapper, MainAppWrapper, MainApp } from "./styled";
 
+// Constants
+import Constants from "./globalConstants"
+
 
 interface State {
   error: ErrorMessageProps | null;
@@ -116,7 +119,7 @@ class App extends Component<Props, State> {
         <IdleTimer
           element={document}
           onIdle={this.onIdle}
-          timeout={1800000} />
+          timeout={Constants.LOGOUT_TIMEOUT} />
         <Switch>
           <Route exact path="/preview/:uuid/:version">
             <Shared authButtonMethod={this.login}></Shared>
