@@ -15,6 +15,7 @@ import PublishModal from '../../../Common/PublishModal';
 import UnpublishModal from '../../../Common/UnpublishModal';
 import Tags from '../../../Common/Tags';
 import ShareModal from '../../../Common/ShareModal';
+import DeleteModal from '../../../Common/DeleteModal';
 
 import VersionCard from './VersionCard';
 
@@ -32,6 +33,7 @@ import {
   Status,
   TimeStamp,
   ActionsWrapper,
+  StyledButton,
   MainContentWrapper,
   RowWrapper,
   Card,
@@ -189,10 +191,10 @@ class TemplateInfo extends React.Component<Props, State> {
           </TopRowWrapper>
           <ActionsWrapper>
             {buttons.map((val) => (
-              <ActionButton key={val.text} iconProps={val.icon} allowDisabledFocus
+              <StyledButton key={val.text} iconProps={val.icon} allowDisabledFocus isPink={val.text === 'Delete'}
                 onClick={() => { onActionButtonClick(this.props, this.state, val) }}>
                 {val.text === 'Publish' && templateState === PostedTemplate.StateEnum.Live ? val.altText : val.text}
-              </ActionButton>
+              </StyledButton>
             ))}
           </ActionsWrapper>
         </HeaderWrapper>
@@ -226,6 +228,7 @@ class TemplateInfo extends React.Component<Props, State> {
         {this.props.modalState === ModalState.Publish && <PublishModal template={this.props.template} templateVersion={this.state.version} />}
         {this.props.modalState === ModalState.Unpublish && <UnpublishModal template={this.props.template} templateVersion={this.state.version} />}
         {this.props.modalState === ModalState.Share && <ShareModal template={this.props.template} templateVersion={this.state.version} />}
+        {this.props.modalState === ModalState.Delete && <DeleteModal template={this.props.template} templateVersion={this.state.version} />}
       </OuterWrapper>
     );
   }
@@ -241,6 +244,9 @@ function onActionButtonClick(props: Props, state: State, val: any) {
     case EDIT_IN_DESIGNER:
       const { history } = props;
       if (history) history.push('/designer');
+      break;      
+    case DELETE:
+      props.openModal(ModalState.Delete);
       break;
     case PUBLISH:
       switch (templateState) {

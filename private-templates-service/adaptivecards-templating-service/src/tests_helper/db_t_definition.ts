@@ -32,6 +32,9 @@ function autoCompleteTemplateInstanceModel(instance: ITemplateInstance): void {
   if (!instance.data) {
     instance.data = [];
   }
+  if(!instance.lastEditedUser) {
+    instance.lastEditedUser = "";
+  }
 }
 function autoCompleteTemplateModel(template: ITemplate): void {
   if (!template.tags) {
@@ -68,9 +71,10 @@ function validateMatchingInstances(a: ITemplateInstance, b: ITemplateInstance) {
   expect(a.json).toEqual(b.json);
   expect(a.version).toBe(b.version);
   expect(a.state).toBe(b.state);
-  expect(a.numHits).toBe(a.numHits);
-  expect(a.data).toBe(a.data);
-  expect(a.isShareable).toBe(a.isShareable);
+  expect(a.numHits).toBe(b.numHits);
+  expect(a.data).toEqual(b.data);
+  expect(a.isShareable).toBe(b.isShareable);
+  expect(a.lastEditedUser).toBe(b.lastEditedUser);
 }
 export function validateMatchingTemplates(a: ITemplate, b: ITemplate): void {
   expect(a.instances!.length).toEqual(b.instances!.length);
@@ -166,7 +170,8 @@ export function testDB(db: StorageProvider) {
   it("Completely filled:create & save template successfully", async () => {
     const validTemplateInstance: ITemplateInstance = {
       json: JSON.parse('{"key":"value"}'),
-      version: "1.0"
+      version: "1.0",
+      lastEditedUser: ""
     };
     const validTemplate: ITemplate = {
       name: "validTemplate",
