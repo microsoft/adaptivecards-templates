@@ -158,7 +158,7 @@ class Dashboard extends React.Component<Props> {
           </React.Fragment>
         </DashboardContainer>
         <TagsContainer>
-          <Title style={{ marginRight: "150px" }}>Tags</Title>
+          <Title style={{ marginRight: "150px", color: 'pink' }}>Tags</Title>
           <Tags tags={tags} allowEdit={false}></Tags>
         </TagsContainer>
       </OuterWindow>
