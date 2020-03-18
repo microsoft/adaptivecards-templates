@@ -196,7 +196,6 @@ export class TemplateServiceClient {
    * @param token 
    */
   public async getUser(token?: string): Promise<JSONResponse<IUser>> {
-     
     let authCheck = this._checkAuthenticated(token || this.authProvider.token);
     if (!authCheck.success) {
       return authCheck;
