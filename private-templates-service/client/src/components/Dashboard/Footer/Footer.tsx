@@ -47,13 +47,6 @@ class Footer extends React.Component {
               {footerLinks.map((val) => (
                 <FooterLink href={val.link}>{val.name}</FooterLink>
               ))}
-              {/* <FooterLink>Sitemap</FooterLink>
-              <FooterLink>Contact Microsoft</FooterLink>
-              <FooterLink href="https://go.microsoft.com/fwlink/?LinkId=521839">Privacy & Cookies</FooterLink>
-              <FooterLink>Terms of Use</FooterLink>
-              <FooterLink>Trademarks</FooterLink>
-              <FooterLink>Safety & Eco</FooterLink>
-              <FooterLink>© Microsoft 2020</FooterLink> */}
             </FooterContents>
           </FooterContainer>
         </FooterOuterContainer>
