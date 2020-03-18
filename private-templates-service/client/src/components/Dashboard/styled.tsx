@@ -12,6 +12,10 @@ export const Title = styled.h1`
   font-weight: 700;
 `;
 
+export const OuterDashboardContainer = styled.div`
+  display: contents;
+`;
+
 export const DashboardContainer = styled.div`
   flex: 1;
   padding: 0px 40px;
