@@ -771,7 +771,7 @@ export class TemplateServiceClient {
     }
     let template = response.result[0];
 
-    if (template.owner !==  userResponse.result![0]._id || template.isLive) {
+    if (template.owner !==  userResponse.result![0]._id && !template.isLive) {
       return { success: false, errorMessage: ServiceErrorMessage.UnauthorizedAction };
     }
 
