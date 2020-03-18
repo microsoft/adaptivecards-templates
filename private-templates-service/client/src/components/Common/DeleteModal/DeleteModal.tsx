@@ -39,10 +39,6 @@ import {
   CancelButton,
 } from '../../Common/PublishModal/styled';
 
-import { 
-  ConfirmationDescription
-} from './styled';
-
 interface Props {
   template: Template;
   templateVersion: string;
@@ -71,10 +67,10 @@ class DeleteModal extends React.Component<Props> {
     const { template } = this.props;
 
     return (
-      <BackDrop>
+    <BackDrop>
       <Modal>
-        <Header>Delete Template</Header>
-        <ConfirmationDescription>{STRINGS.DELETE_CONFIRMATION}<DescriptionAccent>{template.name} - {this.props.templateVersion}</DescriptionAccent>?</ConfirmationDescription>
+        <Header>{STRINGS.DELETE_TITLE}</Header>
+        <div>{STRINGS.DELETE_CONFIRMATION}<DescriptionAccent>{template.name} - {this.props.templateVersion}</DescriptionAccent>?</div>
         <Description>{STRINGS.DELETE_WARNING}</Description>
         <CenterPanelWrapper>
           <Container>
