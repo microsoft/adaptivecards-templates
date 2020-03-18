@@ -67,7 +67,6 @@ export class TemplateServiceClient {
     if (!response.success || (response.result && response.result.length === 0)) {
       return { success: false, errorMessage: ServiceErrorMessage.UserNotFound };
     }
-
     return { success: true, result: response.result![0]._id };
   }
 
@@ -186,6 +185,8 @@ export class TemplateServiceClient {
     if (!result.success){
       return { success: false, errorMessage: ServiceErrorMessage.UserNotFound }
     }
+    logger.info(`User with oid ${authId} requested data.`);
+    
     return result;
   }
 
@@ -674,8 +675,6 @@ export class TemplateServiceClient {
     }
     let authId = this.authProvider.getAuthIDFromToken(token || this.authProvider.token);
     let userResponse = await this._getUser(authId);
-    logger.info(`User with authid ${authId} requested templates`);
-
     if (!userResponse.success || !userResponse.result || userResponse.result.length === 0) {
       return { success: false, errorMessage: userResponse.errorMessage };
     }
