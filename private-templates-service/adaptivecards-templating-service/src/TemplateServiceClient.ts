@@ -6,7 +6,7 @@ import { StorageProvider } from ".";
 import { ITemplate, JSONResponse, ITemplateInstance, IUser } from ".";
 import { SortBy, SortOrder, TemplatePreview, TemplateState, TemplateInstancePreview, TagList } from "./models/models";
 import { updateTemplateToLatestInstance, removeMostRecentTemplate, getTemplateVersion, isValidJSONString, setTemplateInstanceParam, incrementVersion, anyVersionsLive, sortTemplateByVersion, parseToken } from "./util/templateutils";
-
+import logger from "./util/logger"
 export class TemplateServiceClient {
   private storageProvider: StorageProvider;
   private authProvider: AuthenticationProvider;
@@ -194,7 +194,8 @@ export class TemplateServiceClient {
    * Get own user info. 
    * @param token 
    */
-  public async getUser(token?: string): Promise<JSONResponse<IUser>> { 
+  public async getUser(token?: string): Promise<JSONResponse<IUser>> {
+     
     let authCheck = this._checkAuthenticated(token || this.authProvider.token);
     if (!authCheck.success) {
       return authCheck;
@@ -673,6 +674,7 @@ export class TemplateServiceClient {
     }
     let authId = this.authProvider.getAuthIDFromToken(token || this.authProvider.token);
     let userResponse = await this._getUser(authId);
+    logger.info(`User with authid ${authId} requested templates`);
 
     if (!userResponse.success || !userResponse.result || userResponse.result.length === 0) {
       return { success: false, errorMessage: userResponse.errorMessage };
@@ -840,7 +842,7 @@ export class TemplateServiceClient {
     if (!userInfo.success || !userInfo.result) {
       return { success: false, errorMessage: ServiceErrorMessage.FailedToRetrievePreview };
     }
-
+    logger.info(`Template of user with oid ${userInfo.result!} was requested in template preview.`);
     let templatePreview: TemplatePreview = {
       _id: templateId,
       name: template.name,
@@ -848,6 +850,7 @@ export class TemplateServiceClient {
       instance: templateInstance,
       tags: template.tags || []
     };
+
 
     return { success: true, result: templatePreview };
   }
@@ -864,6 +867,7 @@ export class TemplateServiceClient {
     }
 
     let user: IUser = response.result![0];
+
     if ((viewed && !user.recentlyViewedTemplates) || (!viewed && !user.recentlyEditedTemplates)) {
       return { success: true, result: results };
     }
@@ -875,6 +879,7 @@ export class TemplateServiceClient {
         results.push(templateResponse.result[0]);
       }
     }
+
     return { success: true, result: results };
   }
   /**
