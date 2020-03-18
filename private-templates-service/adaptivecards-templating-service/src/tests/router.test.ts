@@ -61,6 +61,7 @@ export function testDefaultTemplateInstanceParameters(instance: ITemplateInstanc
   expect(instance).toHaveProperty("numHits");
   expect(instance).toHaveProperty("data");
   expect(instance).toHaveProperty("updatedAt");
+  expect(instance).toHaveProperty("lastEditedUser");
 }
 
 describe("Basic Post Templates", () => {
