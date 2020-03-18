@@ -17,7 +17,6 @@ const RELATIVE_PATH_CLIENT = '../../../../client/build';
 const app = express();
 
 // Express configuration
-app.use(express.static(path.join(__dirname, RELATIVE_PATH_CLIENT)));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(bodyParser.json());
@@ -50,7 +49,9 @@ mongoDB.connect()
         app.use("/user", client.userExpressMiddleware());
 
         // Keep this request at the end so it has lowest priority
+        app.use(express.static(path.join(__dirname, RELATIVE_PATH_CLIENT)));
         app.get('*', (req, res) => {
+          res.header("Strict-Transport-Security", "max-age=15552000");
           res.sendFile(path.join(__dirname, RELATIVE_PATH_CLIENT + '/index.html'));
         })
       } else {

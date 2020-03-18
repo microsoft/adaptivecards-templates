@@ -32,6 +32,7 @@ import {
   Status,
   TimeStamp,
   ActionsWrapper,
+  StyledButton,
   MainContentWrapper,
   RowWrapper,
   Card,
@@ -189,10 +190,10 @@ class TemplateInfo extends React.Component<Props, State> {
           </TopRowWrapper>
           <ActionsWrapper>
             {buttons.map((val) => (
-              <ActionButton key={val.text} iconProps={val.icon} allowDisabledFocus
+              <StyledButton key={val.text} iconProps={val.icon} allowDisabledFocus isPink={val.text === 'Delete'}
                 onClick={() => { onActionButtonClick(this.props, this.state, val) }}>
                 {val.text === 'Publish' && templateState === PostedTemplate.StateEnum.Live ? val.altText : val.text}
-              </ActionButton>
+              </StyledButton>
             ))}
           </ActionsWrapper>
         </HeaderWrapper>

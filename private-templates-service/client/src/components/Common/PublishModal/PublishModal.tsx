@@ -73,7 +73,7 @@ class PublishModal extends React.Component<Props> {
               <AdaptiveCardPanel>
                 <AdaptiveCard cardtemplate={template} templateVersion={this.props.templateVersion} />
               </AdaptiveCardPanel>
-              <SemiBoldText>
+              <SemiBoldText style={{ color: 'pink' }}>
                 Notified
               </SemiBoldText>
               <SearchBox placeholder="Search for people" />

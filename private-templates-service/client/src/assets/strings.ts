@@ -5,7 +5,6 @@ export const UNPUBLISH_CONFIRMATION = "Are you sure you want to unpublish "
 // ShareModalForm.tsx
 export const EMAIL_TEXTFIELD_WARNING = "Please enter comma separated e-mail IDs. Warning: Before sharing, ensure that the embedded card data is not sensitive.";
 
-
 //TemplateInfo.tsx
 export const EDIT_IN_DESIGNER = 'Edit in designer';
 export const DELETE = 'Delete';
@@ -17,3 +16,13 @@ export const MANAGE = 'Manage';
 // Dashboard.tsx
 export const DASHBOARD_RECENTLY_EDITED_PLACEHOLDER = 'No edited templates.';
 export const DASHBOARD_RECENTLY_VIEWED_PLACEHOLDER = 'No recently viewed templates.';
+
+//Footer.tsx
+export const SITEMAP = "Sitemap";
+export const CONTACT = "Contact Microsoft";
+export const PRIVACY = "Privacy & Cookies";
+export const TERMS = "Terms of Use";
+export const TRADEMARKS = "Trademarks";
+export const SAFETY = "Safety & Eco";
+export const ABOUT_ADS = "About our Ads";
+export const MICROSOFT = "© Microsoft 2020";
