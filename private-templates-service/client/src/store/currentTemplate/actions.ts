@@ -272,8 +272,7 @@ export function deleteTemplateVersion(templateVersion: string, templateID?: stri
 
     dispatch(deleteTemplateInstance());
 
-    const api = new TemplateApi();
-
+    let api = new TemplateApi();
     if (appState.auth.accessToken) {
       api.setApiKey(0, `Bearer ${appState.auth.accessToken!.idToken.rawIdToken}`);
     }
