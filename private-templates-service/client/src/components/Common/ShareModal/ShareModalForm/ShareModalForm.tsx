@@ -3,13 +3,14 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { updateTemplate } from '../../../../store/currentTemplate/actions';
 import { closeModal } from '../../../../store/page/actions';
+import { UserType } from '../../../../store/auth/types';
+import { RootState } from '../../../../store/rootReducer';
 
-import { TextField, PrimaryButton, DefaultButton, Link } from 'office-ui-fabric-react';
+import { PrimaryButton } from 'office-ui-fabric-react';
 
 import { EmailPanel, SemiBoldText, BottomRow, ButtonGroup, CancelButton, SendMailButton } from '../styled';
 import * as STRINGS from '../../../../assets/strings';
-import { UserType } from '../../../../store/auth/types';
-import { RootState } from '../../../../store/rootReducer';
+
 import { Template } from 'adaptive-templating-service-typescript-node';
 
 interface ShareModalFormProps {

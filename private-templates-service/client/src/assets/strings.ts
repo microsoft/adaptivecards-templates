@@ -11,7 +11,6 @@ export const COPY_LINK = "Copy link";
 // ShareModalForm.tsx
 export const EMAIL_RECIPIENTS = "Email Recipients";
 export const SEND_IN_OUTLOOK = "Send in Outlook";
-export const EMAIL_TEXTFIELD_WARNING = "Please enter comma separated e-mail IDs. Warning: Before sharing, ensure that the embedded card data is not sensitive.";
 
 //TemplateInfo.tsx
 export const EDIT_IN_DESIGNER = 'Edit in designer';
