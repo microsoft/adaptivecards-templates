@@ -9,33 +9,32 @@ import { InMemoryDBProvider } from "../storageproviders/InMemoryDBProvider";
 import { ITemplate, ITemplateInstance } from "../models/models";
 
 export default async function getToken(): Promise<string> {
-  // const request = require("request-promise");
-  // const endpoint = "https://login.microsoftonline.com/72f988bf-86f1-41af-91ab-2d7cd011db47/oauth2/token";
-  // const requestParams = {
-  //   grant_type: "client_credentials",
-  //   client_id: "#{CLIENT_ID_TOKEN}#",
-  //   client_secret: "#{CLIENT_SECRET_TOKEN}#",
-  //   resource: "#{CLIENT_ID_TOKEN}#"
-  // };
-  // return await request
-  //   .post({ url: endpoint, form: requestParams }) // put in try catch
-  //   .then((err: any, response: any, body: any) => {
-  //     if (err) {
-  //       let parsedBody = JSON.parse(err);
-  //       return Promise.resolve(parsedBody.access_token);
-  //     } else {
-  //       console.log("Body=" + body);
-  //       let parsedBody = JSON.parse(body);
-  //       if (parsedBody.error_description) {
-  //         console.log("Error=" + parsedBody.error_description);
-  //         return Promise.resolve(parsedBody.error_description);
-  //       } else {
-  //         console.log("Access Token=" + parsedBody.access_token);
-  //         return Promise.resolve(parsedBody.access_token);
-  //       }
-  //     }
-  //   });
-  return "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IllNRUxIVDBndmIwbXhvU0RvWWZvbWpxZmpZVSJ9.eyJhdWQiOiI0ODAzZjY2YS0xMzZkLTQxNTUtYTUxZS02ZDk4NDAwZDU1MDYiLCJpc3MiOiJodHRwczovL2xvZ2luLm1pY3Jvc29mdG9ubGluZS5jb20vNzJmOTg4YmYtODZmMS00MWFmLTkxYWItMmQ3Y2QwMTFkYjQ3L3YyLjAiLCJpYXQiOjE1ODQzODI1MjksIm5iZiI6MTU4NDM4MjUyOSwiZXhwIjoxNTg0Mzg2NDI5LCJhaW8iOiI0Mk5nWUdqdllQelpZOEgyK1BxM3I1enpQOHQ2QWdBPSIsImF6cCI6IjQ4MDNmNjZhLTEzNmQtNDE1NS1hNTFlLTZkOTg0MDBkNTUwNiIsImF6cGFjciI6IjEiLCJvaWQiOiI4Yzg1ZjgwNi03MDA1LTRlY2QtOGYxZS1kMWY3ODRmNThiOWMiLCJzdWIiOiI4Yzg1ZjgwNi03MDA1LTRlY2QtOGYxZS1kMWY3ODRmNThiOWMiLCJ0aWQiOiI3MmY5ODhiZi04NmYxLTQxYWYtOTFhYi0yZDdjZDAxMWRiNDciLCJ1dGkiOiJpWmJadkRKVncwYXhhR1d0Uk5NNkFRIiwidmVyIjoiMi4wIn0.avM4PDFdpQUKpmtjLz6G6ATNE1zbFcIHx269Bxo7Xikv8cPJ4pQfQNTrifHoy-RQUgO9ejQVyqtu8g88R9RxbSA5vwrb0F2Lu6LnJX7rqORdRWMH-yqhVcqP1XM26S4JAajO5GPqPc3hvw1ZhQ5KCEtpXjjXgj-RDqIerZN_Qqc4joIMYyjuGZ6xN7MIQIjGt9P8CiNWjs9yF9lJqUDSl4_mk9qIEBnRvD8BqfYcdiubRLDRgg2rpx3XSJPcdpoNKjmZCOaMzBgrVeil69rrcYvssK175JKhYO-rOXydCtpoTt0Tt8QOTCZ_OnRDxaybyyzqSZSZJE6qqdfbX--2tQ";
+  const request = require("request-promise");
+  const endpoint = "https://login.microsoftonline.com/72f988bf-86f1-41af-91ab-2d7cd011db47/oauth2/token";
+  const requestParams = {
+    grant_type: "client_credentials",
+    client_id: "#{CLIENT_ID_TOKEN}#",
+    client_secret: "#{CLIENT_SECRET_TOKEN}#",
+    resource: "#{CLIENT_ID_TOKEN}#"
+  };
+  return await request
+    .post({ url: endpoint, form: requestParams }) // put in try catch
+    .then((err: any, response: any, body: any) => {
+      if (err) {
+        let parsedBody = JSON.parse(err);
+        return Promise.resolve(parsedBody.access_token);
+      } else {
+        console.log("Body=" + body);
+        let parsedBody = JSON.parse(body);
+        if (parsedBody.error_description) {
+          console.log("Error=" + parsedBody.error_description);
+          return Promise.resolve(parsedBody.error_description);
+        } else {
+          console.log("Access Token=" + parsedBody.access_token);
+          return Promise.resolve(parsedBody.access_token);
+        }
+      }
+    });
 }
 
 let options: ClientOptions = {
