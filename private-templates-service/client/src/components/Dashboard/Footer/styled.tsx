@@ -10,7 +10,6 @@ export const FooterOuterContainer = styled.div`
 
 export const FooterContainer = styled.div`
   padding: 0px 10px;
-  width: calc(100% - 300px);
   height: 100%;
   display: flex;
 `;
