@@ -133,8 +133,8 @@ class App extends Component<Props, State> {
                   <Route exact path="/designer">
                     <Designer authButtonMethod={this.login} />
                   </Route>
-                  <Route path="/template/:uuid">
-                    <PreviewModal />
+                  <Route path="/preview/:uuid">
+                    <PreviewModal authButtonMethod={this.login} />
                   </Route>
                 </Switch>
               </MainApp>
