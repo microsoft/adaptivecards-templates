@@ -43,6 +43,8 @@ const mapDispatchToProps = (dispatch: any) => {
   }
 }
 
+
+
 interface Props {
   templates: Template[];
   propsOnClick?: (id: string) => any;
@@ -52,6 +54,15 @@ interface Props {
 }
 
 class RecentlyViewedTable extends React.Component<Props> {
+  constructor(props: Props) {
+    super(props);
+    this.getOwnerInfo = this.getOwnerInfo.bind(this);
+  }
+  getOwnerInfo = (oID: string) => {
+    this.props.getOwnerName(oID);
+    this.props.getOwnerProfilePicture(oID);
+  };
+
   render() {
     const { templates, propsOnClick } = this.props;
     let rows: JSX.Element[] = new Array();
@@ -64,7 +75,7 @@ class RecentlyViewedTable extends React.Component<Props> {
       // if (!template || !template.instances || template.instances[0] || template.instances[0].lastEditedUser) {
       //   return <div>Error loading templates</div>
       // }
-      this.getOwnerInfo('oID');
+      this.getOwnerInfo('2e3f0fbf-9a55-4232-b041-06ae601a16a8');
       return (
         <RecentlyViewedBodyRow onClick={onClick}>
           <RecentlyViewedItem>{template.name}</RecentlyViewedItem>
@@ -83,16 +94,11 @@ class RecentlyViewedTable extends React.Component<Props> {
               <Status>{template.isLive ? "Published" : "Draft"}</Status>
             </TemplateStateWrapper>
           </RecentlyViewedItem>
-          <RecentlyViewedItem>{<UserAvatar iconSize="0.1rem" />} {(this.props.owner && this.props.owner.displayName) ? this.props.owner?.displayName : ""}</RecentlyViewedItem>
+          <RecentlyViewedItem>{<UserAvatar iconSize="1rem" />} {(this.props.owner && this.props.owner.displayName) ? this.props.owner?.displayName : ""}</RecentlyViewedItem>
         </RecentlyViewedBodyRow>
       );
     });
     return <RecentlyViewedBody>{rows}</RecentlyViewedBody>;
-  }
-
-  getOwnerInfo = async (oID: string) => {
-    this.props.getOwnerName(oID);
-    this.props.getOwnerProfilePicture(oID);
   }
 }
 
