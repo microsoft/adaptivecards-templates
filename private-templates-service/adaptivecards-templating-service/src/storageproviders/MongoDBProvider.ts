@@ -4,7 +4,6 @@ import { MongoConnectionParams } from "../models/mongo/MongoConnectionParams";
 import { MongoWorker } from "../util/mongoutils/MongoWorker";
 import { MongoUtils } from "../util/mongoutils/mongoutils";
 import { clone } from "../util/inmemorydbutils/inmemorydbutils";
-import { InMemoryDBProvider } from "./InMemoryDBProvider";
 
 export class MongoDBProvider implements StorageProvider {
   worker: MongoWorker;
@@ -19,12 +18,6 @@ export class MongoDBProvider implements StorageProvider {
   // to make sure they're both in the returned user 'team' field
   private _constructUserQuery(query: Partial<IUser>): any {
     let userQuery: any = MongoUtils.removeUndefinedFields(query);
-    if (query.team && query.team.length) {
-      userQuery.team = { $all: query.team };
-    }
-    if (query.org && query.org.length) {
-      userQuery.org = { $all: query.org };
-    }
     return userQuery;
   }
   private _constructTemplateQuery(query: Partial<ITemplate>): any {

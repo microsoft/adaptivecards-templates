@@ -1,5 +1,5 @@
 import React from "react";
-import { IDropdownOption} from 'office-ui-fabric-react/lib/Dropdown';
+import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { RootState } from "../../../../store/rootReducer";
 import { connect } from 'react-redux';
 import { StyledSortDropdown } from "./styled";
@@ -13,7 +13,7 @@ const mapStateToProps = (state: RootState) => {
   }
 }
 
-const mapDispatchToProps = (dispatch: any) => { 
+const mapDispatchToProps = (dispatch: any) => {
   return {
     clearSort: () => {
       dispatch(clearSort());
@@ -25,25 +25,21 @@ const mapDispatchToProps = (dispatch: any) => {
 }
 
 interface Props {
-  isSearch : boolean;
+  isSearch: boolean;
   sortType: string;
   querySort: (sortType: string) => void;
   clearSort: () => void;
 }
 
 const options: IDropdownOption[] = [
-  {key: 'date created', text: "Date Created"},
-  {key: "date updated", text: "Date Updated"},
-  {key: "alphabetical", text: "Alphabetical"}
+  { key: 'date created', text: "Date Created" },
+  { key: "date updated", text: "Date Updated" },
+  { key: "alphabetical", text: "Alphabetical" }
 ];
 
 class Sort extends React.Component<Props> {
-  constructor(props: Props) {
-    super(props);
-  }
-  
-  onChange = (event: React.FormEvent<HTMLDivElement>, option?:IDropdownOption) => {
-    if(option && typeof option.key === "string") {
+  onChange = (event: React.FormEvent<HTMLDivElement>, option?: IDropdownOption) => {
+    if (option && typeof option.key === "string") {
       this.props.querySort(option.key);
     }
   }
@@ -51,10 +47,10 @@ class Sort extends React.Component<Props> {
   render() {
     return (
       <StyledSortDropdown
-        placeHolder = "Sort by"
-        options = {options}
-        onChange = {this.onChange}
-        theme = {THEME.LIGHT}
+        placeHolder="Sort by"
+        options={options}
+        onChange={this.onChange}
+        theme={THEME.LIGHT}
       />
     );
   }

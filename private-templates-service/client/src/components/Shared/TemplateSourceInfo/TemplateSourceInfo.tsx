@@ -1,6 +1,6 @@
 import React from 'react';
 import { TopRowWrapper, TitleWrapper, Title, HeaderWrapper, TemplateSourceWrapper, SourceWrapper, Source } from './styled';
-import { ActionButton, ScrollablePane, Text } from 'office-ui-fabric-react';
+import { ActionButton, ScrollablePane } from 'office-ui-fabric-react';
 
 interface TemplateSourceInfoProps {
   templateJSON?: object;

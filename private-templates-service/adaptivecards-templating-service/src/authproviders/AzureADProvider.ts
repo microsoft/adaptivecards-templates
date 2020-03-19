@@ -10,16 +10,18 @@ import { AuthIssuer } from "../models/models";
  */
 export class AzureADProvider implements AuthenticationProvider {
   public issuer: AuthIssuer = AuthIssuer.AzureAD;
-  private user: string = "";
+  public token: string;
   private static CERT_URL: string = "https://login.microsoftonline.com/common/discovery/keys";
 
-  async isValid(accessToken: string): Promise<boolean> {
+  async isValid(token?: string): Promise<boolean> {
+    let accessToken: string = token || this.token;
     let bearer = accessToken.split(/[ ]+/).pop();
     if (bearer) {
       accessToken = bearer;
     }
 
     let decodedToken: Signature = jws.decode(accessToken);
+
     if (!decodedToken) {
       return false;
     }
@@ -45,16 +47,15 @@ export class AzureADProvider implements AuthenticationProvider {
     // Check aud of token matches the client ID of env app
     result = "#{CLIENT_ID_TOKEN}#" === decodedToken.payload.aud;
 
-    if (result) {
-      this.user = decodedToken.payload.oid;
-    }
     return result;
   }
 
-  public getOwner(): string | undefined {
-    if (this.user.length === 0) {
-      return undefined;
-    }
-    return this.user;
+  public getAuthIDFromToken(token: string): string {
+    let decodedToken: Signature = jws.decode(token);
+    return decodedToken.payload.oid;
+  }
+
+  public constructor(token?: string) {
+    this.token = token || "";
   }
 }
