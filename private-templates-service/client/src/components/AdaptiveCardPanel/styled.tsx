@@ -18,7 +18,7 @@ export const Container = styled.div`
   }
 
   &: hover {
-    background: ${COLORS.GREY1};
+    background: ${COLORS.GREYHOVER};
   }
 `;
 
