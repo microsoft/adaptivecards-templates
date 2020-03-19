@@ -133,10 +133,10 @@ const NavBar = (props: NavBarProps) => {
     default:
       return (
         <Banner>
-          <BaselineBanner>
+          <MobileBanner>
             <StyledLogo src={Logo} />
-            <Styledh1>{(props.template && props.template.name) || props.currentPageTitle}</Styledh1>
-          </BaselineBanner>
+            <Styledh1>{props.currentPageTitle}</Styledh1>
+          </MobileBanner>
         </Banner>
       );
   }
