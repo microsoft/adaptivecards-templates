@@ -85,9 +85,9 @@ const Shared = (props: SharedComponentProps) => {
     }
   }
 
-  return template ? (
+  return props.template ? (
     <React.Fragment>
-      <NavBar></NavBar>
+      <NavBar />
       <ModalBackdrop>
         <ModalWrapper>
           <ACPanel>
