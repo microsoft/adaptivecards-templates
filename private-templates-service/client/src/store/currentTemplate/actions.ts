@@ -21,6 +21,7 @@ import {
 import { Template, TemplateApi, PostedTemplate } from "adaptive-templating-service-typescript-node";
 
 import { RootState } from '../rootReducer';
+import { initClientSDK } from '../../utils/TemplateUtil';
 
 export function newTemplate(): CurrentTemplateAction {
   return {
@@ -274,7 +275,7 @@ export function deleteTemplateVersion(templateVersion: string, templateID?: stri
     const id = templateID || appState.currentTemplate.templateID;
 
     dispatch(deleteTemplateInstance());
-
+    
     const api = initClientSDK(dispatch, getState);
 
     if (!id || id === "") {
@@ -312,13 +313,4 @@ function removeSpecificTemplateVersion(template: Template, version: string) {
     instanceList.push(instance);
   }
   template.instances = instanceList;
-}
-
-function initClientSDK(dispatch: any, getState: () => RootState, ): TemplateApi {
-  const api = new TemplateApi();
-  const state = getState();
-  if (state.auth.accessToken) {
-    api.setApiKey(0, `Bearer ${state.auth.accessToken!.idToken.rawIdToken}`);
-  }
-  return api;
 }

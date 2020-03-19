@@ -10,6 +10,7 @@ import {
 } from "./types";
 import { RootState } from "../rootReducer";
 import { IncomingMessage } from "http";
+import { initClientSDK } from "../../utils/TemplateUtil/TemplateUtil";
 
 export function requestRecentTemplates(): RecentTemplatesAction {
   return {
@@ -41,14 +42,7 @@ export function getRecentTemplates() {
   return function (dispatch: any, getState: () => RootState) {
     const appState = getState();
     dispatch(requestRecentTemplates());
-    let api = new TemplateApi();
-    
-    if (appState.auth.accessToken) {
-      api.setApiKey(
-        0,
-        `Bearer ${appState.auth.accessToken!.idToken.rawIdToken}`
-      );
-    }
+    const api = initClientSDK(dispatch, getState);
 
     return api.getRecent().then(response => {
       if (response.response.statusCode && response.response.statusCode === 200) {
