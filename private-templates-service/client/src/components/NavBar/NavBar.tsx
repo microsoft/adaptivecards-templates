@@ -29,7 +29,7 @@ const mapStateToProps = (state: RootState) => {
     currentPageTitle: state.page.currentPageTitle,
     currentPage: state.page.currentPage,
     template: state.currentTemplate.template,
-    templateName: state.currentTemplate.templateName,
+    // templateName: state.currentTemplate.templateName,
     isFetching: state.currentTemplate.isFetching
   }
 }
@@ -90,7 +90,7 @@ const NavBar = (props: NavBarProps) => {
         <Banner>
           <MobileBanner>
             <StyledLogo src={Logo} />
-            <Styledh1>{props.templateName ? props.templateName : props.currentPageTitle}</Styledh1>
+            <Styledh1>{props.template ? props.template.name : props.currentPageTitle}</Styledh1>
             <Styledh2>{props.version ? "Version " + props.version : ""}</Styledh2>
           </MobileBanner>
           <ActionButton onClick={() => { history.push("/") }}>
@@ -117,7 +117,7 @@ const NavBar = (props: NavBarProps) => {
         <Banner>
           <BaselineBanner>
             <StyledLogo src={Logo} />
-            <Styledh1>{props.templateName || props.currentPageTitle}</Styledh1>
+            <Styledh1>{(props.template && props.template.name) || props.currentPageTitle}</Styledh1>
             {!props.isFetching && <EditButton onClick={editName} iconProps={{ iconName: 'Edit' }} />}
           </BaselineBanner>
         </Banner>

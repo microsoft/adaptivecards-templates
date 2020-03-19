@@ -57,7 +57,7 @@ const requireShared = <P extends object>(Component: React.ComponentType<P>) => {
     render() {
       return (
         <React.Fragment>
-          {this.isShared() ?
+          {!this.isShared() ?
             <Component {...this.props} /> :
             <React.Fragment>You do not have permission to view this page.</React.Fragment>}
         </React.Fragment>

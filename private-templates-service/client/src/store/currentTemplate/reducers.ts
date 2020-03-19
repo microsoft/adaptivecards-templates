@@ -19,6 +19,8 @@ import {
   DELETE_TEMPLATE_INSTANCE_FAILURE
 } from './types';
 
+import { NEW_TEMPLATE_NAME } from '../../assets/strings';
+
 const initialState: CurrentTemplateState = {
   templateID: undefined,
   templateJSON: undefined,
@@ -33,9 +35,10 @@ export function currentTemplateReducer(state = initialState, action: CurrentTemp
     case NEW_TEMPLATE:
       return {
         ...state,
+        template: undefined,
         templateID: "",
         templateJSON: require('../../assets/default-adaptivecards/defaultAdaptiveCard.json'),
-        templateName: "Untitled Card",
+        templateName: NEW_TEMPLATE_NAME,
         sampleDataJSON: {},
         version: "",
         isFetching: false

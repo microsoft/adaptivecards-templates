@@ -12,6 +12,7 @@ import {
 } from '../../../assets/strings';
 
 import { PrimaryButton } from 'office-ui-fabric-react';
+import { TextField } from 'office-ui-fabric-react/lib/TextField';
 
 import {
   BackDrop,
@@ -23,7 +24,6 @@ import {
 
 import {
   EditWrapper,
-  StyledInput,
   ButtonGroup,
 } from './styled';
 
@@ -57,6 +57,11 @@ const EditNameModal = (props: Props) => {
     setName(newValue || '');
   }
 
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    updateName();
+  }
+
   const updateName = () => {
     if (name && name !== props.currentName) {
       props.updateName(name);
@@ -69,8 +74,8 @@ const EditNameModal = (props: Props) => {
       <Modal>
         <Header>{EDIT_CARD_NAME}</Header>
         <Description>{EDIT_CARD_SUBHEADER}</Description>
-        <EditWrapper onSubmit={updateName} >
-          <StyledInput value={name} onChange={onChange} />
+        <EditWrapper onSubmit={handleSubmit} >
+          <TextField value={name} onChange={onChange} />
         </EditWrapper>
         <ButtonGroup>
           <CancelButton text={CANCEL} onClick={props.closeModal} />

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 
 import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 
 import AdaptiveCard from '../Common/AdaptiveCard';
 import NavBar from '../NavBar/NavBar';
@@ -13,7 +14,7 @@ import { setPage } from '../../store/page/actions';
 import { RootState } from '../../store/rootReducer';
 import { getTemplate } from '../../store/currentTemplate/actions';
 
-import { ModalBackdrop, ModalWrapper, ACPanel, ACWrapper, DescriptorWrapper } from './styled';
+import { ModalBackdrop, ModalWrapper, ACPanel, ACWrapper, DescriptorWrapper, CenteredSpinner } from './styled';
 
 import { Template, TemplateInstance } from 'adaptive-templating-service-typescript-node';
 
@@ -49,28 +50,26 @@ interface SharedComponentProps extends RouteComponentProps<MatchParams> {
 }
 
 const Shared = (props: SharedComponentProps) => {
-
   let templateInstance: TemplateInstance | undefined = undefined;
-  let uuid: string | undefined = undefined;
-  let version: string | undefined = undefined;
+  let uuid = props.match.params.uuid;
+  let version = props.match.params.version;
+
+  const {
+    template,
+    setPage,
+  } = props;
 
   useEffect(() => {
-    uuid = props.match.params.uuid;
-    version = props.match.params.version;
-
-    props.setPage((props.template !== undefined && props.template.name &&
-      props.template.name !== "") ? props.template.name : "Preview", "sharedPage");
-
-    if (uuid) {
-      props.getTemplate(uuid);
+    if (template !== undefined) {
+      setPage(template.name || "Preview", "sharedPage");
     }
-  }, []);
+  }, [template, setPage])
 
-  useEffect(() => {
-    if (uuid !== undefined) {
-      props.getTemplate(uuid);
-    }
-  }, [uuid]);
+  if (uuid) {
+    props.getTemplate(uuid);
+  } else {
+    return <React.Fragment>Error fetching template. Check the URL.</React.Fragment>;
+  }
 
   if (props.template !== undefined && props.template.instances && props.template.instances.length > 0) {
     if (version) {
@@ -86,14 +85,14 @@ const Shared = (props: SharedComponentProps) => {
     }
   }
 
-  return (
+  return template ? (
     <React.Fragment>
       <NavBar></NavBar>
       <ModalBackdrop>
         <ModalWrapper>
           <ACPanel>
             <ACWrapper>
-              <AdaptiveCard cardtemplate={props.template ? props.template : new Template()} templateVersion={version ? version : ""}></AdaptiveCard>
+              <AdaptiveCard cardtemplate={props.template} templateVersion={version ? version : ""} />
             </ACWrapper>
           </ACPanel>
           <DescriptorWrapper>
@@ -103,7 +102,11 @@ const Shared = (props: SharedComponentProps) => {
         </ModalWrapper>
       </ModalBackdrop>
     </React.Fragment>
-  );
+  ) : (
+      <ModalBackdrop>
+        <CenteredSpinner size={SpinnerSize.large} />
+      </ModalBackdrop>
+    );
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(requireAuthentication(requireShared(withRouter(Shared))));
