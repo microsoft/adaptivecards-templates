@@ -17,7 +17,6 @@ export const SHARE = 'Share';
 export const PUBLISH = 'Publish';
 export const UNPUBLISH = 'Unpublish';
 export const MANAGE = 'Manage';
-export const CANCEL = 'Cancel';
 
 // EditNameModal.tsx
 export const EDIT_CARD_NAME = 'Edit Card Name'
