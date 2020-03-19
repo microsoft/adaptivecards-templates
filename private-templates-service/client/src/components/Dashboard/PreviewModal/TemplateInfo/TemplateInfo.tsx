@@ -20,7 +20,7 @@ import DeleteModal from '../../../Common/DeleteModal';
 
 import VersionCard from './VersionCard';
 
-import { ActionButton, IDropdownOption } from 'office-ui-fabric-react';
+import { IDropdownOption } from 'office-ui-fabric-react';
 
 import { EDIT_IN_DESIGNER, DELETE, SHARE, PUBLISH, UNPUBLISH } from "../../../../assets/strings"
 import { THEME } from '../../../../globalStyles';
@@ -244,7 +244,7 @@ function onActionButtonClick(props: Props, state: State, val: any) {
     case EDIT_IN_DESIGNER:
       const { history } = props;
       if (history) history.push('/designer');
-      break;      
+      break;
     case DELETE:
       props.openModal(ModalState.Delete);
       break;

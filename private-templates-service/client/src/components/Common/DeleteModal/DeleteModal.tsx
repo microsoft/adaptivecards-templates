@@ -26,7 +26,6 @@ import {
 import {
   Container,
   ACWrapper,
-  TemplateName
 } from '../../AdaptiveCardPanel/styled'
 
 import {
@@ -67,26 +66,26 @@ class DeleteModal extends React.Component<Props> {
     const { template } = this.props;
 
     return (
-    <BackDrop>
-      <Modal>
-        <Header>{STRINGS.DELETE_TITLE}</Header>
-        <div>{STRINGS.DELETE_CONFIRMATION}<DescriptionAccent>{template.name} - {this.props.templateVersion}</DescriptionAccent>?</div>
-        <Description>{STRINGS.DELETE_WARNING}</Description>
-        <CenterPanelWrapper>
-          <Container>
-            <ACWrapper>
-              <AdaptiveCard cardtemplate={template} templateVersion={this.props.templateVersion} />
-            </ACWrapper>
-          </Container>
-        </CenterPanelWrapper>
-        <BottomRow>
-          <ButtonGroup>
-            <CancelButton text={STRINGS.CANCEL} onClick={this.props.closeModal} />
-            <PrimaryButton text={STRINGS.DELETE} onClick={this.delete} />
-          </ButtonGroup>
-        </BottomRow>
-      </Modal>
-    </BackDrop>
+      <BackDrop>
+        <Modal>
+          <Header>{STRINGS.DELETE_TITLE}</Header>
+          <div>{STRINGS.DELETE_CONFIRMATION}<DescriptionAccent>{template.name} - {this.props.templateVersion}</DescriptionAccent>?</div>
+          <Description>{STRINGS.DELETE_WARNING}</Description>
+          <CenterPanelWrapper>
+            <Container>
+              <ACWrapper>
+                <AdaptiveCard cardtemplate={template} templateVersion={this.props.templateVersion} />
+              </ACWrapper>
+            </Container>
+          </CenterPanelWrapper>
+          <BottomRow>
+            <ButtonGroup>
+              <CancelButton text={STRINGS.CANCEL} onClick={this.props.closeModal} />
+              <PrimaryButton text={STRINGS.DELETE} onClick={this.delete} />
+            </ButtonGroup>
+          </BottomRow>
+        </Modal>
+      </BackDrop>
     )
   }
 }
