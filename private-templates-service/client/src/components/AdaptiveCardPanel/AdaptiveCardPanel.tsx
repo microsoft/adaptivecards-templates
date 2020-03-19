@@ -39,7 +39,7 @@ class AdaptiveCardPanel extends React.Component<Props> {
     return (
       <Container onClick={this.onClick}>
         <ACWrapper>
-          <AdaptiveCard cardtemplate={template} templateVersion={version} />
+          <AdaptiveCard cardtemplate={template} templateVersion={version} hoverEffect />
         </ACWrapper>
         <TemplateFooterWrapper>
           <TemplateNameAndDateWrapper>

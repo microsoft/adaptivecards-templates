@@ -16,6 +16,10 @@ export const Container = styled.div`
   @media only screen and (max-width: 1399px) {
     margin-bottom: 20px;
   }
+
+  &: hover {
+    background: ${COLORS.GREY1};
+  }
 `;
 
 export const ACWrapper = styled.div`
