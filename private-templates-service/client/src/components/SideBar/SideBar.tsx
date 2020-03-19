@@ -6,7 +6,6 @@ import { connect } from "react-redux";
 import { RootState } from "../../store/rootReducer";
 import { UserType } from "../../store/auth/types";
 import { newTemplate } from "../../store/currentTemplate/actions";
-import { initializeIcons } from "office-ui-fabric-react/lib/Icons";
 import { COLORS } from "../../globalStyles";
 import UserAvatar from "./UserAvatar";
 import mainLogo from "../../assets/adaptive-cards-100-logo.png";
@@ -26,9 +25,8 @@ import {
   LogoTextHeader,
   LogoTextSubHeader
 } from "./styled";
-import { INavLink, INavLinkGroup, INavStyles } from "office-ui-fabric-react";
+import { INavLinkGroup, INavStyles } from "office-ui-fabric-react";
 
-initializeIcons();
 interface Props {
   authButtonMethod: () => void;
   isAuthenticated: boolean;

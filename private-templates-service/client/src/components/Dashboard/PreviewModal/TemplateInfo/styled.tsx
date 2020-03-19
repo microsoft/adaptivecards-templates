@@ -1,8 +1,7 @@
 import styled from 'styled-components';
 import { COLORS } from '../../../../globalStyles';
 
-import { ActionButton, Icon, IDropdownStyles } from 'office-ui-fabric-react';
-import { Dropdown } from "office-ui-fabric-react";
+import { Dropdown, ActionButton, Icon, IDropdownStyles } from "office-ui-fabric-react";
 import { PostedTemplate } from 'adaptive-templating-service-typescript-node';
 
 export const StyledVersionDropdown = styled(Dropdown)`
@@ -74,13 +73,14 @@ export const Status = styled.div`
 export const TimeStamp = styled.div`
   font-size: 14px;
   font-weight: 400;
+  white-space: nowrap;
+  margin-left: 64px;
 `;
 
 export const ActionsWrapper = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding-right: 20%;
 `;
 
 export const StyledButton = styled(ActionButton) <{ isPink: boolean }>`
@@ -106,7 +106,7 @@ export const RowWrapper = styled.div`
 `;
 
 export const Card = styled.div`
-  flex: 0.47 0 auto;
+  flex: 0.47 0 0;
   display: flex;
   flex-direction: column;
   box-shadow: 0px 3px 6px #00000029;

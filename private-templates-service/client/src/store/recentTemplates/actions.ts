@@ -38,7 +38,7 @@ export function requestRecentTemplatesFailure(
 }
 
 export function getRecentTemplates() {
-  return function(dispatch: any, getState: () => RootState) {
+  return function (dispatch: any, getState: () => RootState) {
     const appState = getState();
     dispatch(requestRecentTemplates());
     let api = new TemplateApi();
@@ -51,7 +51,7 @@ export function getRecentTemplates() {
     }
 
     return api.getRecent().then(response => {
-      if (response.response.statusCode && response.response.statusCode == 200) {
+      if (response.response.statusCode && response.response.statusCode === 200) {
         if (response.body.recentlyEdited && response.body.recentlyViewed) {
           dispatch(
             requestRecentTemplatesSuccess(
