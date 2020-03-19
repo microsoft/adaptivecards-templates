@@ -92,12 +92,21 @@ export const ButtonGroup = styled.div`
 
 export const CancelButton = styled(DefaultButton)`
   margin-right: 12px;
+  &: focus {
+    outline: 0px;
+  }
 `;
 
 export const SendMailButton = styled(DefaultButton)`
   max-width: fit-content;
+  &: focus {
+    outline: 0px;
+  }
 `;
 
 export const CopyLinkButton = styled(Button)`
   min-width: fit-content;
+  &: focus {
+    outline: 0px;
+  }
 `;

@@ -42,11 +42,9 @@ const mapDispatchToProps = (dispatch: any) => {
 
 class ShareModalForm extends React.Component<ShareModalFormProps> {
 
-  handleSubmit(event: any) {
+  shareTemplate = () => {
     this.props.shareTemplate(this.props.templateVersion ? this.props.templateVersion : "1.0", true);
     this.props.closeModal();
-
-    event.preventDefault();
   }
 
   render() {
@@ -59,7 +57,7 @@ class ShareModalForm extends React.Component<ShareModalFormProps> {
         <BottomRow>
           <ButtonGroup>
             <CancelButton text="Cancel" onClick={this.props.closeModal} />
-            <PrimaryButton type="submit" value="Submit" text="Done" onClick={this.handleSubmit} />
+            <PrimaryButton type="submit" value="Submit" text="Done" onClick={this.shareTemplate} />
           </ButtonGroup>
         </BottomRow>
       </React.Fragment>
