@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import { ActionButton } from 'office-ui-fabric-react';
 
 import { BREAK, COLORS } from "../../globalStyles";
 
@@ -9,6 +10,7 @@ export const Banner = styled.div`
   flex-direction: row;
   justify-content: space-between;
   width: 100%;
+  min-height: 61px;
   align-items: center;
   padding: 8px 40px;
   z-index: 2;
@@ -93,4 +95,15 @@ export const EditButton = styled(IconButton)`
   &: focus {
     outline: 0px;
   }
+`;
+
+export const BackButton = styled(ActionButton)`
+  &: focus {
+    outline: 0px;
+  }
+`;
+
+export const ButtonTextWrapper = styled.div`
+  margin-left: 8px;
+  font-size: 15px;
 `;

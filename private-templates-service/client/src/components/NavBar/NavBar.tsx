@@ -10,11 +10,10 @@ import { Template } from "adaptive-templating-service-typescript-node";
 
 import SearchBar from "./SearchBar";
 
-import { ActionButton } from "office-ui-fabric-react";
-
+import { ActionButton } from 'office-ui-fabric-react';
 import Logo from '../../assets/adaptive-cards-100-logo.png';
 
-import { Banner, Styledh1, StyledLogo, MobileBanner, BaselineBanner, StyledButton, Styledh2, StyledButtonContent, EditButton } from './styled';
+import { Banner, Styledh1, StyledLogo, MobileBanner, BaselineBanner, StyledButton, Styledh2, StyledButtonContent, EditButton, BackButton, ButtonTextWrapper } from './styled';
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
@@ -62,6 +61,14 @@ const NavBar = (props: NavBarProps) => {
 
   const editName = () => {
     props.openModal();
+  }
+
+  const onBackButton = () => {
+    if (history.length > 0) {
+      history.goBack();
+    } else {
+      history.replace('/')
+    }
   }
 
   switch (props.currentPage.toLowerCase()) {
@@ -120,6 +127,7 @@ const NavBar = (props: NavBarProps) => {
             <Styledh1>{(props.template && props.template.name) || props.currentPageTitle}</Styledh1>
             {!props.isFetching && <EditButton onClick={editName} iconProps={{ iconName: 'Edit' }} />}
           </BaselineBanner>
+          <BackButton iconProps={{ iconName: 'Back' }} onClick={onBackButton}><ButtonTextWrapper>Back</ButtonTextWrapper></BackButton>
         </Banner>
       );
   }
