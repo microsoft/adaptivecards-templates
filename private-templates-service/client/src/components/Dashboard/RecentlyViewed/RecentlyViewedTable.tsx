@@ -17,6 +17,8 @@ import {
   RecentlyViewedBody,
   RecentlyViewedStatusIndicator
 } from "./styled";
+import UserAvatar from "../../SideBar/UserAvatar";
+
 
 import { getDateString } from "../../../utils/versionUtils";
 import { Status } from "../PreviewModal/TemplateInfo/styled";
@@ -62,7 +64,7 @@ class RecentlyViewedTable extends React.Component<Props> {
       // if (!template || !template.instances || template.instances[0] || template.instances[0].lastEditedUser) {
       //   return <div>Error loading templates</div>
       // }
-      this.getOwnerInfo('2e3f0fbf-9a55-4232-b041-06ae601a16a8');
+      this.getOwnerInfo('oID');
       return (
         <RecentlyViewedBodyRow onClick={onClick}>
           <RecentlyViewedItem>{template.name}</RecentlyViewedItem>
@@ -81,7 +83,7 @@ class RecentlyViewedTable extends React.Component<Props> {
               <Status>{template.isLive ? "Published" : "Draft"}</Status>
             </TemplateStateWrapper>
           </RecentlyViewedItem>
-          <RecentlyViewedItem>Pic!! {(this.props.owner && this.props.owner.displayName) ? this.props.owner?.displayName : ""}</RecentlyViewedItem>
+          <RecentlyViewedItem>{<UserAvatar iconSize="0.1rem" />} {(this.props.owner && this.props.owner.displayName) ? this.props.owner?.displayName : ""}</RecentlyViewedItem>
         </RecentlyViewedBodyRow>
       );
     });

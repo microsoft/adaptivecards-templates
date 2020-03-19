@@ -58,7 +58,6 @@ export function getOwnerName(oID: string) {
     if (!state.auth.accessToken) {
       return dispatch(requestOwnerNameFailure());
     }
-
     const client = getAuthenticatedClient(state.auth.accessToken);
     return client.api('/users/' + oID + '/displayName').get()
       .then((name: any) => {
@@ -83,12 +82,13 @@ export function getOwnerProfilePicture(oID: string) {
     }
 
     const client = getAuthenticatedClient(state.auth.accessToken);
-    return client.api('/users/' + oID + '/photos/$value').get()
+    return client.api('/users/' + oID + '/photo/$value').get()
       .then((image: Blob) => {
         const imageURL = URL.createObjectURL(image);
         dispatch(requestOwnerProfilePictureSuccess(imageURL));
-      }, (fail: any) => {
-        dispatch(requestOwnerProfilePictureFailure());
-      })
+      },
+        (fail: any) => {
+          dispatch(requestOwnerProfilePictureFailure());
+        })
   }
 }
