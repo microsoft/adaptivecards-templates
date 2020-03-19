@@ -241,6 +241,82 @@ paths:
           description: "successful operation"
           schema: 
             $ref: "#/definitions/TemplatePreview"
+  '/template/{templateId}/batch':
+    delete:
+      tags:
+        - "template"
+      summary: "Batch delete template version operation"  
+      operationId: "batchTemplateDelete"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "templateId"
+          in: "path"
+          description: "ID of template to update"
+          required: true
+          type: string
+        - in: "body"
+          name: "body"
+          description: "template versions to delete"
+          required: true
+          schema:
+            properties: 
+              versions:
+                type: array
+                items:
+                  type: string
+      responses:
+        204: 
+          description: "successful operation"
+        404:
+          description: "Template does not exist"
+          schema: 
+            $ref: "#/definitions/BaseError"
+        401:
+          description: "Unauthorized user"
+          schema: 
+            $ref: "#/definitions/BaseError"        
+      security:
+        - bearer_auth: []
+    post:
+      tags: 
+        - "template"
+      summary: "Batch update template states"
+      description: "Update existing template given id"
+      produces:
+        - "application/json"
+      operationId: "batchTemplateUpdate"
+      parameters:
+        - name: "templateId"
+          in: "path"
+          description: "ID of template to update"
+          required: true
+          type: string
+        - in: "body"
+          name: "body"
+          description: "list of template versions and desired states"
+          required: true
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/UpdateTemplateState"
+      responses:
+        201: 
+          description: "successful operation"
+        400:
+          description: "Unable to create given template"
+          schema: 
+            $ref: "#/definitions/BaseError"
+        401:
+          description: "Unauthorized user"
+          schema: 
+            $ref: "#/definitions/BaseError" 
+        404:
+          description: "Template does not exist"
+          schema: 
+            $ref: "#/definitions/BaseError"
+      security:
+        - bearer_auth: []
   '/template/recent':
     get: 
       tags: 
@@ -489,3 +565,13 @@ definitions:
     properties:
       template:
         $ref: "#/definitions/TemplateInfo"
+  UpdateTemplateState:
+    type: object
+    properties:
+      version: 
+        type: string
+      state: 
+        enum:
+          - "draft"
+          - "live"
+          - "deprecated"

@@ -483,7 +483,7 @@ describe("Delete Templates", () => {
     res = await request(app).delete(`/template/${id}/batch`)
     .set({ Authorization: "Bearer " + token })
     .send({
-      version: [
+      versions: [
         "1.0", 
         "1.1"
       ]

@@ -1227,7 +1227,7 @@ export class TemplateServiceClient {
 
     router.delete("/:id/batch", (req: Request, res: Response, _next: NextFunction) => {
       let token = parseToken(req.headers.authorization!);
-      let versions : string[] = req.body.version;
+      let versions : string[] = req.body.versions || [];
       this.batchDeleteTemplate(req.params.id, versions, token).then(response => {
         if (!response.success) {
           const err = new TemplateError(ApiError.DeleteTemplateVersionFailed, `Failed to delete template ${req.params.id} versions: ${versions}.`);
