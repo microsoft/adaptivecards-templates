@@ -160,3 +160,21 @@ export function parseToken(token: string): string {
   let bearer = token.split(/[ ]+/).pop();
   return bearer || "";
 }
+
+/**
+ * Returns whether the state change is valid. 
+ * @param currState 
+ * @param desiredState 
+ */
+export function checkValidTemplateState(currState: TemplateState, desiredState: TemplateState): boolean {
+  switch (currState) {
+    case TemplateState.draft:
+      return desiredState !== TemplateState.deprecated;
+    case TemplateState.deprecated:
+      return false;
+    case TemplateState.live:
+      return desiredState !== TemplateState.draft;
+    default:
+      return false;
+  }
+}

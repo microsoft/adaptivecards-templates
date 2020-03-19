@@ -457,6 +457,125 @@ describe("Delete Templates", () => {
     expect(res.body.templates[0].instances[0].version).toEqual("1.0");
   });
 
+  it("should try to delete a multiple version of the posted template and succeed", async () => {
+    let res = await request(app)
+      .post("/template")
+      .set({ Authorization: "Bearer " + token })
+      .send({
+        template: {},
+        state: "live"
+      });
+    expect(res.status).toEqual(201);
+    expect(res.body).toHaveProperty("id");
+    id = res.body.id;
+    idsToDelete.push(id);
+
+    res = await request(app)
+      .post(`/template/${id}`)
+      .set({ Authorization: "Bearer " + token })
+      .send({
+        template: {},
+        state: "live",
+        version: "1.1"
+      });
+    expect(res.status).toEqual(201);
+
+    res = await request(app).delete(`/template/${id}/batch`)
+    .set({ Authorization: "Bearer " + token })
+    .send({
+      version: [
+        "1.0", 
+        "1.1"
+      ]
+    });
+    expect(res.status).toEqual(204);
+
+    res = await request(app).get(`/template/${id}`)
+    .set({ Authorization: "Bearer " + token });
+    expect(res.status).toEqual(404);
+  });
+
+  afterAll(async () => {
+    for (let id of idsToDelete) {
+      await request(app).delete(`/template/${id}`)
+      .set({ Authorization: "Bearer " + token });
+    }
+  });
+});
+
+
+describe("Batch Update Templates", () => {
+  let token: string;
+  const app = express();
+  let id: string;
+  let idsToDelete: string[] = [];
+
+  beforeAll(async () => {
+    // TODO: request access token for registered AD app
+    token = await getToken();
+    let templateClient = TemplateServiceClient.init(options);
+    let middleware: Router = templateClient.expressMiddleware();
+    app.use(bodyParser.json());
+    app.use("/template", middleware);
+  });
+
+  it("should try to unpublish multiple templates and succeed", async () => {
+    let res = await request(app)
+      .post("/template")
+      .set({ Authorization: "Bearer " + token })
+      .send({
+        template: {},
+        state: "live",
+      });
+    expect(res.status).toEqual(201);
+    expect(res.body).toHaveProperty("id");
+    id = res.body.id;
+    idsToDelete.push(id);
+
+    res = await request(app)
+    .post(`/template/${id}`)
+    .set({ Authorization: "Bearer " + token })
+    .send({
+      template: {},
+      state: "live",
+      version: "1.1"
+    });
+  expect(res.status).toEqual(201);
+  idsToDelete.push(id);
+
+  res = await request(app).post(`/template/${id}/batch`)
+  .set({ Authorization: "Bearer " + token })
+  .send({
+    templates: [
+      {
+      version: "1.0",
+      state: "deprecated"
+      }, 
+      {
+        version: "1.1",
+        state: "deprecated"
+      }
+    ]
+  })
+  expect(res.status).toEqual(201);
+
+  res = await request(app).get(`/template/${id}?version=1.0`)
+    .set({ Authorization: "Bearer " + token });
+    expect(res.status).toEqual(200);
+  expect(res.body).toHaveProperty("templates");
+  expect(res.body.templates).toHaveLength(1);
+  expect(res.body.templates[0].instances).toHaveLength(1);
+  expect(res.body.templates[0].instances[0].state).toEqual("deprecated");
+
+  res = await request(app).get(`/template/${id}?version=1.1`)
+  .set({ Authorization: "Bearer " + token });
+  expect(res.status).toEqual(200);
+  expect(res.body).toHaveProperty("templates");
+  expect(res.body.templates).toHaveLength(1);
+  expect(res.body.templates[0].instances).toHaveLength(1);
+  expect(res.body.templates[0].instances[0].state).toEqual("deprecated");
+  });
+
   afterAll(async () => {
     for (let id of idsToDelete) {
       await request(app).delete(`/template/${id}`)
