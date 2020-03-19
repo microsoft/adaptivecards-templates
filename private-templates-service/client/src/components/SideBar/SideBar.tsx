@@ -89,7 +89,7 @@ const navMenuLinks: INavLinkGroup[] = [
         }
       },
       {
-        name: "New Template",
+        name: "New Card",
         url: "/designer",
         iconProps: {
           iconName: "CalculatorAddition",
@@ -97,8 +97,8 @@ const navMenuLinks: INavLinkGroup[] = [
         }
       },
       {
-        name: "All Templates",
-        url: "/dashboard/all",
+        name: "All Cards",
+        url: "/allcards",
         iconProps: {
           iconName: "ViewList",
           style: iconStylePink
