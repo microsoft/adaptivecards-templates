@@ -57,7 +57,7 @@ const mapDispatchToProps = (dispatch: any) => {
 class VersionCard extends React.Component<Props> {
   render() {
     return (
-      <Card key="Recent Releases" style={{ width: `100%` }}>
+      <Card key="Recent Releases" style={{ flex: '1 0 auto' }}>
         <CardHeader>
           <VersionCardHeader>
             <CardTitle>Recent Releases</CardTitle>

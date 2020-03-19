@@ -150,15 +150,14 @@ class TemplateInfo extends React.Component<Props, State> {
   render() {
     const {
       tags,
-      createdAt,
+      updatedAt,
       instances,
     } = this.props.template;
 
-    let createdAtParsed = "";
-
-    if (createdAt) {
-      const createdAtDate = new Date(createdAt);
-      createdAtParsed = createdAtDate.toLocaleString();
+    let timestampParsed = "";
+    if (updatedAt) {
+      const tempDate = new Date(updatedAt);
+      timestampParsed = tempDate.toLocaleString();
     }
 
     const { history } = this.props;
@@ -167,7 +166,7 @@ class TemplateInfo extends React.Component<Props, State> {
     }
     let templateState = getTemplateState(this.props.template, this.state.version);
     return (
-      < OuterWrapper >
+      <OuterWrapper>
         <HeaderWrapper>
           <TopRowWrapper>
             <TitleWrapper>
@@ -184,7 +183,7 @@ class TemplateInfo extends React.Component<Props, State> {
               <Status>{PostedTemplate.StateEnum[templateState]}</Status>
             </TitleWrapper>
             <TimeStamp>
-              Created {createdAtParsed}
+              Updated {timestampParsed}
             </TimeStamp>
           </TopRowWrapper>
           <ActionsWrapper>

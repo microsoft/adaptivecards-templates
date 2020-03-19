@@ -14,9 +14,9 @@ export const Banner = styled.div`
   align-items: center;
   padding: 8px 40px;
   z-index: 2;
-  -webkit-box-shadow: -2px 8px 3px -4px ${COLORS.GREY_BOX_SHADOW};
-  -moz-box-shadow: -2px 8px 3px -4px ${COLORS.GREY_BOX_SHADOW};
-  box-shadow: -2px 8px 3px -4px ${COLORS.GREY_BOX_SHADOW};
+  -webkit-box-shadow: 0px 4px 3px 0px ${COLORS.GREY_BOX_SHADOW};
+  -moz-box-shadow: 0px 4px 3px 0px ${COLORS.GREY_BOX_SHADOW};
+  box-shadow: 0px 4px 3px 0px ${COLORS.GREY_BOX_SHADOW};
 
   @media only screen and (max-width: ${BREAK.SM}px) {
     padding: 8px 24px;
