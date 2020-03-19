@@ -10,6 +10,7 @@ import {
 import { IncomingMessage } from 'http';
 import { TemplateApi } from 'adaptive-templating-service-typescript-node';
 import { RootState } from '../rootReducer';
+import { initClientSDK } from '../../utils/TemplateUtil/TemplateUtil';
 
 export function querySearchBegin(): SearchAction {
   return {
@@ -39,10 +40,7 @@ export function querySearch(searchByTemplateName: string): (dispatch: any, getSt
     const appState = getState();
     dispatch(querySearchBegin())
     
-    let api = new TemplateApi();
-    if (appState.auth.accessToken){
-      api.setApiKey(0, `Bearer ${appState.auth.accessToken!.idToken.rawIdToken}`);
-    }
+    const api = initClientSDK(dispatch, getState);
     
     return api.allTemplates(undefined, true, searchByTemplateName)
       .then(response => {

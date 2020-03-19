@@ -57,7 +57,7 @@ const mapDispatchToProps = (dispatch: any) => {
 class VersionCard extends React.Component<Props> {
   render() {
     return (
-      <Card key="Recent Releases" style={{ width: `100%` }}>
+      <Card key="Recent Releases" style={{ flex: '1 0 auto' }}>
         <CardHeader>
           <VersionCardHeader>
             <CardTitle>Recent Releases</CardTitle>
@@ -70,8 +70,8 @@ class VersionCard extends React.Component<Props> {
             <VersionCardRowTitle style={{ flexBasis: `25%` }}>Updated</VersionCardRowTitle>
             <VersionCardRowTitle style={{ flexBasis: `20%` }}>Status</VersionCardRowTitle>
           </VersionCardRow>
-          {this.props.template.instances && this.props.template.instances.map((instance: TemplateInstance) => (
-            <VersionCardRow>
+          {this.props.template.instances && this.props.template.instances.map((instance: TemplateInstance, index: number) => (
+            <VersionCardRow key={index}>
               <VersionWrapper>
                 {instance.version}
                 {instance.version === this.props.templateVersion && <VersionIcon iconName={'View'} />}

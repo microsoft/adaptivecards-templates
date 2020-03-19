@@ -1,7 +1,8 @@
 import { REQUEST_TEMPLATES_GET, REQUEST_TEMPLATE_GET_SUCCESS, REQUEST_TEMPLATE_GET_FAIL, AllTemplateAction } from "./types";
-import { TemplateApi, TemplateList, Template } from 'adaptive-templating-service-typescript-node';
+import { TemplateApi, TemplateList } from 'adaptive-templating-service-typescript-node';
 import { IncomingMessage } from "http";
 import { RootState } from "../rootReducer";
+import { initClientSDK } from "../../utils/TemplateUtil/TemplateUtil";
 
 export function requestAllTemplates(): AllTemplateAction {
   return {
@@ -27,13 +28,10 @@ export function getAllTemplates() {
   return function (dispatch: any, getState: () => RootState) {
     const appState = getState();
     dispatch(requestAllTemplates())
-    let api = new TemplateApi();
-    if (appState.auth.accessToken) {
-      api.setApiKey(0, `Bearer ${appState.auth.accessToken!.idToken.rawIdToken}`);
-    }
+    const api = initClientSDK(dispatch, getState);
     return api.allTemplates(undefined, true)
       .then(response => {
-        if (response.response.statusCode && response.response.statusCode == 200) {
+        if (response.response.statusCode && response.response.statusCode === 200) {
           dispatch(receiveAllTemplates(response.body))
         } else {
           dispatch(failGetAll(response.response))

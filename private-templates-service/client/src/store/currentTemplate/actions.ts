@@ -21,6 +21,7 @@ import {
 import { Template, TemplateApi, PostedTemplate } from "adaptive-templating-service-typescript-node";
 
 import { RootState } from '../rootReducer';
+import { initClientSDK } from '../../utils/TemplateUtil';
 
 export function newTemplate(): CurrentTemplateAction {
   return {
@@ -159,7 +160,7 @@ export function updateCurrentTemplateVersion(template: Template, version: string
     if (template.instances) {
       let numInstances = template.instances.length;
       for (let j = 0; j < numInstances; j++) {
-        if (template.instances[j] && template.instances[j].version && template.instances[j].version == version) {
+        if (template.instances[j] && template.instances[j].version && template.instances[j].version === version) {
           return dispatch(
             receiveUpdateCurrentTemplateVersion(
               template.instances[j].json,
@@ -217,6 +218,8 @@ export function updateTemplate(templateID?: string, currentVersion?: string, tem
         else {
           dispatch(failureNewTemplateUpdate());
         }
+      }).catch((error: any) => {
+        dispatch(failureNewTemplateUpdate());
       });
     }
     else {
@@ -238,7 +241,6 @@ export function updateTemplate(templateID?: string, currentVersion?: string, tem
 
 export function getTemplate(templateID: string) {
   return function (dispatch: any, getState: () => RootState) {
-    const appState = getState();
     dispatch(requestTemplate(templateID));
 
     const api = initClientSDK(dispatch, getState);
@@ -257,7 +259,9 @@ export function getTemplate(templateID: string) {
             ))
         }
         dispatch(requestTemplateFailure());
-      })
+      }).catch((error: any) => {
+        dispatch(requestTemplateFailure());
+      });
     }
     catch {
       dispatch(requestTemplateFailure());
@@ -271,11 +275,8 @@ export function deleteTemplateVersion(templateVersion: string, templateID?: stri
     const id = templateID || appState.currentTemplate.templateID;
 
     dispatch(deleteTemplateInstance());
-
-    let api = new TemplateApi();
-    if (appState.auth.accessToken) {
-      api.setApiKey(0, `Bearer ${appState.auth.accessToken!.idToken.rawIdToken}`);
-    }
+    
+    const api = initClientSDK(dispatch, getState);
 
     if (!id || id === "") {
       dispatch(deleteTemplateInstanceFailure());
@@ -294,7 +295,9 @@ export function deleteTemplateVersion(templateVersion: string, templateID?: stri
           return dispatch(deleteTemplateInstanceSuccess(template));
         }
         return dispatch(deleteTemplateInstanceFailure());
-      })
+      }).catch((error: any) => {
+        dispatch(deleteTemplateInstanceFailure());
+      });
     }
     catch {
       dispatch(deleteTemplateInstanceFailure());
@@ -310,13 +313,4 @@ function removeSpecificTemplateVersion(template: Template, version: string) {
     instanceList.push(instance);
   }
   template.instances = instanceList;
-}
-
-function initClientSDK(dispatch: any, getState: () => RootState, ): TemplateApi {
-  const api = new TemplateApi();
-  const state = getState();
-  if (state.auth.accessToken) {
-    api.setApiKey(0, `Bearer ${state.auth.accessToken!.idToken.rawIdToken}`);
-  }
-  return api;
 }
