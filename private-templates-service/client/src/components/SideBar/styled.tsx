@@ -63,10 +63,14 @@ export const UserWrapper = styled.div`
 
 export const AvatarIcon = styled.img`
   width: 80px;
-  margin-bottom: 16px;
+  margin-bottom: 32px;
 `;
 
-export const DefaultAvatarIcon = styled(Icon)<{ size?: string }>`
+export const OwnerAvatar = styled.img `
+  width: 22px;
+`
+
+export const DefaultAvatarIcon = styled(Icon) <{ size?: string }>`
   font-size: ${props => props.size || "1rem"};
   align-self: center;
 `;
