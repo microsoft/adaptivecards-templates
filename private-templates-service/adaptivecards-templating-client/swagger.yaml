@@ -377,6 +377,8 @@ definitions:
       createdAt:
         type: string
         format: Date
+      lastEditedUser: 
+        type: string
   PostedTemplate:
     type: object
     properties: 

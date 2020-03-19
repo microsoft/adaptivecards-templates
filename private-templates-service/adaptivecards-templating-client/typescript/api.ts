@@ -428,6 +428,7 @@ export class TemplateInstance {
     'data'?: Array<any>;
     'updatedAt'?: string;
     'createdAt'?: string;
+    'lastEditedUser'?: string;
 
     static discriminator: string | undefined = undefined;
 
@@ -480,6 +481,11 @@ export class TemplateInstance {
         {
             "name": "createdAt",
             "baseName": "createdAt",
+            "type": "string"
+        },
+        {
+            "name": "lastEditedUser",
+            "baseName": "lastEditedUser",
             "type": "string"
         }    ];
 
