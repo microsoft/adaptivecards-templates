@@ -119,7 +119,7 @@ const NavBar = (props: NavBarProps) => {
           </MobileBanner>
         </Banner>
       );
-    default:
+    case "template":
       return (
         <Banner>
           <BaselineBanner>
@@ -128,6 +128,15 @@ const NavBar = (props: NavBarProps) => {
             {!props.isFetching && <EditButton onClick={editName} iconProps={{ iconName: 'Edit' }} />}
           </BaselineBanner>
           <BackButton iconProps={{ iconName: 'Back' }} onClick={onBackButton}><ButtonTextWrapper>Back</ButtonTextWrapper></BackButton>
+        </Banner>
+      );
+    default:
+      return (
+        <Banner>
+          <BaselineBanner>
+            <StyledLogo src={Logo} />
+            <Styledh1>{(props.template && props.template.name) || props.currentPageTitle}</Styledh1>
+          </BaselineBanner>
         </Banner>
       );
   }
