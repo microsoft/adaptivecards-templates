@@ -59,7 +59,7 @@ class ShareModalForm extends React.Component<ShareModalFormProps, State> {
       <React.Fragment>
         <form onSubmit={this.handleSubmit}>
           <EmailPanel>
-            <SemiBoldText>Send to recipients</SemiBoldText>
+            <SemiBoldText style={{ color: 'pink' }}>Send to recipients</SemiBoldText>
             <TextField id="emailTextField"
               value={this.state.value}
               onChange={this.handleChange}

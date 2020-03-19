@@ -72,6 +72,11 @@ const iconStyle = {
   margin: "0px 10px 0px 40px"
 };
 
+const iconStylePink = {
+  color: 'pink',
+  margin: "0px 10px 0px 40px"
+}
+
 const navMenuLinks: INavLinkGroup[] = [
   {
     links: [
@@ -96,7 +101,7 @@ const navMenuLinks: INavLinkGroup[] = [
         url: "/dashboard/all",
         iconProps: {
           iconName: "ViewList",
-          style: iconStyle
+          style: iconStylePink
         }
       },
       {
@@ -104,7 +109,7 @@ const navMenuLinks: INavLinkGroup[] = [
         url: "/drafts",
         iconProps: {
           iconName: "SingleColumnEdit",
-          style: iconStyle
+          style: iconStylePink
         }
       },
       {
@@ -112,7 +117,7 @@ const navMenuLinks: INavLinkGroup[] = [
         url: "/published",
         iconProps: {
           iconName: "PublishContent",
-          style: iconStyle
+          style: iconStylePink
         }
       },
       {
@@ -120,7 +125,7 @@ const navMenuLinks: INavLinkGroup[] = [
         url: "/tags",
         iconProps: {
           iconName: "Tag",
-          style: iconStyle
+          style: iconStylePink
         }
       }
     ]

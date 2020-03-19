@@ -217,6 +217,8 @@ export function updateTemplate(templateID?: string, currentVersion?: string, tem
         else {
           dispatch(failureNewTemplateUpdate());
         }
+      }).catch((error: any) => {
+        dispatch(failureNewTemplateUpdate());
       });
     }
     else {
@@ -256,7 +258,9 @@ export function getTemplate(templateID: string) {
             ))
         }
         dispatch(requestTemplateFailure());
-      })
+      }).catch((error: any) => {
+        dispatch(requestTemplateFailure());
+      });
     }
     catch {
       dispatch(requestTemplateFailure());
@@ -271,11 +275,7 @@ export function deleteTemplateVersion(templateVersion: string, templateID?: stri
 
     dispatch(deleteTemplateInstance());
 
-    const api = new TemplateApi();
-
-    if (appState.auth.accessToken) {
-      api.setApiKey(0, `Bearer ${appState.auth.accessToken!.idToken.rawIdToken}`);
-    }
+    const api = initClientSDK(dispatch, getState);
 
     if (!id || id === "") {
       dispatch(deleteTemplateInstanceFailure());
@@ -294,7 +294,9 @@ export function deleteTemplateVersion(templateVersion: string, templateID?: stri
           return dispatch(deleteTemplateInstanceSuccess(template));
         }
         return dispatch(deleteTemplateInstanceFailure());
-      })
+      }).catch((error: any) => {
+        dispatch(deleteTemplateInstanceFailure());
+      });
     }
     catch {
       dispatch(deleteTemplateInstanceFailure());

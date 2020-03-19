@@ -1,6 +1,4 @@
 import { ITemplate, ITemplateInstance, TemplateState } from "../models/models";
-import { version } from "mongoose";
-
 /**
  * @function
  * Updates passed ITemplate object to only have the latest version instance.
@@ -152,4 +150,13 @@ export function isValidJSONString(input: string) {
     return false;
   }
   return true;
+}
+
+/**
+ * Get token from authorization header.
+ * @param token 
+ */
+export function parseToken(token: string): string {
+  let bearer = token.split(/[ ]+/).pop();
+  return bearer || "";
 }

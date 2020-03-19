@@ -6,14 +6,14 @@ import { AuthIssuer } from "../models/models";
 export interface AuthenticationProvider {
   // Issuer and owner fields unique identify every user
   issuer: AuthIssuer;
+  token: string;
 
   /**
-   * To get an id that uniquely identifies the user from
-   * the access token
-   * @returns string or undefined if client is not authenticated
+   * Gets the unique id that identifies the user from the token.
+   * @param accessToken 
    */
-  getOwner: () => string | undefined;
-
+  getAuthIDFromToken(accessToken: string): string;
+  
   /**
    * Validate signature of access token and assigns owner.
    * @throws error - invalid signature

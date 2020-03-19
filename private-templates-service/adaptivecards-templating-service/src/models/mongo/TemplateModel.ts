@@ -19,7 +19,8 @@ export const TemplateInstanceSchema: Schema = new Schema(
     state: { type: String, default: TemplateState.draft },
     isShareable: { type: Boolean, default: false },
     numHits: { type: Number, default: 0 },
-    data: { type: [String], default: [], set: MongoUtils.jsonArrayToString }
+    data: { type: [String], default: [], set: MongoUtils.jsonArrayToString },
+    lastEditedUser: { type: String, default: null }
   },
   {
     versionKey: false,
