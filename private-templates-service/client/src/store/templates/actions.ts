@@ -1,5 +1,5 @@
 import { REQUEST_TEMPLATES_GET, REQUEST_TEMPLATE_GET_SUCCESS, REQUEST_TEMPLATE_GET_FAIL, AllTemplateAction } from "./types";
-import { TemplateApi, TemplateList, Template } from 'adaptive-templating-service-typescript-node';
+import { TemplateApi, TemplateList } from 'adaptive-templating-service-typescript-node';
 import { IncomingMessage } from "http";
 import { RootState } from "../rootReducer";
 
@@ -33,7 +33,7 @@ export function getAllTemplates() {
     }
     return api.allTemplates(undefined, true)
       .then(response => {
-        if (response.response.statusCode && response.response.statusCode == 200) {
+        if (response.response.statusCode && response.response.statusCode === 200) {
           dispatch(receiveAllTemplates(response.body))
         } else {
           dispatch(failGetAll(response.response))

@@ -19,8 +19,6 @@ import {
   DELETE_TEMPLATE_INSTANCE_FAILURE
 } from './types';
 
-import { Template } from 'adaptive-templating-service-typescript-node';
-
 const initialState: CurrentTemplateState = {
   templateID: undefined,
   templateJSON: undefined,

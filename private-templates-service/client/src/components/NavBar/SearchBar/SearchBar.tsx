@@ -3,7 +3,6 @@ import { StyledSearchBox } from "./styled";
 import { RootState } from "../../../store/rootReducer";
 import { connect } from "react-redux";
 import { querySearch, clearSearch } from "../../../store/search/actions";
-import { initializeIcons } from "office-ui-fabric-react/lib/Icons";
 import { COLORS, BREAK } from "../../../globalStyles";
 
 const mapStateToProps = (state: RootState) => {
@@ -69,7 +68,6 @@ class SearchBar extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = { isMobile: window.screen.width < BREAK.SM };
-    initializeIcons(); // to initilize the icons being used
   }
 
   componentDidMount() {

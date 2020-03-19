@@ -70,8 +70,8 @@ class VersionCard extends React.Component<Props> {
             <VersionCardRowTitle style={{ flexBasis: `25%` }}>Updated</VersionCardRowTitle>
             <VersionCardRowTitle style={{ flexBasis: `20%` }}>Status</VersionCardRowTitle>
           </VersionCardRow>
-          {this.props.template.instances && this.props.template.instances.map((instance: TemplateInstance) => (
-            <VersionCardRow>
+          {this.props.template.instances && this.props.template.instances.map((instance: TemplateInstance, index: number) => (
+            <VersionCardRow key={index}>
               <VersionWrapper>
                 {instance.version}
                 {instance.version === this.props.templateVersion && <VersionIcon iconName={'View'} />}

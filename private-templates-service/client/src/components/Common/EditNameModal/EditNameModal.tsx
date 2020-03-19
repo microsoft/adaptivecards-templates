@@ -18,7 +18,6 @@ import {
   Modal,
   Header,
   Description,
-  DescriptionAccent,
   CancelButton,
 } from '../PublishModal/styled';
 
@@ -59,7 +58,7 @@ const EditNameModal = (props: Props) => {
   }
 
   const updateName = () => {
-    if (name) {
+    if (name && name !== props.currentName) {
       props.updateName(name);
     }
     props.closeModal();

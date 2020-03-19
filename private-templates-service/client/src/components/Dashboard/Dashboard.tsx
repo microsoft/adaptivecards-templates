@@ -110,7 +110,7 @@ class Dashboard extends React.Component<Props> {
       recentlyViewedTemplates = recentTemplates.recentlyViewed.templates;
     }
     // TODO: Get tags and make them clickable
-    let tags: string[] = new Array();
+    let tags: string[] = [];
     return (
       <OuterWindow>
         <DashboardContainer>

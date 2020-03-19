@@ -16,7 +16,9 @@ class Gallery extends React.Component<Props> {
   render() {
     let cards: JSX.Element[] = [];
     if (this.props.templates) {
-      cards = this.props.templates.map((val: any) => <AdaptiveCardPanel onClick={this.props.onClick} template={val} />);
+      cards = this.props.templates.map(
+        (val: Template, index: number) => <AdaptiveCardPanel key={index} onClick={this.props.onClick} template={val} />
+      );
     }
     return (
       <Container>

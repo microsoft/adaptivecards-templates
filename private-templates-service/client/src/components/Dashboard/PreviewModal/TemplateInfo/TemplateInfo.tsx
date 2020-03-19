@@ -149,7 +149,6 @@ class TemplateInfo extends React.Component<Props, State> {
 
   render() {
     const {
-      isLive,
       tags,
       createdAt,
       instances,
@@ -258,6 +257,7 @@ function onActionButtonClick(props: Props, state: State, val: any) {
         default:
           break;
       }
+      break;
     default:
       break;
   }

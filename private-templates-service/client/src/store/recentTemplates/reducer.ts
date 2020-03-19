@@ -6,8 +6,6 @@ import {
   RecentTemplatesState
 } from "./types";
 
-import { UserList } from "adaptive-templating-service-typescript-node";
-
 const initialState: RecentTemplatesState = {
   isFetching: false
 };
