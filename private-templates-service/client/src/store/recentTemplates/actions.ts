@@ -42,11 +42,11 @@ export function getRecentTemplates() {
     const appState = getState();
     dispatch(requestRecentTemplates());
     let api = new TemplateApi();
-    // TODO dynamically fetch bearer token
+    
     if (appState.auth.accessToken) {
       api.setApiKey(
         0,
-        `Bearer ${appState.auth.accessToken!.idToken.rawIdToken}`
+        `Bearer ${appState.auth.accessToken!.accessToken}`
       );
     }
 

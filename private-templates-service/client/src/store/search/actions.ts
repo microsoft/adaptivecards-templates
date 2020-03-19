@@ -41,7 +41,7 @@ export function querySearch(searchByTemplateName: string): (dispatch: any, getSt
     
     let api = new TemplateApi();
     if (appState.auth.accessToken){
-      api.setApiKey(0, `Bearer ${appState.auth.accessToken!.idToken.rawIdToken}`);
+      api.setApiKey(0, `Bearer ${appState.auth.accessToken!.accessToken}`);
     }
     
     return api.allTemplates(undefined, true, searchByTemplateName)

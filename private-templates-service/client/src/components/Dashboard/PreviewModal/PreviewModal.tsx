@@ -11,6 +11,7 @@ import { getLatestVersion } from "../../../utils/TemplateUtil";
 
 import AdaptiveCard from '../../Common/AdaptiveCard'
 import TemplateInfo from './TemplateInfo';
+import requireAuthentication from '../../../utils/requireAuthentication';
 
 import { ModalWrapper, ACPanel, ACWrapper, DescriptorWrapper, CenteredSpinner } from './styled';
 
@@ -107,4 +108,4 @@ class PreviewModal extends React.Component<Props, State> {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(PreviewModal));
+export default connect(mapStateToProps, mapDispatchToProps)(requireAuthentication(withRouter(PreviewModal)));

@@ -271,12 +271,8 @@ export function deleteTemplateVersion(templateVersion: string, templateID?: stri
     const id = templateID || appState.currentTemplate.templateID;
 
     dispatch(deleteTemplateInstance());
-
-    const api = new TemplateApi();
-
-    if (appState.auth.accessToken) {
-      api.setApiKey(0, `Bearer ${appState.auth.accessToken!.idToken.rawIdToken}`);
-    }
+    
+    const api = initClientSDK(dispatch, getState);
 
     if (!id || id === "") {
       dispatch(deleteTemplateInstanceFailure());
@@ -317,7 +313,7 @@ function initClientSDK(dispatch: any, getState: () => RootState, ): TemplateApi 
   const api = new TemplateApi();
   const state = getState();
   if (state.auth.accessToken) {
-    api.setApiKey(0, `Bearer ${state.auth.accessToken!.idToken.rawIdToken}`);
+    api.setApiKey(0, `Bearer ${state.auth.accessToken!.accessToken}`);
   }
   return api;
 }

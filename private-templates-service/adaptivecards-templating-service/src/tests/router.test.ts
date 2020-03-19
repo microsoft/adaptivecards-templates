@@ -649,7 +649,7 @@ describe("Post Templates, and increment version", () => {
 
     expect(res.status).toEqual(200);
     expect(res.body).toHaveProperty("templates");
-    expect(res.body.templates).toHaveLength(2);
+    expect(res.body.templates).toHaveLength(1);
     let template = res.body.templates[0];
     testDefaultTemplateParameters(template);
   });

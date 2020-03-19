@@ -6,7 +6,7 @@ info:
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "adaptivecms.azurewebsites.net"
+host: "localhost:5000"
 tags:
 - name: "template"
   description: "Adaptive Cards Template"
@@ -214,7 +214,9 @@ paths:
         401:
           description: "Unauthorized user"
           schema: 
-            $ref: "#/definitions/BaseError"   
+            $ref: "#/definitions/BaseError"       
+      security:
+        - bearer_auth: [] 
   '/template/{templateId}/preview':
     get: 
       tags: 
@@ -272,16 +274,7 @@ paths:
           schema: 
             $ref: "#/definitions/BaseError" 
       security:
-        - bearer_auth: []
-      responses: 
-        200: 
-          description: "successful operation"
-        401: 
-          description: "Unauthorized user"
-          schema: 
-            $ref: "#/definitions/BaseError"   
-      security:
-        - bearer_auth: []    
+        - bearer_auth: [] 
     delete: 
       tags: 
         - "user"
@@ -356,7 +349,7 @@ definitions:
       _id: 
         type: string
       json: 
-        type: string
+        type: object
         format: JSON
       version: 
         type: string
@@ -465,7 +458,7 @@ definitions:
       version:
         type: string
       json:
-        type: string
+        type: object
         format: JSON
       state: 
         type: string
@@ -488,10 +481,9 @@ definitions:
         items:
           type: string
       owner: 
-        $ref: "#/definitions/TemplatePreviewUser"
+        type: string
   TemplatePreview: 
     type: object
     properties:
       template:
         $ref: "#/definitions/TemplateInfo"
-        

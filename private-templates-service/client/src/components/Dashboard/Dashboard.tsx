@@ -3,33 +3,47 @@ import { connect } from "react-redux";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import { RootState } from "../../store/rootReducer";
 import { UserType } from "../../store/auth/types";
+import { getAllTemplates } from "../../store/templates/actions";
 import { AllTemplateState } from "../../store/templates/types";
+import { getRecentTemplates } from "../../store/recentTemplates/actions";
 import { RecentTemplatesState } from "../../store/recentTemplates/types";
 import { setPage } from "../../store/page/actions";
-import { getAllTemplates } from "../../store/templates/actions";
 import { getTemplate } from "../../store/currentTemplate/actions";
-import { getRecentTemplates } from "../../store/recentTemplates/actions";
 import { setSearchBarVisible } from "../../store/search/actions";
+
+import { Template } from "adaptive-templating-service-typescript-node";
+import { SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
+
 import requireAuthentication from "../../utils/requireAuthentication";
+
 import Gallery from "../Gallery";
 import SearchPage from "./SearchPage/SearchPage";
-import { Template } from "adaptive-templating-service-typescript-node";
-import { RecentlyViewed } from "./RecentlyViewed/RecentlyViewed";
+import RecentlyViewed from "./RecentlyViewed";
 import Tags from "../Common/Tags";
+import Footer from "./Footer";
+import {
+  DASHBOARD_RECENTLY_EDITED_PLACEHOLDER,
+  DASHBOARD_RECENTLY_VIEWED_PLACEHOLDER,
+} from '../../assets/strings';
+
+
 import {
   Title,
   DashboardContainer,
   OuterWindow,
   TagsContainer,
-  PlaceholderText
+  PlaceholderText,
+  CenteredSpinner,
+  OuterDashboardContainer
 } from "./styled";
+
 const mapStateToProps = (state: RootState) => {
   return {
     isAuthenticated: state.auth.isAuthenticated,
     user: state.auth.user,
     templates: state.allTemplates,
     isSearch: state.search.isSearch,
-    recentTemplates: state.recentTemplates
+    recentTemplates: state.recentTemplates,
   };
 };
 const mapDispatchToProps = (dispatch: any) => {
@@ -80,7 +94,7 @@ class Dashboard extends React.Component<Props> {
     }
   }
   selectTemplate = (templateID: string) => {
-    this.props.history.push("template/" + templateID);
+    this.props.history.push("preview/" + templateID);
   };
   render() {
     if (this.props.isSearch) {
@@ -112,40 +126,47 @@ class Dashboard extends React.Component<Props> {
     // TODO: Get tags and make them clickable
     let tags: string[] = new Array();
     return (
-      <OuterWindow>
-        <DashboardContainer>
-          <React.Fragment>
-            <Title>Recently Edited</Title>
-            {recentlyEditedTemplates.length ? (
-              <Gallery
-                onClick={this.selectTemplate}
-                templates={recentlyEditedTemplates}
-              ></Gallery>
-            ) : (
-                <PlaceholderText>
-                  No edited templates yet. Create or edit one :)
-              </PlaceholderText>
-              )}
-          </React.Fragment>
-          <React.Fragment>
-            <Title>Recently Viewed</Title>
-            {recentlyViewedTemplates.length ? (
-              <RecentlyViewed
-                onClick={this.selectTemplate}
-                recentlyViewed={recentlyViewedTemplates}
-              ></RecentlyViewed>
-            ) : (
-                <PlaceholderText>
-                  No recently viewed templates yet. Check out some templates:)
-              </PlaceholderText>
-              )}
-          </React.Fragment>
-        </DashboardContainer>
-        <TagsContainer>
-          <Title style={{ marginRight: "150px" }}>Tags</Title>
-          <Tags tags={tags} allowEdit={false}></Tags>
-        </TagsContainer>
-      </OuterWindow>
+      <OuterDashboardContainer>
+        <OuterWindow>
+          <DashboardContainer>
+            <React.Fragment>
+              <Title>Recently Edited</Title>
+              {recentTemplates.isFetching ?
+                <CenteredSpinner size={SpinnerSize.large} />
+                : recentlyEditedTemplates.length ? (
+                  <Gallery
+                    onClick={this.selectTemplate}
+                    templates={recentlyEditedTemplates}
+                  ></Gallery>
+                ) : (
+                    <PlaceholderText>
+                      {DASHBOARD_RECENTLY_EDITED_PLACEHOLDER}
+                    </PlaceholderText>
+                  )}
+            </React.Fragment>
+            <React.Fragment>
+              <Title>Recently Viewed</Title>
+              {recentTemplates.isFetching ?
+                <CenteredSpinner size={SpinnerSize.large} />
+                : recentlyViewedTemplates.length ? (
+                  <RecentlyViewed
+                    onClick={this.selectTemplate}
+                    recentlyViewed={recentlyViewedTemplates}
+                  ></RecentlyViewed>
+                ) : (
+                  <PlaceholderText>
+                    {DASHBOARD_RECENTLY_VIEWED_PLACEHOLDER}
+                  </PlaceholderText>
+                )}
+            </React.Fragment>
+          </DashboardContainer>
+          <TagsContainer>
+            <Title style={{ marginRight: "150px", color: 'pink' }}>Tags</Title>
+            <Tags tags={tags} allowEdit={false}></Tags>
+          </TagsContainer>
+        </OuterWindow>
+        <Footer />
+      </OuterDashboardContainer>
     );
   }
 }
