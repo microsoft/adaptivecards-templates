@@ -20,7 +20,7 @@ const initialOwnerState: OwnerType = {
   displayName: "",
 }
 
-function owner(owner = initialOwnerState, action: GetOwnerNameAction | GetOwnerProfilePictureAction): OwnerType | undefined {
+function createOwner(owner = initialOwnerState, action: GetOwnerNameAction | GetOwnerProfilePictureAction): OwnerType | undefined {
   switch (action.type) {
     case GET_OWNER_NAME_SUCCESS:
       return {
@@ -39,6 +39,7 @@ function owner(owner = initialOwnerState, action: GetOwnerNameAction | GetOwnerP
 
 export function templateOwnerReducer(state = initialState, action: GetOwnerNameAction | GetOwnerProfilePictureAction): OwnerState {
   switch (action.type) {
+    // empty case statement will "fall through" to logic in the next non-empty case
     case GET_OWNER_NAME:
     case GET_OWNER_PROFILE_PICTURE:
       return {
@@ -55,7 +56,7 @@ export function templateOwnerReducer(state = initialState, action: GetOwnerNameA
     case GET_OWNER_PROFILE_PICTURE_SUCCESS:
       return {
         ...state,
-        owner: owner(state.owner, action),
+        owner: createOwner(state.owner, action),
       }
     default:
       return state;
