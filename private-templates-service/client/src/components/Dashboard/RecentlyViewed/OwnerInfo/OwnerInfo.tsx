@@ -5,8 +5,8 @@ import { RootState } from "../../../../store/rootReducer";
 import { getOwnerName, getOwnerProfilePicture } from "../../../../store/templateOwner/actions";
 import { OwnerType } from "../../../../store/templateOwner/types";
 
-import UserAvatar from "../../../SideBar/UserAvatar";
 import {InfoWrapper} from "./styled";
+import OwnerAvatar from "../OwnerAvatar";
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -41,7 +41,7 @@ class OwnerInfo extends React.Component<Props> {
   render() {
     return (
       <InfoWrapper>
-        <UserAvatar iconSize="1rem" setOwner={true} /> {(this.props.owner && this.props.owner.displayName) ? this.props.owner?.displayName : ""}
+        <OwnerAvatar/> {(this.props.owner && this.props.owner.displayName) ? this.props.owner?.displayName : ""}
       </InfoWrapper>
     );
   }

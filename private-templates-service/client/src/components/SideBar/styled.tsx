@@ -2,7 +2,6 @@ import styled from "styled-components";
 import { Nav } from "office-ui-fabric-react/lib/Nav";
 import { Icon } from "office-ui-fabric-react/lib/Icon";
 import { ActionButton } from "office-ui-fabric-react";
-import { Facepile } from 'office-ui-fabric-react/lib/Facepile';
 import { COLORS, BREAK } from "../../globalStyles";
 
 export const OuterSideBarWrapper = styled.div`
@@ -64,16 +63,10 @@ export const UserWrapper = styled.div`
 
 export const AvatarIcon = styled.img`
   width: 80px;
-  margin-bottom: 32px;
+  margin-bottom: 16px;
 `;
 
-export const OwnerAvatar = styled.img `
-  width: 19px;
-  padding-bottom: 3px;
-
-`
-
-export const DefaultAvatarIcon = styled(Icon) <{ size?: string }>`
+export const DefaultAvatarIcon = styled(Icon)<{ size?: string }>`
   font-size: ${props => props.size || "1rem"};
   align-self: center;
 `;
