@@ -1,5 +1,4 @@
-import { Template, TemplateApi, PostedTemplate } from "adaptive-templating-service-typescript-node";
-import { RootState } from '../../store/rootReducer';
+import { Template, PostedTemplate } from 'adaptive-templating-service-typescript-node';
 
 export function getLatestVersion(template?: Template): string {
   if (template && template.instances && template.instances[0] && template.instances[0].version) {
@@ -15,13 +14,4 @@ export function getLatestTemplateInstanceState(template: Template): string {
   }
   // should never reach the next line
   return "";
-}
-
-export function initClientSDK(dispatch: any, getState: () => RootState ): TemplateApi {
-  const api = new TemplateApi();
-  const state = getState();
-  if (state.auth.accessToken) {
-    api.setApiKey(0, `Bearer ${state.auth.accessToken!.accessToken}`);
-  }
-  return api;
 }
