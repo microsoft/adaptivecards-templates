@@ -39,17 +39,15 @@ export class AzureADProvider implements AuthenticationProvider {
     for (const key of response.data.keys) {
       if (key.kid === kid) {
         const cert = "-----BEGIN CERTIFICATE-----\n" + key.x5c[0] + "\n-----END CERTIFICATE-----";
+        console.log(accessToken);
         result = jws.verify(accessToken, algorithm, cert);
+        console.log("cert: ", result);
         break;
       }
     }
 
-    // Check expiry date on token
-    result = result && new Date() <= new Date(decodedToken.payload.exp * 1000); 
-
     // Check aud of token matches the client ID of env app
-    let appId = "#{CLIENT_ID_TOKEN}#";
-    result = result && (appId === decodedToken.payload.appid || appId === decodedToken.payload.aud);
+    // result = "#{CLIENT_ID_TOKEN}#" === decodedToken.payload.aud;
 
     return result;
   }

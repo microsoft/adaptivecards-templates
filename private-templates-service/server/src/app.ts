@@ -34,7 +34,19 @@ app.use(session({
   saveUninitialized: true
 }));
 
-let mongoDB = new MongoDBProvider({ connectionString: "#{DB_CONNECTION_TOKEN}#" });
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+      "Access-Control-Allow-Headers",
+      "Origin, Content-Type, Accept, Authorization, api_key"
+  );
+  res.header(
+      "Access-Control-Allow-Methods",
+      "GET, POST, OPTIONS, DELETE"
+  );
+  next();
+});
+let mongoDB = new MongoDBProvider({ connectionString: "mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass%20Community&ssl=false" });
 mongoDB.connect()
   .then(
     (res) => {

@@ -12,8 +12,13 @@ export const Container = styled.div`
   max-width: 350px;
   border: 1px solid ${COLORS.BORDER2};
   border-radius: 5px;
+  cursor: pointer;
   @media only screen and (max-width: 1399px) {
     margin-bottom: 20px;
+  }
+
+  &: hover {
+    background: ${COLORS.GREYHOVER};
   }
 `;
 
