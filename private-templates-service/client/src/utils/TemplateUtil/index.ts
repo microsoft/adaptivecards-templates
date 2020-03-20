@@ -1,3 +1,3 @@
-import { getLatestVersion, getLatestTemplateInstanceState, initClientSDK } from './TemplateUtil';
+import { getLatestVersion, getLatestTemplateInstanceState } from './TemplateUtil';
 
-export { getLatestVersion, getLatestTemplateInstanceState, initClientSDK };
+export { getLatestVersion, getLatestTemplateInstanceState };
