@@ -23,3 +23,32 @@ export const Modal = styled.div`
   width: 50%;
   padding: 48px;
 `;
+
+export const ColumnWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+export const TitleWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+export const MiddleRowWrapper = styled.div`
+  display: flex;
+  direction: row;
+`;
+
+export const InfoWrapper = styled.div`
+  display: flex;
+  direction: column;
+`;
+
+export const CardWrapper = styled.div`
+
+`;
+
+export const ButtonWrapper = styled.div` 
+  display: flex;
+  direction: row;  
+`;

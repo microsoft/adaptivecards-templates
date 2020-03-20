@@ -221,6 +221,8 @@ export function updateTemplate(templateID?: string, currentVersion?: string, tem
     newTemplate.state = state;
     newTemplate.tags = tags;
     newTemplate.isShareable = isShareable;
+    console.log(newTemplate);
+    console.log("id",id);
 
     if (id === null || id === undefined || id === "") {
       dispatch(requestNewTemplateUpdate());
@@ -232,6 +234,7 @@ export function updateTemplate(templateID?: string, currentVersion?: string, tem
           dispatch(failureNewTemplateUpdate());
         }
       }).catch((error: any) => {
+        console.log("errrorrr",error);
         dispatch(failureNewTemplateUpdate());
       });
     }

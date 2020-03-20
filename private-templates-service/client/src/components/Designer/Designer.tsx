@@ -12,6 +12,7 @@ import * as ACDesigner from 'adaptivecards-designer';
 import { setPage, openModal } from '../../store/page/actions';
 import { DesignerWrapper } from './styled';
 
+import EditNameModal from '../Common/EditNameModal';
 import SaveModal from './SaveModal/SaveModal';
 import { ModalState } from '../../store/page/types';
 
@@ -22,7 +23,8 @@ const mapStateToProps = (state: RootState) => {
     templateName: state.currentTemplate.templateName,
     sampleDataJSON: state.currentTemplate.sampleDataJSON,
     modalState: state.page.modalState,
-    version: state.currentTemplate.version
+    version: state.currentTemplate.version,
+    isFetching: state.currentTemplate.isFetching
   };
 };
 
@@ -52,6 +54,7 @@ interface DesignerProps {
   openModal: (modalState: ModalState) => void;
   isSaveOpen: boolean;
   modalState?: ModalState;
+  isFetching: boolean;
 }
 
 let designer: ACDesigner.CardDesigner;
@@ -113,11 +116,11 @@ class Designer extends React.Component<DesignerProps> {
   }
 
   render() {
-    console.log(this.props.modalState,"modalstate insider redner");
     return (
       <React.Fragment>
         <DesignerWrapper id="designer-container" dangerouslySetInnerHTML={{ __html: "dangerouslySetACDesigner" }}></DesignerWrapper>
-        {this.props.modalState===ModalState.Save && <SaveModal designerSampleData = {designer.sampleData} designerTemplateJSON = {JSON.stringify(designer.getCard())}/>}
+        {this.props.modalState===ModalState.Save && <SaveModal designerSampleData = {designer.sampleData} designerTemplateJSON = {designer.getCard()}/>}
+        {this.props.modalState === ModalState.EditName && <EditNameModal />}
       </React.Fragment>
     );
   }
@@ -143,7 +146,12 @@ function initDesigner(): ACDesigner.CardDesigner {
 }
 
 function onSave(designer: ACDesigner.CardDesigner, props: DesignerProps): void {
-  console.log("onSave in the designer ", props, "sampleData", designer.sampleData, "designer Template Json",JSON.stringify(designer.getCard()) );
-  props.openModal(ModalState.Save);
+  if(props.templateID === ""){
+    props.openModal(ModalState.Save);
+  }
+  else if (JSON.stringify(props.templateJSON) !== JSON.stringify(designer.getCard()) || props.sampleDataJSON !== designer.sampleData){ 
+    props.updateTemplate(props.templateID, props.version, designer.getCard(), designer.sampleData, props.templateName);  
+  }
 }
+
 export default connect(mapStateToProps, mapDispatchToProps)(requireAuthentication(Designer));

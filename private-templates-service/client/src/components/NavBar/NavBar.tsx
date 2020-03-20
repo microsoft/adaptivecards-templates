@@ -32,8 +32,9 @@ const mapStateToProps = (state: RootState) => {
     currentPageTitle: state.page.currentPageTitle,
     currentPage: state.page.currentPage,
     template: state.currentTemplate.template,
-    // templateName: state.currentTemplate.templateName,
-    isFetching: state.currentTemplate.isFetching
+    templateID: state.currentTemplate.templateID,
+    isFetching: state.currentTemplate.isFetching,
+    templateName: state.currentTemplate.templateName
   }
 }
 
@@ -46,6 +47,7 @@ interface NavBarProps {
   isFetching: boolean;
   version?: string;
   clearParams: () => void;
+  templateID?: string;
 }
 
 
@@ -109,12 +111,12 @@ const NavBar = (props: NavBarProps) => {
         <Banner>
           <MobileBanner>
             <StyledLogo src={Logo} />
-            <Styledh1>{props.template ? props.template.name : props.currentPageTitle}</Styledh1>
-            <Styledh2>{props.version ? "Version " + props.version : ""}</Styledh2>
+            <Styledh1>{(props.templateID === "" && "Untitled Template") || props.templateName}</Styledh1>
+            {props.templateID !== "" && <EditButton onClick={editName} iconProps={{ iconName: 'Edit' }} />}
+            {/* <Styledh1>{props.template ? props.template.name : props.currentPageTitle}</Styledh1>
+            <Styledh2>{props.version ? "Version " + props.version : ""}</Styledh2> */}
           </MobileBanner>
-          <ActionButton onClick={finishButton}> 
-          {/* <ActionButton onClick={() => { history.push("/") }}>  */}
-          {/* set everything to undefiend for button press */}
+          <ActionButton onClick={() => { history.push("/") }}> 
             <StyledButton>
               <StyledButtonContent>
                 Finish
