@@ -6,6 +6,7 @@ import { getOwnerName, getOwnerProfilePicture } from "../../../../store/template
 import { OwnerType } from "../../../../store/templateOwner/types";
 
 import UserAvatar from "../../../SideBar/UserAvatar";
+import {InfoWrapper} from "./styled";
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -39,9 +40,9 @@ class OwnerInfo extends React.Component<Props> {
   }
   render() {
     return (
-      <div>
+      <InfoWrapper>
         <UserAvatar iconSize="1rem" setOwner={true} /> {(this.props.owner && this.props.owner.displayName) ? this.props.owner?.displayName : ""}
-      </div>
+      </InfoWrapper>
     );
   }
 }
