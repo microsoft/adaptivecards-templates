@@ -40,6 +40,7 @@ function createOwner(owner = initialOwnerState, action: GetOwnerNameAction | Get
 export function templateOwnerReducer(state = initialState, action: GetOwnerNameAction | GetOwnerProfilePictureAction): OwnerState {
   switch (action.type) {
     // empty case statement will "fall through" to logic in the next non-empty case
+
     case GET_OWNER_NAME:
     case GET_OWNER_PROFILE_PICTURE:
       return {
