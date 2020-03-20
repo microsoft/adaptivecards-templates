@@ -44,8 +44,8 @@ class Footer extends React.Component {
         <FooterOuterContainer>
           <FooterContainer>
             <FooterContents>
-              {footerLinks.map((val) => (
-                <FooterLink href={val.link}>{val.name}</FooterLink>
+              {footerLinks.map((val, index: number) => (
+                <FooterLink key={index} href={val.link}>{val.name}</FooterLink>
               ))}
             </FooterContents>
           </FooterContainer>

@@ -48,6 +48,10 @@ export const TemplateName = styled.div`
   font-size: 0.95rem;
   font-family: Segoe UI Semibold;
   color: black;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 196px;
+  overflow: hidden;
 `;
 export const TemplateUpdatedAt = styled.div`
   font-family: Segoe UI Regular;

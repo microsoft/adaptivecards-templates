@@ -25,8 +25,8 @@ interface Props {
 class RecentlyViewedTable extends React.Component<Props> {
   render() {
     const { templates, propsOnClick } = this.props;
-    let rows: JSX.Element[] = new Array();
-    rows = templates.map(template => {
+    let rows: JSX.Element[] = [];
+    rows = templates.map((template: Template, index: number) => {
       let onClick = () => {
         if (propsOnClick && template.id) {
           propsOnClick(template.id);
@@ -36,8 +36,7 @@ class RecentlyViewedTable extends React.Component<Props> {
         return <div>Error loading templates</div>
       }
       return (
-        <RecentlyViewedBodyRow onClick={onClick}>
-          {console.log(template)}
+        <RecentlyViewedBodyRow key={index} onClick={onClick}>
           <RecentlyViewedItem>{template.name}</RecentlyViewedItem>
           <RecentlyViewedItem>
             {template.updatedAt ? getDateString(template.updatedAt) : "N/A"}

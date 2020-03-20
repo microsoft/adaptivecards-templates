@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 
 import { COLORS, BREAK } from '../../globalStyles';
 
@@ -45,4 +46,8 @@ export const DescriptorWrapper = styled.div`
   flex: 1 0 auto;
   background: ${COLORS.WHITE};
   border-left: 1px solid ${COLORS.BORDER};
+`;
+
+export const CenteredSpinner = styled(Spinner)`
+  height: 100%;
 `;
