@@ -14,10 +14,10 @@ const mapStateToProps = (state: RootState) => {
 }
 
 const mapDispatchToProps = (dispatch: any) => {
-  return { 
+  return {
     clearFilter: () => {
       dispatch(clearFilter());
-    },  
+    },
     queryFilter: (filterType: string) => {
       dispatch(queryFilter(filterType));
     }
@@ -26,35 +26,31 @@ const mapDispatchToProps = (dispatch: any) => {
 
 interface Props {
   isSearch: boolean;
-  filterType: string; 
+  filterType: string;
   queryFilter: (filterType: string) => void;
   clearFilter: () => void;
 }
 
 const options: IDropdownOption[] = [
-  {key: 'created by me', text: "Created by me"},
-  {key: "draft", text: "Draft"},
-  {key: "published", text: "Published"}
+  { key: 'created by me', text: "Created by me" },
+  { key: "draft", text: "Draft" },
+  { key: "published", text: "Published" }
 ];
 
 class Filter extends React.Component<Props> {
-  constructor(props: Props) {
-    super(props);
-  };
-
   onChange = (event: React.FormEvent<HTMLDivElement>, option?: IDropdownOption) => {
-    if(option && typeof option.key === "string") {
-      this.props.queryFilter(option.key);  
+    if (option && typeof option.key === "string") {
+      this.props.queryFilter(option.key);
     }
   }
 
   render() {
     return (
       <StyledFilterDropdown
-        placeholder = "Filter by"
-        options = {options}
-        onChange = {this.onChange}
-        theme = {THEME.LIGHT}
+        placeholder="Filter by"
+        options={options}
+        onChange={this.onChange}
+        theme={THEME.LIGHT}
       />
     );
   }

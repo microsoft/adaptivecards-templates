@@ -42,7 +42,7 @@ import {
 
 import { getDateString } from '../../../utils/versionUtils';
 import ModalHOC from '../../../utils/ModalHOC';
-import { openModal, closeModal } from '../../../store/page/actions';
+import { closeModal } from '../../../store/page/actions';
 
 interface Props {
   template: Template;
@@ -72,7 +72,7 @@ interface State {
 class VersionModal extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { versionList: this.props.template.instances ? new Array(this.props.template.instances.length) : new Array() }
+    this.state = { versionList: this.props.template.instances ? new Array(this.props.template.instances.length) : [] }
   }
 
   delete = () => {

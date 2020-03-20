@@ -19,7 +19,7 @@ import {
   DELETE_TEMPLATE_INSTANCE_FAILURE
 } from './types';
 
-import { Template } from 'adaptive-templating-service-typescript-node';
+import { NEW_TEMPLATE_NAME } from '../../assets/strings';
 
 const initialState: CurrentTemplateState = {
   templateID: undefined,
@@ -35,9 +35,10 @@ export function currentTemplateReducer(state = initialState, action: CurrentTemp
     case NEW_TEMPLATE:
       return {
         ...state,
+        template: undefined,
         templateID: "",
         templateJSON: require('../../assets/default-adaptivecards/defaultAdaptiveCard.json'),
-        templateName: "Untitled",
+        templateName: NEW_TEMPLATE_NAME,
         sampleDataJSON: {},
         version: "",
         isFetching: false
@@ -123,20 +124,20 @@ export function currentTemplateReducer(state = initialState, action: CurrentTemp
         templateID: undefined,
         isFetching: false,
       }
-    case DELETE_TEMPLATE_INSTANCE: 
+    case DELETE_TEMPLATE_INSTANCE:
       return {
         ...state,
         isFetching: true
       }
     case DELETE_TEMPLATE_INSTANCE_SUCCESS:
       return {
-        ...state, 
+        ...state,
         template: action.template,
         isFetching: false
       }
-    case DELETE_TEMPLATE_INSTANCE_FAILURE: 
+    case DELETE_TEMPLATE_INSTANCE_FAILURE:
       return {
-        ...state, 
+        ...state,
         isFetching: false
       }
     default:

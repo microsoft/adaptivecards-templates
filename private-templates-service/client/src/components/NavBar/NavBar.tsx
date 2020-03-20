@@ -3,29 +3,43 @@ import React from "react";
 import { connect } from "react-redux";
 import { RootState } from "../../store/rootReducer";
 import { useHistory } from "react-router-dom";
+import { openModal } from '../../store/page/actions';
+import { ModalState } from '../../store/page/types';
 
 import { Template } from "adaptive-templating-service-typescript-node";
 
 import SearchBar from "./SearchBar";
 
-import { ActionButton } from "office-ui-fabric-react";
-
+import { ActionButton } from 'office-ui-fabric-react';
 import Logo from '../../assets/adaptive-cards-100-logo.png';
 
-import { Banner, Styledh1, StyledLogo, MobileBanner, StyledButton, Styledh2, StyledButtonContent } from './styled';
+import { Banner, Styledh1, StyledLogo, MobileBanner, BaselineBanner, StyledButton, Styledh2, StyledButtonContent, EditButton, BackButton, ButtonTextWrapper } from './styled';
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    openModal: () => {
+      dispatch(openModal(ModalState.EditName));
+    }
+  }
+}
 
 const mapStateToProps = (state: RootState) => {
   return {
     currentPageTitle: state.page.currentPageTitle,
     currentPage: state.page.currentPage,
-    template: state.currentTemplate.template
+    template: state.currentTemplate.template,
+    // templateName: state.currentTemplate.templateName,
+    isFetching: state.currentTemplate.isFetching
   }
 }
 
 interface NavBarProps {
+  openModal: () => void;
   currentPageTitle?: string;
   currentPage?: string;
   template?: Template;
+  templateName?: string;
+  isFetching: boolean;
   version?: string;
 }
 
@@ -43,6 +57,18 @@ const NavBar = (props: NavBarProps) => {
         </MobileBanner>
       </Banner>
     );
+  }
+
+  const editName = () => {
+    props.openModal();
+  }
+
+  const onBackButton = () => {
+    if (history.length > 0) {
+      history.goBack();
+    } else {
+      history.replace('/')
+    }
   }
 
   switch (props.currentPage.toLowerCase()) {
@@ -93,6 +119,17 @@ const NavBar = (props: NavBarProps) => {
           </MobileBanner>
         </Banner>
       );
+    case "template":
+      return (
+        <Banner>
+          <BaselineBanner>
+            <StyledLogo src={Logo} />
+            <Styledh1>{(props.template && props.template.name) || props.currentPageTitle}</Styledh1>
+            {!props.isFetching && <EditButton onClick={editName} iconProps={{ iconName: 'Edit' }} />}
+          </BaselineBanner>
+          <BackButton iconProps={{ iconName: 'Back' }} onClick={onBackButton}><ButtonTextWrapper>Back</ButtonTextWrapper></BackButton>
+        </Banner>
+      );
     default:
       return (
         <Banner>
@@ -106,4 +143,4 @@ const NavBar = (props: NavBarProps) => {
 }
 
 
-export default connect(mapStateToProps)(NavBar);
+export default connect(mapStateToProps, mapDispatchToProps)(NavBar);

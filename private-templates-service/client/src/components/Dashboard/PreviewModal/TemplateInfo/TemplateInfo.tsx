@@ -15,11 +15,12 @@ import PublishModal from '../../../Common/PublishModal';
 import UnpublishModal from '../../../Common/UnpublishModal';
 import Tags from '../../../Common/Tags';
 import ShareModal from '../../../Common/ShareModal';
+import EditNameModal from '../../../Common/EditNameModal';
 import DeleteModal from '../../../Common/DeleteModal';
 
 import VersionCard from './VersionCard';
 
-import { ActionButton, IDropdownOption } from 'office-ui-fabric-react';
+import { IDropdownOption } from 'office-ui-fabric-react';
 
 import { EDIT_IN_DESIGNER, DELETE, SHARE, PUBLISH, UNPUBLISH } from "../../../../assets/strings"
 import { THEME } from '../../../../globalStyles';
@@ -150,17 +151,15 @@ class TemplateInfo extends React.Component<Props, State> {
 
   render() {
     const {
-      isLive,
       tags,
-      createdAt,
+      updatedAt,
       instances,
     } = this.props.template;
 
-    let createdAtParsed = "";
-
-    if (createdAt) {
-      const createdAtDate = new Date(createdAt);
-      createdAtParsed = createdAtDate.toLocaleString();
+    let timestampParsed = "";
+    if (updatedAt) {
+      const tempDate = new Date(updatedAt);
+      timestampParsed = tempDate.toLocaleString();
     }
 
     const { history } = this.props;
@@ -169,7 +168,7 @@ class TemplateInfo extends React.Component<Props, State> {
     }
     let templateState = getTemplateState(this.props.template, this.state.version);
     return (
-      < OuterWrapper >
+      <OuterWrapper>
         <HeaderWrapper>
           <TopRowWrapper>
             <TitleWrapper>
@@ -186,7 +185,7 @@ class TemplateInfo extends React.Component<Props, State> {
               <Status>{PostedTemplate.StateEnum[templateState]}</Status>
             </TitleWrapper>
             <TimeStamp>
-              Created {createdAtParsed}
+              Updated {timestampParsed}
             </TimeStamp>
           </TopRowWrapper>
           <ActionsWrapper>
@@ -229,6 +228,7 @@ class TemplateInfo extends React.Component<Props, State> {
         {this.props.modalState === ModalState.Unpublish && <UnpublishModal template={this.props.template} templateVersion={this.state.version} />}
         {this.props.modalState === ModalState.Share && <ShareModal template={this.props.template} templateVersion={this.state.version} />}
         {this.props.modalState === ModalState.Delete && <DeleteModal template={this.props.template} templateVersion={this.state.version} />}
+        {this.props.modalState === ModalState.EditName && <EditNameModal />}
       </OuterWrapper>
     );
   }
@@ -244,7 +244,7 @@ function onActionButtonClick(props: Props, state: State, val: any) {
     case EDIT_IN_DESIGNER:
       const { history } = props;
       if (history) history.push('/designer');
-      break;      
+      break;
     case DELETE:
       props.openModal(ModalState.Delete);
       break;
@@ -262,6 +262,7 @@ function onActionButtonClick(props: Props, state: State, val: any) {
         default:
           break;
       }
+      break;
     default:
       break;
   }
