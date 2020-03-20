@@ -35,6 +35,7 @@ class RecentlyViewedTable extends React.Component<Props> {
       if (!template || !template.instances || !template.instances[0] || !template.instances[0].lastEditedUser) {
         return <div>Error loading templates</div>
       }
+
       return (
         <RecentlyViewedBodyRow key={index} onClick={onClick}>
           <RecentlyViewedItem>{template.name}</RecentlyViewedItem>
