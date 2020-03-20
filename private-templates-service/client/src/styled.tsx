@@ -10,6 +10,7 @@ export const MainAppWrapper = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1 1 auto;
+  overflow: auto;
 `;
 
 export const MainApp = styled.div`

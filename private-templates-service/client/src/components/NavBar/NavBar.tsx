@@ -130,6 +130,16 @@ const NavBar = (props: NavBarProps) => {
           <BackButton iconProps={{ iconName: 'Back' }} onClick={onBackButton}><ButtonTextWrapper>Back</ButtonTextWrapper></BackButton>
         </Banner>
       );
+    case "allcards":
+      return (
+        <Banner>
+          <MobileBanner>
+            <StyledLogo src={Logo} />
+            <Styledh1>{props.currentPageTitle}</Styledh1>
+          </MobileBanner>
+          <SearchBar />
+        </Banner>
+      );
     default:
       return (
         <Banner>
