@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { BackDrop, Modal, TitleWrapper, ColumnWrapper, InfoWrapper, CardWrapper, ButtonWrapper, MiddleRowWrapper } from './styled';
+import { BackDrop, Modal, TitleWrapper, ColumnWrapper, InfoWrapper, CardWrapper, ButtonWrapper, MiddleRowWrapper, Card, StyledTitle } from './styled';
 import { PrimaryButton } from 'office-ui-fabric-react';
 import ModalHOC from '../../../utils/ModalHOC';
 import { RootState } from '../../../store/rootReducer';
@@ -8,6 +8,12 @@ import { ModalState } from '../../../store/page/types';
 import { closeModal } from '../../../store/page/actions';
 import { updateTemplate } from '../../../store/currentTemplate/actions';
 import { PostedTemplate } from 'adaptive-templating-service-typescript-node';
+import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import  AdaptiveCard from '../../Common/AdaptiveCard';
+import * as AdaptiveCards from "adaptivecards";
+import * as ACData from "adaptivecards-templating";
+import Tags from '../../Common/Tags';
+
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -29,6 +35,7 @@ interface Props {
   designerSampleData?: any;
   designerTemplateJSON?: any;
   version?: string;
+  
 }
 
 const mapDispatchToProps = (dispatch: any) => {
@@ -37,7 +44,7 @@ const mapDispatchToProps = (dispatch: any) => {
       dispatch(closeModal());
     },
     updateTemplate: (templateID?: string, currentVersion?: string, templateJSON?: object, sampleDataJSON?: object, templateName?: string) => {
-      dispatch(updateTemplate(templateID, currentVersion, templateJSON, sampleDataJSON,templateName,));
+      dispatch(updateTemplate(templateID, currentVersion, templateJSON, sampleDataJSON, templateName,));
     } 
   }
 }
@@ -45,6 +52,11 @@ const mapDispatchToProps = (dispatch: any) => {
 class SaveModal extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
+    let tags: string[] = []
+  }
+  
+  saveTags = (tagsToUpdate: string[]) => {
+    //tags = tagsToUpdate
   }
 
   onClick = () => {
@@ -57,23 +69,38 @@ class SaveModal extends React.Component<Props> {
     }
     this.props.closeModal();
   }
+  
   render(){ 
+    var adaptiveCard = new AdaptiveCards.AdaptiveCard();
+    adaptiveCard.hostConfig = new AdaptiveCards.HostConfig({
+      fontFamily: "Segoe UI, Helvetica Neue, sans-serif"
+    });
+    adaptiveCard.onExecuteAction = function(action) { alert("Ow!"); }
+    adaptiveCard.parse(this.props.designerTemplateJSON);
+    var renderedCard = adaptiveCard.render();
+    
+
+
+    let tags: string[] = [];
     return(
       <BackDrop>
         <Modal>
           <ColumnWrapper>
             <TitleWrapper>
-              <div>Save card</div>
+              <StyledTitle> Save Card </StyledTitle>
               <div>Your card will be saved as a draft until you publish it to your organization.</div>
             </TitleWrapper>
             <MiddleRowWrapper>
               <CardWrapper>
-                <div>card goes here</div>
+                <Card ref={n => {
+                  // Work around for known issue: https://github.com/gatewayapps/react-adaptivecards/issues/10
+                  n && n.firstChild && n.removeChild(n.firstChild);
+                  n && n.appendChild(renderedCard);
+                }}/>
               </CardWrapper>
               <InfoWrapper>
-                <div>card name</div>
-                <div>enter card name</div>
-                <div>tags + add tags</div>
+                <TextField label="Card Name" />
+                <Tags updateTags = {this.saveTags} tags={tags} allowAddTag={true} allowEdit={true} />
               </InfoWrapper>
             </MiddleRowWrapper>
             <ButtonWrapper>

@@ -5,7 +5,7 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { RootState } from '../../../../store/rootReducer';
 import { openModal, closeModal } from '../../../../store/page/actions';
 import { ModalState } from '../../../../store/page/types';
-import { updateCurrentTemplateVersion } from '../../../../store/currentTemplate/actions';
+import { updateCurrentTemplateVersion, updateTemplate } from '../../../../store/currentTemplate/actions';
 
 import { Template, TemplateInstance, PostedTemplate } from 'adaptive-templating-service-typescript-node';
 
@@ -88,6 +88,7 @@ interface Props extends RouteComponentProps {
   modalState?: ModalState;
   openModal: (modalState: ModalState) => void;
   closeModal: () => void;
+  updateTags: (tags: string[]) => void;
 }
 
 interface State {
@@ -112,6 +113,9 @@ const mapDispatchToProps = (dispatch: any) => {
     },
     updateCurrentTemplateVersion: (template: Template, version: string) => {
       dispatch(updateCurrentTemplateVersion(template, version))
+    },
+    updateTags: (tags: string[]) => {
+      dispatch(updateTemplate(undefined, undefined, undefined, undefined, undefined, undefined, tags))
     }
   }
 };
@@ -147,6 +151,9 @@ class TemplateInfo extends React.Component<Props, State> {
     this.setState({ version: version });
     this.props.updateCurrentTemplateVersion(this.props.template, version);
     this.props.onSwitchVersion(version);
+  }
+  saveTags = (tags: string[]) => {
+    this.props.updateTags(tags);
   }
 
   render() {
@@ -216,7 +223,7 @@ class TemplateInfo extends React.Component<Props, State> {
             <CardHeader>Tags</CardHeader>
             <CardBody>
               <TagsWrapper>
-                <Tags tags={tags} allowAddTag={true} allowEdit={true} />
+                <Tags updateTags = {this.saveTags} tags={tags} allowAddTag={true} allowEdit={true} />
               </TagsWrapper>
             </CardBody>
           </Card>

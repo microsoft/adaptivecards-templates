@@ -25,14 +25,6 @@ const mapStateToProps = (state: RootState) => {
   }
 }
 
-const mapDispatchToProps = (dispatch: any) => {
-  return {
-    updateTags: (tags: string[]) => {
-      dispatch(updateTemplate(undefined, undefined, undefined, undefined, undefined, undefined, tags))
-    }
-  }
-}
-
 interface Props {
   tags?: string[];
   allowEdit?: boolean;
@@ -83,16 +75,16 @@ class Tags extends React.Component<Props, State>  {
 
   submitNewTag = (e: any): void => {
     e.preventDefault();
-    if (this.addTagInput && this.addTagInput.current && this.props.template && this.props.template.tags) {
+    if (this.addTagInput && this.addTagInput.current && this.props.tags) {
       const tag = this.addTagInput.current.value;
-      if(this.props.template.tags.includes(tag)){
-        this.highlightTag(tag, this.props.template.tags);
+      if(this.props.tags.includes(tag)){
+        this.highlightTag(tag, this.props.tags);
       }
       else if(tag === ""){
         this.closeAddTag();
       }
       else{
-        this.props.updateTags([...this.props.template.tags, tag]);
+        this.props.updateTags([...this.props.tags, tag]);
       }
     }
   }
@@ -155,4 +147,4 @@ class Tags extends React.Component<Props, State>  {
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(Tags);
+export default connect(mapStateToProps)(Tags);
