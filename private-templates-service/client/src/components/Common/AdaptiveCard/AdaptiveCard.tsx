@@ -30,8 +30,6 @@ function renderingSetup(hostConfig?: any): AdaptiveCards.AdaptiveCard {
   adaptiveCard.hostConfig = new AdaptiveCards.HostConfig(hostConfig || {
     fontFamily: "Segoe UI, Helvetica Neue, sans-serif"
   });
-
-
   return adaptiveCard;
 }
 
