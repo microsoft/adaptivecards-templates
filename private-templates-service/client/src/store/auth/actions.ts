@@ -1,10 +1,8 @@
 import {
   LOGOUT,
-  ACCESS_TOKEN_SET,
   GRAPH_ACCESS_TOKEN_SET,
   UserType,
   AuthAction,
-  AccessTokenAction,
   GraphAccessTokenAction,
   GetUserDetailsAction,
   GetOrgDetailsAction,
@@ -35,13 +33,6 @@ export function setGraphAccessToken(graphAccessToken: AuthResponse): GraphAccess
   return {
     type: GRAPH_ACCESS_TOKEN_SET,
     graphAccessToken
-  }
-}
-
-export function setAccessToken(accessToken: AuthResponse): AccessTokenAction {
-  return {
-    type: ACCESS_TOKEN_SET, 
-    accessToken
   }
 }
 
