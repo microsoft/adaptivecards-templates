@@ -256,7 +256,7 @@ paths:
           required: true
           type: string
         - in: "body"
-          name: "body"
+          name: "VersionList"
           description: "template versions to delete"
           required: true
           schema:
@@ -297,9 +297,7 @@ paths:
           description: "list of template versions and desired states"
           required: true
           schema:
-            type: array
-            items:
-              $ref: "#/definitions/UpdateTemplateState"
+            $ref: "#/definitions/UpdateTemplateStateList"
       responses:
         201: 
           description: "successful operation"
@@ -575,3 +573,11 @@ definitions:
           - "draft"
           - "live"
           - "deprecated"
+        type: string
+  UpdateTemplateStateList:
+    type: object
+    properties:
+      templates:
+        type: array
+        items:
+          $ref: "#/definitions/UpdateTemplateState"  
