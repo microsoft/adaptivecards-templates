@@ -3,7 +3,6 @@ import React from 'react';
 import { Template, TemplateInstance } from 'adaptive-templating-service-typescript-node';
 
 import * as AdaptiveCards from "adaptivecards";
-
 import * as ACData from "adaptivecards-templating";
 import markdownit from "markdown-it";
 
