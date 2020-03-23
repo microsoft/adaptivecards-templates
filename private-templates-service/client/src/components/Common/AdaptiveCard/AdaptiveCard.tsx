@@ -28,10 +28,10 @@ function renderingSetup(hostConfig?: any): AdaptiveCards.AdaptiveCard {
   let adaptiveCard = new AdaptiveCards.AdaptiveCard();
   // Set its hostConfig property unless you want to use the default Host Config
   // Host Config defines the style and behavior of a card
-  adaptiveCard.hostConfig = new AdaptiveCards.HostConfig(hostConfig || {});
+  adaptiveCard.hostConfig = new AdaptiveCards.HostConfig(hostConfig || {
+    fontFamily: "Segoe UI, Helvetica Neue, sans-serif"
+  });
 
-  // console.log((OutlookDesktop));
-  // adaptiveCard.hostConfig = new AdaptiveCards.HostConfig(OutlookDesktop);
 
   return adaptiveCard;
 }
