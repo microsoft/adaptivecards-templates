@@ -14,6 +14,7 @@ interface Props {
   cardtemplate: Template;
   templateVersion: string;
   hostConfig?: any;
+  hoverEffect?: boolean;
 }
 
 function renderingSetup(hostConfig?: any): AdaptiveCards.AdaptiveCard {
@@ -97,6 +98,7 @@ class AdaptiveCard extends React.Component<Props> {
     }
     return (
       <Card
+        hoverEffect={this.props.hoverEffect || false}
         onClick={this.props.onClick}
         ref={n => {
           // Work around for known issue: https://github.com/gatewayapps/react-adaptivecards/issues/10
