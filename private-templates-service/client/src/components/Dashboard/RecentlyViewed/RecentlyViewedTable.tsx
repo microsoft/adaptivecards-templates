@@ -26,7 +26,9 @@ class RecentlyViewedTable extends React.Component<Props> {
   render() {
     const { templates, propsOnClick } = this.props;
     let rows: JSX.Element[] = [];
-    rows = templates.map((template: Template, index: number) => {
+    let index: number = -1;
+    rows = templates.map((template: Template) => {
+      index++;
       let onClick = () => {
         if (propsOnClick && template.id) {
           propsOnClick(template.id);
@@ -54,8 +56,8 @@ class RecentlyViewedTable extends React.Component<Props> {
               <Status>{template.isLive ? "Published" : "Draft"}</Status>
             </TemplateStateWrapper>
           </RecentlyViewedItem>
-          <RecentlyViewedItem><OwnerInfo oID={template.instances[0]!.lastEditedUser!}></OwnerInfo></RecentlyViewedItem>
-        </RecentlyViewedBodyRow>
+          <RecentlyViewedItem><OwnerInfo oID={template.instances[0]!.lastEditedUser!} index={index}></OwnerInfo></RecentlyViewedItem>
+        </RecentlyViewedBodyRow >
       );
     });
     return <RecentlyViewedBody>{rows}</RecentlyViewedBody>;

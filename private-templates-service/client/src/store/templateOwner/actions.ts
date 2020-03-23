@@ -18,10 +18,11 @@ function requestOwnerName(): GetOwnerNameAction {
   }
 }
 
-function requestOwnerNameSuccess(ownerName: string): GetOwnerNameAction {
+function requestOwnerNameSuccess(ownerName: string, index: number): GetOwnerNameAction {
   return {
     type: GET_OWNER_NAME_SUCCESS,
     ownerName,
+    index,
   }
 }
 
@@ -37,10 +38,11 @@ function requestOwnerProfilePicture(): GetOwnerProfilePictureAction {
   }
 }
 
-function requestOwnerProfilePictureSuccess(ownerImageURL: string): GetOwnerProfilePictureAction {
+function requestOwnerProfilePictureSuccess(ownerImageURL: string, index: number): GetOwnerProfilePictureAction {
   return {
     type: GET_OWNER_PROFILE_PICTURE_SUCCESS,
-    ownerImageURL
+    ownerImageURL,
+    index,
   }
 }
 
@@ -50,7 +52,7 @@ function requestOwnerProfilePictureFailure(): GetOwnerProfilePictureAction {
   }
 }
 
-export function getOwnerName(oID: string) {
+export function getOwnerName(oID: string, index: number) {
   return function (dispatch: any, getState: () => RootState) {
     dispatch(requestOwnerName());
     const state = getState();
@@ -64,7 +66,7 @@ export function getOwnerName(oID: string) {
         if (!name.value) {
           dispatch(requestOwnerNameFailure());
         } else {
-          dispatch(requestOwnerNameSuccess(name.value));
+          dispatch(requestOwnerNameSuccess(name.value, index));
         }
       }, (fail: any) => {
         dispatch(requestOwnerNameFailure());
@@ -72,7 +74,7 @@ export function getOwnerName(oID: string) {
   }
 }
 
-export function getOwnerProfilePicture(oID: string) {
+export function getOwnerProfilePicture(oID: string, index: number) {
   return function (dispatch: any, getState: () => RootState) {
     dispatch(requestOwnerProfilePicture());
     const state = getState();
@@ -85,7 +87,7 @@ export function getOwnerProfilePicture(oID: string) {
     return client.api('/users/' + oID + '/photo/$value').get()
       .then((image: Blob) => {
         const imageURL = URL.createObjectURL(image);
-        dispatch(requestOwnerProfilePictureSuccess(imageURL));
+        dispatch(requestOwnerProfilePictureSuccess(imageURL, index));
       }, (fail: any) => {
         dispatch(requestOwnerProfilePictureFailure());
       })

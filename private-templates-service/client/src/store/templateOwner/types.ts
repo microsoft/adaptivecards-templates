@@ -1,11 +1,11 @@
 export interface OwnerState {
-  owner?: OwnerType;
+  owners?: OwnerType;
   isFetching: boolean;
 }
 
 export interface OwnerType {
-  displayName?: string;
-  imageURL?: string;
+  displayNames?: { [index: number]: string; };
+  imageURLs?: { [index: number]: string; };
 }
 
 export const GET_OWNER_NAME = 'GET_OWNER_NAME';
@@ -18,10 +18,12 @@ export const GET_OWNER_PROFILE_PICTURE_FAILURE = 'GET_OWNER_PROFILE_PICTURE_FAIL
 
 export interface GetOwnerNameAction {
   type: typeof GET_OWNER_NAME | typeof GET_OWNER_NAME_SUCCESS | typeof GET_OWNER_NAME_FAILURE;
+  index?: number;
   ownerName?: string;
 }
 
 export interface GetOwnerProfilePictureAction {
   type: typeof GET_OWNER_PROFILE_PICTURE | typeof GET_OWNER_PROFILE_PICTURE_SUCCESS | typeof GET_OWNER_PROFILE_PICTURE_FAILURE;
+  index?: number;
   ownerImageURL?: string;
 }

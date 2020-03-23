@@ -8,27 +8,28 @@ import { PersonaSize } from 'office-ui-fabric-react/lib/Persona';
 
 interface Props {
   owner?: OwnerType;
+  index: number;
 }
 
 const mapStateToProps = (state: RootState) => {
   return {
-    owner: state.templateOwner.owner
+    owner: state.templateOwner.owners
   };
 };
 
 class OwnerAvatar extends React.Component<Props> {
   render() {
-    if (this.props.owner && this.props.owner.imageURL) {
+    if (this.props.owner && this.props.owner.imageURLs && this.props.owner.imageURLs[this.props.index]) {
       let facepileProps: IFacepileProps = {
         personaSize: PersonaSize.size24,
-        personas: new Array({ imageUrl: this.props.owner.imageURL, }),
+        personas: new Array({ imageUrl: this.props.owner.imageURLs[this.props.index], }),
       };
       return (<Facepile {...facepileProps} />)
     }
-    else if (this.props.owner && this.props.owner.displayName && this.props.owner.displayName[0]) {
+    else if (this.props.owner && this.props.owner.displayNames && this.props.owner.displayNames[this.props.index] && this.props.owner.displayNames[this.props.index][0]) {
       let facepileProps: IFacepileProps = {
         personaSize: PersonaSize.size24,
-        personas: new Array({ imageInitials: this.props.owner.displayName[0], }),
+        personas: new Array({ imageInitials: this.props.owner.displayNames[this.props.index][0], }),
       };
       return (<Facepile {...facepileProps} />)
     }
