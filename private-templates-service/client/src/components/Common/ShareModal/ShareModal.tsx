@@ -5,6 +5,8 @@ import { Template } from 'adaptive-templating-service-typescript-node';
 import Config from '../../../Config';
 import ShareModalForm from './ShareModalForm';
 
+import ModalHOC from '../../../utils/ModalHOC';
+
 import { closeModal } from '../../../store/page/actions';
 import { connect } from 'react-redux';
 
@@ -19,9 +21,11 @@ import {
   ShareLinkPanel,
   SemiBoldText,
   LinkRow,
-  TextFieldContainer
+  TextFieldContainer,
+  CopyLinkButton
 } from './styled';
-import ModalHOC from '../../../utils/ModalHOC';
+import * as STRINGS from '../../../assets/strings';
+
 
 interface ShareModalProps {
   template: Template;
@@ -43,11 +47,11 @@ class ShareModal extends React.Component<ShareModalProps> {
     return (
       <BackDrop>
         <Modal>
-          <Header>Share template version</Header>
-          <Description>You will be sharing your template below. Shared users can only view your template.</Description>
+          <Header>{STRINGS.SHARE_MODAL_TITLE}</Header>
+          <Description>{getShareModalDescription(this.props.template, this.props.templateVersion!)}</Description>
           <CenterPanelWrapper>
             <ShareLinkPanel>
-              <SemiBoldText>Share with link</SemiBoldText>
+              <SemiBoldText>{STRINGS.SHARE_WITH_LINK}</SemiBoldText>
               <LinkRow>
                 <TextFieldContainer>
                   <TextField readOnly={true}
@@ -55,9 +59,9 @@ class ShareModal extends React.Component<ShareModalProps> {
                     defaultValue={getShareURL(this.props)}
                     width={100} />
                 </TextFieldContainer>
-                <Button iconProps={{ iconName: 'Copy' }} onClick={() => { onCopyURL(this.props) }}>
-                  Copy
-                </Button>
+                <CopyLinkButton iconProps={{ iconName: 'Copy' }} onClick={() => { onCopyURL(this.props) }}>
+                  {STRINGS.COPY_LINK}
+                </CopyLinkButton>
               </LinkRow>
             </ShareLinkPanel>
             <ShareModalForm shareURL={Config.redirectUri + getShareURL(this.props)} templateVersion={this.props.templateVersion} />
@@ -81,6 +85,10 @@ function onCopyURL(props: ShareModalProps) {
 
 function getShareURL(props: ShareModalProps): string {
   return "/preview/" + props.template.id + "/" + props.templateVersion;
+}
+
+function getShareModalDescription(template: Template, templateVersion: string): string {
+  return STRINGS.SHARE_MODAL_DESCRIPTION + template!.name + " - " + templateVersion;
 }
 
 export default ModalHOC(connect(() => { return {} }, mapDispatchToProps)(ShareModal));
