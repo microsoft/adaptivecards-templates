@@ -5,7 +5,7 @@ import { TemplateError, ApiError, ServiceErrorMessage } from "./models/errorMode
 import { StorageProvider } from ".";
 import { ITemplate, JSONResponse, ITemplateInstance, IUser } from ".";
 import { SortBy, SortOrder, TemplatePreview, TemplateState, TemplateInstancePreview, TagList, TemplateStateRequest } from "./models/models";
-import { updateTemplateToLatestInstance, removeMostRecentTemplate, getTemplateVersion, isValidJSONString, setTemplateInstanceParam, incrementVersion, anyVersionsLive, sortTemplateByVersion, parseToken, getMostRecentVersion, checkValidTemplateState } from "./util/templateutils";
+import { updateTemplateToLatestInstance, removeMostRecentTemplate, getTemplateVersion, isValidJSONString, setTemplateInstanceParam, incrementVersion, anyVersionsLive, sortTemplateByVersion, parseToken, getMostRecentVersion, checkValidTemplateState, incrementVersionStr } from "./util/templateutils";
 import logger from "./util/logger"
 export class TemplateServiceClient {
   private storageProvider: StorageProvider;
@@ -480,13 +480,28 @@ export class TemplateServiceClient {
     }
 
     let existingTemplate: ITemplate = response.result[0];
-
+    let latestVersion: string = getMostRecentVersion(existingTemplate)?.version || "1.0";
     let templateInstances: ITemplateInstance[] = [];
     for (let instance of existingTemplate.instances || []) {
       for (let request of requests) {
-        if (request.version == instance.version) {
+        if (request.version === instance.version) {
           if (instance.state && checkValidTemplateState(instance.state, request.state)){
             instance.state = request.state;
+          }
+          if (instance.state === TemplateState.deprecated && request.state === TemplateState.live) {
+            const instanceCopy: ITemplateInstance = {
+              json: instance.json,
+              version: incrementVersionStr(latestVersion),
+              publishedAt: new Date(Date.now()),
+              state: TemplateState.live,
+              isShareable: false,
+              numHits: 0,
+              data: instance.data,
+              updatedAt: new Date(Date.now()),
+              lastEditedUser: authId
+            };
+            latestVersion = instanceCopy.version;
+            templateInstances.push(instanceCopy);
           }
           break;
         }

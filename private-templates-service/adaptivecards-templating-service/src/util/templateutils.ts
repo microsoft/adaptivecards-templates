@@ -86,7 +86,13 @@ export function compareVersion(a: string, b: string): boolean {
 export function incrementVersion(template: ITemplate): string{ 
   // check if this is the most recent version 
   let latestTemplate = getMostRecentVersion(template);
-  let version = latestTemplate?.version.split(".");
+  if (!latestTemplate?.version) return "";
+  return incrementVersionStr(latestTemplate?.version);
+}
+
+export function incrementVersionStr(latestVersion: string): string{ 
+  // check if this is the most recent version 
+  let version = latestVersion.split(".");
 
   if(!version){
     return "1.0";
@@ -100,6 +106,7 @@ export function incrementVersion(template: ITemplate): string{
   }
   return (version[0] + "." + version[1]);
 }
+
 
 export function setTemplateInstanceParam(templateInstance: ITemplateInstance, templateData: JSON[] | undefined, state: TemplateState | undefined, isShareable: boolean | undefined, version?: string): ITemplateInstance { 
   // set params for the template instance. 
@@ -171,7 +178,7 @@ export function checkValidTemplateState(currState: TemplateState, desiredState: 
     case TemplateState.draft:
       return desiredState !== TemplateState.deprecated;
     case TemplateState.deprecated:
-      return false;
+      return desiredState === TemplateState.deprecated;
     case TemplateState.live:
       return desiredState !== TemplateState.draft;
     default:
