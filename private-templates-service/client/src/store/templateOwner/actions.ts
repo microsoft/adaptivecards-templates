@@ -86,9 +86,8 @@ export function getOwnerProfilePicture(oID: string) {
       .then((image: Blob) => {
         const imageURL = URL.createObjectURL(image);
         dispatch(requestOwnerProfilePictureSuccess(imageURL));
-      },
-        (fail: any) => {
-          dispatch(requestOwnerProfilePictureFailure());
-        })
+      }, (fail: any) => {
+        dispatch(requestOwnerProfilePictureFailure());
+      })
   }
 }
