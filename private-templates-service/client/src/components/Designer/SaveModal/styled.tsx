@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { COLORS } from '../../../globalStyles';
-import { DefaultButton } from 'office-ui-fabric-react';
+import { DefaultButton, PrimaryButton, TextField } from 'office-ui-fabric-react';
 
 export const BackDrop = styled.div`
   position: fixed;
@@ -32,30 +32,48 @@ export const ColumnWrapper = styled.div`
 export const TitleWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  margin-bottom: 15px;
 `;
 
 export const MiddleRowWrapper = styled.div`
   display: flex;
-  direction: row;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  
 `;
 
 export const InfoWrapper = styled.div`
   display: flex;
-  direction: column;
+  flex-direction: column;
+  flex: 1;
 `;
 
-export const CardWrapper = styled.div`
-  flex: 0.47 0 0;
+export const TemplateFooterWrapper = styled.div`
+  padding: 10px 0px 10px 20px;
+  flex: 1;
   display: flex;
-  flex-direction: column;
-  box-shadow: 0px 3px 6px #00000029;
-  padding: 8px 0px 16px;
-  margin-bottom: 24px;
+  flex-direction: row;
+  align-items: baseline;
+  border-top: 1px solid ${COLORS.BORDER2};
+`;
+
+export const TemplateNameWrapper = styled.div`
+  flex: 0.8;
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+`;
+
+export const StyledH3 = styled.h3`
+  font-size: 1rem;
+  font-weight: 500;
 `;
 
 export const ButtonWrapper = styled.div` 
   display: flex;
-  direction: row;  
+  direction: row; 
+  justify-content: flex-end; 
 `;
 export const StyledTitle = styled.h1`
   font-size: 2rem;
@@ -64,4 +82,24 @@ export const StyledTitle = styled.h1`
 
 export const Card = styled.div`
   pointer-events: none;
+`;
+
+export const TagsWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+`;
+
+export const StyledSaveButton = styled(PrimaryButton)`
+  margin-left: 5px;
+  min-width: 150px
+`;
+
+export const StyledCancelButton = styled(DefaultButton)`
+  margin-right: 5px;
+  min-width: 150px
+`;
+
+export const StyledTextField = styled(TextField)`
+  margin-bottom: 5px;
 `;

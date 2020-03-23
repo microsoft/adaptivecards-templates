@@ -101,6 +101,10 @@ class Dashboard extends React.Component<Props> {
     // do nothing
   }
 
+  tagRemove = (tag: string) => {
+    // do nothing
+  }
+
   render() {
     if (this.props.isSearch) {
       return (
@@ -167,7 +171,7 @@ class Dashboard extends React.Component<Props> {
           </DashboardContainer>
           <TagsContainer>
             <Title style={{ marginRight: "150px", color: 'pink' }}>Tags</Title>
-            <Tags updateTags = {this.saveTags} tags={tags} allowEdit={false}></Tags>
+            <Tags updateTags = {this.saveTags} tagRemove = {this.tagRemove} tags={tags} allowEdit={false}></Tags>
           </TagsContainer>
         </OuterWindow>
         <Footer />

@@ -55,13 +55,6 @@ const NavBar = (props: NavBarProps) => {
 
   let history = useHistory();
 
-  const finishButton = () => {
-    //console.log("finish button triggered", props)
-    //props.clearParams();
-    //console.log("after clearParams triggered", props)
-    history.push("/")
-  }
-
   if (!props.currentPage) {
     return (
       <Banner>
@@ -113,8 +106,6 @@ const NavBar = (props: NavBarProps) => {
             <StyledLogo src={Logo} />
             <Styledh1>{(props.templateID === "" && "Untitled Template") || props.templateName}</Styledh1>
             {props.templateID !== "" && <EditButton onClick={editName} iconProps={{ iconName: 'Edit' }} />}
-            {/* <Styledh1>{props.template ? props.template.name : props.currentPageTitle}</Styledh1>
-            <Styledh2>{props.version ? "Version " + props.version : ""}</Styledh2> */}
           </MobileBanner>
           <ActionButton onClick={() => { history.push("/") }}> 
             <StyledButton>

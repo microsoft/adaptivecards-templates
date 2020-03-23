@@ -1,19 +1,30 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { BackDrop, Modal, TitleWrapper, ColumnWrapper, InfoWrapper, CardWrapper, ButtonWrapper, MiddleRowWrapper, Card, StyledTitle } from './styled';
-import { PrimaryButton } from 'office-ui-fabric-react';
+import { Status, StatusIndicator} from '../../Dashboard/PreviewModal/TemplateInfo/styled';
 import ModalHOC from '../../../utils/ModalHOC';
 import { RootState } from '../../../store/rootReducer';
-import { ModalState } from '../../../store/page/types';
 import { closeModal } from '../../../store/page/actions';
 import { updateTemplate } from '../../../store/currentTemplate/actions';
 import { PostedTemplate } from 'adaptive-templating-service-typescript-node';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import  AdaptiveCard from '../../Common/AdaptiveCard';
 import * as AdaptiveCards from "adaptivecards";
-import * as ACData from "adaptivecards-templating";
 import Tags from '../../Common/Tags';
 
+import { Container, TemplateName, ACWrapper, TemplateFooterWrapper, TemplateStateWrapper } from '../../AdaptiveCardPanel/styled';
+import { 
+  BackDrop,
+  Modal, 
+  TitleWrapper, 
+  ColumnWrapper, 
+  InfoWrapper,
+  ButtonWrapper, 
+  MiddleRowWrapper, 
+  Card, 
+  StyledTitle, 
+  StyledH3, 
+  TagsWrapper, 
+  StyledCancelButton, 
+  StyledSaveButton, 
+  StyledTextField } from './styled';
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -24,18 +35,22 @@ const mapStateToProps = (state: RootState) => {
     version: state.currentTemplate.version
   }
 }
+
 interface Props {
   templateID?: string;
   templateName?: string;
   sampleDataJSON?: object;
   templateJSON?: object;
-  closeModal: () => void;
-  updateTemplate: (templateID?: string, currentVersion?: string, templateJSON?: object, sampleDataJSON?: object, templateName?: string, state?: PostedTemplate.StateEnum, tags?: string[], isShareable?: boolean ) => any; 
-
   designerSampleData?: any;
   designerTemplateJSON?: any;
   version?: string;
-  
+  closeModal: () => void;
+  updateTemplate: (templateID?: string, currentVersion?: string, templateJSON?: object, sampleDataJSON?: object, templateName?: string, state?: PostedTemplate.StateEnum, tags?: string[], isShareable?: boolean ) => any; 
+}
+
+interface State {
+  tags: string[];
+  templateName: string;
 }
 
 const mapDispatchToProps = (dispatch: any) => {
@@ -43,29 +58,38 @@ const mapDispatchToProps = (dispatch: any) => {
     closeModal: () => {
       dispatch(closeModal());
     },
-    updateTemplate: (templateID?: string, currentVersion?: string, templateJSON?: object, sampleDataJSON?: object, templateName?: string) => {
-      dispatch(updateTemplate(templateID, currentVersion, templateJSON, sampleDataJSON, templateName,));
+    updateTemplate: (templateID?: string, currentVersion?: string, templateJSON?: object, sampleDataJSON?: object, templateName?: string, templateState?: PostedTemplate.StateEnum, templateTags?:string[]) => {
+      dispatch(updateTemplate(templateID, currentVersion, templateJSON, sampleDataJSON, templateName, templateState, templateTags));
     } 
   }
 }
 
-class SaveModal extends React.Component<Props> {
+class SaveModal extends React.Component<Props,State> {
   constructor(props: Props) {
     super(props);
-    let tags: string[] = []
+    this.state = {tags : [], templateName:"Untitled Template"}
   }
-  
+
   saveTags = (tagsToUpdate: string[]) => {
-    //tags = tagsToUpdate
+    this.setState({tags: tagsToUpdate});
+  }
+
+  tagRemove = (tag: string) => {
+    const newTags = this.state.tags.filter((existingTag: string) => existingTag !== tag);
+    this.setState({tags: newTags});
+
+  }
+
+  onChange = (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => {
+    if(newValue){
+      this.setState({templateName: newValue});
+    }
   }
 
   onClick = () => {
-    // this will be for the first time saving
-    console.log("props before save",this.props);
+    // will only trigger on first save
     if(JSON.stringify(this.props.sampleDataJSON) !== JSON.stringify(this.props.designerTemplateJSON) || this.props.sampleDataJSON !== this.props.designerSampleData ){
-      console.log("inside 1")
-      console.log (typeof(this.props.designerTemplateJSON),"template",typeof(this.props.designerSampleData),"data");
-      this.props.updateTemplate(undefined,undefined,this.props.designerTemplateJSON,this.props.designerSampleData,undefined);
+      this.props.updateTemplate(undefined,undefined,this.props.designerTemplateJSON,this.props.designerSampleData,this.state.templateName,PostedTemplate.StateEnum.Draft,this.state.tags);
     }
     this.props.closeModal();
   }
@@ -79,9 +103,6 @@ class SaveModal extends React.Component<Props> {
     adaptiveCard.parse(this.props.designerTemplateJSON);
     var renderedCard = adaptiveCard.render();
     
-
-
-    let tags: string[] = [];
     return(
       <BackDrop>
         <Modal>
@@ -91,21 +112,34 @@ class SaveModal extends React.Component<Props> {
               <div>Your card will be saved as a draft until you publish it to your organization.</div>
             </TitleWrapper>
             <MiddleRowWrapper>
-              <CardWrapper>
-                <Card ref={n => {
-                  // Work around for known issue: https://github.com/gatewayapps/react-adaptivecards/issues/10
-                  n && n.firstChild && n.removeChild(n.firstChild);
-                  n && n.appendChild(renderedCard);
-                }}/>
-              </CardWrapper>
+              <Container>
+                <ACWrapper>
+                  <Card ref={n => {
+                    // Work around for known issue: https://github.com/gatewayapps/react-adaptivecards/issues/10
+                    n && n.firstChild && n.removeChild(n.firstChild);
+                    n && n.appendChild(renderedCard);
+                  }}/>
+                </ACWrapper>
+                <TemplateFooterWrapper style={{justifyContent:"space-between", paddingRight:"20px"}}>
+                  <TemplateName> Untitled Card </TemplateName>
+                  <TemplateStateWrapper style={{justifyContent:"flex-end"}}>
+                    <StatusIndicator state={PostedTemplate.StateEnum.Draft}/>
+                    <Status> Draft </Status>
+                  </TemplateStateWrapper>
+                </TemplateFooterWrapper>
+              </Container>
               <InfoWrapper>
-                <TextField label="Card Name" />
-                <Tags updateTags = {this.saveTags} tags={tags} allowAddTag={true} allowEdit={true} />
+                <StyledH3>Save</StyledH3>
+                <StyledTextField onChange={this.onChange}/>
+                <StyledH3>Tags</StyledH3>
+                <TagsWrapper>
+                  <Tags updateTags = {this.saveTags} tagRemove = {this.tagRemove} tags={this.state.tags} allowAddTag={true} allowEdit={true} />
+                </TagsWrapper>
               </InfoWrapper>
             </MiddleRowWrapper>
             <ButtonWrapper>
-              <PrimaryButton text = "Cancel" onClick={this.props.closeModal} />
-              <PrimaryButton text = "Save" onClick={this.onClick}/>
+              <StyledCancelButton text = "Cancel" onClick={this.props.closeModal} />
+              <StyledSaveButton text = "Save" onClick={this.onClick}/>
             </ButtonWrapper>
           </ColumnWrapper>
         </Modal>
