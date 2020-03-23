@@ -3,6 +3,16 @@ import React from 'react';
 import { Template, TemplateInstance } from 'adaptive-templating-service-typescript-node';
 
 import * as AdaptiveCards from "adaptivecards";
+import * as CortanaSkills from 'adaptivecards-designer/lib/hostConfigs/cortana-skills.json';
+import * as TeamsDark from 'adaptivecards-designer/lib/hostConfigs/microsoft-teams-dark.json';
+import * as TeamsLight from 'adaptivecards-designer/lib/hostConfigs/microsoft-teams-light.json';
+import OutlookDesktop from 'adaptivecards-designer/lib/hostConfigs/outlook-desktop.json';
+import * as Default from 'adaptivecards-designer/lib/hostConfigs/sample.json';
+import * as Skype from 'adaptivecards-designer/lib/hostConfigs/skype.json';
+import * as Webchat from 'adaptivecards-designer/lib/hostConfigs/webchat.json';
+import * as WindowsNotification from 'adaptivecards-designer/lib/hostConfigs/windows-notification.json';
+import * as WindowsTimeline from 'adaptivecards-designer/lib/hostConfigs/windows-timeline.json';
+
 import * as ACData from "adaptivecards-templating";
 import markdownit from "markdown-it";
 
@@ -25,9 +35,13 @@ function renderingSetup(): AdaptiveCards.AdaptiveCard {
   let adaptiveCard = new AdaptiveCards.AdaptiveCard();
   // Set its hostConfig property unless you want to use the default Host Config
   // Host Config defines the style and behavior of a card
-  adaptiveCard.hostConfig = new AdaptiveCards.HostConfig({
-    fontFamily: "Segoe UI, Helvetica Neue, sans-serif"
-  });
+  adaptiveCard.hostConfig = new AdaptiveCards.HostConfig(
+    TeamsDark,
+  );
+
+  // console.log((OutlookDesktop));
+  // adaptiveCard.hostConfig = new AdaptiveCards.HostConfig(OutlookDesktop);
+
   return adaptiveCard;
 }
 
