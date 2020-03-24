@@ -30,8 +30,8 @@ interface Props {
   allowAddTag?: boolean;
   templateID?: string;
   template?: Template;
-  updateTags: (tags: string[]) => void;
-  tagRemove: (tag: string) => void;
+  updateTags?: (tags: string[]) => void;
+  tagRemove?: (tag: string) => void;
 }
 
 interface State {
@@ -76,7 +76,7 @@ class Tags extends React.Component<Props, State>  {
       else if(tag === ""){
         this.closeAddTag();
       }
-      else{
+      else if (this.props.updateTags){
         this.props.updateTags([...this.props.tags, tag]);
         this.setState({newTagName: ""});
       }
@@ -125,7 +125,7 @@ class Tags extends React.Component<Props, State>  {
           <Tag ref={(ref: HTMLDivElement) => this.tagRefs[tag] = ref} onAnimationEnd={this.onAnimationEnd} key={tag}>
             <TagText>{tag}</TagText>
 	    {allowEdit &&
-            <TagCloseIcon key={tag} iconName="ChromeClose" onClick={() => this.props.tagRemove(tag)} />}
+            <TagCloseIcon key={tag} iconName="ChromeClose" onClick={() => this.props.tagRemove ? this.props.tagRemove(tag) : {} } />}
           </Tag>
         ))}
         {allowAddTag && <AddTagWrapper onSubmit={this.submitNewTag} open={isAdding}>

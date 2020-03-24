@@ -52,22 +52,25 @@ interface DesignerProps {
   setPage: (currentPageTitle: string, currentPage: string) => void;
   toggleModal: () => void;
   openModal: (modalState: ModalState) => void;
-  isSaveOpen: boolean;
   modalState?: ModalState;
   isFetching: boolean;
 }
 
+interface State { 
+  isSaveOpen: boolean;
+}
+
 let designer: ACDesigner.CardDesigner;
 
-class Designer extends React.Component<DesignerProps> {
+class Designer extends React.Component<DesignerProps,State> {
   constructor(props: DesignerProps) {
     super(props);
     props.setPage(this.props.templateName, "Designer");
-    this.setState({isSaveOpen: false});
+    this.state = {isSaveOpen: false };
   }
 
   toggleModal = () => {
-    this.setState({isSaveOpen: !this.props.isSaveOpen});
+    this.setState({isSaveOpen: !this.state.isSaveOpen});
   }
   componentWillMount() {
     ACDesigner.GlobalSettings.enableDataBindingSupport = true;

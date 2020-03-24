@@ -97,14 +97,6 @@ class Dashboard extends React.Component<Props> {
     this.props.history.push("preview/" + templateID);
   };
 
-  saveTags = (tags: string[]) => {
-    // do nothing
-  }
-
-  tagRemove = (tag: string) => {
-    // do nothing
-  }
-
   render() {
     if (this.props.isSearch) {
       return (
@@ -171,7 +163,7 @@ class Dashboard extends React.Component<Props> {
           </DashboardContainer>
           <TagsContainer>
             <Title style={{ marginRight: "150px", color: 'pink' }}>Tags</Title>
-            <Tags updateTags = {this.saveTags} tagRemove = {this.tagRemove} tags={tags} allowEdit={false}></Tags>
+            <Tags tags={tags} allowEdit={false}></Tags>
           </TagsContainer>
         </OuterWindow>
         <Footer />

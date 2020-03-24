@@ -5,7 +5,6 @@ import { RootState } from "../../store/rootReducer";
 import { useHistory } from "react-router-dom";
 import { openModal } from '../../store/page/actions';
 import { ModalState } from '../../store/page/types';
-import { clearParams } from '../../store/currentTemplate/actions';
 
 import { Template } from "adaptive-templating-service-typescript-node";
 
@@ -20,9 +19,6 @@ const mapDispatchToProps = (dispatch: any) => {
   return {
     openModal: () => {
       dispatch(openModal(ModalState.EditName));
-    },
-    clearParams: () =>{
-      dispatch(clearParams());
     }
   }
 }
@@ -46,7 +42,6 @@ interface NavBarProps {
   templateName?: string;
   isFetching: boolean;
   version?: string;
-  clearParams: () => void;
   templateID?: string;
 }
 

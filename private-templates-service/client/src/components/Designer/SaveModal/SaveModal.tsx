@@ -77,7 +77,6 @@ class SaveModal extends React.Component<Props,State> {
   tagRemove = (tag: string) => {
     const newTags = this.state.tags.filter((existingTag: string) => existingTag !== tag);
     this.setState({tags: newTags});
-
   }
 
   onChange = (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => {
@@ -99,7 +98,6 @@ class SaveModal extends React.Component<Props,State> {
     adaptiveCard.hostConfig = new AdaptiveCards.HostConfig({
       fontFamily: "Segoe UI, Helvetica Neue, sans-serif"
     });
-    adaptiveCard.onExecuteAction = function(action) { alert("Ow!"); }
     adaptiveCard.parse(this.props.designerTemplateJSON);
     var renderedCard = adaptiveCard.render();
     
