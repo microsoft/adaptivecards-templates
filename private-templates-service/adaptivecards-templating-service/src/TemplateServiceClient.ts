@@ -476,7 +476,7 @@ export class TemplateServiceClient {
     // Check if version already exists
     let response = await this.getTemplates(token, templateId);
     if (!response.success || !response.result || response.result.length === 0) {
-      return { success: false };
+      return { success: false, errorMessage: response.errorMessage };
     }
 
     let existingTemplate: ITemplate = response.result[0];
