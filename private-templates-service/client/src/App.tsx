@@ -135,7 +135,7 @@ class App extends Component<Props, State> {
             <MainAppWrapper>
               <NavBar />
               <MainApp>
-                {error}
+                {!this.props.isAuthenticated && error}
                 <Switch>
                   <Route exact path="/">
                     <Dashboard authButtonMethod={this.login} />
@@ -157,7 +157,7 @@ class App extends Component<Props, State> {
   }
 
   _onIdle() {
-    if(this.props.isAuthenticated) {
+    if (this.props.isAuthenticated) {
       this.logout();
     }
   }

@@ -1,17 +1,21 @@
 import React from "react";
+
 import {
   Template,
   PostedTemplate
 } from "adaptive-templating-service-typescript-node";
+
 import {
   RecentlyViewedBodyRow,
   RecentlyViewedItem,
   RecentlyViewedBody,
   RecentlyViewedStatusIndicator
 } from "./styled";
+
 import { getDateString } from "../../../utils/versionUtils";
 import { Status } from "../PreviewModal/TemplateInfo/styled";
 import { TemplateStateWrapper } from "../../AdaptiveCardPanel/styled";
+import OwnerInfo from "./OwnerInfo";
 
 interface Props {
   templates: Template[];
@@ -22,12 +26,18 @@ class RecentlyViewedTable extends React.Component<Props> {
   render() {
     const { templates, propsOnClick } = this.props;
     let rows: JSX.Element[] = [];
-    rows = templates.map((template: Template, index: number) => {
+    let index: number = -1;
+    rows = templates.map((template: Template) => {
+      index++;
       let onClick = () => {
         if (propsOnClick && template.id) {
           propsOnClick(template.id);
         }
       };
+      if (!template || !template.instances || !template.instances[0] || !template.instances[0].lastEditedUser) {
+        return <div>Error loading templates</div>
+      }
+
       return (
         <RecentlyViewedBodyRow key={index} onClick={onClick}>
           <RecentlyViewedItem>{template.name}</RecentlyViewedItem>
@@ -46,8 +56,8 @@ class RecentlyViewedTable extends React.Component<Props> {
               <Status>{template.isLive ? "Published" : "Draft"}</Status>
             </TemplateStateWrapper>
           </RecentlyViewedItem>
-          <RecentlyViewedItem>User Name</RecentlyViewedItem>
-        </RecentlyViewedBodyRow>
+          <RecentlyViewedItem><OwnerInfo oID={template.instances[0]!.lastEditedUser!} index={index}></OwnerInfo></RecentlyViewedItem>
+        </RecentlyViewedBodyRow >
       );
     });
     return <RecentlyViewedBody>{rows}</RecentlyViewedBody>;

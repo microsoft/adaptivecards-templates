@@ -12,10 +12,11 @@ interface Props {
   onClick?: () => void;
   cardtemplate: Template;
   templateVersion: string;
+  hostConfig?: any;
   hoverEffect?: boolean;
 }
 
-function renderingSetup(): AdaptiveCards.AdaptiveCard {
+function renderingSetup(hostConfig?: any): AdaptiveCards.AdaptiveCard {
   AdaptiveCards.AdaptiveCard.onProcessMarkdown = function (
     text: string,
     result: { didProcess: boolean; outputHtml?: string }
@@ -26,14 +27,14 @@ function renderingSetup(): AdaptiveCards.AdaptiveCard {
   let adaptiveCard = new AdaptiveCards.AdaptiveCard();
   // Set its hostConfig property unless you want to use the default Host Config
   // Host Config defines the style and behavior of a card
-  adaptiveCard.hostConfig = new AdaptiveCards.HostConfig({
+  adaptiveCard.hostConfig = new AdaptiveCards.HostConfig(hostConfig || {
     fontFamily: "Segoe UI, Helvetica Neue, sans-serif"
   });
   return adaptiveCard;
 }
 
-function parseCardTemplate(template: Template): AdaptiveCards.AdaptiveCard {
-  let adaptiveCard = renderingSetup();
+function parseCardTemplate(template: Template, hostConfig?: any): AdaptiveCards.AdaptiveCard {
+  let adaptiveCard = renderingSetup(hostConfig);
   try {
     // Parse the card payload
     adaptiveCard.parse(template);
@@ -43,8 +44,8 @@ function parseCardTemplate(template: Template): AdaptiveCards.AdaptiveCard {
   }
 }
 
-export function renderAdaptiveCard(template: Template): any {
-  let adaptiveCard = parseCardTemplate(template);
+export function renderAdaptiveCard(template: Template, hostConfig?: any): any {
+  let adaptiveCard = parseCardTemplate(template, hostConfig);
   try {
     // Render the card to an HTML element
     let renderedCard = adaptiveCard.render();
@@ -71,9 +72,9 @@ function bindData(temp: TemplateInstance): TemplateInstance {
   }
 }
 
-function processTemplate(temp: TemplateInstance): any {
+function processTemplate(temp: TemplateInstance, hostConfig?: any): any {
   const jsonTemp = bindData(temp);
-  const template = renderAdaptiveCard(jsonTemp);
+  const template = renderAdaptiveCard(jsonTemp, hostConfig);
   return template;
 }
 
@@ -83,11 +84,11 @@ class AdaptiveCard extends React.Component<Props> {
     if (this.props.cardtemplate && this.props.cardtemplate.instances) {
       for (let instance of this.props.cardtemplate.instances) {
         if (instance.version === this.props.templateVersion) {
-          template = processTemplate(instance);
+          template = processTemplate(instance, this.props.hostConfig);
         }
       }
       if (template.length === 0) {
-        template = processTemplate(this.props.cardtemplate.instances[0]);
+        template = processTemplate(this.props.cardtemplate.instances[0], this.props.hostConfig);
       }
     } else {
       return <div></div>;
