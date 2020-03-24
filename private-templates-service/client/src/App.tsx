@@ -217,7 +217,6 @@ class App extends Component<Props, State> {
           scopes: config.scopes
         }
       );
-      console.log(accessToken);
       this.props.setAccessToken(accessToken);
 
       this.props.getUserDetails();
