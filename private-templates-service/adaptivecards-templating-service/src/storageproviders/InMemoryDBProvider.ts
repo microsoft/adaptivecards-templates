@@ -66,7 +66,11 @@ export class InMemoryDBProvider implements StorageProvider {
     return this._matchUsers(query);
   }
 
-  async getTemplates(query: Partial<ITemplate>, sortBy: SortBy = SortBy.alphabetical, sortOrder: SortOrder = SortOrder.ascending): Promise<JSONResponse<ITemplate[]>> {
+  async getTemplates(
+    query: Partial<ITemplate>,
+    sortBy: SortBy = SortBy.alphabetical,
+    sortOrder: SortOrder = SortOrder.ascending
+  ): Promise<JSONResponse<ITemplate[]>> {
     return this._matchTemplates(query, sortBy, sortOrder);
   }
 
@@ -137,18 +141,6 @@ export class InMemoryDBProvider implements StorageProvider {
   }
 
   protected _autoCompleteUserModel(user: IUser): void {
-    if (!user.firstName) {
-      user.firstName = "";
-    }
-    if (!user.lastName) {
-      user.lastName = "";
-    }
-    if (!user.team) {
-      user.team = [];
-    }
-    if (!user.org) {
-      user.org = [];
-    }
     if (!user.recentlyViewedTemplates) {
       user.recentlyViewedTemplates = [];
     }
@@ -176,6 +168,9 @@ export class InMemoryDBProvider implements StorageProvider {
     }
     if (!instance.publishedAt) {
       instance.publishedAt = new Date("null");
+    }
+    if(!instance.lastEditedUser) {
+      instance.lastEditedUser = "";
     }
   }
   protected _autoCompleteTemplateModel(template: ITemplate): void {
@@ -206,7 +201,11 @@ export class InMemoryDBProvider implements StorageProvider {
     this._setID(template);
   }
 
-  protected async _insert<T extends ITemplate | IUser>(doc: T, collection: Map<String, T>, autoComplete: (doc: T) => void): Promise<JSONResponse<string>> {
+  protected async _insert<T extends ITemplate | IUser>(
+    doc: T,
+    collection: Map<String, T>,
+    autoComplete: (doc: T) => void
+  ): Promise<JSONResponse<string>> {
     let docToInsert: T = Utils.clone(doc);
     autoComplete(docToInsert);
     if (!collection.has(docToInsert._id!)) {
@@ -227,8 +226,6 @@ export class InMemoryDBProvider implements StorageProvider {
     }
   }
 
-  // protected _setT;
-
   protected _setTimestamps(doc: ITemplate): void {
     let currentDate: Date = new Date(Date.now());
     doc.createdAt = currentDate;
@@ -243,13 +240,9 @@ export class InMemoryDBProvider implements StorageProvider {
 
   protected _matchUser(query: Partial<IUser>, user: IUser): boolean {
     if (
-      (query.lastName && !(query.lastName === user.lastName)) ||
-      (query.firstName && !(query.firstName === user.firstName)) ||
       (query._id && !(query._id === user._id)) ||
       (query.authId && !(query.authId === user.authId)) ||
-      (query.authIssuer && !(query.authIssuer === user.authIssuer)) ||
-      (query.org && user.org && !Utils.ifContainsList(user.org, query.org)) ||
-      (query.team && user.team && !Utils.ifContainsList(user.team, query.team))
+      (query.authIssuer && !(query.authIssuer === user.authIssuer))
     ) {
       return false;
     }

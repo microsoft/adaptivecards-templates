@@ -61,6 +61,7 @@ export function testDefaultTemplateInstanceParameters(instance: ITemplateInstanc
   expect(instance).toHaveProperty("numHits");
   expect(instance).toHaveProperty("data");
   expect(instance).toHaveProperty("updatedAt");
+  expect(instance).toHaveProperty("lastEditedUser");
 }
 
 describe("Basic Post Templates", () => {
@@ -335,7 +336,6 @@ describe("Preview Templates", () => {
     expect(template).toHaveProperty("_id");
     expect(template).toHaveProperty("name");
     expect(template).toHaveProperty("owner");
-    let owner = template.owner;
     expect(template).toHaveProperty("instance");
     let instance = template.instance;
     expect(instance).toHaveProperty("version");
@@ -649,7 +649,7 @@ describe("Post Templates, and increment version", () => {
 
     expect(res.status).toEqual(200);
     expect(res.body).toHaveProperty("templates");
-    expect(res.body.templates).toHaveLength(2);
+    expect(res.body.templates).toHaveLength(1);
     let template = res.body.templates[0];
     testDefaultTemplateParameters(template);
   });

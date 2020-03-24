@@ -6,7 +6,7 @@ import { StorageProvider } from ".";
 import { ITemplate, JSONResponse, ITemplateInstance, IUser } from ".";
 import { SortBy, SortOrder, TemplatePreview, TemplateState, TemplateInstancePreview, TagList } from "./models/models";
 import { updateTemplateToLatestInstance, removeMostRecentTemplate, getTemplateVersion, isValidJSONString, setTemplateInstanceParam, incrementVersion, anyVersionsLive, sortTemplateByVersion, parseToken } from "./util/templateutils";
-
+import logger from "./util/logger"
 export class TemplateServiceClient {
   private storageProvider: StorageProvider;
   private authProvider: AuthenticationProvider;
@@ -67,7 +67,6 @@ export class TemplateServiceClient {
     if (!response.success || (response.result && response.result.length === 0)) {
       return { success: false, errorMessage: ServiceErrorMessage.UserNotFound };
     }
-
     return { success: true, result: response.result![0]._id };
   }
 
@@ -186,6 +185,8 @@ export class TemplateServiceClient {
     if (!result.success){
       return { success: false, errorMessage: ServiceErrorMessage.UserNotFound }
     }
+    logger.info(`User with oid ${authId} requested data.`);
+    
     return result;
   }
 
@@ -194,7 +195,7 @@ export class TemplateServiceClient {
    * Get own user info. 
    * @param token 
    */
-  public async getUser(token?: string): Promise<JSONResponse<IUser>> { 
+  public async getUser(token?: string): Promise<JSONResponse<IUser>> {
     let authCheck = this._checkAuthenticated(token || this.authProvider.token);
     if (!authCheck.success) {
       return authCheck;
@@ -359,6 +360,8 @@ export class TemplateServiceClient {
     if (!version) {
       version = incrementVersion(existingTemplate);
     }
+    let authId = this.authProvider.getAuthIDFromToken(token || this.authProvider.token);
+
     let templateInstance: ITemplateInstance = {
       json: template ? template : JSON.parse("{}"),
       version: version || "1.0",
@@ -367,7 +370,8 @@ export class TemplateServiceClient {
       publishedAt: state === TemplateState.live ? new Date(Date.now()) : undefined,
       updatedAt: new Date(Date.now()),
       numHits: 0,
-      isShareable: isShareable
+      isShareable: isShareable,
+      lastEditedUser: authId
     };
     let templateInstances: ITemplateInstance[] = [];
     if (existingTemplate.instances) {
@@ -436,7 +440,7 @@ export class TemplateServiceClient {
     } else {
       templateInstances.push(templateInstance);
     }
-    let userResponse = await this._getUserID(this.authProvider.getAuthIDFromToken(token || this.authProvider.token));
+    let userResponse = await this._getUserID(authId);
     if (!userResponse.success) return { success: false, errorMessage: userResponse.errorMessage };
 
     const newTemplate: Partial<ITemplate> = {
@@ -548,7 +552,8 @@ export class TemplateServiceClient {
       isShareable: isShareable || false,
       numHits: 0,
       data: data ? (data instanceof Array ? data : [data]) : [],
-      updatedAt: new Date(Date.now())
+      updatedAt: new Date(Date.now()),
+      lastEditedUser: authId
     };
 
     let templateName = name || "Untitled Template";
@@ -669,7 +674,6 @@ export class TemplateServiceClient {
     }
     let authId = this.authProvider.getAuthIDFromToken(token || this.authProvider.token);
     let userResponse = await this._getUser(authId);
-
     if (!userResponse.success || !userResponse.result || userResponse.result.length === 0) {
       return { success: false, errorMessage: userResponse.errorMessage };
     }
@@ -704,7 +708,7 @@ export class TemplateServiceClient {
     }
 
     if (templateId && templates.length > 0) {
-      if (templates![0].owner !== userId) return { success: true, result: [] };
+      if (templates![0].owner !== userId && templates![0].isLive === false) return { success: true, result: [] };
 
       await this._updateRecentTemplate(authId, templateId, true);
 
@@ -767,7 +771,7 @@ export class TemplateServiceClient {
     }
     let template = response.result[0];
 
-    if (template.owner !==  userResponse.result![0]._id || template.isLive) {
+    if (template.owner !==  userResponse.result![0]._id && !template.isLive) {
       return { success: false, errorMessage: ServiceErrorMessage.UnauthorizedAction };
     }
 
@@ -836,7 +840,7 @@ export class TemplateServiceClient {
     if (!userInfo.success || !userInfo.result) {
       return { success: false, errorMessage: ServiceErrorMessage.FailedToRetrievePreview };
     }
-
+    logger.info(`Template of user with oid ${userInfo.result!} was requested in template preview.`);
     let templatePreview: TemplatePreview = {
       _id: templateId,
       name: template.name,
@@ -866,7 +870,7 @@ export class TemplateServiceClient {
 
     let templateList = viewed ? user.recentlyViewedTemplates : user.recentlyEditedTemplates;
     for (let templateId of templateList!) {
-      let templateResponse = await this.getTemplates(token, templateId);
+      let templateResponse = await this.getTemplates(token, templateId, undefined, undefined, undefined, undefined, undefined, undefined, undefined, true);
       if (templateResponse.success && templateResponse.result && templateResponse.result.length === 1) {
         results.push(templateResponse.result[0]);
       }

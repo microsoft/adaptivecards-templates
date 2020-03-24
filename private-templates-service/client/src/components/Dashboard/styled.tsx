@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
+
 import { COLORS } from "../../globalStyles";
 
 export const PlaceholderText = styled.h5`
@@ -10,6 +12,11 @@ export const Title = styled.h1`
   padding-top: 15px;
   font-size: 1.5rem;
   font-weight: 700;
+`;
+
+export const OuterDashboardContainer = styled.div`
+  display: contents;
+  height: calc(100vh - 61px);
 `;
 
 export const DashboardContainer = styled.div`
@@ -25,7 +32,8 @@ export const OuterWindow = styled.div`
   flex-direction: row;
   align-items: stretch;
   justify-content: space-between;
-  height: 100%;
+  height: auto;
+  flex: 1;
 `;
 export const TagsContainer = styled.div`
   background-color: ${COLORS.GREY1};
@@ -35,4 +43,8 @@ export const TagsContainer = styled.div`
   justify-content: flex-start;
   width: 300px;
   padding-left: 30px;
+`;
+
+export const CenteredSpinner = styled(Spinner)`
+  margin: 120px auto;
 `;

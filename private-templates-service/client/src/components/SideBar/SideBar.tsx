@@ -6,7 +6,6 @@ import { connect } from "react-redux";
 import { RootState } from "../../store/rootReducer";
 import { UserType } from "../../store/auth/types";
 import { newTemplate } from "../../store/currentTemplate/actions";
-import { initializeIcons } from "office-ui-fabric-react/lib/Icons";
 import { COLORS } from "../../globalStyles";
 import UserAvatar from "./UserAvatar";
 import mainLogo from "../../assets/adaptive-cards-100-logo.png";
@@ -26,9 +25,9 @@ import {
   LogoTextHeader,
   LogoTextSubHeader
 } from "./styled";
-import { INavLink, INavLinkGroup, INavStyles } from "office-ui-fabric-react";
+import { INavLinkGroup, INavStyles } from "office-ui-fabric-react";
+import { ClearOwners } from "../../store/templateOwner/actions";
 
-initializeIcons();
 interface Props {
   authButtonMethod: () => void;
   isAuthenticated: boolean;
@@ -74,6 +73,11 @@ const iconStyle = {
   margin: "0px 10px 0px 40px"
 };
 
+const iconStylePink = {
+  color: 'pink',
+  margin: "0px 10px 0px 40px"
+}
+
 const navMenuLinks: INavLinkGroup[] = [
   {
     links: [
@@ -98,7 +102,7 @@ const navMenuLinks: INavLinkGroup[] = [
         url: "/dashboard/all",
         iconProps: {
           iconName: "ViewList",
-          style: iconStyle
+          style: iconStylePink
         }
       },
       {
@@ -106,7 +110,7 @@ const navMenuLinks: INavLinkGroup[] = [
         url: "/drafts",
         iconProps: {
           iconName: "SingleColumnEdit",
-          style: iconStyle
+          style: iconStylePink
         }
       },
       {
@@ -114,7 +118,7 @@ const navMenuLinks: INavLinkGroup[] = [
         url: "/published",
         iconProps: {
           iconName: "PublishContent",
-          style: iconStyle
+          style: iconStylePink
         }
       },
       {
@@ -122,7 +126,7 @@ const navMenuLinks: INavLinkGroup[] = [
         url: "/tags",
         iconProps: {
           iconName: "Tag",
-          style: iconStyle
+          style: iconStylePink
         }
       }
     ]
@@ -136,6 +140,9 @@ const SideBar = (props: Props) => {
     event.preventDefault();
     if (element.url === "/designer") {
       props.newTemplate();
+    }
+    else if (element.url === "/") {
+      ClearOwners();
     }
     history.push(element.url);
   };

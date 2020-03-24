@@ -2,20 +2,14 @@ import { StorageProvider } from "../storageproviders/IStorageProvider";
 import { IUser, ITemplate, ITemplateInstance, JSONResponse, TemplateState } from "../models/models";
 
 function autoCompleteUserModel(user: IUser): void {
-  if (!user.firstName) {
-    user.firstName = "";
-  }
-  if (!user.lastName) {
-    user.lastName = "";
-  }
-  if (!user.team) {
-    user.team = [];
-  }
-  if (!user.org) {
-    user.org = [];
-  }
   if (!user.recentlyViewedTemplates) {
     user.recentlyViewedTemplates = [];
+  }
+  if (!user.recentlyEditedTemplates) {
+    user.recentlyEditedTemplates = [];
+  }
+  if (!user.recentTags) {
+    user.recentTags = [];
   }
 }
 
@@ -37,6 +31,9 @@ function autoCompleteTemplateInstanceModel(instance: ITemplateInstance): void {
   }
   if (!instance.data) {
     instance.data = [];
+  }
+  if(!instance.lastEditedUser) {
+    instance.lastEditedUser = "";
   }
 }
 function autoCompleteTemplateModel(template: ITemplate): void {
@@ -74,9 +71,10 @@ function validateMatchingInstances(a: ITemplateInstance, b: ITemplateInstance) {
   expect(a.json).toEqual(b.json);
   expect(a.version).toBe(b.version);
   expect(a.state).toBe(b.state);
-  expect(a.numHits).toBe(a.numHits);
-  expect(a.data).toBe(a.data);
-  expect(a.isShareable).toBe(a.isShareable);
+  expect(a.numHits).toBe(b.numHits);
+  expect(a.data).toEqual(b.data);
+  expect(a.isShareable).toBe(b.isShareable);
+  expect(a.lastEditedUser).toBe(b.lastEditedUser);
 }
 export function validateMatchingTemplates(a: ITemplate, b: ITemplate): void {
   expect(a.instances!.length).toEqual(b.instances!.length);
@@ -93,11 +91,9 @@ export function validateMatchingTemplates(a: ITemplate, b: ITemplate): void {
 export function validateMatchingUsers(a: IUser, b: IUser): void {
   expect(a.authIssuer).toEqual(b.authIssuer);
   expect(a.authId).toEqual(b.authId);
-  expect(a.firstName).toEqual(b.firstName);
-  expect(a.lastName).toEqual(b.lastName);
-  expect(a.org).toEqual(Array.from(b.org!));
-  expect(a.team).toEqual(Array.from(b.team!));
   expect(a.recentlyViewedTemplates).toEqual(Array.from(b.recentlyViewedTemplates!));
+  expect(a.recentlyEditedTemplates).toEqual(Array.from(b.recentlyEditedTemplates!));
+  expect(a.recentTags).toEqual(Array.from(b.recentTags!));
 }
 
 async function insertAndValidateUser(db: StorageProvider, user: IUser): Promise<void> {
@@ -154,23 +150,29 @@ export function testDB(db: StorageProvider) {
 
   it("Completely filled: create & save user successfully", async () => {
     const validUser: IUser = {
-      firstName: "John",
-      lastName: "Travolta",
       authIssuer: "Microsoft Oauth2",
       authId: "51201",
-      org: ["Microsoft"],
-      team: ["Bing"]
+      recentlyEditedTemplates: ["template1"],
+      recentlyViewedTemplates: ["template2"],
+      recentTags: ["tag1", "tag2"]
     };
     await insertAndValidateUser(db, validUser);
   });
 
   it("Partially filled: create & save user successfully", async () => {
-    const validUser: IUser = { firstName: "John", lastName: "Travolta", authIssuer: "Microsoft Oauth2", authId: "51201" };
+    const validUser: IUser = {
+      authIssuer: "Microsoft Oauth2",
+      authId: "51201"
+    };
     await insertAndValidateUser(db, validUser);
   });
 
   it("Completely filled:create & save template successfully", async () => {
-    const validTemplateInstance: ITemplateInstance = { json: JSON.parse('{"key":"value"}'), version: "1.0" };
+    const validTemplateInstance: ITemplateInstance = {
+      json: JSON.parse('{"key":"value"}'),
+      version: "1.0",
+      lastEditedUser: ""
+    };
     const validTemplate: ITemplate = {
       name: "validTemplate",
       instances: [validTemplateInstance],
