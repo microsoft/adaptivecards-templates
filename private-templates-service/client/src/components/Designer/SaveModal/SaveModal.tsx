@@ -67,7 +67,7 @@ const mapDispatchToProps = (dispatch: any) => {
 class SaveModal extends React.Component<Props,State> {
   constructor(props: Props) {
     super(props);
-    this.state = {tags : [], templateName:"Untitled Template"}
+    this.state = {tags : [], templateName: "Untitled Template"}
   }
 
   saveTags = (tagsToUpdate: string[]) => {

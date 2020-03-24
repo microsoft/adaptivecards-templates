@@ -121,7 +121,7 @@ class Designer extends React.Component<DesignerProps,State> {
   render() {
     return (
       <React.Fragment>
-        <DesignerWrapper id="designer-container" dangerouslySetInnerHTML={{ __html: "dangerouslySetACDesigner" }}></DesignerWrapper>
+        <DesignerWrapper id="designer-container" />
         {this.props.modalState===ModalState.Save && <SaveModal designerSampleData = {designer.sampleData} designerTemplateJSON = {designer.getCard()}/>}
         {this.props.modalState === ModalState.EditName && <EditNameModal />}
       </React.Fragment>
