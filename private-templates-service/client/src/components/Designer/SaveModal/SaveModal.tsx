@@ -129,7 +129,7 @@ class SaveModal extends React.Component<Props,State> {
                 </TemplateFooterWrapper>
               </Container>
               <InfoWrapper>
-                <StyledH3>Save</StyledH3>
+                <StyledH3>Card Name</StyledH3>
                 <StyledTextField onChange={this.onChange}/>
                 <StyledH3>Tags</StyledH3>
                 <TagsWrapper>
