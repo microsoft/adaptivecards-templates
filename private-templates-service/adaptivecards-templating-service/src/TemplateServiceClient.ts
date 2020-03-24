@@ -401,16 +401,14 @@ export class TemplateServiceClient {
               added = true;
               continue;
             }
-            else if (template || state || isShareable){
+            else {
               // Create new draft version
               templateInstances.push(instance);
-              version = incrementVersion(existingTemplate);
-              templateInstance = setTemplateInstanceParam(templateInstance, templateData, templateState, isShareable, version);
-              templateInstances.push(templateInstance);
-              added = true;
-              continue;
-            } else {
-              templateInstances.push(instance);
+              if (template || state || isShareable) {
+                version = incrementVersion(existingTemplate);
+                templateInstance = setTemplateInstanceParam(templateInstance, templateData, templateState, isShareable, version);
+                templateInstances.push(templateInstance);
+              }
               added = true;
               continue;
             }
