@@ -55,7 +55,6 @@ function requestOwnerProfilePictureFailure(): GetOwnerProfilePictureAction {
 }
 
 export function ClearOwners(): ClearOwnersAction {
-  console.log("clear");
   return {
     type: CLEAR_OWNERS,
   }
