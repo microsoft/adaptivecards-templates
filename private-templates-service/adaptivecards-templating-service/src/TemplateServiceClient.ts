@@ -384,11 +384,12 @@ export class TemplateServiceClient {
             // The template that is trying to be modified is deprecated
             templateInstances.push(instance);
             // Pushing existing deprecated version back
-
-            version = incrementVersion(existingTemplate);
-            templateState = templateState === TemplateState.live ? TemplateState.live : TemplateState.draft;
-            templateInstance = setTemplateInstanceParam(templateInstance, templateData, templateState, isShareable, version);
-            templateInstances.push(templateInstance);
+            if (template || state || isShareable){
+              version = incrementVersion(existingTemplate);
+              templateState = templateState === TemplateState.live ? TemplateState.live : TemplateState.draft;
+              templateInstance = setTemplateInstanceParam(templateInstance, templateData, templateState, isShareable, version);
+              templateInstances.push(templateInstance);
+            }
             added = true;
             continue;
           }
@@ -400,12 +401,16 @@ export class TemplateServiceClient {
               added = true;
               continue;
             }
-            else {
+            else if (template || state || isShareable){
+              // Create new draft version
               templateInstances.push(instance);
-              // Pushing existing deprecated version back
               version = incrementVersion(existingTemplate);
               templateInstance = setTemplateInstanceParam(templateInstance, templateData, templateState, isShareable, version);
               templateInstances.push(templateInstance);
+              added = true;
+              continue;
+            } else {
+              templateInstances.push(instance);
               added = true;
               continue;
             }
@@ -423,6 +428,7 @@ export class TemplateServiceClient {
           templateInstance.data = templateData || instance.data;
           templateInstance.publishedAt = templateInstance.publishedAt || instance.publishedAt;
           templateInstance.isShareable = templateInstance.isShareable || instance.isShareable;
+          templateInstance.json = template ? template : instance.json;
           added = true;
           templateInstances.push(templateInstance);
         } else {
