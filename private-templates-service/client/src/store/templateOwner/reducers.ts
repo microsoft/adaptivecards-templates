@@ -7,8 +7,10 @@ import {
   GET_OWNER_PROFILE_PICTURE,
   GET_OWNER_PROFILE_PICTURE_SUCCESS,
   GET_OWNER_PROFILE_PICTURE_FAILURE,
+  CLEAR_OWNERS,
   GetOwnerNameAction,
   GetOwnerProfilePictureAction,
+  ClearOwnersAction,
 } from './types';
 
 const initialState: OwnerState = {
@@ -44,31 +46,13 @@ function updateOwners(owner = initialOwnerState, action: GetOwnerNameAction | Ge
   }
 }
 
-function clearOwners(owner = initialOwnerState, action: GetOwnerNameAction | GetOwnerProfilePictureAction): OwnerType | undefined {
-  switch (action.type) {
-    case GET_OWNER_NAME:
-      return {
-        ...owner,
-        displayNames: {}
-      }
-    case GET_OWNER_PROFILE_PICTURE:
-      return {
-        ...owner,
-        imageURLs: {},
-      }
-    default:
-      return owner;
-  }
-}
-
-export function templateOwnerReducer(state = initialState, action: GetOwnerNameAction | GetOwnerProfilePictureAction): OwnerState {
+export function templateOwnerReducer(state = initialState, action: GetOwnerNameAction | GetOwnerProfilePictureAction | ClearOwnersAction): OwnerState {
   switch (action.type) {
     // empty case statement will "fall through" to logic in the next non-empty case
     case GET_OWNER_NAME:
     case GET_OWNER_PROFILE_PICTURE:
       return {
         ...state,
-        owners: clearOwners(state.owners, action),
         isFetching: true,
       };
     case GET_OWNER_NAME_FAILURE:
@@ -82,6 +66,11 @@ export function templateOwnerReducer(state = initialState, action: GetOwnerNameA
       return {
         ...state,
         owners: updateOwners(state.owners, action),
+      }
+    case CLEAR_OWNERS:
+      return {
+        ...state,
+        owners: undefined,
       }
     default:
       return state;
