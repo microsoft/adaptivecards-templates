@@ -4,7 +4,7 @@ import { COLORS } from '../../../../globalStyles';
 import { Dropdown, ActionButton, Icon, IDropdownStyles } from "office-ui-fabric-react";
 import { PostedTemplate } from 'adaptive-templating-service-typescript-node';
 
-export const StyledVersionDropdown = styled(Dropdown)`
+export const StyledVersionDropdown = styled(Dropdown).attrs({'aria-label': 'Version List'})`
   display: flex
   padding-right: 10px;
 `;
