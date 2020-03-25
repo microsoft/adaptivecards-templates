@@ -10,7 +10,7 @@ import ModalHOC from '../../../utils/ModalHOC';
 import { closeModal } from '../../../store/page/actions';
 import { connect } from 'react-redux';
 
-import { TextField, Button } from 'office-ui-fabric-react';
+import { TextField } from 'office-ui-fabric-react';
 
 import {
   BackDrop,
