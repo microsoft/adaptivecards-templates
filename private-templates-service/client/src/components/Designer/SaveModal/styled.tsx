@@ -40,13 +40,15 @@ export const MiddleRowWrapper = styled.div`
   flex-direction: row;
   justify-content: space-between;
   flex-wrap: wrap;
-  
+  margin: 32px 0px 32px 0px;
 `;
 
 export const InfoWrapper = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
+  max-width: 200px;
+  margin-right: 42px;
 `;
 
 export const TemplateFooterWrapper = styled.div`
@@ -66,7 +68,7 @@ export const TemplateNameWrapper = styled.div`
 `;
 
 export const StyledH3 = styled.h3`
-  font-size: 1rem;
+  font-size: 0.85rem;
   font-weight: 500;
 `;
 
@@ -76,7 +78,7 @@ export const ButtonWrapper = styled.div`
   justify-content: flex-end; 
 `;
 export const StyledTitle = styled.h1`
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: 500;
 `;
 
@@ -92,12 +94,12 @@ export const TagsWrapper = styled.div`
 
 export const StyledSaveButton = styled(PrimaryButton)`
   margin-left: 5px;
-  min-width: 150px
+  min-width: 125px
 `;
 
 export const StyledCancelButton = styled(DefaultButton)`
   margin-right: 5px;
-  min-width: 150px
+  min-width: 125px
 `;
 
 export const StyledTextField = styled(TextField)`

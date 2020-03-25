@@ -110,7 +110,7 @@ class SaveModal extends React.Component<Props,State> {
               <div>Your card will be saved as a draft until you publish it to your organization.</div>
             </TitleWrapper>
             <MiddleRowWrapper>
-              <Container>
+              <Container style={{marginRight: "0px", marginLeft:"42px"}} >
                 <ACWrapper>
                   <Card ref={n => {
                     // Work around for known issue: https://github.com/gatewayapps/react-adaptivecards/issues/10
