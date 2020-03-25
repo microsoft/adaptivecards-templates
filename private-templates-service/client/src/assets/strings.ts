@@ -47,3 +47,9 @@ export const TRADEMARKS = "Trademarks";
 export const SAFETY = "Safety & Eco";
 export const ABOUT_ADS = "About our Ads";
 export const MICROSOFT = "© Microsoft 2020";
+
+// Logo styled
+export const LOGO_DESCRIPTION = "Adaptive Cards Portal Icon";
+
+// SearchBar styled
+export const SEARCHBAR_DESCRIPTION = "Searchbar";

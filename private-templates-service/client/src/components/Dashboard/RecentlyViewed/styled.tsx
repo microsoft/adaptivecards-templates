@@ -42,7 +42,7 @@ export const RecentlyViewedBody = styled.div`
   justify-content: flex-start;
 `;
 
-export const RecentlyViewedItem = styled.h6`
+export const RecentlyViewedItem = styled.div`
   font-family: Segoe UI Regular;
   flex: 1;
 `;

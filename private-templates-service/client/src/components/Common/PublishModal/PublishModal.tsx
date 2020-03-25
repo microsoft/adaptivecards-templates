@@ -76,7 +76,7 @@ class PublishModal extends React.Component<Props> {
               <SemiBoldText style={{ color: 'pink' }}>
                 Notified
               </SemiBoldText>
-              <SearchBox placeholder="Search for people" />
+              <SearchBox aria-label="Search for people" placeholder="Search for people" />
             </CenterPanelLeft>
             <CenterPanelRight>
               <TextField label="Comments" placeholder="Enter any comments you may have for your reviewers to see. (Optional)" multiline autoAdjustHeight />
