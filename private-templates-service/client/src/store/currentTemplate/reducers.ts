@@ -16,8 +16,7 @@ import {
   GET_TEMPLATE_FAILURE,
   DELETE_TEMPLATE_INSTANCE,
   DELETE_TEMPLATE_INSTANCE_SUCCESS,
-  DELETE_TEMPLATE_INSTANCE_FAILURE,
-  CLEAR_TEMPLATE_PARAMS
+  DELETE_TEMPLATE_INSTANCE_FAILURE
 } from './types';
 
 import { NEW_TEMPLATE_NAME } from '../../assets/strings';
@@ -138,11 +137,6 @@ export function currentTemplateReducer(state = initialState, action: CurrentTemp
       }
     case DELETE_TEMPLATE_INSTANCE_FAILURE:
       return {
-        ...state,
-        isFetching: false
-      }
-    case CLEAR_TEMPLATE_PARAMS:
-      return{
         ...state,
         isFetching: false
       }
