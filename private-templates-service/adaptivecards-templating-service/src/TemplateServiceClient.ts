@@ -382,9 +382,10 @@ export class TemplateServiceClient {
           let templateData: JSON[] | undefined = data ? [data] : dataList ? dataList : undefined;
           if (instance.state === TemplateState.deprecated) {
             // The template that is trying to be modified is deprecated
+            if (isShareable) instance.isShareable = isShareable;
             templateInstances.push(instance);
             // Pushing existing deprecated version back
-            if (template || state || isShareable){
+            if (template || state){
               version = incrementVersion(existingTemplate);
               templateState = templateState === TemplateState.live ? TemplateState.live : TemplateState.draft;
               templateInstance = setTemplateInstanceParam(templateInstance, templateData, templateState, isShareable, version);
@@ -403,8 +404,9 @@ export class TemplateServiceClient {
             }
             else {
               // Create new draft version
+              if (isShareable) instance.isShareable = isShareable;
               templateInstances.push(instance);
-              if (template || state || isShareable) {
+              if (template || state) {
                 version = incrementVersion(existingTemplate);
                 templateInstance = setTemplateInstanceParam(templateInstance, templateData, templateState, isShareable, version);
                 templateInstances.push(templateInstance);
