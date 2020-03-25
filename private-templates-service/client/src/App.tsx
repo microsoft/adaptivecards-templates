@@ -228,7 +228,7 @@ class App extends Component<Props, State> {
           scopes: config.scopes
         }
       );
-      this.props.setAccessToken(graphAccessToken);
+      this.props.setGraphAccessToken(graphAccessToken);
 
       this.props.getUserDetails();
       this.props.getOrgDetails();

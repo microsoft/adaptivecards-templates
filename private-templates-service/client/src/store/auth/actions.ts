@@ -126,11 +126,11 @@ export function getOrgDetails() {
     dispatch(requestOrgDetails());
     const state = getState();
 
-    if (!state.auth.accessToken) {
+    if (!state.auth.graphAccessToken) {
       return dispatch(requestOrgDetailsFailure());
     }
 
-    const client = getAuthenticatedClient(state.auth.accessToken);
+    const client = getAuthenticatedClient(state.auth.graphAccessToken);
     return client.api('/organization').get()
       .then((org: any) => {
         if (org.value.length === 0) {
