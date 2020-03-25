@@ -15,8 +15,7 @@ import {
   GET_TEMPLATE_FAILURE,
   DELETE_TEMPLATE_INSTANCE,
   DELETE_TEMPLATE_INSTANCE_SUCCESS,
-  DELETE_TEMPLATE_INSTANCE_FAILURE,
-  CLEAR_TEMPLATE_PARAMS
+  DELETE_TEMPLATE_INSTANCE_FAILURE
 } from './types';
 
 import { Template, TemplateApi, PostedTemplate } from "adaptive-templating-service-typescript-node";
