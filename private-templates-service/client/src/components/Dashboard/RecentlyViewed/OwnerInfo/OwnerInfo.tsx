@@ -16,33 +16,33 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    getOwnerName: (oID: string, index: number) => {
-      dispatch(getOwnerName(oID, index));
+    getOwnerName: (oID: string) => {
+      dispatch(getOwnerName(oID));
     },
-    getOwnerProfilePicture: (oID: string, index: number) => {
-      dispatch(getOwnerProfilePicture(oID, index));
+    getOwnerProfilePicture: (oID: string) => {
+      dispatch(getOwnerProfilePicture(oID));
     }
   }
 }
 
 interface Props {
   oID: string;
-  index: number;
-  getOwnerName: (oID: string, index: number) => void;
-  getOwnerProfilePicture: (oID: string, index: number) => void;
+  getOwnerName: (oID: string) => void;
+  getOwnerProfilePicture: (oID: string) => void;
   owner?: OwnerType;
 }
 
 class OwnerInfo extends React.Component<Props> {
   constructor(props: Props) {
+
     super(props);
-    this.props.getOwnerName(this.props.oID, this.props.index);
-    this.props.getOwnerProfilePicture(this.props.oID, this.props.index);
+    this.props.getOwnerName(this.props.oID);
+    this.props.getOwnerProfilePicture(this.props.oID);
   }
   render() {
     return (
       <InfoWrapper>
-        <OwnerAvatar index={this.props.index} /> {(this.props.owner && this.props.owner.displayNames) ? this.props.owner.displayNames[this.props.index] : ""}
+        <OwnerAvatar index={this.props.oID} /> {(this.props.owner && this.props.owner.displayNames) ? this.props.owner.displayNames[this.props.oID] : ""}
       </InfoWrapper>
     );
   }
