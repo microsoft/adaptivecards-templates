@@ -8,7 +8,7 @@ import { PersonaSize } from 'office-ui-fabric-react/lib/Persona';
 
 interface Props {
   owner?: OwnerType;
-  index: number;
+  index: string;
 }
 
 const mapStateToProps = (state: RootState) => {
@@ -18,6 +18,7 @@ const mapStateToProps = (state: RootState) => {
 };
 
 class OwnerAvatar extends React.Component<Props> {
+
   render() {
     if (this.props.owner && this.props.owner.imageURLs && this.props.owner.imageURLs[this.props.index]) {
       let facepileProps: IFacepileProps = {
