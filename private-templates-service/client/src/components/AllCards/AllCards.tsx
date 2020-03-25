@@ -17,6 +17,7 @@ import SearchPage from "../Dashboard/SearchPage";
 import { ALLCARDS_PLACEHOLDER, ALLCARDS_LIST_VIEW, ALLCARDS_GRID_VIEW } from "../../assets/strings";
 import { SpinnerSize, IconButton, IIconProps, IContextualMenuProps } from "office-ui-fabric-react";
 import Tags from "../Common/Tags";
+import { Scroller } from "../../utils/AllCardsUtil";
 
 
 const mapStateToProps = (state: RootState) => {
@@ -46,26 +47,11 @@ interface Props extends RouteComponentProps {
   isSearch: boolean;
 }
 
-const emojiIcon: IIconProps = { iconName: 'Emoji2' };
-
-const menuProps: IContextualMenuProps = {
-  items: [
-    {
-      key: 'emailMessage',
-      text: 'Email message',
-      iconProps: { iconName: 'Mail' },
-    },
-    {
-      key: 'calendarEvent',
-      text: 'Calendar event',
-      iconProps: { iconName: 'Calendar' },
-    },
-  ],
-  directionalHintFixed: true,
-};
 class AllCards extends Component<Props> {
+  scroller: Scroller;
   constructor(props: Props) {
     super(props);
+    this.scroller = new Scroller();
     this.props.setPage("Cards", "AllCards");
     this.props.setSearchBarVisible(true);
     this.props.getTemplates();  
@@ -99,6 +85,7 @@ class AllCards extends Component<Props> {
           </PlaceholderText>
         )
   }
+  // TODO: decide which method to use
   render() {
     if (this.props.isSearch) {
       return (
@@ -135,12 +122,8 @@ class AllCards extends Component<Props> {
             <Filter />
           </ViewHelperBar>
         </UpperBar>
-        <TagsContainer onWheel={(e) => {
-          let item = e.currentTarget;
-          if (e.deltaY > 0) item.scrollLeft += 100;
-          else item.scrollLeft -= 100;
-        }}>
-          <Tags tags={tags} allowEdit={false}></Tags>
+        <TagsContainer onWheel={this.scroller.horizontalScroll}>
+        <Tags tags={tags} allowEdit={false}></Tags>
         </TagsContainer>
         {this.onLoad(templatesState.isFetching, templates, ALLCARDS_PLACEHOLDER)}
     </AllCardsContainer>

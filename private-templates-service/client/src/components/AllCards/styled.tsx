@@ -17,7 +17,7 @@ export const UpperBar = styled.div`
 `;
 
 export const TagsContainer = styled.div`
-onWhee
+scroll-behavior: smooth;
 border-style:solid;
 padding-top: 20px;
   display: flex;
@@ -26,7 +26,7 @@ padding-top: 20px;
   justify-content: flex-start;
   overflow-x: hidden;
   overflow-y: hidden;
-//   ::-webkit-scrollbar: {display:none};
+  -webkit-overflow-scrolling: touch;
 `;
 
 export const ViewHelperBar = styled(SearchAndFilter)``;
