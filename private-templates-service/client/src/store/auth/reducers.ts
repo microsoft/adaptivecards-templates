@@ -3,11 +3,13 @@ import {
   AuthAction,
   UserType,
   AccessTokenAction,
+  GraphAccessTokenAction,
   GetUserDetailsAction,
   GetOrgDetailsAction,
   GetProfilePictureAction,
   LOGOUT,
   ACCESS_TOKEN_SET,
+  GRAPH_ACCESS_TOKEN_SET,
   GET_USER_DETAILS,
   GET_USER_DETAILS_FAILURE,
   GET_USER_DETAILS_SUCCESS,
@@ -24,6 +26,7 @@ const initialState: AuthState = {
   user: undefined,
   isFetching: false,
   accessToken: undefined,
+  graphAccessToken: undefined
 }
 
 const initialUserState: UserType = {
@@ -53,7 +56,7 @@ function user(user = initialUserState, action: AuthAction | AccessTokenAction | 
   }
 }
 
-export function authReducer(state = initialState, action: AuthAction | AccessTokenAction | GetUserDetailsAction | GetOrgDetailsAction | GetProfilePictureAction): AuthState {
+export function authReducer(state = initialState, action: AuthAction | AccessTokenAction | GraphAccessTokenAction | GetUserDetailsAction | GetOrgDetailsAction | GetProfilePictureAction): AuthState {
   switch (action.type) {
     case GET_USER_DETAILS:
     case GET_ORG_DETAILS:
@@ -81,6 +84,12 @@ export function authReducer(state = initialState, action: AuthAction | AccessTok
         ...state,
         isAuthenticated: true,
         accessToken: action.accessToken,
+      }
+    case GRAPH_ACCESS_TOKEN_SET:
+      return {
+        ...state,
+        isAuthenticated: true,
+        graphAccessToken: action.graphAccessToken,
       }
     case LOGOUT:
       return {
