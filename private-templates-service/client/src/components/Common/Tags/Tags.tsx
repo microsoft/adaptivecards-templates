@@ -41,7 +41,7 @@ interface State {
 
 class Tags extends React.Component<Props, State>  {
   addTagInput = React.createRef<HTMLInputElement>();
-  tagRefs: {[ref: string]: HTMLDivElement};
+  tagRefs: { [ref: string]: HTMLDivElement };
 
   constructor(props: Props) {
     super(props);
@@ -70,23 +70,23 @@ class Tags extends React.Component<Props, State>  {
     e.preventDefault();
     if (this.addTagInput && this.addTagInput.current && this.props.tags) {
       const tag = this.addTagInput.current.value;
-      if(this.props.tags.includes(tag)){
+      if (this.props.tags.includes(tag)) {
         this.highlightTag(tag, this.props.tags);
       }
-      else if(tag === ""){
+      else if (tag === "") {
         this.closeAddTag();
       }
-      else if (this.props.updateTags){
+      else if (this.props.updateTags) {
         this.props.updateTags([...this.props.tags, tag]);
-        this.setState({newTagName: ""});
+        this.setState({ newTagName: "" });
       }
     }
   }
 
   highlightTag = (tagToHighlight: string, currentTags: string[]): void => {
-    for(let tag of currentTags){
-      if(tag === tagToHighlight && tag in this.tagRefs){
-          this.tagRefs[tag].classList.add('duplicate'); // Add the class that renders an animation
+    for (let tag of currentTags) {
+      if (tag === tagToHighlight && tag in this.tagRefs) {
+        this.tagRefs[tag].classList.add('duplicate'); // Add the class that renders an animation
       }
     }
   }
@@ -99,11 +99,11 @@ class Tags extends React.Component<Props, State>  {
 
   closeAddTag = () => {
     this.setState({ isAdding: false });
-    this.setState({newTagName: ""});
+    this.setState({ newTagName: "" });
   }
 
   onKeyDown = (keyStroke: any) => {
-    if(keyStroke.keyCode === KeyCode.ESC){
+    if (keyStroke.keyCode === KeyCode.ESC) {
       this.closeAddTag();
     }
   }
@@ -124,12 +124,12 @@ class Tags extends React.Component<Props, State>  {
         {tags && tags.map((tag: string) => (
           <Tag ref={(ref: HTMLDivElement) => this.tagRefs[tag] = ref} onAnimationEnd={this.onAnimationEnd} key={tag}>
             <TagText>{tag}</TagText>
-	    {allowEdit &&
-            <TagCloseIcon key={tag} iconName="ChromeClose" onClick={ this.props.tagRemove && (() => this.props.tagRemove!(tag))}/>}
+            {allowEdit &&
+              <TagCloseIcon key={tag} iconName="ChromeClose" onClick={this.props.tagRemove && (() => this.props.tagRemove!(tag))} />}
           </Tag>
         ))}
         {allowAddTag && <AddTagWrapper onSubmit={this.submitNewTag} open={isAdding}>
-          <AddTagInput ref={this.addTagInput} open={isAdding} value={this.state.newTagName} onChange={this.handleChange} onKeyDown={this.onKeyDown} />
+          <AddTagInput ref={this.addTagInput} open={isAdding} value={this.state.newTagName} maxLength={30} onChange={this.handleChange} onKeyDown={this.onKeyDown} />
           <TagAddIcon iconName="Add" onClick={this.openNewTag} open={isAdding} />
           <TagSubmitButton type="submit" open={isAdding}>
             <TagSubmitIcon iconName="CheckMark" />
