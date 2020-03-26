@@ -20,7 +20,6 @@ import {
   PostedTemplate,
 } from "adaptive-templating-service-typescript-node";
 import { getDateString } from "../../utils/versionUtils";
-import { Button } from "office-ui-fabric-react";
 
 interface Props {
   onClick?: (templateID: string) => void;

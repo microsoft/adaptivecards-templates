@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { COLORS } from "../../globalStyles";
-import { Button } from "office-ui-fabric-react";
 
 export const ButtonWrapper = styled.button`
   border-width: 0px;
