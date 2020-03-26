@@ -1,11 +1,20 @@
 import styled from "styled-components";
 import { COLORS } from "../../globalStyles";
+import { Button } from "office-ui-fabric-react";
+
+export const ButtonWrapper = styled.button`
+  border-width: 0px;
+  padding: 0px;
+  margin: 0 24px 24px 0;
+  @media only screen and (max-width: 1399px) {
+    margin-bottom: 20px;
+  }
+`;
 
 export const Container = styled.div`
   flex: 1 1 0px;
   display: flex;
   flex-direction: column;
-  margin: 0 24px 24px 0;
   background: white;
   height: 220px;
   min-width: 300px;
@@ -13,9 +22,6 @@ export const Container = styled.div`
   border: 1px solid ${COLORS.BORDER2};
   border-radius: 5px;
   cursor: pointer;
-  @media only screen and (max-width: 1399px) {
-    margin-bottom: 20px;
-  }
 
   &: hover {
     background: ${COLORS.GREYHOVER};
@@ -48,6 +54,7 @@ export const TemplateNameAndDateWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  align-items: baseline;
 `;
 export const TemplateName = styled.div`
   font-size: 0.95rem;
