@@ -25,7 +25,7 @@ import {
   LogoTextHeader,
   LogoTextSubHeader
 } from "./styled";
-import { INavLinkGroup, INavStyles, TooltipHost, ActionButton, IButtonProps, TooltipDelay, DirectionalHint } from "office-ui-fabric-react";
+import { INavLinkGroup, INavStyles } from "office-ui-fabric-react";
 import { ClearOwners } from "../../store/templateOwner/actions";
 
 
