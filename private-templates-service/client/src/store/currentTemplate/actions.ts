@@ -222,13 +222,9 @@ export function updateTemplate(templateID?: string, currentVersion?: string, tem
     const appState = getState();
 
     const api = initClientSDK(dispatch, getState);
+    const newTemplate = populateTemplate(getState);
 
-    let newTemplate = new PostedTemplate();
     const id = templateID || appState.currentTemplate.templateID;
-
-    const version = currentVersion ||
-      (appState.currentTemplate.template && appState.currentTemplate.template.instances && appState.currentTemplate.template.instances.length > 0 ?
-        appState.currentTemplate.template!.instances![0].version : "1.0");
 
     if (templateJSON) {
       newTemplate.template = templateJSON;
@@ -242,7 +238,7 @@ export function updateTemplate(templateID?: string, currentVersion?: string, tem
       newTemplate.data = new Array(appState.currentTemplate.sampleDataJSON);
     }
 
-    newTemplate.version = version;
+    newTemplate.version = currentVersion || newTemplate.version;
     newTemplate.name = templateName;
     newTemplate.state = state;
     newTemplate.tags = tags;

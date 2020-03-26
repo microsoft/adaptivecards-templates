@@ -5,7 +5,7 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { RootState } from '../../../../store/rootReducer';
 import { openModal, closeModal } from '../../../../store/page/actions';
 import { ModalState } from '../../../../store/page/types';
-import { updateCurrentTemplateVersion, updateTemplate, updateTemplateTags } from '../../../../store/currentTemplate/actions';
+import { updateCurrentTemplateVersion, updateTemplateTags } from '../../../../store/currentTemplate/actions';
 
 import { Template, TemplateInstance, PostedTemplate } from 'adaptive-templating-service-typescript-node';
 
@@ -119,7 +119,6 @@ const mapDispatchToProps = (dispatch: any) => {
     },
     updateTags: (tags: string[]) => {
       dispatch(updateTemplateTags(tags))
-      // dispatch(updateTemplate(undefined, undefined, undefined, undefined, undefined, undefined, tags));
     }
   }
 };
