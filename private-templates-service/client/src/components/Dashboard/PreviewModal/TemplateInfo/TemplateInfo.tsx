@@ -192,6 +192,7 @@ class TemplateInfo extends React.Component<Props, State> {
                   onChange={this.onVersionChange}
                   theme={THEME.LIGHT}
                   styles={DropdownStyles}
+                  ariaLabel="Version List Dropdown"
                 />
               </Title>
               <StatusIndicator state={templateState} />

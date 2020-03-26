@@ -128,7 +128,7 @@ const NavBar = (props: NavBarProps) => {
           <BaselineBanner>
             <StyledLogo src={Logo} />
             <Styledh1>{(props.template && props.template.name) || props.currentPageTitle}</Styledh1>
-            {!props.isFetching && <EditButton onClick={editName} iconProps={{ iconName: 'Edit' }} />}
+            {!props.isFetching && <EditButton ariaLabel="Edit Template Name" onClick={editName} iconProps={{ iconName: 'Edit' }} />}
           </BaselineBanner>
           <BackButton iconProps={{ iconName: 'Back' }} onClick={onBackButton}><ButtonTextWrapper>Back</ButtonTextWrapper></BackButton>
         </Banner>
