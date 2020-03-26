@@ -25,8 +25,9 @@ import {
   LogoTextHeader,
   LogoTextSubHeader
 } from "./styled";
-import { INavLinkGroup, INavStyles } from "office-ui-fabric-react";
+import { INavLinkGroup, INavStyles, TooltipHost, ActionButton, IButtonProps, TooltipDelay, DirectionalHint } from "office-ui-fabric-react";
 import { ClearOwners } from "../../store/templateOwner/actions";
+
 
 interface Props {
   authButtonMethod: () => void;
@@ -89,7 +90,7 @@ const navMenuLinks: INavLinkGroup[] = [
           style: iconStyle
         },
         title: "",
-        ariaLabel: "Dashboard Link"
+        ariaLabel: "Link to Dashboard"
       },
       {
         name: "New Template",
@@ -99,7 +100,7 @@ const navMenuLinks: INavLinkGroup[] = [
           style: iconStyle
         },
         title: "",
-        ariaLabel: "New Template Link"
+        ariaLabel: "Link to New Template"
       },
       {
         name: "All Templates",
@@ -109,7 +110,7 @@ const navMenuLinks: INavLinkGroup[] = [
           style: iconStylePink
         },
         title: "",
-        ariaLabel: "New Template Link"
+        ariaLabel: "Link to All Templates"
       },
       {
         name: "Drafts",
@@ -119,7 +120,7 @@ const navMenuLinks: INavLinkGroup[] = [
           style: iconStylePink
         },
         title: "",
-        ariaLabel: "New Template Link"
+        ariaLabel: "Link to Drafts"
       },
       {
         name: "Published",
@@ -129,7 +130,7 @@ const navMenuLinks: INavLinkGroup[] = [
           style: iconStylePink
         },
         title: "",
-        ariaLabel: "New Template Link"
+        ariaLabel: "Link to Published Templates"
       },
       {
         name: "Tags",
@@ -139,7 +140,7 @@ const navMenuLinks: INavLinkGroup[] = [
           style: iconStylePink
         },
         title: "",
-        ariaLabel: "New Template Link"
+        ariaLabel: "Link to Tags"
       }
     ]
   }
