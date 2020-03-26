@@ -5,7 +5,6 @@ import { Dropdown, Icon, IDropdownStyles } from "office-ui-fabric-react";
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { PostedTemplate } from 'adaptive-templating-service-typescript-node';
 
-
 export const StyledVersionDropdown = styled(Dropdown)`
   display: flex
   padding-right: 10px;
