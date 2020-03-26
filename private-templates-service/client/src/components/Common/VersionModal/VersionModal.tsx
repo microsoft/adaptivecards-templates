@@ -88,7 +88,7 @@ class VersionModal extends React.Component<Props, State> {
     let list = this.props.template.instances!;
     for (let i = 0; i < list.length; i++) {
       if (!this.state.versionList[i]) continue;
-      this.props.updateTemplateState(PostedTemplate.StateEnum.Live, list[i].version!, list[i].json);
+      this.props.updateTemplateState(PostedTemplate.StateEnum.Live, list[i].version!, list[i]);
       this.props.closeModal();
     }
   }
@@ -97,7 +97,7 @@ class VersionModal extends React.Component<Props, State> {
     let list = this.props.template.instances!;
     for (let i = 0; i < list.length; i++) {
       if (!this.state.versionList[i]) continue;
-      this.props.updateTemplateState(PostedTemplate.StateEnum.Deprecated, list[i].version!, list[i].json);
+      this.props.updateTemplateState(PostedTemplate.StateEnum.Deprecated, list[i].version!, list[i]);
       this.props.closeModal();
     }
   }

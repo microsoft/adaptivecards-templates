@@ -12,6 +12,7 @@ import SearchBar from "./SearchBar";
 
 import { ActionButton } from 'office-ui-fabric-react';
 import Logo from '../../assets/adaptive-cards-100-logo.png';
+import { UNTITLEDCARD } from '../../assets/strings';
 
 import { Banner, Styledh1, StyledLogo, MobileBanner, BaselineBanner, StyledButton, Styledh2, StyledButtonContent, EditButton, BackButton, ButtonTextWrapper } from './styled';
 
@@ -28,8 +29,9 @@ const mapStateToProps = (state: RootState) => {
     currentPageTitle: state.page.currentPageTitle,
     currentPage: state.page.currentPage,
     template: state.currentTemplate.template,
-    // templateName: state.currentTemplate.templateName,
-    isFetching: state.currentTemplate.isFetching
+    templateID: state.currentTemplate.templateID,
+    isFetching: state.currentTemplate.isFetching,
+    templateName: state.currentTemplate.templateName
   }
 }
 
@@ -41,6 +43,7 @@ interface NavBarProps {
   templateName?: string;
   isFetching: boolean;
   version?: string;
+  templateID?: string;
 }
 
 
@@ -97,10 +100,10 @@ const NavBar = (props: NavBarProps) => {
         <Banner>
           <MobileBanner>
             <StyledLogo src={Logo} />
-            <Styledh1>{props.template ? props.template.name : props.currentPageTitle}</Styledh1>
-            <Styledh2>{props.version ? "Version " + props.version : ""}</Styledh2>
+            <Styledh1>{(props.templateID === "" && UNTITLEDCARD) || props.templateName}</Styledh1>
+            {props.templateID !== "" && <EditButton onClick={editName} iconProps={{ iconName: 'Edit' }} />}
           </MobileBanner>
-          <ActionButton onClick={() => { history.push("/") }}>
+          <ActionButton onClick={() => { history.push("/") }}> 
             <StyledButton>
               <StyledButtonContent>
                 Finish

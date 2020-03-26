@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { updateTemplate } from '../../../store/currentTemplate/actions';
 import { RootState } from '../../../store/rootReducer';
 
 import { Template } from 'adaptive-templating-service-typescript-node';
@@ -25,21 +24,14 @@ const mapStateToProps = (state: RootState) => {
   }
 }
 
-const mapDispatchToProps = (dispatch: any) => {
-  return {
-    updateTags: (tags: string[]) => {
-      dispatch(updateTemplate(undefined, undefined, undefined, undefined, undefined, undefined, tags))
-    }
-  }
-}
-
 interface Props {
   tags?: string[];
   allowEdit?: boolean;
   allowAddTag?: boolean;
   templateID?: string;
   template?: Template;
-  updateTags: (tags: string[]) => void;
+  updateTags?: (tags: string[]) => void;
+  tagRemove?: (tag: string) => void;
 }
 
 interface State {
@@ -60,13 +52,6 @@ class Tags extends React.Component<Props, State>  {
     this.tagRefs = {};
   }
 
-  tagRemove = (tag: string) => {
-    if (this.props.allowEdit && this.props.template && this.props.template.tags) {
-      const newTags = this.props.template.tags.filter((existingTag: string) => existingTag !== tag);
-      this.props.updateTags(newTags);
-    }
-  }
-
   openNewTag = () => {
     this.setState({ isAdding: true }, () => {
       if (this.addTagInput && this.addTagInput.current) {
@@ -83,16 +68,17 @@ class Tags extends React.Component<Props, State>  {
 
   submitNewTag = (e: any): void => {
     e.preventDefault();
-    if (this.addTagInput && this.addTagInput.current && this.props.template && this.props.template.tags) {
+    if (this.addTagInput && this.addTagInput.current && this.props.tags) {
       const tag = this.addTagInput.current.value;
-      if(this.props.template.tags.includes(tag)){
-        this.highlightTag(tag, this.props.template.tags);
+      if(this.props.tags.includes(tag)){
+        this.highlightTag(tag, this.props.tags);
       }
       else if(tag === ""){
         this.closeAddTag();
       }
-      else{
-        this.props.updateTags([...this.props.template.tags, tag]);
+      else if (this.props.updateTags){
+        this.props.updateTags([...this.props.tags, tag]);
+        this.setState({newTagName: ""});
       }
     }
   }
@@ -139,7 +125,7 @@ class Tags extends React.Component<Props, State>  {
           <Tag ref={(ref: HTMLDivElement) => this.tagRefs[tag] = ref} onAnimationEnd={this.onAnimationEnd} key={tag}>
             <TagText>{tag}</TagText>
 	    {allowEdit &&
-            <TagCloseIcon key={tag} iconName="ChromeClose" onClick={() => this.tagRemove(tag)} />}
+            <TagCloseIcon key={tag} iconName="ChromeClose" onClick={ this.props.tagRemove && (() => this.props.tagRemove!(tag))}/>}
           </Tag>
         ))}
         {allowAddTag && <AddTagWrapper onSubmit={this.submitNewTag} open={isAdding}>
@@ -155,4 +141,4 @@ class Tags extends React.Component<Props, State>  {
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(Tags);
+export default connect(mapStateToProps)(Tags);

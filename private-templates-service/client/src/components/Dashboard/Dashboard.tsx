@@ -96,6 +96,7 @@ class Dashboard extends React.Component<Props> {
   selectTemplate = (templateID: string) => {
     this.props.history.push("preview/" + templateID);
   };
+
   render() {
     if (this.props.isSearch) {
       return (
