@@ -191,9 +191,6 @@ export function updateTemplate(templateID?: string, currentVersion?: string, tem
     if (templateJSON) {
       newTemplate.template = templateJSON;
     }
-    else {
-      newTemplate.template = appState.currentTemplate.templateJSON;
-    }
 
     if (sampleDataJSON) {
       // TODO: the clientSDK, backend, and DB adapter should be refactored such that the data is a json object and not an array of objects
