@@ -866,6 +866,25 @@ describe("Basic Get Templates", () => {
     // Check that only the latest version is returned
     expect(template.instances[0].version).toMatch("1.2");
   });
+});
+
+
+describe("Post Templates: Data Binding", () => {
+  let token: string;
+  const app = express();
+  let id: string;
+  let idsToDelete: string[] = [];
+
+  beforeAll(async () => {
+    // TODO: request access token for registered AD app
+    token = await getToken();
+    let templateClient = TemplateServiceClient.init(options);
+    let middleware: Router = templateClient.expressMiddleware();
+    let userMiddleware: Router = templateClient.userExpressMiddleware();
+    app.use(bodyParser.json());
+    app.use("/template", middleware);
+    app.use("/user", userMiddleware);
+  });
 
   // Authenticated post request
   it("pass in a data json and id and should receive a template with the data bound", async () => {
@@ -901,13 +920,14 @@ describe("Basic Get Templates", () => {
     idsToDelete.push(id);
 
     res = await request(app)
-      .get(`/template/${id}`)
+      .post(`/template/${id}`)
       .set({ Authorization: "Bearer " + token })
       .send({
         data: {
           "greeting": "hi",
           "name": "intern",
-        }
+        },
+        bindData: "true"
       })
     expect(res.status).toEqual(200);
     expect(res.body).toHaveProperty("templates");
@@ -927,5 +947,178 @@ describe("Basic Get Templates", () => {
       ],
       "$schema": "http://adaptivecards.io/schemas/adaptive-card.json"
     }));
+  });
+
+  it("pass in a data json, version, and id and should receive that version of the template with the data bound", async () => {
+    let res = await request(app)
+      .post("/template")
+      .set({ Authorization: "Bearer " + token })
+      .send({
+        template: {}
+      });
+    expect(res.status).toEqual(201);
+    expect(res.body).toHaveProperty("id");
+    id = res.body.id;
+    idsToDelete.push(id);
+
+    res = await request(app)
+      .post(`/template/${id}`)
+      .set({ Authorization: "Bearer " + token })
+      .send({
+        template: {
+          "type": "AdaptiveCard",
+          "version": "1.0",
+          "body": [
+            {
+              "type": "TextBlock",
+              "text": "{greeting} {name} version 1.0"
+            }
+          ],
+          "$schema": "http://adaptivecards.io/schemas/adaptive-card.json"
+        },
+        version: "1.0"
+      });
+    expect(res.status).toEqual(201);
+    idsToDelete.push(id);
+
+    res = await request(app)
+      .post(`/template/${id}`)
+      .set({ Authorization: "Bearer " + token })
+      .send({
+        template: {
+          "type": "AdaptiveCard",
+          "version": "1.0",
+          "body": [
+            {
+              "type": "TextBlock",
+              "text": "{greeting} {name}"
+            }
+          ],
+          "$schema": "http://adaptivecards.io/schemas/adaptive-card.json"
+        },
+        version: "1.1"
+      });
+    expect(res.status).toEqual(201);
+    idsToDelete.push(id);
+
+    res = await request(app)
+      .post(`/template/${id}`)
+      .set({ Authorization: "Bearer " + token })
+      .send({
+        data: {
+          "greeting": "hi",
+          "name": "intern",
+        },
+        bindData: "true",
+        version: "1.0"
+      })
+    expect(res.status).toEqual(200);
+    expect(res.body).toHaveProperty("templates");
+    expect(res.body.templates).toHaveLength(1);
+    let template = res.body.templates[0];
+    id = template._id;
+    expect(template.instances).toHaveLength(1);
+    // Check that the data was bound
+    expect(JSON.stringify(template.instances[0].json)).toMatch(JSON.stringify({
+      "type": "AdaptiveCard",
+      "version": "1.0",
+      "body": [
+        {
+          "type": "TextBlock",
+          "text": "hi intern version 1.0"
+        }
+      ],
+      "$schema": "http://adaptivecards.io/schemas/adaptive-card.json"
+    }));
+  });
+
+  it("pass in a data json, no version, and id and should receive the latest version of the template with the data bound", async () => {
+    let res = await request(app)
+      .post("/template")
+      .set({ Authorization: "Bearer " + token })
+      .send({
+        template: {}
+      });
+    expect(res.status).toEqual(201);
+    expect(res.body).toHaveProperty("id");
+    id = res.body.id;
+    idsToDelete.push(id);
+
+    res = await request(app)
+      .post(`/template/${id}`)
+      .set({ Authorization: "Bearer " + token })
+      .send({
+        template: {
+          "type": "AdaptiveCard",
+          "version": "1.0",
+          "body": [
+            {
+              "type": "TextBlock",
+              "text": "{greeting} {name} version 1.0"
+            }
+          ],
+          "$schema": "http://adaptivecards.io/schemas/adaptive-card.json"
+        },
+        version: "1.0"
+      });
+    expect(res.status).toEqual(201);
+    idsToDelete.push(id);
+
+    res = await request(app)
+      .post(`/template/${id}`)
+      .set({ Authorization: "Bearer " + token })
+      .send({
+        template: {
+          "type": "AdaptiveCard",
+          "version": "1.0",
+          "body": [
+            {
+              "type": "TextBlock",
+              "text": "{greeting} {name}"
+            }
+          ],
+          "$schema": "http://adaptivecards.io/schemas/adaptive-card.json"
+        },
+        version: "1.1"
+      });
+    expect(res.status).toEqual(201);
+    idsToDelete.push(id);
+
+    res = await request(app)
+      .post(`/template/${id}`)
+      .set({ Authorization: "Bearer " + token })
+      .send({
+        data: {
+          "greeting": "hi",
+          "name": "intern",
+        },
+        bindData: "true",
+      })
+    expect(res.status).toEqual(200);
+    expect(res.body).toHaveProperty("templates");
+    expect(res.body.templates).toHaveLength(1);
+    let template = res.body.templates[0];
+    id = template._id;
+    expect(template.instances).toHaveLength(1);
+    // Check that the data was bound
+    expect(JSON.stringify(template.instances[0].json)).toMatch(JSON.stringify({
+      "type": "AdaptiveCard",
+      "version": "1.0",
+      "body": [
+        {
+          "type": "TextBlock",
+          "text": "hi intern"
+        }
+      ],
+      "$schema": "http://adaptivecards.io/schemas/adaptive-card.json"
+    }));
+  });
+
+  afterAll(async () => {
+    await mongoose.connection.close();
+    for (let id of idsToDelete) {
+      await request(app).delete(`/template/${id}`)
+        .set({ Authorization: "Bearer " + token });
+    }
   });
 });
