@@ -11,7 +11,7 @@ Prerequisites:
 
 **3. `cd adaptivecards-templates/private-templates-service/server` and run `npm run init-app`. This installs and links dependencies.**
 
-**4. Open `server/app.ts` and replace mongoose code lines 39 - 64 with 
+**4. Open `server/app.ts` and replace mongoose code lines 39 - 64 with the following:**
 ```
 import { InMemoryDBProvider } from '../../adaptivecards-templating-service/src/storageproviders/InMemoryDBProvider';
 
@@ -36,7 +36,7 @@ const mongoClient: ClientOptions = {
 const client: TemplateServiceClient = TemplateServiceClient.init(mongoClient);
 app.use("/template", client.expressMiddleware());
 app.use("/user", client.userExpressMiddleware());
-```.**
+```
 
 **5. In the `adaptivecards-templates/private-templates-service/server/app.ts` file, replace ` "#{DB_CONNECTION_TOKEN}#"` with the real DB connection string. Make sure to NOT commit this file. Ask a dev for this string!**
 
