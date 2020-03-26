@@ -87,7 +87,7 @@ export const StyledButtonContent = styled.div`
   text-align: center;
 `;
 
-export const EditButton = styled(IconButton).attrs({'aria-label': 'Edit Template Name'})`
+export const EditButton = styled(IconButton)`
   margin-left: 16px;
   border: 0;
   outline: 0;

@@ -56,16 +56,18 @@ const navMenuLinksProps: Partial<INavStyles> = {
     selectors: {
       ".ms-Nav-compositeLink:hover &": {
         backgroundColor: COLORS.BLUE2,
-        textDecoration: "none"
+        textDecoration: "none",
+        
       },
       ".ms-Nav-compositeLink.is-selected &": {
         background: COLORS.BLUE2
-      }
-    }
+      },
+    },
+    
   },
   linkText: {
     color: COLORS.WHITE
-  }
+  },
 };
 
 const iconStyle = {
@@ -87,7 +89,9 @@ const navMenuLinks: INavLinkGroup[] = [
         iconProps: {
           iconName: "ViewDashboard",
           style: iconStyle
-        }
+        },
+        title: "",
+        ariaLabel: "Dashboard Link"
       },
       {
         name: "New Template",
@@ -95,7 +99,9 @@ const navMenuLinks: INavLinkGroup[] = [
         iconProps: {
           iconName: "CalculatorAddition",
           style: iconStyle
-        }
+        },
+        title: "",
+        ariaLabel: "New Template Link"
       },
       {
         name: "All Templates",
@@ -103,7 +109,9 @@ const navMenuLinks: INavLinkGroup[] = [
         iconProps: {
           iconName: "ViewList",
           style: iconStylePink
-        }
+        },
+        title: "",
+        ariaLabel: "New Template Link"
       },
       {
         name: "Drafts",
@@ -111,7 +119,9 @@ const navMenuLinks: INavLinkGroup[] = [
         iconProps: {
           iconName: "SingleColumnEdit",
           style: iconStylePink
-        }
+        },
+        title: "",
+        ariaLabel: "New Template Link"
       },
       {
         name: "Published",
@@ -119,7 +129,9 @@ const navMenuLinks: INavLinkGroup[] = [
         iconProps: {
           iconName: "PublishContent",
           style: iconStylePink
-        }
+        },
+        title: "",
+        ariaLabel: "New Template Link"
       },
       {
         name: "Tags",
@@ -127,7 +139,9 @@ const navMenuLinks: INavLinkGroup[] = [
         iconProps: {
           iconName: "Tag",
           style: iconStylePink
-        }
+        },
+        title: "",
+        ariaLabel: "New Template Link"
       }
     ]
   }
