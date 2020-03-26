@@ -20,7 +20,7 @@ export const Modal = styled.div`
   display: flex;
   flex-direction: column;
   background-color: ${COLORS.WHITE};
-  width: 50%;
+  width: 60%;
   padding: 48px;
 `;
 
@@ -39,16 +39,13 @@ export const MiddleRowWrapper = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  flex-wrap: wrap;
-  margin: 32px 0px 32px 0px;
+  margin: 32px;
 `;
 
 export const InfoWrapper = styled.div`
   display: flex;
+  flex: 1 1 200px;
   flex-direction: column;
-  flex: 1;
-  max-width: 200px;
-  margin-right: 42px;
 `;
 
 export const TemplateFooterWrapper = styled.div`
