@@ -23,5 +23,6 @@ export function initClientSDK(dispatch: any, getState: () => RootState, ): Templ
   if (state.auth.accessToken) {
     api.setApiKey(0, `Bearer ${state.auth.accessToken!.accessToken}`);
   }
+  console.log(state.auth.accessToken!.accessToken);
   return api;
 }
