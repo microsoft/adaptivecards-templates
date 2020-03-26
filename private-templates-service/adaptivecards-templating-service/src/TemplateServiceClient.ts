@@ -380,35 +380,25 @@ export class TemplateServiceClient {
       for (let instance of existingTemplate.instances) {
         if (instance.version === templateInstance.version) {
           let templateData: JSON[] | undefined = data ? [data] : dataList ? dataList : undefined;
-          if (instance.state === TemplateState.deprecated) {
+          if (instance.state === TemplateState.deprecated || instance.state === TemplateState.live && templateState !== TemplateState.deprecated) {
             // The template that is trying to be modified is deprecated
+            if (isShareable) instance.isShareable = isShareable;
             templateInstances.push(instance);
             // Pushing existing deprecated version back
-
-            version = incrementVersion(existingTemplate);
-            templateState = templateState === TemplateState.live ? TemplateState.live : TemplateState.draft;
-            templateInstance = setTemplateInstanceParam(templateInstance, templateData, templateState, isShareable, version);
-            templateInstances.push(templateInstance);
+            if (template || state){
+              version = incrementVersion(existingTemplate);
+              if (instance.state === TemplateState.deprecated) templateState = templateState === TemplateState.live ? TemplateState.live : TemplateState.draft;
+              templateInstance = setTemplateInstanceParam(templateInstance, templateData, templateState, isShareable, version);
+              templateInstances.push(templateInstance);
+            }
             added = true;
             continue;
-          }
-          if (instance.state === TemplateState.live) {
-            if (templateState === TemplateState.deprecated) {
+          } else if (instance.state === TemplateState.live && templateState === TemplateState.deprecated) {
               // Set the template to deprecated
               templateInstance = setTemplateInstanceParam(templateInstance, templateData, templateState, isShareable, version);
               templateInstances.push(templateInstance);
               added = true;
               continue;
-            }
-            else {
-              templateInstances.push(instance);
-              // Pushing existing deprecated version back
-              version = incrementVersion(existingTemplate);
-              templateInstance = setTemplateInstanceParam(templateInstance, templateData, templateState, isShareable, version);
-              templateInstances.push(templateInstance);
-              added = true;
-              continue;
-            }
           }
 
           let existingData = instance.data;
@@ -423,6 +413,7 @@ export class TemplateServiceClient {
           templateInstance.data = templateData || instance.data;
           templateInstance.publishedAt = templateInstance.publishedAt || instance.publishedAt;
           templateInstance.isShareable = templateInstance.isShareable || instance.isShareable;
+          templateInstance.json = template ? template : instance.json;
           added = true;
           templateInstances.push(templateInstance);
         } else {

@@ -11,5 +11,5 @@ export default {
     (process.env.REACT_APP_HOST_ENV === 'dev' ?
       'https://adaptivecms.azurewebsites.net/' :
       'https://adaptivecms-stage.azurewebsites.net/'),
-  scopes: ["user.read"]
+  scopes: ["user.read", "user.readbasic.all"]
 };

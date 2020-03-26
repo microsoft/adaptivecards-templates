@@ -3,22 +3,31 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { updateTemplate } from '../../../../store/currentTemplate/actions';
 import { closeModal } from '../../../../store/page/actions';
+import { UserType } from '../../../../store/auth/types';
+import { RootState } from '../../../../store/rootReducer';
 
-import { TextField, PrimaryButton } from 'office-ui-fabric-react';
+import { PrimaryButton } from 'office-ui-fabric-react';
 
-import { EmailPanel, SemiBoldText, BottomRow, ButtonGroup, CancelButton } from '../styled';
+import { EmailPanel, SemiBoldText, BottomRow, ButtonGroup, CancelButton, SendMailButton } from '../styled';
 import * as STRINGS from '../../../../assets/strings';
+
+import { Template } from 'adaptive-templating-service-typescript-node';
 
 interface ShareModalFormProps {
   shareURL: string;
   templateVersion?: string;
   closeModal: () => void;
   shareTemplate: (version: string, isShareable: boolean) => void;
+  user?: UserType;
+  template?: Template;
 }
 
-interface State {
-  value: string;
-}
+const mapStateToProps = (state: RootState) => {
+  return {
+    user: state.auth.user,
+    template: state.currentTemplate.template
+  };
+};
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
@@ -31,50 +40,41 @@ const mapDispatchToProps = (dispatch: any) => {
   }
 }
 
-class ShareModalForm extends React.Component<ShareModalFormProps, State> {
+class ShareModalForm extends React.Component<ShareModalFormProps> {
 
-  constructor(props: ShareModalFormProps) {
-    super(props);
-    this.state = { value: '' };
-
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  handleChange(event: any) {
-    this.setState({ value: event.target.value });
-  }
-
-  handleSubmit(event: any) {
-    //TODO: use emails given to send an email
-
+  shareTemplate = () => {
     this.props.shareTemplate(this.props.templateVersion ? this.props.templateVersion : "1.0", true);
     this.props.closeModal();
-
-    event.preventDefault();
   }
 
   render() {
     return (
       <React.Fragment>
-        <form onSubmit={this.handleSubmit}>
-          <EmailPanel>
-            <SemiBoldText style={{ color: 'pink' }}>Send to recipients</SemiBoldText>
-            <TextField id="emailTextField"
-              value={this.state.value}
-              onChange={this.handleChange}
-              description={STRINGS.EMAIL_TEXTFIELD_WARNING} />
-          </EmailPanel>
-          <BottomRow>
-            <ButtonGroup>
-              <CancelButton text="Cancel" onClick={this.props.closeModal} />
-              <PrimaryButton type="submit" value="Submit" text="Share" />
-            </ButtonGroup>
-          </BottomRow>
-        </form>
+        <EmailPanel>
+          <SemiBoldText>{STRINGS.EMAIL_RECIPIENTS}</SemiBoldText>
+          <SendMailButton text={STRINGS.SEND_IN_OUTLOOK} href={initMailingLink(this.props)} />
+        </EmailPanel>
+        <BottomRow>
+          <ButtonGroup>
+            <CancelButton text="Cancel" onClick={this.props.closeModal} />
+            <PrimaryButton type="submit" value="Submit" text="Done" onClick={this.shareTemplate} />
+          </ButtonGroup>
+        </BottomRow>
       </React.Fragment>
     );
   }
 }
 
-export default connect(undefined, mapDispatchToProps)(ShareModalForm);
+function initMailingLink(props: ShareModalFormProps): string {
+  let templateName = props.template!.name;
+
+  const to = "";
+  const subject = "ACMS: " + props.user!.displayName + " shared " + templateName + " with you";
+  const body = "Here is the link to access this Adaptive Card: " + props.shareURL;
+
+  let mailingLink = "mailto:" + to + "?subject=" + subject + "&body=" + body;
+
+  return mailingLink.replace(" ", "%20");
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ShareModalForm);

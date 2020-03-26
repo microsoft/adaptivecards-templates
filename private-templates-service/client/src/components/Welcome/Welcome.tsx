@@ -6,6 +6,7 @@ import { RootState } from "../../store/rootReducer";
 import { Button } from "reactstrap";
 import { connect } from "react-redux";
 import { OuterWrapper } from "./styled";
+import { COLORS } from "../../globalStyles";
 
 const mapStateToPropsWelcome = (state: RootState) => {
   return {
@@ -23,7 +24,7 @@ const WelcomeContent = (props: WelcomeProps): ReactElement => {
   // Not authenticated, present a sign in button
   return (
     <React.Fragment>
-      <Button color="primary" onClick={props.authButtonMethod}>
+      <Button style={{backgroundColor: COLORS.BLUE}} onClick={props.authButtonMethod}>
         Click here to sign in
       </Button>
     </React.Fragment>

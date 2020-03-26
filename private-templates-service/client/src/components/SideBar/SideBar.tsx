@@ -26,6 +26,8 @@ import {
   LogoTextSubHeader
 } from "./styled";
 import { INavLinkGroup, INavStyles } from "office-ui-fabric-react";
+import { ClearOwners } from "../../store/templateOwner/actions";
+
 
 interface Props {
   authButtonMethod: () => void;
@@ -86,7 +88,9 @@ const navMenuLinks: INavLinkGroup[] = [
         iconProps: {
           iconName: "ViewDashboard",
           style: iconStyle
-        }
+        },
+        title: "",
+        ariaLabel: "Link to Dashboard"
       },
       {
         name: "New Template",
@@ -94,7 +98,9 @@ const navMenuLinks: INavLinkGroup[] = [
         iconProps: {
           iconName: "CalculatorAddition",
           style: iconStyle
-        }
+        },
+        title: "",
+        ariaLabel: "Link to New Template"
       },
       {
         name: "All Templates",
@@ -102,7 +108,9 @@ const navMenuLinks: INavLinkGroup[] = [
         iconProps: {
           iconName: "ViewList",
           style: iconStylePink
-        }
+        },
+        title: "",
+        ariaLabel: "Link to All Templates"
       },
       {
         name: "Drafts",
@@ -110,7 +118,9 @@ const navMenuLinks: INavLinkGroup[] = [
         iconProps: {
           iconName: "SingleColumnEdit",
           style: iconStylePink
-        }
+        },
+        title: "",
+        ariaLabel: "Link to Drafts"
       },
       {
         name: "Published",
@@ -118,7 +128,9 @@ const navMenuLinks: INavLinkGroup[] = [
         iconProps: {
           iconName: "PublishContent",
           style: iconStylePink
-        }
+        },
+        title: "",
+        ariaLabel: "Link to Published Templates"
       },
       {
         name: "Tags",
@@ -126,7 +138,9 @@ const navMenuLinks: INavLinkGroup[] = [
         iconProps: {
           iconName: "Tag",
           style: iconStylePink
-        }
+        },
+        title: "",
+        ariaLabel: "Link to Tags"
       }
     ]
   }
@@ -139,6 +153,9 @@ const SideBar = (props: Props) => {
     event.preventDefault();
     if (element.url === "/designer") {
       props.newTemplate();
+    }
+    else if (element.url === "/") {
+      ClearOwners();
     }
     history.push(element.url);
   };

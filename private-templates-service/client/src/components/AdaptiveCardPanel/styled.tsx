@@ -12,8 +12,13 @@ export const Container = styled.div`
   max-width: 350px;
   border: 1px solid ${COLORS.BORDER2};
   border-radius: 5px;
+  cursor: pointer;
   @media only screen and (max-width: 1399px) {
     margin-bottom: 20px;
+  }
+
+  &: hover {
+    background: ${COLORS.GREYHOVER};
   }
 `;
 
@@ -56,7 +61,7 @@ export const TemplateName = styled.div`
 export const TemplateUpdatedAt = styled.div`
   font-family: Segoe UI Regular;
   font-size: 0.8rem;
-  color: grey;
+  color: ${COLORS.GREY3};
 `;
 
 export const Bottom = styled.div`
