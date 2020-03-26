@@ -16,7 +16,6 @@
   },
   "license": "ISC",
   "dependencies": {
-    "adaptivecards": "^1.2.5",
     "adaptivecards-templating": "^0.1.1-alpha.1",
     "axios": "^0.19.2",
     "bunyan": "^1.8.12",
