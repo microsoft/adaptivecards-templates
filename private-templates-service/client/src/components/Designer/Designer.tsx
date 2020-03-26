@@ -149,7 +149,7 @@ function initDesigner(): ACDesigner.CardDesigner {
 }
 
 function onSave(designer: ACDesigner.CardDesigner, props: DesignerProps): void {
-  if(props.templateID === ""){
+  if(props.templateID === "" || props.templateID === undefined){
     props.openModal(ModalState.Save);
   }
   else if (JSON.stringify(props.templateJSON) !== JSON.stringify(designer.getCard()) || props.sampleDataJSON !== designer.sampleData){ 
