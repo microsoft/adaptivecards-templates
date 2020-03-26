@@ -806,11 +806,12 @@ export class TemplateServiceClient {
    * @returns Promise as valid json
    */
   public async bindData(
-    token: string,
     templateId: string,
     data: JSON,
     version?: string,
     isClient?: boolean,
+    token?: string,
+
 
   ): Promise<JSONResponse<ITemplate[]>> {
     let authCheck = this._checkAuthenticated(token);
@@ -834,47 +835,37 @@ export class TemplateServiceClient {
 
     let templates: ITemplate[] = response.result;
 
-    if (templateId && templates.length > 0) {
-      if (templates![0].owner !== userId && templates![0].isLive === false) return { success: true, result: [] };
-
-      if (isClient === undefined || isClient === false) {
-        // Update hit counter for template
-        this._incrementTemplateHits(templateId, templates![0], version);
-      }
-      sortTemplateByVersion(templates![0]);
-      if (!version) {
-        let resultTemplates: ITemplate[] = [];
-        let template: ITemplate = templates[0];
-        if (!template.instances || !template.instances[0]) {
-          return { success: false, errorMessage: "No template instances found" };
-        }
-        let boundJSON: JSON = createCard(template.instances[0].json, data);
-        template.instances![0].json = boundJSON;
-        //return only the most recent version of the template with data bound 
-        template.instances = [template.instances[0]];
-        resultTemplates.push(template);
-        return { success: true, result: resultTemplates };
-      }
+    if (templates.length != 1) {
+      return { success: false, errorMessage: "Invalid template ID" };
     }
 
+    if (isClient === undefined || isClient === false) {
+      // Update hit counter for template
+      this._incrementTemplateHits(templateId, templates![0], version);
+    }
 
-    // Filter for the latest template version (instance)
+    sortTemplateByVersion(templates![0]);
+
     let resultTemplates: ITemplate[] = [];
-    for (let template of templates) {
-      if (template.isLive === false && template.owner !== userId) continue;
-      if (!template.instances) continue;
-      if (version) {
-        for (let instance of template.instances) {
-          if (version && instance.version === version) {
-            let boundJSON: JSON = createCard(instance.json, data);
-            instance.json = boundJSON;
-            template.instances = [instance];
-            resultTemplates.push(template);
-            break;
-          }
+    let template = templates[0];
+    if (template.isLive === false && template.owner !== userId) return { success: false, errorMessage: "Invalid auth token" };
+    if (!template.instances) { return { success: false, errorMessage: "Invalid template ID" } };
+    if (version) {
+      for (let instance of template.instances) {
+        if (version && instance.version === version) {
+          let boundJSON: JSON = createCard(instance.json, data);
+          instance.json = boundJSON;
+          template.instances = [instance];
+          resultTemplates.push(template);
+          return { success: true, result: resultTemplates }
         }
       }
     }
+    // return latest version if 
+    let boundJSON: JSON = createCard(template.instances[0].json, data);
+    template.instances![0].json = boundJSON;
+    template.instances = [template.instances[0]];
+    resultTemplates.push(template);
     return { success: true, result: resultTemplates };
 
   }
@@ -1270,19 +1261,18 @@ export class TemplateServiceClient {
           return res.status(400).json({ error: err });
         }
         let isClient: boolean | undefined = req.query.isClient ? req.query.isClient.toLowerCase() === "true" : undefined;
-        let token = parseToken(req.headers.authorization!);
 
         let response = await this.bindData(
-          token,
           req.params.id,
           req.body.data,
           req.body.version,
-          isClient
+          isClient,
+          token,
         )
 
         if (!response.success || (response.result && response.result.length === 0)) {
           const err = new TemplateError(ApiError.DataBindingFailed, "Data binding failed.");
-          return res.status(404).json({ error: err });
+          return res.status(400).json({ error: err });
         }
         return res.status(200).json({ templates: response.result });
 
