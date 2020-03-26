@@ -261,7 +261,7 @@ export function updateTemplate(templateID?: string, currentVersion?: string, tem
       dispatch(requestExistingTemplateUpdate());
       return api.postTemplateById(id, newTemplate).then(response => {
         if (response.response.statusCode && response.response.statusCode === 201) {
-          dispatch(receiveExistingTemplateUpdate(templateJSON, templateName, sampleDataJSON, version));
+          dispatch(receiveExistingTemplateUpdate(templateJSON, templateName, sampleDataJSON, newTemplate.version));
           dispatch(getTemplate(id));
         }
         else {
