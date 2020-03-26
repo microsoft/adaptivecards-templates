@@ -479,7 +479,8 @@ export class TemplateServiceClient {
     isShareable?: boolean,
     tags?: string[] | string,
     data?: JSON[] | JSON,
-    token?: string
+    token?: string,
+    isDataBound?: boolean
   ): Promise<JSONResponse<String>> {
     let authCheck = this._checkAuthenticated(token);
     if (!authCheck.success) {
@@ -515,6 +516,7 @@ export class TemplateServiceClient {
         dataItem = data;
         dataList = undefined;
       }
+
       let response = await this._updateTemplate(
         templateId,
         name,
@@ -642,21 +644,20 @@ export class TemplateServiceClient {
   }
 
   /**
-   * @public
-   * Get entry point.
-   * Returns the latest version of all published (live) and owned templates.
-   * @param {string} templateId - unique template id
-   * @param {boolean} isPublished - search only for live templates
-   * @param {string} templateName - name to query for
-   * @param {string} version - version number, used with templateId
-   * @param {boolean} owned - If false, will retrieve all public templates regardless of owner
-   * @param {SortBy} sortBy - one of dateCreated, dateModified, alphabetical
-   * @param {SortOrder} sortOrder - one of ascending, descending
-   * @param {string[]} tags - filter by one or more tags
-   * @param {boolean} isClient - used to ignore updating the hit number on a template
-   * @param {JSON} data - data json to bind with template
-   * @returns Promise as valid json
-   */
+     * @public
+     * Get entry point.
+     * Returns the latest version of all published (live) and owned templates.
+     * @param {string} templateId - unique template id
+     * @param {boolean} isPublished - search only for live templates
+     * @param {string} templateName - name to query for
+     * @param {string} version - version number, used with templateId
+     * @param {boolean} owned - If false, will retrieve all public templates regardless of owner
+     * @param {SortBy} sortBy - one of dateCreated, dateModified, alphabetical
+     * @param {SortOrder} sortOrder - one of ascending, descending
+     * @param {string[]} tags - filter by one or more tags
+     * @param {boolean} isClient - used to ignore updating the hit number on a template
+     * @returns Promise as valid json
+     */
   public async getTemplates(
     token?: string,
     templateId?: string,
@@ -667,8 +668,7 @@ export class TemplateServiceClient {
     sortBy?: SortBy,
     sortOrder?: SortOrder,
     tags?: string[],
-    isClient?: boolean,
-    data?: JSON,
+    isClient?: boolean
   ): Promise<JSONResponse<ITemplate[]>> {
     let authCheck = this._checkAuthenticated(token);
     if (!authCheck.success) {
@@ -719,22 +719,7 @@ export class TemplateServiceClient {
         this._incrementTemplateHits(templateId, templates![0], version);
       }
       sortTemplateByVersion(templates![0]);
-      if (!version) {
-        if (data) {
-          let resultTemplates: ITemplate[] = [];
-          let template: ITemplate = templates[0];
-          if (!template.instances || !template.instances[0]) {
-            return { success: false, errorMessage: "No template instances found" };
-          }
-          let boundJSON: JSON = createCard(template.instances[0].json, data);
-          template.instances![0].json = boundJSON;
-          //return only the most recent version of the template with data bound 
-          template.instances = [template.instances[0]];
-          resultTemplates.push(template);
-          return { success: true, result: resultTemplates };
-        }
-        return { success: true, result: templates };
-      }
+      if (!version) return { success: true, result: templates };
     }
 
     // Filter for the latest template version (instance)
@@ -745,10 +730,6 @@ export class TemplateServiceClient {
       if (version) {
         for (let instance of template.instances) {
           if (version && instance.version === version) {
-            if (data) {
-              let boundJSON: JSON = createCard(instance.json, data);
-              instance.json = boundJSON;
-            }
             template.instances = [instance];
             resultTemplates.push(template);
             break;
@@ -760,6 +741,92 @@ export class TemplateServiceClient {
       }
     }
     return { success: true, result: resultTemplates };
+  }
+
+  /**
+   * @public
+   * Get entry point.
+   * Returns the specified template with the data bound into the template JSON.
+   * If a version is passed in, it will update the template JSON of that version.
+   * If not version is passed, it will update the latest version.
+   * @param {string} templateId - unique template id
+   * @param {JSON} data - data json to bound with template json
+   * @param {string} version - version number, used with templateId
+   * @param {boolean} isClient - used to ignore updating the hit number on a template
+   * @returns Promise as valid json
+   */
+  public async bindData(
+    token: string,
+    templateId: string,
+    data: JSON,
+    version?: string,
+    isClient?: boolean,
+
+  ): Promise<JSONResponse<ITemplate[]>> {
+    let authCheck = this._checkAuthenticated(token);
+    if (!authCheck.success) {
+      return authCheck;
+    }
+    let authId = this.authProvider.getAuthIDFromToken(token || this.authProvider.token);
+    let userResponse = await this._getUser(authId);
+    if (!userResponse.success || !userResponse.result || userResponse.result.length === 0) {
+      return { success: false, errorMessage: userResponse.errorMessage };
+    }
+
+    let userId = userResponse.result![0]._id;
+    const templateQuery: Partial<ITemplate> = {
+      _id: templateId,
+    };
+
+    let response = await this.storageProvider.getTemplates(templateQuery, undefined, undefined);
+
+    if (!response.success || !response.result) return response;
+
+    let templates: ITemplate[] = response.result;
+
+    if (templateId && templates.length > 0) {
+      if (templates![0].owner !== userId && templates![0].isLive === false) return { success: true, result: [] };
+
+      if (isClient === undefined || isClient === false) {
+        // Update hit counter for template
+        this._incrementTemplateHits(templateId, templates![0], version);
+      }
+      sortTemplateByVersion(templates![0]);
+      if (!version) {
+        let resultTemplates: ITemplate[] = [];
+        let template: ITemplate = templates[0];
+        if (!template.instances || !template.instances[0]) {
+          return { success: false, errorMessage: "No template instances found" };
+        }
+        let boundJSON: JSON = createCard(template.instances[0].json, data);
+        template.instances![0].json = boundJSON;
+        //return only the most recent version of the template with data bound 
+        template.instances = [template.instances[0]];
+        resultTemplates.push(template);
+        return { success: true, result: resultTemplates };
+      }
+    }
+
+
+    // Filter for the latest template version (instance)
+    let resultTemplates: ITemplate[] = [];
+    for (let template of templates) {
+      if (template.isLive === false && template.owner !== userId) continue;
+      if (!template.instances) continue;
+      if (version) {
+        for (let instance of template.instances) {
+          if (version && instance.version === version) {
+            let boundJSON: JSON = createCard(instance.json, data);
+            instance.json = boundJSON;
+            template.instances = [instance];
+            resultTemplates.push(template);
+            break;
+          }
+        }
+      }
+    }
+    return { success: true, result: resultTemplates };
+
   }
 
   /**
@@ -1025,7 +1092,6 @@ export class TemplateServiceClient {
         return res.status(400).json({ error: err });
       }
 
-
       if (req.query.sortOrder && !(req.query.sortOrder in SortOrder)) {
         const err = new TemplateError(ApiError.InvalidQueryParam, "Sort order value is not valid.");
         return res.status(400).json({ error: err });
@@ -1038,7 +1104,7 @@ export class TemplateServiceClient {
       let tagList: string[] = req.query.tags ? req.query.tags.split(",") : undefined;
 
       this.getTemplates(token, undefined, isPublished, req.query.name, req.query.version,
-        owned, req.query.sortBy, req.query.sortOrder, tagList, isClient, req.query.data).then(response => {
+        owned, req.query.sortBy, req.query.sortOrder, tagList, isClient).then(response => {
           if (!response.success) {
             return res.status(200).json({ templates: [] });
           }
@@ -1092,13 +1158,7 @@ export class TemplateServiceClient {
     router.get("/:id?", (req: Request, res: Response, _next: NextFunction) => {
       let isClient: boolean | undefined = req.query.isClient ? req.query.isClient.toLowerCase() === "true" : undefined;
       let token = parseToken(req.headers.authorization!);
-
-      if (req.body.data !== undefined && (!(req.body.data instanceof Object) || !isValidJSONString(JSON.stringify(req.body.data)))) {
-        const err = new TemplateError(ApiError.InvalidTemplate, `Data must be valid JSON.`);
-        return res.status(400).json({ error: err });
-      }
-
-      this.getTemplates(token, req.params.id, undefined, undefined, req.query.version, undefined, undefined, undefined, undefined, isClient, req.body.data).then(
+      this.getTemplates(token, req.params.id, undefined, undefined, req.query.version, undefined, undefined, undefined, undefined, isClient).then(
         response => {
           if (!response.success || (response.result && response.result.length === 0)) {
             const err = new TemplateError(ApiError.TemplateNotFound, `Template with id ${req.params.id} does not exist.`);
@@ -1136,6 +1196,32 @@ export class TemplateServiceClient {
       let tags: string[] | string = req.body.tags;
       let data: JSON[] | JSON = req.body.data;
 
+      let bindData: boolean | undefined = req.body.bindData ? req.body.bindData.toLowerCase() === "true" : undefined;
+
+      if (bindData) {
+        if (req.body.data !== undefined && (!(req.body.data instanceof Object) || !isValidJSONString(JSON.stringify(req.body.data)))) {
+          const err = new TemplateError(ApiError.InvalidTemplate, `Data must be valid JSON.`);
+          return res.status(400).json({ error: err });
+        }
+        let isClient: boolean | undefined = req.query.isClient ? req.query.isClient.toLowerCase() === "true" : undefined;
+        let token = parseToken(req.headers.authorization!);
+
+        let response = await this.bindData(
+          token,
+          req.params.id,
+          req.body.data,
+          req.body.version,
+          isClient
+        )
+
+        if (!response.success || (response.result && response.result.length === 0)) {
+          const err = new TemplateError(ApiError.DataBindingFailed, "Data binding failed.");
+          return res.status(404).json({ error: err });
+        }
+        return res.status(200).json({ templates: response.result });
+
+      }
+
       let response = req.params.id
         ? await this.postTemplates(
           req.body.template,
@@ -1147,7 +1233,7 @@ export class TemplateServiceClient {
           isShareable,
           tags,
           data,
-          token
+          token,
         )
         : await this.postTemplates(
           req.body.template,
@@ -1159,7 +1245,7 @@ export class TemplateServiceClient {
           isShareable,
           tags,
           data,
-          token
+          token,
         );
 
       if (!response.success) {
