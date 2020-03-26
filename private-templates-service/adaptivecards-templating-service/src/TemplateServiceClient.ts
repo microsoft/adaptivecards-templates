@@ -5,12 +5,12 @@ import { TemplateError, ApiError, ServiceErrorMessage } from "./models/errorMode
 import { StorageProvider } from ".";
 import { ITemplate, JSONResponse, ITemplateInstance, IUser } from ".";
 import { SortBy, SortOrder, TemplatePreview, TemplateState, TemplateInstancePreview, TagList } from "./models/models";
-import { updateTemplateToLatestInstance, removeMostRecentTemplate, getTemplateVersion, isValidJSONString, setTemplateInstanceParam, incrementVersion, anyVersionsLive, sortTemplateByVersion, parseToken } from "./util/templateutils";
+import { updateTemplateToLatestInstance, removeMostRecentTemplate, getTemplateVersion, isValidJSONString, setTemplateInstanceParam, incrementVersion, anyVersionsLive, sortTemplateByVersion, parseToken, createCard } from "./util/templateutils";
 import logger from "./util/logger"
 export class TemplateServiceClient {
   private storageProvider: StorageProvider;
   private authProvider: AuthenticationProvider;
-  
+
   /**
    * @public
    * Initialize database if not already running
@@ -43,10 +43,10 @@ export class TemplateServiceClient {
     return this.storageProvider.connect();
   }
 
- /**
-   * @private
-   * Check if user has already been authenticated.
-   */
+  /**
+    * @private
+    * Check if user has already been authenticated.
+    */
   private _checkAuthenticated(token?: string): JSONResponse<any> {
     let accessToken = token || this.authProvider.token;
     if (!this.authProvider.isValid(accessToken)) {
@@ -182,11 +182,11 @@ export class TemplateServiceClient {
       }
       result = await this.storageProvider.getUsers(query);
     }
-    if (!result.success){
+    if (!result.success) {
       return { success: false, errorMessage: ServiceErrorMessage.UserNotFound }
     }
     logger.info(`User with oid ${authId} requested data.`);
-    
+
     return result;
   }
 
@@ -202,8 +202,8 @@ export class TemplateServiceClient {
     }
 
     let userResponse = await this._getUser(this.authProvider.getAuthIDFromToken(token || this.authProvider.token));
-    if (userResponse.success){
-      return { success: true, result: userResponse.result![0]}
+    if (userResponse.success) {
+      return { success: true, result: userResponse.result![0] }
     }
     return { success: false, errorMessage: userResponse.errorMessage };
   }
@@ -654,6 +654,7 @@ export class TemplateServiceClient {
    * @param {SortOrder} sortOrder - one of ascending, descending
    * @param {string[]} tags - filter by one or more tags
    * @param {boolean} isClient - used to ignore updating the hit number on a template
+   * @param {JSON} data - data json to bind with template
    * @returns Promise as valid json
    */
   public async getTemplates(
@@ -666,7 +667,8 @@ export class TemplateServiceClient {
     sortBy?: SortBy,
     sortOrder?: SortOrder,
     tags?: string[],
-    isClient?: boolean
+    isClient?: boolean,
+    data?: JSON,
   ): Promise<JSONResponse<ITemplate[]>> {
     let authCheck = this._checkAuthenticated(token);
     if (!authCheck.success) {
@@ -717,7 +719,22 @@ export class TemplateServiceClient {
         this._incrementTemplateHits(templateId, templates![0], version);
       }
       sortTemplateByVersion(templates![0]);
-      if (!version) return { success: true, result: templates };
+      if (!version) {
+        if (data) {
+          let resultTemplates: ITemplate[] = [];
+          let template: ITemplate = templates[0];
+          if (!template.instances || !template.instances[0]) {
+            return { success: false, errorMessage: "No template instances found" };
+          }
+          let boundJSON: JSON = createCard(template.instances[0].json, data);
+          template.instances![0].json = boundJSON;
+          //return only the most recent version of the template with data bound 
+          template.instances = [template.instances[0]];
+          resultTemplates.push(template);
+          return { success: true, result: resultTemplates };
+        }
+        return { success: true, result: templates };
+      }
     }
 
     // Filter for the latest template version (instance)
@@ -728,6 +745,10 @@ export class TemplateServiceClient {
       if (version) {
         for (let instance of template.instances) {
           if (version && instance.version === version) {
+            if (data) {
+              let boundJSON: JSON = createCard(instance.json, data);
+              instance.json = boundJSON;
+            }
             template.instances = [instance];
             resultTemplates.push(template);
             break;
@@ -757,7 +778,7 @@ export class TemplateServiceClient {
     let authId = this.authProvider.getAuthIDFromToken(token || this.authProvider.token);
     let userResponse = await this._getUser(authId);
 
-    if (!userResponse.success ) {
+    if (!userResponse.success) {
       return { success: false, errorMessage: userResponse.errorMessage };
     }
 
@@ -771,7 +792,7 @@ export class TemplateServiceClient {
     }
     let template = response.result[0];
 
-    if (template.owner !==  userResponse.result![0]._id && !template.isLive) {
+    if (template.owner !== userResponse.result![0]._id && !template.isLive) {
       return { success: false, errorMessage: ServiceErrorMessage.UnauthorizedAction };
     }
 
@@ -1004,6 +1025,7 @@ export class TemplateServiceClient {
         return res.status(400).json({ error: err });
       }
 
+
       if (req.query.sortOrder && !(req.query.sortOrder in SortOrder)) {
         const err = new TemplateError(ApiError.InvalidQueryParam, "Sort order value is not valid.");
         return res.status(400).json({ error: err });
@@ -1016,7 +1038,7 @@ export class TemplateServiceClient {
       let tagList: string[] = req.query.tags ? req.query.tags.split(",") : undefined;
 
       this.getTemplates(token, undefined, isPublished, req.query.name, req.query.version,
-        owned, req.query.sortBy, req.query.sortOrder, tagList, isClient).then(response => {
+        owned, req.query.sortBy, req.query.sortOrder, tagList, isClient, req.query.data).then(response => {
           if (!response.success) {
             return res.status(200).json({ templates: [] });
           }
@@ -1070,7 +1092,13 @@ export class TemplateServiceClient {
     router.get("/:id?", (req: Request, res: Response, _next: NextFunction) => {
       let isClient: boolean | undefined = req.query.isClient ? req.query.isClient.toLowerCase() === "true" : undefined;
       let token = parseToken(req.headers.authorization!);
-      this.getTemplates(token, req.params.id, undefined, undefined, req.query.version, undefined, undefined, undefined, undefined, isClient).then(
+
+      if (req.body.data !== undefined && (!(req.body.data instanceof Object) || !isValidJSONString(JSON.stringify(req.body.data)))) {
+        const err = new TemplateError(ApiError.InvalidTemplate, `Data must be valid JSON.`);
+        return res.status(400).json({ error: err });
+      }
+
+      this.getTemplates(token, req.params.id, undefined, undefined, req.query.version, undefined, undefined, undefined, undefined, isClient, req.body.data).then(
         response => {
           if (!response.success || (response.result && response.result.length === 0)) {
             const err = new TemplateError(ApiError.TemplateNotFound, `Template with id ${req.params.id} does not exist.`);
@@ -1118,7 +1146,7 @@ export class TemplateServiceClient {
           req.body.state,
           isShareable,
           tags,
-          data, 
+          data,
           token
         )
         : await this.postTemplates(
@@ -1130,7 +1158,7 @@ export class TemplateServiceClient {
           req.body.state,
           isShareable,
           tags,
-          data, 
+          data,
           token
         );
 

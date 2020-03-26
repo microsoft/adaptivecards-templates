@@ -171,7 +171,6 @@ export function createCard(template: JSON, data: JSON): JSON {
     let card: JSON = dataTemplate.expand(context);
     return card;
   }
-  //not sure what to do when catching errors??
   catch {
     return JSON.parse('{}');
   }
