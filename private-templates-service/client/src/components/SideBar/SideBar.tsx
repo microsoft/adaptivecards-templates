@@ -57,12 +57,12 @@ const navMenuLinksProps: Partial<INavStyles> = {
     selectors: {
       ".ms-Nav-compositeLink:hover &": {
         backgroundColor: COLORS.BLUE2,
-        textDecoration: "none",
+        textDecoration: "none"
       },
       ".ms-Nav-compositeLink.is-selected &": {
         background: COLORS.BLUE2
-      },
-    },
+      }
+    }
   },
   linkText: {
     color: COLORS.WHITE
