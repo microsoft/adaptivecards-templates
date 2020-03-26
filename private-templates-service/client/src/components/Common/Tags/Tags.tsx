@@ -125,7 +125,7 @@ class Tags extends React.Component<Props, State>  {
           <Tag ref={(ref: HTMLDivElement) => this.tagRefs[tag] = ref} onAnimationEnd={this.onAnimationEnd} key={tag}>
             <TagText>{tag}</TagText>
 	    {allowEdit &&
-            <TagCloseIcon key={tag} iconName="ChromeClose" onClick={() => this.props.tagRemove ? this.props.tagRemove(tag) : {} } />}
+            <TagCloseIcon key={tag} iconName="ChromeClose" onClick={ this.props.tagRemove && (() => this.props.tagRemove!(tag))}/>}
           </Tag>
         ))}
         {allowAddTag && <AddTagWrapper onSubmit={this.submitNewTag} open={isAdding}>

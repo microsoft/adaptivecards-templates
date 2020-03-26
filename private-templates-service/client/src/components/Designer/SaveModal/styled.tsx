@@ -103,5 +103,5 @@ export const StyledCancelButton = styled(DefaultButton)`
 `;
 
 export const StyledTextField = styled(TextField)`
-  margin-bottom: 5px;
+  margin-bottom: 15px;
 `;

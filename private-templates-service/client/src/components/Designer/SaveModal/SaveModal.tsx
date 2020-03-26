@@ -24,7 +24,10 @@ import {
   TagsWrapper, 
   StyledCancelButton, 
   StyledSaveButton, 
-  StyledTextField } from './styled';
+  StyledTextField 
+} from './styled';
+
+import { UNTITLEDCARD, SAVETEXT, DRAFT, SAVE, CANCEL, SAVECARD, CARDNAME, TAGS } from '../../../assets/strings';
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -67,7 +70,7 @@ const mapDispatchToProps = (dispatch: any) => {
 class SaveModal extends React.Component<Props,State> {
   constructor(props: Props) {
     super(props);
-    this.state = {tags : [], templateName: "Untitled Template"}
+    this.state = {tags : [], templateName: UNTITLEDCARD}
   }
 
   saveTags = (tagsToUpdate: string[]) => {
@@ -94,20 +97,20 @@ class SaveModal extends React.Component<Props,State> {
   }
   
   render(){ 
-    var adaptiveCard = new AdaptiveCards.AdaptiveCard();
+    let adaptiveCard = new AdaptiveCards.AdaptiveCard();
     adaptiveCard.hostConfig = new AdaptiveCards.HostConfig({
       fontFamily: "Segoe UI, Helvetica Neue, sans-serif"
     });
     adaptiveCard.parse(this.props.designerTemplateJSON);
-    var renderedCard = adaptiveCard.render();
+    let renderedCard = adaptiveCard.render();
     
     return(
       <BackDrop>
         <Modal>
           <ColumnWrapper>
             <TitleWrapper>
-              <StyledTitle> Save Card </StyledTitle>
-              <div>Your card will be saved as a draft until you publish it to your organization.</div>
+              <StyledTitle>{SAVECARD}</StyledTitle>
+              <div>{SAVETEXT}</div>
             </TitleWrapper>
             <MiddleRowWrapper>
               <Container style={{marginRight: "0px", marginLeft:"42px"}} >
@@ -119,25 +122,25 @@ class SaveModal extends React.Component<Props,State> {
                   }}/>
                 </ACWrapper>
                 <TemplateFooterWrapper style={{justifyContent:"space-between", paddingRight:"20px"}}>
-                  <TemplateName> Untitled Card </TemplateName>
+                  <TemplateName>{UNTITLEDCARD}</TemplateName>
                   <TemplateStateWrapper style={{justifyContent:"flex-end"}}>
                     <StatusIndicator state={PostedTemplate.StateEnum.Draft}/>
-                    <Status> Draft </Status>
+                    <Status>{DRAFT}</Status>
                   </TemplateStateWrapper>
                 </TemplateFooterWrapper>
               </Container>
               <InfoWrapper>
-                <StyledH3>Card Name</StyledH3>
+                <StyledH3>{CARDNAME}</StyledH3>
                 <StyledTextField onChange={this.onChange}/>
-                <StyledH3>Tags</StyledH3>
+                <StyledH3>{TAGS}</StyledH3>
                 <TagsWrapper>
                   <Tags updateTags = {this.saveTags} tagRemove = {this.tagRemove} tags={this.state.tags} allowAddTag={true} allowEdit={true} />
                 </TagsWrapper>
               </InfoWrapper>
             </MiddleRowWrapper>
             <ButtonWrapper>
-              <StyledCancelButton text = "Cancel" onClick={this.props.closeModal} />
-              <StyledSaveButton text = "Save" onClick={this.onClick}/>
+              <StyledCancelButton text = {CANCEL} onClick={this.props.closeModal} />
+              <StyledSaveButton text = {SAVE} onClick={this.onClick}/>
             </ButtonWrapper>
           </ColumnWrapper>
         </Modal>

@@ -12,6 +12,7 @@ import SearchBar from "./SearchBar";
 
 import { ActionButton } from 'office-ui-fabric-react';
 import Logo from '../../assets/adaptive-cards-100-logo.png';
+import { UNTITLEDCARD } from '../../assets/strings';
 
 import { Banner, Styledh1, StyledLogo, MobileBanner, BaselineBanner, StyledButton, Styledh2, StyledButtonContent, EditButton, BackButton, ButtonTextWrapper } from './styled';
 
@@ -99,7 +100,7 @@ const NavBar = (props: NavBarProps) => {
         <Banner>
           <MobileBanner>
             <StyledLogo src={Logo} />
-            <Styledh1>{(props.templateID === "" && "Untitled Card") || props.templateName}</Styledh1>
+            <Styledh1>{(props.templateID === "" && UNTITLEDCARD) || props.templateName}</Styledh1>
             {props.templateID !== "" && <EditButton onClick={editName} iconProps={{ iconName: 'Edit' }} />}
           </MobileBanner>
           <ActionButton onClick={() => { history.push("/") }}> 
