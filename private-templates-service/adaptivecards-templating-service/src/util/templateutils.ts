@@ -88,7 +88,13 @@ export function compareVersion(a: string, b: string): boolean {
 export function incrementVersion(template: ITemplate): string {
   // check if this is the most recent version 
   let latestTemplate = getMostRecentVersion(template);
-  let version = latestTemplate?.version.split(".");
+  if (!latestTemplate?.version) return "";
+  return incrementVersionStr(latestTemplate?.version);
+}
+
+export function incrementVersionStr(latestVersion: string): string {
+  // check if this is the most recent version 
+  let version = latestVersion.split(".");
 
   if (!version) {
     return "1.0";
@@ -103,7 +109,12 @@ export function incrementVersion(template: ITemplate): string {
   return (version[0] + "." + version[1]);
 }
 
+<<<<<<< HEAD
 export function setTemplateInstanceParam(templateInstance: ITemplateInstance, templateData: JSON[] | undefined, state: TemplateState | undefined, isShareable: boolean | undefined, version?: string): ITemplateInstance {
+=======
+
+export function setTemplateInstanceParam(templateInstance: ITemplateInstance, templateData: JSON[] | undefined, state: TemplateState | undefined, isShareable: boolean | undefined, version?: string): ITemplateInstance {
+>>>>>>> 9dd4f76585d063626f7f038519d7615815487669
   // set params for the template instance. 
   templateInstance.state = state || TemplateState.draft;
   templateInstance.isShareable = isShareable || false;
@@ -174,5 +185,22 @@ export function createCard(template: JSON, data: JSON): JSON {
   catch {
     return JSON.parse('{}');
   }
+}
 
+/**
+ * Returns whether the state change is valid. 
+ * @param currState 
+ * @param desiredState 
+ */
+export function checkValidTemplateState(currState: TemplateState, desiredState: TemplateState): boolean {
+  switch (currState) {
+    case TemplateState.draft:
+      return desiredState !== TemplateState.deprecated;
+    case TemplateState.deprecated:
+      return desiredState === TemplateState.deprecated;
+    case TemplateState.live:
+      return desiredState !== TemplateState.draft;
+    default:
+      return false;
+  }
 }

@@ -47,3 +47,11 @@ export const TRADEMARKS = "Trademarks";
 export const SAFETY = "Safety & Eco";
 export const ABOUT_ADS = "About our Ads";
 export const MICROSOFT = "© Microsoft 2020";
+
+//SaveModal.tsx
+export const SAVECARD = "Save Card";
+export const SAVETEXT = "Your card will be saved as a draft until you publish it to your organization.";
+export const UNTITLEDCARD = "Untitled Card";
+export const DRAFT = "Draft";
+export const CARDNAME = "Card Name";
+export const TAGS = "Tags";
