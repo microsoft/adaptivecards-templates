@@ -570,6 +570,53 @@ export class TemplatePreviewInstance {
     }
 }
 
+export class UpdateTemplateState {
+    'version'?: string;
+    'state'?: UpdateTemplateState.StateEnum;
+
+    static discriminator: string | undefined = undefined;
+
+    static attributeTypeMap: Array<{name: string, baseName: string, type: string}> = [
+        {
+            "name": "version",
+            "baseName": "version",
+            "type": "string"
+        },
+        {
+            "name": "state",
+            "baseName": "state",
+            "type": "UpdateTemplateState.StateEnum"
+        }    ];
+
+    static getAttributeTypeMap() {
+        return UpdateTemplateState.attributeTypeMap;
+    }
+}
+
+export namespace UpdateTemplateState {
+    export enum StateEnum {
+        Draft = <any> 'draft',
+        Live = <any> 'live',
+        Deprecated = <any> 'deprecated'
+    }
+}
+export class UpdateTemplateStateList {
+    'templates'?: Array<UpdateTemplateState>;
+
+    static discriminator: string | undefined = undefined;
+
+    static attributeTypeMap: Array<{name: string, baseName: string, type: string}> = [
+        {
+            "name": "templates",
+            "baseName": "templates",
+            "type": "Array<UpdateTemplateState>"
+        }    ];
+
+    static getAttributeTypeMap() {
+        return UpdateTemplateStateList.attributeTypeMap;
+    }
+}
+
 export class User {
     'id'?: string;
     'authId'?: string;
@@ -634,10 +681,28 @@ export class UserList {
     }
 }
 
+export class VersionList {
+    'versions'?: Array<string>;
+
+    static discriminator: string | undefined = undefined;
+
+    static attributeTypeMap: Array<{name: string, baseName: string, type: string}> = [
+        {
+            "name": "versions",
+            "baseName": "versions",
+            "type": "Array<string>"
+        }    ];
+
+    static getAttributeTypeMap() {
+        return VersionList.attributeTypeMap;
+    }
+}
+
 
 let enumsMap: {[index: string]: any} = {
         "PostedTemplate.StateEnum": PostedTemplate.StateEnum,
         "TemplateInstance.StateEnum": TemplateInstance.StateEnum,
+        "UpdateTemplateState.StateEnum": UpdateTemplateState.StateEnum,
 }
 
 let typeMap: {[index: string]: any} = {
@@ -653,8 +718,11 @@ let typeMap: {[index: string]: any} = {
     "TemplateList": TemplateList,
     "TemplatePreview": TemplatePreview,
     "TemplatePreviewInstance": TemplatePreviewInstance,
+    "UpdateTemplateState": UpdateTemplateState,
+    "UpdateTemplateStateList": UpdateTemplateStateList,
     "User": User,
     "UserList": UserList,
+    "VersionList": VersionList,
 }
 
 export interface Authentication {
@@ -836,6 +904,132 @@ export class TemplateApi {
                     reject(error);
                 } else {
                     body = ObjectSerializer.deserialize(body, "TemplateList");
+                    if (response.statusCode && response.statusCode >= 200 && response.statusCode <= 299) {
+                        resolve({ response: response, body: body });
+                    } else {
+                        reject({ response: response, body: body });
+                    }
+                }
+            });
+        });
+    }
+    /**
+     * 
+     * @summary Batch delete template version operation
+     * @param templateId ID of template to update
+     * @param versionList template versions to delete
+     * @param {*} [options] Override http request options.
+     */
+    public batchTemplateDelete (templateId: string, versionList: VersionList, options: any = {}) : Promise<{ response: http.IncomingMessage; body?: any;  }> {
+        const localVarPath = this.basePath + '/template/{templateId}/batch'
+            .replace('{' + 'templateId' + '}', encodeURIComponent(String(templateId)));
+        let localVarQueryParameters: any = {};
+        let localVarHeaderParams: any = (<any>Object).assign({}, this.defaultHeaders);
+        let localVarFormParams: any = {};
+
+        // verify required parameter 'templateId' is not null or undefined
+        if (templateId === null || templateId === undefined) {
+            throw new Error('Required parameter templateId was null or undefined when calling batchTemplateDelete.');
+        }
+
+        // verify required parameter 'versionList' is not null or undefined
+        if (versionList === null || versionList === undefined) {
+            throw new Error('Required parameter versionList was null or undefined when calling batchTemplateDelete.');
+        }
+
+        (<any>Object).assign(localVarHeaderParams, options.headers);
+
+        let localVarUseFormData = false;
+
+        let localVarRequestOptions: localVarRequest.Options = {
+            method: 'DELETE',
+            qs: localVarQueryParameters,
+            headers: localVarHeaderParams,
+            uri: localVarPath,
+            useQuerystring: this._useQuerystring,
+            json: true,
+            body: ObjectSerializer.serialize(versionList, "VersionList")
+        };
+
+        this.authentications.bearer_auth.applyToRequest(localVarRequestOptions);
+
+        this.authentications.default.applyToRequest(localVarRequestOptions);
+
+        if (Object.keys(localVarFormParams).length) {
+            if (localVarUseFormData) {
+                (<any>localVarRequestOptions).formData = localVarFormParams;
+            } else {
+                localVarRequestOptions.form = localVarFormParams;
+            }
+        }
+        return new Promise<{ response: http.IncomingMessage; body?: any;  }>((resolve, reject) => {
+            localVarRequest(localVarRequestOptions, (error, response, body) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    if (response.statusCode && response.statusCode >= 200 && response.statusCode <= 299) {
+                        resolve({ response: response, body: body });
+                    } else {
+                        reject({ response: response, body: body });
+                    }
+                }
+            });
+        });
+    }
+    /**
+     * Update existing template given id
+     * @summary Batch update template states
+     * @param templateId ID of template to update
+     * @param body list of template versions and desired states
+     * @param {*} [options] Override http request options.
+     */
+    public batchTemplateUpdate (templateId: string, body: UpdateTemplateStateList, options: any = {}) : Promise<{ response: http.IncomingMessage; body?: any;  }> {
+        const localVarPath = this.basePath + '/template/{templateId}/batch'
+            .replace('{' + 'templateId' + '}', encodeURIComponent(String(templateId)));
+        let localVarQueryParameters: any = {};
+        let localVarHeaderParams: any = (<any>Object).assign({}, this.defaultHeaders);
+        let localVarFormParams: any = {};
+
+        // verify required parameter 'templateId' is not null or undefined
+        if (templateId === null || templateId === undefined) {
+            throw new Error('Required parameter templateId was null or undefined when calling batchTemplateUpdate.');
+        }
+
+        // verify required parameter 'body' is not null or undefined
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling batchTemplateUpdate.');
+        }
+
+        (<any>Object).assign(localVarHeaderParams, options.headers);
+
+        let localVarUseFormData = false;
+
+        let localVarRequestOptions: localVarRequest.Options = {
+            method: 'POST',
+            qs: localVarQueryParameters,
+            headers: localVarHeaderParams,
+            uri: localVarPath,
+            useQuerystring: this._useQuerystring,
+            json: true,
+            body: ObjectSerializer.serialize(body, "UpdateTemplateStateList")
+        };
+
+        this.authentications.bearer_auth.applyToRequest(localVarRequestOptions);
+
+        this.authentications.default.applyToRequest(localVarRequestOptions);
+
+        if (Object.keys(localVarFormParams).length) {
+            if (localVarUseFormData) {
+                (<any>localVarRequestOptions).formData = localVarFormParams;
+            } else {
+                localVarRequestOptions.form = localVarFormParams;
+            }
+        }
+        return new Promise<{ response: http.IncomingMessage; body?: any;  }>((resolve, reject) => {
+            localVarRequest(localVarRequestOptions, (error, response, body) => {
+                if (error) {
+                    reject(error);
+                } else {
                     if (response.statusCode && response.statusCode >= 200 && response.statusCode <= 299) {
                         resolve({ response: response, body: body });
                     } else {

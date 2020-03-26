@@ -4,8 +4,8 @@ import { AuthenticationProvider } from ".";
 import { TemplateError, ApiError, ServiceErrorMessage } from "./models/errorModels";
 import { StorageProvider } from ".";
 import { ITemplate, JSONResponse, ITemplateInstance, IUser } from ".";
-import { SortBy, SortOrder, TemplatePreview, TemplateState, TemplateInstancePreview, TagList } from "./models/models";
-import { updateTemplateToLatestInstance, removeMostRecentTemplate, getTemplateVersion, isValidJSONString, setTemplateInstanceParam, incrementVersion, anyVersionsLive, sortTemplateByVersion, parseToken } from "./util/templateutils";
+import { SortBy, SortOrder, TemplatePreview, TemplateState, TemplateInstancePreview, TagList, TemplateStateRequest } from "./models/models";
+import { updateTemplateToLatestInstance, getTemplateVersion, isValidJSONString, setTemplateInstanceParam, incrementVersion, anyVersionsLive, sortTemplateByVersion, parseToken, getMostRecentVersion, checkValidTemplateState, incrementVersionStr } from "./util/templateutils";
 import logger from "./util/logger"
 export class TemplateServiceClient {
   private storageProvider: StorageProvider;
@@ -447,6 +447,65 @@ export class TemplateServiceClient {
   }
 
   /**
+   * @public 
+   * Batch update template state only, template must already exist. 
+   * Can only publish & unpublish batch template versions. 
+   */
+  public async batchUpdateTemplate(templateId: string, requests: TemplateStateRequest[], token?: string): Promise<JSONResponse<Number>> {
+    let authCheck = this._checkAuthenticated(token);
+    if (!authCheck.success) {
+      return authCheck;
+    }
+
+    let authId = this.authProvider.getAuthIDFromToken(token || this.authProvider.token);
+    let userResponse = await this._getUser(authId);
+
+    if (!userResponse.success) {
+      return { success: false, errorMessage: userResponse.errorMessage };
+    }
+
+    // Check if version already exists
+    let response = await this.getTemplates(token, templateId);
+    if (!response.success || !response.result || response.result.length === 0) {
+      return { success: false, errorMessage: response.errorMessage };
+    }
+
+    let existingTemplate: ITemplate = response.result[0];
+    let latestVersion: string = getMostRecentVersion(existingTemplate)?.version || "1.0";
+    let templateInstances: ITemplateInstance[] = [];
+    for (let instance of existingTemplate.instances || []) {
+      for (let request of requests) {
+        if (request.version === instance.version) {
+          if (instance.state && checkValidTemplateState(instance.state, request.state)){
+            instance.state = request.state;
+          }
+          if (instance.state === TemplateState.deprecated && request.state === TemplateState.live) {
+            const instanceCopy: ITemplateInstance = {
+              json: instance.json,
+              version: incrementVersionStr(latestVersion),
+              publishedAt: new Date(Date.now()),
+              state: TemplateState.live,
+              isShareable: false,
+              numHits: 0,
+              data: instance.data,
+              updatedAt: new Date(Date.now()),
+              lastEditedUser: authId
+            };
+            latestVersion = instanceCopy.version;
+            templateInstances.push(instanceCopy);
+          }
+          break;
+        }
+      }
+      templateInstances.push(instance);
+    }
+    const updatedTemplate: Partial<ITemplate> = {
+      instances: templateInstances
+    };
+    return this.storageProvider.updateTemplate({_id: templateId}, updatedTemplate);
+  }
+
+  /**
    * @public
    * Post templates and checks if user exists
    * @param {JSON} template
@@ -745,14 +804,39 @@ export class TemplateServiceClient {
     if (!authCheck.success) {
       return authCheck;
     }
+
+    if (!version){
+      let response = await this.getTemplates(token, templateId);
+      if (!response.success || !response.result) {
+        return { success: false, errorMessage: response.errorMessage };
+      }
+      if (response.result.length === 0) {
+        return { success: true };
+      }
+      let latestVersion = getMostRecentVersion(response.result[0]);
+      version = latestVersion?.version;
+    }
+    return this.batchDeleteTemplate(templateId, version? [version] : [], token);
+  }
+
+  /**
+   * @public
+   * Delete template batch endpoint.
+   * @param {string} templateId
+   * @param {string[]} versionList
+   * @param {string} token
+   */
+  public async batchDeleteTemplate(templateId: string, versionList: string[], token?: string): Promise<JSONResponse<Number>> {
+    let authCheck = this._checkAuthenticated(token);
+    if (!authCheck.success) {
+      return authCheck;
+    }
     let authId = this.authProvider.getAuthIDFromToken(token || this.authProvider.token);
     let userResponse = await this._getUser(authId);
-
     if (!userResponse.success ) {
       return { success: false, errorMessage: userResponse.errorMessage };
     }
 
-    // Get template instance, check owner and isPublished
     let response = await this.getTemplates(token, templateId);
     if (!response.success || !response.result) {
       return { success: false, errorMessage: response.errorMessage };
@@ -766,25 +850,16 @@ export class TemplateServiceClient {
       return { success: false, errorMessage: ServiceErrorMessage.UnauthorizedAction };
     }
 
-    // No instances, delete template object entirely
-    if (!template.instances) {
-      return this.storageProvider.removeTemplate({ _id: templateId });
-    }
-
     let templateObj: ITemplate;
-    if (!version) {
-      templateObj = removeMostRecentTemplate(template);
-    } else {
-      let templateInstances = [];
-      for (let instance of template.instances) {
-        if (instance.version !== version) {
-          templateInstances.push(instance);
-        }
+    let templateInstances = [];
+    for (let instance of template.instances || []) {
+      if (!versionList.includes(instance.version)) {
+        templateInstances.push(instance);
       }
-      template.instances = templateInstances;
-      template.deletedVersions?.push(version);
-      templateObj = template;
     }
+    template.instances = templateInstances;
+    template.deletedVersions?.push(...versionList);
+    templateObj = template;
 
     // No instances, delete template object entirely
     if (templateObj.instances && templateObj.instances.length === 0) {
@@ -1082,7 +1157,7 @@ export class TemplateServiceClient {
       });
     });
 
-    router.post("/:id*?", async (req: Request, res: Response, _next: NextFunction) => {
+    router.post("/:id?", async (req: Request, res: Response, _next: NextFunction) => {
       let token = parseToken(req.headers.authorization!);
       if (req.body.template !== undefined && (!(req.body.template instanceof Object) || !isValidJSONString(JSON.stringify(req.body.template)))) {
         const err = new TemplateError(ApiError.InvalidTemplate, `Template must be valid JSON.`);
@@ -1133,7 +1208,19 @@ export class TemplateServiceClient {
       return res.status(201).json({ id: response.result });
     });
 
-    router.delete("/:id*?", (req: Request, res: Response, _next: NextFunction) => {
+    router.post("/:id/batch", async (req: Request, res: Response, _next: NextFunction) => {
+      let token = parseToken(req.headers.authorization!);
+      let requestList: TemplateStateRequest[] = req.body.templates;
+      this.batchUpdateTemplate(req.params.id, requestList, token).then(response => {
+        if (!response.success) {
+          const err = new TemplateError(ApiError.InvalidTemplate, "Unable to update template versions.");
+          return res.status(400).json({ error: err });
+        }
+        res.status(201).send();
+      })
+    });
+
+    router.delete("/:id?", (req: Request, res: Response, _next: NextFunction) => {
       let token = parseToken(req.headers.authorization!);
       this.deleteTemplate(req.params.id, req.query.version, token).then(response => {
         if (!response.success) {
@@ -1143,6 +1230,19 @@ export class TemplateServiceClient {
         res.status(204).send();
       });
     });
+
+    router.delete("/:id/batch", (req: Request, res: Response, _next: NextFunction) => {
+      let token = parseToken(req.headers.authorization!);
+      let versions : string[] = req.body.versions || [];
+      this.batchDeleteTemplate(req.params.id, versions, token).then(response => {
+        if (!response.success) {
+          const err = new TemplateError(ApiError.DeleteTemplateVersionFailed, `Failed to delete template ${req.params.id} versions: ${versions}.`);
+          return res.status(404).json({ error: err });
+        }
+        res.status(204).send();
+      })
+    });
+
     return router;
   }
 
