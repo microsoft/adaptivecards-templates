@@ -1,3 +1,47 @@
+# Quickstart
+These steps will get our end-to-end app running locally. If any steps fail, try the longer steps below.
+
+Prerequisites:
+-   Git
+-   [Node v12](https://nodejs.org/en/download/)
+
+**1. Clone the reponsitory.**
+
+**2. Switch to the desired branch. The latest build is on `dev`**
+
+**3. `cd adaptivecards-templates/private-templates-service/server` and run `npm run init-app`. This installs and links dependencies.**
+
+**4. Open `server/app.ts` and replace mongoose code lines 39 - 64 with 
+```
+import { InMemoryDBProvider } from '../../adaptivecards-templating-service/src/storageproviders/InMemoryDBProvider';
+
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, Content-Type, Accept, Authorization, api_key"
+  );
+  res.header(
+    "Access-Control-Allow-Methods",
+    "GET, POST, OPTIONS, DELETE"
+  );
+  next();
+});
+app.options('*', function (req, res) { res.sendStatus(200); });
+
+const mongoClient: ClientOptions = {
+  authenticationProvider: new AzureADProvider(),
+  storageProvider: new InMemoryDBProvider(),
+}
+const client: TemplateServiceClient = TemplateServiceClient.init(mongoClient);
+app.use("/template", client.expressMiddleware());
+app.use("/user", client.userExpressMiddleware());
+```.**
+
+**5. In the `adaptivecards-templates/private-templates-service/server/app.ts` file, replace ` "#{DB_CONNECTION_TOKEN}#"` with the real DB connection string. Make sure to NOT commit this file. Ask a dev for this string!**
+
+**6. Run `npm run dev`. This command concurrently runs the client and server locally. Navigate to `localhost:3000` to see the site.**
+
 # Running the frontend and backend of Adaptive Cards CMS Locally
 
 To run this web application locally, you must have the following installed on your system:
