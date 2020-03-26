@@ -7,11 +7,15 @@ import {
   REQUEST_EXISTING_TEMPLATE_UPDATE,
   RECEIVE_EXISTING_TEMPLATE_UPDATE,
   FAILURE_EXISTING_TEMPLATE_UPDATE,
-  RECEIVE_EXISTING_TEMPLATE_STATE_UPDATE, 
+  RECEIVE_EXISTING_TEMPLATE_STATE_UPDATE,
+  REQUEST_EXISTING_TEMPLATE_UPDATE_TAGS,
+  RECIEVE_EXISTING_TEMPLATE_UPDATE_TAGS,
+  FAILURE_EXISTING_TEMPLATE_UPDATE_TAGS,
   REQUEST_UPDATE_CURRENT_TEMPLATE_VERSION,
   RECEIVE_UPDATE_CURRENT_TEMPLATE_VERSION,
   FAILURE_UPDATE_CURRENT_TEMPLATE_VERSION,
   GET_TEMPLATE,
+  GET_TEMPLATE_TAGS,
   GET_TEMPLATE_SUCCESS,
   GET_TEMPLATE_FAILURE,
   DELETE_TEMPLATE_INSTANCE,
@@ -22,7 +26,7 @@ import {
 import { Template, PostedTemplate, UpdateTemplateState } from "adaptive-templating-service-typescript-node";
 
 import { RootState } from '../rootReducer';
-import { initClientSDK } from '../../utils/TemplateUtil';
+import { initClientSDK, populateTemplate } from '../../utils/TemplateUtil';
 
 export function newTemplate(): CurrentTemplateAction {
   return {
@@ -90,10 +94,39 @@ function receiveExistingTemplateStateUpdate(template?: Template): CurrentTemplat
   };
 }
 
+function requestExistingTemplateUpdateTags(): CurrentTemplateAction {
+  return {
+    type: REQUEST_EXISTING_TEMPLATE_UPDATE_TAGS,
+    text: "Update tags",
+  }
+}
+
+function recieveExistingTemplateUpdateTags(): CurrentTemplateAction {
+  return {
+    type: RECIEVE_EXISTING_TEMPLATE_UPDATE_TAGS,
+    text: "Update tags success",
+  }
+}
+
+function failureExistingTemplateUpdateTags(): CurrentTemplateAction {
+  return {
+    type: FAILURE_EXISTING_TEMPLATE_UPDATE_TAGS,
+    text: "Update tags failure",
+  }
+}
+
 function requestTemplate(templateID: string): CurrentTemplateAction {
   return {
     type: GET_TEMPLATE,
     text: "get single template",
+    templateID
+  }
+}
+
+function requestTemplateTags(templateID: string): CurrentTemplateAction {
+  return {
+    type: GET_TEMPLATE_TAGS,
+    text: "get single template tags",
     templateID
   }
 }
@@ -245,10 +278,36 @@ export function updateTemplate(templateID?: string, currentVersion?: string, tem
   };
 }
 
-export function getTemplate(templateID: string) {
+export function updateTemplateTags(tags: string[]) {
   return function (dispatch: any, getState: () => RootState) {
-    dispatch(requestTemplate(templateID));
+    const appState = getState();
 
+    let newTemplate = populateTemplate(getState);
+    const api = initClientSDK(dispatch, getState);
+
+    const id = appState.currentTemplate.templateID;
+    newTemplate.tags = tags;
+
+    dispatch(requestExistingTemplateUpdateTags());
+    if (id !== undefined) {
+      return api.postTemplateById(id, newTemplate).then(response => {
+        if (response.response.statusCode && response.response.statusCode === 201) {
+          dispatch(recieveExistingTemplateUpdateTags());
+          dispatch(getTemplate(id, requestTemplateTags));
+        } else {
+          dispatch(failureExistingTemplateUpdateTags());
+        }
+      }).catch((error: any) => {
+        dispatch(failureExistingTemplateUpdateTags());
+      })
+    }
+  }
+}
+
+
+export function getTemplate(templateID: string, action?: (templateID: string) => CurrentTemplateAction) {
+  return function (dispatch: any, getState: () => RootState) {
+    dispatch(action ? action(templateID) : requestTemplate(templateID));
     const api = initClientSDK(dispatch, getState);
 
     try {
@@ -321,18 +380,18 @@ export function batchDeleteTemplateVersions(versionList: string[], templateID?: 
       dispatch(deleteTemplateInstanceFailure());
     }
     try {
-      api.batchTemplateDelete(id!, {versions: versionList}).then((resp: any) => {
-          if (resp.response.statusCode && resp.response.statusCode === 204) {
-            let template = appState.currentTemplate.template;
-            if (template) {
-              removeTemplateVersions(template, versionList);
-              if (template.instances && template.instances.length === 0) {
-                template = undefined;
-              }
+      api.batchTemplateDelete(id!, { versions: versionList }).then((resp: any) => {
+        if (resp.response.statusCode && resp.response.statusCode === 204) {
+          let template = appState.currentTemplate.template;
+          if (template) {
+            removeTemplateVersions(template, versionList);
+            if (template.instances && template.instances.length === 0) {
+              template = undefined;
             }
-            return dispatch(deleteTemplateInstanceSuccess(template));
           }
-          return dispatch(deleteTemplateInstanceFailure());
+          return dispatch(deleteTemplateInstanceSuccess(template));
+        }
+        return dispatch(deleteTemplateInstanceFailure());
       }).catch((error: any) => {
         dispatch(deleteTemplateInstanceFailure());
       });
@@ -354,19 +413,19 @@ export function batchUpdateTemplateState(versionList: string[], stateList: Poste
     }
     let requestList: UpdateTemplateState[] = [];
     for (let i = 0; i < versionList.length; i++) {
-      requestList.push({version: versionList[i], state: stateList[i]});
+      requestList.push({ version: versionList[i], state: stateList[i] });
     }
 
     try {
-      api.batchTemplateUpdate(id!, {"templates": requestList}).then((resp: any) => {
-          let template = appState.currentTemplate.template;
-          if (resp.response.statusCode && resp.response.statusCode === 201) {
-            if (template) updateTemplateVersionStates(template, versionList, stateList);
-            dispatch(receiveExistingTemplateStateUpdate(template));
-            dispatch(getTemplate(id!));
-          } else {
-            return dispatch(failureExistingTemplateUpdate());
-          }
+      api.batchTemplateUpdate(id!, { "templates": requestList }).then((resp: any) => {
+        let template = appState.currentTemplate.template;
+        if (resp.response.statusCode && resp.response.statusCode === 201) {
+          if (template) updateTemplateVersionStates(template, versionList, stateList);
+          dispatch(receiveExistingTemplateStateUpdate(template));
+          dispatch(getTemplate(id!));
+        } else {
+          return dispatch(failureExistingTemplateUpdate());
+        }
       }).catch((error: any) => {
         dispatch(failureExistingTemplateUpdate());
       });
@@ -379,8 +438,8 @@ export function batchUpdateTemplateState(versionList: string[], stateList: Poste
 
 function updateTemplateVersionStates(template: Template, versionList: string[], stateList: PostedTemplate.StateEnum[]) {
   if (!template.instances) return;
-  for (let instance of template.instances){
-    if (instance.version && versionList.includes(instance.version)){
+  for (let instance of template.instances) {
+    if (instance.version && versionList.includes(instance.version)) {
       instance.state = stateList[versionList.indexOf(instance.version)];
     }
   }

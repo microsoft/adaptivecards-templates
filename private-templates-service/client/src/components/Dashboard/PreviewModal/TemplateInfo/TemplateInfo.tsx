@@ -5,7 +5,7 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { RootState } from '../../../../store/rootReducer';
 import { openModal, closeModal } from '../../../../store/page/actions';
 import { ModalState } from '../../../../store/page/types';
-import { updateCurrentTemplateVersion, updateTemplate } from '../../../../store/currentTemplate/actions';
+import { updateCurrentTemplateVersion, updateTemplate, updateTemplateTags } from '../../../../store/currentTemplate/actions';
 
 import { Template, TemplateInstance, PostedTemplate } from 'adaptive-templating-service-typescript-node';
 
@@ -21,6 +21,7 @@ import DeleteModal from '../../../Common/DeleteModal';
 import VersionCard from './VersionCard';
 
 import { IDropdownOption, ActionButton } from 'office-ui-fabric-react';
+import { SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 
 import { EDIT_IN_DESIGNER, DELETE, SHARE, PUBLISH, UNPUBLISH } from "../../../../assets/strings"
 import { THEME } from '../../../../globalStyles';
@@ -44,6 +45,7 @@ import {
   TagsWrapper,
   StyledVersionDropdown,
   DropdownStyles,
+  CenteredSpinner,
 } from './styled';
 
 const buttons = [
@@ -88,6 +90,7 @@ interface Props extends RouteComponentProps {
   openModal: (modalState: ModalState) => void;
   closeModal: () => void;
   updateTags: (tags: string[]) => void;
+  isFetchingTags: boolean;
 }
 
 interface State {
@@ -98,7 +101,8 @@ interface State {
 const mapStateToProps = (state: RootState) => {
   return {
     modalState: state.page.modalState,
-    version: state.currentTemplate.version
+    version: state.currentTemplate.version,
+    isFetchingTags: state.currentTemplate.isFetchingTags,
   };
 };
 
@@ -114,7 +118,8 @@ const mapDispatchToProps = (dispatch: any) => {
       dispatch(updateCurrentTemplateVersion(template, version))
     },
     updateTags: (tags: string[]) => {
-      dispatch(updateTemplate(undefined, undefined, undefined, undefined, undefined, undefined, tags))
+      dispatch(updateTemplateTags(tags))
+      // dispatch(updateTemplate(undefined, undefined, undefined, undefined, undefined, undefined, tags));
     }
   }
 };
@@ -155,8 +160,8 @@ class TemplateInfo extends React.Component<Props, State> {
     this.props.updateTags(tags);
   }
 
-  tagRemove = (tag: string) =>{
-    if(this.props.template.tags){
+  tagRemove = (tag: string) => {
+    if (this.props.template.tags) {
       const newTags = this.props.template.tags.filter((existingTag: string) => existingTag !== tag);
       this.props.updateTags(newTags);
     }
@@ -168,6 +173,7 @@ class TemplateInfo extends React.Component<Props, State> {
       updatedAt,
       instances,
     } = this.props.template;
+    const { isFetchingTags } = this.props;
 
     let timestampParsed = "";
     if (updatedAt) {
@@ -230,7 +236,10 @@ class TemplateInfo extends React.Component<Props, State> {
             <CardHeader>Tags</CardHeader>
             <CardBody>
               <TagsWrapper>
-                <Tags updateTags={this.saveTags} tagRemove={this.tagRemove} tags={tags} allowAddTag={true} allowEdit={true} />
+                {isFetchingTags ?
+                  <CenteredSpinner size={SpinnerSize.large} />
+                  : <Tags updateTags={this.saveTags} tagRemove={this.tagRemove} tags={tags} allowAddTag={true} allowEdit={true} />
+                }
               </TagsWrapper>
             </CardBody>
           </Card>
