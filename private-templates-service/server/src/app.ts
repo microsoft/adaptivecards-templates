@@ -4,13 +4,12 @@ import passport from "./config/passport";
 import bodyParser from "body-parser";
 import session from "express-session";
 import helmet from "helmet";
-import mongoose from "mongoose";
 
 // import controllers
-import { TemplateServiceClient } from "../../adaptivecards-templating-service/src/TemplateServiceClient";
-import { ClientOptions } from "../../adaptivecards-templating-service/src/IClientOptions";
-import { AzureADProvider } from "../../adaptivecards-templating-service/src/authproviders/AzureADProvider";
-import { MongoDBProvider } from "../../adaptivecards-templating-service/src/storageproviders/MongoDBProvider";
+import { TemplateServiceClient } from "adaptivecards-templating-service";
+import { ClientOptions } from "adaptivecards-templating-service";
+import { AzureADProvider } from "adaptivecards-templating-service";
+import { MongoDBProvider } from "adaptivecards-templating-service";
 
 const RELATIVE_PATH_CLIENT = '../../../../client/build';
 
@@ -36,7 +35,6 @@ app.use(session({
 }));
 app.use(helmet.noSniff());
 
-mongoose.set('useFindAndModify', false)
 let mongoDB = new MongoDBProvider({ connectionString: "#{DB_CONNECTION_TOKEN}#" });
 mongoDB.connect()
   .then(
