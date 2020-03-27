@@ -131,7 +131,6 @@ class Tags extends React.Component<Props, State>  {
     const {
       isAdding
     } = this.state;
-    console.log(this.props.modalState);
     return (
       <React.Fragment>
         {tags && tags.map((tag: string) => (
