@@ -48,6 +48,15 @@ export const SAFETY = "Safety & Eco";
 export const ABOUT_ADS = "About our Ads";
 export const MICROSOFT = "© Microsoft 2020";
 
+// PublishModal.tsx
+export const SEARCH_FOR_PEOPLE = "Search for people";
+
+// NavBar/SideBar styled
+export const LOGO_DESCRIPTION = "Adaptive Cards Portal Icon";
+
+// SearchBar/styled.tsx
+export const SEARCHBAR_DESCRIPTION = "Searchbar";
+
 //SaveModal.tsx
 export const SAVECARD = "Save Card";
 export const SAVETEXT = "Your card will be saved as a draft until you publish it to your organization.";

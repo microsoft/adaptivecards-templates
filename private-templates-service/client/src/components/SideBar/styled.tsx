@@ -3,7 +3,6 @@ import { Nav } from "office-ui-fabric-react/lib/Nav";
 import { Icon } from "office-ui-fabric-react/lib/Icon";
 import { ActionButton } from "office-ui-fabric-react";
 import { COLORS, BREAK } from "../../globalStyles";
-
 export const OuterSideBarWrapper = styled.div`
   display: flex;
   flex-direction: column;
