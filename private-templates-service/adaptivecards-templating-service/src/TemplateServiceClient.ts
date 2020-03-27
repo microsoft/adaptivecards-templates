@@ -835,7 +835,7 @@ export class TemplateServiceClient {
 
     let templates: ITemplate[] = response.result;
 
-    if (templates.length != 1) {
+    if (templates.length !== 1) {
       return { success: false, errorMessage: "Invalid template ID" };
     }
 
@@ -846,27 +846,22 @@ export class TemplateServiceClient {
 
     sortTemplateByVersion(templates![0]);
 
-    let resultTemplates: ITemplate[] = [];
     let template = templates[0];
     if (template.isLive === false && template.owner !== userId) return { success: false, errorMessage: "Invalid user ID" };
     if (!template.instances) { return { success: false, errorMessage: "Invalid template ID" } };
+    let selectedInstance = template.instances[0];
     if (version) {
       for (let instance of template.instances) {
         if (instance.version === version) {
-          let boundJSON: JSON = createCard(instance.json, data);
-          instance.json = boundJSON;
-          template.instances = [instance];
-          resultTemplates.push(template);
-          return { success: true, result: resultTemplates }
+          selectedInstance = instance;
+          break;
         }
       }
     }
-    // return latest version with data bound if no version is supplied
-    let boundJSON: JSON = createCard(template.instances[0].json, data);
-    template.instances![0].json = boundJSON;
-    template.instances = [template.instances[0]];
-    resultTemplates.push(template);
-    return { success: true, result: resultTemplates };
+    let boundJSON: JSON = createCard(selectedInstance.json, data);
+    selectedInstance.json = boundJSON;
+    template.instances = [selectedInstance];
+    return { success: true, result: [template] };
 
   }
 
