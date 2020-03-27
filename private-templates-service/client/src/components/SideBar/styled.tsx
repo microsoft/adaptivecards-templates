@@ -3,8 +3,6 @@ import { Nav } from "office-ui-fabric-react/lib/Nav";
 import { Icon } from "office-ui-fabric-react/lib/Icon";
 import { ActionButton } from "office-ui-fabric-react";
 import { COLORS, BREAK } from "../../globalStyles";
-import * as STRINGS from "../../assets/strings";
-
 export const OuterSideBarWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -37,7 +35,7 @@ export const LogoWrapper = styled.div`
   padding-right: 48px;
 `;
 
-export const Logo = styled.img.attrs({"aria-label": STRINGS.LOGO_DESCRIPTION})`
+export const Logo = styled.img`
   width: 32px;
   margin-right: 12px;
 `;

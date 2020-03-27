@@ -3,7 +3,6 @@ import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { ActionButton } from 'office-ui-fabric-react';
 
 import { BREAK, COLORS } from "../../globalStyles";
-import * as STRINGS from "../../assets/strings";
 
 export const Banner = styled.div`
   background-color: ${COLORS.WHITE};
@@ -38,7 +37,7 @@ export const BaselineBanner = styled.div`
   align-items: baseline;
 `;
 
-export const StyledLogo = styled.img.attrs({"aria-label": STRINGS.LOGO_DESCRIPTION})`
+export const StyledLogo = styled.img`
   width: 32px;
   margin-right: 10px;
 

@@ -9,6 +9,7 @@ import { newTemplate } from "../../store/currentTemplate/actions";
 import { COLORS } from "../../globalStyles";
 import UserAvatar from "./UserAvatar";
 import mainLogo from "../../assets/adaptive-cards-100-logo.png";
+import * as STRINGS from "../../assets/strings";
 
 // CSS
 import {
@@ -151,7 +152,7 @@ const SideBar = (props: Props) => {
     <OuterSideBarWrapper>
       <MainItems>
         <LogoWrapper>
-          <Logo src={mainLogo} />
+          <Logo aria-label={STRINGS.LOGO_DESCRIPTION} src={mainLogo} />
           <LogoTextWrapper>
             <LogoTextHeader>Adaptive Cards</LogoTextHeader>
             <LogoTextSubHeader>Portal</LogoTextSubHeader>

@@ -12,6 +12,7 @@ import SearchBar from "./SearchBar";
 
 import { ActionButton } from 'office-ui-fabric-react';
 import Logo from '../../assets/adaptive-cards-100-logo.png';
+import * as STRINGS from "../../assets/strings";
 
 import { Banner, Styledh1, StyledLogo, MobileBanner, BaselineBanner, StyledButton, Styledh2, StyledButtonContent, EditButton, BackButton, ButtonTextWrapper } from './styled';
 
@@ -52,7 +53,7 @@ const NavBar = (props: NavBarProps) => {
     return (
       <Banner>
         <MobileBanner>
-          <StyledLogo src={Logo} />
+          <StyledLogo aria-label={STRINGS.LOGO_DESCRIPTION} src={Logo} />
           <Styledh1>{props.currentPageTitle || ""}</Styledh1>
         </MobileBanner>
       </Banner>
@@ -76,7 +77,7 @@ const NavBar = (props: NavBarProps) => {
       return (
         <Banner>
           <MobileBanner>
-            <StyledLogo src={Logo} />
+            <StyledLogo aria-label={STRINGS.LOGO_DESCRIPTION} src={Logo} />
             <Styledh1>{props.currentPageTitle}</Styledh1>
           </MobileBanner>
           <SearchBar />
@@ -86,7 +87,7 @@ const NavBar = (props: NavBarProps) => {
       return (
         <Banner>
           <MobileBanner>
-            <StyledLogo src={Logo} />
+            <StyledLogo aria-label={STRINGS.LOGO_DESCRIPTION} src={Logo} />
             <Styledh1>{props.currentPageTitle}</Styledh1>
           </MobileBanner>
           <SearchBar />
@@ -96,7 +97,7 @@ const NavBar = (props: NavBarProps) => {
       return (
         <Banner>
           <MobileBanner>
-            <StyledLogo src={Logo} />
+            <StyledLogo aria-label={STRINGS.LOGO_DESCRIPTION} src={Logo} />
             <Styledh1>{props.template ? props.template.name : props.currentPageTitle}</Styledh1>
             <Styledh2>{props.version ? "Version " + props.version : ""}</Styledh2>
           </MobileBanner>
@@ -113,7 +114,7 @@ const NavBar = (props: NavBarProps) => {
       return (
         <Banner>
           <MobileBanner>
-            <StyledLogo src={Logo} />
+            <StyledLogo aria-label={STRINGS.LOGO_DESCRIPTION} src={Logo} />
             <Styledh1>{props.template ? (props.version ? props.template.name + " - " + props.version : props.template.name) : "Preview"}</Styledh1>
             <Styledh2>{props.template ? "ID: " + props.template.id : ""}</Styledh2>
           </MobileBanner>
@@ -123,7 +124,7 @@ const NavBar = (props: NavBarProps) => {
       return (
         <Banner>
           <BaselineBanner>
-            <StyledLogo src={Logo} />
+            <StyledLogo aria-label={STRINGS.LOGO_DESCRIPTION} src={Logo} />
             <Styledh1>{(props.template && props.template.name) || props.currentPageTitle}</Styledh1>
             {!props.isFetching && <EditButton onClick={editName} iconProps={{ iconName: 'Edit' }} />}
           </BaselineBanner>
@@ -134,7 +135,7 @@ const NavBar = (props: NavBarProps) => {
       return (
         <Banner>
           <MobileBanner>
-            <StyledLogo src={Logo} />
+            <StyledLogo aria-label={STRINGS.LOGO_DESCRIPTION} src={Logo} />
             <Styledh1>{props.currentPageTitle}</Styledh1>
           </MobileBanner>
         </Banner>
