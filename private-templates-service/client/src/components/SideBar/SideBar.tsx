@@ -28,6 +28,7 @@ import {
 } from "./styled";
 import { INavLinkGroup, INavStyles } from "office-ui-fabric-react";
 import { ClearOwners } from "../../store/templateOwner/actions";
+import { ModalState } from "../../store/page/types";
 
 
 interface Props {
@@ -36,13 +37,15 @@ interface Props {
   user?: UserType;
   templateID: string | undefined;
   newTemplate: () => void;
+  modalState?: ModalState;
 }
 
 const mapStateToProps = (state: RootState) => {
   return {
     isAuthenticated: state.auth.isAuthenticated,
     user: state.auth.user,
-    templateID: state.currentTemplate.templateID
+    templateID: state.currentTemplate.templateID,
+    modalState: state.page.modalState
   };
 };
 
@@ -181,7 +184,7 @@ const SideBar = (props: Props) => {
         {props.isAuthenticated && <NavMenu styles={navMenuLinksProps} groups={navMenuLinks} onLinkClick={onNavClick} />}
       </MainItems>
 
-      <SignOut onClick={props.authButtonMethod}>Sign {props.isAuthenticated ? "Out" : "In"}</SignOut>
+      <SignOut onClick={props.authButtonMethod} tabIndex={props.modalState ? -1 : 0}>Sign {props.isAuthenticated ? "Out" : "In"}</SignOut>
     </OuterSideBarWrapper>
   );
 };

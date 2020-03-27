@@ -115,10 +115,6 @@ export const TagSubmitButton = styled.button<{ open: boolean }>`
   &: active {
     outline: 0px;
   }
-
-  &: focus {
-    outline: 0px;
-  }
 `;
 
 export const TagSubmitIcon = styled(Icon)`
