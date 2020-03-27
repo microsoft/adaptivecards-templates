@@ -18,7 +18,7 @@ export default async function getToken(): Promise<string> {
     resource: "#{CLIENT_ID_TOKEN}#"
   };
   return await request
-    .post({ url: endpoint, form: requestParams }) // put in try catch
+    .post({ url: endpoint, form: requestParams }) // put in try catch
     .then((err: any, response: any, body: any) => {
       if (err) {
         let parsedBody = JSON.parse(err);
@@ -30,7 +30,7 @@ export default async function getToken(): Promise<string> {
           console.log("Error=" + parsedBody.error_description);
           return Promise.resolve(parsedBody.error_description);
         } else {
-          console.log("Access Token=" + parsedBody.access_token);
+          console.log("Access Token=" + parsedBody.access_token);
           return Promise.resolve(parsedBody.access_token);
         }
       }
@@ -209,7 +209,7 @@ describe("Basic Post Templates", () => {
     await mongoose.connection.close();
     for (let id of idsToDelete) {
       await request(app).delete(`/template/${id}`)
-        .set({ Authorization: "Bearer " + token });
+      .set({ Authorization: "Bearer " + token });
     }
   });
 });
@@ -296,7 +296,7 @@ describe("Basic Get Templates", () => {
   afterAll(async () => {
     for (let id of idsToDelete) {
       await request(app).delete(`/template/${id}`)
-        .set({ Authorization: "Bearer " + token });
+      .set({ Authorization: "Bearer " + token });
     }
   });
 });
@@ -382,7 +382,7 @@ describe("Preview Templates", () => {
   afterAll(async () => {
     for (let id of idsToDelete) {
       await request(app).delete(`/template/${id}`)
-        .set({ Authorization: "Bearer " + token });
+      .set({ Authorization: "Bearer " + token });
     }
   });
 });
@@ -414,11 +414,11 @@ describe("Delete Templates", () => {
     id = res.body.id;
 
     res = await request(app).delete(`/template/${id}`)
-      .set({ Authorization: "Bearer " + token });
+    .set({ Authorization: "Bearer " + token });
     expect(res.status).toEqual(204);
 
     res = await request(app).get(`/template/${id}`)
-      .set({ Authorization: "Bearer " + token });
+    .set({ Authorization: "Bearer " + token });
     expect(res.status).toEqual(404);
   });
 
@@ -444,15 +444,15 @@ describe("Delete Templates", () => {
     expect(res.status).toEqual(201);
 
     res = await request(app).delete(`/template/${id}?version=1.4`)
-      .set({ Authorization: "Bearer " + token });
+    .set({ Authorization: "Bearer " + token });
     expect(res.status).toEqual(204);
 
     res = await request(app).get(`/template/${id}?version=1.4`)
-      .set({ Authorization: "Bearer " + token });
+    .set({ Authorization: "Bearer " + token });
     expect(res.status).toEqual(404);
 
     res = await request(app).get(`/template/${id}`)
-      .set({ Authorization: "Bearer " + token });
+    .set({ Authorization: "Bearer " + token });
     expect(res.status).toEqual(200);
     expect(res.body.templates[0].instances[0].version).toEqual("1.0");
   });
@@ -481,24 +481,24 @@ describe("Delete Templates", () => {
     expect(res.status).toEqual(201);
 
     res = await request(app).delete(`/template/${id}/batch`)
-      .set({ Authorization: "Bearer " + token })
-      .send({
-        versions: [
-          "1.0",
-          "1.1"
-        ]
-      });
+    .set({ Authorization: "Bearer " + token })
+    .send({
+      versions: [
+        "1.0", 
+        "1.1"
+      ]
+    });
     expect(res.status).toEqual(204);
 
     res = await request(app).get(`/template/${id}`)
-      .set({ Authorization: "Bearer " + token });
+    .set({ Authorization: "Bearer " + token });
     expect(res.status).toEqual(404);
   });
 
   afterAll(async () => {
     for (let id of idsToDelete) {
       await request(app).delete(`/template/${id}`)
-        .set({ Authorization: "Bearer " + token });
+      .set({ Authorization: "Bearer " + token });
     }
   });
 });
@@ -533,53 +533,53 @@ describe("Batch Update Templates", () => {
     idsToDelete.push(id);
 
     res = await request(app)
-      .post(`/template/${id}`)
-      .set({ Authorization: "Bearer " + token })
-      .send({
-        template: {},
-        state: "live",
-        version: "1.1"
-      });
-    expect(res.status).toEqual(201);
-    idsToDelete.push(id);
+    .post(`/template/${id}`)
+    .set({ Authorization: "Bearer " + token })
+    .send({
+      template: {},
+      state: "live",
+      version: "1.1"
+    });
+  expect(res.status).toEqual(201);
+  idsToDelete.push(id);
 
-    res = await request(app).post(`/template/${id}/batch`)
-      .set({ Authorization: "Bearer " + token })
-      .send({
-        templates: [
-          {
-            version: "1.0",
-            state: "deprecated"
-          },
-          {
-            version: "1.1",
-            state: "deprecated"
-          }
-        ]
-      })
-    expect(res.status).toEqual(201);
+  res = await request(app).post(`/template/${id}/batch`)
+  .set({ Authorization: "Bearer " + token })
+  .send({
+    templates: [
+      {
+      version: "1.0",
+      state: "deprecated"
+      }, 
+      {
+        version: "1.1",
+        state: "deprecated"
+      }
+    ]
+  })
+  expect(res.status).toEqual(201);
 
-    res = await request(app).get(`/template/${id}?version=1.0`)
-      .set({ Authorization: "Bearer " + token });
+  res = await request(app).get(`/template/${id}?version=1.0`)
+    .set({ Authorization: "Bearer " + token });
     expect(res.status).toEqual(200);
-    expect(res.body).toHaveProperty("templates");
-    expect(res.body.templates).toHaveLength(1);
-    expect(res.body.templates[0].instances).toHaveLength(1);
-    expect(res.body.templates[0].instances[0].state).toEqual("deprecated");
+  expect(res.body).toHaveProperty("templates");
+  expect(res.body.templates).toHaveLength(1);
+  expect(res.body.templates[0].instances).toHaveLength(1);
+  expect(res.body.templates[0].instances[0].state).toEqual("deprecated");
 
-    res = await request(app).get(`/template/${id}?version=1.1`)
-      .set({ Authorization: "Bearer " + token });
-    expect(res.status).toEqual(200);
-    expect(res.body).toHaveProperty("templates");
-    expect(res.body.templates).toHaveLength(1);
-    expect(res.body.templates[0].instances).toHaveLength(1);
-    expect(res.body.templates[0].instances[0].state).toEqual("deprecated");
+  res = await request(app).get(`/template/${id}?version=1.1`)
+  .set({ Authorization: "Bearer " + token });
+  expect(res.status).toEqual(200);
+  expect(res.body).toHaveProperty("templates");
+  expect(res.body.templates).toHaveLength(1);
+  expect(res.body.templates[0].instances).toHaveLength(1);
+  expect(res.body.templates[0].instances[0].state).toEqual("deprecated");
   });
 
   afterAll(async () => {
     for (let id of idsToDelete) {
       await request(app).delete(`/template/${id}`)
-        .set({ Authorization: "Bearer " + token });
+      .set({ Authorization: "Bearer " + token });
     }
   });
 });
@@ -632,7 +632,7 @@ describe("Filtering Templates", () => {
   afterAll(async () => {
     for (let id of idsToDelete) {
       await request(app).delete(`/template/${id}`)
-        .set({ Authorization: "Bearer " + token });
+      .set({ Authorization: "Bearer " + token });
     }
   });
 });
@@ -667,7 +667,7 @@ describe("Get Tags", () => {
     idsToDelete.push(id);
 
     res = await request(app).get(`/template/${id}`)
-      .set({ Authorization: "Bearer " + token });
+    .set({ Authorization: "Bearer " + token });
     expect(res.body).toHaveProperty("templates");
     expect(res.body.templates).toHaveLength(1);
     let template = res.body.templates[0];
@@ -691,7 +691,7 @@ describe("Get Tags", () => {
   // Authenticated post request
   it("should try to get the list of owners and all tags and succeed", async () => {
     let res = await request(app).get("/template/tag")
-      .set({ Authorization: "Bearer " + token });
+    .set({ Authorization: "Bearer " + token });
     expect(res.status).toEqual(200);
     expect(res.body).toHaveProperty("ownedTags");
     expect(res.body).toHaveProperty("allTags");
@@ -705,7 +705,7 @@ describe("Get Tags", () => {
   afterAll(async () => {
     for (let id of idsToDelete) {
       await request(app).delete(`/template/${id}`)
-        .set({ Authorization: "Bearer " + token });
+      .set({ Authorization: "Bearer " + token });
     }
   });
 });
@@ -913,7 +913,7 @@ describe("Post Templates, and increment version", () => {
     await mongoose.connection.close();
     for (let id of idsToDelete) {
       await request(app).delete(`/template/${id}`)
-        .set({ Authorization: "Bearer " + token });
+      .set({ Authorization: "Bearer " + token });
     }
   });
 });
@@ -984,236 +984,5 @@ describe("Basic Get Templates", () => {
     expect(template.instances).toHaveLength(1);
     // Check that only the latest version is returned
     expect(template.instances[0].version).toMatch("1.2");
-  });
-});
-
-describe("Post Templates: Data Binding", () => {
-  let token: string;
-  const app = express();
-  let id: string;
-  let idsToDelete: string[] = [];
-
-  beforeAll(async () => {
-    // TODO: request access token for registered AD app
-    token = await getToken();
-    let templateClient = TemplateServiceClient.init(options);
-    let middleware: Router = templateClient.expressMiddleware();
-    let userMiddleware: Router = templateClient.userExpressMiddleware();
-    app.use(bodyParser.json());
-    app.use("/template", middleware);
-    app.use("/user", userMiddleware);
-  });
-
-  it("pass in a data json, version, and id and should receive that version of the template with the data bound", async () => {
-    let res = await request(app)
-      .post("/template")
-      .set({ Authorization: "Bearer " + token })
-      .send({
-        template: {}
-      });
-    expect(res.status).toEqual(201);
-    expect(res.body).toHaveProperty("id");
-    id = res.body.id;
-    idsToDelete.push(id);
-
-    res = await request(app)
-      .post(`/template/${id}`)
-      .set({ Authorization: "Bearer " + token })
-      .send({
-        template: {
-          "type": "AdaptiveCard",
-          "version": "1.0",
-          "body": [
-            {
-              "type": "TextBlock",
-              "text": "{greeting} {name} V1.0"
-            }
-          ],
-          "$schema": "http://adaptivecards.io/schemas/adaptive-card.json"
-        },
-        version: "1.0"
-      });
-    expect(res.status).toEqual(201);
-    idsToDelete.push(id);
-
-    res = await request(app)
-      .post(`/template/${id}`)
-      .set({ Authorization: "Bearer " + token })
-      .send({
-        template: {
-          "type": "AdaptiveCard",
-          "version": "1.0",
-          "body": [
-            {
-              "type": "TextBlock",
-              "text": "{greeting} {name} V1.1"
-            }
-          ],
-          "$schema": "http://adaptivecards.io/schemas/adaptive-card.json"
-        },
-        version: "1.1"
-      });
-    expect(res.status).toEqual(201);
-    idsToDelete.push(id);
-
-    res = await request(app)
-      .post(`/template/${id}`)
-      .set({ Authorization: "Bearer " + token })
-      .send({
-        template: {
-          "type": "AdaptiveCard",
-          "version": "1.0",
-          "body": [
-            {
-              "type": "TextBlock",
-              "text": "{greeting} {name} V1.2"
-            }
-          ],
-          "$schema": "http://adaptivecards.io/schemas/adaptive-card.json"
-        },
-        version: "1.2"
-      });
-    expect(res.status).toEqual(201);
-    idsToDelete.push(id);
-
-    res = await request(app)
-      .post(`/template/${id}`)
-      .set({ Authorization: "Bearer " + token })
-      .send({
-        data: {
-          "greeting": "hi",
-          "name": "intern",
-        },
-        bindData: "true",
-        version: "1.0"
-      })
-    expect(res.status).toEqual(200);
-    expect(res.body).toHaveProperty("templates");
-    expect(res.body.templates).toHaveLength(1);
-    let template = res.body.templates[0];
-    id = template._id;
-    expect(template.instances).toHaveLength(1);
-    // Check that the data was bound
-    expect(JSON.stringify(template.instances[0].json)).toMatch(JSON.stringify({
-      "type": "AdaptiveCard",
-      "version": "1.0",
-      "body": [
-        {
-          "type": "TextBlock",
-          "text": "hi intern V1.0"
-        }
-      ],
-      "$schema": "http://adaptivecards.io/schemas/adaptive-card.json"
-    }));
-  });
-
-  it("pass in a data json, no version, and id and should receive the latest version of the template with the data bound", async () => {
-    let res = await request(app)
-      .post("/template")
-      .set({ Authorization: "Bearer " + token })
-      .send({
-        template: {}
-      });
-    expect(res.status).toEqual(201);
-    expect(res.body).toHaveProperty("id");
-    id = res.body.id;
-    idsToDelete.push(id);
-
-    res = await request(app)
-      .post(`/template/${id}`)
-      .set({ Authorization: "Bearer " + token })
-      .send({
-        template: {
-          "type": "AdaptiveCard",
-          "version": "1.0",
-          "body": [
-            {
-              "type": "TextBlock",
-              "text": "{greeting} {name} version 1.0"
-            }
-          ],
-          "$schema": "http://adaptivecards.io/schemas/adaptive-card.json"
-        },
-        version: "1.0"
-      });
-    expect(res.status).toEqual(201);
-    idsToDelete.push(id);
-
-    res = await request(app)
-      .post(`/template/${id}`)
-      .set({ Authorization: "Bearer " + token })
-      .send({
-        template: {
-          "type": "AdaptiveCard",
-          "version": "1.0",
-          "body": [
-            {
-              "type": "TextBlock",
-              "text": "{greeting} {name} V1.0"
-            }
-          ],
-          "$schema": "http://adaptivecards.io/schemas/adaptive-card.json"
-        },
-        version: "1.1"
-      });
-    expect(res.status).toEqual(201);
-    idsToDelete.push(id);
-
-    res = await request(app)
-      .post(`/template/${id}`)
-      .set({ Authorization: "Bearer " + token })
-      .send({
-        template: {
-          "type": "AdaptiveCard",
-          "version": "1.0",
-          "body": [
-            {
-              "type": "TextBlock",
-              "text": "{greeting} {name} V1.2"
-            }
-          ],
-          "$schema": "http://adaptivecards.io/schemas/adaptive-card.json"
-        },
-        version: "1.2"
-      });
-    expect(res.status).toEqual(201);
-    idsToDelete.push(id);
-
-    res = await request(app)
-      .post(`/template/${id}`)
-      .set({ Authorization: "Bearer " + token })
-      .send({
-        data: {
-          "greeting": "hi",
-          "name": "intern",
-        },
-        bindData: "true",
-      })
-    expect(res.status).toEqual(200);
-    expect(res.body).toHaveProperty("templates");
-    expect(res.body.templates).toHaveLength(1);
-    let template = res.body.templates[0];
-    id = template._id;
-    expect(template.instances).toHaveLength(1);
-    // Check that the data was bound
-    expect(JSON.stringify(template.instances[0].json)).toMatch(JSON.stringify({
-      "type": "AdaptiveCard",
-      "version": "1.0",
-      "body": [
-        {
-          "type": "TextBlock",
-          "text": "hi intern V1.2"
-        }
-      ],
-      "$schema": "http://adaptivecards.io/schemas/adaptive-card.json"
-    }));
-  });
-
-  afterAll(async () => {
-    await mongoose.connection.close();
-    for (let id of idsToDelete) {
-      await request(app).delete(`/template/${id}`)
-        .set({ Authorization: "Bearer " + token });
-    }
   });
 });
