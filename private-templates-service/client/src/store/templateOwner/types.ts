@@ -4,8 +4,8 @@ export interface OwnerState {
 }
 
 export interface OwnerType {
-  displayNames?: { [index: number]: string; };
-  imageURLs?: { [index: number]: string; };
+  displayNames?: { [index: string]: string; };
+  imageURLs?: { [index: string]: string; };
 }
 
 export const GET_OWNER_NAME = 'GET_OWNER_NAME';
@@ -20,13 +20,13 @@ export const CLEAR_OWNERS = 'CLEAR_OWNERS';
 
 export interface GetOwnerNameAction {
   type: typeof GET_OWNER_NAME | typeof GET_OWNER_NAME_SUCCESS | typeof GET_OWNER_NAME_FAILURE;
-  index?: number;
+  index?: string;
   ownerName?: string;
 }
 
 export interface GetOwnerProfilePictureAction {
   type: typeof GET_OWNER_PROFILE_PICTURE | typeof GET_OWNER_PROFILE_PICTURE_SUCCESS | typeof GET_OWNER_PROFILE_PICTURE_FAILURE;
-  index?: number;
+  index?: string;
   ownerImageURL?: string;
 }
 

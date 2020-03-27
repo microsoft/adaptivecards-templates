@@ -61,7 +61,7 @@ export const TemplateName = styled.div`
 export const TemplateUpdatedAt = styled.div`
   font-family: Segoe UI Regular;
   font-size: 0.8rem;
-  color: grey;
+  color: ${COLORS.GREY3};
 `;
 
 export const Bottom = styled.div`

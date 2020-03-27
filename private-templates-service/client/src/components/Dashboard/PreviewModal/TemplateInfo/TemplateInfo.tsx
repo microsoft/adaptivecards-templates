@@ -5,7 +5,7 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { RootState } from '../../../../store/rootReducer';
 import { openModal, closeModal } from '../../../../store/page/actions';
 import { ModalState } from '../../../../store/page/types';
-import { updateCurrentTemplateVersion } from '../../../../store/currentTemplate/actions';
+import { updateCurrentTemplateVersion, updateTemplate } from '../../../../store/currentTemplate/actions';
 
 import { Template, TemplateInstance, PostedTemplate } from 'adaptive-templating-service-typescript-node';
 
@@ -20,7 +20,7 @@ import DeleteModal from '../../../Common/DeleteModal';
 
 import VersionCard from './VersionCard';
 
-import { IDropdownOption } from 'office-ui-fabric-react';
+import { IDropdownOption, ActionButton } from 'office-ui-fabric-react';
 
 import { EDIT_IN_DESIGNER, DELETE, SHARE, PUBLISH, UNPUBLISH } from "../../../../assets/strings"
 import { THEME } from '../../../../globalStyles';
@@ -34,7 +34,6 @@ import {
   Status,
   TimeStamp,
   ActionsWrapper,
-  StyledButton,
   MainContentWrapper,
   RowWrapper,
   Card,
@@ -88,6 +87,7 @@ interface Props extends RouteComponentProps {
   modalState?: ModalState;
   openModal: (modalState: ModalState) => void;
   closeModal: () => void;
+  updateTags: (tags: string[]) => void;
 }
 
 interface State {
@@ -112,6 +112,9 @@ const mapDispatchToProps = (dispatch: any) => {
     },
     updateCurrentTemplateVersion: (template: Template, version: string) => {
       dispatch(updateCurrentTemplateVersion(template, version))
+    },
+    updateTags: (tags: string[]) => {
+      dispatch(updateTemplate(undefined, undefined, undefined, undefined, undefined, undefined, tags))
     }
   }
 };
@@ -148,6 +151,16 @@ class TemplateInfo extends React.Component<Props, State> {
     this.props.updateCurrentTemplateVersion(this.props.template, version);
     this.props.onSwitchVersion(version);
   }
+  saveTags = (tags: string[]) => {
+    this.props.updateTags(tags);
+  }
+
+  tagRemove = (tag: string) =>{
+    if(this.props.template.tags){
+      const newTags = this.props.template.tags.filter((existingTag: string) => existingTag !== tag);
+      this.props.updateTags(newTags);
+    }
+  }
 
   render() {
     const {
@@ -179,6 +192,7 @@ class TemplateInfo extends React.Component<Props, State> {
                   onChange={this.onVersionChange}
                   theme={THEME.LIGHT}
                   styles={DropdownStyles}
+                  ariaLabel="Version List Dropdown"
                 />
               </Title>
               <StatusIndicator state={templateState} />
@@ -190,10 +204,10 @@ class TemplateInfo extends React.Component<Props, State> {
           </TopRowWrapper>
           <ActionsWrapper>
             {buttons.map((val) => (
-              <StyledButton key={val.text} iconProps={val.icon} allowDisabledFocus isPink={val.text === 'Delete'}
+              <ActionButton key={val.text} iconProps={val.icon} allowDisabledFocus
                 onClick={() => { onActionButtonClick(this.props, this.state, val) }}>
                 {val.text === 'Publish' && templateState === PostedTemplate.StateEnum.Live ? val.altText : val.text}
-              </StyledButton>
+              </ActionButton>
             ))}
           </ActionsWrapper>
         </HeaderWrapper>
@@ -216,7 +230,7 @@ class TemplateInfo extends React.Component<Props, State> {
             <CardHeader>Tags</CardHeader>
             <CardBody>
               <TagsWrapper>
-                <Tags tags={tags} allowAddTag={true} allowEdit={true} />
+                <Tags updateTags={this.saveTags} tagRemove={this.tagRemove} tags={tags} allowAddTag={true} allowEdit={true} />
               </TagsWrapper>
             </CardBody>
           </Card>

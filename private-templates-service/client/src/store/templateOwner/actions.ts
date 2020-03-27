@@ -20,7 +20,7 @@ function requestOwnerName(): GetOwnerNameAction {
   }
 }
 
-function requestOwnerNameSuccess(ownerName: string, index: number): GetOwnerNameAction {
+function requestOwnerNameSuccess(ownerName: string, index: string): GetOwnerNameAction {
   return {
     type: GET_OWNER_NAME_SUCCESS,
     ownerName,
@@ -40,7 +40,7 @@ function requestOwnerProfilePicture(): GetOwnerProfilePictureAction {
   }
 }
 
-function requestOwnerProfilePictureSuccess(ownerImageURL: string, index: number): GetOwnerProfilePictureAction {
+function requestOwnerProfilePictureSuccess(ownerImageURL: string, index: string): GetOwnerProfilePictureAction {
   return {
     type: GET_OWNER_PROFILE_PICTURE_SUCCESS,
     ownerImageURL,
@@ -60,21 +60,21 @@ export function ClearOwners(): ClearOwnersAction {
   }
 }
 
-export function getOwnerName(oID: string, index: number) {
+export function getOwnerName(oID: string) {
   return function (dispatch: any, getState: () => RootState) {
     dispatch(requestOwnerName());
     const state = getState();
 
-    if (!state.auth.accessToken) {
+    if (!state.auth.graphAccessToken) {
       return dispatch(requestOwnerNameFailure());
     }
-    const client = getAuthenticatedClient(state.auth.accessToken);
+    const client = getAuthenticatedClient(state.auth.graphAccessToken);
     return client.api('/users/' + oID + '/displayName').get()
       .then((name: any) => {
         if (!name.value) {
           dispatch(requestOwnerNameFailure());
         } else {
-          dispatch(requestOwnerNameSuccess(name.value, index));
+          dispatch(requestOwnerNameSuccess(name.value, oID));
         }
       }, (fail: any) => {
         dispatch(requestOwnerNameFailure());
@@ -82,20 +82,20 @@ export function getOwnerName(oID: string, index: number) {
   }
 }
 
-export function getOwnerProfilePicture(oID: string, index: number) {
+export function getOwnerProfilePicture(oID: string) {
   return function (dispatch: any, getState: () => RootState) {
     dispatch(requestOwnerProfilePicture());
     const state = getState();
 
-    if (!state.auth.accessToken) {
+    if (!state.auth.graphAccessToken) {
       return dispatch(requestOwnerProfilePictureFailure());
     }
 
-    const client = getAuthenticatedClient(state.auth.accessToken);
+    const client = getAuthenticatedClient(state.auth.graphAccessToken);
     return client.api('/users/' + oID + '/photo/$value').get()
       .then((image: Blob) => {
         const imageURL = URL.createObjectURL(image);
-        dispatch(requestOwnerProfilePictureSuccess(imageURL, index));
+        dispatch(requestOwnerProfilePictureSuccess(imageURL, oID));
       }, (fail: any) => {
         dispatch(requestOwnerProfilePictureFailure());
       })

@@ -10,7 +10,8 @@ export enum ModalState {
   Unpublish,
   Version,
   EditName,
-  Delete
+  Delete,
+  Save
 }
 
 // Action Types

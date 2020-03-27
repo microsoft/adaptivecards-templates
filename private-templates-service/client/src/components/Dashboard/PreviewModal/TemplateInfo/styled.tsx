@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { COLORS } from '../../../../globalStyles';
 
-import { Dropdown, ActionButton, Icon, IDropdownStyles } from "office-ui-fabric-react";
+import { Dropdown, Icon, IDropdownStyles } from "office-ui-fabric-react";
 import { PostedTemplate } from 'adaptive-templating-service-typescript-node';
 
 export const StyledVersionDropdown = styled(Dropdown)`
@@ -81,13 +81,6 @@ export const ActionsWrapper = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-`;
-
-export const StyledButton = styled(ActionButton) <{ isPink: boolean }>`
-  ${props => props.isPink && `color: pink;`}
-  &: focus {
-    outline: none;
-  }
 `;
 
 export const MainContentWrapper = styled.div`

@@ -3,11 +3,11 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { UserAgentApplication, ClientAuthError } from "msal";
 import { AuthResponse } from 'msal';
 import { initializeIcons } from '@uifabric/icons';
-import IdleTimer from 'react-idle-timer'
+import IdleTimer from 'react-idle-timer';
 
 // Redux
 import { connect } from "react-redux";
-import { setAccessToken, getUserDetails, getOrgDetails, getProfilePicture, logout } from "./store/auth/actions";
+import { setAccessToken, setGraphAccessToken, getUserDetails, getOrgDetails, getProfilePicture, logout } from "./store/auth/actions";
 import { UserType } from "./store/auth/types";
 import { RootState } from "./store/rootReducer";
 
@@ -46,6 +46,9 @@ const mapDispatchToProps = (dispatch: any) => {
     setAccessToken: (accessToken: AuthResponse) => {
       dispatch(setAccessToken(accessToken));
     },
+    setGraphAccessToken: (accessToken: AuthResponse) => {
+      dispatch(setGraphAccessToken(accessToken));
+    },
     getUserDetails: () => {
       dispatch(getUserDetails());
     },
@@ -63,6 +66,7 @@ const mapDispatchToProps = (dispatch: any) => {
 
 interface Props {
   setAccessToken: (accessToken: AuthResponse) => void;
+  setGraphAccessToken: (graphAccessToken: AuthResponse) => void;
   getUserDetails: () => void;
   getOrgDetails: () => void;
   getProfilePicture: () => void;
@@ -133,7 +137,7 @@ class App extends Component<Props, State> {
               }
             />
             <MainAppWrapper>
-              <NavBar />
+              <NavBar/>
               <MainApp>
                 {!this.props.isAuthenticated && error}
                 <Switch>
@@ -214,11 +218,17 @@ class App extends Component<Props, State> {
       // make a request to the Azure OAuth endpoint to get a token
       let accessToken = await this.userAgentApplication.acquireTokenSilent(
         {
+          scopes: [`api://${config.appId}/Templates.All`]
+        }
+      );
+      this.props.setAccessToken(accessToken);
+
+      let graphAccessToken = await this.userAgentApplication.acquireTokenSilent(
+        {
           scopes: config.scopes
         }
       );
-
-      this.props.setAccessToken(accessToken);
+      this.props.setGraphAccessToken(graphAccessToken);
 
       this.props.getUserDetails();
       this.props.getOrgDetails();

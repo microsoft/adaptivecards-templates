@@ -29,8 +29,9 @@ const mapStateToProps = (state: RootState) => {
     currentPageTitle: state.page.currentPageTitle,
     currentPage: state.page.currentPage,
     template: state.currentTemplate.template,
-    // templateName: state.currentTemplate.templateName,
-    isFetching: state.currentTemplate.isFetching
+    templateID: state.currentTemplate.templateID,
+    isFetching: state.currentTemplate.isFetching,
+    templateName: state.currentTemplate.templateName
   }
 }
 
@@ -42,6 +43,7 @@ interface NavBarProps {
   templateName?: string;
   isFetching: boolean;
   version?: string;
+  templateID?: string;
 }
 
 
@@ -98,10 +100,10 @@ const NavBar = (props: NavBarProps) => {
         <Banner>
           <MobileBanner>
             <StyledLogo aria-label={STRINGS.LOGO_DESCRIPTION} src={Logo} />
-            <Styledh1>{props.template ? props.template.name : props.currentPageTitle}</Styledh1>
-            <Styledh2>{props.version ? "Version " + props.version : ""}</Styledh2>
+            <Styledh1>{(props.templateID === "" && STRINGS.UNTITLEDCARD) || props.templateName}</Styledh1>
+            {props.templateID !== "" && <EditButton onClick={editName} iconProps={{ iconName: 'Edit' }} />}
           </MobileBanner>
-          <ActionButton onClick={() => { history.push("/") }}>
+          <ActionButton onClick={() => { history.push("/") }}> 
             <StyledButton>
               <StyledButtonContent>
                 Finish
@@ -126,7 +128,7 @@ const NavBar = (props: NavBarProps) => {
           <BaselineBanner>
             <StyledLogo aria-label={STRINGS.LOGO_DESCRIPTION} src={Logo} />
             <Styledh1>{(props.template && props.template.name) || props.currentPageTitle}</Styledh1>
-            {!props.isFetching && <EditButton onClick={editName} iconProps={{ iconName: 'Edit' }} />}
+            {!props.isFetching && <EditButton ariaLabel="Edit Template Name" onClick={editName} iconProps={{ iconName: 'Edit' }} />}
           </BaselineBanner>
           <BackButton iconProps={{ iconName: 'Back' }} onClick={onBackButton}><ButtonTextWrapper>Back</ButtonTextWrapper></BackButton>
         </Banner>
