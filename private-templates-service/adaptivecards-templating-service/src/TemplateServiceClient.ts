@@ -659,9 +659,9 @@ export class TemplateServiceClient {
         recentTags!.splice(index, 1);
       }
       if (recentTags!.length >= 10) {
-        recentTags!.shift();
+        recentTags!.pop();
       }
-      recentTags!.push(tag);
+      recentTags!.unshift(tag);
     }
     return await this._updateUser(authId, undefined, undefined, recentTags);
   }
@@ -684,9 +684,9 @@ export class TemplateServiceClient {
       recentList!.splice(index, 1);
     }
     if (recentList!.length >= 5) {
-      recentList!.shift();
+      recentList!.pop();
     }
-    recentList!.push(templateId);
+    recentList!.unshift(templateId);
     if (viewed) {
       return await this._updateUser(authId, recentList);
     }
