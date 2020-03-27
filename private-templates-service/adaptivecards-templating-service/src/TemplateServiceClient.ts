@@ -848,7 +848,7 @@ export class TemplateServiceClient {
 
     let resultTemplates: ITemplate[] = [];
     let template = templates[0];
-    if (template.isLive === false && template.owner !== userId) return { success: false, errorMessage: "Invalid auth token" };
+    if (template.isLive === false && template.owner !== userId) return { success: false, errorMessage: "Invalid user ID" };
     if (!template.instances) { return { success: false, errorMessage: "Invalid template ID" } };
     if (version) {
       for (let instance of template.instances) {
@@ -861,7 +861,7 @@ export class TemplateServiceClient {
         }
       }
     }
-    // return latest version if 
+    // return latest version with data bound if no version is supplied
     let boundJSON: JSON = createCard(template.instances[0].json, data);
     template.instances![0].json = boundJSON;
     template.instances = [template.instances[0]];
