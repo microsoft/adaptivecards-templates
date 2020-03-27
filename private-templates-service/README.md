@@ -40,7 +40,9 @@ app.use("/user", client.userExpressMiddleware());
 
 **5. In the `adaptivecards-templates/private-templates-service/server/app.ts` file, replace ` "#{DB_CONNECTION_TOKEN}#"` with the real DB connection string. Make sure to NOT commit this file. Ask a dev for this string!**
 
-**6. Run `npm run dev`. This command concurrently runs the client and server locally. Navigate to `localhost:3000` to see the site.**
+**6. In 50 in AzureADProvider.ts, replace `#{CLIENT_ID_TOKEN}#` with your client ID token. Ask a dev for this string! `result = result && "#{CLIENT_ID_TOKEN}#" === decodedToken.payload.aud;`**
+
+**7. Run `npm run dev`. This command concurrently runs the client and server locally. Navigate to `localhost:3000` to see the site.**
 
 # Running the frontend and backend of Adaptive Cards CMS Locally
 
