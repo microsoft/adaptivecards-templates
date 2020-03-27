@@ -76,9 +76,7 @@ class Tags extends React.Component<Props, State>  {
       if (this.props.tags.includes(tag)) {
         this.highlightTag(tag, this.props.tags);
       }
-      else if (tag === "") {
-        //this.closeAddTag();
-      }
+      else if (tag === "") { }
       else if (this.props.updateTags) {
         this.props.updateTags([...this.props.tags, tag]);
         this.setState({ newTagName: "" });
