@@ -852,7 +852,7 @@ export class TemplateServiceClient {
     if (!template.instances) { return { success: false, errorMessage: "Invalid template ID" } };
     if (version) {
       for (let instance of template.instances) {
-        if (version && instance.version === version) {
+        if (instance.version === version) {
           let boundJSON: JSON = createCard(instance.json, data);
           instance.json = boundJSON;
           template.instances = [instance];
