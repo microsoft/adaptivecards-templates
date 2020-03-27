@@ -34,7 +34,7 @@ class RecentlyViewedTable extends React.Component<Props> {
         }
       };
       let onKeyDown = (keyStroke: any) => {
-        if (propsOnClick && template.id && keyStroke.keyCode == KeyCode.ENTER) {
+        if (propsOnClick && template.id && keyStroke.keyCode === KeyCode.ENTER) {
           propsOnClick(template.id);
         }
       }
