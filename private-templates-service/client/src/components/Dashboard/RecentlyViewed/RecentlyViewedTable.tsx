@@ -1,8 +1,7 @@
 import React from "react";
 
 import {
-  Template,
-  PostedTemplate
+  Template
 } from "adaptive-templating-service-typescript-node";
 
 import {
