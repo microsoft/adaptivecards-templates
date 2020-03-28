@@ -11,13 +11,17 @@ import { Template, TemplateInstance, PostedTemplate } from 'adaptive-templating-
 
 import { getLatestVersion } from "../../../../utils/TemplateUtil";
 
+import { getOwnerName, getOwnerProfilePicture } from "../../../../store/templateOwner/actions";
+import { OwnerType } from "../../../../store/templateOwner/types";
+import OwnerAvatar from "../../RecentlyViewed/OwnerAvatar";
+import { PersonaSize } from 'office-ui-fabric-react/lib/Persona';
+
 import PublishModal from '../../../Common/PublishModal';
 import UnpublishModal from '../../../Common/UnpublishModal';
 import Tags from '../../../Common/Tags';
 import ShareModal from '../../../Common/ShareModal';
 import EditNameModal from '../../../Common/EditNameModal';
 import DeleteModal from '../../../Common/DeleteModal';
-
 import VersionCard from './VersionCard';
 
 import { IDropdownOption, ActionButton } from 'office-ui-fabric-react';
@@ -77,7 +81,6 @@ const cards = [
   },
   {
     header: 'Usage',
-    body: (<UsageNumber>56</UsageNumber>),
     bodyText: 'Requests'
   }
 ];
@@ -91,18 +94,17 @@ interface Props extends RouteComponentProps {
   closeModal: () => void;
   updateTags: (tags: string[]) => void;
   isFetchingTags: boolean;
+  getOwnerName: (oID: string) => void;
+  getOwnerProfilePicture: (oID: string) => void;
+  owner?: OwnerType;
 }
-
-interface State {
-  version: string;
-}
-
 
 const mapStateToProps = (state: RootState) => {
   return {
     modalState: state.page.modalState,
     version: state.currentTemplate.version,
     isFetchingTags: state.currentTemplate.isFetchingTags,
+    owner: state.templateOwner.owners,
   };
 };
 
@@ -119,16 +121,25 @@ const mapDispatchToProps = (dispatch: any) => {
     },
     updateTags: (tags: string[]) => {
       dispatch(updateTemplateTags(tags))
+    },
+    getOwnerName: (oid: string) => {
+      dispatch(getOwnerName(oid));
+    },
+    getOwnerProfilePicture: (oid: string) => {
+      dispatch(getOwnerProfilePicture(oid));
     }
   }
 };
 
-function getTemplateState(template: Template, version: string): PostedTemplate.StateEnum {
-  if (!template.instances || template.instances.length === 0) return PostedTemplate.StateEnum.Draft;
-  for (let instance of template.instances) {
-    if (instance.version === version) return instance.state || PostedTemplate.StateEnum.Draft;
+function getTemplateInstance(template: Template, version: string): TemplateInstance {
+  for (let instance of template.instances!) {
+    if (instance.version === version) return instance;
   }
-  return PostedTemplate.StateEnum.Draft;
+  return template.instances![0];
+}
+
+interface State {
+  version: string
 }
 
 class TemplateInfo extends React.Component<Props, State> {
@@ -136,6 +147,9 @@ class TemplateInfo extends React.Component<Props, State> {
     super(props);
     const currentVersion = getLatestVersion(this.props.template);
     this.state = { version: currentVersion }
+    let templateInstance = getTemplateInstance(this.props.template, currentVersion);
+    this.props.getOwnerName(templateInstance.lastEditedUser!);
+    this.props.getOwnerProfilePicture(templateInstance.lastEditedUser!);
   }
 
   versionList = (instances: TemplateInstance[] | undefined): IDropdownOption[] => {
@@ -184,7 +198,9 @@ class TemplateInfo extends React.Component<Props, State> {
     if (!history) {
       return (<div>Error loading page</div>)
     }
-    let templateState = getTemplateState(this.props.template, this.state.version);
+    let templateInstance = getTemplateInstance(this.props.template, this.state.version);
+    let templateState = templateInstance.state || PostedTemplate.StateEnum.Draft;
+    this.props.getOwnerName(templateInstance.lastEditedUser!);
     return (
       <OuterWrapper>
         <HeaderWrapper>
@@ -224,9 +240,9 @@ class TemplateInfo extends React.Component<Props, State> {
                   {val.header}
                 </CardHeader>
                 <CardBody>
-                  {val.iconName && <IconWrapper iconName={val.iconName}></IconWrapper>}
-                  {val.body}
-                  {val.bodyText}
+                  {val.iconName && <IconWrapper><OwnerAvatar hidePersonalDetails={true} index={templateInstance.lastEditedUser!} size={PersonaSize.size48}/></IconWrapper>}
+                  {val.header === "Usage" && <UsageNumber>{templateInstance.numHits}</UsageNumber>}
+                  {(val.header === "Owner")? (this.props.owner && this.props.owner.displayNames) ? this.props.owner.displayNames[templateInstance.lastEditedUser!] : "" : val.bodyText}
                 </CardBody>
               </Card>
             ))}
@@ -257,7 +273,7 @@ class TemplateInfo extends React.Component<Props, State> {
 }
 
 function onActionButtonClick(props: Props, state: State, val: any) {
-  let templateState = getTemplateState(props.template, state.version);
+  let templateState = getTemplateInstance(props.template, state.version).state || PostedTemplate.StateEnum.Draft;
 
   switch (val.text) {
     case SHARE:
