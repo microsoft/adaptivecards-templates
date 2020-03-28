@@ -50,14 +50,8 @@ class RecentlyViewedTable extends React.Component<Props> {
           </RecentlyViewedItem>
           <RecentlyViewedItem>
             <TemplateStateWrapper>
-              <RecentlyViewedStatusIndicator
-                state={
-                  template.isLive
-                    ? PostedTemplate.StateEnum.Live
-                    : PostedTemplate.StateEnum.Draft
-                }
-              />
-              <Status>{template.isLive ? "Published" : "Draft"}</Status>
+              <RecentlyViewedStatusIndicator state={template.instances[0].state}/>
+              <Status>{template.instances[0].state && template.instances[0].state.toString().charAt(0).toUpperCase() + template.instances[0].state.toString().slice(1)}</Status>
             </TemplateStateWrapper>
           </RecentlyViewedItem>
           < RecentlyViewedItem > <OwnerInfo oID={template.instances[0]!.lastEditedUser!} ></OwnerInfo></RecentlyViewedItem >
