@@ -12,6 +12,7 @@ import {
 } from "./styled";
 
 import { getDateString } from "../../../utils/versionUtils";
+import { capitalizeString } from "../../../utils/stringUtils";
 import { Status } from "../PreviewModal/TemplateInfo/styled";
 import { TemplateStateWrapper } from "../../AdaptiveCardPanel/styled";
 import OwnerInfo from "./OwnerInfo";
@@ -50,7 +51,7 @@ class RecentlyViewedTable extends React.Component<Props> {
           <RecentlyViewedItem>
             <TemplateStateWrapper>
               <RecentlyViewedStatusIndicator state={template.instances[0].state}/>
-              <Status>{template.instances[0].state && template.instances[0].state.toString().charAt(0).toUpperCase() + template.instances[0].state.toString().slice(1)}</Status>
+              <Status>{template.instances[0].state && capitalizeString(template.instances[0].state.toString())}</Status>
             </TemplateStateWrapper>
           </RecentlyViewedItem>
           < RecentlyViewedItem > <OwnerInfo oID={template.instances[0]!.lastEditedUser!} ></OwnerInfo></RecentlyViewedItem >

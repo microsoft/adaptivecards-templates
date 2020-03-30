@@ -41,6 +41,7 @@ import {
 } from '../../Dashboard/PreviewModal/TemplateInfo/styled';
 
 import { getDateString } from '../../../utils/versionUtils';
+import { capitalizeString } from "../../../utils/stringUtils";
 import ModalHOC from '../../../utils/ModalHOC';
 import { closeModal } from '../../../store/page/actions';
 
@@ -136,7 +137,7 @@ class VersionModal extends React.Component<Props, State> {
                     <DateWrapper>{instance.publishedAt ? getDateString(instance.publishedAt) : "Not published"}</DateWrapper>
                     <StatusWrapper>
                       <StatusIndicator state={instance.state!} />
-                      <Status>{instance.state && instance.state.toString().charAt(0).toUpperCase() + instance.state.toString().slice(1)}</Status>
+                      <Status>{instance.state && capitalizeString(instance.state.toString())}</Status>
                     </StatusWrapper>
                     <CheckboxWrapper><Checkbox checked={this.state.versionList[index]}
                       onChange={() => {
