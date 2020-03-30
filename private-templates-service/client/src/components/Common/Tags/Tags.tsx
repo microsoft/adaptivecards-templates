@@ -17,7 +17,6 @@ import {
   TagSubmitButton,
   TagSubmitIcon,
 } from './styled';
-import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react';
 
 const mapStateToProps = (state: RootState) => {
   return {
