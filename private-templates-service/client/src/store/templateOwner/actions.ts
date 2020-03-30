@@ -1,14 +1,12 @@
 import {
   GetOwnerNameAction,
   GetOwnerProfilePictureAction,
-  ClearOwnersAction,
   GET_OWNER_NAME,
   GET_OWNER_NAME_SUCCESS,
   GET_OWNER_NAME_FAILURE,
   GET_OWNER_PROFILE_PICTURE,
   GET_OWNER_PROFILE_PICTURE_SUCCESS,
   GET_OWNER_PROFILE_PICTURE_FAILURE,
-  CLEAR_OWNERS,
 } from './types';
 
 import { getAuthenticatedClient } from '../../Services/GraphService';
@@ -51,12 +49,6 @@ function requestOwnerProfilePictureSuccess(ownerImageURL: string, index: string)
 function requestOwnerProfilePictureFailure(): GetOwnerProfilePictureAction {
   return {
     type: GET_OWNER_PROFILE_PICTURE_FAILURE
-  }
-}
-
-export function ClearOwners(): ClearOwnersAction {
-  return {
-    type: CLEAR_OWNERS,
   }
 }
 

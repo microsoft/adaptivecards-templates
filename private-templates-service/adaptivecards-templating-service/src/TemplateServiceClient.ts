@@ -388,14 +388,14 @@ export class TemplateServiceClient {
             if (template || state) {
               version = incrementVersion(existingTemplate);
               if (instance.state === TemplateState.deprecated) templateState = templateState === TemplateState.live ? TemplateState.live : TemplateState.draft;
-              templateInstance = setTemplateInstanceParam(templateInstance, templateData, templateState, isShareable, version);
+              templateInstance = setTemplateInstanceParam(templateInstance, templateData, templateState, isShareable, version, template ? template : instance.json);
               templateInstances.push(templateInstance);
             }
             added = true;
             continue;
           } else if (instance.state === TemplateState.live && templateState === TemplateState.deprecated) {
             // Set the template to deprecated
-            templateInstance = setTemplateInstanceParam(templateInstance, templateData, templateState, isShareable, version);
+            templateInstance = setTemplateInstanceParam(templateInstance, templateData, templateState, isShareable, version, template ? template : instance.json);
             templateInstances.push(templateInstance);
             added = true;
             continue;

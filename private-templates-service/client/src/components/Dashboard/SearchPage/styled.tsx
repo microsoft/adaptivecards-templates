@@ -17,7 +17,7 @@ export const SearchResultBanner = styled.div`
 
 export const StyledSearchText = styled.div`
   letter-spacing 0;
-  font-size: 26px;
+  font-size: 1.625rem;
   font-weight: 600;
 `;
 
