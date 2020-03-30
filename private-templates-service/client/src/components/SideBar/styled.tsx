@@ -43,7 +43,7 @@ export const Logo = styled.img`
 export const LogoTextWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  font-size: 12px;
+  font-size: 0.75rem;
   line-height: 1rem;
 `;
 
@@ -74,7 +74,7 @@ export const Name = styled.div`
   display: flex;
   flex-direction: column;
   align-self: center;
-  font-size: 18px;
+  font-size: 1.125rem;
 
   color: ${COLORS.WHITE};
 
@@ -85,7 +85,7 @@ export const Title = styled.div`
   align-self: flex-start;
 
   font-weight: 400;
-  font-size: 12px;
+  font-size: 0.75rem;
 `;
 
 export const NavMenu = styled(Nav)`

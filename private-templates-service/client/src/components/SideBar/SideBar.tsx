@@ -68,7 +68,8 @@ const navMenuLinksProps: Partial<INavStyles> = {
     }
   },
   linkText: {
-    color: COLORS.WHITE
+    color: COLORS.WHITE,
+    fontSize: "0.875rem"
   }
 };
 
