@@ -93,6 +93,8 @@ interface Props extends RouteComponentProps {
   closeModal: () => void;
   updateTags: (tags: string[]) => void;
   isFetchingTags: boolean;
+  isFetchingOwnerName: boolean;
+  isFetchingOwnerPic: boolean;
   getOwnerName: (oID: string) => void;
   getOwnerProfilePicture: (oID: string) => void;
   owner?: OwnerType;
@@ -104,6 +106,8 @@ const mapStateToProps = (state: RootState) => {
     version: state.currentTemplate.version,
     isFetchingTags: state.currentTemplate.isFetchingTags,
     owner: state.templateOwner.owners,
+    isFetchingOwnerName: state.templateOwner.isFetchingName,
+    isFetchingOwnerPic: state.templateOwner.isFetchingPicture
   };
 };
 
@@ -193,7 +197,7 @@ class TemplateInfo extends React.Component<Props, State> {
       updatedAt,
       instances,
     } = this.props.template;
-    const { isFetchingTags } = this.props;
+    const { isFetchingTags, isFetchingOwnerName, isFetchingOwnerPic } = this.props;
 
     let timestampParsed = "";
     if (updatedAt) {
@@ -248,7 +252,9 @@ class TemplateInfo extends React.Component<Props, State> {
                   {val.header}
                 </CardHeader>
                 <CardBody>
-                  {val.iconName && <IconWrapper><OwnerAvatar sizeInPx={50} oID={templateInstance.lastEditedUser!}/></IconWrapper>}
+                  {val.iconName && ((isFetchingOwnerName || isFetchingOwnerPic) ?
+                    <CenteredSpinner size={SpinnerSize.large} /> : 
+                    <IconWrapper><OwnerAvatar sizeInPx={50} oID={templateInstance.lastEditedUser!}/></IconWrapper>)}
                   {val.header === "Usage" && <UsageNumber>{templateInstance.numHits}</UsageNumber>}
                   {(val.header === "Owner")? (this.props.owner && this.props.owner.displayNames) ? this.props.owner.displayNames[templateInstance.lastEditedUser!] : "" : val.bodyText}
                 </CardBody>
