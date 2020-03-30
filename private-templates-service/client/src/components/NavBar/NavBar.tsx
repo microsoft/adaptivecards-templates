@@ -31,7 +31,8 @@ const mapStateToProps = (state: RootState) => {
     template: state.currentTemplate.template,
     templateID: state.currentTemplate.templateID,
     isFetching: state.currentTemplate.isFetching,
-    templateName: state.currentTemplate.templateName
+    templateName: state.currentTemplate.templateName,
+    modalState: state.page.modalState
   }
 }
 
@@ -44,6 +45,7 @@ interface NavBarProps {
   isFetching: boolean;
   version?: string;
   templateID?: string;
+  modalState?: ModalState;
 }
 
 
@@ -128,9 +130,9 @@ const NavBar = (props: NavBarProps) => {
           <BaselineBanner>
             <StyledLogo aria-label={STRINGS.LOGO_DESCRIPTION} src={Logo} />
             <Styledh1>{(props.template && props.template.name) || props.currentPageTitle}</Styledh1>
-            {!props.isFetching && <EditButton ariaLabel="Edit Template Name" onClick={editName} iconProps={{ iconName: 'Edit' }} />}
+            {!props.isFetching && <EditButton ariaLabel="Edit Template Name" onClick={editName} iconProps={{ iconName: 'Edit' }} tabIndex={props.modalState ? -1 : 0} />}
           </BaselineBanner>
-          <BackButton iconProps={{ iconName: 'Back' }} onClick={onBackButton}><ButtonTextWrapper>Back</ButtonTextWrapper></BackButton>
+          <BackButton iconProps={{ iconName: 'Back' }} onClick={onBackButton} tabIndex={props.modalState ? -1 : 0} ><ButtonTextWrapper>Back</ButtonTextWrapper></BackButton>
         </Banner>
       );
     default:

@@ -61,7 +61,9 @@ class VersionCard extends React.Component<Props> {
         <CardHeader>
           <VersionCardHeader>
             <CardTitle>Recent Releases</CardTitle>
-            <CardManageButton onClick={() => { this.props.openModal(ModalState.Version) }}>{MANAGE}</CardManageButton>
+            <CardManageButton onClick={() => { this.props.openModal(ModalState.Version) }} tabIndex={this.props.modalState ? -1 : 0}>
+              {MANAGE}
+            </CardManageButton>
           </VersionCardHeader>
         </CardHeader>
         <CardBody>

@@ -1,15 +1,6 @@
 import styled from "styled-components";
 import { COLORS } from "../../globalStyles";
 
-export const ButtonWrapper = styled.button`
-  border-width: 0px;
-  padding: 0px;
-  margin: 0 24px 24px 0;
-  @media only screen and (max-width: 1399px) {
-    margin-bottom: 20px;
-  }
-`;
-
 export const Container = styled.div`
   flex: 1 1 0px;
   display: flex;
@@ -21,7 +12,10 @@ export const Container = styled.div`
   border: 1px solid ${COLORS.BORDER2};
   border-radius: 5px;
   cursor: pointer;
-
+  margin: 0 24px 24px 0;
+  @media only screen and (max-width: 1399px) {
+    margin-bottom: 20px;
+  }
   &: hover {
     background: ${COLORS.GREYHOVER};
   }

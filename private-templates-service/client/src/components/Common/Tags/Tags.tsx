@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { RootState } from '../../../store/rootReducer';
+import { ModalState } from '../../../store/page/types';
 
 import { Template } from 'adaptive-templating-service-typescript-node';
 
@@ -21,6 +22,7 @@ import {
 const mapStateToProps = (state: RootState) => {
   return {
     template: state.currentTemplate.template,
+    modalState: state.page.modalState
   }
 }
 
@@ -32,6 +34,7 @@ interface Props {
   template?: Template;
   updateTags?: (tags: string[]) => void;
   tagRemove?: (tag: string) => void;
+  modalState?: ModalState;
 }
 
 interface State {
@@ -73,10 +76,7 @@ class Tags extends React.Component<Props, State>  {
       if (this.props.tags.includes(tag)) {
         this.highlightTag(tag, this.props.tags);
       }
-      else if (tag === "") {
-        this.closeAddTag();
-      }
-      else if (this.props.updateTags) {
+      else if (this.props.updateTags && tag !== "") {
         this.props.updateTags([...this.props.tags, tag]);
         this.setState({ newTagName: "" });
       }
@@ -108,6 +108,18 @@ class Tags extends React.Component<Props, State>  {
     }
   }
 
+  onKeyDownAddTag = (keyStroke: any) => {
+    if (keyStroke.keyCode === KeyCode.ENTER) {
+      this.openNewTag();
+    }
+  }
+
+  onKeyDownRemoveTag = (tag: string, keyStroke: any) => {
+    if (this.props.tagRemove && keyStroke.keyCode === KeyCode.ENTER) {
+      this.props.tagRemove(tag);
+    }
+  }
+
   render() {
     const {
       tags,
@@ -118,20 +130,19 @@ class Tags extends React.Component<Props, State>  {
     const {
       isAdding
     } = this.state;
-
     return (
       <React.Fragment>
         {tags && tags.map((tag: string) => (
           <Tag ref={(ref: HTMLDivElement) => this.tagRefs[tag] = ref} onAnimationEnd={this.onAnimationEnd} key={tag}>
             <TagText>{tag}</TagText>
             {allowEdit &&
-              <TagCloseIcon key={tag} iconName="ChromeClose" onClick={this.props.tagRemove && (() => this.props.tagRemove!(tag))} />}
+              <TagCloseIcon key={tag} iconName="ChromeClose" onClick={this.props.tagRemove && (() => this.props.tagRemove!(tag))} tabIndex={this.props.modalState ? -1 : 0} onKeyDown={(event: any) => { this.onKeyDownRemoveTag(tag, event) }} />}
           </Tag>
         ))}
-        {allowAddTag && <AddTagWrapper onSubmit={this.submitNewTag} open={isAdding}>
+        {allowAddTag && <AddTagWrapper onSubmit={this.submitNewTag} open={isAdding} >
           <AddTagInput ref={this.addTagInput} open={isAdding} value={this.state.newTagName} maxLength={30} onChange={this.handleChange} onKeyDown={this.onKeyDown} />
-          <TagAddIcon iconName="Add" onClick={this.openNewTag} open={isAdding} />
-          <TagSubmitButton type="submit" open={isAdding}>
+          <TagAddIcon iconName="Add" onClick={this.openNewTag} open={isAdding} onKeyDown={this.onKeyDownAddTag} tabIndex={this.props.modalState ? -1 : 0} />
+          <TagSubmitButton type="submit" open={isAdding} >
             <TagSubmitIcon iconName="CheckMark" />
           </TagSubmitButton>
         </AddTagWrapper>}

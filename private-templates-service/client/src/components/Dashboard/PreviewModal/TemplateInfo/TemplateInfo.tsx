@@ -214,6 +214,7 @@ class TemplateInfo extends React.Component<Props, State> {
                   theme={THEME.LIGHT}
                   styles={DropdownStyles}
                   ariaLabel="Version List Dropdown"
+                  tabIndex={this.props.modalState ? -1 : 0}
                 />
               </Title>
               <StatusIndicator state={templateState} />
@@ -226,7 +227,8 @@ class TemplateInfo extends React.Component<Props, State> {
           <ActionsWrapper>
             {buttons.map((val) => (
               <ActionButton key={val.text} iconProps={val.icon} allowDisabledFocus
-                onClick={() => { onActionButtonClick(this.props, this.state, val) }}>
+                onClick={() => { onActionButtonClick(this.props, this.state, val) }}
+                tabIndex={this.props.modalState ? -1 : 0}>
                 {val.text === 'Publish' && templateState === PostedTemplate.StateEnum.Live ? val.altText : val.text}
               </ActionButton>
             ))}

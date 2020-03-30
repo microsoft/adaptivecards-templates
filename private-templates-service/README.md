@@ -26,7 +26,7 @@ app.use(function (req, res, next) {
 
 **4. In the `adaptivecards-templates/private-templates-service/server/app.ts` file, replace ` "#{DB_CONNECTION_TOKEN}#"` with the real DB connection string. Make sure to NOT commit this file.**
 
-**5. Under the `adaptivecards-templates/private-templates-service/server`, run `npm run link-client`. Please note you may have to remove the command `sudo` from `private-templates-service\server\package.json`.**
+**5. Under the `adaptivecards-templates/private-templates-service/server`, run `npm run link-client`. Please note you may have to run  `sudo npm run link-client` if you are having errors with permissions.**
 
 **6. Inside of `adaptivecards-templates/private-templates-service/server` run `npm install`, run `tsc`, and run `npm run dev` to launch the client and server in your default browser.**
 
