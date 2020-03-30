@@ -41,8 +41,14 @@ const mapStateToProps = (state: RootState) => {
 };
 
 class AdaptiveCardPanel extends React.Component<Props> {
-  onKeyDown = (event: any) => {
+  onKeyDown = (event: React.KeyboardEvent) => {
     if (this.props.onClick && this.props.template.id && event.keyCode === KeyCode.ENTER) {
+      this.props.onClick(this.props.template.id);
+    }
+  }
+
+  onClick = () => {
+    if (this.props.onClick && this.props.template.id) {
       this.props.onClick(this.props.template.id);
     }
   }
@@ -50,9 +56,14 @@ class AdaptiveCardPanel extends React.Component<Props> {
   render() {
     let template = this.props.template;
     let version = getLatestVersion(this.props.template);
-    let state = getLatestTemplateInstanceState(template)
+    let state = getLatestTemplateInstanceState(template);
+
+    const isComponentNavigable = Boolean(this.props.pageTitle && this.props.pageTitle.toLowerCase() === "dashboard");
+    const isStateDefined = Boolean(template.instances && template.instances[0] && template.instances[0].state);
     return (
-      <Container tabIndex={this.props.pageTitle && this.props.pageTitle.toLowerCase() === "dashboard" ? 0 : -1} onKeyDown={this.props.pageTitle && this.props.pageTitle.toLowerCase() === "dashboard" ? this.onKeyDown : () => { }}>
+      <Container tabIndex={isComponentNavigable ? 0 : -1}
+        onKeyDown={isComponentNavigable ? this.onKeyDown : () => { }}
+        onClick={isComponentNavigable ? this.onClick : () => { }}>
         <ACWrapper>
           <AdaptiveCard cardtemplate={template} templateVersion={version} hoverEffect />
         </ACWrapper>
@@ -64,11 +75,10 @@ class AdaptiveCardPanel extends React.Component<Props> {
             </TemplateUpdatedAt>
           </TemplateNameAndDateWrapper>
           <TemplateStateWrapper style={{ justifyContent: "center" }}>
-            <StatusIndicator state={template.instances && template.instances[0] && template.instances[0].state ? template.instances[0].state : PostedTemplate.StateEnum.Draft}
+            <StatusIndicator state={isStateDefined ? template!.instances![0].state : PostedTemplate.StateEnum.Draft}
               style={{ marginRight: "10px" }}
             />
-            <Status>{state}
-            </Status>
+            <Status>{state}</Status>
           </TemplateStateWrapper>
         </TemplateFooterWrapper>
       </Container>
