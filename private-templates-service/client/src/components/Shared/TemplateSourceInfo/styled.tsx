@@ -23,7 +23,7 @@ export const TitleWrapper = styled.div`
 `;
 
 export const Title = styled.div`
-  font-size: 22px;
+  font-size: 1.375rem;
   font-weight: 500;
 `;
 
@@ -40,7 +40,7 @@ export const SourceWrapper = styled.div`
 
 export const Source = styled.div`
   font-family: "Courier New", Courier, monospace;
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: normal;
   white-space: pre-wrap;
 `;

@@ -50,12 +50,12 @@ export const Styledh1 = styled.div`
   color: ${COLORS.BLACK};
   letter-spacing: 0;
   opacity: 1;
-  font-size: 30px;
+  font-size: 1.875rem;
   margin-bottom: 0;
   font-weight: 600;
 
   @media only screen and (max-width: ${BREAK.SM}px) {
-    font-size: 18px;
+    font-size: 1.125rem;
   }
 `;
 
@@ -63,13 +63,13 @@ export const Styledh2 = styled.div`
   color: ${COLORS.WHITE};
   letter-spacing: 0;
   opacity: 1;
-  font-size: 12px;
+  font-size: 0.75rem;
   margin-bottom: 0;
   padding-left: 16px;
   font-weight: 300;
 
   @media only screen and (max-width: ${BREAK.SM}px) {
-    font-size: 12px;
+    font-size: 0.75rem;
   }
 `;
 
@@ -105,5 +105,5 @@ export const BackButton = styled(ActionButton)`
 
 export const ButtonTextWrapper = styled.div`
   margin-left: 8px;
-  font-size: 15px;
+  font-size: 0.9375rem;
 `;
