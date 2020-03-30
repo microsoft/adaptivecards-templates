@@ -1,11 +1,12 @@
 import React from "react";
-
 import { useHistory } from "react-router-dom";
 
 import { connect } from "react-redux";
 import { RootState } from "../../store/rootReducer";
 import { UserType } from "../../store/auth/types";
+import { ModalState } from "../../store/page/types";
 import { newTemplate } from "../../store/currentTemplate/actions";
+
 import { COLORS } from "../../globalStyles";
 import UserAvatar from "./UserAvatar";
 import mainLogo from "../../assets/adaptive-cards-100-logo.png";
@@ -28,19 +29,22 @@ import {
 } from "./styled";
 import { INavLinkGroup, INavStyles } from "office-ui-fabric-react";
 
+
 interface Props {
   authButtonMethod: () => void;
   isAuthenticated: boolean;
   user?: UserType;
   templateID: string | undefined;
   newTemplate: () => void;
+  modalState?: ModalState;
 }
 
 const mapStateToProps = (state: RootState) => {
   return {
     isAuthenticated: state.auth.isAuthenticated,
     user: state.auth.user,
-    templateID: state.currentTemplate.templateID
+    templateID: state.currentTemplate.templateID,
+    modalState: state.page.modalState
   };
 };
 
@@ -176,7 +180,7 @@ const SideBar = (props: Props) => {
         {props.isAuthenticated && <NavMenu styles={navMenuLinksProps} groups={navMenuLinks} onLinkClick={onNavClick} />}
       </MainItems>
 
-      <SignOut onClick={props.authButtonMethod}>Sign {props.isAuthenticated ? "Out" : "In"}</SignOut>
+      <SignOut onClick={props.authButtonMethod} tabIndex={props.modalState ? -1 : 0}>Sign {props.isAuthenticated ? "Out" : "In"}</SignOut>
     </OuterSideBarWrapper>
   );
 };
