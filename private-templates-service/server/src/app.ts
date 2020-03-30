@@ -5,18 +5,14 @@ import bodyParser from "body-parser";
 import session from "express-session";
 import helmet from "helmet";
 import mongoose from "mongoose";
-
 // import controllers
 import { TemplateServiceClient } from "../../adaptivecards-templating-service/src/TemplateServiceClient";
 import { ClientOptions } from "../../adaptivecards-templating-service/src/IClientOptions";
 import { AzureADProvider } from "../../adaptivecards-templating-service/src/authproviders/AzureADProvider";
 import { MongoDBProvider } from "../../adaptivecards-templating-service/src/storageproviders/MongoDBProvider";
-
 const RELATIVE_PATH_CLIENT = '../../../../client/build';
-
 // import mongo, create new mongo, pass options
 const app = express();
-
 // Express configuration
 app.use(passport.initialize());
 app.use(passport.session());
@@ -35,32 +31,47 @@ app.use(session({
   saveUninitialized: true
 }));
 app.use(helmet.noSniff());
-
-mongoose.set('useFindAndModify', false)
-let mongoDB = new MongoDBProvider({ connectionString: "#{DB_CONNECTION_TOKEN}#" });
-mongoDB.connect()
-  .then(
-    (res) => {
-      if (res.success) {
-        const mongoClient: ClientOptions = {
-          authenticationProvider: new AzureADProvider(),
-          storageProvider: mongoDB,
-        }
-
-        const client: TemplateServiceClient = TemplateServiceClient.init(mongoClient);
-        app.use("/template", client.expressMiddleware());
-        app.use("/user", client.userExpressMiddleware());
-
-        // Keep this request at the end so it has lowest priority
-        app.use(express.static(path.join(__dirname, RELATIVE_PATH_CLIENT)));
-        app.get('*', (req, res) => {
-          res.sendFile(path.join(__dirname, RELATIVE_PATH_CLIENT + '/index.html'));
-        })
-      } else {
-        console.log(res.errorMessage);
-      }
-
-    }
-  )
-
+import { InMemoryDBProvider } from '../../adaptivecards-templating-service/src/storageproviders/InMemoryDBProvider';
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, Content-Type, Accept, Authorization, api_key"
+  );
+  res.header(
+    "Access-Control-Allow-Methods",
+    "GET, POST, OPTIONS, DELETE"
+  );
+  next();
+});
+app.options('*', function (req, res) { res.sendStatus(200); });
+const mongoClient: ClientOptions = {
+  authenticationProvider: new AzureADProvider(),
+  storageProvider: new InMemoryDBProvider(),
+}
+const client: TemplateServiceClient = TemplateServiceClient.init(mongoClient);
+app.use("/template", client.expressMiddleware());
+app.use("/user", client.userExpressMiddleware());
+// let mongoDB = new MongoDBProvider({ connectionString: "#{DB_CONNECTION_TOKEN}#" });
+// mongoDB.connect()
+//   .then(
+//     (res) => {
+//       if (res.success) {
+//         const mongoClient: ClientOptions = {
+//           authenticationProvider: new AzureADProvider(),
+//           storageProvider: mongoDB,
+//         }
+//         const client: TemplateServiceClient = TemplateServiceClient.init(mongoClient);
+//         app.use("/template", client.expressMiddleware());
+//         app.use("/user", client.userExpressMiddleware());
+//         // Keep this request at the end so it has lowest priority
+//         app.use(express.static(path.join(__dirname, RELATIVE_PATH_CLIENT)));
+//         app.get('*', (req, res) => {
+//           res.sendFile(path.join(__dirname, RELATIVE_PATH_CLIENT + '/index.html'));
+//         })
+//       } else {
+//         console.log(res.errorMessage);
+//       }
+//     }
+//   )
 export default app;
