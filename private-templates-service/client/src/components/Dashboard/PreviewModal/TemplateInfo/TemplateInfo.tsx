@@ -151,9 +151,9 @@ class TemplateInfo extends React.Component<Props, State> {
     this.props.getOwnerProfilePicture(templateInstance.lastEditedUser!);
   }
 
-  componentDidUpdate(prevProps: Props) {
+  componentDidUpdate(prevProps: Props, prevState: State) {
     let templateInstance = getTemplateInstance(this.props.template, this.state.version);
-    if (this.props.template !== prevProps.template && templateInstance.lastEditedUser){
+    if (this.state.version !== prevState.version && templateInstance.lastEditedUser){
       this.props.getOwnerName(templateInstance.lastEditedUser!);
       this.props.getOwnerProfilePicture(templateInstance.lastEditedUser!);
     }
