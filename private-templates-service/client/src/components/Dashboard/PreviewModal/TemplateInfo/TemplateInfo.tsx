@@ -47,6 +47,7 @@ import {
   DropdownStyles,
   CenteredSpinner,
 } from './styled';
+import TooltipPublishButton from './TooltipPublishButton';
 
 const buttons = [
   {
@@ -209,11 +210,17 @@ class TemplateInfo extends React.Component<Props, State> {
             </TimeStamp>
           </TopRowWrapper>
           <ActionsWrapper>
-            {buttons.map((val) => (
-              <ActionButton key={val.text} iconProps={val.icon} allowDisabledFocus
+            {buttons.map((val) => (val.text === "Publish" ?
+              <TooltipPublishButton val={val}
+                templateState={templateState}
+                openModal={this.props.openModal}
+                modalState={this.props.modalState} /> :
+              <ActionButton key={val.text}
+                iconProps={val.icon}
+                allowDisabledFocus
                 onClick={() => { onActionButtonClick(this.props, this.state, val) }}
                 tabIndex={this.props.modalState ? -1 : 0}>
-                {val.text === 'Publish' && templateState === PostedTemplate.StateEnum.Live ? val.altText : val.text}
+                {val.text}
               </ActionButton>
             ))}
           </ActionsWrapper>
@@ -259,8 +266,6 @@ class TemplateInfo extends React.Component<Props, State> {
 }
 
 function onActionButtonClick(props: Props, state: State, val: any) {
-  let templateState = getTemplateState(props.template, state.version);
-
   switch (val.text) {
     case SHARE:
       props.openModal(ModalState.Share);
@@ -271,21 +276,6 @@ function onActionButtonClick(props: Props, state: State, val: any) {
       break;
     case DELETE:
       props.openModal(ModalState.Delete);
-      break;
-    case PUBLISH:
-      switch (templateState) {
-        case PostedTemplate.StateEnum.Draft:
-          props.openModal(ModalState.Publish);
-          break;
-        case PostedTemplate.StateEnum.Live:
-          props.openModal(ModalState.Unpublish);
-          break;
-        case PostedTemplate.StateEnum.Deprecated:
-          props.openModal(ModalState.Publish);
-          break;
-        default:
-          break;
-      }
       break;
     default:
       break;
