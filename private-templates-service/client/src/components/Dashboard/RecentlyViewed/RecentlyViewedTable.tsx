@@ -8,7 +8,8 @@ import {
   RecentlyViewedBodyRow,
   RecentlyViewedItem,
   RecentlyViewedBody,
-  RecentlyViewedStatusIndicator
+  RecentlyViewedStatusIndicator,
+  StatusWrapper
 } from "./styled";
 
 import { getDateString } from "../../../utils/versionUtils";
@@ -50,8 +51,10 @@ class RecentlyViewedTable extends React.Component<Props> {
           </RecentlyViewedItem>
           <RecentlyViewedItem>
             <TemplateStateWrapper>
-              <RecentlyViewedStatusIndicator state={template.instances[0].state}/>
-              <Status>{template.instances[0].state && capitalizeString(template.instances[0].state.toString())}</Status>
+              <RecentlyViewedStatusIndicator state={template.instances[0].state} />
+              <StatusWrapper>
+                <Status>{template.instances[0].state && capitalizeString(template.instances[0].state.toString())}</Status>
+              </StatusWrapper>
             </TemplateStateWrapper>
           </RecentlyViewedItem>
           < RecentlyViewedItem > <OwnerInfo oID={template.instances[0]!.lastEditedUser!} ></OwnerInfo></RecentlyViewedItem >

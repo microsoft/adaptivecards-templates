@@ -1,6 +1,7 @@
 export interface OwnerState {
   owners?: OwnerType;
-  isFetching: boolean;
+  isFetchingName: boolean;
+  isFetchingPicture: boolean;
 }
 
 export interface OwnerType {
@@ -28,8 +29,4 @@ export interface GetOwnerProfilePictureAction {
   type: typeof GET_OWNER_PROFILE_PICTURE | typeof GET_OWNER_PROFILE_PICTURE_SUCCESS | typeof GET_OWNER_PROFILE_PICTURE_FAILURE;
   index?: string;
   ownerImageURL?: string;
-}
-
-export interface ClearOwnersAction {
-  type: typeof CLEAR_OWNERS;
 }

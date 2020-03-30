@@ -10,7 +10,8 @@ import {
   TemplateFooterWrapper,
   TemplateStateWrapper,
   TemplateNameAndDateWrapper,
-  TemplateUpdatedAt
+  TemplateUpdatedAt,
+  Align
 } from "./styled";
 import {
   StatusIndicator,
@@ -69,17 +70,20 @@ class AdaptiveCardPanel extends React.Component<Props> {
         </ACWrapper>
         <TemplateFooterWrapper>
           <TemplateNameAndDateWrapper>
+
             <TemplateName>{template.name}</TemplateName>
             <TemplateUpdatedAt>
               {template.updatedAt ? getDateString(template.updatedAt) : "N/A"}
             </TemplateUpdatedAt>
           </TemplateNameAndDateWrapper>
-          <TemplateStateWrapper style={{ justifyContent: "center" }}>
-            <StatusIndicator state={isStateDefined ? template!.instances![0].state : PostedTemplate.StateEnum.Draft}
-              style={{ marginRight: "10px" }}
-            />
-            <Status>{state}</Status>
-          </TemplateStateWrapper>
+          <Align>
+            <TemplateStateWrapper style={{ justifyContent: "center" }}>
+              <StatusIndicator state={isStateDefined ? template!.instances![0].state : PostedTemplate.StateEnum.Draft}
+                style={{ marginRight: "10px" }}
+              />
+              <Status>{state}</Status>
+            </TemplateStateWrapper>
+          </Align>
         </TemplateFooterWrapper>
       </Container>
     );
