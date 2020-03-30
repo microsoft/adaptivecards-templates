@@ -35,6 +35,7 @@ class OwnerAvatar extends React.Component<Props> {
         personaSize: this.props.size || PersonaSize.size24,
         personas: new Array({ imageUrl: this.props.owner.imageURLs[this.props.index] }),
         ariaLabel: ARIA_LABEL,
+        getPersonaProps: this.getPersonaProps
       };
       return (<Facepile {...facepileProps} />)
     }
