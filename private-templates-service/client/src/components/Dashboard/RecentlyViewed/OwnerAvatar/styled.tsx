@@ -9,6 +9,7 @@ export const ProfilePic = styled.img`
 
 export const Container = styled.div`
   margin-right: 15px;
+  margin-bottom: 3px;
   `
 
 export const InitialsPic = styled.div`
@@ -21,8 +22,8 @@ export const InitialsPic = styled.div`
   `
 
 export const Initials = styled.div` 
-    text-align: center;
-    font-size: 15px;
-    padding-top: 2.5px;
-    color: ${COLORS.WHITE};
-  `
+  text-align: center;
+  font-size: 15px;
+  padding-top: 2.5px;
+  color: ${COLORS.WHITE};
+`

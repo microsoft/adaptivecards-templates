@@ -9,7 +9,8 @@ import {
   RecentlyViewedBodyRow,
   RecentlyViewedItem,
   RecentlyViewedBody,
-  RecentlyViewedStatusIndicator
+  RecentlyViewedStatusIndicator,
+  StatusWrapper
 } from "./styled";
 
 import { getDateString } from "../../../utils/versionUtils";
@@ -57,7 +58,9 @@ class RecentlyViewedTable extends React.Component<Props> {
                     : PostedTemplate.StateEnum.Draft
                 }
               />
-              <Status>{template.isLive ? "Published" : "Draft"}</Status>
+              <StatusWrapper>
+                <Status>{template.isLive ? "Published" : "Draft"}</Status>
+              </StatusWrapper>
             </TemplateStateWrapper>
           </RecentlyViewedItem>
           < RecentlyViewedItem > <OwnerInfo oID={template.instances[0]!.lastEditedUser!} ></OwnerInfo></RecentlyViewedItem >
