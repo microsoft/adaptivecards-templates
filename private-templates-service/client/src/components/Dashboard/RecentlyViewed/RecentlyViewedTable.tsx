@@ -1,8 +1,7 @@
 import React from "react";
 
 import {
-  Template,
-  PostedTemplate
+  Template
 } from "adaptive-templating-service-typescript-node";
 
 import {
@@ -13,6 +12,7 @@ import {
 } from "./styled";
 
 import { getDateString } from "../../../utils/versionUtils";
+import { capitalizeString } from "../../../utils/stringUtils";
 import { Status } from "../PreviewModal/TemplateInfo/styled";
 import { TemplateStateWrapper } from "../../AdaptiveCardPanel/styled";
 import OwnerInfo from "./OwnerInfo";
@@ -50,14 +50,8 @@ class RecentlyViewedTable extends React.Component<Props> {
           </RecentlyViewedItem>
           <RecentlyViewedItem>
             <TemplateStateWrapper>
-              <RecentlyViewedStatusIndicator
-                state={
-                  template.isLive
-                    ? PostedTemplate.StateEnum.Live
-                    : PostedTemplate.StateEnum.Draft
-                }
-              />
-              <Status>{template.isLive ? "Published" : "Draft"}</Status>
+              <RecentlyViewedStatusIndicator state={template.instances[0].state}/>
+              <Status>{template.instances[0].state && capitalizeString(template.instances[0].state.toString())}</Status>
             </TemplateStateWrapper>
           </RecentlyViewedItem>
           < RecentlyViewedItem > <OwnerInfo oID={template.instances[0]!.lastEditedUser!} ></OwnerInfo></RecentlyViewedItem >

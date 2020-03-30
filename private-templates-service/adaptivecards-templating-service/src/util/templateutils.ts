@@ -110,12 +110,13 @@ export function incrementVersionStr(latestVersion: string): string {
 }
 
 
-export function setTemplateInstanceParam(templateInstance: ITemplateInstance, templateData: JSON[] | undefined, state: TemplateState | undefined, isShareable: boolean | undefined, version?: string): ITemplateInstance {
+export function setTemplateInstanceParam(templateInstance: ITemplateInstance, templateData: JSON[] | undefined, state: TemplateState | undefined, isShareable: boolean | undefined, version?: string, template?: JSON): ITemplateInstance {
   // set params for the template instance. 
   templateInstance.state = state || TemplateState.draft;
   templateInstance.isShareable = isShareable || false;
   templateInstance.data = templateData || [];
   templateInstance.version = version || "1.0";
+  templateInstance.json = template || templateInstance.json;
   return templateInstance;
 }
 
