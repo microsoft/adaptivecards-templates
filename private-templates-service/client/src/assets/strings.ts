@@ -67,4 +67,4 @@ export const TAGS = "Tags";
 
 //OwnerAvatar.tsx
 export const ERROR_LOADING_IMAGE = "Error loading image";
-export const ARIA_LABEL = "Template owner profile picture"
+export const ALT_TEXT = "Template owner profile picture"

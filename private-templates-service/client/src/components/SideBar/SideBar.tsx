@@ -1,11 +1,12 @@
 import React from "react";
-
 import { useHistory } from "react-router-dom";
 
 import { connect } from "react-redux";
 import { RootState } from "../../store/rootReducer";
 import { UserType } from "../../store/auth/types";
+import { ModalState } from "../../store/page/types";
 import { newTemplate } from "../../store/currentTemplate/actions";
+
 import { COLORS } from "../../globalStyles";
 import UserAvatar from "./UserAvatar";
 import mainLogo from "../../assets/adaptive-cards-100-logo.png";
@@ -27,8 +28,6 @@ import {
   LogoTextSubHeader
 } from "./styled";
 import { INavLinkGroup, INavStyles } from "office-ui-fabric-react";
-import { ClearOwners } from "../../store/templateOwner/actions";
-import { ModalState } from "../../store/page/types";
 
 
 interface Props {
@@ -69,7 +68,8 @@ const navMenuLinksProps: Partial<INavStyles> = {
     }
   },
   linkText: {
-    color: COLORS.WHITE
+    color: COLORS.WHITE,
+    fontSize: "0.875rem"
   }
 };
 
@@ -157,9 +157,6 @@ const SideBar = (props: Props) => {
     event.preventDefault();
     if (element.url === "/designer") {
       props.newTemplate();
-    }
-    else if (element.url === "/") {
-      ClearOwners();
     }
     history.push(element.url);
   };

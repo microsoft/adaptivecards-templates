@@ -14,7 +14,6 @@ import { getLatestVersion } from "../../../../utils/TemplateUtil";
 import { getOwnerName, getOwnerProfilePicture } from "../../../../store/templateOwner/actions";
 import { OwnerType } from "../../../../store/templateOwner/types";
 import OwnerAvatar from "../../RecentlyViewed/OwnerAvatar";
-import { PersonaSize } from 'office-ui-fabric-react/lib/Persona';
 
 import PublishModal from '../../../Common/PublishModal';
 import UnpublishModal from '../../../Common/UnpublishModal';
@@ -152,6 +151,14 @@ class TemplateInfo extends React.Component<Props, State> {
     this.props.getOwnerProfilePicture(templateInstance.lastEditedUser!);
   }
 
+  componentDidUpdate(prevProps: Props) {
+    let templateInstance = getTemplateInstance(this.props.template, this.state.version);
+    if (this.props.template !== prevProps.template && templateInstance.lastEditedUser){
+      this.props.getOwnerName(templateInstance.lastEditedUser!);
+      this.props.getOwnerProfilePicture(templateInstance.lastEditedUser!);
+    }
+  }
+
   versionList = (instances: TemplateInstance[] | undefined): IDropdownOption[] => {
     if (!instances) return [];
     let options: IDropdownOption[] = [];
@@ -200,7 +207,6 @@ class TemplateInfo extends React.Component<Props, State> {
     }
     let templateInstance = getTemplateInstance(this.props.template, this.state.version);
     let templateState = templateInstance.state || PostedTemplate.StateEnum.Draft;
-    this.props.getOwnerName(templateInstance.lastEditedUser!);
     return (
       <OuterWrapper>
         <HeaderWrapper>
@@ -242,7 +248,7 @@ class TemplateInfo extends React.Component<Props, State> {
                   {val.header}
                 </CardHeader>
                 <CardBody>
-                  {val.iconName && <IconWrapper><OwnerAvatar hidePersonalDetails={true} index={templateInstance.lastEditedUser!} size={PersonaSize.size48}/></IconWrapper>}
+                  {val.iconName && <IconWrapper><OwnerAvatar sizeInPx={50} oID={templateInstance.lastEditedUser!}/></IconWrapper>}
                   {val.header === "Usage" && <UsageNumber>{templateInstance.numHits}</UsageNumber>}
                   {(val.header === "Owner")? (this.props.owner && this.props.owner.displayNames) ? this.props.owner.displayNames[templateInstance.lastEditedUser!] : "" : val.bodyText}
                 </CardBody>

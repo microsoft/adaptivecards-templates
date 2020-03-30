@@ -7,15 +7,14 @@ import {
   GET_OWNER_PROFILE_PICTURE,
   GET_OWNER_PROFILE_PICTURE_SUCCESS,
   GET_OWNER_PROFILE_PICTURE_FAILURE,
-  CLEAR_OWNERS,
   GetOwnerNameAction,
   GetOwnerProfilePictureAction,
-  ClearOwnersAction,
 } from './types';
 
 const initialState: OwnerState = {
   owners: undefined,
-  isFetching: false,
+  isFetchingName: false,
+  isFetchingPicture: false,
 }
 
 const initialOwnerState: OwnerType = {
@@ -46,31 +45,58 @@ function updateOwners(owner = initialOwnerState, action: GetOwnerNameAction | Ge
   }
 }
 
-export function templateOwnerReducer(state = initialState, action: GetOwnerNameAction | GetOwnerProfilePictureAction | ClearOwnersAction): OwnerState {
+function clearOwners(owner = initialOwnerState, action: GetOwnerNameAction | GetOwnerProfilePictureAction): OwnerType | undefined {
   switch (action.type) {
-    // empty case statement will "fall through" to logic in the next non-empty case
     case GET_OWNER_NAME:
+      return {
+        ...owner,
+        displayNames: {}
+      }
+    case GET_OWNER_PROFILE_PICTURE:
+      return {
+        ...owner,
+        imageURLs: {},
+      }
+    default:
+      return owner;
+  }
+}
+
+export function templateOwnerReducer(state = initialState, action: GetOwnerNameAction | GetOwnerProfilePictureAction): OwnerState {
+  switch (action.type) {
+    case GET_OWNER_NAME:
+      return {
+        ...state,
+        owners: clearOwners(state.owners, action),
+        isFetchingName: true,
+      };
     case GET_OWNER_PROFILE_PICTURE:
       return {
         ...state,
-        isFetching: true,
+        owners: clearOwners(state.owners, action),
+        isFetchingPicture: true,
       };
     case GET_OWNER_NAME_FAILURE:
+      return {
+        ...state,
+        isFetchingName: false,
+      }
     case GET_OWNER_PROFILE_PICTURE_FAILURE:
       return {
         ...state,
-        isFetching: false,
+        isFetchingPicture: false,
       }
     case GET_OWNER_NAME_SUCCESS:
+      return {
+        ...state,
+        owners: updateOwners(state.owners, action),
+        isFetchingName: false,
+      }
     case GET_OWNER_PROFILE_PICTURE_SUCCESS:
       return {
         ...state,
         owners: updateOwners(state.owners, action),
-      }
-    case CLEAR_OWNERS:
-      return {
-        ...state,
-        owners: undefined,
+        isFetchingPicture: false,
       }
     default:
       return state;

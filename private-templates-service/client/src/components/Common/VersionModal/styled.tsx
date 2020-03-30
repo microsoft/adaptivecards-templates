@@ -25,7 +25,7 @@ export const Modal = styled.div`
 `;
 
 export const Header = styled.div`
-  font-size: 22px;
+  font-size: 1.375rem;
   font-weight: 500;
   margin-bottom: 12px;
 `;
@@ -92,7 +92,7 @@ export const CardBody = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-size: 14px;
+  font-size: 0.875rem ;
   font-weight: 400;
   padding-top: 8px;
 `;

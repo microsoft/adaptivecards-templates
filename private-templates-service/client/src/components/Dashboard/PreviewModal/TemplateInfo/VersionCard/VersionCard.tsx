@@ -27,6 +27,7 @@ import {
 } from './../styled';
 
 import { getDateString } from '../../../../../utils/versionUtils';
+import { capitalizeString } from "../../../../../utils/stringUtils";
 import { ModalState } from '../../../../../store/page/types';
 import { openModal } from '../../../../../store/page/actions';
 import VersionModal from '../../../../Common/VersionModal';
@@ -81,7 +82,7 @@ class VersionCard extends React.Component<Props> {
               <DateWrapper>{instance.updatedAt ? getDateString(instance.updatedAt) : "N/A"}</DateWrapper>
               <StatusWrapper>
                 <StatusIndicator state={instance.state} />
-                <Status>{instance.state && instance.state.toString().charAt(0).toUpperCase() + instance.state.toString().slice(1)}</Status>
+                <Status>{instance.state && capitalizeString(instance.state.toString())}</Status>
               </StatusWrapper>
             </VersionCardRow>
           ))}

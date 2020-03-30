@@ -3,50 +3,42 @@ import { connect } from "react-redux";
 import { RootState } from "../../../../store/rootReducer";
 import { OwnerType } from "../../../../store/templateOwner/types";
 
-import { Facepile, IFacepileProps, IFacepilePersona } from 'office-ui-fabric-react/lib/Facepile';
-import { PersonaSize } from 'office-ui-fabric-react/lib/Persona';
-import { ERROR_LOADING_IMAGE, ARIA_LABEL } from "../../../../assets/strings";
+import { ERROR_LOADING_IMAGE, ALT_TEXT } from "../../../../assets/strings";
+import { ProfilePic, Container, InitialsPic, Initials } from "./styled";
 
 interface Props {
   owner?: OwnerType;
-  index: string;
-  size?: PersonaSize;
-  hidePersonalDetails?: boolean;
+  oID: string;
+  sizeInPx?: number;
 }
 
 const mapStateToProps = (state: RootState) => {
   return {
-    owner: state.templateOwner.owners
+    owner: state.templateOwner.owners,
   };
 };
 
 
 
 class OwnerAvatar extends React.Component<Props> {
-  getPersonaProps = (persona: IFacepilePersona) => {
-    return {
-      hidePersonaDetails: this.props.hidePersonalDetails || false
-    }
-  };
 
   render() {
-    if (this.props.owner && this.props.owner.imageURLs && this.props.owner.imageURLs[this.props.index]) {
-      let facepileProps: IFacepileProps = {
-        personaSize: this.props.size || PersonaSize.size24,
-        personas: new Array({ imageUrl: this.props.owner.imageURLs[this.props.index] }),
-        ariaLabel: ARIA_LABEL,
-        getPersonaProps: this.getPersonaProps
-      };
-      return (<Facepile {...facepileProps} />)
+    if (this.props.owner && this.props.owner.imageURLs && this.props.owner.imageURLs[this.props.oID]) {
+      return (
+        <Container>
+          <ProfilePic style={{height: this.props.sizeInPx || 30, width: this.props.sizeInPx || 30}} src={this.props.owner.imageURLs[this.props.oID]} alt={ALT_TEXT}></ProfilePic>
+        </Container>)
     }
-    else if (this.props.owner && this.props.owner.displayNames && this.props.owner.displayNames[this.props.index] && this.props.owner.displayNames[this.props.index][0]) {
-      let facepileProps: IFacepileProps = {
-        personaSize: this.props.size || PersonaSize.size24,
-        personas: new Array({ imageInitials: this.props.owner.displayNames[this.props.index][0]}),
-        ariaLabel: ARIA_LABEL,
-        getPersonaProps: this.getPersonaProps
-      };
-      return (<Facepile {...facepileProps} />)
+    else if (this.props.owner && this.props.owner.displayNames && this.props.owner.displayNames[this.props.oID]) {
+      let halfSize = this.props.sizeInPx? this.props.sizeInPx / 2 : undefined;
+      return (
+        <Container>
+          <InitialsPic style={{height: this.props.sizeInPx || 30, width: this.props.sizeInPx || 30}} >
+            <Initials style={{fontSize: halfSize || 15}} >
+              {this.props.owner.displayNames[this.props.oID][0]}
+            </Initials>
+          </InitialsPic>
+        </Container>)
     }
     return (<div>{ERROR_LOADING_IMAGE}</div>)
   }
