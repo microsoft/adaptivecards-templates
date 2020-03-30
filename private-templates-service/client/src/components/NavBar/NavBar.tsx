@@ -102,7 +102,7 @@ const NavBar = (props: NavBarProps) => {
         <Banner>
           <MobileBanner>
             <StyledLogo src={Logo} />
-            <Styledh1>{((props.templateID === "" || props.templateID === undefined) && UNTITLEDCARD) || props.templateName}</Styledh1>
+            <Styledh1>{((props.templateID === "" || props.templateID === undefined) && STRINGS.UNTITLEDCARD) || props.templateName}</Styledh1>
             {(props.templateID !== "" && props.templateID !== undefined ) && <EditButton onClick={editName} iconProps={{ iconName: 'Edit' }} />}
           </MobileBanner>
           <ActionButton onClick={() => { history.push("/") }}>
