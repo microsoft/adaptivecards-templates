@@ -169,7 +169,9 @@ class Dashboard extends React.Component<Props> {
             </React.Fragment>
             <React.Fragment>
               <Title>Recently Viewed</Title>
-              {recentTemplates.isFetching || !this.props.recentTemplates.recentlyViewed || this.props.templateOwner.isFetchingName || this.props.templateOwner.isFetchingPicture ?
+              {recentTemplates.isFetching || !this.props.recentTemplates.recentlyViewed
+                || !this.props.recentTemplates.recentlyViewed.templates
+                || this.props.templateOwner.isFetchingName || this.props.templateOwner.isFetchingPicture ?
                 <CenteredSpinner size={SpinnerSize.large} />
                 : recentlyViewedTemplates.length ? (
                   <RecentlyViewed
