@@ -25,3 +25,17 @@ export function initClientSDK(dispatch: any, getState: () => RootState, ): Templ
   }
   return api;
 }
+
+export function populateTemplate(getState: () => RootState): PostedTemplate {
+  const appState = getState();
+  let newTemplate = new PostedTemplate();
+
+  const version = (appState.currentTemplate.template
+    && appState.currentTemplate.template.instances
+    && appState.currentTemplate.template.instances.length > 0)
+    ? appState.currentTemplate.template.instances[0].version
+    : '1.0';
+
+  newTemplate.version = version;
+  return newTemplate;
+}

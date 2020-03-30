@@ -12,7 +12,7 @@ import SearchBar from "./SearchBar";
 
 import { ActionButton } from 'office-ui-fabric-react';
 import Logo from '../../assets/adaptive-cards-100-logo.png';
-import { UNTITLEDCARD } from '../../assets/strings';
+import * as STRINGS from "../../assets/strings";
 
 import { Banner, Styledh1, StyledLogo, MobileBanner, BaselineBanner, StyledButton, Styledh2, StyledButtonContent, EditButton, BackButton, ButtonTextWrapper } from './styled';
 
@@ -31,7 +31,8 @@ const mapStateToProps = (state: RootState) => {
     template: state.currentTemplate.template,
     templateID: state.currentTemplate.templateID,
     isFetching: state.currentTemplate.isFetching,
-    templateName: state.currentTemplate.templateName
+    templateName: state.currentTemplate.templateName,
+    modalState: state.page.modalState
   }
 }
 
@@ -44,6 +45,7 @@ interface NavBarProps {
   isFetching: boolean;
   version?: string;
   templateID?: string;
+  modalState?: ModalState;
 }
 
 
@@ -55,7 +57,7 @@ const NavBar = (props: NavBarProps) => {
     return (
       <Banner>
         <MobileBanner>
-          <StyledLogo src={Logo} />
+          <StyledLogo aria-label={STRINGS.LOGO_DESCRIPTION} src={Logo} />
           <Styledh1>{props.currentPageTitle || ""}</Styledh1>
         </MobileBanner>
       </Banner>
@@ -79,7 +81,7 @@ const NavBar = (props: NavBarProps) => {
       return (
         <Banner>
           <MobileBanner>
-            <StyledLogo src={Logo} />
+            <StyledLogo aria-label={STRINGS.LOGO_DESCRIPTION} src={Logo} />
             <Styledh1>{props.currentPageTitle}</Styledh1>
           </MobileBanner>
           <SearchBar />
@@ -89,7 +91,7 @@ const NavBar = (props: NavBarProps) => {
       return (
         <Banner>
           <MobileBanner>
-            <StyledLogo src={Logo} />
+            <StyledLogo aria-label={STRINGS.LOGO_DESCRIPTION} src={Logo} />
             <Styledh1>{props.currentPageTitle}</Styledh1>
           </MobileBanner>
           <SearchBar />
@@ -103,7 +105,7 @@ const NavBar = (props: NavBarProps) => {
             <Styledh1>{((props.templateID === "" || props.templateID === undefined) && UNTITLEDCARD) || props.templateName}</Styledh1>
             {(props.templateID !== "" && props.templateID !== undefined ) && <EditButton onClick={editName} iconProps={{ iconName: 'Edit' }} />}
           </MobileBanner>
-          <ActionButton onClick={() => { history.push("/") }}> 
+          <ActionButton onClick={() => { history.push("/") }}>
             <StyledButton>
               <StyledButtonContent>
                 Finish
@@ -116,7 +118,7 @@ const NavBar = (props: NavBarProps) => {
       return (
         <Banner>
           <MobileBanner>
-            <StyledLogo src={Logo} />
+            <StyledLogo aria-label={STRINGS.LOGO_DESCRIPTION} src={Logo} />
             <Styledh1>{props.template ? (props.version ? props.template.name + " - " + props.version : props.template.name) : "Preview"}</Styledh1>
             <Styledh2>{props.template ? "ID: " + props.template.id : ""}</Styledh2>
           </MobileBanner>
@@ -126,18 +128,18 @@ const NavBar = (props: NavBarProps) => {
       return (
         <Banner>
           <BaselineBanner>
-            <StyledLogo src={Logo} />
+            <StyledLogo aria-label={STRINGS.LOGO_DESCRIPTION} src={Logo} />
             <Styledh1>{(props.template && props.template.name) || props.currentPageTitle}</Styledh1>
-            {!props.isFetching && <EditButton ariaLabel="Edit Template Name" onClick={editName} iconProps={{ iconName: 'Edit' }} />}
+            {!props.isFetching && <EditButton ariaLabel="Edit Template Name" onClick={editName} iconProps={{ iconName: 'Edit' }} tabIndex={props.modalState ? -1 : 0} />}
           </BaselineBanner>
-          <BackButton iconProps={{ iconName: 'Back' }} onClick={onBackButton}><ButtonTextWrapper>Back</ButtonTextWrapper></BackButton>
+          <BackButton iconProps={{ iconName: 'Back' }} onClick={onBackButton} tabIndex={props.modalState ? -1 : 0} ><ButtonTextWrapper>Back</ButtonTextWrapper></BackButton>
         </Banner>
       );
     default:
       return (
         <Banner>
           <MobileBanner>
-            <StyledLogo src={Logo} />
+            <StyledLogo aria-label={STRINGS.LOGO_DESCRIPTION} src={Logo} />
             <Styledh1>{props.currentPageTitle}</Styledh1>
           </MobileBanner>
         </Banner>

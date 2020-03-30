@@ -25,6 +25,7 @@ import requireAuthentication from '../../../utils/requireAuthentication';
 import { ModalWrapper, ACOuterPanel, StyledDropdown, ACPanel, ACWrapper, DescriptorWrapper, CenteredSpinner } from './styled';
 
 import { Template } from 'adaptive-templating-service-typescript-node';
+import { ModalState } from '../../../store/page/types';
 
 const DropdownOptions = [
   { key: 'sample', text: 'Default', value: Default },
@@ -42,6 +43,7 @@ const mapStateToProps = (state: RootState) => {
   return {
     template: state.currentTemplate.template,
     isFetching: state.currentTemplate.isFetching,
+    modalState: state.page.modalState
   }
 }
 
@@ -65,6 +67,7 @@ interface Props extends RouteComponentProps<MatchParams> {
   isFetching?: boolean;
   setPage: (currentPageTitle: string, currentPage: string) => void;
   getTemplate: (templateID: string) => void;
+  modalState?: ModalState
 }
 
 interface State {
@@ -127,7 +130,7 @@ class PreviewModal extends React.Component<Props, State> {
         {template && !isFetching ?
           <React.Fragment>
             <ACOuterPanel>
-              <StyledDropdown selectedKey={selectedItem.key} onChange={this.hostConfigChange} options={DropdownOptions} />
+              <StyledDropdown selectedKey={selectedItem.key} onChange={this.hostConfigChange} options={DropdownOptions} tabIndex={this.props.modalState ? -1 : 0} />
               <ACPanel>
                 <ACWrapper>
                   <AdaptiveCard cardtemplate={template} templateVersion={this.state.templateVersion} hostConfig={selectedItem.value} />

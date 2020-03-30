@@ -9,6 +9,7 @@ import { newTemplate } from "../../store/currentTemplate/actions";
 import { COLORS } from "../../globalStyles";
 import UserAvatar from "./UserAvatar";
 import mainLogo from "../../assets/adaptive-cards-100-logo.png";
+import * as STRINGS from "../../assets/strings";
 
 // CSS
 import {
@@ -27,6 +28,7 @@ import {
 } from "./styled";
 import { INavLinkGroup, INavStyles } from "office-ui-fabric-react";
 import { ClearOwners } from "../../store/templateOwner/actions";
+import { ModalState } from "../../store/page/types";
 
 
 interface Props {
@@ -35,13 +37,15 @@ interface Props {
   user?: UserType;
   templateID: string | undefined;
   newTemplate: () => void;
+  modalState?: ModalState;
 }
 
 const mapStateToProps = (state: RootState) => {
   return {
     isAuthenticated: state.auth.isAuthenticated,
     user: state.auth.user,
-    templateID: state.currentTemplate.templateID
+    templateID: state.currentTemplate.templateID,
+    modalState: state.page.modalState
   };
 };
 
@@ -164,7 +168,7 @@ const SideBar = (props: Props) => {
     <OuterSideBarWrapper>
       <MainItems>
         <LogoWrapper>
-          <Logo src={mainLogo} />
+          <Logo aria-label={STRINGS.LOGO_DESCRIPTION} src={mainLogo} />
           <LogoTextWrapper>
             <LogoTextHeader>Adaptive Cards</LogoTextHeader>
             <LogoTextSubHeader>Portal</LogoTextSubHeader>
@@ -180,7 +184,7 @@ const SideBar = (props: Props) => {
         {props.isAuthenticated && <NavMenu styles={navMenuLinksProps} groups={navMenuLinks} onLinkClick={onNavClick} />}
       </MainItems>
 
-      <SignOut onClick={props.authButtonMethod}>Sign {props.isAuthenticated ? "Out" : "In"}</SignOut>
+      <SignOut onClick={props.authButtonMethod} tabIndex={props.modalState ? -1 : 0}>Sign {props.isAuthenticated ? "Out" : "In"}</SignOut>
     </OuterSideBarWrapper>
   );
 };

@@ -1,4 +1,6 @@
 import { ITemplate, ITemplateInstance, TemplateState } from "../models/models";
+
+import * as ACData from "adaptivecards-templating";
 /**
  * @function
  * Updates passed ITemplate object to only have the latest version instance.
@@ -83,39 +85,46 @@ export function compareVersion(a: string, b: string): boolean {
  * @param template 
  * 
  */
-export function incrementVersion(template: ITemplate): string{ 
+export function incrementVersion(template: ITemplate): string {
   // check if this is the most recent version 
   let latestTemplate = getMostRecentVersion(template);
-  let version = latestTemplate?.version.split(".");
+  if (!latestTemplate?.version) return "";
+  return incrementVersionStr(latestTemplate?.version);
+}
 
-  if(!version){
+export function incrementVersionStr(latestVersion: string): string {
+  // check if this is the most recent version 
+  let version = latestVersion.split(".");
+
+  if (!version) {
     return "1.0";
   }
-  if(version[1] === "9"){
-    version[0] = (parseInt(version[0])+1).toString();
-    version[1]="0";
+  if (version[1] === "9") {
+    version[0] = (parseInt(version[0]) + 1).toString();
+    version[1] = "0";
   }
   else {
-    version[1] = (parseInt(version[1])+1).toString();
+    version[1] = (parseInt(version[1]) + 1).toString();
   }
   return (version[0] + "." + version[1]);
 }
 
-export function setTemplateInstanceParam(templateInstance: ITemplateInstance, templateData: JSON[] | undefined, state: TemplateState | undefined, isShareable: boolean | undefined, version?: string): ITemplateInstance { 
+
+export function setTemplateInstanceParam(templateInstance: ITemplateInstance, templateData: JSON[] | undefined, state: TemplateState | undefined, isShareable: boolean | undefined, version?: string): ITemplateInstance {
   // set params for the template instance. 
-  templateInstance.state = state || TemplateState.draft ;
-  templateInstance.isShareable = isShareable || false ;
-  templateInstance.data = templateData || []; 
+  templateInstance.state = state || TemplateState.draft;
+  templateInstance.isShareable = isShareable || false;
+  templateInstance.data = templateData || [];
   templateInstance.version = version || "1.0";
   return templateInstance;
 }
 
-export function anyVersionsLive(templates: ITemplateInstance[]): boolean { 
-  if(!templates){
+export function anyVersionsLive(templates: ITemplateInstance[]): boolean {
+  if (!templates) {
     return false;
   }
-  for(let instance of templates){ 
-    if(instance.state === TemplateState.live){
+  for (let instance of templates) {
+    if (instance.state === TemplateState.live) {
       return true;
     }
   }
@@ -125,7 +134,7 @@ export function anyVersionsLive(templates: ITemplateInstance[]): boolean {
  * @function
  */
 export function compareTemplateVersions(a: ITemplateInstance, b: ITemplateInstance): number {
-  return compareVersion(a.version, b.version)? -1 : 1;
+  return compareVersion(a.version, b.version) ? -1 : 1;
 }
 
 /**
@@ -144,9 +153,9 @@ export function sortTemplateByVersion(template: ITemplate) {
  * @param input 
  */
 export function isValidJSONString(input: string) {
-  try { 
+  try {
     JSON.parse(input);
-  } catch(e){
+  } catch (e) {
     return false;
   }
   return true;
@@ -159,4 +168,35 @@ export function isValidJSONString(input: string) {
 export function parseToken(token: string): string {
   let bearer = token.split(/[ ]+/).pop();
   return bearer || "";
+}
+
+export function createCard(template: JSON, data: JSON): JSON {
+  try {
+    let dataTemplate: ACData.Template = new ACData.Template(template);
+    let context: ACData.EvaluationContext = new ACData.EvaluationContext();
+    context.$root = data;
+    let card: JSON = dataTemplate.expand(context);
+    return card;
+  }
+  catch {
+    return JSON.parse('{}');
+  }
+}
+
+/**
+ * Returns whether the state change is valid. 
+ * @param currState 
+ * @param desiredState 
+ */
+export function checkValidTemplateState(currState: TemplateState, desiredState: TemplateState): boolean {
+  switch (currState) {
+    case TemplateState.draft:
+      return desiredState !== TemplateState.deprecated;
+    case TemplateState.deprecated:
+      return desiredState === TemplateState.deprecated;
+    case TemplateState.live:
+      return desiredState !== TemplateState.draft;
+    default:
+      return false;
+  }
 }

@@ -34,6 +34,7 @@ export const RecentlyViewedContainer = styled(Card)`
   border: 1px solid ${COLORS.BORDER2};
   border-radius: 5px;
   justify-content: flex-start;
+  margin-top: 10px;
 `;
 
 export const RecentlyViewedBody = styled.div`
@@ -42,7 +43,7 @@ export const RecentlyViewedBody = styled.div`
   justify-content: flex-start;
 `;
 
-export const RecentlyViewedItem = styled.h6`
+export const RecentlyViewedItem = styled.div`
   font-family: Segoe UI Regular;
   flex: 1;
 `;

@@ -16,6 +16,7 @@ import { getDateString } from "../../../utils/versionUtils";
 import { Status } from "../PreviewModal/TemplateInfo/styled";
 import { TemplateStateWrapper } from "../../AdaptiveCardPanel/styled";
 import OwnerInfo from "./OwnerInfo";
+import KeyCode from "../../../globalKeyCodes";
 
 interface Props {
   templates: Template[];
@@ -32,12 +33,17 @@ class RecentlyViewedTable extends React.Component<Props> {
           propsOnClick(template.id);
         }
       };
+      let onKeyDown = (keyStroke: any) => {
+        if (propsOnClick && template.id && keyStroke.keyCode === KeyCode.ENTER) {
+          propsOnClick(template.id);
+        }
+      }
       if (!template || !template.instances || !template.instances[0] || !template.instances[0].lastEditedUser) {
         return <div>Error loading templates</div>
       }
 
       return (
-        <RecentlyViewedBodyRow key={template.instances[0]!.lastEditedUser!} onClick={onClick} >
+        <RecentlyViewedBodyRow key={template.instances[0]!.lastEditedUser!} onClick={onClick} onKeyDown={onKeyDown} tabIndex={0}>
           <RecentlyViewedItem>{template.name}</RecentlyViewedItem>
           <RecentlyViewedItem>
             {template.updatedAt ? getDateString(template.updatedAt) : "N/A"}

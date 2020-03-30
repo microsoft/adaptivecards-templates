@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { COLORS } from '../../../../globalStyles';
 
 import { Dropdown, Icon, IDropdownStyles } from "office-ui-fabric-react";
+import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { PostedTemplate } from 'adaptive-templating-service-typescript-node';
 
 export const StyledVersionDropdown = styled(Dropdown)`
@@ -152,4 +153,8 @@ export const TagsWrapper = styled.div`
   flex-direction: row;
   flex-wrap: wrap;
   padding: 16px 24px 0;
+`;
+
+export const CenteredSpinner = styled(Spinner)`
+  margin: auto;
 `;
