@@ -13,6 +13,7 @@ export const RecentlyViewedBodyRow = styled.div`
   flex: 1;
   padding-top: 20px;
   padding-left: 50px;
+  padding-bottom: 2px;
   justify-content: flex-start;
 `;
 

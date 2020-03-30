@@ -70,6 +70,7 @@ export const StatusIndicator = styled.div<{ state?: PostedTemplate.StateEnum }>`
 export const Status = styled.div`
   font-size: 14px;
   font-weight: 400;
+  padding-right: 7px;
 `
 export const TimeStamp = styled.div`
   font-size: 14px;

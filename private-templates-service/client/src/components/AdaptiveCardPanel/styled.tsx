@@ -73,3 +73,9 @@ export const TemplateUpdatedAt = styled.div`
 export const Bottom = styled.div`
   padding: 20px;
 `;
+
+export const Align = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-right: 5px;
+`;

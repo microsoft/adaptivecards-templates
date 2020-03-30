@@ -27,8 +27,6 @@ import {
   LogoTextSubHeader
 } from "./styled";
 import { INavLinkGroup, INavStyles } from "office-ui-fabric-react";
-import { ClearOwners } from "../../store/templateOwner/actions";
-
 
 interface Props {
   authButtonMethod: () => void;
@@ -154,9 +152,6 @@ const SideBar = (props: Props) => {
     event.preventDefault();
     if (element.url === "/designer") {
       props.newTemplate();
-    }
-    else if (element.url === "/") {
-      ClearOwners();
     }
     history.push(element.url);
   };
