@@ -8,7 +8,7 @@ export const CardManageButton = styled(ActionButton)`
 `
 
 export const CardTitle = styled.div`
-  font-size: 22px;
+  font-size: 1.375rem;
   font-weight: 600;
 `
 
