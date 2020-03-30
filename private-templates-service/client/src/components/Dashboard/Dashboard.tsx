@@ -105,10 +105,12 @@ class Dashboard extends React.Component<Props> {
       }
     }
     if (prevProps.recentTemplates !== this.props.recentTemplates &&
+      !this.props.recentTemplates.isFetching &&
       this.props.recentTemplates.recentlyViewed && this.props.recentTemplates.recentlyViewed.templates) {
       let templates = this.props.recentTemplates.recentlyViewed.templates;
       for (let template of templates) {
         if (template.instances && template.instances[0].lastEditedUser) {
+          console.log(template.instances[0].lastEditedUser);
           this.props.getOwnerName(template.instances[0].lastEditedUser);
           this.props.getOwnerProfilePicture(template.instances[0].lastEditedUser);
         }
@@ -169,9 +171,7 @@ class Dashboard extends React.Component<Props> {
             </React.Fragment>
             <React.Fragment>
               <Title>Recently Viewed</Title>
-              {recentTemplates.isFetching || !this.props.recentTemplates.recentlyViewed
-                || !this.props.recentTemplates.recentlyViewed.templates
-                || this.props.templateOwner.isFetchingName || this.props.templateOwner.isFetchingPicture ?
+              {recentTemplates.isFetching || this.props.templateOwner.isFetchingName || this.props.templateOwner.isFetchingPicture ?
                 <CenteredSpinner size={SpinnerSize.large} />
                 : recentlyViewedTemplates.length ? (
                   <RecentlyViewed
