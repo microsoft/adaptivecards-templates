@@ -25,7 +25,7 @@ export const Modal = styled.div`
 `;
 
 export const Header = styled.div`
-  font-size: 22px;
+  font-size: 1.375rem;
   font-weight: 500;
   margin-bottom: 12px;
 `;
@@ -73,7 +73,7 @@ export const EmailPanel = styled.div`
 `;
 
 export const SemiBoldText = styled.div`
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 600;
 `;
 
