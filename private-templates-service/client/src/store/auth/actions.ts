@@ -1,9 +1,11 @@
 import {
   LOGOUT,
   ACCESS_TOKEN_SET,
+  GRAPH_ACCESS_TOKEN_SET,
   UserType,
   AuthAction,
   AccessTokenAction,
+  GraphAccessTokenAction,
   GetUserDetailsAction,
   GetOrgDetailsAction,
   GetProfilePictureAction,
@@ -29,9 +31,16 @@ export function logout(): AuthAction {
   }
 }
 
+export function setGraphAccessToken(graphAccessToken: AuthResponse): GraphAccessTokenAction {
+  return {
+    type: GRAPH_ACCESS_TOKEN_SET,
+    graphAccessToken
+  }
+}
+
 export function setAccessToken(accessToken: AuthResponse): AccessTokenAction {
   return {
-    type: ACCESS_TOKEN_SET,
+    type: ACCESS_TOKEN_SET, 
     accessToken
   }
 }
@@ -98,11 +107,11 @@ export function getUserDetails() {
     dispatch(requestUserDetails());
     const state = getState();
 
-    if (!state.auth.accessToken) {
+    if (!state.auth.graphAccessToken) {
       return dispatch(requestUserDetailsFailure());
     }
 
-    const client = getAuthenticatedClient(state.auth.accessToken);
+    const client = getAuthenticatedClient(state.auth.graphAccessToken);
     return client.api('/me').get()
       .then((userDetails: UserType) => {
         dispatch(requestUserDetailsSuccess(userDetails))
@@ -117,11 +126,11 @@ export function getOrgDetails() {
     dispatch(requestOrgDetails());
     const state = getState();
 
-    if (!state.auth.accessToken) {
+    if (!state.auth.graphAccessToken) {
       return dispatch(requestOrgDetailsFailure());
     }
 
-    const client = getAuthenticatedClient(state.auth.accessToken);
+    const client = getAuthenticatedClient(state.auth.graphAccessToken);
     return client.api('/organization').get()
       .then((org: any) => {
         if (org.value.length === 0) {
@@ -140,11 +149,11 @@ export function getProfilePicture() {
     dispatch(requestProfilePicture());
     const state = getState();
 
-    if (!state.auth.accessToken) {
+    if (!state.auth.graphAccessToken) {
       return dispatch(requestProfilePictureFailure());
     }
 
-    const client = getAuthenticatedClient(state.auth.accessToken);
+    const client = getAuthenticatedClient(state.auth.graphAccessToken);
     return client.api('/me/photos/240x240/$value').get()
       .then((image: Blob) => {
         const imageURL = URL.createObjectURL(image);

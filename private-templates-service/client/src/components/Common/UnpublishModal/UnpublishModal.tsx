@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 
 // Libraries
 import { PrimaryButton } from 'office-ui-fabric-react'
@@ -7,11 +6,13 @@ import { PrimaryButton } from 'office-ui-fabric-react'
 import { Template, PostedTemplate } from 'adaptive-templating-service-typescript-node';
 
 // Redux
+import { connect } from 'react-redux';
 import { updateTemplate } from '../../../store/currentTemplate/actions';
 import { closeModal } from '../../../store/page/actions';
 
 // Components
-import AdaptiveCard from '../AdaptiveCard';
+import AdaptiveCardPanel from '../../AdaptiveCardPanel';
+import ModalHOC from '../../../utils/ModalHOC';
 
 // Strings
 import * as STRINGS from '../../../assets/strings';
@@ -23,12 +24,6 @@ import {
 } from './styled';
 
 import {
-  Container,
-  ACWrapper,
-  TemplateName
-} from '../../AdaptiveCardPanel/styled'
-
-import {
   BackDrop,
   Modal,
   Header,
@@ -37,8 +32,6 @@ import {
   ButtonGroup,
   CancelButton,
 } from '../../Common/PublishModal/styled';
-import ModalHOC from '../../../utils/ModalHOC';
-
 
 interface Props {
   template: Template;
@@ -75,12 +68,7 @@ class UnpublishModal extends React.Component<Props> {
           <Description style={{ marginBottom: 0 }}>{STRINGS.UNPUBLISH_CONFIRMATION}<DescriptionAccent>{template.name} - {this.props.templateVersion}</DescriptionAccent>?</Description>
           <Description>{STRINGS.UNPUBLISH_WARNING}</Description>
           <CenterPanelWrapper>
-            <Container>
-              <ACWrapper>
-                <AdaptiveCard cardtemplate={template} templateVersion={this.props.templateVersion} />
-              </ACWrapper>
-              <TemplateName>{template.name}</TemplateName>
-            </Container>
+            <AdaptiveCardPanel template={template} />
           </CenterPanelWrapper>
           <BottomRow>
             <ButtonGroup>

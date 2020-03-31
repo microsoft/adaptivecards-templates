@@ -5,6 +5,7 @@ export interface AuthState {
   user?: UserType;
   isFetching: boolean;
   accessToken?: AuthResponse;
+  graphAccessToken?: AuthResponse;
 }
 
 export interface UserType {
@@ -16,6 +17,7 @@ export interface UserType {
 
 // Action Types
 export const ACCESS_TOKEN_SET = 'ACCESS_TOKEN_SET';
+export const GRAPH_ACCESS_TOKEN_SET = 'GRAPH_ACCESS_TOKEN_SET';
 
 export const GET_USER_DETAILS = 'GET_USER_DETAILS';
 export const GET_USER_DETAILS_SUCCESS = 'GET_USER_DETAILS_SUCCESS';
@@ -62,3 +64,9 @@ export interface AccessTokenAction {
   type: typeof ACCESS_TOKEN_SET;
   accessToken: AuthResponse;
 }
+
+export interface GraphAccessTokenAction {
+  type: typeof GRAPH_ACCESS_TOKEN_SET;
+  graphAccessToken: AuthResponse;
+}
+

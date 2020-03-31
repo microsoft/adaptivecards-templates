@@ -27,6 +27,7 @@ import {
 } from './../styled';
 
 import { getDateString } from '../../../../../utils/versionUtils';
+import { capitalizeString } from "../../../../../utils/stringUtils";
 import { ModalState } from '../../../../../store/page/types';
 import { openModal } from '../../../../../store/page/actions';
 import VersionModal from '../../../../Common/VersionModal';
@@ -57,11 +58,13 @@ const mapDispatchToProps = (dispatch: any) => {
 class VersionCard extends React.Component<Props> {
   render() {
     return (
-      <Card key="Recent Releases" style={{ width: `100%` }}>
+      <Card key="Recent Releases" style={{ flex: '1 0 auto' }}>
         <CardHeader>
           <VersionCardHeader>
             <CardTitle>Recent Releases</CardTitle>
-            <CardManageButton onClick={() => { this.props.openModal(ModalState.Version) }}>{MANAGE}</CardManageButton>
+            <CardManageButton onClick={() => { this.props.openModal(ModalState.Version) }} tabIndex={this.props.modalState ? -1 : 0}>
+              {MANAGE}
+            </CardManageButton>
           </VersionCardHeader>
         </CardHeader>
         <CardBody>
@@ -70,8 +73,8 @@ class VersionCard extends React.Component<Props> {
             <VersionCardRowTitle style={{ flexBasis: `25%` }}>Updated</VersionCardRowTitle>
             <VersionCardRowTitle style={{ flexBasis: `20%` }}>Status</VersionCardRowTitle>
           </VersionCardRow>
-          {this.props.template.instances && this.props.template.instances.map((instance: TemplateInstance) => (
-            <VersionCardRow>
+          {this.props.template.instances && this.props.template.instances.map((instance: TemplateInstance, index: number) => (
+            <VersionCardRow key={index}>
               <VersionWrapper>
                 {instance.version}
                 {instance.version === this.props.templateVersion && <VersionIcon iconName={'View'} />}
@@ -79,7 +82,7 @@ class VersionCard extends React.Component<Props> {
               <DateWrapper>{instance.updatedAt ? getDateString(instance.updatedAt) : "N/A"}</DateWrapper>
               <StatusWrapper>
                 <StatusIndicator state={instance.state} />
-                <Status>{instance.state && instance.state.toString().charAt(0).toUpperCase() + instance.state.toString().slice(1)}</Status>
+                <Status>{instance.state && capitalizeString(instance.state.toString())}</Status>
               </StatusWrapper>
             </VersionCardRow>
           ))}

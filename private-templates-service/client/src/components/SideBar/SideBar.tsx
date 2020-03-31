@@ -1,15 +1,16 @@
 import React from "react";
-
 import { useHistory } from "react-router-dom";
 
 import { connect } from "react-redux";
 import { RootState } from "../../store/rootReducer";
 import { UserType } from "../../store/auth/types";
+import { ModalState } from "../../store/page/types";
 import { newTemplate } from "../../store/currentTemplate/actions";
-import { initializeIcons } from "office-ui-fabric-react/lib/Icons";
+
 import { COLORS } from "../../globalStyles";
 import UserAvatar from "./UserAvatar";
 import mainLogo from "../../assets/adaptive-cards-100-logo.png";
+import * as STRINGS from "../../assets/strings";
 
 // CSS
 import {
@@ -26,22 +27,24 @@ import {
   LogoTextHeader,
   LogoTextSubHeader
 } from "./styled";
-import { INavLink, INavLinkGroup, INavStyles } from "office-ui-fabric-react";
+import { INavLinkGroup, INavStyles } from "office-ui-fabric-react";
 
-initializeIcons();
+
 interface Props {
   authButtonMethod: () => void;
   isAuthenticated: boolean;
   user?: UserType;
   templateID: string | undefined;
   newTemplate: () => void;
+  modalState?: ModalState;
 }
 
 const mapStateToProps = (state: RootState) => {
   return {
     isAuthenticated: state.auth.isAuthenticated,
     user: state.auth.user,
-    templateID: state.currentTemplate.templateID
+    templateID: state.currentTemplate.templateID,
+    modalState: state.page.modalState
   };
 };
 
@@ -65,7 +68,8 @@ const navMenuLinksProps: Partial<INavStyles> = {
     }
   },
   linkText: {
-    color: COLORS.WHITE
+    color: COLORS.WHITE,
+    fontSize: "0.875rem"
   }
 };
 
@@ -73,6 +77,11 @@ const iconStyle = {
   color: COLORS.WHITE,
   margin: "0px 10px 0px 40px"
 };
+
+const iconStylePink = {
+  color: 'pink',
+  margin: "0px 10px 0px 40px"
+}
 
 const navMenuLinks: INavLinkGroup[] = [
   {
@@ -83,7 +92,9 @@ const navMenuLinks: INavLinkGroup[] = [
         iconProps: {
           iconName: "ViewDashboard",
           style: iconStyle
-        }
+        },
+        title: "",
+        ariaLabel: "Link to Dashboard"
       },
       {
         name: "New Template",
@@ -91,39 +102,49 @@ const navMenuLinks: INavLinkGroup[] = [
         iconProps: {
           iconName: "CalculatorAddition",
           style: iconStyle
-        }
+        },
+        title: "",
+        ariaLabel: "Link to New Template"
       },
       {
         name: "All Templates",
         url: "/dashboard/all",
         iconProps: {
           iconName: "ViewList",
-          style: iconStyle
-        }
+          style: iconStylePink
+        },
+        title: "",
+        ariaLabel: "Link to All Templates"
       },
       {
         name: "Drafts",
         url: "/drafts",
         iconProps: {
           iconName: "SingleColumnEdit",
-          style: iconStyle
-        }
+          style: iconStylePink
+        },
+        title: "",
+        ariaLabel: "Link to Drafts"
       },
       {
         name: "Published",
         url: "/published",
         iconProps: {
           iconName: "PublishContent",
-          style: iconStyle
-        }
+          style: iconStylePink
+        },
+        title: "",
+        ariaLabel: "Link to Published Templates"
       },
       {
         name: "Tags",
         url: "/tags",
         iconProps: {
           iconName: "Tag",
-          style: iconStyle
-        }
+          style: iconStylePink
+        },
+        title: "",
+        ariaLabel: "Link to Tags"
       }
     ]
   }
@@ -144,7 +165,7 @@ const SideBar = (props: Props) => {
     <OuterSideBarWrapper>
       <MainItems>
         <LogoWrapper>
-          <Logo src={mainLogo} />
+          <Logo aria-label={STRINGS.LOGO_DESCRIPTION} src={mainLogo} />
           <LogoTextWrapper>
             <LogoTextHeader>Adaptive Cards</LogoTextHeader>
             <LogoTextSubHeader>Portal</LogoTextSubHeader>
@@ -160,7 +181,7 @@ const SideBar = (props: Props) => {
         {props.isAuthenticated && <NavMenu styles={navMenuLinksProps} groups={navMenuLinks} onLinkClick={onNavClick} />}
       </MainItems>
 
-      <SignOut onClick={props.authButtonMethod}>Sign {props.isAuthenticated ? "Out" : "In"}</SignOut>
+      <SignOut onClick={props.authButtonMethod} tabIndex={props.modalState ? -1 : 0}>Sign {props.isAuthenticated ? "Out" : "In"}</SignOut>
     </OuterSideBarWrapper>
   );
 };

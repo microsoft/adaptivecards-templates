@@ -1,6 +1,5 @@
 import {
-  TemplateList,
-  TemplateApi
+  TemplateList
 } from "adaptive-templating-service-typescript-node";
 import {
   REQUEST_RECENT_TEMPLATES_GET,
@@ -10,6 +9,7 @@ import {
 } from "./types";
 import { RootState } from "../rootReducer";
 import { IncomingMessage } from "http";
+import { initClientSDK } from "../../utils/TemplateUtil";
 
 export function requestRecentTemplates(): RecentTemplatesAction {
   return {
@@ -38,20 +38,11 @@ export function requestRecentTemplatesFailure(
 }
 
 export function getRecentTemplates() {
-  return function(dispatch: any, getState: () => RootState) {
-    const appState = getState();
+  return function (dispatch: any, getState: () => RootState) {
     dispatch(requestRecentTemplates());
-    let api = new TemplateApi();
-    // TODO dynamically fetch bearer token
-    if (appState.auth.accessToken) {
-      api.setApiKey(
-        0,
-        `Bearer ${appState.auth.accessToken!.idToken.rawIdToken}`
-      );
-    }
-
+    const api = initClientSDK(dispatch, getState);
     return api.getRecent().then(response => {
-      if (response.response.statusCode && response.response.statusCode == 200) {
+      if (response.response.statusCode && response.response.statusCode === 200) {
         if (response.body.recentlyEdited && response.body.recentlyViewed) {
           dispatch(
             requestRecentTemplatesSuccess(

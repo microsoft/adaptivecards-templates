@@ -3,33 +3,50 @@ import { connect } from "react-redux";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import { RootState } from "../../store/rootReducer";
 import { UserType } from "../../store/auth/types";
+import { getAllTemplates } from "../../store/templates/actions";
 import { AllTemplateState } from "../../store/templates/types";
+import { getRecentTemplates } from "../../store/recentTemplates/actions";
 import { RecentTemplatesState } from "../../store/recentTemplates/types";
 import { setPage } from "../../store/page/actions";
-import { getAllTemplates } from "../../store/templates/actions";
 import { getTemplate } from "../../store/currentTemplate/actions";
-import { getRecentTemplates } from "../../store/recentTemplates/actions";
 import { setSearchBarVisible } from "../../store/search/actions";
+import { getOwnerProfilePicture, getOwnerName } from "../../store/templateOwner/actions";
+import { OwnerState } from "../../store/templateOwner/types";
+
+import { Template } from "adaptive-templating-service-typescript-node";
+import { SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
+
 import requireAuthentication from "../../utils/requireAuthentication";
+
 import Gallery from "../Gallery";
 import SearchPage from "./SearchPage/SearchPage";
-import { Template } from "adaptive-templating-service-typescript-node";
-import { RecentlyViewed } from "./RecentlyViewed/RecentlyViewed";
+import RecentlyViewed from "./RecentlyViewed";
 import Tags from "../Common/Tags";
+import Footer from "./Footer";
+import {
+  DASHBOARD_RECENTLY_EDITED_PLACEHOLDER,
+  DASHBOARD_RECENTLY_VIEWED_PLACEHOLDER,
+} from '../../assets/strings';
+
+
 import {
   Title,
   DashboardContainer,
   OuterWindow,
   TagsContainer,
-  PlaceholderText
+  PlaceholderText,
+  CenteredSpinner,
+  OuterDashboardContainer
 } from "./styled";
+
 const mapStateToProps = (state: RootState) => {
   return {
     isAuthenticated: state.auth.isAuthenticated,
     user: state.auth.user,
     templates: state.allTemplates,
     isSearch: state.search.isSearch,
-    recentTemplates: state.recentTemplates
+    recentTemplates: state.recentTemplates,
+    templateOwner: state.templateOwner,
   };
 };
 const mapDispatchToProps = (dispatch: any) => {
@@ -48,6 +65,12 @@ const mapDispatchToProps = (dispatch: any) => {
     },
     getRecentTemplates: () => {
       dispatch(getRecentTemplates());
+    },
+    getOwnerName: (oID: string) => {
+      dispatch(getOwnerName(oID));
+    },
+    getOwnerProfilePicture: (oID: string) => {
+      dispatch(getOwnerProfilePicture(oID));
     }
   };
 };
@@ -56,11 +79,14 @@ interface Props extends RouteComponentProps {
   user?: UserType;
   recentTemplates: RecentTemplatesState;
   templates: AllTemplateState;
+  templateOwner: OwnerState;
   setPage: (currentPageTitle: string, currentPage: string) => void;
   setSearchBarVisible: (isSearchBarVisible: boolean) => void;
   getTemplates: () => void;
   getRecentTemplates: () => void;
   getTemplate: (templateID: string) => void;
+  getOwnerName: (oID: string) => void;
+  getOwnerProfilePicture: (oID: string) => void;
   isSearch: boolean;
 }
 class Dashboard extends React.Component<Props> {
@@ -78,10 +104,21 @@ class Dashboard extends React.Component<Props> {
         this.props.setPage("Dashboard", "Dashboard");
       }
     }
+    if (prevProps.recentTemplates !== this.props.recentTemplates &&
+      this.props.recentTemplates.recentlyViewed && this.props.recentTemplates.recentlyViewed.templates) {
+      let templates = this.props.recentTemplates.recentlyViewed.templates;
+      for (let template of templates) {
+        if (template.instances && template.instances[0].lastEditedUser) {
+          this.props.getOwnerName(template.instances[0].lastEditedUser);
+          this.props.getOwnerProfilePicture(template.instances[0].lastEditedUser);
+        }
+      }
+    }
   }
   selectTemplate = (templateID: string) => {
-    this.props.history.push("template/" + templateID);
+    this.props.history.push("preview/" + templateID);
   };
+
   render() {
     if (this.props.isSearch) {
       return (
@@ -110,42 +147,49 @@ class Dashboard extends React.Component<Props> {
       recentlyViewedTemplates = recentTemplates.recentlyViewed.templates;
     }
     // TODO: Get tags and make them clickable
-    let tags: string[] = new Array();
+    let tags: string[] = [];
     return (
-      <OuterWindow>
-        <DashboardContainer>
-          <React.Fragment>
-            <Title>Recently Edited</Title>
-            {recentlyEditedTemplates.length ? (
-              <Gallery
-                onClick={this.selectTemplate}
-                templates={recentlyEditedTemplates}
-              ></Gallery>
-            ) : (
-                <PlaceholderText>
-                  No edited templates yet. Create or edit one :)
-              </PlaceholderText>
-              )}
-          </React.Fragment>
-          <React.Fragment>
-            <Title>Recently Viewed</Title>
-            {recentlyViewedTemplates.length ? (
-              <RecentlyViewed
-                onClick={this.selectTemplate}
-                recentlyViewed={recentlyViewedTemplates}
-              ></RecentlyViewed>
-            ) : (
-                <PlaceholderText>
-                  No recently viewed templates yet. Check out some templates:)
-              </PlaceholderText>
-              )}
-          </React.Fragment>
-        </DashboardContainer>
-        <TagsContainer>
-          <Title style={{ marginRight: "150px" }}>Tags</Title>
-          <Tags tags={tags} allowEdit={false}></Tags>
-        </TagsContainer>
-      </OuterWindow>
+      <OuterDashboardContainer>
+        <OuterWindow>
+          <DashboardContainer>
+            <React.Fragment>
+              <Title>Recently Edited</Title>
+              {recentTemplates.isFetching || this.props.templateOwner.isFetchingName || this.props.templateOwner.isFetchingPicture ?
+                <CenteredSpinner size={SpinnerSize.large} />
+                : recentlyEditedTemplates.length ? (
+                  <Gallery
+                    onClick={this.selectTemplate}
+                    templates={recentlyEditedTemplates}
+                  ></Gallery>
+                ) : (
+                    <PlaceholderText>
+                      {DASHBOARD_RECENTLY_EDITED_PLACEHOLDER}
+                    </PlaceholderText>
+                  )}
+            </React.Fragment>
+            <React.Fragment>
+              <Title>Recently Viewed</Title>
+              {recentTemplates.isFetching || this.props.templateOwner.isFetchingName || this.props.templateOwner.isFetchingPicture ?
+                <CenteredSpinner size={SpinnerSize.large} />
+                : recentlyViewedTemplates.length ? (
+                  <RecentlyViewed
+                    onClick={this.selectTemplate}
+                    recentlyViewed={recentlyViewedTemplates}
+                  ></RecentlyViewed>
+                ) : (
+                    <PlaceholderText>
+                      {DASHBOARD_RECENTLY_VIEWED_PLACEHOLDER}
+                    </PlaceholderText>
+                  )}
+            </React.Fragment>
+          </DashboardContainer>
+          <TagsContainer>
+            <Title style={{ marginRight: "150px", color: 'pink' }}>Tags</Title>
+            <Tags tags={tags} allowEdit={false}></Tags>
+          </TagsContainer>
+        </OuterWindow>
+        <Footer />
+      </OuterDashboardContainer>
     );
   }
 }

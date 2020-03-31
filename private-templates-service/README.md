@@ -1,3 +1,47 @@
+# Quickstart
+These steps will get our end-to-end app running locally. If any steps fail, try the longer steps below.
+
+Prerequisites:
+-   Git
+-   [Node v12](https://nodejs.org/en/download/)
+
+**1. Clone the reponsitory.**
+
+**2. Switch to the desired branch. The latest build is on `dev`**
+
+**3. `cd adaptivecards-templates/private-templates-service/server` and run `npm run init-app`. This installs and links dependencies.**
+
+**4. Open `server/app.ts` and replace mongoose code lines 39 - 64 with the following:**
+```
+import { InMemoryDBProvider } from '../../adaptivecards-templating-service/src/storageproviders/InMemoryDBProvider';
+
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, Content-Type, Accept, Authorization, api_key"
+  );
+  res.header(
+    "Access-Control-Allow-Methods",
+    "GET, POST, OPTIONS, DELETE"
+  );
+  next();
+});
+app.options('*', function (req, res) { res.sendStatus(200); });
+
+const mongoClient: ClientOptions = {
+  authenticationProvider: new AzureADProvider(),
+  storageProvider: new InMemoryDBProvider(),
+}
+const client: TemplateServiceClient = TemplateServiceClient.init(mongoClient);
+app.use("/template", client.expressMiddleware());
+app.use("/user", client.userExpressMiddleware());
+```
+
+**5. In 50 in AzureADProvider.ts, replace `#{CLIENT_ID_TOKEN}#` with your client ID token. Ask a dev for this string! `result = result && "#{CLIENT_ID_TOKEN}#" === decodedToken.payload.aud;`**
+
+**6. Run `npm run dev`. This command concurrently runs the client and server locally. Navigate to `localhost:3000` to see the site.**
+
 # Running the frontend and backend of Adaptive Cards CMS Locally
 
 To run this web application locally, you must have the following installed on your system:
@@ -26,7 +70,7 @@ app.use(function (req, res, next) {
 
 **4. In the `adaptivecards-templates/private-templates-service/server/app.ts` file, replace ` "#{DB_CONNECTION_TOKEN}#"` with the real DB connection string. Make sure to NOT commit this file.**
 
-**5. Under the `adaptivecards-templates/private-templates-service/server`, run `npm run link-client`. Please note you may have to remove the command `sudo` from `private-templates-service\server\package.json`.**
+**5. Under the `adaptivecards-templates/private-templates-service/server`, run `npm run link-client`. Please note you may have to run  `sudo npm run link-client` if you are having errors with permissions.**
 
 **6. Inside of `adaptivecards-templates/private-templates-service/server` run `npm install`, run `tsc`, and run `npm run dev` to launch the client and server in your default browser.**
 

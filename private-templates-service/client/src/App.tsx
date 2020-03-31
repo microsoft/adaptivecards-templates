@@ -3,10 +3,11 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { UserAgentApplication, ClientAuthError } from "msal";
 import { AuthResponse } from 'msal';
 import { initializeIcons } from '@uifabric/icons';
+import IdleTimer from 'react-idle-timer';
 
 // Redux
 import { connect } from "react-redux";
-import { setAccessToken, getUserDetails, getOrgDetails, getProfilePicture, logout } from "./store/auth/actions";
+import { setAccessToken, setGraphAccessToken, getUserDetails, getOrgDetails, getProfilePicture, logout } from "./store/auth/actions";
 import { UserType } from "./store/auth/types";
 import { RootState } from "./store/rootReducer";
 
@@ -23,6 +24,9 @@ import config from "./Config";
 // CSS
 import "bootstrap/dist/css/bootstrap.css";
 import { OuterAppWrapper, MainAppWrapper, MainApp } from "./styled";
+
+// Constants
+import Constants from "./globalConstants"
 
 
 interface State {
@@ -42,6 +46,9 @@ const mapDispatchToProps = (dispatch: any) => {
     setAccessToken: (accessToken: AuthResponse) => {
       dispatch(setAccessToken(accessToken));
     },
+    setGraphAccessToken: (accessToken: AuthResponse) => {
+      dispatch(setGraphAccessToken(accessToken));
+    },
     getUserDetails: () => {
       dispatch(getUserDetails());
     },
@@ -59,6 +66,7 @@ const mapDispatchToProps = (dispatch: any) => {
 
 interface Props {
   setAccessToken: (accessToken: AuthResponse) => void;
+  setGraphAccessToken: (graphAccessToken: AuthResponse) => void;
   getUserDetails: () => void;
   getOrgDetails: () => void;
   getProfilePicture: () => void;
@@ -70,6 +78,7 @@ interface Props {
 
 class App extends Component<Props, State> {
   userAgentApplication: UserAgentApplication;
+  onIdle: () => any;
 
   constructor(props: Props) {
     super(props);
@@ -95,6 +104,7 @@ class App extends Component<Props, State> {
       // Enhance user object with data from Graph
       this.getUserInfo();
     }
+    this.onIdle = this._onIdle.bind(this);
   }
 
   render() {
@@ -110,6 +120,10 @@ class App extends Component<Props, State> {
 
     return (
       <Router>
+        <IdleTimer
+          element={document}
+          onIdle={this.onIdle}
+          timeout={Constants.LOGOUT_TIMEOUT} />
         <Switch>
           <Route exact path="/preview/:uuid/:version">
             <Shared authButtonMethod={this.login}></Shared>
@@ -123,9 +137,9 @@ class App extends Component<Props, State> {
               }
             />
             <MainAppWrapper>
-              <NavBar />
+              <NavBar/>
               <MainApp>
-                {error}
+                {!this.props.isAuthenticated && error}
                 <Switch>
                   <Route exact path="/">
                     <Dashboard authButtonMethod={this.login} />
@@ -133,8 +147,8 @@ class App extends Component<Props, State> {
                   <Route exact path="/designer">
                     <Designer authButtonMethod={this.login} />
                   </Route>
-                  <Route path="/template/:uuid">
-                    <PreviewModal />
+                  <Route path="/preview/:uuid">
+                    <PreviewModal authButtonMethod={this.login} />
                   </Route>
                 </Switch>
               </MainApp>
@@ -144,6 +158,12 @@ class App extends Component<Props, State> {
         <div id="modal" />
       </Router >
     );
+  }
+
+  _onIdle() {
+    if (this.props.isAuthenticated) {
+      this.logout();
+    }
   }
 
   login = async () => {
@@ -198,11 +218,17 @@ class App extends Component<Props, State> {
       // make a request to the Azure OAuth endpoint to get a token
       let accessToken = await this.userAgentApplication.acquireTokenSilent(
         {
+          scopes: [`api://${config.appId}/Templates.All`]
+        }
+      );
+      this.props.setAccessToken(accessToken);
+
+      let graphAccessToken = await this.userAgentApplication.acquireTokenSilent(
+        {
           scopes: config.scopes
         }
       );
-
-      this.props.setAccessToken(accessToken);
+      this.props.setGraphAccessToken(graphAccessToken);
 
       this.props.getUserDetails();
       this.props.getOrgDetails();

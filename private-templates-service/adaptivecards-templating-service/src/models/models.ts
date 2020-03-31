@@ -22,6 +22,7 @@ export interface ITemplateInstance {
   data?: JSON[];
   updatedAt?: Date;
   createdAt?: Date;
+  lastEditedUser?: string;
 }
 
 export interface ITemplate {
@@ -106,4 +107,13 @@ export interface TemplatePreview {
 export interface TagList {
   ownedTags: any[];
   allTags: any[];
+}
+
+/**
+ * @interface
+ * Request for batch update operations.
+ */
+export interface TemplateStateRequest {
+  version: string;
+  state: TemplateState;
 }

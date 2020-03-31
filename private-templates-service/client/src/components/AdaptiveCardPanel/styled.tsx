@@ -5,15 +5,19 @@ export const Container = styled.div`
   flex: 1 1 0px;
   display: flex;
   flex-direction: column;
-  margin: 0 24px 24px 0;
   background: white;
   height: 220px;
   min-width: 300px;
   max-width: 350px;
   border: 1px solid ${COLORS.BORDER2};
   border-radius: 5px;
+  cursor: pointer;
+  margin: 0 24px 24px 0;
   @media only screen and (max-width: 1399px) {
     margin-bottom: 20px;
+  }
+  &: hover {
+    background: ${COLORS.GREYHOVER};
   }
 `;
 
@@ -43,18 +47,29 @@ export const TemplateNameAndDateWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  align-items: baseline;
 `;
 export const TemplateName = styled.div`
   font-size: 0.95rem;
   font-family: Segoe UI Semibold;
   color: black;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 196px;
+  overflow: hidden;
 `;
 export const TemplateUpdatedAt = styled.div`
   font-family: Segoe UI Regular;
   font-size: 0.8rem;
-  color: grey;
+  color: ${COLORS.GREY3};
 `;
 
 export const Bottom = styled.div`
   padding: 20px;
+`;
+
+export const Align = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-right: 5px;
 `;

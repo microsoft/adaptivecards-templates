@@ -3,30 +3,49 @@ import React from "react";
 import { connect } from "react-redux";
 import { RootState } from "../../store/rootReducer";
 import { useHistory } from "react-router-dom";
+import { openModal } from '../../store/page/actions';
+import { ModalState } from '../../store/page/types';
 
 import { Template } from "adaptive-templating-service-typescript-node";
 
 import SearchBar from "./SearchBar";
 
-import { ActionButton } from "office-ui-fabric-react";
-
+import { ActionButton } from 'office-ui-fabric-react';
 import Logo from '../../assets/adaptive-cards-100-logo.png';
+import * as STRINGS from "../../assets/strings";
 
-import { Banner, Styledh1, StyledLogo, MobileBanner, StyledButton, Styledh2, StyledButtonContent } from './styled';
+import { Banner, Styledh1, StyledLogo, MobileBanner, BaselineBanner, StyledButton, Styledh2, StyledButtonContent, EditButton, BackButton, ButtonTextWrapper } from './styled';
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    openModal: () => {
+      dispatch(openModal(ModalState.EditName));
+    }
+  }
+}
 
 const mapStateToProps = (state: RootState) => {
   return {
     currentPageTitle: state.page.currentPageTitle,
     currentPage: state.page.currentPage,
-    template: state.currentTemplate.template
+    template: state.currentTemplate.template,
+    templateID: state.currentTemplate.templateID,
+    isFetching: state.currentTemplate.isFetching,
+    templateName: state.currentTemplate.templateName,
+    modalState: state.page.modalState
   }
 }
 
 interface NavBarProps {
+  openModal: () => void;
   currentPageTitle?: string;
   currentPage?: string;
   template?: Template;
+  templateName?: string;
+  isFetching: boolean;
   version?: string;
+  templateID?: string;
+  modalState?: ModalState;
 }
 
 
@@ -38,11 +57,23 @@ const NavBar = (props: NavBarProps) => {
     return (
       <Banner>
         <MobileBanner>
-          <StyledLogo src={Logo} />
+          <StyledLogo aria-label={STRINGS.LOGO_DESCRIPTION} src={Logo} />
           <Styledh1>{props.currentPageTitle || ""}</Styledh1>
         </MobileBanner>
       </Banner>
     );
+  }
+
+  const editName = () => {
+    props.openModal();
+  }
+
+  const onBackButton = () => {
+    if (history.length > 0) {
+      history.goBack();
+    } else {
+      history.replace('/')
+    }
   }
 
   switch (props.currentPage.toLowerCase()) {
@@ -50,7 +81,7 @@ const NavBar = (props: NavBarProps) => {
       return (
         <Banner>
           <MobileBanner>
-            <StyledLogo src={Logo} />
+            <StyledLogo aria-label={STRINGS.LOGO_DESCRIPTION} src={Logo} />
             <Styledh1>{props.currentPageTitle}</Styledh1>
           </MobileBanner>
           <SearchBar />
@@ -60,7 +91,7 @@ const NavBar = (props: NavBarProps) => {
       return (
         <Banner>
           <MobileBanner>
-            <StyledLogo src={Logo} />
+            <StyledLogo aria-label={STRINGS.LOGO_DESCRIPTION} src={Logo} />
             <Styledh1>{props.currentPageTitle}</Styledh1>
           </MobileBanner>
           <SearchBar />
@@ -70,11 +101,11 @@ const NavBar = (props: NavBarProps) => {
       return (
         <Banner>
           <MobileBanner>
-            <StyledLogo src={Logo} />
-            <Styledh1>{props.template ? props.template.name : props.currentPageTitle}</Styledh1>
-            <Styledh2>{props.version ? "Version " + props.version : ""}</Styledh2>
+            <StyledLogo aria-label={STRINGS.LOGO_DESCRIPTION} src={Logo} />
+            <Styledh1>{(props.templateID === "" && STRINGS.UNTITLEDCARD) || props.templateName}</Styledh1>
+            {props.templateID !== "" && <EditButton onClick={editName} iconProps={{ iconName: 'Edit' }} />}
           </MobileBanner>
-          <ActionButton onClick={() => { history.push("/") }}>
+          <ActionButton onClick={() => { history.push(`preview/${props.templateID}`) }}>
             <StyledButton>
               <StyledButtonContent>
                 Finish
@@ -87,17 +118,28 @@ const NavBar = (props: NavBarProps) => {
       return (
         <Banner>
           <MobileBanner>
-            <StyledLogo src={Logo} />
+            <StyledLogo aria-label={STRINGS.LOGO_DESCRIPTION} src={Logo} />
             <Styledh1>{props.template ? (props.version ? props.template.name + " - " + props.version : props.template.name) : "Preview"}</Styledh1>
             <Styledh2>{props.template ? "ID: " + props.template.id : ""}</Styledh2>
           </MobileBanner>
+        </Banner>
+      );
+    case "template":
+      return (
+        <Banner>
+          <BaselineBanner>
+            <StyledLogo aria-label={STRINGS.LOGO_DESCRIPTION} src={Logo} />
+            <Styledh1>{(props.template && props.template.name) || props.currentPageTitle}</Styledh1>
+            {!props.isFetching && <EditButton ariaLabel="Edit Template Name" onClick={editName} iconProps={{ iconName: 'Edit' }} tabIndex={props.modalState ? -1 : 0} />}
+          </BaselineBanner>
+          <BackButton iconProps={{ iconName: 'Back' }} onClick={onBackButton} tabIndex={props.modalState ? -1 : 0} ><ButtonTextWrapper>Back</ButtonTextWrapper></BackButton>
         </Banner>
       );
     default:
       return (
         <Banner>
           <MobileBanner>
-            <StyledLogo src={Logo} />
+            <StyledLogo aria-label={STRINGS.LOGO_DESCRIPTION} src={Logo} />
             <Styledh1>{props.currentPageTitle}</Styledh1>
           </MobileBanner>
         </Banner>
@@ -106,4 +148,4 @@ const NavBar = (props: NavBarProps) => {
 }
 
 
-export default connect(mapStateToProps)(NavBar);
+export default connect(mapStateToProps, mapDispatchToProps)(NavBar);

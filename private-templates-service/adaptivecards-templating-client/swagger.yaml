@@ -6,7 +6,7 @@ info:
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "adaptivecms.azurewebsites.net"
+host: "localhost:5000"
 tags:
 - name: "template"
   description: "Adaptive Cards Template"
@@ -214,7 +214,9 @@ paths:
         401:
           description: "Unauthorized user"
           schema: 
-            $ref: "#/definitions/BaseError"   
+            $ref: "#/definitions/BaseError"       
+      security:
+        - bearer_auth: [] 
   '/template/{templateId}/preview':
     get: 
       tags: 
@@ -239,6 +241,80 @@ paths:
           description: "successful operation"
           schema: 
             $ref: "#/definitions/TemplatePreview"
+  '/template/{templateId}/batch':
+    delete:
+      tags:
+        - "template"
+      summary: "Batch delete template version operation"  
+      operationId: "batchTemplateDelete"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "templateId"
+          in: "path"
+          description: "ID of template to update"
+          required: true
+          type: string
+        - in: "body"
+          name: "VersionList"
+          description: "template versions to delete"
+          required: true
+          schema:
+            properties: 
+              versions:
+                type: array
+                items:
+                  type: string
+      responses:
+        204: 
+          description: "successful operation"
+        404:
+          description: "Template does not exist"
+          schema: 
+            $ref: "#/definitions/BaseError"
+        401:
+          description: "Unauthorized user"
+          schema: 
+            $ref: "#/definitions/BaseError"        
+      security:
+        - bearer_auth: []
+    post:
+      tags: 
+        - "template"
+      summary: "Batch update template states"
+      description: "Update existing template given id"
+      produces:
+        - "application/json"
+      operationId: "batchTemplateUpdate"
+      parameters:
+        - name: "templateId"
+          in: "path"
+          description: "ID of template to update"
+          required: true
+          type: string
+        - in: "body"
+          name: "body"
+          description: "list of template versions and desired states"
+          required: true
+          schema:
+            $ref: "#/definitions/UpdateTemplateStateList"
+      responses:
+        201: 
+          description: "successful operation"
+        400:
+          description: "Unable to create given template"
+          schema: 
+            $ref: "#/definitions/BaseError"
+        401:
+          description: "Unauthorized user"
+          schema: 
+            $ref: "#/definitions/BaseError" 
+        404:
+          description: "Template does not exist"
+          schema: 
+            $ref: "#/definitions/BaseError"
+      security:
+        - bearer_auth: []
   '/template/recent':
     get: 
       tags: 
@@ -272,16 +348,7 @@ paths:
           schema: 
             $ref: "#/definitions/BaseError" 
       security:
-        - bearer_auth: []
-      responses: 
-        200: 
-          description: "successful operation"
-        401: 
-          description: "Unauthorized user"
-          schema: 
-            $ref: "#/definitions/BaseError"   
-      security:
-        - bearer_auth: []    
+        - bearer_auth: [] 
     delete: 
       tags: 
         - "user"
@@ -356,7 +423,7 @@ definitions:
       _id: 
         type: string
       json: 
-        type: string
+        type: object
         format: JSON
       version: 
         type: string
@@ -384,6 +451,8 @@ definitions:
       createdAt:
         type: string
         format: Date
+      lastEditedUser: 
+        type: string
   PostedTemplate:
     type: object
     properties: 
@@ -465,7 +534,7 @@ definitions:
       version:
         type: string
       json:
-        type: string
+        type: object
         format: JSON
       state: 
         type: string
@@ -488,10 +557,27 @@ definitions:
         items:
           type: string
       owner: 
-        $ref: "#/definitions/TemplatePreviewUser"
+        type: string
   TemplatePreview: 
     type: object
     properties:
       template:
         $ref: "#/definitions/TemplateInfo"
-        
+  UpdateTemplateState:
+    type: object
+    properties:
+      version: 
+        type: string
+      state: 
+        enum:
+          - "draft"
+          - "live"
+          - "deprecated"
+        type: string
+  UpdateTemplateStateList:
+    type: object
+    properties:
+      templates:
+        type: array
+        items:
+          $ref: "#/definitions/UpdateTemplateState"  

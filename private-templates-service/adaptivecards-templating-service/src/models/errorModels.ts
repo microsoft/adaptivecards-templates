@@ -23,7 +23,8 @@ export enum ApiError {
   InvalidAuthenticationToken = "InvalidAuthenticationToken",
   UserNotFound = "UserNotFound",
   DeleteUserInfoFailed = "DeleteUserInfoFailed",
-  DeleteTemplateVersionFailed = "DeleteTemplateVersionFailed"
+  DeleteTemplateVersionFailed = "DeleteTemplateVersionFailed",
+  DataBindingFailed = "DataBindingFailed",
 }
 
 /**

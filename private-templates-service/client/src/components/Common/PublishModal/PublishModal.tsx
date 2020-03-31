@@ -16,6 +16,9 @@ import { closeModal } from '../../../store/page/actions';
 import AdaptiveCard from '../AdaptiveCard';
 import ModalHOC from '../../../utils/ModalHOC';
 
+// Strings
+import * as STRINGS from '../../../assets/strings';
+
 // Styles
 import {
   BackDrop,
@@ -73,10 +76,10 @@ class PublishModal extends React.Component<Props> {
               <AdaptiveCardPanel>
                 <AdaptiveCard cardtemplate={template} templateVersion={this.props.templateVersion} />
               </AdaptiveCardPanel>
-              <SemiBoldText>
+              <SemiBoldText style={{ color: 'pink' }}>
                 Notified
               </SemiBoldText>
-              <SearchBox placeholder="Search for people" />
+              <SearchBox aria-label={STRINGS.SEARCH_FOR_PEOPLE} placeholder={STRINGS.SEARCH_FOR_PEOPLE} />
             </CenterPanelLeft>
             <CenterPanelRight>
               <TextField label="Comments" placeholder="Enter any comments you may have for your reviewers to see. (Optional)" multiline autoAdjustHeight />

@@ -5,20 +5,26 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { RootState } from '../../../../store/rootReducer';
 import { openModal, closeModal } from '../../../../store/page/actions';
 import { ModalState } from '../../../../store/page/types';
-import { updateCurrentTemplateVersion } from '../../../../store/currentTemplate/actions';
+import { updateCurrentTemplateVersion, updateTemplateTags } from '../../../../store/currentTemplate/actions';
 
 import { Template, TemplateInstance, PostedTemplate } from 'adaptive-templating-service-typescript-node';
 
 import { getLatestVersion } from "../../../../utils/TemplateUtil";
 
+import { getOwnerName, getOwnerProfilePicture } from "../../../../store/templateOwner/actions";
+import { OwnerType } from "../../../../store/templateOwner/types";
+import OwnerAvatar from "../../RecentlyViewed/OwnerAvatar";
+
 import PublishModal from '../../../Common/PublishModal';
 import UnpublishModal from '../../../Common/UnpublishModal';
 import Tags from '../../../Common/Tags';
 import ShareModal from '../../../Common/ShareModal';
-
+import EditNameModal from '../../../Common/EditNameModal';
+import DeleteModal from '../../../Common/DeleteModal';
 import VersionCard from './VersionCard';
 
-import { ActionButton, IDropdownOption } from 'office-ui-fabric-react';
+import { IDropdownOption, ActionButton } from 'office-ui-fabric-react';
+import { SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 
 import { EDIT_IN_DESIGNER, DELETE, SHARE, PUBLISH, UNPUBLISH } from "../../../../assets/strings"
 import { THEME } from '../../../../globalStyles';
@@ -42,6 +48,7 @@ import {
   TagsWrapper,
   StyledVersionDropdown,
   DropdownStyles,
+  CenteredSpinner,
 } from './styled';
 
 const buttons = [
@@ -73,7 +80,6 @@ const cards = [
   },
   {
     header: 'Usage',
-    body: (<UsageNumber>56</UsageNumber>),
     bodyText: 'Requests'
   }
 ];
@@ -85,17 +91,23 @@ interface Props extends RouteComponentProps {
   modalState?: ModalState;
   openModal: (modalState: ModalState) => void;
   closeModal: () => void;
+  updateTags: (tags: string[]) => void;
+  isFetchingTags: boolean;
+  isFetchingOwnerName: boolean;
+  isFetchingOwnerPic: boolean;
+  getOwnerName: (oID: string) => void;
+  getOwnerProfilePicture: (oID: string) => void;
+  owner?: OwnerType;
 }
-
-interface State {
-  version: string;
-}
-
 
 const mapStateToProps = (state: RootState) => {
   return {
     modalState: state.page.modalState,
-    version: state.currentTemplate.version
+    version: state.currentTemplate.version,
+    isFetchingTags: state.currentTemplate.isFetchingTags,
+    owner: state.templateOwner.owners,
+    isFetchingOwnerName: state.templateOwner.isFetchingName,
+    isFetchingOwnerPic: state.templateOwner.isFetchingPicture
   };
 };
 
@@ -109,16 +121,28 @@ const mapDispatchToProps = (dispatch: any) => {
     },
     updateCurrentTemplateVersion: (template: Template, version: string) => {
       dispatch(updateCurrentTemplateVersion(template, version))
+    },
+    updateTags: (tags: string[]) => {
+      dispatch(updateTemplateTags(tags))
+    },
+    getOwnerName: (oid: string) => {
+      dispatch(getOwnerName(oid));
+    },
+    getOwnerProfilePicture: (oid: string) => {
+      dispatch(getOwnerProfilePicture(oid));
     }
   }
 };
 
-function getTemplateState(template: Template, version: string): PostedTemplate.StateEnum {
-  if (!template.instances || template.instances.length === 0) return PostedTemplate.StateEnum.Draft;
-  for (let instance of template.instances) {
-    if (instance.version === version) return instance.state || PostedTemplate.StateEnum.Draft;
+function getTemplateInstance(template: Template, version: string): TemplateInstance {
+  for (let instance of template.instances!) {
+    if (instance.version === version) return instance;
   }
-  return PostedTemplate.StateEnum.Draft;
+  return template.instances![0];
+}
+
+interface State {
+  version: string
 }
 
 class TemplateInfo extends React.Component<Props, State> {
@@ -126,6 +150,17 @@ class TemplateInfo extends React.Component<Props, State> {
     super(props);
     const currentVersion = getLatestVersion(this.props.template);
     this.state = { version: currentVersion }
+    let templateInstance = getTemplateInstance(this.props.template, currentVersion);
+    this.props.getOwnerName(templateInstance.lastEditedUser!);
+    this.props.getOwnerProfilePicture(templateInstance.lastEditedUser!);
+  }
+
+  componentDidUpdate(prevProps: Props, prevState: State) {
+    let templateInstance = getTemplateInstance(this.props.template, this.state.version);
+    if (this.state.version !== prevState.version && templateInstance.lastEditedUser){
+      this.props.getOwnerName(templateInstance.lastEditedUser!);
+      this.props.getOwnerProfilePicture(templateInstance.lastEditedUser!);
+    }
   }
 
   versionList = (instances: TemplateInstance[] | undefined): IDropdownOption[] => {
@@ -145,29 +180,39 @@ class TemplateInfo extends React.Component<Props, State> {
     this.props.updateCurrentTemplateVersion(this.props.template, version);
     this.props.onSwitchVersion(version);
   }
+  saveTags = (tags: string[]) => {
+    this.props.updateTags(tags);
+  }
+
+  tagRemove = (tag: string) => {
+    if (this.props.template.tags) {
+      const newTags = this.props.template.tags.filter((existingTag: string) => existingTag !== tag);
+      this.props.updateTags(newTags);
+    }
+  }
 
   render() {
     const {
-      isLive,
       tags,
-      createdAt,
+      updatedAt,
       instances,
     } = this.props.template;
+    const { isFetchingTags, isFetchingOwnerName, isFetchingOwnerPic } = this.props;
 
-    let createdAtParsed = "";
-
-    if (createdAt) {
-      const createdAtDate = new Date(createdAt);
-      createdAtParsed = createdAtDate.toLocaleString();
+    let timestampParsed = "";
+    if (updatedAt) {
+      const tempDate = new Date(updatedAt);
+      timestampParsed = tempDate.toLocaleString();
     }
 
     const { history } = this.props;
     if (!history) {
       return (<div>Error loading page</div>)
     }
-    let templateState = getTemplateState(this.props.template, this.state.version);
+    let templateInstance = getTemplateInstance(this.props.template, this.state.version);
+    let templateState = templateInstance.state || PostedTemplate.StateEnum.Draft;
     return (
-      < OuterWrapper >
+      <OuterWrapper>
         <HeaderWrapper>
           <TopRowWrapper>
             <TitleWrapper>
@@ -178,19 +223,22 @@ class TemplateInfo extends React.Component<Props, State> {
                   onChange={this.onVersionChange}
                   theme={THEME.LIGHT}
                   styles={DropdownStyles}
+                  ariaLabel="Version List Dropdown"
+                  tabIndex={this.props.modalState ? -1 : 0}
                 />
               </Title>
               <StatusIndicator state={templateState} />
               <Status>{PostedTemplate.StateEnum[templateState]}</Status>
             </TitleWrapper>
             <TimeStamp>
-              Created {createdAtParsed}
+              Updated {timestampParsed}
             </TimeStamp>
           </TopRowWrapper>
           <ActionsWrapper>
             {buttons.map((val) => (
               <ActionButton key={val.text} iconProps={val.icon} allowDisabledFocus
-                onClick={() => { onActionButtonClick(this.props, this.state, val) }}>
+                onClick={() => { onActionButtonClick(this.props, this.state, val) }}
+                tabIndex={this.props.modalState ? -1 : 0}>
                 {val.text === 'Publish' && templateState === PostedTemplate.StateEnum.Live ? val.altText : val.text}
               </ActionButton>
             ))}
@@ -204,9 +252,11 @@ class TemplateInfo extends React.Component<Props, State> {
                   {val.header}
                 </CardHeader>
                 <CardBody>
-                  {val.iconName && <IconWrapper iconName={val.iconName}></IconWrapper>}
-                  {val.body}
-                  {val.bodyText}
+                  {val.iconName && ((isFetchingOwnerName || isFetchingOwnerPic) ?
+                    <CenteredSpinner size={SpinnerSize.large} /> : 
+                    <IconWrapper><OwnerAvatar sizeInPx={50} oID={templateInstance.lastEditedUser!}/></IconWrapper>)}
+                  {val.header === "Usage" && <UsageNumber>{templateInstance.numHits}</UsageNumber>}
+                  {(val.header === "Owner")? (this.props.owner && this.props.owner.displayNames) ? this.props.owner.displayNames[templateInstance.lastEditedUser!] : "" : val.bodyText}
                 </CardBody>
               </Card>
             ))}
@@ -215,7 +265,10 @@ class TemplateInfo extends React.Component<Props, State> {
             <CardHeader>Tags</CardHeader>
             <CardBody>
               <TagsWrapper>
-                <Tags tags={tags} allowAddTag={true} allowEdit={true} />
+                {isFetchingTags ?
+                  <CenteredSpinner size={SpinnerSize.large} />
+                  : <Tags updateTags={this.saveTags} tagRemove={this.tagRemove} tags={tags} allowAddTag={true} allowEdit={true} />
+                }
               </TagsWrapper>
             </CardBody>
           </Card>
@@ -226,13 +279,15 @@ class TemplateInfo extends React.Component<Props, State> {
         {this.props.modalState === ModalState.Publish && <PublishModal template={this.props.template} templateVersion={this.state.version} />}
         {this.props.modalState === ModalState.Unpublish && <UnpublishModal template={this.props.template} templateVersion={this.state.version} />}
         {this.props.modalState === ModalState.Share && <ShareModal template={this.props.template} templateVersion={this.state.version} />}
+        {this.props.modalState === ModalState.Delete && <DeleteModal template={this.props.template} templateVersion={this.state.version} />}
+        {this.props.modalState === ModalState.EditName && <EditNameModal />}
       </OuterWrapper>
     );
   }
 }
 
 function onActionButtonClick(props: Props, state: State, val: any) {
-  let templateState = getTemplateState(props.template, state.version);
+  let templateState = getTemplateInstance(props.template, state.version).state || PostedTemplate.StateEnum.Draft;
 
   switch (val.text) {
     case SHARE:
@@ -241,6 +296,9 @@ function onActionButtonClick(props: Props, state: State, val: any) {
     case EDIT_IN_DESIGNER:
       const { history } = props;
       if (history) history.push('/designer');
+      break;
+    case DELETE:
+      props.openModal(ModalState.Delete);
       break;
     case PUBLISH:
       switch (templateState) {
@@ -256,6 +314,7 @@ function onActionButtonClick(props: Props, state: State, val: any) {
         default:
           break;
       }
+      break;
     default:
       break;
   }

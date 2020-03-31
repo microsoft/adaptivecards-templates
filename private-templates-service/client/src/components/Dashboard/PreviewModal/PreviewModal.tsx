@@ -2,6 +2,15 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
+import CortanaSkills from 'adaptivecards-designer/lib/hostConfigs/cortana-skills.json';
+import TeamsDark from 'adaptivecards-designer/lib/hostConfigs/microsoft-teams-dark.json';
+import TeamsLight from 'adaptivecards-designer/lib/hostConfigs/microsoft-teams-light.json';
+import OutlookDesktop from 'adaptivecards-designer/lib/hostConfigs/outlook-desktop.json';
+import Default from 'adaptivecards-designer/lib/hostConfigs/sample.json';
+import Skype from 'adaptivecards-designer/lib/hostConfigs/skype.json';
+import Webchat from 'adaptivecards-designer/lib/hostConfigs/webchat.json';
+import WindowsNotification from 'adaptivecards-designer/lib/hostConfigs/windows-notification.json';
+import WindowsTimeline from 'adaptivecards-designer/lib/hostConfigs/windows-timeline.json';
 
 import { setPage } from '../../../store/page/actions';
 import { RootState } from '../../../store/rootReducer';
@@ -11,15 +20,30 @@ import { getLatestVersion } from "../../../utils/TemplateUtil";
 
 import AdaptiveCard from '../../Common/AdaptiveCard'
 import TemplateInfo from './TemplateInfo';
+import requireAuthentication from '../../../utils/requireAuthentication';
 
-import { ModalWrapper, ACPanel, ACWrapper, DescriptorWrapper, CenteredSpinner } from './styled';
+import { ModalWrapper, ACOuterPanel, StyledDropdown, ACPanel, ACWrapper, DescriptorWrapper, CenteredSpinner } from './styled';
 
 import { Template } from 'adaptive-templating-service-typescript-node';
+import { ModalState } from '../../../store/page/types';
+
+const DropdownOptions = [
+  { key: 'sample', text: 'Default', value: Default },
+  { key: 'cortana-skills', text: 'Cortana Skills', value: CortanaSkills },
+  { key: 'microsoft-teams-dark', text: 'Microsoft Teams - Dark', value: TeamsDark },
+  { key: 'microsoft-teams-light', text: 'Microsoft Teams - Light', value: TeamsLight },
+  { key: 'outlook-desktop', text: 'Outlook Desktop', value: OutlookDesktop },
+  { key: 'skype', text: 'Skype', value: Skype },
+  { key: 'webchat', text: 'Webchat', value: Webchat },
+  { key: 'windows-notification', text: 'Windows Notification', value: WindowsNotification },
+  { key: 'windows-timeline', text: 'Windows Timeline', value: WindowsTimeline }
+];
 
 const mapStateToProps = (state: RootState) => {
   return {
     template: state.currentTemplate.template,
     isFetching: state.currentTemplate.isFetching,
+    modalState: state.page.modalState
   }
 }
 
@@ -43,17 +67,23 @@ interface Props extends RouteComponentProps<MatchParams> {
   isFetching?: boolean;
   setPage: (currentPageTitle: string, currentPage: string) => void;
   getTemplate: (templateID: string) => void;
+  modalState?: ModalState
 }
 
 interface State {
   templateVersion: string;
+  selectedItem: { key: string, text: string, value: any };
 }
 
 
 class PreviewModal extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { templateVersion: getLatestVersion(this.props.template) };
+    this.state = {
+      templateVersion: getLatestVersion(this.props.template),
+      selectedItem: { key: 'sample', text: 'Default', value: Default },
+    };
+
     this.props.getTemplate(this.props.match.params.uuid);
   }
 
@@ -81,21 +111,32 @@ class PreviewModal extends React.Component<Props, State> {
     }
   }
 
+  hostConfigChange = (event: React.FormEvent<HTMLDivElement>, item: any) => {
+    this.setState({ selectedItem: item });
+  }
+
   render() {
     const {
       isFetching,
       template,
     } = this.props;
 
+    const {
+      selectedItem
+    } = this.state;
+
     return (
       <ModalWrapper>
         {template && !isFetching ?
           <React.Fragment>
-            <ACPanel>
-              <ACWrapper>
-                <AdaptiveCard cardtemplate={template} templateVersion={this.state.templateVersion} />
-              </ACWrapper>
-            </ACPanel>
+            <ACOuterPanel>
+              <StyledDropdown selectedKey={selectedItem.key} onChange={this.hostConfigChange} options={DropdownOptions} tabIndex={this.props.modalState ? -1 : 0} />
+              <ACPanel>
+                <ACWrapper>
+                  <AdaptiveCard cardtemplate={template} templateVersion={this.state.templateVersion} hostConfig={selectedItem.value} />
+                </ACWrapper>
+              </ACPanel>
+            </ACOuterPanel>
             <DescriptorWrapper>
               <TemplateInfo template={template} onSwitchVersion={this.toggleTemplateVersion} />
             </DescriptorWrapper>
@@ -107,4 +148,4 @@ class PreviewModal extends React.Component<Props, State> {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(PreviewModal));
+export default connect(mapStateToProps, mapDispatchToProps)(requireAuthentication(withRouter(PreviewModal)));
