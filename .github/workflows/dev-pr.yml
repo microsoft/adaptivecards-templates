@@ -37,7 +37,7 @@ steps:
     npm install
     cd ..
     cd client
-    npm run build:staging --if-present
+    npm run build:dev --if-present
     cd ../server
     npm run deploy
 
