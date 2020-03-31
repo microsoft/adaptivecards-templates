@@ -34,19 +34,19 @@ steps:
     echo cd ../../client
     cd ../../client
     echo npm link adaptive-templating-service-typescript-node
-    npm link adaptive-templating-service-typescript-node
+    npm link ../adaptivecards-templating-client/typescript
     npm install
     cd src 
-    npm link adaptive-templating-service-typescript-node
+    npm link ../../adaptivecards-templating-client/typescript
     cd ..
     cd ..
-    cd private-templates-service/adaptivecards-templating-service
+    cd adaptivecards-templating-service
     sudo npm link
     cd ../server
     npm link adaptivecards-templating-service
     npm install
     cd ..
-    cd private-templates-service/client
+    cd client
     npm run build:staging --if-present
     cd ../server
     npm run deploy
