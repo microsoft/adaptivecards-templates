@@ -30,7 +30,7 @@ steps:
     echo npm run build
     npm run build
     echo sudo npm link
-    sudo npm link
+    npm link
     echo cd ../../client
     cd ../../client
     echo npm link adaptive-templating-service-typescript-node
@@ -52,10 +52,10 @@ steps:
     npm run deploy
 - task: PublishBuildArtifacts@1
   inputs:
-    PathtoPublish: '$(System.DefaultWorkingDirectory)/private-templates-service/'
+    PathtoPublish: '$(System.DefaultWorkingDirectory)/'
 - task: ArchiveFiles@2
   inputs:
-    rootFolderOrFile: '$(System.DefaultWorkingDirectory)/private-templates-service/'
+    rootFolderOrFile: '$(System.DefaultWorkingDirectory)/'
     includeRootFolder: false
 - task: AzureWebApp@1
   displayName: 'Azure Web App Deploy'
@@ -63,4 +63,4 @@ steps:
     azureSubscription: $(azureSubscription)
     appType: webAppLinux
     appName: $(appName)
-    package: $(System.ArtifactsDirectory)/private-templates-service/**/*.zip
+    package: $(System.ArtifactsDirectory)/**/*.zip
