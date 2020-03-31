@@ -1,4 +1,4 @@
-import { SET_SKIP_LINK_CONTENT_ID, SkipLinkAction, SkipLinkState } from "./types";
+import { SET_SKIP_LINK_CONTENT_ID, SkipLinkAction } from "./types";
 
 export function setSkipLinkContentID(id: string): SkipLinkAction {
   return {
