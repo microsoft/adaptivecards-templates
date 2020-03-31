@@ -1,5 +1,5 @@
 import { SkipLinkState, SET_SKIP_LINK_CONTENT_ID, SkipLinkAction } from "./types";
-import { DASHBOARD_MAIN_CONTENT_ID } from "../../components/Dashboard/Dashboard";
+import { DASHBOARD_MAIN_CONTENT_ID } from "../../components/Dashboard";
 
 const initialState: SkipLinkState = {
   contentID: DASHBOARD_MAIN_CONTENT_ID
