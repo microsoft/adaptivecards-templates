@@ -23,11 +23,23 @@ import EditNameModal from '../../../Common/EditNameModal';
 import DeleteModal from '../../../Common/DeleteModal';
 import VersionCard from './VersionCard';
 
-import { IDropdownOption, ActionButton } from 'office-ui-fabric-react';
+import { IDropdownOption, ActionButton, TooltipHost } from 'office-ui-fabric-react';
 import { SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 
-import { EDIT_IN_DESIGNER, DELETE, SHARE, PUBLISH, UNPUBLISH } from "../../../../assets/strings"
 import { THEME } from '../../../../globalStyles';
+import {
+  EDIT_IN_DESIGNER,
+  DELETE,
+  SHARE,
+  PUBLISH,
+  UNPUBLISH,
+  EDIT_IN_DESIGNER_TOOLTIP,
+  DELETE_BUTTON_TOOLTIP,
+  SHARE_BUTTON_TOOLTIP,
+  PUBLISH_BUTTON_TOOLTIP,
+  UNPUBLISH_BUTTON_TOOLTIP
+} from "../../../../assets/strings";
+import { TooltipContainer } from '../styled';
 import {
   OuterWrapper,
   HeaderWrapper,
@@ -50,25 +62,29 @@ import {
   DropdownStyles,
   CenteredSpinner,
 } from './styled';
-import TooltipPublishButton from './TooltipPublishButton';
 
 const buttons = [
   {
     text: EDIT_IN_DESIGNER,
-    icon: { iconName: 'SingleColumnEdit' }
+    icon: { iconName: 'SingleColumnEdit' },
+    tooltip: EDIT_IN_DESIGNER_TOOLTIP
   },
   {
     text: DELETE,
-    icon: { iconName: 'Delete' }
+    icon: { iconName: 'Delete' },
+    tooltip: DELETE_BUTTON_TOOLTIP
   },
   {
     text: SHARE,
-    icon: { iconName: 'AddFriend' }
+    icon: { iconName: 'AddFriend' },
+    tooltip: SHARE_BUTTON_TOOLTIP
   },
   {
     text: PUBLISH,
     altText: UNPUBLISH,
-    icon: { iconName: 'PublishContent' }
+    icon: { iconName: 'PublishContent' },
+    tooltip: PUBLISH_BUTTON_TOOLTIP,
+    altTooltip: UNPUBLISH_BUTTON_TOOLTIP
   },
 ];
 
@@ -192,6 +208,43 @@ class TemplateInfo extends React.Component<Props, State> {
     }
   }
 
+  tooltipButton = (val: any, templateState: PostedTemplate.StateEnum) => {
+    const tooltipID = val.text.replace(" ", "_").trim();
+    if (val.text === "Publish") {
+      return (
+        <TooltipContainer>
+          <TooltipHost id={tooltipID} content={templateState === PostedTemplate.StateEnum.Live ? val.altTooltip : val.tooltip}>
+            <ActionButton key={templateState === PostedTemplate.StateEnum.Live ? val.altText : val.text}
+              iconProps={val.icon}
+              allowDisabledFocus
+              onClick={() => { onActionButtonClick(this.props, this.state, val) }}
+              tabIndex={this.props.modalState ? -1 : 0}
+              ariaDescription={tooltipID}>
+              {templateState === PostedTemplate.StateEnum.Live ? val.altText : val.text}
+            </ActionButton>
+          </TooltipHost>
+        </TooltipContainer>
+      );
+    }
+    else {
+      return (
+        <TooltipContainer>
+          <TooltipHost id={tooltipID} content={val.tooltip}>
+            <ActionButton key={val.text}
+              iconProps={val.icon}
+              allowDisabledFocus
+              onClick={() => { onActionButtonClick(this.props, this.state, val) }}
+              tabIndex={this.props.modalState ? -1 : 0}
+              ariaDescription={tooltipID}>
+              {val.text}
+            </ActionButton>
+          </TooltipHost>
+        </TooltipContainer>
+      );
+    }
+
+  }
+
   render() {
     const {
       tags,
@@ -236,19 +289,7 @@ class TemplateInfo extends React.Component<Props, State> {
             </TimeStamp>
           </TopRowWrapper>
           <ActionsWrapper>
-            {buttons.map((val) => (val.text === "Publish" ?
-              <TooltipPublishButton val={val}
-                templateState={templateState}
-                openModal={this.props.openModal}
-                modalState={this.props.modalState} /> :
-              <ActionButton key={val.text}
-                iconProps={val.icon}
-                allowDisabledFocus
-                onClick={() => { onActionButtonClick(this.props, this.state, val) }}
-                tabIndex={this.props.modalState ? -1 : 0}>
-                {val.text}
-              </ActionButton>
-            ))}
+            {buttons.map((val) => this.tooltipButton(val, templateState))}
           </ActionsWrapper>
         </HeaderWrapper>
         <MainContentWrapper>
@@ -294,6 +335,7 @@ class TemplateInfo extends React.Component<Props, State> {
 }
 
 function onActionButtonClick(props: Props, state: State, val: any) {
+  const templateState = getTemplateInstance(props.template, state.version).state || PostedTemplate.StateEnum.Draft;
   switch (val.text) {
     case SHARE:
       props.openModal(ModalState.Share);
@@ -304,6 +346,21 @@ function onActionButtonClick(props: Props, state: State, val: any) {
       break;
     case DELETE:
       props.openModal(ModalState.Delete);
+      break;
+    case PUBLISH:
+      switch (templateState) {
+        case PostedTemplate.StateEnum.Draft:
+          props.openModal(ModalState.Publish);
+          break;
+        case PostedTemplate.StateEnum.Live:
+          props.openModal(ModalState.Unpublish);
+          break;
+        case PostedTemplate.StateEnum.Deprecated:
+          props.openModal(ModalState.Publish);
+          break;
+        default:
+          break;
+      }
       break;
     default:
       break;
