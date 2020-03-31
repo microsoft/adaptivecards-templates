@@ -7,6 +7,7 @@ import { ITemplate, JSONResponse, ITemplateInstance, IUser } from ".";
 import { SortBy, SortOrder, TemplatePreview, TemplateState, TemplateInstancePreview, TagList, TemplateStateRequest } from "./models/models";
 import { updateTemplateToLatestInstance, getTemplateVersion, isValidJSONString, setTemplateInstanceParam, incrementVersion, anyVersionsLive, sortTemplateByVersion, parseToken, getMostRecentVersion, checkValidTemplateState, incrementVersionStr, createCard } from "./util/templateutils";
 import logger from "./util/logger"
+import { sortByField } from "./util/inmemorydbutils/inmemorydbutils";
 export class TemplateServiceClient {
   private storageProvider: StorageProvider;
   private authProvider: AuthenticationProvider;
@@ -702,7 +703,7 @@ export class TemplateServiceClient {
      * @param {string} templateName - name to query for
      * @param {string} version - version number, used with templateId
      * @param {boolean} owned - If false, will retrieve all public templates regardless of owner
-     * @param {SortBy} sortBy - one of dateCreated, dateModified, alphabetical
+     * @param {SortBy} sortBy - one of dateCreated, dateUpdated, alphabetical
      * @param {SortOrder} sortOrder - one of ascending, descending
      * @param {string[]} tags - filter by one or more tags
      * @param {boolean} isClient - used to ignore updating the hit number on a template
@@ -737,13 +738,13 @@ export class TemplateServiceClient {
       tags: tags,
       owner: owned ? userId : undefined
     };
-
+    console.log("templateQuery: " ,templateQuery, " sortBy: ", sortBy," sortOrder: ", sortOrder)
     let response = await this.storageProvider.getTemplates(templateQuery, sortBy, sortOrder);
 
     if (!response.success || !response.result) return response;
 
     let templates: ITemplate[] = response.result;
-
+    console.log("templates: ",templates)
     if (owned === false) {
       templates = await this._getOwnedTemplates(authId, templates, owned);
     }
@@ -1139,15 +1140,24 @@ export class TemplateServiceClient {
 
     router.get("/", (req: Request, res: Response, _next: NextFunction) => {
       let token = parseToken(req.headers.authorization!);
+      console.log("sortBy: ",req.query.sortBy," sortOrder: ", req.query.sortOrder);
+      console.log(req.query.sortBy in SortBy,"is it in sortby")
+      console.log("sortby:", SortBy)
+      
       if (req.query.sortBy && !(req.query.sortBy in SortBy)) {
+        console.log("fail in first")
         const err = new TemplateError(ApiError.InvalidQueryParam, "Sort by value is not valid.");
         return res.status(400).json({ error: err });
       }
 
       if (req.query.sortOrder && !(req.query.sortOrder in SortOrder)) {
+        console.log("fail in second")
         const err = new TemplateError(ApiError.InvalidQueryParam, "Sort order value is not valid.");
         return res.status(400).json({ error: err });
       }
+
+      let sortBy: SortBy =  SortBy[req.query.sortBy as keyof typeof SortBy];
+      let sortOrder: SortOrder = SortOrder[req.query.sortOrder as keyof typeof SortOrder];
 
       let isPublished: boolean | undefined = req.query.isPublished ? req.query.isPublished.toLowerCase() === "true" : undefined;
       let owned: boolean | undefined = req.query.owned ? req.query.owned.toLowerCase() === "true" : undefined;
@@ -1156,7 +1166,7 @@ export class TemplateServiceClient {
       let tagList: string[] = req.query.tags ? req.query.tags.split(",") : undefined;
 
       this.getTemplates(token, undefined, isPublished, req.query.name, req.query.version,
-        owned, req.query.sortBy, req.query.sortOrder, tagList, isClient).then(response => {
+        owned, sortBy, sortOrder, tagList, isClient).then(response => {
           if (!response.success) {
             return res.status(200).json({ templates: [] });
           }
