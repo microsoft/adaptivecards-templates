@@ -23,7 +23,7 @@ steps:
     cd private-templates-service/adaptivecards-templating-service
     npm install
     cd ..
-    cd private-templates-service/adaptivecards-templating-client/typescript
+    cd adaptivecards-templating-client/typescript
     npm install
     npm run build
     sudo npm link
