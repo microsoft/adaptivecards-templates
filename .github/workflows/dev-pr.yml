@@ -20,9 +20,12 @@ steps:
     versionSpec: '12.x'
 
 - script: |
+    ls
+    echo $(System.DefaultWorkingDirectory)
     cd private-templates-service/adaptivecards-templating-service
     npm install
     cd ..
+    ls
     cd adaptivecards-templating-client/typescript
     npm install
     npm run build
