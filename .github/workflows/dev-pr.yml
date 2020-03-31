@@ -15,25 +15,15 @@ steps:
 - script: |
     ls
     echo $(System.DefaultWorkingDirectory)
-    echo cd private-templates-service/adaptivecards-templating-service
     cd private-templates-service/adaptivecards-templating-service
-    echo npm install
     npm install
-    echo cd ..
     cd ..
-    echo ls
     ls
-    echo cd adaptivecards-templating-client/typescript
     cd adaptivecards-templating-client/typescript
-    echo npm install
     npm install
-    echo npm run build
     npm run build
-    echo sudo npm link
     npm link
-    echo cd ../../client
     cd ../../client
-    echo npm link adaptive-templating-service-typescript-node
     npm link ../adaptivecards-templating-client/typescript
     npm install
     cd src 
@@ -52,13 +42,18 @@ steps:
     npm run deploy
 
 - task: ArchiveFiles@2
+  displayName: 'Archive the function source code'
   inputs:
-    rootFolderOrFile: '$(System.DefaultWorkingDirectory)/'
+    rootFolderOrFile: '$(system.defaultworkingdirectory)/private-templates-service'
     includeRootFolder: false
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    replaceExistingArchive: true
 
 - task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact: drop'
   inputs:
-    PathtoPublish: '$(System.DefaultWorkingDirectory)/'
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
 
 - task: AzureWebApp@1
   displayName: 'Azure Web App Deploy'
