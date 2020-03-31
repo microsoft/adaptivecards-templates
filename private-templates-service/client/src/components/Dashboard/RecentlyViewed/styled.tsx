@@ -11,8 +11,8 @@ export const RecentlyViewedBodyRow = styled.div`
   display: flex;
   flex-direction: row;
   flex: 1;
-  padding-top: 20px;
   padding-left: 50px;
+  padding-bottom: 2px;
   justify-content: flex-start;
 `;
 
@@ -34,6 +34,8 @@ export const RecentlyViewedContainer = styled(Card)`
   border: 1px solid ${COLORS.BORDER2};
   border-radius: 5px;
   justify-content: flex-start;
+  margin-top: 10px;
+  padding-bottom: 0px;
 `;
 
 export const RecentlyViewedBody = styled.div`
@@ -42,12 +44,17 @@ export const RecentlyViewedBody = styled.div`
   justify-content: flex-start;
 `;
 
-export const RecentlyViewedItem = styled.h6`
+export const RecentlyViewedItem = styled.div`
   font-family: Segoe UI Regular;
   flex: 1;
+  padding-top: 6px;
 `;
 
 export const RecentlyViewedStatusIndicator = styled(StatusIndicator)`
   margin-right: 10px;
   margin-left: 0px;
 `;
+
+export const StatusWrapper = styled.div`
+  padding-top: 3px;
+`

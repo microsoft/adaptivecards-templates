@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 import { COLORS } from '../../../../globalStyles';
 
-import { Dropdown, ActionButton, Icon, IDropdownStyles } from "office-ui-fabric-react";
+import { Dropdown, IDropdownStyles } from "office-ui-fabric-react";
+import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { PostedTemplate } from 'adaptive-templating-service-typescript-node';
 
 export const StyledVersionDropdown = styled(Dropdown)`
@@ -52,7 +53,7 @@ export const TitleWrapper = styled.div`
 `;
 
 export const Title = styled.div`
-  font-size: 22px;
+  font-size: 1.375rem;
   font-weight: 500;
 `;
 
@@ -67,11 +68,12 @@ export const StatusIndicator = styled.div<{ state?: PostedTemplate.StateEnum }>`
 `
 
 export const Status = styled.div`
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 400;
+  padding-right: 7px;
 `
 export const TimeStamp = styled.div`
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 400;
   white-space: nowrap;
   margin-left: 64px;
@@ -81,13 +83,6 @@ export const ActionsWrapper = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-`;
-
-export const StyledButton = styled(ActionButton) <{ isPink: boolean }>`
-  ${props => props.isPink && `color: pink;`}
-  &: focus {
-    outline: none;
-  }
 `;
 
 export const MainContentWrapper = styled.div`
@@ -119,7 +114,7 @@ export const CardHeader = styled.div`
   flex-direction: column;
   align-items: center;
   padding-bottom: 8px;
-  font-size: 22px;
+  font-size: 1.375rem;
   font-weight: 600;
   border-bottom: 1px solid ${COLORS.BORDER};
 `;
@@ -128,12 +123,12 @@ export const CardBody = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 400;
   padding-top: 8px;
 `;
 
-export const IconWrapper = styled(Icon)`
+export const IconWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -142,12 +137,11 @@ export const IconWrapper = styled(Icon)`
   width: 3rem;
   border-radius: 50%;
   font-size: 1.5rem;
-  background-color: ${COLORS.GREY1};
   margin: 8px 0;
 `;
 
 export const UsageNumber = styled.div`
-  font-size: 28px;
+  font-size: 1.75rem;
   font-weight: 600;
   height: 4rem;
   padding: 0.5rem;
@@ -159,4 +153,8 @@ export const TagsWrapper = styled.div`
   flex-direction: row;
   flex-wrap: wrap;
   padding: 16px 24px 0;
+`;
+
+export const CenteredSpinner = styled(Spinner)`
+  margin: auto;
 `;

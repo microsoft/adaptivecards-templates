@@ -24,5 +24,5 @@ export const FooterContents = styled.div`
 export const FooterLink = styled(Link)`
   padding: 0px 10px;
   color: ${COLORS.BLACK};
-  font-size: 14px;
+  font-size: 0.875rem;
 `;

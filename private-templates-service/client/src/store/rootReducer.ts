@@ -5,6 +5,8 @@ import { currentTemplateReducer } from "./currentTemplate/reducers";
 import { filterReducer } from "./filter/reducer";
 import { allTemplateReducer } from "./templates/reducer";
 import { recentTemplatesReducer } from "./recentTemplates/reducer";
+import { templateOwnerReducer } from "./templateOwner/reducers";
+import { skipLinkReducer } from "./skiplink/reducer"
 
 import { combineReducers } from "redux";
 import { sortReducer } from "./sort/reducer";
@@ -17,7 +19,9 @@ export const rootReducer = combineReducers({
   filter: filterReducer,
   sort: sortReducer,
   allTemplates: allTemplateReducer,
-  recentTemplates: recentTemplatesReducer
+  recentTemplates: recentTemplatesReducer,
+  templateOwner: templateOwnerReducer,
+  skipLink: skipLinkReducer
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

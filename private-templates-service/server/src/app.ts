@@ -4,6 +4,7 @@ import passport from "./config/passport";
 import bodyParser from "body-parser";
 import session from "express-session";
 import helmet from "helmet";
+import mongoose from "mongoose";
 
 // import controllers
 import { TemplateServiceClient } from "../../adaptivecards-templating-service/src/TemplateServiceClient";
@@ -33,7 +34,9 @@ app.use(session({
   resave: false,
   saveUninitialized: true
 }));
+app.use(helmet.noSniff());
 
+mongoose.set('useFindAndModify', false)
 let mongoDB = new MongoDBProvider({ connectionString: "#{DB_CONNECTION_TOKEN}#" });
 mongoDB.connect()
   .then(
@@ -51,7 +54,6 @@ mongoDB.connect()
         // Keep this request at the end so it has lowest priority
         app.use(express.static(path.join(__dirname, RELATIVE_PATH_CLIENT)));
         app.get('*', (req, res) => {
-          res.header("Strict-Transport-Security", "max-age=15552000");
           res.sendFile(path.join(__dirname, RELATIVE_PATH_CLIENT + '/index.html'));
         })
       } else {

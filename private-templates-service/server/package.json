@@ -12,7 +12,8 @@
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "server": "nodemon --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' --exec ts-node src/server.ts | bunyan",
     "client": "cd ../client && npm start",
-    "link-client": "cd ../adaptivecards-templating-client/typescript && npm install && npm run build && npm link && cd ../../client && npm link adaptive-templating-service-typescript-node && npm install && cd src && npm link adaptive-templating-service-typescript-node"
+    "link-client": "cd ../adaptivecards-templating-client/typescript && npm install && npm run build && npm link && cd ../../client && npm link adaptive-templating-service-typescript-node && npm install && cd src && npm link adaptive-templating-service-typescript-node",
+    "init-app": "cd ../adaptivecards-templating-service && npm install && npm run build && npm link && cd ../server && npm link adaptivecards-templating-service && npm install && npm run link-client"
   },
   "author": "",
   "license": "ISC",
@@ -20,6 +21,7 @@
     "@types/cors": "^2.8.6",
     "@types/express-session": "^1.17.0",
     "@types/helmet": "0.0.45",
+    "adaptivecards-templating": "^0.1.1-alpha.1",
     "adaptivecards-templating-service": "file:../adaptivecards-templating-service",
     "async": "^3.1.1",
     "axios": "^0.19.2",
@@ -31,7 +33,7 @@
     "express-validator": "^6.3.1",
     "helmet": "^3.21.3",
     "jws": "^4.0.0",
-    "mongoose": "^5.8.10",
+    "mongoose": "^5.9.6",
     "passport": "^0.4.1",
     "passport-azure-ad": "^4.2.1",
     "uuid": "^3.4.0"

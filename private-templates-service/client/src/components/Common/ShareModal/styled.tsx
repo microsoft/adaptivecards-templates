@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { COLORS } from '../../../globalStyles';
-import { DefaultButton } from 'office-ui-fabric-react';
+import { DefaultButton, Button } from 'office-ui-fabric-react';
 
 export const BackDrop = styled.div`
   position: fixed;
@@ -25,7 +25,7 @@ export const Modal = styled.div`
 `;
 
 export const Header = styled.div`
-  font-size: 22px;
+  font-size: 1.375rem;
   font-weight: 500;
   margin-bottom: 12px;
 `;
@@ -73,7 +73,7 @@ export const EmailPanel = styled.div`
 `;
 
 export const SemiBoldText = styled.div`
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 600;
 `;
 
@@ -92,4 +92,21 @@ export const ButtonGroup = styled.div`
 
 export const CancelButton = styled(DefaultButton)`
   margin-right: 12px;
+  &: focus {
+    outline: 0px;
+  }
+`;
+
+export const SendMailButton = styled(DefaultButton)`
+  max-width: fit-content;
+  &: focus {
+    outline: 0px;
+  }
+`;
+
+export const CopyLinkButton = styled(Button)`
+  min-width: fit-content;
+  &: focus {
+    outline: 0px;
+  }
 `;

@@ -2,22 +2,22 @@ import { createTheme } from "office-ui-fabric-react";
 
 export const COLORS = {
   BLACK: "#000000",
-  PRIMARY: "#6F6F6F",
   SECONDARY: "#707070",
   WHITE: "#FFFFFF",
   GREY1: "#FAFAFA",
   GREY2: "#EAEAEA",
   GREY3: "#6F6F6F",
   GREY4: "#5C5C5C",
-  GREYHOVER: "#F3F3F3",
+  GREYHOVER: "#F5F4F4",
   GREY_SEARCH_BAR_DARK: "#A1A1A1",
   GREY_BOX_SHADOW: "#E0E0E0",
   GREEN: "#00D610",
   YELLOW: "#FFBD53",
   BLUE: "#016FC4",
+  BLUE2: "#02599C",
+  BLUE3: "#5390FF",
   BORDER: "#E6E6E6",
   BORDER2: "#C3C3C3",
-  BLUE2: "#02599C"
 };
 
 export const BREAK = {

@@ -30,7 +30,7 @@ export const Tag = styled.div`
 export const TagText = styled.div``;
 
 export const TagCloseIcon = styled(Icon)`
-  font-size: 10px;
+  font-size: 0.625rem;
   margin-left: 8px;
   padding: 1px 3px 0;
   border-radius: 50%;
@@ -90,7 +90,7 @@ export const AddTagInput = styled.input<{ open: boolean }>`
 export const TagAddIcon = styled(Icon) <{ open: boolean }>`
   display: ${props => props.open && 'none'};
   align-self: center;
-  font-size: 10px;
+  font-size: 0.625rem;
   padding: 1px 3px 0;
   border-radius: 50%;
 
@@ -115,15 +115,11 @@ export const TagSubmitButton = styled.button<{ open: boolean }>`
   &: active {
     outline: 0px;
   }
-
-  &: focus {
-    outline: 0px;
-  }
 `;
 
 export const TagSubmitIcon = styled(Icon)`
   align-self: center;
-  font-size: 14px;
+  font-size: 0.875rem;
   padding: 1px 3px 0;
   border-radius: 50%;
 

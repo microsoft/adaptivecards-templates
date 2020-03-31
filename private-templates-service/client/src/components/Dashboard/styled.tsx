@@ -16,6 +16,7 @@ export const Title = styled.h1`
 
 export const OuterDashboardContainer = styled.div`
   display: contents;
+  height: calc(100vh - 61px);
 `;
 
 export const DashboardContainer = styled.div`
@@ -31,7 +32,8 @@ export const OuterWindow = styled.div`
   flex-direction: row;
   align-items: stretch;
   justify-content: space-between;
-  height: 100%;
+  height: auto;
+  flex: 1;
 `;
 export const TagsContainer = styled.div`
   background-color: ${COLORS.GREY1};

@@ -7,7 +7,7 @@ import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 import { Template, PostedTemplate, TemplateInstance } from 'adaptive-templating-service-typescript-node';
 
 // Redux
-import { updateTemplate, deleteTemplateVersion } from '../../../store/currentTemplate/actions';
+import { batchUpdateTemplateState, batchDeleteTemplateVersions } from '../../../store/currentTemplate/actions';
 
 // Styles
 import {
@@ -41,14 +41,15 @@ import {
 } from '../../Dashboard/PreviewModal/TemplateInfo/styled';
 
 import { getDateString } from '../../../utils/versionUtils';
+import { capitalizeString } from "../../../utils/stringUtils";
 import ModalHOC from '../../../utils/ModalHOC';
 import { closeModal } from '../../../store/page/actions';
 
 interface Props {
   template: Template;
   closeModal: () => void;
-  updateTemplateState: (state: PostedTemplate.StateEnum, version: string, templateJSON?: object) => void;
-  deleteTemplateVersion: (version: string) => void;
+  updateTemplateState: (versionList: string[], stateList: PostedTemplate.StateEnum[]) => void;
+  deleteTemplateVersions: (versionList: string[]) => void;
 }
 
 const mapDispatchToProps = (dispatch: any) => {
@@ -56,11 +57,11 @@ const mapDispatchToProps = (dispatch: any) => {
     closeModal: () => {
       dispatch(closeModal());
     },
-    updateTemplateState: (state: PostedTemplate.StateEnum, version: string, templateJSON?: object) => {
-      dispatch(updateTemplate(undefined, version, templateJSON, undefined, undefined, state, undefined));
+    updateTemplateState: (versionList: string[], stateList: PostedTemplate.StateEnum[]) => {
+      dispatch(batchUpdateTemplateState(versionList, stateList, undefined));
     },
-    deleteTemplateVersion: (version: string) => {
-      dispatch(deleteTemplateVersion(version, undefined))
+    deleteTemplateVersions: (versionList: string[]) => {
+      dispatch(batchDeleteTemplateVersions(versionList, undefined))
     }
   }
 }
@@ -77,29 +78,39 @@ class VersionModal extends React.Component<Props, State> {
 
   delete = () => {
     let list = this.props.template.instances!;
+    let versionList: string[] = [];
     for (let i = 0; i < list.length; i++) {
       if (!this.state.versionList[i]) continue;
-      this.props.deleteTemplateVersion(list[i].version!);
-      this.props.closeModal();
+      versionList.push(list[i].version!);
     }
+    this.props.deleteTemplateVersions(versionList);
+    this.props.closeModal();
   }
 
   publish = () => {
     let list = this.props.template.instances!;
+    let versionList: string[] = [];
+    let stateList: PostedTemplate.StateEnum[] = [];
     for (let i = 0; i < list.length; i++) {
       if (!this.state.versionList[i]) continue;
-      this.props.updateTemplateState(PostedTemplate.StateEnum.Live, list[i].version!, list[i].json);
-      this.props.closeModal();
+      versionList.push(list[i].version!);
+      stateList.push(PostedTemplate.StateEnum.Live);
     }
+    this.props.updateTemplateState(versionList, stateList);
+    this.props.closeModal();
   }
 
   unpublish = () => {
     let list = this.props.template.instances!;
+    let versionList: string[] = [];
+    let stateList: PostedTemplate.StateEnum[] = [];
     for (let i = 0; i < list.length; i++) {
       if (!this.state.versionList[i]) continue;
-      this.props.updateTemplateState(PostedTemplate.StateEnum.Deprecated, list[i].version!, list[i].json);
-      this.props.closeModal();
+      versionList.push(list[i].version!);
+      stateList.push(PostedTemplate.StateEnum.Deprecated);
     }
+    this.props.updateTemplateState(versionList, stateList);
+    this.props.closeModal();
   }
 
   render() {
@@ -126,7 +137,7 @@ class VersionModal extends React.Component<Props, State> {
                     <DateWrapper>{instance.publishedAt ? getDateString(instance.publishedAt) : "Not published"}</DateWrapper>
                     <StatusWrapper>
                       <StatusIndicator state={instance.state!} />
-                      <Status>{instance.state && instance.state.toString().charAt(0).toUpperCase() + instance.state.toString().slice(1)}</Status>
+                      <Status>{instance.state && capitalizeString(instance.state.toString())}</Status>
                     </StatusWrapper>
                     <CheckboxWrapper><Checkbox checked={this.state.versionList[index]}
                       onChange={() => {

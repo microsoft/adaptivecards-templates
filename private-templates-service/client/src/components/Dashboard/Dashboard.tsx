@@ -10,6 +10,9 @@ import { RecentTemplatesState } from "../../store/recentTemplates/types";
 import { setPage } from "../../store/page/actions";
 import { getTemplate } from "../../store/currentTemplate/actions";
 import { setSearchBarVisible } from "../../store/search/actions";
+import { getOwnerProfilePicture, getOwnerName } from "../../store/templateOwner/actions";
+import { OwnerState } from "../../store/templateOwner/types";
+import { setSkipLinkContentID } from "../../store/skiplink/actions";
 
 import { Template } from "adaptive-templating-service-typescript-node";
 import { SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
@@ -44,6 +47,7 @@ const mapStateToProps = (state: RootState) => {
     templates: state.allTemplates,
     isSearch: state.search.isSearch,
     recentTemplates: state.recentTemplates,
+    templateOwner: state.templateOwner,
   };
 };
 const mapDispatchToProps = (dispatch: any) => {
@@ -62,6 +66,15 @@ const mapDispatchToProps = (dispatch: any) => {
     },
     getRecentTemplates: () => {
       dispatch(getRecentTemplates());
+    },
+    getOwnerName: (oID: string) => {
+      dispatch(getOwnerName(oID));
+    },
+    getOwnerProfilePicture: (oID: string) => {
+      dispatch(getOwnerProfilePicture(oID));
+    },
+    setSkipLinkContentID: (id: string) => {
+      dispatch(setSkipLinkContentID(id));
     }
   };
 };
@@ -70,11 +83,15 @@ interface Props extends RouteComponentProps {
   user?: UserType;
   recentTemplates: RecentTemplatesState;
   templates: AllTemplateState;
+  templateOwner: OwnerState;
   setPage: (currentPageTitle: string, currentPage: string) => void;
   setSearchBarVisible: (isSearchBarVisible: boolean) => void;
   getTemplates: () => void;
   getRecentTemplates: () => void;
   getTemplate: (templateID: string) => void;
+  getOwnerName: (oID: string) => void;
+  getOwnerProfilePicture: (oID: string) => void;
+  setSkipLinkContentID: (id: string) => void;
   isSearch: boolean;
 }
 class Dashboard extends React.Component<Props> {
@@ -83,6 +100,7 @@ class Dashboard extends React.Component<Props> {
     props.setPage("Dashboard", "Dashboard");
     props.setSearchBarVisible(true);
     props.getRecentTemplates();
+    props.setSkipLinkContentID(DASHBOARD_MAIN_CONTENT_ID);
   }
   componentDidUpdate(prevProps: Props) {
     if (this.props.isSearch !== prevProps.isSearch) {
@@ -92,10 +110,21 @@ class Dashboard extends React.Component<Props> {
         this.props.setPage("Dashboard", "Dashboard");
       }
     }
+    if (prevProps.recentTemplates !== this.props.recentTemplates &&
+      this.props.recentTemplates.recentlyViewed && this.props.recentTemplates.recentlyViewed.templates) {
+      let templates = this.props.recentTemplates.recentlyViewed.templates;
+      for (let template of templates) {
+        if (template.instances && template.instances[0].lastEditedUser) {
+          this.props.getOwnerName(template.instances[0].lastEditedUser);
+          this.props.getOwnerProfilePicture(template.instances[0].lastEditedUser);
+        }
+      }
+    }
   }
   selectTemplate = (templateID: string) => {
     this.props.history.push("preview/" + templateID);
   };
+
   render() {
     if (this.props.isSearch) {
       return (
@@ -128,10 +157,10 @@ class Dashboard extends React.Component<Props> {
     return (
       <OuterDashboardContainer>
         <OuterWindow>
-          <DashboardContainer>
+          <DashboardContainer id={DASHBOARD_MAIN_CONTENT_ID}>
             <React.Fragment>
               <Title>Recently Edited</Title>
-              {recentTemplates.isFetching ?
+              {recentTemplates.isFetching || this.props.templateOwner.isFetchingName || this.props.templateOwner.isFetchingPicture ?
                 <CenteredSpinner size={SpinnerSize.large} />
                 : recentlyEditedTemplates.length ? (
                   <Gallery
@@ -146,7 +175,7 @@ class Dashboard extends React.Component<Props> {
             </React.Fragment>
             <React.Fragment>
               <Title>Recently Viewed</Title>
-              {recentTemplates.isFetching ?
+              {recentTemplates.isFetching || this.props.templateOwner.isFetchingName || this.props.templateOwner.isFetchingPicture ?
                 <CenteredSpinner size={SpinnerSize.large} />
                 : recentlyViewedTemplates.length ? (
                   <RecentlyViewed
@@ -154,10 +183,10 @@ class Dashboard extends React.Component<Props> {
                     recentlyViewed={recentlyViewedTemplates}
                   ></RecentlyViewed>
                 ) : (
-                  <PlaceholderText>
-                    {DASHBOARD_RECENTLY_VIEWED_PLACEHOLDER}
-                  </PlaceholderText>
-                )}
+                    <PlaceholderText>
+                      {DASHBOARD_RECENTLY_VIEWED_PLACEHOLDER}
+                    </PlaceholderText>
+                  )}
             </React.Fragment>
           </DashboardContainer>
           <TagsContainer>
@@ -170,6 +199,7 @@ class Dashboard extends React.Component<Props> {
     );
   }
 }
+export const DASHBOARD_MAIN_CONTENT_ID: string = "dashboard-content";
 
 export default connect(
   mapStateToProps,

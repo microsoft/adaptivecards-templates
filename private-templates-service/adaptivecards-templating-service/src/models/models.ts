@@ -108,3 +108,12 @@ export interface TagList {
   ownedTags: any[];
   allTags: any[];
 }
+
+/**
+ * @interface
+ * Request for batch update operations.
+ */
+export interface TemplateStateRequest {
+  version: string;
+  state: TemplateState;
+}

@@ -3,25 +3,28 @@ import requireAuthentication from '../../utils/requireAuthentication';
 
 import { RootState } from '../../store/rootReducer';
 import { connect } from 'react-redux';
-import { UserType } from '../../store/auth/types';
 import { updateTemplate } from '../../store/currentTemplate/actions';
 
 //ACDesigner
 import * as monaco from 'monaco-editor';
 import markdownit from 'markdown-it';
 import * as ACDesigner from 'adaptivecards-designer';
-import { setPage } from '../../store/page/actions';
+import { setPage, openModal } from '../../store/page/actions';
 import { DesignerWrapper } from './styled';
+
+import EditNameModal from '../Common/EditNameModal';
+import SaveModal from './SaveModal/SaveModal';
+import { ModalState } from '../../store/page/types';
 
 const mapStateToProps = (state: RootState) => {
   return {
-    isAuthenticated: state.auth.isAuthenticated,
-    user: state.auth.user,
     templateID: state.currentTemplate.templateID,
     templateJSON: state.currentTemplate.templateJSON,
     templateName: state.currentTemplate.templateName,
     sampleDataJSON: state.currentTemplate.sampleDataJSON,
-    version: state.currentTemplate.version
+    modalState: state.page.modalState,
+    version: state.currentTemplate.version,
+    isFetching: state.currentTemplate.isFetching
   };
 };
 
@@ -32,13 +35,14 @@ const mapDispatchToProps = (dispatch: any) => {
     },
     setPage: (currentPageTitle: string, currentPage: string) => {
       dispatch(setPage(currentPageTitle, currentPage));
+    },
+    openModal: (modalState: ModalState) => {
+      dispatch(openModal(modalState));
     }
   }
 }
 
 interface DesignerProps {
-  isAuthenticated: boolean;
-  user?: UserType;
   templateID: string;
   templateJSON: object;
   templateName: string;
@@ -46,16 +50,28 @@ interface DesignerProps {
   version: string;
   updateTemplate: (templateID: string, currentVersion: string, templateJSON: object, sampleDataJSON: object, templateName: string) => any;
   setPage: (currentPageTitle: string, currentPage: string) => void;
+  toggleModal: () => void;
+  openModal: (modalState: ModalState) => void;
+  modalState?: ModalState;
+  isFetching: boolean;
+}
+
+interface State { 
+  isSaveOpen: boolean;
 }
 
 let designer: ACDesigner.CardDesigner;
 
-class Designer extends React.Component<DesignerProps> {
+class Designer extends React.Component<DesignerProps,State> {
   constructor(props: DesignerProps) {
     super(props);
     props.setPage(this.props.templateName, "Designer");
+    this.state = {isSaveOpen: false };
   }
 
+  toggleModal = () => {
+    this.setState({isSaveOpen: !this.state.isSaveOpen});
+  }
   componentWillMount() {
     ACDesigner.GlobalSettings.enableDataBindingSupport = true;
     ACDesigner.GlobalSettings.showSampleDataEditorToolbox = true;
@@ -104,12 +120,12 @@ class Designer extends React.Component<DesignerProps> {
 
   render() {
     return (
-      <DesignerWrapper id="designer-container" dangerouslySetInnerHTML={{ __html: "dangerouslySetACDesigner" }}></DesignerWrapper>
+      <React.Fragment>
+        <DesignerWrapper id="designer-container" />
+        {this.props.modalState===ModalState.Save && <SaveModal designerSampleData = {designer.sampleData} designerTemplateJSON = {designer.getCard()}/>}
+        {this.props.modalState === ModalState.EditName && <EditNameModal />}
+      </React.Fragment>
     );
-  }
-
-  shouldComponentUpdate() {
-    return false;
   }
 }
 
@@ -133,8 +149,12 @@ function initDesigner(): ACDesigner.CardDesigner {
 }
 
 function onSave(designer: ACDesigner.CardDesigner, props: DesignerProps): void {
-  if (JSON.stringify(props.templateJSON) !== JSON.stringify(designer.getCard()) || props.sampleDataJSON !== designer.sampleData) {
-    props.updateTemplate(props.templateID, props.version, designer.getCard(), designer.sampleData, props.templateName);
+  if(props.templateID === ""){
+    props.openModal(ModalState.Save);
+  }
+  else if (JSON.stringify(props.templateJSON) !== JSON.stringify(designer.getCard()) || props.sampleDataJSON !== designer.sampleData){ 
+    props.updateTemplate(props.templateID, props.version, designer.getCard(), designer.sampleData, props.templateName);  
   }
 }
+
 export default connect(mapStateToProps, mapDispatchToProps)(requireAuthentication(Designer));

@@ -4,6 +4,7 @@ import { RootState } from "../../../store/rootReducer";
 import { connect } from "react-redux";
 import { querySearch, clearSearch } from "../../../store/search/actions";
 import { COLORS, BREAK } from "../../../globalStyles";
+import * as STRINGS from "../../../assets/strings";
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -98,6 +99,7 @@ class SearchBar extends React.Component<Props, State> {
     if (this.props.isAuthenticated && this.props.isSearchBarVisible) {
       return (
         <StyledSearchBox
+          ariaLabel={STRINGS.SEARCHBAR_DESCRIPTION}
           placeholder={"search" + (this.state.isMobile ? "" : " templates")}
           onSearch={this.onSearch} // will trigger when "Enter" is pressed
           onClear={this.onClear} // will trigger when "Esc" or "X" is pressed
