@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import { RootState } from "../../store/rootReducer";
-import { UserType } from "../../store/auth/types";
+import { UserType, AuthState } from "../../store/auth/types";
 import { getAllTemplates } from "../../store/templates/actions";
 import { AllTemplateState } from "../../store/templates/types";
 import { getRecentTemplates } from "../../store/recentTemplates/actions";
@@ -41,7 +41,7 @@ import {
 
 const mapStateToProps = (state: RootState) => {
   return {
-    isAuthenticated: state.auth.isAuthenticated,
+    AuthState: state.auth,
     user: state.auth.user,
     templates: state.allTemplates,
     isSearch: state.search.isSearch,
@@ -75,7 +75,7 @@ const mapDispatchToProps = (dispatch: any) => {
   };
 };
 interface Props extends RouteComponentProps {
-  isAuthenticated: boolean;
+  AuthState: AuthState;
   user?: UserType;
   recentTemplates: RecentTemplatesState;
   templates: AllTemplateState;
@@ -104,8 +104,8 @@ class Dashboard extends React.Component<Props> {
         this.props.setPage("Dashboard", "Dashboard");
       }
     }
-    if (prevProps.recentTemplates !== this.props.recentTemplates &&
-      !this.props.recentTemplates.isFetching &&
+    if (this.props.AuthState.graphAccessToken && !this.props.recentTemplates.isFetching
+      && prevProps.recentTemplates !== this.props.recentTemplates &&
       this.props.recentTemplates.recentlyViewed && this.props.recentTemplates.recentlyViewed.templates) {
       let templates = this.props.recentTemplates.recentlyViewed.templates;
       for (let template of templates) {
@@ -171,7 +171,8 @@ class Dashboard extends React.Component<Props> {
             </React.Fragment>
             <React.Fragment>
               <Title>Recently Viewed</Title>
-              {recentTemplates.isFetching || this.props.templateOwner.isFetchingName || this.props.templateOwner.isFetchingPicture ?
+              {!this.props.AuthState.accessToken ||
+                recentTemplates.isFetching || this.props.templateOwner.isFetchingName || this.props.templateOwner.isFetchingPicture ?
                 <CenteredSpinner size={SpinnerSize.large} />
                 : recentlyViewedTemplates.length ? (
                   <RecentlyViewed
