@@ -55,7 +55,7 @@ class ShareModal extends React.Component<ShareModalProps> {
               <LinkRow>
                 <TextFieldContainer>
                   <TextField readOnly={true}
-                    prefix={Config.redirectUri}
+                    prefix={process.env.REACT_APP_ACMS_REDIRECT_URI}
                     defaultValue={getShareURL(this.props)}
                     width={100} />
                 </TextFieldContainer>
@@ -64,7 +64,7 @@ class ShareModal extends React.Component<ShareModalProps> {
                 </CopyLinkButton>
               </LinkRow>
             </ShareLinkPanel>
-            <ShareModalForm shareURL={Config.redirectUri + getShareURL(this.props)} templateVersion={this.props.templateVersion} />
+            <ShareModalForm shareURL={process.env.REACT_APP_ACMS_REDIRECT_URI + getShareURL(this.props)} templateVersion={this.props.templateVersion} />
           </CenterPanelWrapper>
         </Modal>
 
@@ -76,7 +76,7 @@ class ShareModal extends React.Component<ShareModalProps> {
 
 function onCopyURL(props: ShareModalProps) {
   let copyCode = document.createElement('textarea');
-  copyCode.innerText = Config.redirectUri + getShareURL(props);
+  copyCode.innerText = process.env.REACT_APP_ACMS_REDIRECT_URI + getShareURL(props);
   document.body.appendChild(copyCode);
   copyCode.select();
   document.execCommand('copy');
