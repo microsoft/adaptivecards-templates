@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { COLORS } from '../../../../globalStyles';
 
-import { Dropdown, Icon, IDropdownStyles } from "office-ui-fabric-react";
+import { Dropdown, IDropdownStyles } from "office-ui-fabric-react";
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 import { PostedTemplate } from 'adaptive-templating-service-typescript-node';
 
@@ -70,6 +70,7 @@ export const StatusIndicator = styled.div<{ state?: PostedTemplate.StateEnum }>`
 export const Status = styled.div`
   font-size: 0.875rem;
   font-weight: 400;
+  padding-right: 7px;
 `
 export const TimeStamp = styled.div`
   font-size: 0.875rem;
@@ -127,7 +128,7 @@ export const CardBody = styled.div`
   padding-top: 8px;
 `;
 
-export const IconWrapper = styled(Icon)`
+export const IconWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -136,7 +137,6 @@ export const IconWrapper = styled(Icon)`
   width: 3rem;
   border-radius: 50%;
   font-size: 1.5rem;
-  background-color: ${COLORS.GREY1};
   margin: 8px 0;
 `;
 
