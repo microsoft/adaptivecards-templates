@@ -43,20 +43,23 @@ steps:
     cd adaptivecards-templating-service
     sudo npm link
     cd ../server
-    npm link adaptivecards-templating-service
+    npm link ../adaptivecards-templating-service
     npm install
     cd ..
     cd client
     npm run build:staging --if-present
     cd ../server
     npm run deploy
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: '$(System.DefaultWorkingDirectory)/'
+
 - task: ArchiveFiles@2
   inputs:
     rootFolderOrFile: '$(System.DefaultWorkingDirectory)/'
     includeRootFolder: false
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(System.DefaultWorkingDirectory)/'
+
 - task: AzureWebApp@1
   displayName: 'Azure Web App Deploy'
   inputs:
