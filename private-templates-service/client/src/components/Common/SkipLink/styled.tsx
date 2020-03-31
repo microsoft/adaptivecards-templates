@@ -7,16 +7,14 @@ position: absolute;
 left: -999px;
 top: -999px;
 &: focus {  
-    padding:0 25px 0 25px;
+    font-size: 0.8rem;
+    padding:5px 25px 5px 25px;
     left:0;
     top:75px;
     margin-left: 40px;
-    color: black;
+    color: white;
     outline: none;
-    background: white;
+    background: ${COLORS.BLUE3};
     text-decoration: none;
-};
-&: hover {
-    color: ${COLORS.BLUE};
 };
 `;
