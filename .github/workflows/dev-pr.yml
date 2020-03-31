@@ -22,7 +22,6 @@ steps:
 - script: |
     cd private-templates-service/adaptivecards-templating-service
     npm install
-    npm run test
     cd ..
     cd private-templates-service/adaptivecards-templating-client/typescript
     npm install
@@ -34,7 +33,6 @@ steps:
     cd src 
     npm link adaptive-templating-service-typescript-node
     cd ..
-    npm run test
     cd ..
     cd private-templates-service/adaptivecards-templating-service
     sudo npm link
