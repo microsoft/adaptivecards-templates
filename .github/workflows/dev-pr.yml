@@ -9,9 +9,14 @@ variables:
 pool:
   vmImage: 'ubuntu-latest'
 steps:
-- task: NodeTool@0 
+
+- task: PowerShell@2
   inputs:
-    versionSpec: '12.x'
+    targetType: 'inline'
+    script: |
+      $envFile="DB_CONNECTION=" + $env:DB_CONNECTION + "`nCLIENT_ID=" + $env:CLIENT_ID
+      Set-Content -Path .\Hello\.env -Value $envFile
+
 - script: |
     ls
     echo $(System.DefaultWorkingDirectory)
