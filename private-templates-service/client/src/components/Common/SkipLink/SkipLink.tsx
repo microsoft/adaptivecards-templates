@@ -10,7 +10,7 @@ interface SkipLinkProps {
 
 const mapStateToProps = (state: RootState) => {
     return {
-        contentID: state.skipLinkReducer.contentID
+        contentID: state.skipLink.contentID
     }
 }
 

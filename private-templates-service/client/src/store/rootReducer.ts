@@ -21,7 +21,7 @@ export const rootReducer = combineReducers({
   allTemplates: allTemplateReducer,
   recentTemplates: recentTemplatesReducer,
   templateOwner: templateOwnerReducer,
-  skipLinkReducer: skipLinkReducer
+  skipLink: skipLinkReducer
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
