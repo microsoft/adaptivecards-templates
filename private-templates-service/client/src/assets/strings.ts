@@ -68,3 +68,6 @@ export const TAGS = "Tags";
 //OwnerAvatar.tsx
 export const ERROR_LOADING_IMAGE = "Error loading image";
 export const ALT_TEXT = "Template owner profile picture"
+
+// SkipLink.tsx
+export const SKIP_TO_MAIN_CONTENT_MESSAGE = "Skip to main content"

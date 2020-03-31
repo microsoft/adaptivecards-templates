@@ -6,6 +6,7 @@ import { filterReducer } from "./filter/reducer";
 import { allTemplateReducer } from "./templates/reducer";
 import { recentTemplatesReducer } from "./recentTemplates/reducer";
 import { templateOwnerReducer } from "./templateOwner/reducers";
+import { skipLinkReducer } from "./skiplink/reducer"
 
 import { combineReducers } from "redux";
 import { sortReducer } from "./sort/reducer";
@@ -20,6 +21,7 @@ export const rootReducer = combineReducers({
   allTemplates: allTemplateReducer,
   recentTemplates: recentTemplatesReducer,
   templateOwner: templateOwnerReducer,
+  skipLinkReducer: skipLinkReducer
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
