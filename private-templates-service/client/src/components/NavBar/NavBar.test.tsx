@@ -8,7 +8,8 @@ import NavBar from './NavBar';
 jest.mock('react-router-dom', () => ({
   useHistory: () => ({
     push: jest.fn()
-  })
+  }),
+  withRouter: (a: any) => a
 }));
 
 it('Renders without crashing', () => {
