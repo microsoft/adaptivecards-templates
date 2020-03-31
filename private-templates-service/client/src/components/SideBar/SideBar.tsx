@@ -28,6 +28,7 @@ import {
   LogoTextSubHeader
 } from "./styled";
 import { INavLinkGroup, INavStyles } from "office-ui-fabric-react";
+import SkipLink from "../Common/SkipLink";
 
 
 interface Props {
@@ -179,6 +180,7 @@ const SideBar = (props: Props) => {
           </Name>
         </UserWrapper>
         {props.isAuthenticated && <NavMenu styles={navMenuLinksProps} groups={navMenuLinks} onLinkClick={onNavClick} />}
+        {props.isAuthenticated && <SkipLink/>}
       </MainItems>
 
       <SignOut onClick={props.authButtonMethod} tabIndex={props.modalState ? -1 : 0}>Sign {props.isAuthenticated ? "Out" : "In"}</SignOut>
