@@ -1,36 +1,39 @@
-
 trigger:
 - users/daniellemott/pipeline
-
 # no PR builds
 pr: none
-
 variables: 
   ## Add this under variables section in the pipeline
   azureSubscription: 'Adaptive Cards (47c80630-3d74-4b3e-a2f4-57e6368cd8c6)'
   appName: 'adaptivecms'
-
 pool:
   vmImage: 'ubuntu-latest'
-
 steps:
-
 - task: NodeTool@0 
   inputs:
     versionSpec: '12.x'
-
 - script: |
     ls
     echo $(System.DefaultWorkingDirectory)
+    echo cd private-templates-service/adaptivecards-templating-service
     cd private-templates-service/adaptivecards-templating-service
+    echo npm install
     npm install
+    echo cd ..
     cd ..
+    echo ls
     ls
+    echo cd adaptivecards-templating-client/typescript
     cd adaptivecards-templating-client/typescript
+    echo npm install
     npm install
+    echo npm run build
     npm run build
+    echo sudo npm link
     sudo npm link
+    echo cd ../../client
     cd ../../client
+    echo npm link adaptive-templating-service-typescript-node
     npm link adaptive-templating-service-typescript-node
     npm install
     cd src 
@@ -47,16 +50,13 @@ steps:
     npm run build:staging --if-present
     cd ../server
     npm run deploy
-
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(System.DefaultWorkingDirectory)/private-templates-service/'
-
 - task: ArchiveFiles@2
   inputs:
     rootFolderOrFile: '$(System.DefaultWorkingDirectory)/private-templates-service/'
     includeRootFolder: false
-
 - task: AzureWebApp@1
   displayName: 'Azure Web App Deploy'
   inputs:
