@@ -15,6 +15,7 @@ import { DesignerWrapper } from './styled';
 import EditNameModal from '../Common/EditNameModal';
 import SaveModal from './SaveModal/SaveModal';
 import { ModalState } from '../../store/page/types';
+import { Tooltip, DirectionalHint, TooltipHost, ITooltipProps } from 'office-ui-fabric-react';
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -56,21 +57,22 @@ interface DesignerProps {
   isFetching: boolean;
 }
 
-interface State { 
+interface State {
   isSaveOpen: boolean;
 }
 
 let designer: ACDesigner.CardDesigner;
+let saveButtonElement: HTMLElement, publishButtonElement: HTMLElement;
 
-class Designer extends React.Component<DesignerProps,State> {
+class Designer extends React.Component<DesignerProps, State> {
   constructor(props: DesignerProps) {
     super(props);
     props.setPage(this.props.templateName, "Designer");
-    this.state = {isSaveOpen: false };
+    this.state = { isSaveOpen: false };
   }
 
   toggleModal = () => {
-    this.setState({isSaveOpen: !this.state.isSaveOpen});
+    this.setState({ isSaveOpen: !this.state.isSaveOpen });
   }
   componentWillMount() {
     ACDesigner.GlobalSettings.enableDataBindingSupport = true;
@@ -113,17 +115,25 @@ class Designer extends React.Component<DesignerProps,State> {
     const buttons = document.getElementsByClassName('acd-toolbar-button');
     for (let i = 0; i < buttons.length; i++) {
       if (buttons[i].innerHTML === 'Publish') {
-        (buttons[i] as HTMLElement).style.color = 'pink';
+        publishButtonElement = (buttons[i] as HTMLElement);
+        publishButtonElement.style.color = 'pink';
+      }
+      else if (buttons[i].innerHTML === 'Save') {
+        saveButtonElement = (buttons[i] as HTMLElement);
       }
     }
   }
 
   render() {
+    console.log(saveButtonElement, publishButtonElement)
     return (
       <React.Fragment>
         <DesignerWrapper id="designer-container" />
-        {this.props.modalState===ModalState.Save && <SaveModal designerSampleData = {designer.sampleData} designerTemplateJSON = {designer.getCard()}/>}
+        {this.props.modalState === ModalState.Save && <SaveModal designerSampleData={designer.sampleData} designerTemplateJSON={designer.getCard()} />}
         {this.props.modalState === ModalState.EditName && <EditNameModal />}
+        {saveButtonElement && <Tooltip targetElement={saveButtonElement}
+          content={"Save this card as a draft"}
+          directionalHint={DirectionalHint.topCenter} />}
       </React.Fragment>
     );
   }
@@ -149,11 +159,11 @@ function initDesigner(): ACDesigner.CardDesigner {
 }
 
 function onSave(designer: ACDesigner.CardDesigner, props: DesignerProps): void {
-  if(props.templateID === ""){
+  if (props.templateID === "") {
     props.openModal(ModalState.Save);
   }
-  else if (JSON.stringify(props.templateJSON) !== JSON.stringify(designer.getCard()) || props.sampleDataJSON !== designer.sampleData){ 
-    props.updateTemplate(props.templateID, props.version, designer.getCard(), designer.sampleData, props.templateName);  
+  else if (JSON.stringify(props.templateJSON) !== JSON.stringify(designer.getCard()) || props.sampleDataJSON !== designer.sampleData) {
+    props.updateTemplate(props.templateID, props.version, designer.getCard(), designer.sampleData, props.templateName);
   }
 }
 
