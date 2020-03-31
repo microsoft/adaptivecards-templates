@@ -87,7 +87,7 @@ class SaveModal extends React.Component<Props, State> {
       this.setState({ templateName: newValue });
     }
   }
-
+  
   onClick = () => {
     // will only trigger on first save
     if (JSON.stringify(this.props.sampleDataJSON) !== JSON.stringify(this.props.designerTemplateJSON) || this.props.sampleDataJSON !== this.props.designerSampleData) {

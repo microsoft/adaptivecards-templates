@@ -99,7 +99,7 @@ const navMenuLinks: INavLinkGroup[] = [
       },
       {
         name: "New Template",
-        url: "/designer",
+        url: "/designer/newcard/1.0",
         iconProps: {
           iconName: "CalculatorAddition",
           style: iconStyle
@@ -156,7 +156,7 @@ const SideBar = (props: Props) => {
 
   const onNavClick = (event: any, element: any) => {
     event.preventDefault();
-    if (element.url === "/designer") {
+    if (element.url === "/designer/newCard/1.0") {
       props.newTemplate();
     }
     else if (element.url === "/") {

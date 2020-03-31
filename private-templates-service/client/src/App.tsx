@@ -144,7 +144,7 @@ class App extends Component<Props, State> {
                   <Route exact path="/">
                     <Dashboard authButtonMethod={this.login} />
                   </Route>
-                  <Route exact path="/designer">
+                  <Route exact path="/designer/:uuid/:version">
                     <Designer authButtonMethod={this.login} />
                   </Route>
                   <Route path="/preview/:uuid">

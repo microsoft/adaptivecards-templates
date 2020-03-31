@@ -3,7 +3,7 @@ import requireAuthentication from '../../utils/requireAuthentication';
 
 import { RootState } from '../../store/rootReducer';
 import { connect } from 'react-redux';
-import { updateTemplate } from '../../store/currentTemplate/actions';
+import { updateTemplate, getTemplate } from '../../store/currentTemplate/actions';
 
 //ACDesigner
 import * as monaco from 'monaco-editor';
@@ -15,6 +15,8 @@ import { DesignerWrapper } from './styled';
 import EditNameModal from '../Common/EditNameModal';
 import SaveModal from './SaveModal/SaveModal';
 import { ModalState } from '../../store/page/types';
+import { withRouter, Route, RouteComponentProps } from 'react-router-dom';
+import SpinnerModal from '../Common/SpinnerModal';
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -38,11 +40,14 @@ const mapDispatchToProps = (dispatch: any) => {
     },
     openModal: (modalState: ModalState) => {
       dispatch(openModal(modalState));
+    },
+    getTemplate: (id: string) => {
+      dispatch(getTemplate(id));
     }
   }
 }
 
-interface DesignerProps {
+interface DesignerProps extends RouteComponentProps<MatchParams> {
   templateID: string;
   templateJSON: object;
   templateName: string;
@@ -52,12 +57,18 @@ interface DesignerProps {
   setPage: (currentPageTitle: string, currentPage: string) => void;
   toggleModal: () => void;
   openModal: (modalState: ModalState) => void;
+  getTemplate: (id: string) => void;
   modalState?: ModalState;
   isFetching: boolean;
 }
 
 interface State { 
   isSaveOpen: boolean;
+}
+
+interface MatchParams {
+  uuid: string;
+  version: string;
 }
 
 let designer: ACDesigner.CardDesigner;
@@ -67,10 +78,30 @@ class Designer extends React.Component<DesignerProps,State> {
     super(props);
     props.setPage(this.props.templateName, "Designer");
     this.state = {isSaveOpen: false };
+    if(this.props.match.params.uuid !== "newCard"){
+      this.props.getTemplate(this.props.match.params.uuid);
+    }
   }
 
   toggleModal = () => {
     this.setState({isSaveOpen: !this.state.isSaveOpen});
+  }
+  
+  updateURL = () => {
+      this.props.history.push("/designer/"+ this.props.templateID + "/" + this.props.version);
+  }
+  
+  toggleSpinner = (isFetching: boolean) => {
+    if(isFetching){
+      this.props.openModal(ModalState.Spinner)
+    }
+  }
+
+  componentDidUpdate() {
+    this.toggleSpinner(this.props.isFetching);
+    if (this.props.templateJSON) {
+      designer.setCard(this.props.templateJSON);
+    }
   }
   componentWillMount() {
     ACDesigner.GlobalSettings.enableDataBindingSupport = true;
@@ -122,9 +153,10 @@ class Designer extends React.Component<DesignerProps,State> {
     return (
       <React.Fragment>
         <DesignerWrapper id="designer-container" />
-        {this.props.modalState===ModalState.Save && <SaveModal designerSampleData = {designer.sampleData} designerTemplateJSON = {designer.getCard()}/>}
-        {this.props.modalState === ModalState.EditName && <EditNameModal />}
-      </React.Fragment>
+        {this.props.modalState === ModalState.Spinner && <SpinnerModal closeAction = {this.updateURL}/>}
+        {this.props.modalState === ModalState.Save && <SaveModal designerSampleData = {designer.sampleData} designerTemplateJSON = {designer.getCard()}/>}
+        {this.props.modalState === ModalState.EditName && <EditNameModal/>}
+      </React.Fragment> 
     );
   }
 }
@@ -157,4 +189,4 @@ function onSave(designer: ACDesigner.CardDesigner, props: DesignerProps): void {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(requireAuthentication(Designer));
+export default connect(mapStateToProps, mapDispatchToProps)(requireAuthentication(withRouter(Designer)));
