@@ -295,7 +295,7 @@ function onActionButtonClick(props: Props, state: State, val: any) {
       break;
     case EDIT_IN_DESIGNER:
       const { history } = props;
-      if (history) history.push('/designer/'+ props.template.id + "/" + state.version);
+      if (history) history.push('/designer/'+ props.template.id + '/' + state.version);
       break;
     case DELETE:
       props.openModal(ModalState.Delete);

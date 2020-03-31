@@ -15,7 +15,7 @@ import { DesignerWrapper } from './styled';
 import EditNameModal from '../Common/EditNameModal';
 import SaveModal from './SaveModal/SaveModal';
 import { ModalState } from '../../store/page/types';
-import { withRouter, Route, RouteComponentProps } from 'react-router-dom';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 import SpinnerModal from '../Common/SpinnerModal';
 
 const mapStateToProps = (state: RootState) => {
@@ -78,7 +78,7 @@ class Designer extends React.Component<DesignerProps,State> {
     super(props);
     props.setPage(this.props.templateName, "Designer");
     this.state = {isSaveOpen: false };
-    if(this.props.match.params.uuid !== "newCard"){
+    if(this.props.match.params.uuid !== "newcard"){
       this.props.getTemplate(this.props.match.params.uuid);
     }
   }
@@ -99,7 +99,7 @@ class Designer extends React.Component<DesignerProps,State> {
 
   componentDidUpdate() {
     this.toggleSpinner(this.props.isFetching);
-    if (this.props.templateJSON) {
+    if (this.props.templateJSON){
       designer.setCard(this.props.templateJSON);
     }
   }

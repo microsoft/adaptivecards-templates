@@ -30,15 +30,16 @@ class SpinnerModal extends React.Component<Props>{
   constructor(props: Props) {
     super(props);
   }
+  
   componentDidUpdate(){
     if(!this.props.isFetching){
-
       if(this.props.closeAction){
         this.props.closeAction();
       }
       this.props.closeModal();
     }
   }
+
   render() {
     return (
       <BackDrop>

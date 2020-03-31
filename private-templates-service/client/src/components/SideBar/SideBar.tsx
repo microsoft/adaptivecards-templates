@@ -155,7 +155,7 @@ const SideBar = (props: Props) => {
 
   const onNavClick = (event: any, element: any) => {
     event.preventDefault();
-    if (element.url === "/designer/newCard/1.0") {
+    if (element.url === "/designer/newcard/1.0") {
       props.newTemplate();
     }
     history.push(element.url);
