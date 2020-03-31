@@ -15,7 +15,7 @@ steps:
     targetType: 'inline'
     script: |
       $envFile="DB_CONNECTION=" + $env:DB_CONNECTION + "`nCLIENT_ID=" + $env:CLIENT_ID
-      Set-Content -Path .\Hello\.env -Value $envFile
+      Set-Content -Path .\private-templates-service\server\.env -Value $envFile
 
 - script: |
     ls
