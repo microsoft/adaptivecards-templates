@@ -104,7 +104,8 @@ class Dashboard extends React.Component<Props> {
         this.props.setPage("Dashboard", "Dashboard");
       }
     }
-    if (this.props.AuthState.graphAccessToken && !this.props.recentTemplates.isFetching
+    if (this.props.AuthState.graphAccessToken && this.props.AuthState.graphAccessToken.accessToken
+      && !this.props.recentTemplates.isFetching
       && prevProps.recentTemplates !== this.props.recentTemplates &&
       this.props.recentTemplates.recentlyViewed && this.props.recentTemplates.recentlyViewed.templates) {
       let templates = this.props.recentTemplates.recentlyViewed.templates;
@@ -171,8 +172,9 @@ class Dashboard extends React.Component<Props> {
             </React.Fragment>
             <React.Fragment>
               <Title>Recently Viewed</Title>
-              {!this.props.AuthState.accessToken ||
-                recentTemplates.isFetching || this.props.templateOwner.isFetchingName || this.props.templateOwner.isFetchingPicture ?
+              {!this.props.AuthState.graphAccessToken || !this.props.AuthState.graphAccessToken.accessToken ||
+                recentTemplates.isFetching || this.props.templateOwner.isFetchingName
+                || this.props.templateOwner.isFetchingPicture ?
                 <CenteredSpinner size={SpinnerSize.large} />
                 : recentlyViewedTemplates.length ? (
                   <RecentlyViewed
