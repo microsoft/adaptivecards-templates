@@ -5,7 +5,6 @@ import bodyParser from "body-parser";
 import session from "express-session";
 import helmet from "helmet";
 import mongoose from "mongoose";
-import { config } from "dotenv";
 
 // import controllers
 import { TemplateServiceClient } from "../../adaptivecards-templating-service/src/TemplateServiceClient";
@@ -36,8 +35,6 @@ app.use(session({
   saveUninitialized: true
 }));
 app.use(helmet.noSniff());
-
-config({ path: path.resolve(__dirname, "../.env") })
 
 mongoose.set('useFindAndModify', false)
 let mongoDB = new MongoDBProvider({ connectionString: process.env.ACMS_DB_CONNECTION });

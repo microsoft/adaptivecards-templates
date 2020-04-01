@@ -2,7 +2,6 @@ import React from 'react';
 
 import { Template } from 'adaptive-templating-service-typescript-node';
 
-import Config from '../../../Config';
 import ShareModalForm from './ShareModalForm';
 
 import ModalHOC from '../../../utils/ModalHOC';
