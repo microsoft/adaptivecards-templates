@@ -17,6 +17,7 @@ export interface ITemplateInstance {
   version: string;
   publishedAt?: Date;
   state?: TemplateState;
+  owner: string;
   isShareable?: boolean;
   numHits?: number;
   data?: JSON[];
@@ -28,7 +29,6 @@ export interface ITemplateInstance {
 export interface ITemplate {
   _id?: string;
   name: string;
-  owner: string;
   instances?: ITemplateInstance[];
   tags?: string[];
   deletedVersions?: string[];
