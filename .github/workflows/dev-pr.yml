@@ -14,11 +14,11 @@ steps:
   inputs:
     versionSpec: '12.x'
 
-- task: AzureKeyVault@1
-  inputs:
-    azureSubscription: $(azureSubscription)
-    keyVaultName: 'AC-KeyVault-West'
-    secretsFilter: '*'
+# - task: AzureKeyVault@1
+#   inputs:
+#     azureSubscription: $(azureSubscription)
+#     keyVaultName: 'AC-KeyVault-West'
+#     secretsFilter: '*'
 
 - script: |
     ls

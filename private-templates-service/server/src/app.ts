@@ -19,6 +19,8 @@ const RELATIVE_PATH_CLIENT = '../../../../client/build';
 const app = express();
 
 // Express configuration
+// app.set('db', process.env.DB_CONNECTION);
+// app.set('secret', process.env.CLIENT_ID);
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(bodyParser.json());
