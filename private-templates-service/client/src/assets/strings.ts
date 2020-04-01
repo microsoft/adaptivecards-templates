@@ -9,8 +9,8 @@ export const SHARE_WITH_LINK = "Share with link";
 export const COPY_LINK = "Copy link";
 
 // ShareModalForm.tsx
-export const EMAIL_RECIPIENTS = "Email Recipients";
-export const SEND_IN_OUTLOOK = "Send in Outlook";
+export const EMAIL_RECIPIENTS = "Send notification";
+export const SEND_IN_OUTLOOK = "Send an Email";
 
 // DeleteModal.tsx
 export const DELETE_WARNING = "Once a template is deleted, your organization will not be able to use it."
@@ -49,6 +49,8 @@ export const ABOUT_ADS = "About our Ads";
 export const MICROSOFT = "© Microsoft 2020";
 
 // PublishModal.tsx
+export const PUBLISH_MODAL_TITLE = "Publish Card";
+export const PUBLISH_MODAL_DESP = "Your new design will be available to your organization as ";
 export const SEARCH_FOR_PEOPLE = "Search for people";
 
 // NavBar/SideBar styled

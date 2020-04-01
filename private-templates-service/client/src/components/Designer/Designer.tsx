@@ -14,6 +14,7 @@ import { DesignerWrapper } from './styled';
 
 import EditNameModal from '../Common/EditNameModal';
 import SaveModal from './SaveModal/SaveModal';
+import DesignerPublishModal from './DesignerPublishModal';
 import { ModalState } from '../../store/page/types';
 
 const mapStateToProps = (state: RootState) => {
@@ -56,22 +57,23 @@ interface DesignerProps {
   isFetching: boolean;
 }
 
-interface State { 
+interface State {
   isSaveOpen: boolean;
 }
 
 let designer: ACDesigner.CardDesigner;
 
-class Designer extends React.Component<DesignerProps,State> {
+class Designer extends React.Component<DesignerProps, State> {
   constructor(props: DesignerProps) {
     super(props);
     props.setPage(this.props.templateName, "Designer");
-    this.state = {isSaveOpen: false };
+    this.state = { isSaveOpen: false };
   }
 
   toggleModal = () => {
-    this.setState({isSaveOpen: !this.state.isSaveOpen});
+    this.setState({ isSaveOpen: !this.state.isSaveOpen });
   }
+
   componentWillMount() {
     ACDesigner.GlobalSettings.enableDataBindingSupport = true;
     ACDesigner.GlobalSettings.showSampleDataEditorToolbox = true;
@@ -82,7 +84,7 @@ class Designer extends React.Component<DesignerProps,State> {
     }
     designer = initDesigner();
 
-    let publishButton = new ACDesigner.ToolbarButton("publishButton", "Publish", "", (sender) => (alert("Published!")));
+    let publishButton = new ACDesigner.ToolbarButton("publishButton", "Publish", "", (sender) => (this.props.openModal(ModalState.DesignerPublish)));
     publishButton.separator = true;
     designer.toolbar.insertElementAfter(publishButton, ACDesigner.CardDesigner.ToolbarCommands.TogglePreview);
 
@@ -122,8 +124,9 @@ class Designer extends React.Component<DesignerProps,State> {
     return (
       <React.Fragment>
         <DesignerWrapper id="designer-container" />
-        {this.props.modalState===ModalState.Save && <SaveModal designerSampleData = {designer.sampleData} designerTemplateJSON = {designer.getCard()}/>}
+        {this.props.modalState === ModalState.Save && <SaveModal designerSampleData={designer.sampleData} designerTemplateJSON={designer.getCard()} />}
         {this.props.modalState === ModalState.EditName && <EditNameModal />}
+        {this.props.modalState === ModalState.DesignerPublish && <DesignerPublishModal />}
       </React.Fragment>
     );
   }
@@ -149,11 +152,11 @@ function initDesigner(): ACDesigner.CardDesigner {
 }
 
 function onSave(designer: ACDesigner.CardDesigner, props: DesignerProps): void {
-  if(props.templateID === ""){
+  if (props.templateID === "") {
     props.openModal(ModalState.Save);
   }
-  else if (JSON.stringify(props.templateJSON) !== JSON.stringify(designer.getCard()) || props.sampleDataJSON !== designer.sampleData){ 
-    props.updateTemplate(props.templateID, props.version, designer.getCard(), designer.sampleData, props.templateName);  
+  else if (JSON.stringify(props.templateJSON) !== JSON.stringify(designer.getCard()) || props.sampleDataJSON !== designer.sampleData) {
+    props.updateTemplate(props.templateID, props.version, designer.getCard(), designer.sampleData, props.templateName);
   }
 }
 

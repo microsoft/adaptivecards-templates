@@ -66,6 +66,7 @@ export const CenterPanelRight = styled.div`
 export const SemiBoldText = styled.div`
   font-size: 1rem;
   font-weight: 600;
+  margin-bottom: 20px;
 `;
 
 export const BottomRow = styled.div`
@@ -87,4 +88,19 @@ export const ButtonGroup = styled.div`
 
 export const CancelButton = styled(DefaultButton)`
   margin-right: 12px;
+`;
+
+export const EmailPanel = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 50%;
+  margin-top: 20px;
+`;
+
+export const SendMailButton = styled(DefaultButton)`
+  max-width: fit-content;
+  min-width: 150px;
+  &: focus {
+    outline: 0px;
+  }
 `;
