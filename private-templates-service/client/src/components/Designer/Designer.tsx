@@ -86,11 +86,7 @@ class Designer extends React.Component<DesignerProps,State> {
   toggleModal = () => {
     this.setState({isSaveOpen: !this.state.isSaveOpen});
   }
-  
-  updateURL = () => {
-      this.props.history.push("/designer/"+ this.props.templateID + "/" + this.props.version);
-  }
-  
+    
   toggleSpinner = (isFetching: boolean) => {
     if(isFetching){
       this.props.openModal(ModalState.Spinner)
@@ -98,9 +94,12 @@ class Designer extends React.Component<DesignerProps,State> {
   }
 
   componentDidUpdate() {
+  if (this.props.location.pathname == '/designer/newcard/1.0' && this.props.templateID && this.props.version) {
+    this.props.history.replace('/designer/' + this.props.templateID + '/' + this.props.version);
+  }
     this.toggleSpinner(this.props.isFetching);
     if (this.props.templateJSON){
-      designer.setCard(this.props.templateJSON);
+      designer.setCard({...this.props.templateJSON});
     }
   }
   componentWillMount() {
@@ -130,7 +129,7 @@ class Designer extends React.Component<DesignerProps,State> {
     designer.monacoModuleLoaded(monaco);
 
     if (this.props.templateJSON) {
-      designer.setCard(this.props.templateJSON);
+      designer.setCard({...this.props.templateJSON});
     }
 
     if (this.props.sampleDataJSON) {
@@ -153,7 +152,7 @@ class Designer extends React.Component<DesignerProps,State> {
     return (
       <React.Fragment>
         <DesignerWrapper id="designer-container" />
-        {this.props.isFetching && <SpinnerModal closeAction = {this.updateURL}/>}
+        {this.props.isFetching && <SpinnerModal/>}
         {this.props.modalState === ModalState.Save && <SaveModal designerSampleData = {designer.sampleData} designerTemplateJSON = {designer.getCard()}/>}
         {this.props.modalState === ModalState.EditName && <EditNameModal/>}
       </React.Fragment> 

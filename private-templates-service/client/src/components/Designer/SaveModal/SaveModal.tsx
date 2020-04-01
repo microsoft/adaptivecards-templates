@@ -131,7 +131,7 @@ class SaveModal extends React.Component<Props, State> {
               </Container>
               <InfoWrapper>
                 <StyledH3>{CARDNAME}</StyledH3>
-                <StyledTextField onChange={this.onChange} />
+                <StyledTextField onChange={this.onChange} placeholder = {UNTITLEDCARD} />
                 <StyledH3>{TAGS}</StyledH3>
                 <TagsWrapper>
                   <Tags updateTags={this.saveTags} tagRemove={this.tagRemove} tags={this.state.tags} allowAddTag={true} allowEdit={true} />
