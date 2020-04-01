@@ -54,6 +54,7 @@ export const Styledh1 = styled.div`
   margin-bottom: 0;
   font-weight: 600;
 
+  margin-right: 16px;
   @media only screen and (max-width: ${BREAK.SM}px) {
     font-size: 1.125rem;
   }
@@ -88,7 +89,6 @@ export const StyledButtonContent = styled.div`
 `;
 
 export const EditButton = styled(IconButton)`
-  margin-left: 16px;
   border: 0;
   outline: 0;
 

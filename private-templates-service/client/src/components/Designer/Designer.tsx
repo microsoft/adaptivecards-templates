@@ -62,7 +62,7 @@ interface DesignerProps extends RouteComponentProps<MatchParams> {
   isFetching: boolean;
 }
 
-interface State { 
+interface State {
   isSaveOpen: boolean;
 }
 
@@ -73,7 +73,7 @@ interface MatchParams {
 
 let designer: ACDesigner.CardDesigner;
 
-class Designer extends React.Component<DesignerProps,State> {
+class Designer extends React.Component<DesignerProps, State> {
   constructor(props: DesignerProps) {
     super(props);
     props.setPage(this.props.templateName, "Designer");
@@ -84,7 +84,7 @@ class Designer extends React.Component<DesignerProps,State> {
   }
 
   toggleModal = () => {
-    this.setState({isSaveOpen: !this.state.isSaveOpen});
+    this.setState({ isSaveOpen: !this.state.isSaveOpen });
   }
     
   toggleSpinner = (isFetching: boolean) => {
@@ -164,7 +164,7 @@ function initDesigner(): ACDesigner.CardDesigner {
   let hostContainers: Array<ACDesigner.HostContainer> = [];
 
   hostContainers.push(new ACDesigner.WebChatContainer("Bot Framework WebChat", "containers/webchat-container.css"));
-  hostContainers.push(new ACDesigner.CortanaContainer("Cortana Skills", "containers/cortana-container.css"));
+  hostContainers.push(new ACDesigner.LightCortanaContainer("Cortana Light", "containers/cortana-container.css"));
   hostContainers.push(new ACDesigner.OutlookContainer("Outlook Actionable Messages", "containers/outlook-container.css"));
   hostContainers.push(new ACDesigner.TimelineContainer("Windows Timeline", "containers/timeline-container.css"));
   hostContainers.push(new ACDesigner.DarkTeamsContainer("Microsoft Teams - Dark", "containers/teams-container-dark.css"));
@@ -183,8 +183,8 @@ function onSave(designer: ACDesigner.CardDesigner, props: DesignerProps): void {
   if(props.templateID === "" || props.templateID === undefined){
     props.openModal(ModalState.Save);
   }
-  else if (JSON.stringify(props.templateJSON) !== JSON.stringify(designer.getCard()) || props.sampleDataJSON !== designer.sampleData){ 
-    props.updateTemplate(props.templateID, props.version, designer.getCard(), designer.sampleData, props.templateName);  
+  else if (JSON.stringify(props.templateJSON) !== JSON.stringify(designer.getCard()) || props.sampleDataJSON !== designer.sampleData) {
+    props.updateTemplate(props.templateID, props.version, designer.getCard(), designer.sampleData, props.templateName);
   }
 }
 
