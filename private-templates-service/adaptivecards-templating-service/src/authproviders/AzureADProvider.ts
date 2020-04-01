@@ -48,7 +48,7 @@ export class AzureADProvider implements AuthenticationProvider {
     // Check expiry date on token
     result = result && new Date() <= new Date(decodedToken.payload.exp * 1000);
     // Check aud of token matches the client ID of env app
-    result = result && process.env.CLIENT_ID === decodedToken.payload.aud;
+    result = result && process.env.ACMS_APP_ID === decodedToken.payload.aud;
 
     return result;
   }

@@ -6,6 +6,7 @@ import bodyParser from "body-parser";
 import session from "express-session";
 import helmet from "helmet";
 import mongoose from "mongoose";
+import { config } from "dotenv";
 
 // import controllers
 import { TemplateServiceClient } from "../../adaptivecards-templating-service/src/TemplateServiceClient";
@@ -29,7 +30,7 @@ app.use(helmet.hsts({
   maxAge: 15552000
 }));
 app.use(session({
-  secret: process.env.CLIENT_ID!,
+  secret: process.env.ACMS_APP_ID || "ACMS",
   cookie: {
     httpOnly: true,
     secure: true
@@ -39,8 +40,10 @@ app.use(session({
 }));
 app.use(helmet.noSniff());
 
+config({ path: path.resolve(__dirname, "../.env") })
+
 mongoose.set('useFindAndModify', false)
-let mongoDB = new MongoDBProvider({ connectionString: process.env.DB_CONNECTION });
+let mongoDB = new MongoDBProvider({ connectionString: process.env.ACMS_DB_CONNECTION });
 mongoDB.connect()
   .then(
     (res) => {
