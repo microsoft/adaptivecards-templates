@@ -38,7 +38,7 @@
     "typescript": "^3.7.5"
   },
   "scripts": {
-    "start": "npm run setup && react-scripts start",
+    "start": "react-scripts start",
     "setup": "bash setup.sh",
     "build": "sh -ac '. ./.env.${REACT_APP_ENV}; react-scripts build'",
     "build:dev": "REACT_APP_ENV=dev npm run build",
