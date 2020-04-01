@@ -15,7 +15,8 @@ import {
   VersionCardRow,
   StatusWrapper,
   VersionIcon,
-  VersionWrapper
+  VersionWrapper, 
+  InfoVersionContainer
 } from './styled'
 
 import {
@@ -33,6 +34,7 @@ import { openModal } from '../../../../../store/page/actions';
 import VersionModal from '../../../../Common/VersionModal';
 import { MANAGE } from '../../../../../assets/strings';
 import { RootState } from '../../../../../store/rootReducer';
+import { Scroller } from "../../../../../utils/Scroller";
 
 interface Props {
   template: Template;
@@ -56,6 +58,12 @@ const mapDispatchToProps = (dispatch: any) => {
 };
 
 class VersionCard extends React.Component<Props> {
+  scroller: Scroller;
+  constructor(props: Props) {
+    super(props);
+    this.scroller = new Scroller();
+  }
+
   render() {
     return (
       <Card key="Recent Releases" style={{ flex: '1 0 auto' }}>
@@ -73,6 +81,7 @@ class VersionCard extends React.Component<Props> {
             <VersionCardRowTitle style={{ flexBasis: `25%` }}>Updated</VersionCardRowTitle>
             <VersionCardRowTitle style={{ flexBasis: `20%` }}>Status</VersionCardRowTitle>
           </VersionCardRow>
+          <InfoVersionContainer onWheel={this.scroller.verticalScroll}>
           {this.props.template.instances && this.props.template.instances.map((instance: TemplateInstance, index: number) => (
             <VersionCardRow key={index}>
               <VersionWrapper>
@@ -86,6 +95,7 @@ class VersionCard extends React.Component<Props> {
               </StatusWrapper>
             </VersionCardRow>
           ))}
+          </InfoVersionContainer>
         </CardBody>
         {this.props.modalState === ModalState.Version && <VersionModal template={this.props.template} />}
       </Card>

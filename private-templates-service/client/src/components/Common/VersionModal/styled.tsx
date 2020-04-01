@@ -120,3 +120,15 @@ export const CheckboxWrapper = styled.div`
   align-items: center;
   flex-basis: 15%;
 `
+export const VersionContainer = styled.div`
+scroll-behavior: smooth;
+width: 100%;
+height: 200px;
+display: flex;
+flex-direction: column;
+flex-wrap: nowrap;
+justify-content: flex-start;
+overflow-x: hidden;
+overflow-y: auto;
+-webkit-overflow-scrolling: touch;
+`;
