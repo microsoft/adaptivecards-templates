@@ -104,7 +104,8 @@ export const Card = styled.div`
   flex: 0.47 0 0;
   display: flex;
   flex-direction: column;
-  box-shadow: 0px 3px 6px #00000029;
+  border: 1px solid ${COLORS.BORDER2};
+  border-radius: 5px;
   padding: 8px 0px 16px;
   margin-bottom: 24px;
 `;
