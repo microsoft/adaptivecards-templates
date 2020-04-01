@@ -31,8 +31,6 @@ export const RecentlyViewedHeader = styled.div`
 
 export const RecentlyViewedContainer = styled(Card)`
   flex: 0 1 auto;
-  border: 1px solid ${COLORS.BORDER2};
-  border-radius: 5px;
   justify-content: flex-start;
   margin-top: 10px;
   padding-bottom: 0px;

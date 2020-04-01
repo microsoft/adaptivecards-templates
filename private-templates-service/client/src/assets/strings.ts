@@ -67,4 +67,16 @@ export const TAGS = "Tags";
 
 //OwnerAvatar.tsx
 export const ERROR_LOADING_IMAGE = "Error loading image";
-export const ALT_TEXT = "Template owner profile picture"
+export const ALT_TEXT = "Template owner profile picture";
+
+//Tooltips
+export const EDIT_NAME_TOOLTIP = "Edit card name";
+export const HOST_CONFIG_TOOLTIP = "Host app preview";
+export const EDIT_IN_DESIGNER_TOOLTIP = "Edit this card in the designer";
+export const DELETE_BUTTON_TOOLTIP = "Delete card version";
+export const SHARE_BUTTON_TOOLTIP = "Share this card via link or e-mail"
+export const PUBLISH_BUTTON_TOOLTIP = "Publishing this card makes it available to your organization";
+export const UNPUBLISH_BUTTON_TOOLTIP = "Unpublishing this card makes it deprecated";
+
+// SkipLink.tsx
+export const SKIP_TO_MAIN_CONTENT_MESSAGE = "Skip to main content"

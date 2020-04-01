@@ -23,11 +23,23 @@ import EditNameModal from '../../../Common/EditNameModal';
 import DeleteModal from '../../../Common/DeleteModal';
 import VersionCard from './VersionCard';
 
-import { IDropdownOption, ActionButton } from 'office-ui-fabric-react';
+import { IDropdownOption, ActionButton, TooltipHost } from 'office-ui-fabric-react';
 import { SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 
-import { EDIT_IN_DESIGNER, DELETE, SHARE, PUBLISH, UNPUBLISH } from "../../../../assets/strings"
 import { THEME } from '../../../../globalStyles';
+import {
+  EDIT_IN_DESIGNER,
+  DELETE,
+  SHARE,
+  PUBLISH,
+  UNPUBLISH,
+  EDIT_IN_DESIGNER_TOOLTIP,
+  DELETE_BUTTON_TOOLTIP,
+  SHARE_BUTTON_TOOLTIP,
+  PUBLISH_BUTTON_TOOLTIP,
+  UNPUBLISH_BUTTON_TOOLTIP
+} from "../../../../assets/strings";
+import { TooltipContainer } from '../styled';
 import {
   OuterWrapper,
   HeaderWrapper,
@@ -54,20 +66,25 @@ import {
 const buttons = [
   {
     text: EDIT_IN_DESIGNER,
-    icon: { iconName: 'SingleColumnEdit' }
+    icon: { iconName: 'SingleColumnEdit' },
+    tooltip: EDIT_IN_DESIGNER_TOOLTIP
   },
   {
     text: DELETE,
-    icon: { iconName: 'Delete' }
+    icon: { iconName: 'Delete' },
+    tooltip: DELETE_BUTTON_TOOLTIP
   },
   {
     text: SHARE,
-    icon: { iconName: 'AddFriend' }
+    icon: { iconName: 'AddFriend' },
+    tooltip: SHARE_BUTTON_TOOLTIP
   },
   {
     text: PUBLISH,
     altText: UNPUBLISH,
-    icon: { iconName: 'PublishContent' }
+    icon: { iconName: 'PublishContent' },
+    tooltip: PUBLISH_BUTTON_TOOLTIP,
+    altTooltip: UNPUBLISH_BUTTON_TOOLTIP
   },
 ];
 
@@ -157,7 +174,7 @@ class TemplateInfo extends React.Component<Props, State> {
 
   componentDidUpdate(prevProps: Props, prevState: State) {
     let templateInstance = getTemplateInstance(this.props.template, this.state.version);
-    if (this.state.version !== prevState.version && templateInstance.lastEditedUser){
+    if (this.state.version !== prevState.version && templateInstance.lastEditedUser) {
       this.props.getOwnerName(templateInstance.lastEditedUser!);
       this.props.getOwnerProfilePicture(templateInstance.lastEditedUser!);
     }
@@ -189,6 +206,43 @@ class TemplateInfo extends React.Component<Props, State> {
       const newTags = this.props.template.tags.filter((existingTag: string) => existingTag !== tag);
       this.props.updateTags(newTags);
     }
+  }
+
+  tooltipButton = (val: any, templateState: PostedTemplate.StateEnum) => {
+    const tooltipID = val.text.replace(" ", "_").trim();
+    if (val.text === "Publish") {
+      return (
+        <TooltipContainer>
+          <TooltipHost id={tooltipID} content={templateState === PostedTemplate.StateEnum.Live ? val.altTooltip : val.tooltip}>
+            <ActionButton key={templateState === PostedTemplate.StateEnum.Live ? val.altText : val.text}
+              iconProps={val.icon}
+              allowDisabledFocus
+              onClick={() => { onActionButtonClick(this.props, this.state, val) }}
+              tabIndex={this.props.modalState ? -1 : 0}
+              ariaDescription={tooltipID}>
+              {templateState === PostedTemplate.StateEnum.Live ? val.altText : val.text}
+            </ActionButton>
+          </TooltipHost>
+        </TooltipContainer>
+      );
+    }
+    else {
+      return (
+        <TooltipContainer>
+          <TooltipHost id={tooltipID} content={val.tooltip}>
+            <ActionButton key={val.text}
+              iconProps={val.icon}
+              allowDisabledFocus
+              onClick={() => { onActionButtonClick(this.props, this.state, val) }}
+              tabIndex={this.props.modalState ? -1 : 0}
+              ariaDescription={tooltipID}>
+              {val.text}
+            </ActionButton>
+          </TooltipHost>
+        </TooltipContainer>
+      );
+    }
+
   }
 
   render() {
@@ -235,13 +289,7 @@ class TemplateInfo extends React.Component<Props, State> {
             </TimeStamp>
           </TopRowWrapper>
           <ActionsWrapper>
-            {buttons.map((val) => (
-              <ActionButton key={val.text} iconProps={val.icon} allowDisabledFocus
-                onClick={() => { onActionButtonClick(this.props, this.state, val) }}
-                tabIndex={this.props.modalState ? -1 : 0}>
-                {val.text === 'Publish' && templateState === PostedTemplate.StateEnum.Live ? val.altText : val.text}
-              </ActionButton>
-            ))}
+            {buttons.map((val) => this.tooltipButton(val, templateState))}
           </ActionsWrapper>
         </HeaderWrapper>
         <MainContentWrapper>
@@ -253,10 +301,10 @@ class TemplateInfo extends React.Component<Props, State> {
                 </CardHeader>
                 <CardBody>
                   {val.iconName && ((isFetchingOwnerName || isFetchingOwnerPic) ?
-                    <CenteredSpinner size={SpinnerSize.large} /> : 
-                    <IconWrapper><OwnerAvatar sizeInPx={50} oID={templateInstance.lastEditedUser!}/></IconWrapper>)}
+                    <CenteredSpinner size={SpinnerSize.large} /> :
+                    <IconWrapper><OwnerAvatar sizeInPx={50} oID={templateInstance.lastEditedUser!} /></IconWrapper>)}
                   {val.header === "Usage" && <UsageNumber>{templateInstance.numHits}</UsageNumber>}
-                  {(val.header === "Owner")? (this.props.owner && this.props.owner.displayNames) ? this.props.owner.displayNames[templateInstance.lastEditedUser!] : "" : val.bodyText}
+                  {(val.header === "Owner") ? (this.props.owner && this.props.owner.displayNames) ? this.props.owner.displayNames[templateInstance.lastEditedUser!] : "" : val.bodyText}
                 </CardBody>
               </Card>
             ))}
@@ -287,8 +335,7 @@ class TemplateInfo extends React.Component<Props, State> {
 }
 
 function onActionButtonClick(props: Props, state: State, val: any) {
-  let templateState = getTemplateInstance(props.template, state.version).state || PostedTemplate.StateEnum.Draft;
-
+  const templateState = getTemplateInstance(props.template, state.version).state || PostedTemplate.StateEnum.Draft;
   switch (val.text) {
     case SHARE:
       props.openModal(ModalState.Share);
