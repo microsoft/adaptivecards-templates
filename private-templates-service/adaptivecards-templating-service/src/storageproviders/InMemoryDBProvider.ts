@@ -74,6 +74,14 @@ export class InMemoryDBProvider implements StorageProvider {
     return this._matchTemplates(query, sortBy, sortOrder);
   }
 
+  async getTemplatesByOwner(
+    owner: string,
+    sortBy: SortBy = SortBy.alphabetical,
+    sortOrder: SortOrder = SortOrder.ascending
+  ): Promise<JSONResponse<ITemplate[]>> {
+    return this._matchTemplatesByOwner(owner, sortBy, sortOrder);
+  }
+
   // Will be fixed in a while to use JSONResponse
   async removeUser(query: Partial<ITemplate>): Promise<JSONResponse<Number>> {
     let removeCount: number = 0;
@@ -140,6 +148,23 @@ export class InMemoryDBProvider implements StorageProvider {
     return Promise.resolve({ success: false });
   }
 
+  protected async _matchTemplatesByOwner(owner: string, sortBy?: SortBy, sortOrder?: SortOrder): Promise<JSONResponse<ITemplate[]>> {
+    let res: ITemplate[] = [];
+
+    this.templates.forEach(template => {
+      if (this._matchTemplateByOwner(owner, template)) {
+        res.push(Utils.clone(template));
+      }
+    });
+    if (res.length) {
+      if (sortBy && sortOrder) {
+        res.sort(Utils.sortByField(sortBy, sortOrder));
+      }
+      return Promise.resolve({ success: true, result: res });
+    }
+    return Promise.resolve({ success: false });
+  }
+
   protected _autoCompleteUserModel(user: IUser): void {
     if (!user.recentlyViewedTemplates) {
       user.recentlyViewedTemplates = [];
@@ -172,6 +197,9 @@ export class InMemoryDBProvider implements StorageProvider {
     if(!instance.lastEditedUser) {
       instance.lastEditedUser = "";
     }
+    if (!instance.owner) {
+      instance.owner = "";
+    }
   }
   protected _autoCompleteTemplateModel(template: ITemplate): void {
     if (!template.tags) {
@@ -183,9 +211,6 @@ export class InMemoryDBProvider implements StorageProvider {
     }
     if (!template.isLive) {
       template.isLive = false;
-    }
-    if (!template.owner) {
-      template.owner = "";
     }
     if (!template.instances) {
       template.instances = [];
@@ -252,7 +277,6 @@ export class InMemoryDBProvider implements StorageProvider {
   protected _matchTemplate(query: Partial<ITemplate>, template: ITemplate): boolean {
     if (
       (query.name && !template.name.toLocaleUpperCase().includes(query.name.toLocaleUpperCase())) ||
-      (query.owner && !(query.owner === template.owner)) ||
       (query._id && !(query._id === template._id)) ||
       (query.isLive && !(query.isLive === template.isLive)) ||
       (query.tags && template.tags && !Utils.ifContainsList(template.tags, query.tags))
@@ -260,6 +284,12 @@ export class InMemoryDBProvider implements StorageProvider {
       return false;
     }
     return true;
+  }
+
+  protected _matchTemplateByOwner(owner: string, template: ITemplate): boolean {
+    return (template.instances !== undefined) && template.instances.some((instance: ITemplateInstance) => {
+      return instance.owner === owner;
+    })
   }
 
   async connect(): Promise<JSONResponse<Boolean>> {
