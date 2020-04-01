@@ -14,8 +14,9 @@ import { DesignerWrapper } from './styled';
 
 import EditNameModal from '../Common/EditNameModal';
 import SaveModal from './SaveModal/SaveModal';
-import DesignerPublishModal from './DesignerPublishModal';
 import { ModalState } from '../../store/page/types';
+import PublishModal from '../Common/PublishModal';
+import { Template } from 'adaptive-templating-service-typescript-node';
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -23,6 +24,7 @@ const mapStateToProps = (state: RootState) => {
     templateJSON: state.currentTemplate.templateJSON,
     templateName: state.currentTemplate.templateName,
     sampleDataJSON: state.currentTemplate.sampleDataJSON,
+    template: state.currentTemplate.template,
     modalState: state.page.modalState,
     version: state.currentTemplate.version,
     isFetching: state.currentTemplate.isFetching
@@ -48,6 +50,7 @@ interface DesignerProps {
   templateJSON: object;
   templateName: string;
   sampleDataJSON: object;
+  template?: Template;
   version: string;
   updateTemplate: (templateID: string, currentVersion: string, templateJSON: object, sampleDataJSON: object, templateName: string) => any;
   setPage: (currentPageTitle: string, currentPage: string) => void;
@@ -84,7 +87,7 @@ class Designer extends React.Component<DesignerProps, State> {
     }
     designer = initDesigner();
 
-    let publishButton = new ACDesigner.ToolbarButton("publishButton", "Publish", "", (sender) => (this.props.openModal(ModalState.DesignerPublish)));
+    let publishButton = new ACDesigner.ToolbarButton("publishButton", "Publish", "", (sender) => (this.props.openModal(ModalState.Publish)));
     publishButton.separator = true;
     designer.toolbar.insertElementAfter(publishButton, ACDesigner.CardDesigner.ToolbarCommands.TogglePreview);
 
@@ -126,7 +129,7 @@ class Designer extends React.Component<DesignerProps, State> {
         <DesignerWrapper id="designer-container" />
         {this.props.modalState === ModalState.Save && <SaveModal designerSampleData={designer.sampleData} designerTemplateJSON={designer.getCard()} />}
         {this.props.modalState === ModalState.EditName && <EditNameModal />}
-        {this.props.modalState === ModalState.DesignerPublish && <DesignerPublishModal />}
+        {this.props.modalState === ModalState.Publish && <PublishModal template={this.props.template} templateVersion={this.props.version} designerTemplateJSON={designer.getCard()} designerSampleDataJSON={designer.sampleData} />}
       </React.Fragment>
     );
   }
