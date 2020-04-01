@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { TooltipHost } from 'office-ui-fabric-react';
 import { SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import CortanaSkills from 'adaptivecards-designer/lib/hostConfigs/cortana-skills.json';
 import TeamsDark from 'adaptivecards-designer/lib/hostConfigs/microsoft-teams-dark.json';
@@ -22,7 +23,8 @@ import AdaptiveCard from '../../Common/AdaptiveCard'
 import TemplateInfo from './TemplateInfo';
 import requireAuthentication from '../../../utils/requireAuthentication';
 
-import { ModalWrapper, ACOuterPanel, StyledDropdown, ACPanel, ACWrapper, DescriptorWrapper, CenteredSpinner } from './styled';
+import * as STRINGS from '../../../assets/strings';
+import { ModalWrapper, ACOuterPanel, StyledDropdown, ACPanel, ACWrapper, DescriptorWrapper, CenteredSpinner, TooltipContainer } from './styled';
 
 import { Template } from 'adaptive-templating-service-typescript-node';
 import { ModalState } from '../../../store/page/types';
@@ -130,7 +132,14 @@ class PreviewModal extends React.Component<Props, State> {
         {template && !isFetching ?
           <React.Fragment>
             <ACOuterPanel>
-              <StyledDropdown selectedKey={selectedItem.key} onChange={this.hostConfigChange} options={DropdownOptions} tabIndex={this.props.modalState ? -1 : 0} />
+              <TooltipContainer>
+                <TooltipHost content={STRINGS.HOST_CONFIG_TOOLTIP} >
+                  <StyledDropdown selectedKey={selectedItem.key}
+                    onChange={this.hostConfigChange}
+                    options={DropdownOptions}
+                    tabIndex={this.props.modalState ? -1 : 0} />
+                </TooltipHost>
+              </TooltipContainer>
               <ACPanel>
                 <ACWrapper>
                   <AdaptiveCard cardtemplate={template} templateVersion={this.state.templateVersion} hostConfig={selectedItem.value} />
