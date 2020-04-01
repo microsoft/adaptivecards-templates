@@ -101,7 +101,7 @@ const NavBar = (props: NavBarProps) => {
       return (
         <Banner>
           <MobileBanner>
-            <StyledLogo src={Logo} />
+          <StyledLogo aria-label={STRINGS.LOGO_DESCRIPTION} src={Logo} />
             <Styledh1>{((props.templateID === "" || props.templateID === undefined) && STRINGS.UNTITLEDCARD) || props.templateName}</Styledh1>
             {(props.templateID !== "" && props.templateID !== undefined ) && <EditButton onClick={editName} iconProps={{ iconName: 'Edit' }} />}
           </MobileBanner>

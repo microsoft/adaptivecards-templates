@@ -1,21 +1,21 @@
 import React from 'react';
 import requireAuthentication from '../../utils/requireAuthentication';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 import { RootState } from '../../store/rootReducer';
 import { connect } from 'react-redux';
+import { ModalState } from '../../store/page/types';
+import { setPage, openModal } from '../../store/page/actions';
 import { updateTemplate, getTemplate } from '../../store/currentTemplate/actions';
 
 //ACDesigner
 import * as monaco from 'monaco-editor';
 import markdownit from 'markdown-it';
 import * as ACDesigner from 'adaptivecards-designer';
-import { setPage, openModal } from '../../store/page/actions';
 import { DesignerWrapper } from './styled';
 
 import EditNameModal from '../Common/EditNameModal';
 import SaveModal from './SaveModal/SaveModal';
-import { ModalState } from '../../store/page/types';
-import { withRouter, RouteComponentProps } from 'react-router-dom';
 import SpinnerModal from '../Common/SpinnerModal';
 
 const mapStateToProps = (state: RootState) => {
@@ -153,7 +153,7 @@ class Designer extends React.Component<DesignerProps,State> {
     return (
       <React.Fragment>
         <DesignerWrapper id="designer-container" />
-        {this.props.modalState === ModalState.Spinner && <SpinnerModal closeAction = {this.updateURL}/>}
+        {this.props.isFetching && <SpinnerModal closeAction = {this.updateURL}/>}
         {this.props.modalState === ModalState.Save && <SaveModal designerSampleData = {designer.sampleData} designerTemplateJSON = {designer.getCard()}/>}
         {this.props.modalState === ModalState.EditName && <EditNameModal/>}
       </React.Fragment> 
