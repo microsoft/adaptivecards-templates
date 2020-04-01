@@ -1,5 +1,4 @@
 import { AuthenticationProvider } from "./IAuthenticationProvider";
-require('dotenv').config()
 import jws, { Algorithm, Signature } from "jws";
 import axios from "axios";
 import { AuthIssuer } from "../models/models";

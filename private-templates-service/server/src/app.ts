@@ -1,5 +1,4 @@
 import express from "express";
-require('dotenv').config()
 import path from "path";
 import passport from "./config/passport";
 import bodyParser from "body-parser";
