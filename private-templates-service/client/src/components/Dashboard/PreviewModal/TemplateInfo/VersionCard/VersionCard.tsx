@@ -16,13 +16,13 @@ import {
   StatusWrapper,
   VersionIcon,
   VersionWrapper, 
-  InfoVersionContainer
+  InfoVersionContainer, 
+  VersionOuterCard, 
+  VersionCardBody
 } from './styled'
 
 import {
-  Card,
   CardHeader,
-  CardBody,
   StatusIndicator,
   Status
 } from './../styled';
@@ -66,7 +66,7 @@ class VersionCard extends React.Component<Props> {
 
   render() {
     return (
-      <Card key="Recent Releases" style={{ flex: '1 0 auto' }}>
+      <VersionOuterCard key="Recent Releases" style={{ flex: '1 0 auto' }}>
         <CardHeader>
           <VersionCardHeader>
             <CardTitle>Recent Releases</CardTitle>
@@ -75,7 +75,7 @@ class VersionCard extends React.Component<Props> {
             </CardManageButton>
           </VersionCardHeader>
         </CardHeader>
-        <CardBody>
+        <VersionCardBody>
           <VersionCardRow>
             <VersionCardRowTitle style={{ flexBasis: `15%` }}>Version</VersionCardRowTitle>
             <VersionCardRowTitle style={{ flexBasis: `25%` }}>Updated</VersionCardRowTitle>
@@ -96,9 +96,9 @@ class VersionCard extends React.Component<Props> {
             </VersionCardRow>
           ))}
           </InfoVersionContainer>
-        </CardBody>
+        </VersionCardBody>
         {this.props.modalState === ModalState.Version && <VersionModal template={this.props.template} />}
-      </Card>
+      </VersionOuterCard>
     );
   }
 }

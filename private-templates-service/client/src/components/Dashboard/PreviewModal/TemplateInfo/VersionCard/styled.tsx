@@ -5,6 +5,18 @@ import {
   VersionContainer
 } from '../../../../Common/VersionModal/styled';
 
+import {
+  Card,
+  CardBody
+} from './../styled';
+
+export const VersionOuterCard = styled(Card)`
+  overflow-y: hidden;
+`
+export const VersionCardBody = styled(CardBody)`
+  overflow-y: hidden;
+`
+
 export const CardManageButton = styled(ActionButton)`
   color: ${COLORS.GREY3};
   font-weight: 500;
@@ -73,5 +85,5 @@ export const VersionWrapper = styled.div`
 `
 
 export const InfoVersionContainer = styled(VersionContainer)`
-  height: 150px;
+  max-height: 150px;
 `

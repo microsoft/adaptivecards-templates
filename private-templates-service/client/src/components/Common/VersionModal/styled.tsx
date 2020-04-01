@@ -22,6 +22,7 @@ export const Modal = styled.div`
   background-color: ${COLORS.WHITE};
   width: 50%;
   padding: 48px;
+  overflow-y: hidden;
 `;
 
 export const Header = styled.div`
@@ -42,6 +43,7 @@ export const DescriptionAccent = styled.span`
 export const CenterPanelWrapper = styled.div`
   display: flex;
   margin-bottom: 24px;
+  overflow-y: hidden;
 `;
 
 export const BottomRow = styled.div`
@@ -72,6 +74,7 @@ export const Card = styled.div`
   border: 1px solid ${COLORS.BORDER};
   padding: 8px 0px 16px;
   margin-bottom: 24px;
+  overflow-y: hidden;
 `;
 
 export const CardHeaderRow = styled.div`
@@ -95,6 +98,7 @@ export const CardBody = styled.div`
   font-size: 0.875rem ;
   font-weight: 400;
   padding-top: 8px;
+  overflow-y: hidden;
 `;
 
 export const DateWrapper = styled.div`
@@ -123,7 +127,7 @@ export const CheckboxWrapper = styled.div`
 export const VersionContainer = styled.div`
 scroll-behavior: smooth;
 width: 100%;
-height: 200px;
+max-height: 200px;
 display: flex;
 flex-direction: column;
 flex-wrap: nowrap;
