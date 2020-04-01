@@ -250,17 +250,17 @@ export class InMemoryDBProvider implements StorageProvider {
   }
 
   protected _matchTemplate(query: Partial<ITemplate>, template: ITemplate): boolean {
-    if (
-      (query.name && !template.name.toLocaleUpperCase().includes(query.name.toLocaleUpperCase())) ||
-      (query.owner && !(query.owner === template.owner)) ||
-      (query._id && !(query._id === template._id)) ||
-      (query.isLive && !(query.isLive === template.isLive)) ||
-      (query.tags && template.tags && !Utils.ifContainsList(template.tags, query.tags))
+    if( 
+      (query.name && template.name.toLocaleUpperCase().includes(query.name.toLocaleUpperCase())) || 
+      (query.owner && (query.owner === template.owner)) ||
+      (query._id && (query._id === template._id)) ||
+      (query.isLive && (query.isLive === template.isLive)) || 
+      (query.tags && template.tags && Utils.ifContainsList(template.tags,query.tags))
     ) {
-      return false;
+      return true;
     }
-    return true;
-  }
+    return false
+    }
 
   async connect(): Promise<JSONResponse<Boolean>> {
     return Promise.resolve({ success: true });
