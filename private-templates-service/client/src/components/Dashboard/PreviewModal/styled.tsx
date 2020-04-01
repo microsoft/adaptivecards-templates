@@ -19,6 +19,12 @@ export const ACOuterPanel = styled.div`
   background: ${COLORS.GREY1};
 `;
 
+export const TooltipContainer = styled.div`
+  width: fit-content;
+  height: fit-content;
+  align-self: flex-end;
+`;
+
 export const StyledDropdown = styled(Dropdown)`
   align-self: flex-end;
   min-width: 190px;

@@ -16,6 +16,7 @@ import EditNameModal from '../Common/EditNameModal';
 import SaveModal from './SaveModal/SaveModal';
 import { ModalState } from '../../store/page/types';
 import { Tooltip, DirectionalHint, TooltipHost, ITooltipProps } from 'office-ui-fabric-react';
+import { TooltipContainer } from '../Dashboard/PreviewModal/styled';
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -62,7 +63,8 @@ interface State {
 }
 
 let designer: ACDesigner.CardDesigner;
-let saveButtonElement: HTMLElement, publishButtonElement: HTMLElement;
+let saveButtonElement: HTMLElement, publishButtonElement: HTMLElement
+let saveButtonParentElement: HTMLElement | null, publishButtonParentElement: HTMLElement | null;
 
 class Designer extends React.Component<DesignerProps, State> {
   constructor(props: DesignerProps) {
@@ -116,13 +118,30 @@ class Designer extends React.Component<DesignerProps, State> {
     for (let i = 0; i < buttons.length; i++) {
       if (buttons[i].innerHTML === 'Publish') {
         publishButtonElement = (buttons[i] as HTMLElement);
+        publishButtonParentElement = publishButtonElement.parentElement;
         publishButtonElement.style.color = 'pink';
       }
       else if (buttons[i].innerHTML === 'Save') {
         saveButtonElement = (buttons[i] as HTMLElement);
+        saveButtonParentElement = saveButtonElement.parentElement;
       }
     }
+
+    // document.createElement()
+    // React.eleme
+
+    // publishButtonParentElement!.removeChild(publishButtonElement);
+    // saveButtonParentElement!.removeChild(saveButtonElement);
+    // let tooltipSaveButton = React.createElement(TooltipContainer, {}, React.createElement(TooltipHost, {content: "Save this card as a draft"}, saveButtonElement));
+    // let tooltipPublishButton = React.createElement(TooltipContainer, {}, React.createElement(TooltipHost, {content: "Publishing this card makes it available to your organization"}, publishButtonElement));
+    // publishButtonParentElement!.append(tooltipPublishButton);
   }
+  /*
+    <parent>*
+      <tooltiphostcontainer>
+        <tooltiphost>
+          <button />*
+  */
 
   render() {
     console.log(saveButtonElement, publishButtonElement)
@@ -131,9 +150,6 @@ class Designer extends React.Component<DesignerProps, State> {
         <DesignerWrapper id="designer-container" />
         {this.props.modalState === ModalState.Save && <SaveModal designerSampleData={designer.sampleData} designerTemplateJSON={designer.getCard()} />}
         {this.props.modalState === ModalState.EditName && <EditNameModal />}
-        {saveButtonElement && <Tooltip targetElement={saveButtonElement}
-          content={"Save this card as a draft"}
-          directionalHint={DirectionalHint.topCenter} />}
       </React.Fragment>
     );
   }
