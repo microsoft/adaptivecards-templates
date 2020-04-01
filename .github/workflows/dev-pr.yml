@@ -14,12 +14,6 @@ steps:
   inputs:
     versionSpec: '12.x'
 
-# - task: AzureKeyVault@1
-#   inputs:
-#     azureSubscription: $(azureSubscription)
-#     keyVaultName: 'AC-KeyVault-West'
-#     secretsFilter: '*'
-
 - script: |
     ls
     echo $(danielleSecret)
@@ -50,15 +44,6 @@ steps:
     cd ../server
     npm run deploy
     cd ..
-
-- task: PowerShell@2
-  inputs:
-    targetType: 'inline'
-    script: |
-      $text="hello"
-      $envFile="DB_CONNECTION=" + $env:DB_CONNECTION + "`nCLIENT_ID=" + $env:CLIENT_ID
-      Set-Content -Path $(system.defaultworkingdirectory)\private-templates-service\server\.env -Value $envFile
-      $text
 
 - task: ArchiveFiles@2
   displayName: 'Archive the function source code'
