@@ -28,6 +28,7 @@ export const TooltipContainer = styled.div`
 export const StyledDropdown = styled(Dropdown)`
   align-self: flex-end;
   min-width: 190px;
+  max-width: 190px;
   margin: 32px 48px 0 0;
 `;
 
