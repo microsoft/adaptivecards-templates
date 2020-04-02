@@ -15,38 +15,12 @@ steps:
     versionSpec: '12.x'
 
 - script: |
-    ls
-    echo $(danielleSecret)
-    echo $(System.DefaultWorkingDirectory)
-    cd private-templates-service/adaptivecards-templating-service
-    npm install
-    cd ..
-    ls
-    cd adaptivecards-templating-client/typescript
-    npm install
-    npm run build
-    npm link
-    cd ../../client
-    npm link ../adaptivecards-templating-client/typescript
-    npm install
-    cd src 
-    npm link ../../adaptivecards-templating-client/typescript
-    cd ..
-    cd ..
-    cd adaptivecards-templating-service
-    sudo npm link
-    cd ../server
-    npm link ../adaptivecards-templating-service
-    npm install
-    cd ..
-    cd client
-    echo $(REACT_APP_ACMS_APP_ID)
-    echo $(REACT_APP_ACMS_REDIRECT_URI)
-    echo $(REACT_APP_ENV)
+    cd private-templates-service/server
+    npm run init-app
+    cd ../client
     npm run build
     cd ../server
     npm run deploy
-    cd ..
 
 - task: ArchiveFiles@2
   displayName: 'Archive the function source code'

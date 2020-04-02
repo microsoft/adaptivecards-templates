@@ -1,3 +1,7 @@
+let appInsights = require('applicationinsights');
+appInsights.setup('InstrumentationKey=' + process.env.ACMS_APP_INSIGHTS_INSTRUMENTATION_KEY).start();
+console.log('InstrumentationKey=' + process.env.ACMS_APP_INSIGHTS_INSTRUMENTATION_KEY);
+
 import express from "express";
 import path from "path";
 import passport from "./config/passport";
@@ -18,8 +22,6 @@ const RELATIVE_PATH_CLIENT = '../../../../client/build';
 const app = express();
 
 // Express configuration
-// app.set('db', process.env.DB_CONNECTION);
-// app.set('secret', process.env.CLIENT_ID);
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(bodyParser.json());

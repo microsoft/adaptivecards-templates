@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.11.2",
+    "@microsoft/applicationinsights-react-js": "^2.5.3",
+    "@microsoft/applicationinsights-web": "^2.5.3",
     "@microsoft/microsoft-graph-client": "^2.0.0",
     "@types/markdown-it": "0.0.9",
     "@types/node": "^13.5.0",
@@ -39,10 +41,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "setup": "bash setup.sh",
     "build": "react-scripts build",
-    "build:dev": "REACT_APP_ENV=dev npm run build",
-    "build:staging": "REACT_APP_ENV=staging npm run build",
     "test": "react-scripts test --watchAll=false",
     "eject": "react-scripts eject"
   },
