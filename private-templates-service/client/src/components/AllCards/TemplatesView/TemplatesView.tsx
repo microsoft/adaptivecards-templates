@@ -65,7 +65,11 @@ export class TemplatesView extends Component<TemplatesViewProps> {
     if (!templatesState.isFetching && templatesState.templates && templatesState.templates.templates) {
       templates = templatesState.templates.templates;
     }
-    return <React.Fragment>{this.onLoad(templatesState.isFetching, templates, ALL_CARDS_PLACEHOLDER)}</React.Fragment>;
+    return (
+      <React.Fragment>
+        {this.onLoad(templatesState.isFetching, templates, ALL_CARDS_PLACEHOLDER)}
+      </React.Fragment>
+    );
   }
 }
 
