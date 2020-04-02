@@ -55,7 +55,6 @@ class TemplateListContent extends React.Component<Props> {
           )}
           {displayComponents.author && (
             <TemplateListItem>
-              {" "}
               <OwnerInfo oID={template.instances[0]!.lastEditedUser!}></OwnerInfo>
             </TemplateListItem>
           )}
