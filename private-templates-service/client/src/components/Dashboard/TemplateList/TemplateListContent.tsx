@@ -4,7 +4,7 @@ import { Template } from "adaptive-templating-service-typescript-node";
 
 import { TemplateListBodyRow, TemplateListItem, TemplateListBody, TemplateListStatusIndicator, StatusWrapper } from "./styled";
 
-import { ListViewComponents } from "./index";
+import { ListViewComponents } from "./TemplateList";
 import { getDateString } from "../../../utils/versionUtils";
 import { capitalizeString } from "../../../utils/stringUtils";
 import { Status } from "../PreviewModal/TemplateInfo/styled";
