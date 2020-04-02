@@ -88,7 +88,7 @@ const navMenuLinks: INavLinkGroup[] = [
   {
     links: [
       {
-        name: "Dashboard",
+        name: STRINGS.DASHBOARD,
         url: "/",
         iconProps: {
           iconName: "ViewDashboard",
@@ -98,27 +98,27 @@ const navMenuLinks: INavLinkGroup[] = [
         ariaLabel: "Link to Dashboard"
       },
       {
-        name: "New Template",
+        name: STRINGS.NEW_CARD,
         url: "/designer",
         iconProps: {
           iconName: "CalculatorAddition",
           style: iconStyle
         },
         title: "",
-        ariaLabel: "Link to New Template"
+        ariaLabel: "Link to New Card"
       },
       {
-        name: "All Templates",
+        name: STRINGS.ALL_CARDS,
         url: "/dashboard/all",
         iconProps: {
           iconName: "ViewList",
           style: iconStylePink
         },
         title: "",
-        ariaLabel: "Link to All Templates"
+        ariaLabel: "Link to All Cards"
       },
       {
-        name: "Drafts",
+        name: STRINGS.DRAFTS,
         url: "/drafts",
         iconProps: {
           iconName: "SingleColumnEdit",
@@ -128,17 +128,17 @@ const navMenuLinks: INavLinkGroup[] = [
         ariaLabel: "Link to Drafts"
       },
       {
-        name: "Published",
+        name: STRINGS.PUBLISHED,
         url: "/published",
         iconProps: {
           iconName: "PublishContent",
           style: iconStylePink
         },
         title: "",
-        ariaLabel: "Link to Published Templates"
+        ariaLabel: "Link to Published Cards"
       },
       {
-        name: "Tags",
+        name: STRINGS.TAGS,
         url: "/tags",
         iconProps: {
           iconName: "Tag",
@@ -180,7 +180,7 @@ const SideBar = (props: Props) => {
           </Name>
         </UserWrapper>
         {props.isAuthenticated && <NavMenu styles={navMenuLinksProps} groups={navMenuLinks} onLinkClick={onNavClick} />}
-        {props.isAuthenticated && <SkipLink/>}
+        {props.isAuthenticated && <SkipLink />}
       </MainItems>
 
       <SignOut onClick={props.authButtonMethod} tabIndex={props.modalState ? -1 : 0}>Sign {props.isAuthenticated ? "Out" : "In"}</SignOut>
