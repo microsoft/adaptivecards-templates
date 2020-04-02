@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import requireAuthentication from '../../utils/requireAuthentication';
 
 import { RootState } from '../../store/rootReducer';
@@ -120,6 +121,7 @@ class Designer extends React.Component<DesignerProps, State> {
         publishButtonElement = (buttons[i] as HTMLElement);
         publishButtonParentElement = publishButtonElement.parentElement;
         publishButtonElement.style.color = 'pink';
+
       }
       else if (buttons[i].innerHTML === 'Save') {
         saveButtonElement = (buttons[i] as HTMLElement);
@@ -127,14 +129,31 @@ class Designer extends React.Component<DesignerProps, State> {
       }
     }
 
+
+    const publishParent = document.createElement('div');
+    // publishParent.append(publishButtonElement);
+
+
+
     // document.createElement()
     // React.eleme
 
     // publishButtonParentElement!.removeChild(publishButtonElement);
-    // saveButtonParentElement!.removeChild(saveButtonElement);
-    // let tooltipSaveButton = React.createElement(TooltipContainer, {}, React.createElement(TooltipHost, {content: "Save this card as a draft"}, saveButtonElement));
-    // let tooltipPublishButton = React.createElement(TooltipContainer, {}, React.createElement(TooltipHost, {content: "Publishing this card makes it available to your organization"}, publishButtonElement));
-    // publishButtonParentElement!.append(tooltipPublishButton);
+    //publishButtonParentElement!.remove
+    //saveButtonParentElement!.removeChild(saveButtonElement);
+    let tooltipSaveButtonWrapper = React.createElement(TooltipContainer, {}, React.createElement(TooltipHost, { content: "Save this card as a draft" }, saveButtonElement));
+    let tooltipPublishButtonWrapper = ReactDOM.render(<TooltipHost id={"dfsjksdkjl"} content="sjdfkls" />, publishParent);
+
+    publishButtonParentElement!.append(publishParent);
+
+    // React.createElement(TooltipContainer, {}, React.createElement(TooltipHost, { content: "Publishing this card makes it available to your organization" }, publishButtonElement))
+
+
+    // publishButtonParentElement!.insertBefore(tooltipPublishButtonWrapper, publishButtonElement);
+
+    //saveButtonParentElement!.appendChild(saveButtonElement);
+    console.log(saveButtonElement);
+    console.log(saveButtonParentElement);
   }
   /*
     <parent>*
