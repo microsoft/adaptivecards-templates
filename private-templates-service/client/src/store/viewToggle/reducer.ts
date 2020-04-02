@@ -1,5 +1,4 @@
 import { SET_TOGGLE_VIEW_TYPE, ViewToggleAction, ViewType, ViewToggleState } from "./types";
-import { DASHBOARD_MAIN_CONTENT_ID } from "../../components/Dashboard";
 
 const initialState: ViewToggleState = {
   viewType: ViewType.Grid
