@@ -1,4 +1,4 @@
-import TemplateList, { ListViewComponents } from "./TemplateList";
+import TemplateList from "./TemplateList";
 
-export type { ListViewComponents };
+export type { ListViewComponents } from "./TemplateList"
 export default TemplateList;
