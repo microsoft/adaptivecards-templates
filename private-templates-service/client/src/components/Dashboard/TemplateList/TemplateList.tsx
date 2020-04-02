@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Template } from "adaptive-templating-service-typescript-node";
 import { TemplateListContainer, TemplateListHeader, TemplateListHeaderItem } from "./styled";
-import TemplateListBody from "./TemplateListContent";
+import TemplateListContent from "./TemplateListContent";
 
 interface Props {
   templates: Template[];
@@ -20,7 +20,7 @@ export class TemplateList extends Component<Props> {
           {displayComponents.status && <TemplateListHeaderItem>Status</TemplateListHeaderItem>}
           {displayComponents.author && <TemplateListHeaderItem>Owner</TemplateListHeaderItem>}
         </TemplateListHeader>
-        <TemplateListBody templates={templates} propsOnClick={onClick} displayComponents={displayComponents}></TemplateListBody>
+        <TemplateListContent templates={templates} propsOnClick={onClick} displayComponents={displayComponents}></TemplateListContent>
       </TemplateListContainer>
     );
   }
