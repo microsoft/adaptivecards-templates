@@ -7,17 +7,16 @@ export const OuterAppWrapper = styled.div`
 `;
 
 export const MainAppWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex: 1 1 auto;
+  display: block;
   overflow: auto;
+  max-height: 100vh;
+  width: 100%;
 `;
 
 export const MainApp = styled.div`
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  flex: 1 1 auto;
   overflow: auto;
-  max-height: 100vh;
+  height: calc(100% - 61px);
 `;

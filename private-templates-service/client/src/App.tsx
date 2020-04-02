@@ -138,7 +138,7 @@ class App extends Component<Props, State> {
               }
             />
             <MainAppWrapper>
-              <NavBar/>
+              <NavBar />
               <MainApp>
                 {!this.props.isAuthenticated && error}
                 <Switch>

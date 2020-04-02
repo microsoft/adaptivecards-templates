@@ -9,6 +9,7 @@ import { ModalState } from '../../store/page/types';
 import { Template } from "adaptive-templating-service-typescript-node";
 
 import SearchBar from "./SearchBar";
+import TooltipEditButton from "./TooltipEditButton";
 
 import { ActionButton } from 'office-ui-fabric-react';
 import Logo from '../../assets/adaptive-cards-100-logo.png';
@@ -47,7 +48,6 @@ interface NavBarProps {
   templateID?: string;
   modalState?: ModalState;
 }
-
 
 const NavBar = (props: NavBarProps) => {
 
@@ -130,7 +130,7 @@ const NavBar = (props: NavBarProps) => {
           <BaselineBanner>
             <StyledLogo aria-label={STRINGS.LOGO_DESCRIPTION} src={Logo} />
             <Styledh1>{(props.template && props.template.name) || props.currentPageTitle}</Styledh1>
-            {!props.isFetching && <EditButton ariaLabel="Edit Template Name" onClick={editName} iconProps={{ iconName: 'Edit' }} tabIndex={props.modalState ? -1 : 0} />}
+            {!props.isFetching && <TooltipEditButton editName={editName} modalState={props.modalState} />}
           </BaselineBanner>
           <BackButton iconProps={{ iconName: 'Back' }} onClick={onBackButton} tabIndex={props.modalState ? -1 : 0} ><ButtonTextWrapper>Back</ButtonTextWrapper></BackButton>
         </Banner>
