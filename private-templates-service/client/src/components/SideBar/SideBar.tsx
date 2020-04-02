@@ -11,6 +11,7 @@ import { COLORS } from "../../globalStyles";
 import UserAvatar from "./UserAvatar";
 import mainLogo from "../../assets/adaptive-cards-100-logo.png";
 import * as STRINGS from "../../assets/strings";
+import KeyCode from '../../globalKeyCodes'
 
 // CSS
 import {
@@ -162,10 +163,20 @@ const SideBar = (props: Props) => {
     history.push(element.url);
   };
 
+  const onLogoClick = () => {
+    history.push("/");
+  }
+  
+  const onKeyDown = (e:React.KeyboardEvent) => {
+    if(e.keyCode === KeyCode.ENTER){
+      history.push("/");
+    }
+  } 
+
   return (
     <OuterSideBarWrapper>
       <MainItems>
-        <LogoWrapper>
+        <LogoWrapper onClick={onLogoClick} tabIndex={props.modalState? -1 : 0} onKeyDown={onKeyDown}>
           <Logo aria-label={STRINGS.LOGO_DESCRIPTION} src={mainLogo} />
           <LogoTextWrapper>
             <LogoTextHeader>Adaptive Cards</LogoTextHeader>
