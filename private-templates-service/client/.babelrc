@@ -1,5 +1,5 @@
 {
-	"presets": ["react-native", "flow"],
+	"presets": ["react-native", "flow", "@babel/preset-typescript"],
 	"retainLines": true,
 	"plugins": ["babel-plugin-styled-components"]
 }
