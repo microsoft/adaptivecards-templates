@@ -81,16 +81,8 @@ class AllCards extends Component<Props> {
     let tags: string[] = new Array();
 
     return (
-      <OuterAllCardsContainer
-        onWheel={e => {
-          console.log("scrolling outer");
-        }}
-      >
-        <AllCardsContainer
-          onWheel={e => {
-            console.log("scrolling inner");
-          }}
-        >
+      <OuterAllCardsContainer>
+        <AllCardsContainer>
           <UpperBar>
             <Title>All Cards</Title>
             <ViewHelperBar>
