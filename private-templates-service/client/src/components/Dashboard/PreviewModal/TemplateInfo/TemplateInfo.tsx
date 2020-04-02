@@ -13,7 +13,7 @@ import { getLatestVersion } from "../../../../utils/TemplateUtil";
 
 import { getOwnerName, getOwnerProfilePicture } from "../../../../store/templateOwner/actions";
 import { OwnerType } from "../../../../store/templateOwner/types";
-import OwnerAvatar from "../../RecentlyViewed/OwnerAvatar";
+import OwnerAvatar from "../../TemplateList/OwnerAvatar";
 
 import PublishModal from '../../../Common/PublishModal';
 import UnpublishModal from '../../../Common/UnpublishModal';

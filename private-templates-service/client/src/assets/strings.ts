@@ -1,3 +1,17 @@
+//SideBar.tsx
+export const DASHBOARD = "Dashboard";
+export const NEW_CARD = "New Card";
+export const ALL_CARDS = "All Cards";
+export const DRAFTS = "Drafts";
+export const PUBLISHED = "Published";
+
+//RecentlyViewed.tsx
+export const NAME = "Name";
+export const VERSION = "Version";
+export const DATE_MODIFIED = "Date Modified";
+export const STATUS = "Status";
+export const AUTHOR = "Author";
+
 // UnpublishModal.tsx
 export const UNPUBLISH_WARNING = "Once a template is unpublished, your organization will not be able to use it."
 export const UNPUBLISH_CONFIRMATION = "Are you sure you want to unpublish "
@@ -37,6 +51,7 @@ export const NEW_TEMPLATE_NAME = 'Untitled Card'
 // Dashboard.tsx
 export const DASHBOARD_RECENTLY_EDITED_PLACEHOLDER = 'No edited templates.';
 export const DASHBOARD_RECENTLY_VIEWED_PLACEHOLDER = 'No recently viewed templates.';
+export const FAVORITED_TAGS = "Favorited tags"
 
 // Footer.tsx
 export const SITEMAP = "Sitemap";
@@ -50,9 +65,10 @@ export const MICROSOFT = "© Microsoft 2020";
 
 
 // AllCards.tsx
-export const ALLCARDS_PLACEHOLDER = "Nothing do display yet."
-export const ALLCARDS_LIST_VIEW = "List View";
-export const ALLCARDS_GRID_VIEW = "Grid View";
+export const ALL_CARDS_TITLE = "Cards"
+export const ALL_CARDS_PLACEHOLDER = "Nothing do display yet."
+export const ALL_CARDS_LIST_VIEW = "List View";
+export const ALL_CARDS_GRID_VIEW = "Grid View";
 
 // PublishModal.tsx
 export const SEARCH_FOR_PEOPLE = "Search for people";

@@ -1,3 +1,3 @@
-import {Scroller} from "./AllCardsUtil"
+import {Scroller, ScrollDirection} from "./Scroller"
 
-export {Scroller};
+export {Scroller, ScrollDirection};

@@ -1,28 +1,30 @@
+// React
 import React, { Component } from "react";
-import { RootState } from "../../store/rootReducer";
-import { getAllTemplates } from "../../store/templates/actions";
-import { AllTemplateState } from "../../store/templates/types";
-import { RouteComponentProps, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import requireAuthentication from "../../utils/requireAuthentication";
-import Gallery from "../Gallery";
-import { Template } from "adaptive-templating-service-typescript-node";
+import { RouteComponentProps, withRouter } from "react-router-dom";
+// Store
+import { RootState } from "../../store/rootReducer";
+import { AllTemplateState } from "../../store/templates/types";
+import { ViewType } from "../../store/viewToggle/types";
+import { setViewToggleType } from "../../store/viewToggle/actions";
 import { setPage } from "../../store/page/actions";
+// Components
 import { setSearchBarVisible } from "../../store/search/actions";
-import { AllCardsContainer, OuterAllCardsContainer, UpperBar, TagsContainer, ViewHelperBar, ViewToggleBar} from "./styled";
-import { Title, CenteredSpinner, PlaceholderText } from "../Dashboard/styled";
+import { Title } from "../Dashboard/styled";
+import { AllCardsContainer, OuterAllCardsContainer, UpperBar, ViewHelperBar } from "./styled";
+import ToggleButton from "./ToggleButton";
+import TemplatesView from "./TemplatesView";
 import Sort from "../Dashboard/SearchPage/Sort";
 import Filter from "../Dashboard/SearchPage/Filter";
 import SearchPage from "../Dashboard/SearchPage";
-import { ALLCARDS_PLACEHOLDER, ALLCARDS_LIST_VIEW, ALLCARDS_GRID_VIEW } from "../../assets/strings";
-import { SpinnerSize, IconButton, IIconProps, IContextualMenuProps } from "office-ui-fabric-react";
-import Tags from "../Common/Tags";
-import { Scroller } from "../../utils/AllCardsUtil";
-
+// Utils
+import requireAuthentication from "../../utils/requireAuthentication";
+// Strings
+import { ALL_CARDS_LIST_VIEW, ALL_CARDS_GRID_VIEW, ALL_CARDS, ALL_CARDS_TITLE } from "../../assets/strings";
+import TagList from "./TagList";
 
 const mapStateToProps = (state: RootState) => {
   return {
-    templates: state.allTemplates,
     isSearch: state.search.isSearch
   };
 };
@@ -34,34 +36,31 @@ const mapDispatchToProps = (dispatch: any) => {
     setSearchBarVisible: (isSearchBarVisible: boolean) => {
       dispatch(setSearchBarVisible(isSearchBarVisible));
     },
-    getTemplates: () => {
-      dispatch(getAllTemplates());
+    toggleView: (viewType: ViewType) => {
+      dispatch(setViewToggleType(viewType));
     }
-  }
+  };
 };
 interface Props extends RouteComponentProps {
   templates: AllTemplateState;
-  getTemplates: () => void;
   setPage: (currentPageTitle: string, currentPage: string) => void;
   setSearchBarVisible: (isSearchBarVisible: boolean) => void;
+  toggleView: (viewType: ViewType) => void;
   isSearch: boolean;
 }
 
 class AllCards extends Component<Props> {
-  scroller: Scroller;
   constructor(props: Props) {
     super(props);
-    this.scroller = new Scroller();
-    this.props.setPage("Cards", "AllCards");
+    this.props.setPage(ALL_CARDS_TITLE, ALL_CARDS);
     this.props.setSearchBarVisible(true);
-    this.props.getTemplates();  
   }
   componentDidUpdate(prevProps: Props) {
     if (this.props.isSearch !== prevProps.isSearch) {
       if (this.props.isSearch) {
-        this.props.setPage("All Cards", "searchPage");
+        this.props.setPage(ALL_CARDS_TITLE, "searchPage");
       } else {
-        this.props.setPage("Cards", "AllCards");
+        this.props.setPage(ALL_CARDS_TITLE, ALL_CARDS);
       }
     }
   }
@@ -70,22 +69,6 @@ class AllCards extends Component<Props> {
     this.props.history.push("preview/" + templateID);
   };
 
-
-  onLoad = (isFetching: boolean, templates: Template[], placeHolder: string) => {
-    return isFetching ?
-      <CenteredSpinner size={SpinnerSize.large} />
-      : templates.length ? (
-        <Gallery
-          onClick={this.selectTemplate}
-          templates={templates}
-        />
-      ) : (
-          <PlaceholderText>
-            {placeHolder}
-          </PlaceholderText>
-        )
-  }
-  // TODO: decide which method to use
   render() {
     if (this.props.isSearch) {
       return (
@@ -94,45 +77,63 @@ class AllCards extends Component<Props> {
         </AllCardsContainer>
       );
     }
+    // These tags will be fetched
+    // let tags: string[] = new Array();
+    let tags: string[] = [
+      "hello",
+      "john",
+      "hello",
+      "john",
+      "hello",
+      "john",
+      "hello",
+      "john",
+      "hello",
+      "john",
+      "hello",
+      "john",
+      "hello",
+      "john",
+      "hello",
+      "john",
+      "hello",
+      "john",
+      "hello",
+      "john",
+      "hello",
+      "john",
+      "hello",
+      "john",
+      "hello",
+      "john"
+    ];
 
-
-    let templatesState: AllTemplateState = this.props.templates;
-    let templates: Template[] = Array();
-    let tags: string[] = ["hello", "john", "weather","hello", "john", "hello", "john", "weather","hello", "john","hello", "john", "weather","hello", "john", "weather","hello", "john", "weather", "tags", "john 1", "hello", "john", "weather", "tags", "john 1"];
-
-    if (
-      !templatesState.isFetching &&
-      templatesState.templates &&
-      templatesState.templates.templates
-    ) {
-     templates = templatesState.templates.templates;
-    }
-
-    return(
-    <OuterAllCardsContainer>
-      <AllCardsContainer>
-        <UpperBar>
-          <Title>
-            All Cards
-          </Title>
-          <ViewHelperBar>
-            <IconButton iconProps={{iconName: "BulletedList"}} title={ALLCARDS_LIST_VIEW} />
-            <IconButton iconProps={{iconName: "GridViewMedium"}} title={ALLCARDS_GRID_VIEW} />
-            <Sort />
-            <Filter />
-          </ViewHelperBar>
-        </UpperBar>
-        <TagsContainer onWheel={this.scroller.horizontalScroll}>
-        <Tags tags={tags} allowEdit={false}></Tags>
-        </TagsContainer>
-        {this.onLoad(templatesState.isFetching, templates, ALLCARDS_PLACEHOLDER)}
-    </AllCardsContainer>
-     </OuterAllCardsContainer>
+    return (
+      <OuterAllCardsContainer
+        onWheel={e => {
+          console.log("scrolling outer");
+        }}
+      >
+        <AllCardsContainer
+          onWheel={e => {
+            console.log("scrolling inner");
+          }}
+        >
+          <UpperBar>
+            <Title>All Cards</Title>
+            <ViewHelperBar>
+              <ToggleButton iconProps={{ iconName: "BulletedList" }} onClick={this.props.toggleView} viewType={ViewType.List} title={ALL_CARDS_LIST_VIEW} />
+              <ToggleButton iconProps={{ iconName: "GridViewMedium" }} onClick={this.props.toggleView} viewType={ViewType.Grid} title={ALL_CARDS_GRID_VIEW} />
+              <Sort />
+              <Filter />
+            </ViewHelperBar>
+          </UpperBar>
+          <TagList tags={tags} allowEdit={false} />
+          <TemplatesView onClick={this.selectTemplate} />
+        </AllCardsContainer>
+      </OuterAllCardsContainer>
     );
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(requireAuthentication(withRouter(AllCards)));
+export default connect(mapStateToProps, mapDispatchToProps)(requireAuthentication(withRouter(AllCards)));
