@@ -61,10 +61,6 @@ interface DesignerProps extends RouteComponentProps<MatchParams> {
   isFetching: boolean;
 }
 
-interface State {
-  isSaveOpen: boolean;
-}
-
 interface MatchParams {
   uuid: string;
   version: string;
@@ -72,11 +68,10 @@ interface MatchParams {
 
 let designer: ACDesigner.CardDesigner;
 
-class Designer extends React.Component<DesignerProps, State> {
+class Designer extends React.Component<DesignerProps> {
   constructor(props: DesignerProps) {
     super(props);
     props.setPage(this.props.templateName, "Designer");
-    this.state = {isSaveOpen: false };
     if(this.props.match.params.uuid !== "newcard"){
       this.props.getTemplate(this.props.match.params.uuid);
     }
