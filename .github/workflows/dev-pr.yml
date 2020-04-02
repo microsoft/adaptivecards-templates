@@ -40,7 +40,10 @@ steps:
     npm install
     cd ..
     cd client
-    npm run build:dev --if-present
+    echo $(REACT_APP_ACMS_APP_ID)
+    echo $(REACT_APP_ACMS_REDIRECT_URI)
+    echo $(REACT_APP_ENV)
+    npm run build
     cd ../server
     npm run deploy
     cd ..
