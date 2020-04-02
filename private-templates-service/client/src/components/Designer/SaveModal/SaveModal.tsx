@@ -27,7 +27,7 @@ import {
   StyledTextField
 } from './styled';
 
-import { UNTITLEDCARD, SAVETEXT, DRAFT, SAVE, CANCEL, SAVECARD, CARDNAME, TAGS } from '../../../assets/strings';
+import { UNTITLEDCARD, SAVETEXT, DRAFT, SAVE, CANCEL, SAVECARD, CARDNAME, TAGS, MYCARD } from '../../../assets/strings';
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -131,7 +131,7 @@ class SaveModal extends React.Component<Props, State> {
               </Container>
               <InfoWrapper>
                 <StyledH3>{CARDNAME}</StyledH3>
-                <StyledTextField onChange={this.onChange} placeholder = {UNTITLEDCARD} />
+                <StyledTextField onChange={this.onChange} placeholder = {MYCARD} defaultValue = {UNTITLEDCARD}/>
                 <StyledH3>{TAGS}</StyledH3>
                 <TagsWrapper>
                   <Tags updateTags={this.saveTags} tagRemove={this.tagRemove} tags={this.state.tags} allowAddTag={true} allowEdit={true} />

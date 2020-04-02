@@ -55,7 +55,6 @@ interface DesignerProps extends RouteComponentProps<MatchParams> {
   version: string;
   updateTemplate: (templateID: string, currentVersion: string, templateJSON: object, sampleDataJSON: object, templateName: string) => any;
   setPage: (currentPageTitle: string, currentPage: string) => void;
-  toggleModal: () => void;
   openModal: (modalState: ModalState) => void;
   getTemplate: (id: string) => void;
   modalState?: ModalState;
@@ -83,10 +82,6 @@ class Designer extends React.Component<DesignerProps, State> {
     }
   }
 
-  toggleModal = () => {
-    this.setState({ isSaveOpen: !this.state.isSaveOpen });
-  }
-    
   toggleSpinner = (isFetching: boolean) => {
     if(isFetching){
       this.props.openModal(ModalState.Spinner)
@@ -94,9 +89,9 @@ class Designer extends React.Component<DesignerProps, State> {
   }
 
   componentDidUpdate() {
-  if (this.props.location.pathname == '/designer/newcard/1.0' && this.props.templateID && this.props.version) {
-    this.props.history.replace('/designer/' + this.props.templateID + '/' + this.props.version);
-  }
+    if (this.props.location.pathname == '/designer/newcard/1.0' && this.props.templateID && this.props.version) {
+      this.props.history.replace('/designer/' + this.props.templateID + '/' + this.props.version);
+    }
     this.toggleSpinner(this.props.isFetching);
     if (this.props.templateJSON){
       designer.setCard({...this.props.templateJSON});
@@ -164,7 +159,7 @@ function initDesigner(): ACDesigner.CardDesigner {
   let hostContainers: Array<ACDesigner.HostContainer> = [];
 
   hostContainers.push(new ACDesigner.WebChatContainer("Bot Framework WebChat", "containers/webchat-container.css"));
-  hostContainers.push(new ACDesigner.LightCortanaContainer("Cortana Light", "containers/cortana-container.css"));
+  hostContainers.push(new ACDesigner.LightTeamsContainer("Cortana Light", "containers/cortana-container.css"));
   hostContainers.push(new ACDesigner.OutlookContainer("Outlook Actionable Messages", "containers/outlook-container.css"));
   hostContainers.push(new ACDesigner.TimelineContainer("Windows Timeline", "containers/timeline-container.css"));
   hostContainers.push(new ACDesigner.DarkTeamsContainer("Microsoft Teams - Dark", "containers/teams-container-dark.css"));
