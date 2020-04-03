@@ -8,8 +8,8 @@ import bodyParser from "body-parser";
 import { InMemoryDBProvider } from "../storageproviders/InMemoryDBProvider";
 import { ITemplate, ITemplateInstance } from "../models/models";
 
-console.log(process.env.REACT_APP_ACMS_LOCAL_APP_ID);
-console.log(process.env.REACT_APP_ACMS_LOCAL_APP_SECRET);
+console.log(process.env.REACT_APP_ACMS_APP_ID);
+console.log(process.env.REACT_APP_ACMS_DEV_APP_SECRET);
 
 export default async function getToken(): Promise<string> {
   const request = require("request-promise");
@@ -17,7 +17,7 @@ export default async function getToken(): Promise<string> {
   const requestParams = {
     grant_type: "client_credentials",
     client_id: process.env.REACT_APP_ACMS_APP_ID,
-    client_secret: process.env.REACT_APP_ACMS_LOCAL_APP_SECRET,
+    client_secret: process.env.REACT_APP_ACMS_DEV_APP_SECRET,
     resource: process.env.REACT_APP_ACMS_APP_ID
   };
   return await request
