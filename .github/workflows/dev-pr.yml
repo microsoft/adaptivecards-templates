@@ -21,7 +21,7 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-        if ("$(Build.SourceBranch)" -eq "refs/heads/users/daniellemott/pipeline") {Write-Host "##vso[task.setvariable variable=buildConfiguration;]Release"}
+        if ("$(Build.SourceBranch)" -eq "refs/heads/users/daniellemott/pipeline") {Write-Host "##vso[task.setvariable variable=buildConfiguration;]$(appName)"}
 
 - task: NodeTool@0 
   inputs:
