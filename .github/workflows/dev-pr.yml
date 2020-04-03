@@ -21,8 +21,20 @@ steps:
   inputs:
     versionSpec: '12.x'
 
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      If ("$(Build.SourceBranch)" -eq "refs/heads/master") {
+      Write-Host "##vso[task.setvariable variable=buildConfiguration;]Release"
+    }
+    If ("$(Build.SourceBranch)" -eq "refs/heads/develop") {
+      Write-Host "##vso[task.setvariable variable=buildConfiguration;]Debug"
+    }
+
 - script: |
     echo $(Build.SourceBranch)
+    echo $(buildConfiguration)
     cd private-templates-service/server
     npm run init-app
     cd ../client
