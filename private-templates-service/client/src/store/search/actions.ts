@@ -39,7 +39,7 @@ export function querySearch(searchByTemplateName: string, sortValue?: 'alphabeti
   return function (dispatch: any, getState: () => RootState) {
     dispatch(querySearchBegin())
     const api = initClientSDK(dispatch, getState);
-        
+    
     return api.allTemplates(undefined, true, searchByTemplateName, undefined, undefined, sortValue, undefined, searchByTemplateName )
       .then(response => {
         if (response.response && response.response.statusCode === 200) {
