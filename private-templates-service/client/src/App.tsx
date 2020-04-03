@@ -151,7 +151,7 @@ class App extends Component<Props, State> {
                   <Route path="/preview/:uuid">
                     <PreviewModal authButtonMethod={this.login} />
                   </Route>
-                  <Route exact path="/dashboard/all">
+                  <Route exact path="/allcards">
                     <AllCards authButtonMethod={this.login} />
                   </Route>
                 </Switch>
