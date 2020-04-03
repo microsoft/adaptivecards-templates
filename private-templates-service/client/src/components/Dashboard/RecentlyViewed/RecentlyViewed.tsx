@@ -1,11 +1,12 @@
 import React, { Component } from "react";
+import RecentlyViewedTable from "./RecentlyViewedTable";
 import { Template } from "adaptive-templating-service-typescript-node";
 import {
   RecentlyViewedContainer,
   RecentlyViewedHeader,
   RecentlyViewedHeaderItem
 } from "./styled";
-import RecentlyViewedTable from "./RecentlyViewedTable";
+import * as STRINGS from '../../../assets/strings';
 
 interface Props {
   recentlyViewed: Template[];
@@ -18,10 +19,10 @@ export class RecentlyViewed extends Component<Props> {
     return (
       <RecentlyViewedContainer>
         <RecentlyViewedHeader>
-          <RecentlyViewedHeaderItem>Name</RecentlyViewedHeaderItem>
-          <RecentlyViewedHeaderItem>Date Modified</RecentlyViewedHeaderItem>
-          <RecentlyViewedHeaderItem>Status</RecentlyViewedHeaderItem>
-          <RecentlyViewedHeaderItem>Owner</RecentlyViewedHeaderItem>
+          <RecentlyViewedHeaderItem>{STRINGS.NAME}</RecentlyViewedHeaderItem>
+          <RecentlyViewedHeaderItem>{STRINGS.DATE_MODIFIED}</RecentlyViewedHeaderItem>
+          <RecentlyViewedHeaderItem>{STRINGS.STATUS}</RecentlyViewedHeaderItem>
+          <RecentlyViewedHeaderItem>{STRINGS.AUTHOR}</RecentlyViewedHeaderItem>
         </RecentlyViewedHeader>
         <RecentlyViewedTable
           templates={recentlyViewed}
