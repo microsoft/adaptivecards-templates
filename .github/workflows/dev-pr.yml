@@ -30,6 +30,8 @@ steps:
 - script: |
     echo $(Build.SourceBranch)
     echo $(buildConfiguration)
+    echo $(REACT_APP_ENV)
+    
     cd private-templates-service/server
     npm run init-app
     cd ../client
