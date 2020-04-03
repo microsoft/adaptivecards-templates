@@ -21,7 +21,7 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-        if ("$(Build.SourceBranch)" -eq "refs/heads/users/daniellemott/pipeline") {Write-Host "##vso[task.setvariable variable=buildConfiguration;]$(appName)"}
+        if ("$(Build.SourceBranch)" -eq "refs/heads/users/daniellemott/pipeline") {Write-Host "##vso[task.setvariable variable=REACT_APP_BUILD;]$(appName)"}
 
 - task: NodeTool@0 
   inputs:
@@ -29,7 +29,7 @@ steps:
 
 - script: |
     echo $(Build.SourceBranch)
-    echo $(buildConfiguration)
+    echo $(REACT_APP_BUILD)
     echo $(REACT_APP_ENV)
     cd private-templates-service/server
     npm run init-app
