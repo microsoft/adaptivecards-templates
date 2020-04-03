@@ -37,7 +37,7 @@ class ToggleButton extends Component<ToggleButtonProps> {
   render() {
     return (
       <React.Fragment>
-        <IconButton iconProps={this.props.iconProps} onClick={this.onClick} title={this.props.title} checked={this.props.toggleState.viewType == this.props.viewType} styles={toggleButtonStyles} />
+        <IconButton iconProps={this.props.iconProps} onClick={this.onClick} title={this.props.title} checked={this.props.toggleState.viewType === this.props.viewType} styles={toggleButtonStyles} />
       </React.Fragment>
     );
   }

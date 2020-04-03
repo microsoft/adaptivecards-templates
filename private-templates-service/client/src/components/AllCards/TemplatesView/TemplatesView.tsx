@@ -43,7 +43,7 @@ export class TemplatesView extends Component<TemplatesViewProps> {
 
   displayTemplates = (onClick: (templateID: string) => void, templates: Template[], viewType: ViewType) => {
     console.log(viewType);
-    return viewType == ViewType.List ? (
+    return viewType === ViewType.List ? (
       <TemplateList templates={templates} displayComponents={{ author: true, dateModified: true, templateName: true, status: true, version: false }} onClick={onClick} />
     ) : (
       <Gallery onClick={onClick} templates={templates} />
@@ -60,7 +60,7 @@ export class TemplatesView extends Component<TemplatesViewProps> {
   };
   render() {
     let templatesState: AllTemplateState = this.props.templates;
-    let templates: Template[] = Array();
+    let templates: Template[] = [];
 
     if (!templatesState.isFetching && templatesState.templates && templatesState.templates.templates) {
       templates = templatesState.templates.templates;

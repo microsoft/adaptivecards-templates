@@ -8,7 +8,7 @@ export class Scroller {
   _scroll: (item: EventTarget & Element, deltaScroll: number, mult: number) => void;
   constructor(scrollDirection: ScrollDirection = ScrollDirection.Vertical) {
     this.timeStamp = 0;
-    if (scrollDirection == ScrollDirection.Vertical) {
+    if (scrollDirection === ScrollDirection.Vertical) {
       this._scroll = this.verticalScroll;
     } else {
       this._scroll = this.horizontalScroll;

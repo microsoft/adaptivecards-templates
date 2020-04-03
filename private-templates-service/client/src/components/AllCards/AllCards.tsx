@@ -78,7 +78,7 @@ class AllCards extends Component<Props> {
       );
     }
     // Container for tags that will be fetched at run time. Not implemented yet.
-    let tags: string[] = new Array();
+    let tags: string[] = [];
 
     return (
       <OuterAllCardsContainer>
