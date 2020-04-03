@@ -21,7 +21,7 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-        Write-Host "##vso[task.setvariable variable=buildConfiguration;]Release"}
+        Write-Host "##vso[task.setvariable variable=buildConfiguration;]Release"
 
 - task: NodeTool@0 
   inputs:
