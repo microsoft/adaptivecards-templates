@@ -1,5 +1,6 @@
 import { Template, PostedTemplate, TemplateApi } from 'adaptive-templating-service-typescript-node';
 import { RootState } from "../../store/rootReducer"
+import Config from '../../Config';
 
 export function getLatestVersion(template?: Template): string {
   if (template && template.instances && template.instances[0] && template.instances[0].version) {
@@ -38,4 +39,12 @@ export function populateTemplate(getState: () => RootState): PostedTemplate {
 
   newTemplate.version = version;
   return newTemplate;
+}
+
+export function getShareURL(templateID?: string, templateVersion?: string): string {
+  return "/preview/" + templateID + "/" + templateVersion;
+}
+
+export function getFullShareURL(templateID?: string, templateVersion?: string): string {
+  return (Config.redirectUri + getShareURL(templateID, templateVersion)).replace("//", "/");
 }
