@@ -27,6 +27,7 @@ import Footer from "./Footer";
 import {
   DASHBOARD_RECENTLY_EDITED_PLACEHOLDER,
   DASHBOARD_RECENTLY_VIEWED_PLACEHOLDER,
+  FAVORITED_TAGS
 } from '../../assets/strings';
 
 
@@ -191,7 +192,7 @@ class Dashboard extends React.Component<Props> {
             </React.Fragment>
           </DashboardContainer>
           <TagsContainer>
-            <Title style={{ marginRight: "150px", color: 'pink' }}>Tags</Title>
+            <Title style={{ marginRight: "150px", color: 'pink' }}>{FAVORITED_TAGS}</Title>
             <Tags tags={tags} allowEdit={false}></Tags>
           </TagsContainer>
         </OuterWindow>

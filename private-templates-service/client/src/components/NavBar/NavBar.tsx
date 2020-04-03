@@ -75,7 +75,7 @@ const NavBar = (props: NavBarProps) => {
       history.replace('/')
     }
   }
-
+  
   switch (props.currentPage.toLowerCase()) {
     case "dashboard":
       return (
@@ -135,7 +135,7 @@ const NavBar = (props: NavBarProps) => {
           <BackButton iconProps={{ iconName: 'Back' }} onClick={onBackButton} tabIndex={props.modalState ? -1 : 0} ><ButtonTextWrapper>Back</ButtonTextWrapper></BackButton>
         </Banner>
       );
-    case "allcards":
+    case "all cards":
       return (
         <Banner>
           <MobileBanner>
