@@ -35,6 +35,9 @@ steps:
     npm run init-app
     cd ../client
     npm run build
+    npm run test
+    cd ../adaptivecards-templating-service
+    npm run test
     cd ../server
     npm run deploy
 
