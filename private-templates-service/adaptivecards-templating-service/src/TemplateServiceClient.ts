@@ -738,13 +738,13 @@ export class TemplateServiceClient {
       tags: tags,
       owner: owned ? userId : undefined
     };
-    console.log("templateQuery: " ,templateQuery, " sortBy: ", sortBy," sortOrder: ", sortOrder)
+
     let response = await this.storageProvider.getTemplates(templateQuery, sortBy, sortOrder);
 
     if (!response.success || !response.result) return response;
 
     let templates: ITemplate[] = response.result;
-    console.log("templates: ",templates)
+
     if (owned === false) {
       templates = await this._getOwnedTemplates(authId, templates, owned);
     }
@@ -1140,18 +1140,13 @@ export class TemplateServiceClient {
 
     router.get("/", (req: Request, res: Response, _next: NextFunction) => {
       let token = parseToken(req.headers.authorization!);
-      console.log("sortBy: ",req.query.sortBy," sortOrder: ", req.query.sortOrder);
-      console.log(req.query.sortBy in SortBy,"is it in sortby")
-      console.log("sortby:", SortBy)
       
       if (req.query.sortBy && !(req.query.sortBy in SortBy)) {
-        console.log("fail in first")
         const err = new TemplateError(ApiError.InvalidQueryParam, "Sort by value is not valid.");
         return res.status(400).json({ error: err });
       }
 
       if (req.query.sortOrder && !(req.query.sortOrder in SortOrder)) {
-        console.log("fail in second")
         const err = new TemplateError(ApiError.InvalidQueryParam, "Sort order value is not valid.");
         return res.status(400).json({ error: err });
       }
