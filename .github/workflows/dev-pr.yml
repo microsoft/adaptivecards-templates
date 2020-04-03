@@ -1,7 +1,14 @@
 trigger:
-- users/daniellemott/pipeline
+  batch: true
+  branches:
+    include:
+    - users/daniellemott/pipeline
+    # - dev
+    # - stage
+
 # no PR builds
 pr: none
+
 variables: 
   ## Add this under variables section in the pipeline
   azureSubscription: 'Adaptive Cards (47c80630-3d74-4b3e-a2f4-57e6368cd8c6)'
@@ -15,6 +22,7 @@ steps:
     versionSpec: '12.x'
 
 - script: |
+    echo $(Build.SourceBranch)
     cd private-templates-service/server
     npm run init-app
     cd ../client
