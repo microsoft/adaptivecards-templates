@@ -11,6 +11,7 @@ import { ITemplate, ITemplateInstance } from "../models/models";
 console.log(process.env.REACT_APP_ACMS_APP_ID);
 console.log(process.env.REACT_APP_ACMS_DEV_APP_SECRET);
 
+
 export default async function getToken(): Promise<string> {
   const request = require("request-promise");
   const endpoint = "https://login.microsoftonline.com/72f988bf-86f1-41af-91ab-2d7cd011db47/oauth2/token";
