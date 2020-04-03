@@ -1,6 +1,6 @@
 {
   "name": "adaptivecards-templating-service",
-  "version": "1.0.0-beta.0.2",
+  "version": "1.0.0-beta.0.3",
   "description": "Backend library for the adaptive cards templating service.",
   "main": "dist/index.js",
   "scripts": {
