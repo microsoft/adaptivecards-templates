@@ -32,8 +32,10 @@ export class MongoDBProvider implements StorageProvider {
         })
       };
     }
-
-    return templateQuery;
+    if(templateQuery.name && templateQuery.tags){
+      return {$or: [{name:templateQuery.name},{tags:templateQuery.tags}]}
+    }
+    return templateQuery
   }
   async getUsers(query: Partial<IUser>): Promise<JSONResponse<IUser[]>> {
     let userQuery: any = this._constructUserQuery(query);
