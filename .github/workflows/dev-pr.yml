@@ -17,18 +17,18 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-- task: NodeTool@0 
-  inputs:
-    versionSpec: '12.x'
-
 - task: PowerShell@2
   inputs:
     targetType: 'inline'
     script: |
       If ("$(Build.SourceBranch)" -eq "refs/heads/master") {
-      Write-Host "##vso[task.setvariable variable=buildConfiguration;]Release"}
-    If ("$(Build.SourceBranch)" -eq "refs/heads/develop") {
-      Write-Host "##vso[task.setvariable variable=buildConfiguration;]Debug"}
+        Write-Host "##vso[task.setvariable variable=buildConfiguration;]Release"}
+      If ("$(Build.SourceBranch)" -eq "refs/heads/develop") {
+        Write-Host "##vso[task.setvariable variable=buildConfiguration;]Debug"}
+
+- task: NodeTool@0 
+  inputs:
+    versionSpec: '12.x'
 
 - script: |
     echo $(Build.SourceBranch)
