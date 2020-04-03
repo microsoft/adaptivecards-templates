@@ -21,15 +21,27 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-        if ("$(Build.SourceBranch)" -eq "refs/heads/users/daniellemott/pipeline") {Write-Host "##vso[task.setvariable variable=REACT_APP_BUILD;]$(appName)"}
+        if ("$(Build.SourceBranch)" -eq "refs/heads/users/daniellemott/pipeline") {
+          Write-Host "##vso[task.setvariable variable=ACMS_APP_ID;]$(DEV_REACT_APP_ACMS_APP_ID)"
+          Write-Host "##vso[task.setvariable variable=REACT_APP_ACMS_APP_ID;]$(DEV_REACT_APP_ACMS_APP_ID)"
+          Write-Host "##vso[task.setvariable variable=REACT_APP_ACMS_APP_INSIGHTS_INSTRUMENTATION_KEY;]$(DEV_REACT_APP_ACMS_APP_INSIGHTS_INSTRUMENTATION_KEY)"
+          Write-Host "##vso[task.setvariable variable=REACT_APP_ACMS_APP_NAME;]$(DEV_REACT_APP_ACMS_APP_NAME)"
+          Write-Host "##vso[task.setvariable variable=REACT_APP_ACMS_APP_SECRET;]$(DEV_REACT_APP_ACMS_APP_SECRET)"
+          Write-Host "##vso[task.setvariable variable=REACT_APP_ACMS_REDIRECT_URI;]$(DEV_REACT_APP_ACMS_REDIRECT_URI)"
+          Write-Host "##vso[task.setvariable variable=REACT_APP_ENV;]$(DEV_REACT_APP_ENV)"
+          }
 
 - task: NodeTool@0 
   inputs:
     versionSpec: '12.x'
 
 - script: |
-    echo $(Build.SourceBranch)
-    echo $(REACT_APP_BUILD)
+    echo $(ACMS_APP_ID)
+    echo $(REACT_APP_ACMS_APP_ID)
+    echo $(REACT_APP_ACMS_APP_INSIGHTS_INSTRUMENTATION_KEY)
+    echo $(REACT_APP_ACMS_APP_NAME)
+    echo $(REACT_APP_ACMS_REDIRECT_URI)
+    echo $(REACT_APP_ACMS_APP_SECRET)
     echo $(REACT_APP_ENV)
     cd private-templates-service/server
     npm run init-app
