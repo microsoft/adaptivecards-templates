@@ -45,7 +45,7 @@ import { getDateString } from '../../../utils/versionUtils';
 import { capitalizeString } from "../../../utils/stringUtils";
 import ModalHOC from '../../../utils/ModalHOC';
 import { closeModal } from '../../../store/page/actions';
-import { Scroller } from '../../../utils/Scroller';
+import { Scroller } from '../../../utils/AllCardsUtil/Scroller';
 
 interface Props {
   template: Template;
@@ -133,7 +133,7 @@ class VersionModal extends React.Component<Props, State> {
                 <CardHeaderText>{`${this.state.versionList.filter(function (s) { return s; }).length} Selected`}</CardHeaderText>
               </CardHeaderRow>
               <CardBody>
-                <VersionContainer onWheel={this.scroller.verticalScroll}>
+                <VersionContainer onWheel={this.scroller.scroll}>
                 {this.props.template.instances && this.props.template.instances.map((instance: TemplateInstance, index: number) => (
                   <VersionCardRow>
                     <VersionWrapper>
