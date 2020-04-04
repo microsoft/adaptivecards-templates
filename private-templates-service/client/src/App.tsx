@@ -117,7 +117,6 @@ class App extends Component<Props, State> {
         />
       );
     }
-    console.log(process.env.REACT_APP_BUILD);
 
     return (
       <Router>
