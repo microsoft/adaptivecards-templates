@@ -100,7 +100,7 @@ describe("Basic Post Templates", () => {
       .send({
         template: {}
       });
-    expect(res.status).toEqual(202);
+    expect(res.status).toEqual(201);
     expect(res.body).toHaveProperty("id");
     id = res.body.id;
     idsToDelete.push(id);
