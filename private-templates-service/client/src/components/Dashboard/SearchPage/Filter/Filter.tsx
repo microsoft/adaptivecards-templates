@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { StyledFilterDropdown } from './styled';
 import { clearFilter, queryFilter } from "../../../../store/filter/actions";
 import { THEME } from '../../../../globalStyles';
-import { querySearch } from "../../../../store/search/actions";
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -22,9 +21,6 @@ const mapDispatchToProps = (dispatch: any) => {
     },
     queryFilter: (filterType: string) => {
       dispatch(queryFilter(filterType));
-    },
-    querySearch: (templateName: string, sortBy: "alphabetical" | "dateCreated" | "dateUpdated" | undefined) => { 
-      dispatch(querySearch(templateName,sortBy));
     }
   }
 }
@@ -34,7 +30,6 @@ interface Props {
   filterType: string;
   queryFilter: (filterType: string) => void;
   clearFilter: () => void;
-  querySearch: (templateName: string, sortBy: "alphabetical" | "dateCreated" | "dateUpdated" | undefined) => void;
 }
 
 const options: IDropdownOption[] = [
