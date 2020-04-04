@@ -52,7 +52,7 @@ steps:
     
 - script: |
     cd ../adaptivecards-templating-service
-    # npm run test
+    npm run test
   displayName: Run backend tests
 
 - script: |
