@@ -5,8 +5,7 @@ import { connect } from 'react-redux';
 import { StyledSortDropdown } from "./styled";
 import { clearSort, querySort } from '../../../../store/sort/actions';
 import { THEME } from '../../../../globalStyles';
-import { querySearch, clearSearch } from "../../../../store/search/actions";
-import { getComboBoxOptionClassNames } from "office-ui-fabric-react/lib/components/ComboBox/ComboBox.classNames";
+import { querySearch } from "../../../../store/search/actions";
 
 const mapStateToProps = (state: RootState) => {
   return {

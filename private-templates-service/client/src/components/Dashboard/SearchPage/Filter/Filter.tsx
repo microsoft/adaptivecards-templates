@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { StyledFilterDropdown } from './styled';
 import { clearFilter, queryFilter } from "../../../../store/filter/actions";
 import { THEME } from '../../../../globalStyles';
-import { querySearch, clearSearch } from "../../../../store/search/actions";
+import { querySearch } from "../../../../store/search/actions";
 
 const mapStateToProps = (state: RootState) => {
   return {
