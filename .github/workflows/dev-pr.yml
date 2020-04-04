@@ -47,18 +47,22 @@ steps:
     npm run init-app
     cd ../client
     npm run build
-    # npm run test
   displayName: Build App
+
+- script: |
+    cd private-templates-service/client
+    npm run test
+  displayName: Run frontend tests
     
 - script: |
-    cd ../adaptivecards-templating-service
+    cd private-templates-service/adaptivecards-templating-service
     npm run test
   displayName: Run backend tests
 
 - script: |
-    cd ../server
+    cd private-templates-service/server
     npm run deploy
-  displayName: Compile backend
+  displayName: Build backend
 
 - task: ArchiveFiles@2
   displayName: 'Archive the function source code'
