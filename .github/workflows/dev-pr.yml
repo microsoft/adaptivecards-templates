@@ -53,6 +53,7 @@ steps:
     cd ../server
     npm run deploy
 
+
 - task: ArchiveFiles@2
   displayName: 'Archive the function source code'
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
