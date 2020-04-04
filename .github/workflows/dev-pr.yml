@@ -48,10 +48,17 @@ steps:
     cd ../client
     npm run build
     # npm run test
+  displayName: Build App
+    
+- script: |
     cd ../adaptivecards-templating-service
     # npm run test
+  displayName: Run backend tests
+
+- script: |
     cd ../server
     npm run deploy
+  displayName: Compile backend
 
 - task: ArchiveFiles@2
   displayName: 'Archive the function source code'
@@ -71,7 +78,7 @@ steps:
 
 - task: AzureWebApp@1
   displayName: 'Azure Web App Deploy'
-  condition: succeeded()
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
   inputs:
     azureSubscription: $(azureSubscription)
     appType: webAppLinux
