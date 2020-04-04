@@ -53,7 +53,6 @@ steps:
     cd ../server
     npm run deploy
 
-
 - task: ArchiveFiles@2
   displayName: 'Archive the function source code'
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
@@ -66,7 +65,7 @@ steps:
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: drop'
-  condition: succeeded()
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
 
