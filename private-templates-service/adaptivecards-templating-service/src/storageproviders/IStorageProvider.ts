@@ -8,7 +8,6 @@ export interface StorageProvider {
   // TODO: Implement OR by tags or name
   getUsers(query: Partial<IUser>): Promise<JSONResponse<IUser[]>>;
   getTemplates(query: Partial<ITemplate>, sortBy?: SortBy, sortOrder?: SortOrder): Promise<JSONResponse<ITemplate[]>>;
-  getTemplatesByOwner(owner: string, sortBy?: SortBy, sortOrder?: SortOrder): Promise<JSONResponse<ITemplate[]>>;
   updateUser(query: Partial<IUser>, updateQuery: Partial<IUser>): Promise<JSONResponse<Number>>;
   updateTemplate(query: Partial<ITemplate>, updateQuery: Partial<ITemplate>): Promise<JSONResponse<Number>>;
   insertUser(user: IUser): Promise<JSONResponse<string>>;

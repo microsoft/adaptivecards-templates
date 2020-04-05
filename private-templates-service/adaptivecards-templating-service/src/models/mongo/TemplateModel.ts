@@ -32,6 +32,7 @@ export const TemplateSchema: Schema = new Schema(
   {
     _id: { type: String, required: true },
     name: { type: String, required: true },
+    owners: { type: [String], required: true },
     instances: { type: [TemplateInstanceSchema], default: [] },
     tags: { type: [String], default: [] },
     deletedVersions: { type: [String], default: [] },
