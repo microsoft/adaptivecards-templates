@@ -32,8 +32,8 @@ export class MongoDBProvider implements StorageProvider {
         })
       };
     }
-    if (query.owners && query.owners.length) {
-      templateQuery.owners = { $all: clone(query.owners) }
+    if (query.authors && query.authors.length) {
+      templateQuery.authors = { $all: clone(query.authors) }
     }
 
     return templateQuery;

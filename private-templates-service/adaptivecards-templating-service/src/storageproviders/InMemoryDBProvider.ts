@@ -111,18 +111,6 @@ export class InMemoryDBProvider implements StorageProvider {
     });
   }
 
-  // async removeTemplateByOwner(owner: String): Prmoise<JSONResponse<Number>> {
-  //   let removeCount: number = 0;
-  //   await this._matchTemplatesByOwner(owner).then(response => {
-  //     if (response.success) {
-  //       response.result!.forEach(template => {
-  //         removeCount += 1;
-  //         this.templates.delete(template._id!);
-  //       })
-  //     }
-  //   })
-  // }
-
   protected async _matchUsers(query: Partial<ITemplate>): Promise<JSONResponse<IUser[]>> {
     let res: IUser[] = new Array();
     this.users.forEach(user => {
@@ -184,8 +172,8 @@ export class InMemoryDBProvider implements StorageProvider {
     if(!instance.lastEditedUser) {
       instance.lastEditedUser = "";
     }
-    if (!instance.owner) {
-      instance.owner = "";
+    if (!instance.author) {
+      instance.author = "";
     }
   }
   protected _autoCompleteTemplateModel(template: ITemplate): void {
@@ -267,17 +255,11 @@ export class InMemoryDBProvider implements StorageProvider {
       (query._id && !(query._id === template._id)) ||
       (query.isLive && !(query.isLive === template.isLive)) ||
       (query.tags && template.tags && !Utils.ifContainsList(template.tags, query.tags)) ||
-      (query.owners && !query.owners.every((value: string) => template.owners.includes(value)))
+      (query.authors && !query.authors.every((value: string) => template.authors.includes(value)))
     ) {
       return false;
     }
     return true;
-  }
-
-  protected _matchTemplateByOwner(owner: String, template: ITemplate): boolean {
-    return (template.instances !== undefined) && template.instances.some((instance: ITemplateInstance) => {
-      return instance.owner === owner;
-    })
   }
 
   async connect(): Promise<JSONResponse<Boolean>> {

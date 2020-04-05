@@ -17,7 +17,7 @@ export const TemplateInstanceSchema: Schema = new Schema(
     version: { type: String, required: true },
     publishedAt: { type: Date, default: null },
     state: { type: String, default: TemplateState.draft },
-    owner: { type: String, required: true }, // todo: add ref: "User" so it checks if owner exists and make type ObjectID
+    author: { type: String, required: true }, // todo: add ref: "User" so it checks if author exists and make type ObjectID
     isShareable: { type: Boolean, default: false },
     numHits: { type: Number, default: 0 },
     data: { type: [String], default: [], set: MongoUtils.jsonArrayToString },
@@ -32,7 +32,7 @@ export const TemplateSchema: Schema = new Schema(
   {
     _id: { type: String, required: true },
     name: { type: String, required: true },
-    owners: { type: [String], required: true },
+    authors: { type: [String], required: true },
     instances: { type: [TemplateInstanceSchema], default: [] },
     tags: { type: [String], default: [] },
     deletedVersions: { type: [String], default: [] },
