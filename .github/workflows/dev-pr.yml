@@ -17,6 +17,10 @@ pool:
 
 steps:
 
+- task: NodeTool@0 
+  inputs:
+    versionSpec: '12.x'
+
 - script: |
     cd private-templates-service/server
     npm run init-app

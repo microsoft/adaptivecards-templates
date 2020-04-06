@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Template } from 'adaptive-templating-service-typescript-node';
+import { getShareURL } from '../../../utils/TemplateUtil/TemplateUtil';
 
 import ShareModalForm from './ShareModalForm';
 
@@ -24,7 +25,6 @@ import {
   CopyLinkButton
 } from './styled';
 import * as STRINGS from '../../../assets/strings';
-
 
 interface ShareModalProps {
   template: Template;
@@ -55,7 +55,7 @@ class ShareModal extends React.Component<ShareModalProps> {
                 <TextFieldContainer>
                   <TextField readOnly={true}
                     prefix={process.env.REACT_APP_ACMS_REDIRECT_URI}
-                    defaultValue={getShareURL(this.props)}
+                    defaultValue={getShareURL(this.props.template.id, this.props.templateVersion)}
                     width={100} />
                 </TextFieldContainer>
                 <CopyLinkButton iconProps={{ iconName: 'Copy' }} onClick={() => { onCopyURL(this.props) }}>
@@ -63,27 +63,21 @@ class ShareModal extends React.Component<ShareModalProps> {
                 </CopyLinkButton>
               </LinkRow>
             </ShareLinkPanel>
-            <ShareModalForm shareURL={process.env.REACT_APP_ACMS_REDIRECT_URI + getShareURL(this.props)} templateVersion={this.props.templateVersion} />
+            <ShareModalForm shareURL={process.env.REACT_APP_ACMS_REDIRECT_URI + getShareURL(this.props.template.id, this.props.templateVersion)} templateVersion={this.props.templateVersion} />
           </CenterPanelWrapper>
         </Modal>
-
       </BackDrop>
-
     );
   }
 }
 
 function onCopyURL(props: ShareModalProps) {
   let copyCode = document.createElement('textarea');
-  copyCode.innerText = process.env.REACT_APP_ACMS_REDIRECT_URI + getShareURL(props);
+  copyCode.innerText = process.env.REACT_APP_ACMS_REDIRECT_URI + getShareURL(props.template.id, props.templateVersion);
   document.body.appendChild(copyCode);
   copyCode.select();
   document.execCommand('copy');
   copyCode.remove();
-}
-
-function getShareURL(props: ShareModalProps): string {
-  return "/preview/" + props.template.id + "/" + props.templateVersion;
 }
 
 function getShareModalDescription(template: Template, templateVersion: string): string {
