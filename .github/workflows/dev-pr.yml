@@ -1,7 +1,7 @@
 
-trigger: none
 
-pr:
+trigger:
+  batch: true
   branches:
     include:
     - dev
@@ -44,3 +44,28 @@ steps:
     cd private-templates-service/server
     npm run deploy
   displayName: Build backend
+
+- task: ArchiveFiles@2
+  displayName: 'Archive the function source code'
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
+  inputs:
+    rootFolderOrFile: '$(system.defaultworkingdirectory)/private-templates-service'
+    includeRootFolder: false
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    replaceExistingArchive: true
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact: drop'
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+
+- task: AzureWebApp@1
+  displayName: 'Azure Web App Deploy'
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
+  inputs:
+    azureSubscription: $(azureSubscription)
+    appType: webAppLinux
+    appName: $(REACT_APP_ACMS_APP_NAME)
+    package: $(System.ArtifactsDirectory)/**/*.zip
