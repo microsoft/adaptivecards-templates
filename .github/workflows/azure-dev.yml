@@ -30,7 +30,7 @@ steps:
           Write-Host "##vso[task.setvariable variable=REACT_APP_ACMS_REDIRECT_URI;]$(DEV_REACT_APP_ACMS_REDIRECT_URI)"
           Write-Host "##vso[task.setvariable variable=REACT_APP_ENV;]$(DEV_REACT_APP_ENV)"
           }
-        if ("$(Build.SourceBranch)" -eq "refs/heads/stage") {
+        if ("$(Build.SourceBranch)" -eq "refs/heads/users/daniellemott/pipeline") {
           Write-Host "##vso[task.setvariable variable=ACMS_APP_ID;]$(STAGE_REACT_APP_ACMS_APP_ID)"
           Write-Host "##vso[task.setvariable variable=REACT_APP_ACMS_APP_ID;]$(STAGE_REACT_APP_ACMS_APP_ID)"
           Write-Host "##vso[task.setvariable variable=REACT_APP_ACMS_APP_INSIGHTS_INSTRUMENTATION_KEY;]$(REACT_APP_ACMS_APP_INSIGHTS_INSTRUMENTATION_KEY)"
