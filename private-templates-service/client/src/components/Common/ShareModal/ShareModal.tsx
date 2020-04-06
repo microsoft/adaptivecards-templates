@@ -25,12 +25,14 @@ import {
   CopyLinkButton
 } from './styled';
 import * as STRINGS from '../../../assets/strings';
+import { RootState } from '../../../store/rootReducer';
 
 
 interface ShareModalProps {
   template: Template;
   templateVersion?: string;
   closeModal: () => void;
+  redirectUri?: string;
 }
 
 const mapDispatchToProps = (dispatch: any) => {
@@ -40,6 +42,12 @@ const mapDispatchToProps = (dispatch: any) => {
     }
   }
 }
+
+const mapStateToProps = (state: RootState) => {
+  return {
+    redirectUri: state.auth.redirectUri,
+  };
+};
 
 class ShareModal extends React.Component<ShareModalProps> {
 
@@ -55,7 +63,7 @@ class ShareModal extends React.Component<ShareModalProps> {
               <LinkRow>
                 <TextFieldContainer>
                   <TextField readOnly={true}
-                    prefix={Config.redirectUri}
+                    prefix={this.props.redirectUri}
                     defaultValue={getShareURL(this.props)}
                     width={100} />
                 </TextFieldContainer>
@@ -64,7 +72,7 @@ class ShareModal extends React.Component<ShareModalProps> {
                 </CopyLinkButton>
               </LinkRow>
             </ShareLinkPanel>
-            <ShareModalForm shareURL={Config.redirectUri + getShareURL(this.props)} templateVersion={this.props.templateVersion} />
+            <ShareModalForm shareURL={this.props.redirectUri + getShareURL(this.props)} templateVersion={this.props.templateVersion} />
           </CenterPanelWrapper>
         </Modal>
 
@@ -76,7 +84,7 @@ class ShareModal extends React.Component<ShareModalProps> {
 
 function onCopyURL(props: ShareModalProps) {
   let copyCode = document.createElement('textarea');
-  copyCode.innerText = Config.redirectUri + getShareURL(props);
+  copyCode.innerText = props.redirectUri + getShareURL(props);
   document.body.appendChild(copyCode);
   copyCode.select();
   document.execCommand('copy');
@@ -91,4 +99,4 @@ function getShareModalDescription(template: Template, templateVersion: string): 
   return STRINGS.SHARE_MODAL_DESCRIPTION + template!.name + " - " + templateVersion;
 }
 
-export default ModalHOC(connect(() => { return {} }, mapDispatchToProps)(ShareModal));
+export default ModalHOC(connect(mapStateToProps, mapDispatchToProps)(ShareModal));
