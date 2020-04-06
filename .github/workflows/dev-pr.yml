@@ -1,9 +1,10 @@
+
 trigger:
   batch: true
   branches:
     include:
+    - dev
     - users/daniellemott/pipeline
-    # - dev
     # - stage
 
 
@@ -11,7 +12,6 @@ trigger:
 pr: none
 
 variables: 
-  ## Add this under variables section in the pipeline
   azureSubscription: 'Adaptive Cards (47c80630-3d74-4b3e-a2f4-57e6368cd8c6)'
   appName: 'adaptivecms'
 pool:
@@ -37,13 +37,7 @@ steps:
     versionSpec: '12.x'
 
 - script: |
-    echo $(ACMS_APP_ID)
-    echo $(REACT_APP_ACMS_APP_ID)
-    echo $(REACT_APP_ACMS_APP_INSIGHTS_INSTRUMENTATION_KEY)
-    echo $(REACT_APP_ACMS_APP_NAME)
-    echo $(REACT_APP_ACMS_REDIRECT_URI)
-    echo $(REACT_APP_ACMS_APP_SECRET)
-    echo $(REACT_APP_ENV)
+    echo $(Build.SourceBranch)
     cd private-templates-service/server
     npm run init-app
     cd ../client
@@ -87,5 +81,5 @@ steps:
   inputs:
     azureSubscription: $(azureSubscription)
     appType: webAppLinux
-    appName: $(appName)
+    appName: $(REACT_APP_ACMS_APP_NAME)
     package: $(System.ArtifactsDirectory)/**/*.zip
