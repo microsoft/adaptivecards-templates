@@ -5,10 +5,11 @@ pr:
   branches:
     include:
     - dev
-
+variables:
+  # map secret variables
+  ACMS_APP_SECRET: $(ACMS_APP_SECRET)
 pool:
   vmImage: 'ubuntu-latest'
-  
 
 steps:
 
