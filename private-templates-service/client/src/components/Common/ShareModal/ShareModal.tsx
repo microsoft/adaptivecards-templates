@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Template } from 'adaptive-templating-service-typescript-node';
+import { getShareURL, getFullShareURL } from '../../../utils/TemplateUtil/TemplateUtil';
 
 import Config from '../../../Config';
 import ShareModalForm from './ShareModalForm';
@@ -26,7 +27,6 @@ import {
 } from './styled';
 import * as STRINGS from '../../../assets/strings';
 import { RootState } from '../../../store/rootReducer';
-
 
 interface ShareModalProps {
   template: Template;
@@ -63,8 +63,8 @@ class ShareModal extends React.Component<ShareModalProps> {
               <LinkRow>
                 <TextFieldContainer>
                   <TextField readOnly={true}
-                    prefix={this.props.redirectUri}
-                    defaultValue={getShareURL(this.props)}
+                    prefix={this.props.redirectUri.slice(-1) === "/" ? this.props.redirectUri.slice(0, this.props.redirectUri.length - 1) : this.props.redirectUri}
+                    defaultValue={getShareURL(this.props.template.id, this.props.templateVersion)}
                     width={100} />
                 </TextFieldContainer>
                 <CopyLinkButton iconProps={{ iconName: 'Copy' }} onClick={() => { onCopyURL(this.props) }}>
@@ -72,27 +72,21 @@ class ShareModal extends React.Component<ShareModalProps> {
                 </CopyLinkButton>
               </LinkRow>
             </ShareLinkPanel>
-            <ShareModalForm shareURL={this.props.redirectUri + getShareURL(this.props)} templateVersion={this.props.templateVersion} />
+            <ShareModalForm shareURL={getFullShareURL(rhis.props.redirectUri, this.props.template.id, this.props.templateVersion)} templateVersion={this.props.templateVersion} />
           </CenterPanelWrapper>
         </Modal>
-
       </BackDrop>
-
     );
   }
 }
 
 function onCopyURL(props: ShareModalProps) {
   let copyCode = document.createElement('textarea');
-  copyCode.innerText = props.redirectUri + getShareURL(props);
+  copyCode.innerText = getFullShareURL(this.props.redirectUri, props.template.id, props.templateVersion);
   document.body.appendChild(copyCode);
   copyCode.select();
   document.execCommand('copy');
   copyCode.remove();
-}
-
-function getShareURL(props: ShareModalProps): string {
-  return "/preview/" + props.template.id + "/" + props.templateVersion;
 }
 
 function getShareModalDescription(template: Template, templateVersion: string): string {
