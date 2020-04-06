@@ -1,17 +1,18 @@
+
 trigger:
   batch: true
   branches:
     include:
     - dev
-    # - users/daniellemott/pipeline
+    - users/daniellemott/pipeline
     # - stage
 
-# no PR builds
 pr: 
   - users/daniellemott/pipeline
 
 variables: 
   azureSubscription: 'Adaptive Cards (47c80630-3d74-4b3e-a2f4-57e6368cd8c6)'
+  appName: 'adaptivecms'
 pool:
   vmImage: 'ubuntu-latest'
 
