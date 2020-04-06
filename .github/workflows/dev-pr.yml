@@ -9,7 +9,7 @@ trigger:
 
 
 pr:
-  - users/daniellemott/pipeline
+  - dev
 
 variables: 
   azureSubscription: 'Adaptive Cards (47c80630-3d74-4b3e-a2f4-57e6368cd8c6)'
