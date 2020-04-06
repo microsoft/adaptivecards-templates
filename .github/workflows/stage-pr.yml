@@ -1,26 +1,24 @@
 
-trigger:
-  batch: true
+pr:
   branches:
     include:
-    - users/daniellemott/pipeline
+    - stage
 
 pool:
   vmImage: 'ubuntu-latest'
 
 steps:
 
-- task: NodeTool@0 
-  inputs:
-    versionSpec: '12.x'
-
 - task: PowerShell@2
   inputs:
     targetType: 'inline'
     script: |
         Write-Host "##vso[task.setvariable variable=ACMS_APP_ID;]$(REACT_APP_ACMS_APP_ID)"
-          
 
+- task: NodeTool@0 
+  inputs:
+    versionSpec: '12.x'
+          
 - script: |
     cd private-templates-service/server
     npm run init-app

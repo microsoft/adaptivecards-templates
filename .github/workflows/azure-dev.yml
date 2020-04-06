@@ -1,8 +1,8 @@
+
 trigger:
   batch: true
   branches:
     include:
-    - users/daniellemott/pipeline
     - dev
     - stage
 
@@ -21,7 +21,7 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-        if ("$(Build.SourceBranch)" -eq "refs/heads/users/dev") {
+        if ("$(Build.SourceBranch)" -eq "refs/heads/dev") {
           Write-Host "##vso[task.setvariable variable=ACMS_APP_ID;]$(DEV_REACT_APP_ACMS_APP_ID)"
           Write-Host "##vso[task.setvariable variable=REACT_APP_ACMS_APP_ID;]$(DEV_REACT_APP_ACMS_APP_ID)"
           Write-Host "##vso[task.setvariable variable=REACT_APP_ACMS_APP_INSIGHTS_INSTRUMENTATION_KEY;]$(REACT_APP_ACMS_APP_INSIGHTS_INSTRUMENTATION_KEY)"
@@ -30,7 +30,7 @@ steps:
           Write-Host "##vso[task.setvariable variable=REACT_APP_ACMS_REDIRECT_URI;]$(DEV_REACT_APP_ACMS_REDIRECT_URI)"
           Write-Host "##vso[task.setvariable variable=REACT_APP_ENV;]$(DEV_REACT_APP_ENV)"
           }
-        if ("$(Build.SourceBranch)" -eq "refs/heads/users/daniellemott/pipeline") {
+        if ("$(Build.SourceBranch)" -eq "refs/heads/stage") {
           Write-Host "##vso[task.setvariable variable=ACMS_APP_ID;]$(STAGE_REACT_APP_ACMS_APP_ID)"
           Write-Host "##vso[task.setvariable variable=REACT_APP_ACMS_APP_ID;]$(STAGE_REACT_APP_ACMS_APP_ID)"
           Write-Host "##vso[task.setvariable variable=REACT_APP_ACMS_APP_INSIGHTS_INSTRUMENTATION_KEY;]$(REACT_APP_ACMS_APP_INSIGHTS_INSTRUMENTATION_KEY)"
