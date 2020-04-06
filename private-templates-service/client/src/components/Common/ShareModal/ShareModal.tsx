@@ -3,7 +3,6 @@ import React from 'react';
 import { Template } from 'adaptive-templating-service-typescript-node';
 import { getShareURL, getFullShareURL } from '../../../utils/TemplateUtil/TemplateUtil';
 
-import Config from '../../../Config';
 import ShareModalForm from './ShareModalForm';
 
 import ModalHOC from '../../../utils/ModalHOC';
