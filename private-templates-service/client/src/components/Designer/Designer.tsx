@@ -129,11 +129,22 @@ class Designer extends React.Component<DesignerProps, State> {
       }
     }
 
-
+    /*
+    div
+      tooltiphost
+        button
+*/
+    console.log(publishButtonParentElement);
+    publishButtonElement.remove();
     const publishParent = document.createElement('div');
+    const publishButton = React.createElement(TooltipHost, { id: "dfsjksdkjl", content: "sjdfkls" }, [publishButtonElement]);
+
+    ReactDOM.render(publishButton, publishParent);
+    console.log(publishButton)
+    publishParent.append(document.createElement('p'));
+    publishButtonParentElement!.append(publishParent);
+
     // publishParent.append(publishButtonElement);
-
-
 
     // document.createElement()
     // React.eleme
@@ -143,8 +154,6 @@ class Designer extends React.Component<DesignerProps, State> {
     //saveButtonParentElement!.removeChild(saveButtonElement);
     let tooltipSaveButtonWrapper = React.createElement(TooltipContainer, {}, React.createElement(TooltipHost, { content: "Save this card as a draft" }, saveButtonElement));
     let tooltipPublishButtonWrapper = ReactDOM.render(<TooltipHost id={"dfsjksdkjl"} content="sjdfkls" />, publishParent);
-
-    publishButtonParentElement!.append(publishParent);
 
     // React.createElement(TooltipContainer, {}, React.createElement(TooltipHost, { content: "Publishing this card makes it available to your organization" }, publishButtonElement))
 

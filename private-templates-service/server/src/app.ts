@@ -35,9 +35,20 @@ app.use(session({
   saveUninitialized: true
 }));
 app.use(helmet.noSniff());
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, Content-Type, Accept, Authorization, api_key"
+  );
+  res.header(
+    "Access-Control-Allow-Methods",
+    "GET, POST, OPTIONS, DELETE"
+  );
+  next();
+});
 
-mongoose.set('useFindAndModify', false)
-let mongoDB = new MongoDBProvider({ connectionString: "#{DB_CONNECTION_TOKEN}#" });
+let mongoDB = new MongoDBProvider({ connectionString: "mongodb://adaptivecardstemplates-staging:Ohl3g9RUdIy12LmQQqrELRhSrb1RCV5BN06wAkKRbpSR6LSQSDYlpEdgyOlzbKlWtmZQ7QOcqeWZEnswOK2kMA==@adaptivecardstemplates-staging.mongo.cosmos.azure.com:10255/test?ssl=true&replicaSet=globaldb&maxIdleTimeMS=120000&appName=@adaptivecardstemplates-staging@" });
 mongoDB.connect()
   .then(
     (res) => {
