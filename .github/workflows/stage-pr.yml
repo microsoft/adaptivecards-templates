@@ -1,8 +1,9 @@
 
-# trigger: none
-
-pr: 
-  - stage
+trigger:
+  batch: true
+  branches:
+    include:
+    - users/daniellemott/pipeline
 
 pool:
   vmImage: 'ubuntu-latest'
