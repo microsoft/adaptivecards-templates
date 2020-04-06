@@ -17,8 +17,6 @@ steps:
     script: |
         Write-Host "##vso[task.setvariable variable=ACMS_APP_ID;]$(REACT_APP_ACMS_APP_ID)"
         Write-Host "##vso[task.setvariable variable=ACMS_APP_SECRET;]$(APP_SECRET)"
-  env:
-    APP_SECRET: $(CLIENT_SECRET)
 
 
 - task: NodeTool@0 
@@ -26,6 +24,7 @@ steps:
     versionSpec: '12.x'
 
 - script: |
+    echo $(APP_SECRET)
     cd private-templates-service/server
     npm run init-app
     cd ../client
