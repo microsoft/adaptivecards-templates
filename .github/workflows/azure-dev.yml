@@ -68,7 +68,7 @@ steps:
 
 - task: ArchiveFiles@2
   displayName: 'Archive the function source code'
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
+  condition: succeeded()
   inputs:
     rootFolderOrFile: '$(system.defaultworkingdirectory)/private-templates-service'
     includeRootFolder: false
@@ -78,13 +78,13 @@ steps:
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: drop'
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
+  condition: succeeded()
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
 
 - task: AzureWebApp@1
   displayName: 'Azure Web App Deploy'
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
+  condition: succeeded()
   inputs:
     azureSubscription: $(azureSubscription)
     appType: webAppLinux
