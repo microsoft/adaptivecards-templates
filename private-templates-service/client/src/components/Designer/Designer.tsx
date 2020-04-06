@@ -77,17 +77,10 @@ class Designer extends React.Component<DesignerProps> {
     }
   }
 
-  toggleSpinner = (isFetching: boolean) => {
-    if(isFetching){
-      this.props.openModal(ModalState.Spinner)
-    }
-  }
-
   componentDidUpdate() {
-    if (this.props.location.pathname == '/designer/newcard/1.0' && this.props.templateID && this.props.version) {
+    if (this.props.location.pathname === '/designer/newcard/1.0' && this.props.templateID && this.props.version) {
       this.props.history.replace('/designer/' + this.props.templateID + '/' + this.props.version);
     }
-    this.toggleSpinner(this.props.isFetching);
     if (this.props.templateJSON){
       designer.setCard({...this.props.templateJSON});
     }
