@@ -33,7 +33,7 @@ export class MongoDBProvider implements StorageProvider {
       };
     }
     if(templateQuery.name && templateQuery.tags){
-      return {$or: [{name:templateQuery.name},{tags:templateQuery.tags}]}
+      return {$or: [{name:templateQuery.name}, {tags:templateQuery.tags}]}
     }
     return templateQuery
   }
