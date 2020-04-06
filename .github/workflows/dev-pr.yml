@@ -8,6 +8,7 @@ pr:
 
 pool:
   vmImage: 'ubuntu-latest'
+  
 
 steps:
 
