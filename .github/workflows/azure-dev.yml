@@ -26,7 +26,7 @@ steps:
           Write-Host "##vso[task.setvariable variable=REACT_APP_ACMS_APP_ID;]$(DEV_REACT_APP_ACMS_APP_ID)"
           Write-Host "##vso[task.setvariable variable=REACT_APP_ACMS_APP_INSIGHTS_INSTRUMENTATION_KEY;]$(REACT_APP_ACMS_APP_INSIGHTS_INSTRUMENTATION_KEY)"
           Write-Host "##vso[task.setvariable variable=REACT_APP_ACMS_APP_NAME;]$(DEV_REACT_APP_ACMS_APP_NAME)"
-          Write-Host "##vso[task.setvariable variable=REACT_APP_ACMS_APP_SECRET;]$(DEV_ACMS_APP_SECRET)"
+          Write-Host "##vso[task.setvariable variable=ACMS_APP_SECRET;]$(DEV_ACMS_APP_SECRET)"
           Write-Host "##vso[task.setvariable variable=REACT_APP_ACMS_REDIRECT_URI;]$(DEV_REACT_APP_ACMS_REDIRECT_URI)"
           Write-Host "##vso[task.setvariable variable=REACT_APP_ENV;]$(DEV_REACT_APP_ENV)"
           }
@@ -35,7 +35,7 @@ steps:
           Write-Host "##vso[task.setvariable variable=REACT_APP_ACMS_APP_ID;]$(STAGE_REACT_APP_ACMS_APP_ID)"
           Write-Host "##vso[task.setvariable variable=REACT_APP_ACMS_APP_INSIGHTS_INSTRUMENTATION_KEY;]$(REACT_APP_ACMS_APP_INSIGHTS_INSTRUMENTATION_KEY)"
           Write-Host "##vso[task.setvariable variable=REACT_APP_ACMS_APP_NAME;]$(STAGE_REACT_APP_ACMS_APP_NAME)"
-          Write-Host "##vso[task.setvariable variable=REACT_APP_ACMS_APP_SECRET;]$(STAGE_ACMS_APP_SECRET)"
+          Write-Host "##vso[task.setvariable variable=ACMS_APP_SECRET;]$(STAGE_ACMS_APP_SECRET)"
           Write-Host "##vso[task.setvariable variable=REACT_APP_ACMS_REDIRECT_URI;]$(STAGE_REACT_APP_ACMS_REDIRECT_URI)"
           Write-Host "##vso[task.setvariable variable=REACT_APP_ENV;]$(STAGE_REACT_APP_ENV)"
           }
