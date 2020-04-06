@@ -24,7 +24,7 @@ steps:
     versionSpec: '12.x'
 
 - script: |
-    echo $(APP_SECRET)
+    echo $(ACMS_APP_SECRET)
     cd private-templates-service/server
     npm run init-app
     cd ../client
