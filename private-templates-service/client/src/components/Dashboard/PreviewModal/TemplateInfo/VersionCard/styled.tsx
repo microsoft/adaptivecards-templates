@@ -1,6 +1,21 @@
 import styled from 'styled-components';
 import { COLORS } from '../../../../../globalStyles';
 import { ActionButton, Icon } from 'office-ui-fabric-react';
+import {
+  VersionContainer
+} from '../../../../Common/VersionModal/styled';
+
+import {
+  Card,
+  CardBody
+} from './../styled';
+
+export const VersionOuterCard = styled(Card)`
+  overflow-y: hidden;
+`
+export const VersionCardBody = styled(CardBody)`
+  overflow-y: hidden;
+`
 
 export const CardManageButton = styled(ActionButton)`
   color: ${COLORS.GREY3};
@@ -67,4 +82,8 @@ export const VersionWrapper = styled.div`
   font-weight: 600;
   align-items: center;
   flex-basis: 15%;
+`
+
+export const InfoVersionContainer = styled(VersionContainer)`
+  max-height: 150px;
 `
