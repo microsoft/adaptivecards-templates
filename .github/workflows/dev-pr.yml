@@ -3,46 +3,24 @@ trigger:
   branches:
     include:
     - users/daniellemott/pipeline
-    # - dev
-    # - stage
+    - dev
 
-# no PR builds
-pr: none
+pr:
+  - dev
 
 variables: 
-  ## Add this under variables section in the pipeline
   azureSubscription: 'Adaptive Cards (47c80630-3d74-4b3e-a2f4-57e6368cd8c6)'
   appName: 'adaptivecms'
 pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-- task: PowerShell@2
-  inputs:
-    targetType: 'inline'
-    script: |
-        if ("$(Build.SourceBranch)" -eq "refs/heads/users/daniellemott/pipeline") {
-          Write-Host "##vso[task.setvariable variable=ACMS_APP_ID;]$(DEV_REACT_APP_ACMS_APP_ID)"
-          Write-Host "##vso[task.setvariable variable=REACT_APP_ACMS_APP_ID;]$(DEV_REACT_APP_ACMS_APP_ID)"
-          Write-Host "##vso[task.setvariable variable=REACT_APP_ACMS_APP_INSIGHTS_INSTRUMENTATION_KEY;]$(DEV_REACT_APP_ACMS_APP_INSIGHTS_INSTRUMENTATION_KEY)"
-          Write-Host "##vso[task.setvariable variable=REACT_APP_ACMS_APP_NAME;]$(DEV_REACT_APP_ACMS_APP_NAME)"
-          Write-Host "##vso[task.setvariable variable=REACT_APP_ACMS_APP_SECRET;]$(DEV_REACT_APP_ACMS_APP_SECRET)"
-          Write-Host "##vso[task.setvariable variable=REACT_APP_ACMS_REDIRECT_URI;]$(DEV_REACT_APP_ACMS_REDIRECT_URI)"
-          Write-Host "##vso[task.setvariable variable=REACT_APP_ENV;]$(DEV_REACT_APP_ENV)"
-          }
 
 - task: NodeTool@0 
   inputs:
     versionSpec: '12.x'
 
 - script: |
-    echo $(ACMS_APP_ID)
-    echo $(REACT_APP_ACMS_APP_ID)
-    echo $(REACT_APP_ACMS_APP_INSIGHTS_INSTRUMENTATION_KEY)
-    echo $(REACT_APP_ACMS_APP_NAME)
-    echo $(REACT_APP_ACMS_REDIRECT_URI)
-    echo $(REACT_APP_ACMS_APP_SECRET)
-    echo $(REACT_APP_ENV)
     cd private-templates-service/server
     npm run init-app
     cd ../client
