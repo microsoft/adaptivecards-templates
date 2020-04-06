@@ -14,7 +14,7 @@ export default async function getToken(): Promise<string> {
   const requestParams = {
     grant_type: "client_credentials",
     client_id: process.env.REACT_APP_ACMS_APP_ID,
-    client_secret: process.env.REACT_APP_ACMS_APP_SECRET,
+    client_secret: process.env.ACMS_APP_SECRET,
     resource: process.env.REACT_APP_ACMS_APP_ID
   };
   return await request

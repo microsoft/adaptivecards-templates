@@ -1,3 +1,4 @@
+
 trigger:
   batch: true
   branches:
@@ -15,10 +16,6 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-
-- task: NodeTool@0 
-  inputs:
-    versionSpec: '12.x'
 
 - script: |
     cd private-templates-service/server
