@@ -1,14 +1,13 @@
 
-trigger:
-  batch: true
-  branches:
-    include:
-    - dev
-    - users/daniellemott/pipeline
+# trigger:
+#   batch: true
+#   branches:
+#     include:
+#     - dev
+    # - users/daniellemott/pipeline
     # - stage
 
 
-# no PR builds
 pr:
   branches:
     include:
