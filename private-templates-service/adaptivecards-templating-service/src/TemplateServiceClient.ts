@@ -1088,10 +1088,8 @@ export class TemplateServiceClient {
           ownedTags.add(tag);
         }
       }
-      if (template.isLive) {
-        for (let tag of template.tags) {
-          allTags.add(tag);
-        }
+      for (let tag of template.tags) {
+        allTags.add(tag);
       }
     }
 
