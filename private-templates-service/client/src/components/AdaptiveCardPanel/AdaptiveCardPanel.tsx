@@ -28,6 +28,7 @@ import {
 import { getLatestVersion, getLatestTemplateInstanceState } from "../../utils/TemplateUtil";
 import { getDateString } from "../../utils/versionUtils";
 import KeyCode from "../../globalKeyCodes";
+import * as STRINGS from "../../assets/strings"
 
 interface Props {
   onClick?: (templateID: string) => void;
@@ -37,7 +38,7 @@ interface Props {
 
 const mapStateToProps = (state: RootState) => {
   return {
-    pageTitle: state.page.currentPage
+    pageTitle: state.page.currentPageTitle
   };
 };
 
@@ -54,12 +55,20 @@ class AdaptiveCardPanel extends React.Component<Props> {
     }
   }
 
+  isComponentNavigable = () => {
+    if(this.props.pageTitle) {
+      let pageTitle: string = this.props.pageTitle.toLowerCase();
+      return pageTitle === STRINGS.DASHBOARD.toLowerCase() || pageTitle === STRINGS.ALL_CARDS_TITLE.toLowerCase();
+    }
+    return false;
+  }
+
   render() {
     let template = this.props.template;
     let version = getLatestVersion(this.props.template);
     let state = getLatestTemplateInstanceState(template);
 
-    const isComponentNavigable = Boolean(this.props.pageTitle && this.props.pageTitle.toLowerCase() === "dashboard");
+    const isComponentNavigable = this.isComponentNavigable();
     const isStateDefined = Boolean(template.instances && template.instances[0] && template.instances[0].state);
     return (
       <Container tabIndex={isComponentNavigable ? 0 : -1}

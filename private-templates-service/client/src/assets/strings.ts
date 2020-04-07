@@ -53,7 +53,7 @@ export const DASHBOARD_RECENTLY_EDITED_PLACEHOLDER = 'No edited templates.';
 export const DASHBOARD_RECENTLY_VIEWED_PLACEHOLDER = 'No recently viewed templates.';
 export const FAVORITED_TAGS = "Favorited tags"
 
-//Footer.tsx
+// Footer.tsx
 export const SITEMAP = "Sitemap";
 export const CONTACT = "Contact Microsoft";
 export const PRIVACY = "Privacy & Cookies";
@@ -62,6 +62,13 @@ export const TRADEMARKS = "Trademarks";
 export const SAFETY = "Safety & Eco";
 export const ABOUT_ADS = "About our Ads";
 export const MICROSOFT = "© Microsoft 2020";
+
+
+// AllCards.tsx
+export const ALL_CARDS_TITLE = "Cards"
+export const ALL_CARDS_PLACEHOLDER = "Nothing to display yet."
+export const ALL_CARDS_LIST_VIEW = "List View";
+export const ALL_CARDS_GRID_VIEW = "Grid View";
 
 // PublishModal.tsx
 export const SEARCH_FOR_PEOPLE = "Search for people";
