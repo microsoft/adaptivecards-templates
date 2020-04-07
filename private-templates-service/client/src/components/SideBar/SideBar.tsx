@@ -110,7 +110,7 @@ const navMenuLinks: INavLinkGroup[] = [
       },
       {
         name: STRINGS.ALL_CARDS,
-        url: "/dashboard/all",
+        url: "/allcards",
         iconProps: {
           iconName: "ViewList",
           style: iconStylePink

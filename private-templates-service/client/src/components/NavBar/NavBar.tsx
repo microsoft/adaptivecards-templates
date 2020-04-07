@@ -75,7 +75,7 @@ const NavBar = (props: NavBarProps) => {
       history.replace('/')
     }
   }
-
+  
   switch (props.currentPage.toLowerCase()) {
     case "dashboard":
       return (
@@ -133,6 +133,16 @@ const NavBar = (props: NavBarProps) => {
             {!props.isFetching && <TooltipEditButton editName={editName} modalState={props.modalState} />}
           </BaselineBanner>
           <BackButton iconProps={{ iconName: 'Back' }} onClick={onBackButton} tabIndex={props.modalState ? -1 : 0} ><ButtonTextWrapper>Back</ButtonTextWrapper></BackButton>
+        </Banner>
+      );
+    case "all cards":
+      return (
+        <Banner>
+          <MobileBanner>
+            <StyledLogo src={Logo} />
+            <Styledh1>{props.currentPageTitle}</Styledh1>
+          </MobileBanner>
+          <SearchBar />
         </Banner>
       );
     default:
