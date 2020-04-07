@@ -86,6 +86,7 @@ export const UNTITLEDCARD = "Untitled Card";
 export const DRAFT = "Draft";
 export const CARDNAME = "Card Name";
 export const TAGS = "Tags";
+export const MYCARD = "My Card";
 
 //OwnerAvatar.tsx
 export const ERROR_LOADING_IMAGE = "Error loading image";
