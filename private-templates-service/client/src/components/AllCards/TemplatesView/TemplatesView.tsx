@@ -18,14 +18,14 @@ const mapDispatchToProps = (dispatch: any) => {
   return {
     getTemplates: () => {
       dispatch(getAllTemplates());
-    }
+    },
   };
 };
 
 const mapStateToProps = (state: RootState) => {
   return {
     templates: state.allTemplates,
-    toggleState: state.allCardsViewToggle
+    toggleState: state.allCardsViewToggle,
   };
 };
 interface TemplatesViewProps {
@@ -41,24 +41,8 @@ export class TemplatesView extends Component<TemplatesViewProps> {
     this.props.getTemplates();
   }
 
-  displayTemplates = (onClick: (templateID: string) => void, templates: Template[], viewType: ViewType) => {
-    console.log(viewType);
-    return viewType === ViewType.List ? (
-      <TemplateList templates={templates} displayComponents={{ author: true, dateModified: true, templateName: true, status: true, version: false }} onClick={onClick} />
-    ) : (
-      <Gallery onClick={onClick} templates={templates} />
-    );
-  };
-  onLoad = (isFetching: boolean, templates: Template[], placeHolder: string) => {
-    return isFetching ? (
-      <CenteredSpinner size={SpinnerSize.large} />
-    ) : templates.length ? (
-      this.displayTemplates(this.props.onClick, templates, this.props.toggleState.viewType)
-    ) : (
-      <PlaceholderText>{placeHolder}</PlaceholderText>
-    );
-  };
   render() {
+    const { toggleState, onClick } = this.props;
     let templatesState: AllTemplateState = this.props.templates;
     let templates: Template[] = [];
 
@@ -67,7 +51,17 @@ export class TemplatesView extends Component<TemplatesViewProps> {
     }
     return (
       <React.Fragment>
-        {this.onLoad(templatesState.isFetching, templates, ALL_CARDS_PLACEHOLDER)}
+        {templatesState.isFetching ? (
+          <CenteredSpinner size={SpinnerSize.large} />
+        ) : templates.length ? (
+          toggleState.viewType === ViewType.List ? (
+            <TemplateList templates={templates} displayComponents={{ author: true, dateModified: true, templateName: true, status: true, version: false }} onClick={onClick} />
+          ) : (
+            <Gallery onClick={onClick} templates={templates} />
+          )
+        ) : (
+          <PlaceholderText>{ALL_CARDS_PLACEHOLDER}</PlaceholderText>
+        )}
       </React.Fragment>
     );
   }

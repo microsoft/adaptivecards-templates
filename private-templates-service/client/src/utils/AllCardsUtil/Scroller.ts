@@ -1,3 +1,7 @@
+const SCROLL_SPEED: number = 10;
+const SCROLL_MIN_TIME_DIFFERENCE: number = 1000; // ms
+const SCROLL_ACCELERATION_MULTIPLIER: number = 10000;
+
 export enum ScrollDirection {
   Vertical,
   Horizontal
@@ -15,20 +19,20 @@ export class Scroller {
     }
   }
   horizontalScroll = (item: EventTarget & Element, deltaScroll: number, mult: number) => {
-    if (deltaScroll > 0) item.scrollLeft += 10 * mult;
-    else item.scrollLeft -= 10 * mult;
+    if (deltaScroll > 0) item.scrollLeft += SCROLL_SPEED * mult;
+    else item.scrollLeft -= SCROLL_SPEED * mult;
   };
 
   verticalScroll = (item: EventTarget & Element, deltaScroll: number, mult: number) => {
-    if (deltaScroll > 0) item.scrollTop += 10 * mult;
-    else item.scrollTop -= 10 * mult;
+    if (deltaScroll > 0) item.scrollTop += SCROLL_SPEED * mult;
+    else item.scrollTop -= SCROLL_SPEED * mult;
   };
 
   scroll = (e: React.WheelEvent) => {
     e.preventDefault();
     var mult = 1;
-    if (e.timeStamp - this.timeStamp < 1000) {
-      mult = 10000 / (e.timeStamp - this.timeStamp);
+    if (e.timeStamp - this.timeStamp < SCROLL_MIN_TIME_DIFFERENCE) {
+      mult = SCROLL_ACCELERATION_MULTIPLIER / (e.timeStamp - this.timeStamp);
     }
     this.timeStamp = e.timeStamp;
     this._scroll(e.currentTarget, e.deltaY, mult);

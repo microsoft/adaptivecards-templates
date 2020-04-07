@@ -66,7 +66,7 @@ export const MICROSOFT = "© Microsoft 2020";
 
 // AllCards.tsx
 export const ALL_CARDS_TITLE = "Cards"
-export const ALL_CARDS_PLACEHOLDER = "Nothing do display yet."
+export const ALL_CARDS_PLACEHOLDER = "Nothing to display yet."
 export const ALL_CARDS_LIST_VIEW = "List View";
 export const ALL_CARDS_GRID_VIEW = "Grid View";
 

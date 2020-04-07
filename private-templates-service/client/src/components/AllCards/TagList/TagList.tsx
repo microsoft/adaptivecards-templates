@@ -17,7 +17,7 @@ class TagList extends Component<TagListProps> {
     this.scroller = new Scroller(ScrollDirection.Horizontal);
   }
   componentDidMount() {
-    this.ref.current.addEventListener("wheel", this.scroller.scroll, { passive: false });
+    this.ref.current!.addEventListener("wheel", this.scroller.scroll, { passive: false });
   }
   componentWillUnmount() {
     if (this.ref.current) {
@@ -26,11 +26,9 @@ class TagList extends Component<TagListProps> {
   }
   render() {
     return (
-      <div>
         <TagsContainer ref={this.ref}>
           <Tags tags={this.props.tags} allowEdit={this.props.allowEdit} />
         </TagsContainer>
-      </div>
     );
   }
 }
