@@ -86,8 +86,8 @@ class App extends Component<Props, State> {
     initializeIcons();
     this.userAgentApplication = new UserAgentApplication({
       auth: {
-        clientId: config.appId,
-        redirectUri: config.redirectUri
+        clientId: process.env.REACT_APP_ACMS_APP_ID!,
+        redirectUri: process.env.REACT_APP_ACMS_REDIRECT_URI
       },
       cache: {
         cacheLocation: "localStorage",
@@ -222,7 +222,7 @@ class App extends Component<Props, State> {
       // make a request to the Azure OAuth endpoint to get a token
       let accessToken = await this.userAgentApplication.acquireTokenSilent(
         {
-          scopes: [`api://${config.appId}/Templates.All`]
+          scopes: [`api://${process.env.REACT_APP_ACMS_APP_ID}/Templates.All`]
         }
       );
       this.props.setAccessToken(accessToken);
