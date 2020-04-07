@@ -7,10 +7,10 @@ import {
   SET_SEARCHBAR_VISIBLE
 } from './types';
 
+import { SortType } from '../sort/types';
 import { IncomingMessage } from 'http';
 import { RootState } from '../rootReducer';
 import { initClientSDK } from '../../utils/TemplateUtil';
-import { SortBy, SortOrder } from '../../../../adaptivecards-templating-service/src/models/models';
 
 export function querySearchBegin(): SearchAction {
   return {
@@ -35,12 +35,11 @@ export function querySearchFailure(error: IncomingMessage): SearchAction {
   }
 }
 
-export function querySearch(searchByTemplateName: string, sortValue?: 'alphabetical' | 'dateCreated' | 'dateUpdated'| undefined ): (dispatch: any, getState: () => RootState) => void {
+export function querySearch(searchByTemplateName: string, sortValue?: SortType, isPublished?: boolean, owned?: boolean ): (dispatch: any, getState: () => RootState) => void {
   return function (dispatch: any, getState: () => RootState) {
     dispatch(querySearchBegin())
     const api = initClientSDK(dispatch, getState);
-    
-    return api.allTemplates(undefined, true, searchByTemplateName, undefined, undefined, sortValue, undefined, searchByTemplateName )
+    return api.allTemplates(isPublished, true, searchByTemplateName, undefined, owned, sortValue, undefined, searchByTemplateName )
       .then(response => {
         if (response.response && response.response.statusCode === 200) {
           dispatch(querySearchSuccess(response.body, searchByTemplateName));
