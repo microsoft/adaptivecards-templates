@@ -8,9 +8,10 @@ import { recentTemplatesReducer } from "./recentTemplates/reducer";
 import { templateOwnerReducer } from "./templateOwner/reducers";
 import { skipLinkReducer } from "./skiplink/reducer";
 import { viewToggleReducer } from "./viewToggle/reducer";
+import { allTagsReducer } from "./tags/reducer";
+import { sortReducer } from "./sort/reducer";
 
 import { combineReducers } from "redux";
-import { sortReducer } from "./sort/reducer";
 
 export const rootReducer = combineReducers({
   auth: authReducer,
@@ -23,7 +24,8 @@ export const rootReducer = combineReducers({
   recentTemplates: recentTemplatesReducer,
   templateOwner: templateOwnerReducer,
   skipLink: skipLinkReducer,
-  allCardsViewToggle: viewToggleReducer
+  allCardsViewToggle: viewToggleReducer,
+  allTags: allTagsReducer
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

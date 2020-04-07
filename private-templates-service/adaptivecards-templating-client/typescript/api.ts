@@ -12,7 +12,6 @@
 
 import localVarRequest = require('request');
 import http = require('http');
-import Promise = require('bluebird');
 
 let defaultBasePath = 'http://localhost:5000';
 
@@ -295,14 +294,20 @@ export class ResourceCreated {
 }
 
 export class TagList {
-    'tags'?: Array<string>;
+    'ownedTags'?: Array<string>;
+    'allTags'?: Array<string>;
 
     static discriminator: string | undefined = undefined;
 
     static attributeTypeMap: Array<{name: string, baseName: string, type: string}> = [
         {
-            "name": "tags",
-            "baseName": "tags",
+            "name": "ownedTags",
+            "baseName": "ownedTags",
+            "type": "Array<string>"
+        },
+        {
+            "name": "allTags",
+            "baseName": "allTags",
             "type": "Array<string>"
         }    ];
 
@@ -824,6 +829,56 @@ export class TemplateApi {
         (this.authentications as any)[TemplateApiApiKeys[key]].apiKey = value;
     }
     /**
+     * 
+     * @summary Ggt the list of owned and all tags
+     * @param {*} [options] Override http request options.
+     */
+    public allTags (options: any = {}) : Promise<{ response: http.IncomingMessage; body: TagList;  }> {
+        const localVarPath = this.basePath + '/template/tag';
+        let localVarQueryParameters: any = {};
+        let localVarHeaderParams: any = (<any>Object).assign({}, this.defaultHeaders);
+        let localVarFormParams: any = {};
+
+        (<any>Object).assign(localVarHeaderParams, options.headers);
+
+        let localVarUseFormData = false;
+
+        let localVarRequestOptions: localVarRequest.Options = {
+            method: 'GET',
+            qs: localVarQueryParameters,
+            headers: localVarHeaderParams,
+            uri: localVarPath,
+            useQuerystring: this._useQuerystring,
+            json: true,
+        };
+
+        this.authentications.bearer_auth.applyToRequest(localVarRequestOptions);
+
+        this.authentications.default.applyToRequest(localVarRequestOptions);
+
+        if (Object.keys(localVarFormParams).length) {
+            if (localVarUseFormData) {
+                (<any>localVarRequestOptions).formData = localVarFormParams;
+            } else {
+                localVarRequestOptions.form = localVarFormParams;
+            }
+        }
+        return new Promise<{ response: http.IncomingMessage; body: TagList;  }>((resolve, reject) => {
+            localVarRequest(localVarRequestOptions, (error, response, body) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    body = ObjectSerializer.deserialize(body, "TagList");
+                    if (response.statusCode && response.statusCode >= 200 && response.statusCode <= 299) {
+                        resolve({ response: response, body: body });
+                    } else {
+                        reject({ response: response, body: body });
+                    }
+                }
+            });
+        });
+    }
+    /**
      * Returns the latest version of all public templates and owned templates
      * @summary Find all templates
      * @param isPublished Query based on if template is published
@@ -836,7 +891,7 @@ export class TemplateApi {
      * @param tags List of tags to filter templates by
      * @param {*} [options] Override http request options.
      */
-    public allTemplates (isPublished?: boolean, isClient?: boolean, name?: string, version?: string, owned?: boolean, sortBy?: 'alphabetical' | 'dateCreated' | 'dateUpdated', sortOrder?: 'ascending' | 'descending', tags?: string, options: any = {}) : Promise<{ response: http.IncomingMessage; body: TemplateList;  }> {
+    public allTemplates (isPublished?: boolean, isClient?: boolean, name?: string, version?: string, owned?: boolean, sortBy?: 'alphabetical' | 'dateCreated' | 'dateUpdated', sortOrder?: 'ascending' | 'descending', tags?: Array<string>, options: any = {}) : Promise<{ response: http.IncomingMessage; body: TemplateList;  }> {
         const localVarPath = this.basePath + '/template';
         let localVarQueryParameters: any = {};
         let localVarHeaderParams: any = (<any>Object).assign({}, this.defaultHeaders);
@@ -871,7 +926,7 @@ export class TemplateApi {
         }
 
         if (tags !== undefined) {
-            localVarQueryParameters['tags'] = ObjectSerializer.serialize(tags, "string");
+            localVarQueryParameters['tags'] = ObjectSerializer.serialize(tags, "Array<string>");
         }
 
         (<any>Object).assign(localVarHeaderParams, options.headers);
