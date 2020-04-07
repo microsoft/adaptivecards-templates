@@ -40,7 +40,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "sh -ac 'react-scripts build'",
+    "build": "react-scripts build",
     "build:dev": "REACT_APP_ENV=dev npm run build",
     "build:staging": "REACT_APP_ENV=staging npm run build",
     "test": "react-scripts test --watchAll=false",
