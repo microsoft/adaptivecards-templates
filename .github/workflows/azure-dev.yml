@@ -5,7 +5,6 @@ trigger:
     include:
     - dev
     - stage
-    - users/daniellemott/pipeline
 
 # no PR builds
 pr: none
@@ -21,7 +20,7 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-        if ("$(Build.SourceBranch)" -eq "refs/heads/users/daniellemott/pipeline") {
+        if ("$(Build.SourceBranch)" -eq "refs/heads/dev") {
           Write-Host "##vso[task.setvariable variable=ACMS_APP_ID;]$(DEV_REACT_APP_ACMS_APP_ID)"
           Write-Host "##vso[task.setvariable variable=REACT_APP_ACMS_APP_ID;]$(DEV_REACT_APP_ACMS_APP_ID)"
           Write-Host "##vso[task.setvariable variable=REACT_APP_ACMS_APP_INSIGHTS_INSTRUMENTATION_KEY;]$(REACT_APP_ACMS_APP_INSIGHTS_INSTRUMENTATION_KEY)"
