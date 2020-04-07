@@ -83,15 +83,12 @@ export class TemplatesView extends Component<Props> {
   };
   render() {
     let templatesState: AllTemplateState = this.props.templates;
-    let searchState: SearchState = this.props.search;
     let templates: Template[] = [];
     console.log(this.props.selectedTags);
     if (!templatesState.isFetching && templatesState.templates && templatesState.templates.templates) {
       templates = templatesState.templates.templates;
     }
-    // if (!searchState.loading && searchState.templates && searchState.templates.templates) {
-    //     templates = searchState.templates.templates;
-    //   }
+
     return (
       <React.Fragment>
         {this.onLoad(templatesState.isFetching, templates, ALL_CARDS_PLACEHOLDER)}
