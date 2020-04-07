@@ -38,11 +38,16 @@ export const VersionCardRow = styled.div`
   display: flex;
   width: 100%;
   justify-content: space-around;
-  margin-top: 8px;
-  margin-left: 16px;
-  margin-bottom: 8px;
-  margin-right: 16px;
+  padding-top: 8px;
+  padding-left: 16px;
+  padding-bottom: 8px;
+  padding-right: 16px;
   align-items: center;
+
+  &: hover {
+    background-color: ${COLORS.GREYHOVER};
+    cursor: pointer;
+  }
 `
 export const VersionCardRowTitle = styled.div`
   font-weight: 600;
