@@ -5,6 +5,7 @@ trigger:
     include:
     - dev
     - stage
+    - users/daniellemott/pipeline
 
 # no PR builds
 pr: none
