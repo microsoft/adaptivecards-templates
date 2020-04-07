@@ -4,7 +4,6 @@ import passport from "./config/passport";
 import bodyParser from "body-parser";
 import session from "express-session";
 import helmet from "helmet";
-import mongoose from "mongoose";
 
 // import controllers
 import { TemplateServiceClient } from "../../adaptivecards-templating-service/src/TemplateServiceClient";
@@ -26,7 +25,7 @@ app.use(helmet.hsts({
   maxAge: 15552000
 }));
 app.use(session({
-  secret: '#{CLIENT_ID_TOKEN}#',
+  secret: 'cc02a0f4-ef1b-4513-a431-9aca7b2f7fca',
   cookie: {
     httpOnly: true,
     secure: true
@@ -34,10 +33,9 @@ app.use(session({
   resave: false,
   saveUninitialized: true
 }));
-app.use(helmet.noSniff());
+app.use(function (req, res, next) { res.header("Access-Control-Allow-Origin", "*"); res.header( "Access-Control-Allow-Headers", "Origin, Content-Type, Accept, Authorization, api_key" ); res.header( "Access-Control-Allow-Methods", "GET, POST, OPTIONS, DELETE" ); next(); });
 
-mongoose.set('useFindAndModify', false)
-let mongoDB = new MongoDBProvider({ connectionString: "#{DB_CONNECTION_TOKEN}#" });
+let mongoDB = new MongoDBProvider();
 mongoDB.connect()
   .then(
     (res) => {
@@ -54,6 +52,7 @@ mongoDB.connect()
         // Keep this request at the end so it has lowest priority
         app.use(express.static(path.join(__dirname, RELATIVE_PATH_CLIENT)));
         app.get('*', (req, res) => {
+          res.header("Strict-Transport-Security", "max-age=15552000");
           res.sendFile(path.join(__dirname, RELATIVE_PATH_CLIENT + '/index.html'));
         })
       } else {
