@@ -19,6 +19,7 @@ import Dashboard from "./components/Dashboard";
 import Shared from "./components/Shared/";
 import PreviewModal from './components/Dashboard/PreviewModal';
 import ErrorMessage, { ErrorMessageProps } from "./components/ErrorMessage/ErrorMessage";
+import NoMatch from "./components/NoMatch";
 import config from "./Config";
 
 // CSS
@@ -27,7 +28,6 @@ import { OuterAppWrapper, MainAppWrapper, MainApp } from "./styled";
 
 // Constants
 import Constants from "./globalConstants"
-
 
 interface State {
   error: ErrorMessageProps | null;
@@ -60,7 +60,7 @@ const mapDispatchToProps = (dispatch: any) => {
     },
     userLogout: () => {
       dispatch(logout());
-    }
+    },
   };
 };
 
@@ -75,6 +75,8 @@ interface Props {
   user?: UserType;
   searchByTemplateName: string;
 }
+
+
 
 class App extends Component<Props, State> {
   userAgentApplication: UserAgentApplication;
@@ -150,6 +152,7 @@ class App extends Component<Props, State> {
                   <Route path="/preview/:uuid">
                     <PreviewModal authButtonMethod={this.login} />
                   </Route>
+                  <Route component={NoMatch} />
                 </Switch>
               </MainApp>
             </MainAppWrapper>

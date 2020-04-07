@@ -95,3 +95,7 @@ export const UNPUBLISH_BUTTON_TOOLTIP = "Unpublishing this card makes it depreca
 
 // SkipLink.tsx
 export const SKIP_TO_MAIN_CONTENT_MESSAGE = "Skip to main content"
+
+//NoMatch.tsx
+export const ERROR_MESSAGE = "Oops, something went wrong.";
+export const GO_TO_DASHBOARD = "Go to Dashboard";
