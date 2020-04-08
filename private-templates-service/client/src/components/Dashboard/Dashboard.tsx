@@ -21,7 +21,7 @@ import requireAuthentication from "../../utils/requireAuthentication";
 
 import Gallery from "../Gallery";
 import SearchPage from "./SearchPage/SearchPage";
-import RecentlyViewed from "./RecentlyViewed";
+import TemplateList from "./TemplateList";
 import Tags from "../Common/Tags";
 import Footer from "./Footer";
 import {
@@ -179,10 +179,11 @@ class Dashboard extends React.Component<Props> {
               {recentTemplates.isFetching || this.props.templateOwner.isFetchingName || this.props.templateOwner.isFetchingPicture ?
                 <CenteredSpinner size={SpinnerSize.large} />
                 : recentlyViewedTemplates.length ? (
-                  <RecentlyViewed
+                  <TemplateList
                     onClick={this.selectTemplate}
-                    recentlyViewed={recentlyViewedTemplates}
-                  ></RecentlyViewed>
+                    templates={recentlyViewedTemplates}
+                    displayComponents={{author: true, status: true, dateModified: true, templateName: true, version: false}}
+                  ></TemplateList>
                 ) : (
                     <PlaceholderText>
                       {DASHBOARD_RECENTLY_VIEWED_PLACEHOLDER}

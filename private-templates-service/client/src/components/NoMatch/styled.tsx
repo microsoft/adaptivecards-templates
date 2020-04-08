@@ -21,7 +21,7 @@ export const ErrorWrapper = styled.h1`
   padding-bottom: 10px;
 `
 
-export const ErrorMessage = styled.h2`
+export const ErrorMessage = styled.h1`
   font-size: 1.3rem;
   margin-bottom: 30px;
 `
