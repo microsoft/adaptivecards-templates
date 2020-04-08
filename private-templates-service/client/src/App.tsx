@@ -27,6 +27,7 @@ import { OuterAppWrapper, MainAppWrapper, MainApp } from "./styled";
 
 // Constants
 import Constants from "./globalConstants"
+import AllCards from "./components/AllCards";
 
 
 interface State {
@@ -85,8 +86,8 @@ class App extends Component<Props, State> {
     initializeIcons();
     this.userAgentApplication = new UserAgentApplication({
       auth: {
-        clientId: config.appId,
-        redirectUri: config.redirectUri
+        clientId: process.env.REACT_APP_ACMS_APP_ID!,
+        redirectUri: process.env.REACT_APP_ACMS_REDIRECT_URI
       },
       cache: {
         cacheLocation: "localStorage",
@@ -137,18 +138,21 @@ class App extends Component<Props, State> {
               }
             />
             <MainAppWrapper>
-              <NavBar/>
+              <NavBar />
               <MainApp>
                 {!this.props.isAuthenticated && error}
                 <Switch>
                   <Route exact path="/">
                     <Dashboard authButtonMethod={this.login} />
                   </Route>
-                  <Route exact path="/designer">
+                  <Route exact path="/designer/:uuid/:version">
                     <Designer authButtonMethod={this.login} />
                   </Route>
                   <Route path="/preview/:uuid">
                     <PreviewModal authButtonMethod={this.login} />
+                  </Route>
+                  <Route exact path="/allcards">
+                    <AllCards authButtonMethod={this.login} />
                   </Route>
                 </Switch>
               </MainApp>
@@ -218,7 +222,7 @@ class App extends Component<Props, State> {
       // make a request to the Azure OAuth endpoint to get a token
       let accessToken = await this.userAgentApplication.acquireTokenSilent(
         {
-          scopes: [`api://${config.appId}/Templates.All`]
+          scopes: [`api://${process.env.REACT_APP_ACMS_APP_ID}/Templates.All`]
         }
       );
       this.props.setAccessToken(accessToken);

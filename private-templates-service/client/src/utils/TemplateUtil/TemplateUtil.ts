@@ -39,3 +39,7 @@ export function populateTemplate(getState: () => RootState): PostedTemplate {
   newTemplate.version = version;
   return newTemplate;
 }
+
+export function getShareURL(templateID?: string, templateVersion?: string): string {
+  return "/preview/" + templateID + "/" + templateVersion;
+}

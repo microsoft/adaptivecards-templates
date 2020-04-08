@@ -33,6 +33,7 @@ export const LogoWrapper = styled.div`
   align-items: center;
   margin-top: 20px;
   padding-right: 48px;
+  cursor: pointer;
 `;
 
 export const Logo = styled.img`

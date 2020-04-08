@@ -14,9 +14,10 @@ export const COLORS = {
   GREEN: "#00D610",
   YELLOW: "#FFBD53",
   BLUE: "#016FC4",
+  BLUE2: "#02599C",
+  BLUE3: "#5390FF",
   BORDER: "#E6E6E6",
   BORDER2: "#C3C3C3",
-  BLUE2: "#02599C"
 };
 
 export const BREAK = {

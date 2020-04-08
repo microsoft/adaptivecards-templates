@@ -1,3 +1,17 @@
+//SideBar.tsx
+export const DASHBOARD = "Dashboard";
+export const NEW_CARD = "New Card";
+export const ALL_CARDS = "All Cards";
+export const DRAFTS = "Drafts";
+export const PUBLISHED = "Published";
+
+//RecentlyViewed.tsx
+export const NAME = "Name";
+export const VERSION = "Version";
+export const DATE_MODIFIED = "Date Modified";
+export const STATUS = "Status";
+export const AUTHOR = "Author";
+
 // UnpublishModal.tsx
 export const UNPUBLISH_WARNING = "Once a template is unpublished, your organization will not be able to use it."
 export const UNPUBLISH_CONFIRMATION = "Are you sure you want to unpublish "
@@ -37,8 +51,9 @@ export const NEW_TEMPLATE_NAME = 'Untitled Card'
 // Dashboard.tsx
 export const DASHBOARD_RECENTLY_EDITED_PLACEHOLDER = 'No edited templates.';
 export const DASHBOARD_RECENTLY_VIEWED_PLACEHOLDER = 'No recently viewed templates.';
+export const FAVORITED_TAGS = "Favorited tags"
 
-//Footer.tsx
+// Footer.tsx
 export const SITEMAP = "Sitemap";
 export const CONTACT = "Contact Microsoft";
 export const PRIVACY = "Privacy & Cookies";
@@ -47,6 +62,13 @@ export const TRADEMARKS = "Trademarks";
 export const SAFETY = "Safety & Eco";
 export const ABOUT_ADS = "About our Ads";
 export const MICROSOFT = "© Microsoft 2020";
+
+
+// AllCards.tsx
+export const ALL_CARDS_TITLE = "Cards"
+export const ALL_CARDS_PLACEHOLDER = "Nothing to display yet."
+export const ALL_CARDS_LIST_VIEW = "List View";
+export const ALL_CARDS_GRID_VIEW = "Grid View";
 
 // PublishModal.tsx
 export const SEARCH_FOR_PEOPLE = "Search for people";
@@ -64,7 +86,20 @@ export const UNTITLEDCARD = "Untitled Card";
 export const DRAFT = "Draft";
 export const CARDNAME = "Card Name";
 export const TAGS = "Tags";
+export const MYCARD = "My Card";
 
 //OwnerAvatar.tsx
 export const ERROR_LOADING_IMAGE = "Error loading image";
-export const ALT_TEXT = "Template owner profile picture"
+export const ALT_TEXT = "Template owner profile picture";
+
+//Tooltips
+export const EDIT_NAME_TOOLTIP = "Edit card name";
+export const HOST_CONFIG_TOOLTIP = "Host app preview";
+export const EDIT_IN_DESIGNER_TOOLTIP = "Edit this card in the designer";
+export const DELETE_BUTTON_TOOLTIP = "Delete card version";
+export const SHARE_BUTTON_TOOLTIP = "Share this card via link or e-mail"
+export const PUBLISH_BUTTON_TOOLTIP = "Publishing this card makes it available to your organization";
+export const UNPUBLISH_BUTTON_TOOLTIP = "Unpublishing this card makes it deprecated";
+
+// SkipLink.tsx
+export const SKIP_TO_MAIN_CONTENT_MESSAGE = "Skip to main content"
