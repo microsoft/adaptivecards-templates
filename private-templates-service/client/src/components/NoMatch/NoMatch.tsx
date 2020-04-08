@@ -4,7 +4,6 @@ import { useHistory } from "react-router-dom";
 
 import { setSearchBarVisible } from "../../store/search/actions";
 
-
 import { Centered, OuterContainer, ErrorWrapper, ErrorMessage, DashboardButton } from "./styled";
 import { ERROR_MESSAGE, GO_TO_DASHBOARD } from "../../assets/strings";
 import KeyCode from "../../globalKeyCodes";

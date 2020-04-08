@@ -16,7 +16,7 @@ export const OuterContainer = styled.div`
 `;
 
 export const ErrorWrapper = styled.h1`
-  color: #C0C0C0;
+  color: #808080;
   font-size: 5rem;
   padding-bottom: 10px;
 `
