@@ -13,7 +13,7 @@ export const OuterContainer = styled.div`
   justify-content: center;  
   align-items: center;
   padding-bottom: 60px;
-`;
+`
 
 export const ErrorWrapper = styled.h1`
   color: #808080;
