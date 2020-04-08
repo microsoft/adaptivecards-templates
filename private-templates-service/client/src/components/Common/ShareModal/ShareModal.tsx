@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Template } from 'adaptive-templating-service-typescript-node';
-import { getShareURL, getFullShareURL } from '../../../utils/TemplateUtil/TemplateUtil';
+import { getShareURL } from '../../../utils/TemplateUtil/TemplateUtil';
 
 import ShareModalForm from './ShareModalForm';
 
@@ -62,7 +62,7 @@ class ShareModal extends React.Component<ShareModalProps> {
               <LinkRow>
                 <TextFieldContainer>
                   <TextField readOnly={true}
-                    prefix={this.props.redirectUri!.slice(-1) === "/" ? this.props.redirectUri!.slice(0, this.props.redirectUri!.length - 1) : this.props.redirectUri}
+                    prefix={this.props.redirectUri!}
                     defaultValue={getShareURL(this.props.template.id, this.props.templateVersion)}
                     width={100} />
                 </TextFieldContainer>
@@ -71,7 +71,7 @@ class ShareModal extends React.Component<ShareModalProps> {
                 </CopyLinkButton>
               </LinkRow>
             </ShareLinkPanel>
-            <ShareModalForm shareURL={getFullShareURL(this.props.redirectUri!, this.props.template.id, this.props.templateVersion)} templateVersion={this.props.templateVersion} />
+            <ShareModalForm shareURL={this.props.redirectUri! + getShareURL(this.props.template.id, this.props.templateVersion)} templateVersion={this.props.templateVersion} />
           </CenterPanelWrapper>
         </Modal>
       </BackDrop>
@@ -81,7 +81,7 @@ class ShareModal extends React.Component<ShareModalProps> {
 
 function onCopyURL(props: ShareModalProps) {
   let copyCode = document.createElement('textarea');
-  copyCode.innerText = getFullShareURL(props.redirectUri!, props.template.id, props.templateVersion);
+  copyCode.innerText = props.redirectUri + getShareURL(props.template.id, props.templateVersion);
   document.body.appendChild(copyCode);
   copyCode.select();
   document.execCommand('copy');

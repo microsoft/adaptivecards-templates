@@ -43,7 +43,3 @@ export function populateTemplate(getState: () => RootState): PostedTemplate {
 export function getShareURL(templateID?: string, templateVersion?: string): string {
   return "/preview/" + templateID + "/" + templateVersion;
 }
-
-export function getFullShareURL(redirectUri: string, templateID?: string, templateVersion?: string): string {
-  return (redirectUri + getShareURL(templateID, templateVersion)).replace("//", "/");
-}

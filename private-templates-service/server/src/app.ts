@@ -1,3 +1,6 @@
+let appInsights = require('applicationinsights');
+appInsights.setup('InstrumentationKey=' + process.env.ACMS_APP_INSIGHTS_INSTRUMENTATION_KEY).start();
+
 import express from "express";
 import path from "path";
 import passport from "./config/passport";
@@ -23,7 +26,7 @@ app.use(helmet.hsts({
   maxAge: 15552000
 }));
 app.use(session({
-  secret: process.env.ACMS_APP_ID!,
+  secret: process.env.ACMS_APP_ID || "ACMS",
   cookie: {
     httpOnly: true,
     secure: true

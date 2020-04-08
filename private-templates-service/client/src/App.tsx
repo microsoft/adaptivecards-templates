@@ -27,6 +27,7 @@ import { OuterAppWrapper, MainAppWrapper, MainApp } from "./styled";
 
 // Constants
 import Constants from "./globalConstants"
+import AllCards from "./components/AllCards";
 
 
 interface State {
@@ -158,11 +159,14 @@ class App extends Component<Props, State> {
                   <Route exact path="/">
                     <Dashboard authButtonMethod={this.login} />
                   </Route>
-                  <Route exact path="/designer">
+                  <Route exact path="/designer/:uuid/:version">
                     <Designer authButtonMethod={this.login} />
                   </Route>
                   <Route path="/preview/:uuid">
                     <PreviewModal authButtonMethod={this.login} />
+                  </Route>
+                  <Route exact path="/allcards">
+                    <AllCards authButtonMethod={this.login} />
                   </Route>
                 </Switch>
               </MainApp>
