@@ -8,6 +8,7 @@ interface TagListProps {
   allowEdit: boolean;
   onClick?: (tag: string) => void;
   toggleStyle?: (isSelected: boolean, ref: any) => void;
+  selectedTags?: string[];
 }
 class TagList extends Component<TagListProps> {
   scroller: Scroller;
@@ -19,7 +20,7 @@ class TagList extends Component<TagListProps> {
     this.scroller = new Scroller(ScrollDirection.Horizontal);
   }
   componentDidMount() {
-    this.ref.current.addEventListener("wheel", this.scroller.scroll, { passive: false });
+    this.ref.current!.addEventListener("wheel", this.scroller.scroll, { passive: false });
   }
   componentWillUnmount() {
     if (this.ref.current) {
@@ -28,9 +29,11 @@ class TagList extends Component<TagListProps> {
   }
   render() {
     return (
+      // The div tag is required to prevent tags container from collapsing on window resize
+      // due to TagsContainer overflows being set to hidden.
       <div>
         <TagsContainer ref={this.ref}>
-          <Tags tags={this.props.tags} allowEdit={this.props.allowEdit} onClick={this.props.onClick} toggleStyle={this.props.toggleStyle} />
+          <Tags tags={this.props.tags} selectedTags={this.props.selectedTags} allowEdit={this.props.allowEdit} onClick={this.props.onClick} toggleStyle={this.props.toggleStyle}/>
         </TagsContainer>
       </div>
     );

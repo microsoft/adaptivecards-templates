@@ -13,6 +13,7 @@ interface Props {
     ifModalState?: boolean;
     setRef?: (ref: HTMLDivElement) => void;
     toggleStyle?: (isSelected: boolean, ref: any) => void;
+    isSelected?: boolean;
 }
 
 interface State {
@@ -23,7 +24,7 @@ export class TagBody extends Component<Props, State> {
     ref: any;
     constructor(props: Props) {
         super(props)
-        this.state = {isSelected: false};
+        this.state = {isSelected: this.props.isSelected? this.props.isSelected : false};
         this.ref = React.createRef();
     }
     componentDidMount = () => {
@@ -31,6 +32,9 @@ export class TagBody extends Component<Props, State> {
         this.props.setRef(this.ref);
         if(this.props.onClick) {
           this.ref.current.style.cursor = "pointer";
+        }
+        if(this.state.isSelected && this.props.toggleStyle) {
+          this.props.toggleStyle(!this.state.isSelected, this.ref);
         }
       }
     }

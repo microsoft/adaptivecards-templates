@@ -33,9 +33,7 @@ class TemplateListContent extends React.Component<Props> {
           propsOnClick(template.id);
         }
       };
-      if (!template || !template.instances || !template.instances[0] || !template.instances[0].lastEditedUser) {
-        console.log(template);
-        console.log(template!.instances![0].lastEditedUser);
+      if (!template || !template.instances || !template.instances[0] || !template.instances[0].lastEditedUser) {  
         return <div>Error loading templates</div>;
       }
 

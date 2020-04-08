@@ -35,6 +35,7 @@ interface Props {
   modalState?: ModalState;
   onClick?: (tag: string) => void;
   toggleStyle?: (isSelected: boolean, ref: any) => void;
+  selectedTags?: string[];
 }
 
 interface State {
@@ -143,7 +144,8 @@ class Tags extends React.Component<Props, State>  {
                   key={tag} onClick={onClick} onKeyDownRemoveTag={this.onKeyDownRemoveTag} 
                   ifModalState={modalState? true : false}
                   allowEdit={allowEdit}
-                  toggleStyle={toggleStyle} />
+                  toggleStyle={toggleStyle}
+                  isSelected={this.props.selectedTags ? (this.props.selectedTags.includes(tag) ? true : false) : false} />
         ))}
         {allowAddTag && <AddTagWrapper onSubmit={this.submitNewTag} open={isAdding} >
           <AddTagInput ref={this.addTagInput} open={isAdding} value={this.state.newTagName} maxLength={30} onChange={this.handleChange} onKeyDown={this.onKeyDown} />

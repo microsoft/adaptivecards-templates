@@ -123,7 +123,7 @@ class Dashboard extends React.Component<Props> {
     }
   }
   selectTemplate = (templateID: string) => {
-    this.props.history.push("preview/" + templateID);
+    this.props.history.push("/preview/" + templateID);
   };
 
   render() {

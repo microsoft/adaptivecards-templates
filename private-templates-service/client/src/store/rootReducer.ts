@@ -8,8 +8,9 @@ import { recentTemplatesReducer } from "./recentTemplates/reducer";
 import { templateOwnerReducer } from "./templateOwner/reducers";
 import { skipLinkReducer } from "./skiplink/reducer";
 import { viewToggleReducer } from "./viewToggle/reducer";
-import { allTagsReducer } from "./tags/reducer";
+import { allTagsReducer } from "./allTags/reducer";
 import { sortReducer } from "./sort/reducer";
+import { selectedTagsReducer } from "./selectedTags/reducer"
 
 import { combineReducers } from "redux";
 
@@ -25,7 +26,8 @@ export const rootReducer = combineReducers({
   templateOwner: templateOwnerReducer,
   skipLink: skipLinkReducer,
   allCardsViewToggle: viewToggleReducer,
-  allTags: allTagsReducer
+  allTags: allTagsReducer,
+  selectedTags: selectedTagsReducer
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

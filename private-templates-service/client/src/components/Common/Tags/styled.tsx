@@ -4,7 +4,9 @@ import { COLORS } from '../../../globalStyles';
 import { Icon } from 'office-ui-fabric-react';
 
 
-export const TagText = styled.div``;
+export const TagText = styled.div`
+  white-space: pre;
+`;
 
 export const TagCloseIcon = styled(Icon)`
   font-size: 0.625rem;

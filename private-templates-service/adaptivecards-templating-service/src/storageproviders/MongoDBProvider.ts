@@ -28,7 +28,7 @@ export class MongoDBProvider implements StorageProvider {
     if (query.tags && query.tags.length) {
       templateQuery.tags = {
         $all: clone(query.tags).map(x => {
-          return x.toLocaleLowerCase();
+          return new RegExp(`^${x}$`, "i");
         })
       };
     }
