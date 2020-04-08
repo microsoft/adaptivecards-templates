@@ -77,8 +77,6 @@ interface Props {
   searchByTemplateName: string;
 }
 
-
-
 class App extends Component<Props, State> {
   userAgentApplication: UserAgentApplication;
   onIdle: () => any;
