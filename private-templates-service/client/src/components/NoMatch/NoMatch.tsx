@@ -6,7 +6,6 @@ import { setSearchBarVisible } from "../../store/search/actions";
 
 import { Centered, OuterContainer, ErrorWrapper, ErrorMessage, DashboardButton } from "./styled";
 import { ERROR_MESSAGE, GO_TO_DASHBOARD } from "../../assets/strings";
-import KeyCode from "../../globalKeyCodes";
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
@@ -28,12 +27,6 @@ const NoMatch = (props: Props) => {
     history.push("/");
   }
 
-  const onKeyDown = (e: React.KeyboardEvent) => {
-    if (e.keyCode === KeyCode.ENTER) {
-      history.push("/");
-    }
-  }
-
   return (
     <OuterContainer>
       <Centered>
@@ -41,7 +34,6 @@ const NoMatch = (props: Props) => {
         <ErrorMessage>{ERROR_MESSAGE}</ErrorMessage>
         <DashboardButton
           onClick={onDashboardClick}
-          onKeyDown={onKeyDown}
           tabIndex={0}>
           {GO_TO_DASHBOARD}
         </DashboardButton>
