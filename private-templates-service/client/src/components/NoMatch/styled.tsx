@@ -27,7 +27,7 @@ export const ErrorMessage = styled.h2`
 `
 
 export const DashboardButton = styled.button`
-  background-color: ${COLORS.BLUE3};
+  background-color: ${COLORS.BLUE};
   color: ${COLORS.WHITE};
   border : none;
   padding: 10px;
