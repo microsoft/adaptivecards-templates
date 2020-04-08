@@ -1,8 +1,6 @@
 import styled from "styled-components";
 import { COLORS } from "../../globalStyles";
 
-import { ActionButton } from "office-ui-fabric-react";
-
 export const Centered = styled.div`
   display: flex;
   flex-direction: column; 
@@ -28,8 +26,9 @@ export const ErrorMessage = styled.h2`
   margin-bottom: 30px;
 `
 
-export const DashboardButton = styled(ActionButton)`
-  background-color: ${COLORS.BLUE2};
+export const DashboardButton = styled.button`
+  background-color: ${COLORS.BLUE3};
   color: ${COLORS.WHITE};
+  border : none;
+  padding: 10px;
 `
-

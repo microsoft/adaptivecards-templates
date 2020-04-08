@@ -1,14 +1,13 @@
 import * as React from "react";
 import { connect } from 'react-redux';
-import { RootState } from "../../store/rootReducer";
 import { useHistory } from "react-router-dom";
 
 import { setSearchBarVisible } from "../../store/search/actions";
-import { ModalState } from "../../store/page/types";
 
 
 import { Centered, OuterContainer, ErrorWrapper, ErrorMessage, DashboardButton } from "./styled";
 import { ERROR_MESSAGE, GO_TO_DASHBOARD } from "../../assets/strings";
+import KeyCode from "../../globalKeyCodes";
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
@@ -20,14 +19,7 @@ const mapDispatchToProps = (dispatch: any) => {
 
 interface Props {
   setSearchBarVisible: (isSearchBarVisible: boolean) => void;
-  modalState?: ModalState;
 }
-
-const mapStateToProps = (state: RootState) => {
-  return {
-    modalState: state.page.modalState
-  };
-};
 
 const NoMatch = (props: Props) => {
   props.setSearchBarVisible(true);
@@ -37,15 +29,21 @@ const NoMatch = (props: Props) => {
     history.push("/");
   }
 
+  const onKeyDown = (e: React.KeyboardEvent) => {
+    if (e.keyCode === KeyCode.ENTER) {
+      history.push("/");
+    }
+  }
+
   return (
     <OuterContainer>
       <Centered>
         <ErrorWrapper>404</ErrorWrapper>
         <ErrorMessage>{ERROR_MESSAGE}</ErrorMessage>
-        <DashboardButton key={GO_TO_DASHBOARD}
+        <DashboardButton
           onClick={onDashboardClick}
-          tabIndex={props.modalState ? -1 : 0}
-          ariaDescription={GO_TO_DASHBOARD}>
+          onKeyDown={onKeyDown}
+          tabIndex={0}>
           {GO_TO_DASHBOARD}
         </DashboardButton>
       </Centered>
@@ -53,4 +51,4 @@ const NoMatch = (props: Props) => {
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(NoMatch);
+export default connect(null, mapDispatchToProps)(NoMatch);
