@@ -182,7 +182,7 @@ class Dashboard extends React.Component<Props> {
                   <TemplateList
                     onClick={this.selectTemplate}
                     templates={recentlyViewedTemplates}
-                    displayComponents={{author: true, status: true, dateModified: true, templateName: true, version: false}}
+                    displayComponents={{ author: true, status: true, dateModified: true, templateName: true, version: false }}
                   ></TemplateList>
                 ) : (
                     <PlaceholderText>
