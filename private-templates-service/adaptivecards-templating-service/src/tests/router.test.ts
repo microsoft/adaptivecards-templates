@@ -336,7 +336,7 @@ describe("Preview Templates", () => {
     let template = res.body.template;
     expect(template).toHaveProperty("_id");
     expect(template).toHaveProperty("name");
-    expect(template).toHaveProperty("authors");
+    expect(template).toHaveProperty("author");
     expect(template).toHaveProperty("instance");
     let instance = template.instance;
     expect(instance).toHaveProperty("version");
