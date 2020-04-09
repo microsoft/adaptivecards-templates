@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { COLORS } from '../../../../globalStyles';
+import { COLORS, FONTS } from '../../../../globalStyles';
 
 import { Dropdown, IDropdownStyles } from "office-ui-fabric-react";
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
@@ -54,7 +54,7 @@ export const TitleWrapper = styled.div`
 
 export const Title = styled.div`
   font-size: 1.375rem;
-  font-weight: 500;
+  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD}
 `;
 
 export const StatusIndicator = styled.div<{ state?: PostedTemplate.StateEnum }>`
@@ -69,7 +69,7 @@ export const StatusIndicator = styled.div<{ state?: PostedTemplate.StateEnum }>`
 
 export const Status = styled.div`
   font-size: 0.875rem;
-  font-weight: 400;
+  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD}
   padding-right: 7px;
 `
 export const TimeStamp = styled.div`
@@ -116,7 +116,7 @@ export const CardHeader = styled.div`
   align-items: center;
   padding-bottom: 8px;
   font-size: 1.375rem;
-  font-weight: 600;
+  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD};
   border-bottom: 1px solid ${COLORS.BORDER};
 `;
 

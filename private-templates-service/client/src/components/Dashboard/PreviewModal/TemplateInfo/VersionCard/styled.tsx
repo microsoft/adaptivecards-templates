@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { COLORS } from '../../../../../globalStyles';
+import { COLORS, FONTS } from '../../../../../globalStyles';
 import { ActionButton, Icon } from 'office-ui-fabric-react';
 import {
   VersionContainer
@@ -24,7 +24,7 @@ export const CardManageButton = styled(ActionButton)`
 
 export const CardTitle = styled.div`
   font-size: 1.375rem;
-  font-weight: 600;
+  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD};
 `
 
 export const VersionCardHeader = styled.div`
@@ -45,7 +45,7 @@ export const VersionCardRow = styled.div`
   align-items: center;
 `
 export const VersionCardRowTitle = styled.div`
-  font-weight: 600;
+  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD};
 `
 
 export const VersionCardRowText = styled.div`

@@ -2,7 +2,8 @@ import styled from "styled-components";
 import { Nav } from "office-ui-fabric-react/lib/Nav";
 import { Icon } from "office-ui-fabric-react/lib/Icon";
 import { ActionButton } from "office-ui-fabric-react";
-import { COLORS, BREAK } from "../../globalStyles";
+import { COLORS, BREAK, FONTS } from "../../globalStyles";
+
 export const OuterSideBarWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -49,10 +50,11 @@ export const LogoTextWrapper = styled.div`
 `;
 
 export const LogoTextHeader = styled.div`
-  font-weight: 500;
+  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD}
 `;
 export const LogoTextSubHeader = styled.div`
-  font-weight: 300;
+  color: ${COLORS.GREY5};
+  font-family: ${FONTS.SEGOE_UI};
 `;
 
 export const UserWrapper = styled.div`
@@ -66,7 +68,7 @@ export const AvatarIcon = styled.img`
   margin-bottom: 16px;
 `;
 
-export const DefaultAvatarIcon = styled(Icon)<{ size?: string }>`
+export const DefaultAvatarIcon = styled(Icon) <{ size?: string }>`
   font-size: ${props => props.size || "1rem"};
   align-self: center;
 `;
@@ -78,15 +80,14 @@ export const Name = styled.div`
   font-size: 1.125rem;
 
   color: ${COLORS.WHITE};
+  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD};
 
-  font-weight: 600;
 `;
 
 export const Title = styled.div`
   align-self: flex-start;
-
-  font-weight: 400;
   font-size: 0.75rem;
+  font-family: ${FONTS.SEGOE_UI_REGULAR};
 `;
 
 export const NavMenu = styled(Nav)`

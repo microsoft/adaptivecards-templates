@@ -8,6 +8,7 @@ export const COLORS = {
   GREY2: "#EAEAEA",
   GREY3: "#6F6F6F",
   GREY4: "#5C5C5C",
+  GREY5: "#A8C0D3",
   GREYHOVER: "#F5F4F4",
   GREY_SEARCH_BAR_DARK: "#A1A1A1",
   GREY_BOX_SHADOW: "#E0E0E0",
@@ -79,4 +80,12 @@ export const THEME = {
       white: "#ffffff"
     }
   })
+};
+
+export const FONTS = {
+  SEGOE_UI: "Segoe UI, Helvetica Neue, sans-serif",
+  SEGOE_UI_REGULAR: "Segoe UI Regular, Helvetica Neue, sans-serif",
+  SEGOE_UI_SEMI_BOLD: "Segoe UI Semibold, Helvetica Neue, sans-serif",
+  SEGOE_UI_BOLD: "Segoe UI Bold, Helvetica Neue, sans-serif",
+
 };

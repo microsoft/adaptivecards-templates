@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { COLORS } from '../../../globalStyles';
+import { COLORS, FONTS } from '../../../globalStyles';
 import { DefaultButton } from 'office-ui-fabric-react';
 
 export const BackDrop = styled.div`
@@ -26,7 +26,7 @@ export const Modal = styled.div`
 
 export const Header = styled.div`
   font-size: 1.375rem;
-  font-weight: 500;
+  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD}
   margin-bottom: 12px;
 `;
 
@@ -65,7 +65,7 @@ export const CenterPanelRight = styled.div`
 
 export const SemiBoldText = styled.div`
   font-size: 1rem;
-  font-weight: 600;
+  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD}
 `;
 
 export const BottomRow = styled.div`
