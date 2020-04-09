@@ -21,12 +21,13 @@ import requireAuthentication from "../../utils/requireAuthentication";
 
 import Gallery from "../Gallery";
 import SearchPage from "./SearchPage/SearchPage";
-import RecentlyViewed from "./RecentlyViewed";
+import TemplateList from "./TemplateList";
 import Tags from "../Common/Tags";
 import Footer from "./Footer";
 import {
   DASHBOARD_RECENTLY_EDITED_PLACEHOLDER,
   DASHBOARD_RECENTLY_VIEWED_PLACEHOLDER,
+  FAVORITED_TAGS
 } from '../../assets/strings';
 
 
@@ -178,10 +179,11 @@ class Dashboard extends React.Component<Props> {
               {recentTemplates.isFetching || this.props.templateOwner.isFetchingName || this.props.templateOwner.isFetchingPicture ?
                 <CenteredSpinner size={SpinnerSize.large} />
                 : recentlyViewedTemplates.length ? (
-                  <RecentlyViewed
+                  <TemplateList
                     onClick={this.selectTemplate}
-                    recentlyViewed={recentlyViewedTemplates}
-                  ></RecentlyViewed>
+                    templates={recentlyViewedTemplates}
+                    displayComponents={{author: true, status: true, dateModified: true, templateName: true, version: false}}
+                  ></TemplateList>
                 ) : (
                     <PlaceholderText>
                       {DASHBOARD_RECENTLY_VIEWED_PLACEHOLDER}
@@ -190,7 +192,7 @@ class Dashboard extends React.Component<Props> {
             </React.Fragment>
           </DashboardContainer>
           <TagsContainer>
-            <Title style={{ marginRight: "150px", color: 'pink' }}>Tags</Title>
+            <Title style={{ marginRight: "150px", color: 'pink' }}>{FAVORITED_TAGS}</Title>
             <Tags tags={tags} allowEdit={false}></Tags>
           </TagsContainer>
         </OuterWindow>

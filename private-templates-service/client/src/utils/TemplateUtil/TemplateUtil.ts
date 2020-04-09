@@ -18,8 +18,8 @@ export function getLatestTemplateInstanceState(template: Template): string {
 }
 
 export function initClientSDK(dispatch: any, getState: () => RootState, ): TemplateApi {
-  const api = new TemplateApi();
   const state = getState();
+  const api = new TemplateApi(state.auth.redirectUri);
   if (state.auth.accessToken) {
     api.setApiKey(0, `Bearer ${state.auth.accessToken!.accessToken}`);
   }
@@ -38,4 +38,8 @@ export function populateTemplate(getState: () => RootState): PostedTemplate {
 
   newTemplate.version = version;
   return newTemplate;
+}
+
+export function getShareURL(templateID?: string, templateVersion?: string): string {
+  return "/preview/" + templateID + "/" + templateVersion;
 }

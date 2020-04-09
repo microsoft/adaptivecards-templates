@@ -28,7 +28,8 @@ import {
   VersionWrapper,
   DateWrapper,
   StatusWrapper,
-  CheckboxWrapper
+  CheckboxWrapper, 
+  VersionContainer
 } from './styled';
 
 import {
@@ -44,6 +45,7 @@ import { getDateString } from '../../../utils/versionUtils';
 import { capitalizeString } from "../../../utils/stringUtils";
 import ModalHOC from '../../../utils/ModalHOC';
 import { closeModal } from '../../../store/page/actions';
+import { Scroller } from '../../../utils/AllCardsUtil/Scroller';
 
 interface Props {
   template: Template;
@@ -71,8 +73,10 @@ interface State {
 }
 
 class VersionModal extends React.Component<Props, State> {
+  scroller: Scroller;
   constructor(props: Props) {
     super(props);
+    this.scroller = new Scroller();
     this.state = { versionList: this.props.template.instances ? new Array(this.props.template.instances.length) : [] }
   }
 
@@ -129,6 +133,7 @@ class VersionModal extends React.Component<Props, State> {
                 <CardHeaderText>{`${this.state.versionList.filter(function (s) { return s; }).length} Selected`}</CardHeaderText>
               </CardHeaderRow>
               <CardBody>
+                <VersionContainer onWheel={this.scroller.scroll}>
                 {this.props.template.instances && this.props.template.instances.map((instance: TemplateInstance, index: number) => (
                   <VersionCardRow>
                     <VersionWrapper>
@@ -147,6 +152,7 @@ class VersionModal extends React.Component<Props, State> {
                       }} /></CheckboxWrapper>
                   </VersionCardRow>
                 ))}
+                </VersionContainer>
               </CardBody>
             </Card>
           </CenterPanelWrapper>

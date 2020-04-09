@@ -1,20 +1,22 @@
 import React from 'react';
 import requireAuthentication from '../../utils/requireAuthentication';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 import { RootState } from '../../store/rootReducer';
 import { connect } from 'react-redux';
-import { updateTemplate } from '../../store/currentTemplate/actions';
+import { ModalState } from '../../store/page/types';
+import { setPage, openModal } from '../../store/page/actions';
+import { updateTemplate, getTemplate } from '../../store/currentTemplate/actions';
 
 //ACDesigner
 import * as monaco from 'monaco-editor';
 import markdownit from 'markdown-it';
 import * as ACDesigner from 'adaptivecards-designer';
-import { setPage, openModal } from '../../store/page/actions';
 import { DesignerWrapper } from './styled';
 
 import EditNameModal from '../Common/EditNameModal';
 import SaveModal from './SaveModal/SaveModal';
-import { ModalState } from '../../store/page/types';
+import SpinnerModal from '../Common/SpinnerModal';
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -38,11 +40,14 @@ const mapDispatchToProps = (dispatch: any) => {
     },
     openModal: (modalState: ModalState) => {
       dispatch(openModal(modalState));
+    },
+    getTemplate: (id: string) => {
+      dispatch(getTemplate(id));
     }
   }
 }
 
-interface DesignerProps {
+interface DesignerProps extends RouteComponentProps<MatchParams> {
   templateID: string;
   templateJSON: object;
   templateName: string;
@@ -50,27 +55,35 @@ interface DesignerProps {
   version: string;
   updateTemplate: (templateID: string, currentVersion: string, templateJSON: object, sampleDataJSON: object, templateName: string) => any;
   setPage: (currentPageTitle: string, currentPage: string) => void;
-  toggleModal: () => void;
   openModal: (modalState: ModalState) => void;
+  getTemplate: (id: string) => void;
   modalState?: ModalState;
   isFetching: boolean;
 }
 
-interface State { 
-  isSaveOpen: boolean;
+interface MatchParams {
+  uuid: string;
+  version: string;
 }
 
 let designer: ACDesigner.CardDesigner;
 
-class Designer extends React.Component<DesignerProps,State> {
+class Designer extends React.Component<DesignerProps> {
   constructor(props: DesignerProps) {
     super(props);
     props.setPage(this.props.templateName, "Designer");
-    this.state = {isSaveOpen: false };
+    if(this.props.match.params.uuid !== "newcard"){
+      this.props.getTemplate(this.props.match.params.uuid);
+    }
   }
 
-  toggleModal = () => {
-    this.setState({isSaveOpen: !this.state.isSaveOpen});
+  componentDidUpdate() {
+    if (this.props.location.pathname === '/designer/newcard/1.0' && this.props.templateID && this.props.version) {
+      this.props.history.replace('/designer/' + this.props.templateID + '/' + this.props.version);
+    }
+    if (this.props.templateJSON){
+      designer.setCard({...this.props.templateJSON});
+    }
   }
   componentWillMount() {
     ACDesigner.GlobalSettings.enableDataBindingSupport = true;
@@ -99,7 +112,7 @@ class Designer extends React.Component<DesignerProps,State> {
     designer.monacoModuleLoaded(monaco);
 
     if (this.props.templateJSON) {
-      designer.setCard(this.props.templateJSON);
+      designer.setCard({...this.props.templateJSON});
     }
 
     if (this.props.sampleDataJSON) {
@@ -122,9 +135,10 @@ class Designer extends React.Component<DesignerProps,State> {
     return (
       <React.Fragment>
         <DesignerWrapper id="designer-container" />
-        {this.props.modalState===ModalState.Save && <SaveModal designerSampleData = {designer.sampleData} designerTemplateJSON = {designer.getCard()}/>}
-        {this.props.modalState === ModalState.EditName && <EditNameModal />}
-      </React.Fragment>
+        {this.props.isFetching && <SpinnerModal/>}
+        {this.props.modalState === ModalState.Save && <SaveModal designerSampleData = {designer.sampleData} designerTemplateJSON = {designer.getCard()}/>}
+        {this.props.modalState === ModalState.EditName && <EditNameModal/>}
+      </React.Fragment> 
     );
   }
 }
@@ -133,7 +147,7 @@ function initDesigner(): ACDesigner.CardDesigner {
   let hostContainers: Array<ACDesigner.HostContainer> = [];
 
   hostContainers.push(new ACDesigner.WebChatContainer("Bot Framework WebChat", "containers/webchat-container.css"));
-  hostContainers.push(new ACDesigner.CortanaContainer("Cortana Skills", "containers/cortana-container.css"));
+  hostContainers.push(new ACDesigner.LightTeamsContainer("Cortana Light", "containers/cortana-container.css"));
   hostContainers.push(new ACDesigner.OutlookContainer("Outlook Actionable Messages", "containers/outlook-container.css"));
   hostContainers.push(new ACDesigner.TimelineContainer("Windows Timeline", "containers/timeline-container.css"));
   hostContainers.push(new ACDesigner.DarkTeamsContainer("Microsoft Teams - Dark", "containers/teams-container-dark.css"));
@@ -149,12 +163,12 @@ function initDesigner(): ACDesigner.CardDesigner {
 }
 
 function onSave(designer: ACDesigner.CardDesigner, props: DesignerProps): void {
-  if(props.templateID === ""){
+  if(props.templateID === "" || props.templateID === undefined){
     props.openModal(ModalState.Save);
   }
-  else if (JSON.stringify(props.templateJSON) !== JSON.stringify(designer.getCard()) || props.sampleDataJSON !== designer.sampleData){ 
-    props.updateTemplate(props.templateID, props.version, designer.getCard(), designer.sampleData, props.templateName);  
+  else if (JSON.stringify(props.templateJSON) !== JSON.stringify(designer.getCard()) || props.sampleDataJSON !== designer.sampleData) {
+    props.updateTemplate(props.templateID, props.version, designer.getCard(), designer.sampleData, props.templateName);
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(requireAuthentication(Designer));
+export default connect(mapStateToProps, mapDispatchToProps)(requireAuthentication(withRouter(Designer)));

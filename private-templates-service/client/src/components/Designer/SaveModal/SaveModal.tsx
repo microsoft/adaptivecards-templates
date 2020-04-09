@@ -27,7 +27,7 @@ import {
   StyledTextField
 } from './styled';
 
-import { UNTITLEDCARD, SAVETEXT, DRAFT, SAVE, CANCEL, SAVECARD, CARDNAME, TAGS } from '../../../assets/strings';
+import { UNTITLEDCARD, SAVETEXT, DRAFT, SAVE, CANCEL, SAVECARD, CARDNAME, TAGS, MYCARD } from '../../../assets/strings';
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -48,7 +48,7 @@ interface Props {
   designerTemplateJSON?: any;
   version?: string;
   closeModal: () => void;
-  updateTemplate: (templateID?: string, currentVersion?: string, templateJSON?: object, sampleDataJSON?: object, templateName?: string, state?: PostedTemplate.StateEnum, tags?: string[], isShareable?: boolean) => any;
+  updateTemplate: (templateJSON?: object, sampleDataJSON?: object, templateName?: string, state?: PostedTemplate.StateEnum, tags?: string[]) => any;
 }
 
 interface State {
@@ -61,8 +61,8 @@ const mapDispatchToProps = (dispatch: any) => {
     closeModal: () => {
       dispatch(closeModal());
     },
-    updateTemplate: (templateID?: string, currentVersion?: string, templateJSON?: object, sampleDataJSON?: object, templateName?: string, templateState?: PostedTemplate.StateEnum, templateTags?: string[]) => {
-      dispatch(updateTemplate(templateID, currentVersion, templateJSON, sampleDataJSON, templateName, templateState, templateTags));
+    updateTemplate: (templateJSON?: object, sampleDataJSON?: object, templateName?: string, templateState?: PostedTemplate.StateEnum, templateTags?: string[]) => {
+      dispatch(updateTemplate(undefined, undefined, templateJSON, sampleDataJSON, templateName, templateState, templateTags));
     }
   }
 }
@@ -91,7 +91,7 @@ class SaveModal extends React.Component<Props, State> {
   onClick = () => {
     // will only trigger on first save
     if (JSON.stringify(this.props.sampleDataJSON) !== JSON.stringify(this.props.designerTemplateJSON) || this.props.sampleDataJSON !== this.props.designerSampleData) {
-      this.props.updateTemplate(undefined, undefined, this.props.designerTemplateJSON, this.props.designerSampleData, this.state.templateName, PostedTemplate.StateEnum.Draft, this.state.tags);
+      this.props.updateTemplate(this.props.designerTemplateJSON, this.props.designerSampleData, this.state.templateName, PostedTemplate.StateEnum.Draft, this.state.tags);
     }
     this.props.closeModal();
   }
@@ -131,7 +131,7 @@ class SaveModal extends React.Component<Props, State> {
               </Container>
               <InfoWrapper>
                 <StyledH3>{CARDNAME}</StyledH3>
-                <StyledTextField onChange={this.onChange} />
+                <StyledTextField onChange={this.onChange} placeholder = {MYCARD} defaultValue = {UNTITLEDCARD}/>
                 <StyledH3>{TAGS}</StyledH3>
                 <TagsWrapper>
                   <Tags updateTags={this.saveTags} tagRemove={this.tagRemove} tags={this.state.tags} allowAddTag={true} allowEdit={true} />

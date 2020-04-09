@@ -334,7 +334,7 @@ export class TemplateServiceClient {
     };
 
     // Check if version already exists
-    let response = await this.getTemplates(token, templateId);
+    let response = await this.getTemplates(token, templateId, undefined, undefined, undefined, undefined, undefined, undefined, undefined, true);
     if (!response.success || !response.result || response.result.length === 0) {
       return { success: false };
     }
@@ -467,7 +467,7 @@ export class TemplateServiceClient {
     const userId = userResponse.result![0]._id;
 
     // Check if version already exists
-    let response = await this.getTemplates(token, templateId);
+    let response = await this.getTemplates(token, templateId, undefined, undefined, undefined, undefined, undefined, undefined, undefined, true);
     if (!response.success || !response.result || response.result.length === 0) {
       return { success: false, errorMessage: response.errorMessage };
     }
@@ -887,7 +887,7 @@ export class TemplateServiceClient {
     }
 
     if (!version) {
-      let response = await this.getTemplates(token, templateId);
+      let response = await this.getTemplates(token, templateId, undefined, undefined, undefined, undefined, undefined, undefined, undefined, true);
       if (!response.success || !response.result) {
         return { success: false, errorMessage: response.errorMessage };
       }
@@ -918,7 +918,7 @@ export class TemplateServiceClient {
       return { success: false, errorMessage: userResponse.errorMessage };
     }
 
-    let response = await this.getTemplates(token, templateId);
+    let response = await this.getTemplates(token, templateId, undefined, undefined, undefined, undefined, undefined, undefined, undefined, true);
     if (!response.success || !response.result) {
       return { success: false, errorMessage: response.errorMessage };
     }
@@ -1097,7 +1097,7 @@ export class TemplateServiceClient {
 
     let allTags = new Set();
     let ownedTags = new Set();
-    let response = await this.getTemplates(token);
+    let response = await this.getTemplates(token, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, true);
     if (!response.success || !response.result) return { success: false, errorMessage: response.errorMessage };
     for (let template of response.result) {
       if (!template.tags) continue;
@@ -1106,10 +1106,8 @@ export class TemplateServiceClient {
           ownedTags.add(tag);
         }
       }
-      if (template.isLive) {
-        for (let tag of template.tags) {
-          allTags.add(tag);
-        }
+      for (let tag of template.tags) {
+        allTags.add(tag);
       }
     }
 
@@ -1284,7 +1282,7 @@ export class TemplateServiceClient {
         )
 
         if (!response.success || (response.result && response.result.length === 0)) {
-          const err = new TemplateError(ApiError.DataBindingFailed, "Data binding failed.");
+          const err = new TemplateError(ApiError.DataBindingFailed, response.errorMessage || "Data binding failed.");
           return res.status(400).json({ error: err });
         }
         return res.status(200).json({ templates: response.result });
@@ -1399,6 +1397,16 @@ export class TemplateServiceClient {
     return router;
   }
 
+  public configExpressMiddleware(): Router {
+    var router = express.Router();
+    router.get("/", (_req: Request, res: Response, _next: NextFunction) => {
+      return res.status(200).json({ 
+        redirectUri: process.env.ACMS_REDIRECT_URI, 
+        appId: process.env.ACMS_APP_ID, 
+        appInsightInstrumentationKey: process.env.ACMS_APP_INSIGHTS_INSTRUMENTATION_KEY });
+    });
+    return router;
+  }
   private constructor(storageProvider: StorageProvider, authProvider: AuthenticationProvider) {
     this.storageProvider = storageProvider;
     this.authProvider = authProvider;

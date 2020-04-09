@@ -9,6 +9,7 @@ import { ModalState } from '../../store/page/types';
 import { Template } from "adaptive-templating-service-typescript-node";
 
 import SearchBar from "./SearchBar";
+import TooltipEditButton from "./TooltipEditButton";
 
 import { ActionButton } from 'office-ui-fabric-react';
 import Logo from '../../assets/adaptive-cards-100-logo.png';
@@ -48,7 +49,6 @@ interface NavBarProps {
   modalState?: ModalState;
 }
 
-
 const NavBar = (props: NavBarProps) => {
 
   let history = useHistory();
@@ -60,6 +60,7 @@ const NavBar = (props: NavBarProps) => {
           <StyledLogo aria-label={STRINGS.LOGO_DESCRIPTION} src={Logo} />
           <Styledh1>{props.currentPageTitle || ""}</Styledh1>
         </MobileBanner>
+        <SearchBar />
       </Banner>
     );
   }
@@ -75,7 +76,7 @@ const NavBar = (props: NavBarProps) => {
       history.replace('/')
     }
   }
-
+  
   switch (props.currentPage.toLowerCase()) {
     case "dashboard":
       return (
@@ -102,10 +103,10 @@ const NavBar = (props: NavBarProps) => {
         <Banner>
           <MobileBanner>
             <StyledLogo aria-label={STRINGS.LOGO_DESCRIPTION} src={Logo} />
-            <Styledh1>{(props.templateID === "" && STRINGS.UNTITLEDCARD) || props.templateName}</Styledh1>
-            {props.templateID !== "" && <EditButton onClick={editName} iconProps={{ iconName: 'Edit' }} />}
+            <Styledh1>{((props.templateID === "" || props.templateID === undefined) && STRINGS.UNTITLEDCARD) || props.templateName}</Styledh1>
+            {(props.templateID !== "" && props.templateID !== undefined ) && <EditButton onClick={editName} iconProps={{ iconName: 'Edit' }} />}
           </MobileBanner>
-          <ActionButton onClick={() => { history.push(`preview/${props.templateID}`) }}>
+          <ActionButton onClick={() => { history.goBack()}}>
             <StyledButton>
               <StyledButtonContent>
                 Finish
@@ -130,9 +131,19 @@ const NavBar = (props: NavBarProps) => {
           <BaselineBanner>
             <StyledLogo aria-label={STRINGS.LOGO_DESCRIPTION} src={Logo} />
             <Styledh1>{(props.template && props.template.name) || props.currentPageTitle}</Styledh1>
-            {!props.isFetching && <EditButton ariaLabel="Edit Template Name" onClick={editName} iconProps={{ iconName: 'Edit' }} tabIndex={props.modalState ? -1 : 0} />}
+            {!props.isFetching && <TooltipEditButton editName={editName} modalState={props.modalState} />}
           </BaselineBanner>
           <BackButton iconProps={{ iconName: 'Back' }} onClick={onBackButton} tabIndex={props.modalState ? -1 : 0} ><ButtonTextWrapper>Back</ButtonTextWrapper></BackButton>
+        </Banner>
+      );
+    case "all cards":
+      return (
+        <Banner>
+          <MobileBanner>
+            <StyledLogo src={Logo} />
+            <Styledh1>{props.currentPageTitle}</Styledh1>
+          </MobileBanner>
+          <SearchBar />
         </Banner>
       );
     default:

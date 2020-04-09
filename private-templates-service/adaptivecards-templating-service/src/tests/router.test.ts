@@ -13,9 +13,9 @@ export default async function getToken(): Promise<string> {
   const endpoint = "https://login.microsoftonline.com/72f988bf-86f1-41af-91ab-2d7cd011db47/oauth2/token";
   const requestParams = {
     grant_type: "client_credentials",
-    client_id: "#{CLIENT_ID_TOKEN}#",
-    client_secret: "#{CLIENT_SECRET_TOKEN}#",
-    resource: "#{CLIENT_ID_TOKEN}#"
+    client_id: process.env.REACT_APP_ACMS_APP_ID,
+    client_secret: process.env.ACMS_APP_SECRET,
+    resource: process.env.REACT_APP_ACMS_APP_ID
   };
   return await request
     .post({ url: endpoint, form: requestParams }) // put in try catch
@@ -698,8 +698,9 @@ describe("Get Tags", () => {
     expect(res.body.ownedTags).toHaveLength(2);
     expect(res.body.ownedTags).toContain("weather");
     expect(res.body.ownedTags).toContain("contosa");
-    expect(res.body.allTags).toHaveLength(1);
+    expect(res.body.allTags).toHaveLength(2);
     expect(res.body.allTags).toContain("contosa");
+    expect(res.body.allTags).toContain("weather");
   });
 
   afterAll(async () => {
