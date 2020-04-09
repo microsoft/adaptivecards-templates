@@ -346,14 +346,14 @@ paths:
       security: 
         - bearer_auth: []
     post:
-      summary: "Favorite or unfavorite tags"
+      summary: "Favorite tags"
       operationId: "updateTags"
       produces: 
         - "application/json"
       parameters: 
         - in: "body"
           name: "body"
-          description: "list of favorite and unfavorited tags"
+          description: "list of favorite tags"
           required: true
           schema:
             $ref: "#/definitions/FavoriteTagList"
@@ -365,6 +365,27 @@ paths:
           schema: 
             $ref: "#/definitions/BaseError"
       security:
+        - bearer_auth: []
+    delete: 
+      summary: "Unfavorite tags"
+      operationId: "unFavoriteTags"
+      produces: 
+        - "application/json"
+      parameters: 
+        - in: "body"
+          name: "body"
+          description: "list of favorite tags"
+          required: true
+          schema:
+            $ref: "#/definitions/UnfavoriteTagList"
+      responses: 
+        200: 
+          description: "sucessful operation"
+        400: 
+          description: "bad request"
+          schema: 
+            $ref: "#/definitions/BaseError"
+      security: 
         - bearer_auth: []
   '/user':
     get: 
@@ -575,8 +596,11 @@ definitions:
     properties: 
       favorite: 
         $ref: "#/definitions/TagList"
+  UnfavoriteTagList:
+    type: object
+    properties: 
       unfavorite: 
-        $ref: "#/definitions/TagList"
+        $ref: "#/definitions/TagList" 
   Recent: 
     type: object
     properties: 

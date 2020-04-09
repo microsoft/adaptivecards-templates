@@ -1268,8 +1268,7 @@ export class TemplateServiceClient {
     router.post("/tag", async (req: Request, res: Response, _next: NextFunction) => {
       let token = parseToken(req.headers.authorization!);
       let favoriteTags: string[] = req.body.favorite || [];
-      let unfavoriteTags: string[] = req.body.unfavorite || [];
-      this.updateFavoriteTags(favoriteTags, unfavoriteTags, token).then(response => {
+      this.updateFavoriteTags(favoriteTags, [], token).then(response => {
         if (!response.success) {
           const err = new TemplateError(ApiError.TagUpdateFailed, "Unable to update favorite tags.");
           return res.status(400).json({ error: err });
@@ -1277,6 +1276,18 @@ export class TemplateServiceClient {
         res.status(200).send();
       })
     });
+
+    router.delete("/tag", async (req: Request, res: Response, _next: NextFunction) => {
+      let token = parseToken(req.headers.authorization!);
+      let unfavoriteTags: string[] = req.body.unfavorite || [];
+      this.updateFavoriteTags([], unfavoriteTags, token).then(response => {
+        if (!response.success) {
+          const err = new TemplateError(ApiError.TagUpdateFailed, "Unable to update favorite tags.");
+          return res.status(400).json({ error: err });
+        }
+        res.status(200).send();
+      })
+    })
 
     router.get("/:id?", (req: Request, res: Response, _next: NextFunction) => {
       let isClient: boolean | undefined = req.query.isClient ? req.query.isClient.toLowerCase() === "true" : undefined;
