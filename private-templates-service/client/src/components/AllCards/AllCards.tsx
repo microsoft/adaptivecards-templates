@@ -89,7 +89,7 @@ class AllCards extends Component<Props, State> {
   }
   
   setSelectedTags = (): void => {
-    if(this.props.page.currentPage === "Template") {
+    if(this.props.page.currentPage === "Template" && this.props.page.previousPage === ALL_CARDS) {
       this.state = { selectedTags: this.props.selectedTags.tags };  
     } else {
       this.props.clearSelectedTags();
