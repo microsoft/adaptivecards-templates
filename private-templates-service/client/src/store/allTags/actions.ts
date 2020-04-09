@@ -1,6 +1,6 @@
 import { REQUEST_TAGS_GET, REQUEST_TAGS_GET_SUCCESS, REQUEST_TAGS_GET_FAIL, AllTagsAction } from "./types";
 import { TagList } from 'adaptive-templating-service-typescript-node';
-import { IncomingMessage, request } from "http";
+import { IncomingMessage } from "http";
 import { RootState } from "../rootReducer";
 import { initClientSDK } from "../../utils/TemplateUtil";
 
