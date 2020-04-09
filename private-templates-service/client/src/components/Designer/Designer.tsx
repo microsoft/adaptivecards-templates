@@ -82,7 +82,6 @@ class Designer extends React.Component<DesignerProps> {
       this.props.history.replace('/designer/' + this.props.templateID + '/' + this.props.version);
     }
     if (this.props.templateJSON) {
-      console.log(this.props.templateJSON);
       designer.setCard({ ...this.props.templateJSON });
     }
   }
