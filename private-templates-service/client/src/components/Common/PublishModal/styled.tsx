@@ -26,7 +26,7 @@ export const Modal = styled.div`
 
 export const Header = styled.div`
   font-size: 1.375rem;
-  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD}
+  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD};
   margin-bottom: 12px;
 `;
 
@@ -37,6 +37,7 @@ export const Description = styled.div`
 export const DescriptionAccent = styled.span`
   color: ${COLORS.BLUE};
   white-space: nowrap;
+  font-weight: bold;
 `;
 
 export const CenterPanelWrapper = styled.div`
@@ -65,7 +66,7 @@ export const CenterPanelRight = styled.div`
 
 export const SemiBoldText = styled.div`
   font-size: 1rem;
-  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD}
+  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD};
 `;
 
 export const BottomRow = styled.div`

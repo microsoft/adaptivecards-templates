@@ -72,7 +72,7 @@ class Designer extends React.Component<DesignerProps> {
   constructor(props: DesignerProps) {
     super(props);
     props.setPage(this.props.templateName, "Designer");
-    if(this.props.match.params.uuid !== "newcard"){
+    if (this.props.match.params.uuid !== "newcard") {
       this.props.getTemplate(this.props.match.params.uuid);
     }
   }
@@ -81,8 +81,9 @@ class Designer extends React.Component<DesignerProps> {
     if (this.props.location.pathname === '/designer/newcard/1.0' && this.props.templateID && this.props.version) {
       this.props.history.replace('/designer/' + this.props.templateID + '/' + this.props.version);
     }
-    if (this.props.templateJSON){
-      designer.setCard({...this.props.templateJSON});
+    if (this.props.templateJSON) {
+      console.log(this.props.templateJSON);
+      designer.setCard({ ...this.props.templateJSON });
     }
   }
   componentWillMount() {
@@ -112,7 +113,7 @@ class Designer extends React.Component<DesignerProps> {
     designer.monacoModuleLoaded(monaco);
 
     if (this.props.templateJSON) {
-      designer.setCard({...this.props.templateJSON});
+      designer.setCard({ ...this.props.templateJSON });
     }
 
     if (this.props.sampleDataJSON) {
@@ -135,10 +136,10 @@ class Designer extends React.Component<DesignerProps> {
     return (
       <React.Fragment>
         <DesignerWrapper id="designer-container" />
-        {this.props.isFetching && <SpinnerModal/>}
-        {this.props.modalState === ModalState.Save && <SaveModal designerSampleData = {designer.sampleData} designerTemplateJSON = {designer.getCard()}/>}
-        {this.props.modalState === ModalState.EditName && <EditNameModal/>}
-      </React.Fragment> 
+        {this.props.isFetching && <SpinnerModal />}
+        {this.props.modalState === ModalState.Save && <SaveModal designerSampleData={designer.sampleData} designerTemplateJSON={designer.getCard()} />}
+        {this.props.modalState === ModalState.EditName && <EditNameModal />}
+      </React.Fragment>
     );
   }
 }
@@ -163,7 +164,7 @@ function initDesigner(): ACDesigner.CardDesigner {
 }
 
 function onSave(designer: ACDesigner.CardDesigner, props: DesignerProps): void {
-  if(props.templateID === "" || props.templateID === undefined){
+  if (props.templateID === "" || props.templateID === undefined) {
     props.openModal(ModalState.Save);
   }
   else if (JSON.stringify(props.templateJSON) !== JSON.stringify(designer.getCard()) || props.sampleDataJSON !== designer.sampleData) {

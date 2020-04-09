@@ -102,7 +102,7 @@ export const CardBody = styled.div`
   flex-direction: column;
   align-items: center;
   font-size: 0.875rem ;
-  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD}
+  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD};
   padding-top: 8px;
   overflow-y: hidden;
 `;

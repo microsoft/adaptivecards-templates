@@ -11,7 +11,7 @@ export const PlaceholderText = styled.h5`
 export const Title = styled.h1`
   padding-top: 15px;
   font-size: 1.5rem;
-  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD}
+  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD};
 `;
 
 export const OuterDashboardContainer = styled.div`

@@ -26,7 +26,7 @@ export const Modal = styled.div`
 
 export const Header = styled.div`
   font-size: 1.375rem;
-  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD}
+  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD};
   margin-bottom: 12px;
 `;
 
@@ -74,7 +74,7 @@ export const EmailPanel = styled.div`
 
 export const SemiBoldText = styled.div`
   font-size: 1rem;
-  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD}
+  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD};
 `;
 
 export const BottomRow = styled.div`

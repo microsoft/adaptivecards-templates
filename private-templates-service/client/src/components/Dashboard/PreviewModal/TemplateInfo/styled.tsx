@@ -56,7 +56,7 @@ export const TitleWrapper = styled.div`
 
 export const Title = styled.div`
   font-size: 1.375rem;
-  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD}
+  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD};
 `;
 
 export const StatusIndicator = styled.div<{ state?: PostedTemplate.StateEnum }>`
@@ -71,7 +71,6 @@ export const StatusIndicator = styled.div<{ state?: PostedTemplate.StateEnum }>`
 
 export const Status = styled.div`
   font-size: 0.875rem;
-  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD}
   padding-right: 7px;
 `
 export const TimeStamp = styled.div`

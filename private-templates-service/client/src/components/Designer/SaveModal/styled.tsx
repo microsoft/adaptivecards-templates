@@ -66,7 +66,7 @@ export const TemplateNameWrapper = styled.div`
 
 export const StyledH3 = styled.h3`
   font-size: 0.85rem;
-  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD}
+  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD};
 `;
 
 export const ButtonWrapper = styled.div` 
@@ -76,7 +76,7 @@ export const ButtonWrapper = styled.div`
 `;
 export const StyledTitle = styled.h1`
   font-size: 1.5rem;
-  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD}
+  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD};
   `;
 
 export const Card = styled.div`
