@@ -54,7 +54,7 @@ export const LogoTextHeader = styled.div`
 `;
 export const LogoTextSubHeader = styled.div`
   color: ${COLORS.GREY5};
-  font-family: ${FONTS.SEGOE_UI};
+  font-family: ${FONTS.SEGOE_UI_REGULAR};
 `;
 
 export const UserWrapper = styled.div`

@@ -83,9 +83,9 @@ export const THEME = {
 };
 
 export const FONTS = {
-  SEGOE_UI: "Segoe UI, Helvetica Neue, sans-serif",
   SEGOE_UI_REGULAR: "Segoe UI Regular, Helvetica Neue, sans-serif",
   SEGOE_UI_SEMI_BOLD: "Segoe UI Semibold, Helvetica Neue, sans-serif",
   SEGOE_UI_BOLD: "Segoe UI Bold, Helvetica Neue, sans-serif",
+  COURIER_NEW: "Courier New, Courier, monospace",
 
 };

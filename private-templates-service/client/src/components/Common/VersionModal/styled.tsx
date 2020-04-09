@@ -27,7 +27,7 @@ export const Modal = styled.div`
 
 export const Header = styled.div`
   font-size: 1.375rem;
-  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD}
+  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD};
   margin-bottom: 12px;
 `;
 
@@ -37,6 +37,7 @@ export const Description = styled.div`
 
 export const DescriptionAccent = styled.span`
   color: ${COLORS.BLUE};
+  font-weight: bold;
   white-space: nowrap;
 `;
 
@@ -87,8 +88,13 @@ export const CardHeaderRow = styled.div`
 `;
 
 export const CardHeaderText = styled.div`
-font-family: ${FONTS.SEGOE_UI_SEMI_BOLD}
-  flex-basis: 15%
+  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD};
+  flex-basis: 15%;
+`;
+
+export const SelectedHeaderText = styled.div`
+  font-family: ${FONTS.SEGOE_UI_REGULAR};
+  flex-basis: 15%;
 `;
 
 export const CardBody = styled.div`
@@ -114,7 +120,7 @@ export const StatusWrapper = styled.div`
 
 export const VersionWrapper = styled.div`
   display: flex;
-  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD}
+  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD};
   align-items: center;
   flex-basis: 15%;
 `

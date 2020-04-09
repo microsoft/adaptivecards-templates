@@ -15,9 +15,9 @@ import {
   VersionCardRow,
   StatusWrapper,
   VersionIcon,
-  VersionWrapper, 
-  InfoVersionContainer, 
-  VersionOuterCard, 
+  VersionWrapper,
+  InfoVersionContainer,
+  VersionOuterCard,
   VersionCardBody
 } from './styled'
 
@@ -82,19 +82,19 @@ class VersionCard extends React.Component<Props> {
             <VersionCardRowTitle style={{ flexBasis: `20%` }}>Status</VersionCardRowTitle>
           </VersionCardRow>
           <InfoVersionContainer onWheel={this.scroller.scroll}>
-          {this.props.template.instances && this.props.template.instances.map((instance: TemplateInstance, index: number) => (
-            <VersionCardRow key={index}>
-              <VersionWrapper>
-                {instance.version}
-                {instance.version === this.props.templateVersion && <VersionIcon iconName={'View'} />}
-              </VersionWrapper>
-              <DateWrapper>{instance.updatedAt ? getDateString(instance.updatedAt) : "N/A"}</DateWrapper>
-              <StatusWrapper>
-                <StatusIndicator state={instance.state} />
-                <Status>{instance.state && capitalizeString(instance.state.toString())}</Status>
-              </StatusWrapper>
-            </VersionCardRow>
-          ))}
+            {this.props.template.instances && this.props.template.instances.map((instance: TemplateInstance, index: number) => (
+              <VersionCardRow key={index}>
+                <VersionWrapper>
+                  {instance.version}
+                  {instance.version === this.props.templateVersion && <VersionIcon iconName={'View'} />}
+                </VersionWrapper>
+                <DateWrapper>{instance.updatedAt ? getDateString(instance.updatedAt) : "N/A"}</DateWrapper>
+                <StatusWrapper>
+                  <StatusIndicator state={instance.state} />
+                  <Status>{instance.state && capitalizeString(instance.state.toString())}</Status>
+                </StatusWrapper>
+              </VersionCardRow>
+            ))}
           </InfoVersionContainer>
         </VersionCardBody>
         {this.props.modalState === ModalState.Version && <VersionModal template={this.props.template} />}

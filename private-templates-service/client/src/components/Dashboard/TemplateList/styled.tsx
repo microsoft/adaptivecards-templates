@@ -43,7 +43,7 @@ export const TemplateListBody = styled.div`
 `;
 
 export const TemplateListItem = styled.div`
-  font-family: ${FONTS.SEGOE_UI};
+  font-family: ${FONTS.SEGOE_UI_REGULAR};
   flex: 1;
   padding-top: 6px;
 `;

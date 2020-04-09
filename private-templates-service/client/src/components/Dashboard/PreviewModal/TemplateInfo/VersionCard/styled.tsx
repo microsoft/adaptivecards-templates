@@ -19,7 +19,6 @@ export const VersionCardBody = styled(CardBody)`
 
 export const CardManageButton = styled(ActionButton)`
   color: ${COLORS.GREY3};
-  font-weight: 500;
 `
 
 export const CardTitle = styled.div`
@@ -49,7 +48,7 @@ export const VersionCardRowTitle = styled.div`
 `
 
 export const VersionCardRowText = styled.div`
-  font-weight: 600;
+  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD};
   align-items: center;
 `
 
@@ -79,7 +78,7 @@ margin: 0 0 0 15px;
 
 export const VersionWrapper = styled.div`
   display: flex;
-  font-weight: 600;
+  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD};
   align-items: center;
   flex-basis: 15%;
 `
