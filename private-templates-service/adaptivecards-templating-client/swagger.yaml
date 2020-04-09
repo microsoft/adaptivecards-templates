@@ -377,7 +377,7 @@ paths:
           description: "list of favorite tags"
           required: true
           schema:
-            $ref: "#/definitions/UnfavoriteTagList"
+            $ref: "#/definitions/FavoriteTagList"
       responses: 
         200: 
           description: "sucessful operation"
@@ -596,11 +596,6 @@ definitions:
     properties: 
       favorite: 
         $ref: "#/definitions/TagList"
-  UnfavoriteTagList:
-    type: object
-    properties: 
-      unfavorite: 
-        $ref: "#/definitions/TagList" 
   Recent: 
     type: object
     properties: 

@@ -1279,7 +1279,7 @@ export class TemplateServiceClient {
 
     router.delete("/tag", async (req: Request, res: Response, _next: NextFunction) => {
       let token = parseToken(req.headers.authorization!);
-      let unfavoriteTags: string[] = req.body.unfavorite || [];
+      let unfavoriteTags: string[] = req.body.favorite || [];
       this.updateFavoriteTags([], unfavoriteTags, token).then(response => {
         if (!response.success) {
           const err = new TemplateError(ApiError.TagUpdateFailed, "Unable to update favorite tags.");
