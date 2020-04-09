@@ -102,3 +102,7 @@ export const UNPUBLISH_BUTTON_TOOLTIP = "Unpublishing this card makes it depreca
 
 // SkipLink.tsx
 export const SKIP_TO_MAIN_CONTENT_MESSAGE = "Skip to main content"
+
+
+// Accessibility
+export const ARIA_ROLE_BUTTON = "Button";

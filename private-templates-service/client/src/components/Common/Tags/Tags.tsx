@@ -145,7 +145,8 @@ class Tags extends React.Component<Props, State>  {
                   ifModalState={modalState? true : false}
                   allowEdit={allowEdit}
                   toggleStyle={toggleStyle}
-                  isSelected={this.props.selectedTags ? (this.props.selectedTags.includes(tag) ? true : false) : false} />
+                  isSelected={this.props.selectedTags ? (this.props.selectedTags.includes(tag) ? true : false) : undefined} 
+          />
         ))}
         {allowAddTag && <AddTagWrapper onSubmit={this.submitNewTag} open={isAdding} >
           <AddTagInput ref={this.addTagInput} open={isAdding} value={this.state.newTagName} maxLength={30} onChange={this.handleChange} onKeyDown={this.onKeyDown} />
