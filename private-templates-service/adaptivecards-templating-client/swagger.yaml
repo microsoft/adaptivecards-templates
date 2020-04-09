@@ -434,6 +434,8 @@ definitions:
         type: string
       redirectUri:
         type: string
+      appInsightsInstrumentationKey: 
+        type: string
   TemplateInstance:
     type: object
     properties:

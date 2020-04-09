@@ -4,6 +4,9 @@ import { UserAgentApplication, ClientAuthError } from "msal";
 import { AuthResponse } from 'msal';
 import { initializeIcons } from '@uifabric/icons';
 import IdleTimer from 'react-idle-timer';
+import { ApplicationInsights } from '@microsoft/applicationinsights-web';
+import { ReactPlugin } from '@microsoft/applicationinsights-react-js';
+import { createBrowserHistory } from "history";
 
 // Redux
 import { connect } from "react-redux";
@@ -40,7 +43,8 @@ const mapStateToProps = (state: RootState) => {
     user: state.auth.user,
     searchByTemplateName: state.search.searchByTemplateName,
     redirectUri: state.auth.redirectUri,
-    appId: state.auth.appId
+    appId: state.auth.appId,
+    appInsightsInstrumentationKey: state.auth.appInsightsInstrumentationKey,
   };
 };
 
@@ -83,6 +87,7 @@ interface Props {
   searchByTemplateName: string;
   appId?: string;
   redirectUri?: string;
+  appInsightsInstrumentationKey?: string;
 }
 
 class App extends Component<Props, State> {
@@ -107,6 +112,21 @@ class App extends Component<Props, State> {
       if (user) {
         // Enhance user object with data from Graph
         this.getUserInfo();
+      }
+
+      if (this.props.appInsightsInstrumentationKey) {
+        const browserHistory = createBrowserHistory({ basename: process.env.REACT_APP_ACMS_APP_NAME });
+        var reactPlugin = new ReactPlugin();
+        var appInsights = new ApplicationInsights({
+          config: {
+            instrumentationKey: process.env.REACT_APP_ACMS_APP_INSIGHTS_INSTRUMENTATION_KEY,
+            extensions: [reactPlugin],
+            extensionConfig: {
+              [reactPlugin.identifier]: { history: browserHistory }
+            }
+          }
+        });
+        appInsights.loadAppInsights();
       }
     }
   }

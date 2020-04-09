@@ -32,7 +32,8 @@ const initialState: AuthState = {
   accessToken: undefined,
   graphAccessToken: undefined,
   redirectUri: undefined, 
-  appId: undefined
+  appId: undefined,
+  appInsightsInstrumentationKey: undefined
 }
 
 const initialUserState: UserType = {
@@ -92,6 +93,7 @@ export function authReducer(state = initialState, action: AuthAction | AccessTok
         ...state, 
         appId: action.appId,
         redirectUri: action.redirectUri,
+        appInsightsInstrumentationKey: action.appInsightsInstrumentationKey
       }
     case ACCESS_TOKEN_SET:
       return {

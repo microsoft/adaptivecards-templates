@@ -8,6 +8,7 @@ export interface AuthState {
   graphAccessToken?: AuthResponse;
   redirectUri?: string;
   appId?: string;
+  appInsightsInstrumentationKey?: string;
 }
 
 export interface UserType {
@@ -55,6 +56,7 @@ export interface GetConfigAction {
   type: typeof GET_CONFIG | typeof GET_CONFIG_SUCCESS | typeof GET_CONFIG_FAILURE;
   redirectUri?: string;
   appId?: string;
+  appInsightsInstrumentationKey?: string;
 }
 
 export interface GetUserDetailsAction {
