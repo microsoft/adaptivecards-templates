@@ -176,6 +176,35 @@ export class BaseErrorError {
     }
 }
 
+export class Config {
+    'appId'?: string;
+    'redirectUri'?: string;
+    'appInsightsInstrumentationKey'?: string;
+
+    static discriminator: string | undefined = undefined;
+
+    static attributeTypeMap: Array<{name: string, baseName: string, type: string}> = [
+        {
+            "name": "appId",
+            "baseName": "appId",
+            "type": "string"
+        },
+        {
+            "name": "redirectUri",
+            "baseName": "redirectUri",
+            "type": "string"
+        },
+        {
+            "name": "appInsightsInstrumentationKey",
+            "baseName": "appInsightsInstrumentationKey",
+            "type": "string"
+        }    ];
+
+    static getAttributeTypeMap() {
+        return Config.attributeTypeMap;
+    }
+}
+
 export class PostedTemplate {
     'name'?: string;
     'version'?: string;
@@ -714,6 +743,7 @@ let enumsMap: {[index: string]: any} = {
 let typeMap: {[index: string]: any} = {
     "BaseError": BaseError,
     "BaseErrorError": BaseErrorError,
+    "Config": Config,
     "PostedTemplate": PostedTemplate,
     "Recent": Recent,
     "ResourceCreated": ResourceCreated,
@@ -783,6 +813,101 @@ export class VoidAuth implements Authentication {
     }
 }
 
+export enum ConfigApiApiKeys {
+    bearer_auth,
+}
+
+export class ConfigApi {
+    protected _basePath = defaultBasePath;
+    protected defaultHeaders : any = {};
+    protected _useQuerystring : boolean = false;
+
+    protected authentications = {
+        'default': <Authentication>new VoidAuth(),
+        'bearer_auth': new ApiKeyAuth('header', 'Authorization'),
+    }
+
+    constructor(basePath?: string);
+    constructor(basePathOrUsername: string, password?: string, basePath?: string) {
+        if (password) {
+            if (basePath) {
+                this.basePath = basePath;
+            }
+        } else {
+            if (basePathOrUsername) {
+                this.basePath = basePathOrUsername
+            }
+        }
+    }
+
+    set useQuerystring(value: boolean) {
+        this._useQuerystring = value;
+    }
+
+    set basePath(basePath: string) {
+        this._basePath = basePath;
+    }
+
+    get basePath() {
+        return this._basePath;
+    }
+
+    public setDefaultAuthentication(auth: Authentication) {
+	this.authentications.default = auth;
+    }
+
+    public setApiKey(key: ConfigApiApiKeys, value: string) {
+        (this.authentications as any)[ConfigApiApiKeys[key]].apiKey = value;
+    }
+    /**
+     * 
+     * @summary Get auth provider specific env values
+     * @param {*} [options] Override http request options.
+     */
+    public configGet (options: any = {}) : Promise<{ response: http.IncomingMessage; body: Config;  }> {
+        const localVarPath = this.basePath + '/config';
+        let localVarQueryParameters: any = {};
+        let localVarHeaderParams: any = (<any>Object).assign({}, this.defaultHeaders);
+        let localVarFormParams: any = {};
+
+        (<any>Object).assign(localVarHeaderParams, options.headers);
+
+        let localVarUseFormData = false;
+
+        let localVarRequestOptions: localVarRequest.Options = {
+            method: 'GET',
+            qs: localVarQueryParameters,
+            headers: localVarHeaderParams,
+            uri: localVarPath,
+            useQuerystring: this._useQuerystring,
+            json: true,
+        };
+
+        this.authentications.default.applyToRequest(localVarRequestOptions);
+
+        if (Object.keys(localVarFormParams).length) {
+            if (localVarUseFormData) {
+                (<any>localVarRequestOptions).formData = localVarFormParams;
+            } else {
+                localVarRequestOptions.form = localVarFormParams;
+            }
+        }
+        return new Promise<{ response: http.IncomingMessage; body: Config;  }>((resolve, reject) => {
+            localVarRequest(localVarRequestOptions, (error, response, body) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    body = ObjectSerializer.deserialize(body, "Config");
+                    if (response.statusCode && response.statusCode >= 200 && response.statusCode <= 299) {
+                        resolve({ response: response, body: body });
+                    } else {
+                        reject({ response: response, body: body });
+                    }
+                }
+            });
+        });
+    }
+}
 export enum TemplateApiApiKeys {
     bearer_auth,
 }

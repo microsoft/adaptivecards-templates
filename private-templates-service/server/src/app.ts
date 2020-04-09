@@ -10,10 +10,7 @@ import helmet from "helmet";
 import mongoose from "mongoose";
 
 // import controllers
-import { TemplateServiceClient } from "../../adaptivecards-templating-service/src/TemplateServiceClient";
-import { ClientOptions } from "../../adaptivecards-templating-service/src/IClientOptions";
-import { AzureADProvider } from "../../adaptivecards-templating-service/src/authproviders/AzureADProvider";
-import { MongoDBProvider } from "../../adaptivecards-templating-service/src/storageproviders/MongoDBProvider";
+const ACMS = require('adaptivecards-templating-service');
 
 const RELATIVE_PATH_CLIENT = '../../../../client/build';
 
@@ -40,19 +37,20 @@ app.use(session({
 app.use(helmet.noSniff());
 
 mongoose.set('useFindAndModify', false)
-let mongoDB = new MongoDBProvider({ connectionString: process.env.ACMS_DB_CONNECTION });
+let mongoDB = new ACMS.MongoDBProvider({ connectionString: process.env.ACMS_DB_CONNECTION });
 mongoDB.connect()
   .then(
-    (res) => {
+    (res: any) => {
       if (res.success) {
-        const mongoClient: ClientOptions = {
-          authenticationProvider: new AzureADProvider(),
+        const mongoClient = {
+          authenticationProvider: new ACMS.AzureADProvider(),
           storageProvider: mongoDB,
         }
 
-        const client: TemplateServiceClient = TemplateServiceClient.init(mongoClient);
+        const client = ACMS.TemplateServiceClient.init(mongoClient);
         app.use("/template", client.expressMiddleware());
         app.use("/user", client.userExpressMiddleware());
+        app.use("/config", client.configExpressMiddleware());
 
         // Keep this request at the end so it has lowest priority
         app.use(express.static(path.join(__dirname, RELATIVE_PATH_CLIENT)));
