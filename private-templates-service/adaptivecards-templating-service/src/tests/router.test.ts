@@ -698,8 +698,9 @@ describe("Get Tags", () => {
     expect(res.body.ownedTags).toHaveLength(2);
     expect(res.body.ownedTags).toContain("weather");
     expect(res.body.ownedTags).toContain("contosa");
-    expect(res.body.allTags).toHaveLength(1);
+    expect(res.body.allTags).toHaveLength(2);
     expect(res.body.allTags).toContain("contosa");
+    expect(res.body.allTags).toContain("weather");
   });
 
   afterAll(async () => {

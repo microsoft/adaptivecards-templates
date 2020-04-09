@@ -22,6 +22,7 @@ import Dashboard from "./components/Dashboard";
 import Shared from "./components/Shared/";
 import PreviewModal from './components/Dashboard/PreviewModal';
 import ErrorMessage, { ErrorMessageProps } from "./components/ErrorMessage/ErrorMessage";
+import NoMatch from "./components/NoMatch";
 import config from "./Config";
 
 // CSS
@@ -31,7 +32,6 @@ import { OuterAppWrapper, MainAppWrapper, MainApp } from "./styled";
 // Constants
 import Constants from "./globalConstants"
 import AllCards from "./components/AllCards";
-
 
 interface State {
   error: ErrorMessageProps | null;
@@ -188,6 +188,7 @@ class App extends Component<Props, State> {
                   <Route exact path="/allcards">
                     <AllCards authButtonMethod={this.login} />
                   </Route>
+                  <Route component={NoMatch} />
                 </Switch>
               </MainApp>
             </MainAppWrapper>
