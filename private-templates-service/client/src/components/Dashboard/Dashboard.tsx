@@ -183,7 +183,7 @@ class Dashboard extends React.Component<Props> {
                     onClick={this.selectTemplate}
                     templates={recentlyViewedTemplates}
                     displayComponents={{ author: true, status: true, dateModified: true, templateName: true, version: false }}
-                  ></TemplateList>
+                  />
                 ) : (
                     <PlaceholderText>
                       {DASHBOARD_RECENTLY_VIEWED_PLACEHOLDER}

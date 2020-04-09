@@ -46,6 +46,9 @@ export const TemplateListItem = styled.div`
   font-family: Segoe UI Regular;
   flex: 1;
   padding-top: 6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
 
 export const TemplateListStatusIndicator = styled(StatusIndicator)`
