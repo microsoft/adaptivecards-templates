@@ -34,7 +34,6 @@ export function querySearchFailure(error: IncomingMessage): SearchAction {
   }
 }
 
-
 export function querySearch(searchByTemplateName: string): (dispatch: any, getState: () => RootState) => void {
   return function (dispatch: any, getState: () => RootState) {
     dispatch(querySearchBegin())
