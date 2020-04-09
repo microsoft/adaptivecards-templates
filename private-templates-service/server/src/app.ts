@@ -7,6 +7,7 @@ import passport from "./config/passport";
 import bodyParser from "body-parser";
 import session from "express-session";
 import helmet from "helmet";
+import mongoose from "mongoose";
 
 // import controllers
 import { TemplateServiceClient } from "../../adaptivecards-templating-service/src/TemplateServiceClient";
@@ -36,9 +37,10 @@ app.use(session({
   resave: false,
   saveUninitialized: true
 }));
-app.use(function (req, res, next) { res.header("Access-Control-Allow-Origin", "*"); res.header( "Access-Control-Allow-Headers", "Origin, Content-Type, Accept, Authorization, api_key" ); res.header( "Access-Control-Allow-Methods", "GET, POST, OPTIONS, DELETE" ); next(); });
+app.use(helmet.noSniff());
 
-let mongoDB = new MongoDBProvider();
+mongoose.set('useFindAndModify', false)
+let mongoDB = new MongoDBProvider({ connectionString: process.env.ACMS_DB_CONNECTION });
 mongoDB.connect()
   .then(
     (res) => {
@@ -55,7 +57,6 @@ mongoDB.connect()
         // Keep this request at the end so it has lowest priority
         app.use(express.static(path.join(__dirname, RELATIVE_PATH_CLIENT)));
         app.get('*', (req, res) => {
-          res.header("Strict-Transport-Security", "max-age=15552000");
           res.sendFile(path.join(__dirname, RELATIVE_PATH_CLIENT + '/index.html'));
         })
       } else {
