@@ -104,7 +104,6 @@ class AllCards extends Component<Props, State> {
         return {selectedTags: state.selectedTags.filter((selectedTag: string) => selectedTag !== tag)}
       } else {
         this.props.addSelectedTag(tag);
-        console.log(tag);
         return {selectedTags: state.selectedTags.concat(tag)}
       }
     });
