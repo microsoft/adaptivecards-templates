@@ -336,7 +336,7 @@ describe("Preview Templates", () => {
     let template = res.body.template;
     expect(template).toHaveProperty("_id");
     expect(template).toHaveProperty("name");
-    expect(template).toHaveProperty("author");
+    expect(template).toHaveProperty("tags");
     expect(template).toHaveProperty("instance");
     let instance = template.instance;
     expect(instance).toHaveProperty("version");
@@ -344,7 +344,7 @@ describe("Preview Templates", () => {
     expect(instance).toHaveProperty("json");
     expect(instance).toHaveProperty("state");
     expect(instance.state).toEqual("draft");
-    expect(template).toHaveProperty("tags");
+    expect(instance).toHaveProperty("author");
   });
 
   it("should try to get posted template preview without passing version and fail", async () => {
