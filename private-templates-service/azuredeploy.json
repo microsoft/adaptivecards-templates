@@ -29,10 +29,18 @@
         },
         "docker_registry_server_password": {
           "type": "String"
-        }
+        },
+        "telemetry_opt_in": {
+            "type": "string",
+            "allowedValues": [
+                "Yes",
+                "No"
+            ]
+        },
     },
     "variables": {
-        "linuxFxVersion": "DOCKER|acmsregistry.azurecr.io/acmsimage"
+        "linuxFxVersion": "DOCKER|acmsregistry.azurecr.io/acmsimage",
+        "appInsightsInstrumentationKey": "931c613f-fdcb-40a9-bd39-314ce31bc5d6",
     },
     "resources": [
         {
@@ -59,7 +67,8 @@
                   "WEBSITES_ENABLE_APP_SERVICE_STORAGE": "false",
                   "DOCKER_REGISTRY_SERVER_URL": "[parameters('docker_registry_server_uri')]",
                   "DOCKER_REGISTRY_SERVER_USERNAME": "[parameters('docker_registry_server_username')]",
-                  "DOCKER_REGISTRY_SERVER_PASSWORD": "[parameters('docker_registry_server_password')]"
+                  "DOCKER_REGISTRY_SERVER_PASSWORD": "[parameters('docker_registry_server_password')]",
+                  "ACMS_APP_INSIGHTS_INSTRUMENTATION_KEY": "[if(equals(parameters('telemetry_opt_in'), 'Yes'), variables('appInsightsInstrumentationKey'), '')]",
                 }
               }
             ]
