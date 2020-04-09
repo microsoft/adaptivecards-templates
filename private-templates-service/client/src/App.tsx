@@ -115,11 +115,11 @@ class App extends Component<Props, State> {
       }
 
       if (this.props.appInsightsInstrumentationKey) {
-        const browserHistory = createBrowserHistory({ basename: process.env.REACT_APP_ACMS_APP_NAME });
+        const browserHistory = createBrowserHistory({ basename: this.props.appId });
         var reactPlugin = new ReactPlugin();
         var appInsights = new ApplicationInsights({
           config: {
-            instrumentationKey: process.env.REACT_APP_ACMS_APP_INSIGHTS_INSTRUMENTATION_KEY,
+            instrumentationKey: this.props.appInsightsInstrumentationKey,
             extensions: [reactPlugin],
             extensionConfig: {
               [reactPlugin.identifier]: { history: browserHistory }
