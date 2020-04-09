@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import { RootState } from "../../store/rootReducer";
 import { UserType } from "../../store/auth/types";
-import { PageState } from "../../store/page/types";
+import { ModalState } from "../../store/page/types";
 import { newTemplate } from "../../store/currentTemplate/actions";
 
 import { COLORS } from "../../globalStyles";
@@ -38,7 +38,7 @@ interface Props {
   user?: UserType;
   templateID: string | undefined;
   newTemplate: () => void;
-  page: PageState;
+  modalState?: ModalState;
 }
 
 const mapStateToProps = (state: RootState) => {
@@ -46,7 +46,7 @@ const mapStateToProps = (state: RootState) => {
     isAuthenticated: state.auth.isAuthenticated,
     user: state.auth.user,
     templateID: state.currentTemplate.templateID,
-    page: state.page
+    modalState: state.page.modalState
   };
 };
 
@@ -180,7 +180,7 @@ const SideBar = (props: Props) => {
   return (
     <OuterSideBarWrapper>
       <MainItems>
-        <LogoWrapper onClick={onLogoClick} tabIndex={props.page.modalState? -1 : 0} onKeyDown={onKeyDown}>
+        <LogoWrapper onClick={onLogoClick} tabIndex={props.modalState? -1 : 0} onKeyDown={onKeyDown}>
           <Logo aria-label={STRINGS.LOGO_DESCRIPTION} src={mainLogo} />
           <LogoTextWrapper>
             <LogoTextHeader>Adaptive Cards</LogoTextHeader>
@@ -198,7 +198,7 @@ const SideBar = (props: Props) => {
         {props.isAuthenticated && <SkipLink />}
       </MainItems>
 
-      <SignOut onClick={props.authButtonMethod} tabIndex={props.page.modalState ? -1 : 0}>Sign {props.isAuthenticated ? "Out" : "In"}</SignOut>
+      <SignOut onClick={props.authButtonMethod} tabIndex={props.modalState ? -1 : 0}>Sign {props.isAuthenticated ? "Out" : "In"}</SignOut>
     </OuterSideBarWrapper>
   );
 };
