@@ -7,13 +7,14 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "start": "node dist/server.js",
+    "dev-start": "node dist/server/src/server.js",
     "build": "",
     "deploy": "tsc",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "server": "nodemon --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' --exec ts-node src/server.ts | bunyan",
     "client": "cd ../client && npm start",
-    "link-client": "cd ../adaptivecards-templating-client/typescript && npm install && npm run build && npm link && cd ../../client && npm link adaptive-templating-service-typescript-node && npm install && cd src && npm link adaptive-templating-service-typescript-node",
-    "init-app": "cd ../adaptivecards-templating-service && npm install && npm run build && npm link && cd ../server && npm link adaptivecards-templating-service && npm install && npm run link-client"
+    "link-client": "cd ../adaptivecards-templating-client/typescript && npm install && npm run build && npm link && cd ../../client && npm uninstall adaptive-templating-service-typescript-node && npm link adaptive-templating-service-typescript-node && npm install && cd src && npm link adaptive-templating-service-typescript-node",
+    "init-app": "cd ../adaptivecards-templating-service && npm install && npm run build && npm link && cd ../server && npm uninstall adaptivecards-templating-service && npm link adaptivecards-templating-service && npm install && npm run link-client"
   },
   "author": "",
   "license": "ISC",

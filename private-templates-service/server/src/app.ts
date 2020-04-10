@@ -12,7 +12,7 @@ import mongoose from "mongoose";
 // import controllers
 const ACMS = require('adaptivecards-templating-service');
 
-const RELATIVE_PATH_CLIENT = '../../../../client/build';
+const RELATIVE_PATH_CLIENT = '../../client/build';
 
 // import mongo, create new mongo, pass options
 const app = express();
