@@ -1,4 +1,4 @@
-import { Template, PostedTemplate, TemplateApi } from 'adaptive-templating-service-typescript-node';
+import { Template, PostedTemplate, TemplateApi, TemplateInstance } from 'adaptive-templating-service-typescript-node';
 import { RootState } from "../../store/rootReducer"
 
 export function getLatestVersion(template?: Template): string {
@@ -6,6 +6,20 @@ export function getLatestVersion(template?: Template): string {
     return template.instances[0].version;
   }
   return "1.0"
+}
+
+export function getTemplateInstance(template: Template, templateVersion: string): TemplateInstance | undefined {
+  if (template.instances) {
+    for (let instance of template.instances) {
+      return instance.version === templateVersion ? instance : undefined;
+    }
+  }
+  return undefined;
+}
+
+export function isTemplateInstanceShareable(template: Template, templateVersion: string): boolean | undefined {
+  let instance = getTemplateInstance(template, templateVersion);
+  return instance ? instance.isShareable : undefined;
 }
 
 export function getLatestTemplateInstanceState(template: Template): string {

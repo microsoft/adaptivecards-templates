@@ -24,6 +24,17 @@ export const Modal = styled.div`
   padding: 48px;
 `;
 
+export const TopRowWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
+export const ToggleContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
 export const Header = styled.div`
   font-size: 1.375rem;
   font-weight: 500;
