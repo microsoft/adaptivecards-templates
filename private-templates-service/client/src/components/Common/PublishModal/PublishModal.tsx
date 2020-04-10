@@ -1,9 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-// Libraries
-import { PrimaryButton } from 'office-ui-fabric-react';
-
 import { Template, PostedTemplate } from 'adaptive-templating-service-typescript-node';
 
 // Redux
@@ -66,7 +63,7 @@ class PublishModal extends React.Component<Props> {
           <Header>{STRINGS.PUBLISH_CARD}</Header>
           <Description>
             {STRINGS.PUBLISH_MODAL_DESC}
-            <DescriptionAccent>{template.name + " - v" + this.props.templateVersion}</DescriptionAccent>
+            <DescriptionAccent>{template.name + " - v" + templateVersion}</DescriptionAccent>
           </Description>
           <CenterPanelWrapper>
             <AdaptiveCardPanel template={template} version={this.props.templateVersion} />
