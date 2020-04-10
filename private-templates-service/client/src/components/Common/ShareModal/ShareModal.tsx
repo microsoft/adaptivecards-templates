@@ -25,13 +25,11 @@ import {
   CopyLinkButton
 } from './styled';
 import * as STRINGS from '../../../assets/strings';
-import { RootState } from '../../../store/rootReducer';
 
 interface ShareModalProps {
   template: Template;
   templateVersion?: string;
   closeModal: () => void;
-  redirectUri?: string;
 }
 
 const mapDispatchToProps = (dispatch: any) => {
@@ -41,12 +39,6 @@ const mapDispatchToProps = (dispatch: any) => {
     }
   }
 }
-
-const mapStateToProps = (state: RootState) => {
-  return {
-    redirectUri: state.auth.redirectUri,
-  };
-};
 
 class ShareModal extends React.Component<ShareModalProps> {
 
@@ -62,7 +54,7 @@ class ShareModal extends React.Component<ShareModalProps> {
               <LinkRow>
                 <TextFieldContainer>
                   <TextField readOnly={true}
-                    prefix={this.props.redirectUri!}
+                    prefix={process.env.REACT_APP_ACMS_REDIRECT_URI}
                     defaultValue={getShareURL(this.props.template.id, this.props.templateVersion)}
                     width={100} />
                 </TextFieldContainer>
@@ -71,7 +63,7 @@ class ShareModal extends React.Component<ShareModalProps> {
                 </CopyLinkButton>
               </LinkRow>
             </ShareLinkPanel>
-            <ShareModalForm shareURL={this.props.redirectUri! + getShareURL(this.props.template.id, this.props.templateVersion)} templateVersion={this.props.templateVersion} />
+            <ShareModalForm shareURL={process.env.REACT_APP_ACMS_REDIRECT_URI + getShareURL(this.props.template.id, this.props.templateVersion)} templateVersion={this.props.templateVersion} />
           </CenterPanelWrapper>
         </Modal>
       </BackDrop>
@@ -81,7 +73,7 @@ class ShareModal extends React.Component<ShareModalProps> {
 
 function onCopyURL(props: ShareModalProps) {
   let copyCode = document.createElement('textarea');
-  copyCode.innerText = props.redirectUri + getShareURL(props.template.id, props.templateVersion);
+  copyCode.innerText = process.env.REACT_APP_ACMS_REDIRECT_URI + getShareURL(props.template.id, props.templateVersion);
   document.body.appendChild(copyCode);
   copyCode.select();
   document.execCommand('copy');
@@ -92,4 +84,4 @@ function getShareModalDescription(template: Template, templateVersion: string): 
   return STRINGS.SHARE_MODAL_DESCRIPTION + template!.name + " - " + templateVersion;
 }
 
-export default ModalHOC(connect(mapStateToProps, mapDispatchToProps)(ShareModal));
+export default ModalHOC(connect(() => { return {} }, mapDispatchToProps)(ShareModal));
