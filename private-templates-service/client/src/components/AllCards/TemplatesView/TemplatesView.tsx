@@ -5,7 +5,7 @@ import { SpinnerSize } from "office-ui-fabric-react";
 import { RootState } from "../../../store/rootReducer";
 import { AllTemplateState } from "../../../store/templates/types";
 import { ViewToggleState, ViewType } from "../../../store/viewToggle/types";
-import { getAllTemplates, getTemplatesByTags } from "../../../store/templates/actions";
+import { getAllTemplates } from "../../../store/templates/actions";
 // Components
 import { CenteredSpinner, PlaceholderText } from "../../Dashboard/styled";
 import { Template } from "adaptive-templating-service-typescript-node";
@@ -16,11 +16,8 @@ import { ALL_CARDS_PLACEHOLDER } from "../../../assets/strings";
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    getTemplates: () => {
-      dispatch(getAllTemplates());
-    },
-    getSelectedTemplates: (tags?: string[]) => {
-      dispatch(getTemplatesByTags(tags));
+    getTemplates: (tags?: string[]) => {
+      dispatch(getAllTemplates(tags));
     }
   };
 };
@@ -33,8 +30,7 @@ const mapStateToProps = (state: RootState) => {
 };
 interface Props {
   onClick: (templateID: string) => void;
-  getTemplates: () => void;
-  getSelectedTemplates: (tags?: string[]) => void;
+  getTemplates: (tags?: string[]) => void;
   templates: AllTemplateState;
   toggleState: ViewToggleState;
   selectedTags: string[];
@@ -46,12 +42,12 @@ export class TemplatesView extends Component<Props> {
   }
  
   componentDidMount() {
-    this.props.getSelectedTemplates(this.props.selectedTags);
+    this.props.getTemplates(this.props.selectedTags);
   }
 
   componentDidUpdate(prevProps: Props) {
     if(prevProps.selectedTags.length != this.props.selectedTags.length) {
-      this.props.getSelectedTemplates(this.props.selectedTags);
+      this.props.getTemplates(this.props.selectedTags);
     }
   }
 

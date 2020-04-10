@@ -4,14 +4,12 @@ import { connect } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 // Store
 import { RootState } from "../../store/rootReducer";
-import { getAllTags } from "../../store/allTags/actions";
-import { AllTagsState } from "../../store/allTags/types";
+import { getAllTags, addSelectedTag, removeSelectedTag, clearSelectedTags } from "../../store/tags/actions";
+import { TagsState } from "../../store/tags/types";
 import { ViewType } from "../../store/viewToggle/types";
 import { setViewToggleType } from "../../store/viewToggle/actions";
 import { setPage } from "../../store/page/actions";
 import { PageState } from "../../store/page/types";
-import { addSelectedTag, removeSelectedTag, clearSelectedTags } from "../../store/selectedTags/actions";
-import { SelectedTagsState } from "../../store/selectedTags/types";
 // Components
 import { setSearchBarVisible } from "../../store/search/actions";
 import { Title } from "../Dashboard/styled";
@@ -28,14 +26,11 @@ import { ALL_CARDS_LIST_VIEW, ALL_CARDS_GRID_VIEW, ALL_CARDS, ALL_CARDS_TITLE } 
 import TagList from "./TagList";
 import { COLORS } from "../../globalStyles";
 
-
-
 const mapStateToProps = (state: RootState) => {
   return {
     isSearch: state.search.isSearch,
-    tags: state.allTags,
-    selectedTags: state.selectedTags,
-    page: state.page
+    tags: state.tags,
+    page: state.page,
   };
 };
 const mapDispatchToProps = (dispatch: any) => {
@@ -53,14 +48,14 @@ const mapDispatchToProps = (dispatch: any) => {
       dispatch(getAllTags());
     },
     addSelectedTag: (tag: string) => {
-      dispatch(addSelectedTag(tag))
+      dispatch(addSelectedTag(tag));
     },
     removeSelectedTag: (tag: string) => {
-      dispatch(removeSelectedTag(tag))
+      dispatch(removeSelectedTag(tag));
     },
     clearSelectedTags: () => {
       dispatch(clearSelectedTags());
-    }
+    },
   };
 };
 interface Props extends RouteComponentProps {
@@ -72,8 +67,7 @@ interface Props extends RouteComponentProps {
   removeSelectedTag: (tag: string) => void;
   clearSelectedTags: () => void;
   isSearch: boolean;
-  tags: AllTagsState;
-  selectedTags: SelectedTagsState;
+  tags: TagsState;
   page: PageState;
 }
 
@@ -87,37 +81,37 @@ class AllCards extends Component<Props, State> {
     this.props.setSearchBarVisible(true);
     this.setSelectedTags();
   }
-  
+
   setSelectedTags = (): void => {
-    if(this.props.page.currentPage === "Template" && this.props.page.previousPage === ALL_CARDS) {
-      this.state = { selectedTags: this.props.selectedTags.tags };  
+    if (this.props.page.currentPage === "Template" && this.props.page.previousPage === ALL_CARDS) {
+      this.state = { selectedTags: this.props.tags.selectedTags };
     } else {
       this.props.clearSelectedTags();
       this.state = { selectedTags: [] };
     }
-  }
+  };
 
   tagOnClick = (tag: string): void => {
     this.setState((state) => {
-      if(state.selectedTags.includes(tag)) {
+      if (state.selectedTags.includes(tag)) {
         this.props.removeSelectedTag(tag);
-        return {selectedTags: state.selectedTags.filter((selectedTag: string) => selectedTag !== tag)}
+        return { selectedTags: state.selectedTags.filter((selectedTag: string) => selectedTag !== tag) };
       } else {
         this.props.addSelectedTag(tag);
-        return {selectedTags: state.selectedTags.concat(tag)}
+        return { selectedTags: state.selectedTags.concat(tag) };
       }
     });
-  }
+  };
   tagToggleStyle = (isSelected: boolean, ref: any) => {
-    if(!isSelected) {
+    if (!isSelected) {
       ref.current.style.background = COLORS.BLUE;
       ref.current.style.color = COLORS.WHITE;
     } else {
       ref.current.style.background = COLORS.GREY2;
       ref.current.style.color = COLORS.BLACK;
     }
-}
-  componentDidMount() { 
+  };
+  componentDidMount() {
     this.props.getAllTags();
   }
 
@@ -143,13 +137,13 @@ class AllCards extends Component<Props, State> {
         </AllCardsContainer>
       );
     }
-    let tagsState: AllTagsState = this.props.tags;
+    let tagsState: TagsState = this.props.tags;
     let allTags: string[] = [];
-    if (!tagsState.isFetching && tagsState.tags && tagsState.tags.allTags) {
-      allTags = tagsState.tags?.allTags
+    if (!tagsState.isFetching && tagsState.allTags && tagsState.allTags.allTags) {
+      allTags = tagsState.allTags?.allTags;
     }
 
-    return ( 
+    return (
       <OuterAllCardsContainer>
         <AllCardsContainer>
           <UpperBar>
@@ -161,8 +155,8 @@ class AllCards extends Component<Props, State> {
               <Filter />
             </ViewHelperBar>
           </UpperBar>
-          <TagList tags={allTags} selectedTags={this.state.selectedTags} allowEdit={false} onClick={this.tagOnClick} toggleStyle={this.tagToggleStyle}/>
-          <TemplatesView onClick={this.selectTemplate} selectedTags={this.state.selectedTags}/>
+          <TagList tags={allTags} selectedTags={this.state.selectedTags} allowEdit={false} onClick={this.tagOnClick} toggleStyle={this.tagToggleStyle} />
+          <TemplatesView onClick={this.selectTemplate} selectedTags={this.state.selectedTags} />
         </AllCardsContainer>
       </OuterAllCardsContainer>
     );

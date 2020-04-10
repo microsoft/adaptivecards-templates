@@ -13,7 +13,6 @@ const initalState: PageState = {
 }
 
 export function pageReducer(state = initalState, action: PageAction): PageState {
-  // console.log(state);
   switch (action.type) {
     case NAVIGATION:
       return {
