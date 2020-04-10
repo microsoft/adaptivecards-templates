@@ -9,7 +9,6 @@ import {
   GetUserDetailsAction,
   GetOrgDetailsAction,
   GetProfilePictureAction,
-  GetConfigAction, 
   GET_USER_DETAILS,
   GET_USER_DETAILS_SUCCESS,
   GET_USER_DETAILS_FAILURE,
@@ -19,15 +18,11 @@ import {
   GET_PROFILE_PICTURE,
   GET_PROFILE_PICTURE_SUCCESS,
   GET_PROFILE_PICTURE_FAILURE,
-  GET_CONFIG, 
-  GET_CONFIG_SUCCESS, 
-  GET_CONFIG_FAILURE
 } from './types';
 
 import { getAuthenticatedClient } from '../../Services/GraphService';
 import { AuthResponse } from 'msal';
 import { RootState } from '../rootReducer';
-import { ConfigApi } from 'adaptive-templating-service-typescript-node';
 
 export function logout(): AuthAction {
   return {
@@ -107,27 +102,6 @@ function requestProfilePictureFailure(): GetProfilePictureAction {
   }
 }
 
-function requestConfig(): GetConfigAction {
-  return {
-    type: GET_CONFIG
-  }
-}
-
-function requestConfigSuccess(appId: string, redirectUri: string, appInsightsInstrumentationKey: string): GetConfigAction {
-  return {
-    type: GET_CONFIG_SUCCESS,
-    redirectUri,
-    appId,
-    appInsightsInstrumentationKey
-  }
-}
-
-function requestConfigFailure(): GetConfigAction {
-  return {
-    type: GET_CONFIG_FAILURE
-  }
-}
-
 export function getUserDetails() {
   return function (dispatch: any, getState: () => RootState) {
     dispatch(requestUserDetails());
@@ -189,21 +163,3 @@ export function getProfilePicture() {
       })
   }
 }
-
-export function getConfig() {
-  return function (dispatch: any) {
-    const api = new ConfigApi(window.location.href);
-
-    dispatch(requestConfig());
-    return api.configGet().then((response: any) => {
-        if (response.response.statusCode && response.response.statusCode === 200) {
-          dispatch(requestConfigSuccess(response.body.appId, response.body.redirectUri, response.body.appInsightsInstrumentationKey));
-        } else {
-          dispatch(requestConfigFailure());
-        }
-      }).catch((error: any) => {
-        dispatch(requestConfigFailure());
-      })
-    }
-}
-
