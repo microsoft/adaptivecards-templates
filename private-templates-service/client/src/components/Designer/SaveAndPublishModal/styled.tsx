@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import { COLORS, FONTS } from '../../../globalStyles';
 
+import { TextField, PrimaryButton, DefaultButton } from 'office-ui-fabric-react';
+
 export const BackDrop = styled.div`
   position: fixed;
   top: 0;
@@ -64,4 +66,42 @@ export const CenterPanelRight = styled.div`
 
 export const Card = styled.div`
   pointer-events: none;
+`;
+
+export const StyledH3 = styled.h3`
+  font-size: 0.85rem;
+  font-weight: 500;
+`;
+
+export const StyledTextField = styled(TextField)`
+  margin-bottom: 15px;
+`;
+
+export const TagsWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+`;
+
+export const BottomRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: flex-end;
+`;
+
+export const ButtonGroup = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
+export const PublishButton = styled(PrimaryButton)`
+  font-family: ${FONTS.SEGOE_UI_REGULAR};
+  min-width: 150px;
+`;
+
+export const CancelButton = styled(DefaultButton)`
+  font-family: ${FONTS.SEGOE_UI_REGULAR};
+  margin-right: 12px;
+  min-width: 150px;
 `;

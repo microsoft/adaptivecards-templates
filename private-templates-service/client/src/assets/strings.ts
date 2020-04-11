@@ -102,8 +102,9 @@ export const TAGS = "Tags";
 export const MYCARD = "My Card";
 
 //SaveAndPublishModal.tsx
-export const SAVE_AND_PUBLISH_CARD = "Save and publish card";
 export const SAVE_AND_PUBLISH_DESC = "Your new design will be available to your organization as ";
+export const SAVE_AND_PUBLISH = "Save and publish";
+export const SAVE_AND_PUBLISH_CARD = SAVE_AND_PUBLISH + " card";
 
 //OwnerAvatar.tsx
 export const ERROR_LOADING_IMAGE = "Error loading image";
