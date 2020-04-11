@@ -6,6 +6,7 @@ export interface PageState {
 
 export enum ModalState {
   Share,
+  ShareSuccess,
   Publish,
   Unpublish,
   Version,
