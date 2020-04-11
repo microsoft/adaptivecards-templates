@@ -107,7 +107,7 @@ class SaveAndPublishModal extends React.Component<Props, State> {
 
   onSaveAndPublish = () => {
     this.props.saveAndPublishTemplate(this.props.designerTemplateJSON, this.props.designerSampleDataJSON, this.state.templateName, this.state.tags);
-    this.props.closeModal();
+    this.props.openModal(ModalState.Share);
   }
 
   render() {
