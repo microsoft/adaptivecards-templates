@@ -13,8 +13,10 @@ export const STATUS = "Status";
 export const AUTHOR = "Author";
 
 // UnpublishModal.tsx
-export const UNPUBLISH_WARNING = "Once a template is unpublished, your organization will not be able to use it."
-export const UNPUBLISH_CONFIRMATION = "Are you sure you want to unpublish "
+export const UNPUBLISH_CARD = "Unpublish card";
+export const UNPUBLISH_CARD_DESC = " will be deprecated and no longer available to your organization until you choose to publish it."
+export const UNPUBLISH_WARNING = "Once a template is unpublished, your organization will not be able to use it.";
+export const UNPUBLISH_CONFIRMATION = "Are you sure you want to unpublish ";
 
 //ShareModal.tsx
 export const SHARING = "Sharing";
