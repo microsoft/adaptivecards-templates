@@ -1,3 +1,3 @@
-import AllCards from "./AllCards"
+import AllCards from "./AllCards";
 
-export default AllCards
+export default AllCards;

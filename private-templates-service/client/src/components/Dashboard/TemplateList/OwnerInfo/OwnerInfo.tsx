@@ -22,7 +22,10 @@ class OwnerInfo extends React.Component<Props> {
   render() {
     return (
       <InfoWrapper>
-        <AvatarWrapper><OwnerAvatar oID={this.props.oID} /></AvatarWrapper> {(this.props.owner && this.props.owner.displayNames) ? this.props.owner.displayNames[this.props.oID] : ""}
+        <AvatarWrapper>
+          <OwnerAvatar oID={this.props.oID} />
+        </AvatarWrapper>
+        {(this.props.owner && this.props.owner.displayNames) ? this.props.owner.displayNames[this.props.oID] : ""}
       </InfoWrapper>
     );
   }

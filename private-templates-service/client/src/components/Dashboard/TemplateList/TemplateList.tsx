@@ -20,7 +20,7 @@ export class TemplateList extends Component<Props> {
           {displayComponents.status && <TemplateListHeaderItem>Status</TemplateListHeaderItem>}
           {displayComponents.author && <TemplateListHeaderItem>Owner</TemplateListHeaderItem>}
         </TemplateListHeader>
-        <TemplateListContent templates={templates} propsOnClick={onClick} displayComponents={displayComponents}></TemplateListContent>
+        <TemplateListContent templates={templates} propsOnClick={onClick} displayComponents={displayComponents} />
       </TemplateListContainer>
     );
   }

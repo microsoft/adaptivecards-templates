@@ -172,6 +172,9 @@ export class InMemoryDBProvider implements StorageProvider {
     if(!instance.lastEditedUser) {
       instance.lastEditedUser = "";
     }
+    if (!instance.author) {
+      instance.author = "";
+    }
   }
   protected _autoCompleteTemplateModel(template: ITemplate): void {
     if (!template.tags) {
@@ -183,9 +186,6 @@ export class InMemoryDBProvider implements StorageProvider {
     }
     if (!template.isLive) {
       template.isLive = false;
-    }
-    if (!template.owner) {
-      template.owner = "";
     }
     if (!template.instances) {
       template.instances = [];
@@ -250,12 +250,12 @@ export class InMemoryDBProvider implements StorageProvider {
   }
 
   protected _matchTemplate(query: Partial<ITemplate>, template: ITemplate): boolean {
-    if( 
-      (query.name && template.name.toLocaleUpperCase().includes(query.name.toLocaleUpperCase())) || 
-      (query.owner && (query.owner === template.owner)) ||
-      (query._id && (query._id === template._id)) ||
-      (query.isLive && (query.isLive === template.isLive)) || 
-      (query.tags && template.tags && Utils.ifContainsList(template.tags,query.tags))
+    if (
+      (query.name && !template.name.toLocaleUpperCase().includes(query.name.toLocaleUpperCase())) ||
+      (query._id && !(query._id === template._id)) ||
+      (query.isLive && !(query.isLive === template.isLive)) ||
+      (query.tags && template.tags && !Utils.ifContainsList(template.tags, query.tags)) ||
+      (query.authors && !query.authors.every((value: string) => template.authors.includes(value)))
     ) {
       return true;
     }
