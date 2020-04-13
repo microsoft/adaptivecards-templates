@@ -37,7 +37,6 @@ import {
   CancelButton,
   CardWrapper,
 } from './styled';
-import { ACWrapper } from '../../AdaptiveCardPanel/styled';
 
 
 interface Props {

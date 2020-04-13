@@ -25,7 +25,6 @@ import {
 
 import {
   Container,
-  ACWrapper,
 } from '../../AdaptiveCardPanel/styled'
 
 import {
