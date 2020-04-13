@@ -12,6 +12,7 @@ import { getTemplate } from "../../store/currentTemplate/actions";
 import { setSearchBarVisible } from "../../store/search/actions";
 import { getOwnerProfilePicture, getOwnerName } from "../../store/templateOwner/actions";
 import { OwnerState } from "../../store/templateOwner/types";
+import { setSkipLinkContentID } from "../../store/skiplink/actions";
 
 import { Template } from "adaptive-templating-service-typescript-node";
 import { SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
@@ -20,12 +21,13 @@ import requireAuthentication from "../../utils/requireAuthentication";
 
 import Gallery from "../Gallery";
 import SearchPage from "./SearchPage/SearchPage";
-import RecentlyViewed from "./RecentlyViewed";
+import TemplateList from "./TemplateList";
 import Tags from "../Common/Tags";
 import Footer from "./Footer";
 import {
   DASHBOARD_RECENTLY_EDITED_PLACEHOLDER,
   DASHBOARD_RECENTLY_VIEWED_PLACEHOLDER,
+  FAVORITED_TAGS
 } from '../../assets/strings';
 
 
@@ -71,6 +73,9 @@ const mapDispatchToProps = (dispatch: any) => {
     },
     getOwnerProfilePicture: (oID: string) => {
       dispatch(getOwnerProfilePicture(oID));
+    },
+    setSkipLinkContentID: (id: string) => {
+      dispatch(setSkipLinkContentID(id));
     }
   };
 };
@@ -87,6 +92,7 @@ interface Props extends RouteComponentProps {
   getTemplate: (templateID: string) => void;
   getOwnerName: (oID: string) => void;
   getOwnerProfilePicture: (oID: string) => void;
+  setSkipLinkContentID: (id: string) => void;
   isSearch: boolean;
 }
 class Dashboard extends React.Component<Props> {
@@ -95,6 +101,7 @@ class Dashboard extends React.Component<Props> {
     props.setPage("Dashboard", "Dashboard");
     props.setSearchBarVisible(true);
     props.getRecentTemplates();
+    props.setSkipLinkContentID(DASHBOARD_MAIN_CONTENT_ID);
   }
   componentDidUpdate(prevProps: Props) {
     if (this.props.isSearch !== prevProps.isSearch) {
@@ -151,7 +158,7 @@ class Dashboard extends React.Component<Props> {
     return (
       <OuterDashboardContainer>
         <OuterWindow>
-          <DashboardContainer>
+          <DashboardContainer id={DASHBOARD_MAIN_CONTENT_ID}>
             <React.Fragment>
               <Title>Recently Edited</Title>
               {recentTemplates.isFetching || this.props.templateOwner.isFetchingName || this.props.templateOwner.isFetchingPicture ?
@@ -172,10 +179,11 @@ class Dashboard extends React.Component<Props> {
               {recentTemplates.isFetching || this.props.templateOwner.isFetchingName || this.props.templateOwner.isFetchingPicture ?
                 <CenteredSpinner size={SpinnerSize.large} />
                 : recentlyViewedTemplates.length ? (
-                  <RecentlyViewed
+                  <TemplateList
                     onClick={this.selectTemplate}
-                    recentlyViewed={recentlyViewedTemplates}
-                  ></RecentlyViewed>
+                    templates={recentlyViewedTemplates}
+                    displayComponents={{author: true, status: true, dateModified: true, templateName: true, version: false}}
+                  ></TemplateList>
                 ) : (
                     <PlaceholderText>
                       {DASHBOARD_RECENTLY_VIEWED_PLACEHOLDER}
@@ -184,7 +192,7 @@ class Dashboard extends React.Component<Props> {
             </React.Fragment>
           </DashboardContainer>
           <TagsContainer>
-            <Title style={{ marginRight: "150px", color: 'pink' }}>Tags</Title>
+            <Title style={{ marginRight: "150px", color: 'pink' }}>{FAVORITED_TAGS}</Title>
             <Tags tags={tags} allowEdit={false}></Tags>
           </TagsContainer>
         </OuterWindow>
@@ -193,6 +201,7 @@ class Dashboard extends React.Component<Props> {
     );
   }
 }
+export const DASHBOARD_MAIN_CONTENT_ID: string = "dashboard-content";
 
 export default connect(
   mapStateToProps,

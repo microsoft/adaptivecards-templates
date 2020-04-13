@@ -3,7 +3,7 @@ import { COLORS } from "../../../globalStyles";
 import { Card } from "../PreviewModal/TemplateInfo/styled";
 import { StatusIndicator } from "../PreviewModal/TemplateInfo/styled";
 
-export const RecentlyViewedBodyRow = styled.div`
+export const TemplateListBodyRow = styled.div`
   &: hover {
     background-color: ${COLORS.GREYHOVER};
     cursor: pointer;
@@ -16,11 +16,11 @@ export const RecentlyViewedBodyRow = styled.div`
   justify-content: flex-start;
 `;
 
-export const RecentlyViewedHeaderItem = styled.h5`
+export const TemplateListHeaderItem = styled.h5`
   flex: 1;
 `;
 
-export const RecentlyViewedHeader = styled.div`
+export const TemplateListHeader = styled.div`
   display: flex;
   flex-direction: row;
   align-items: baseline;
@@ -29,28 +29,26 @@ export const RecentlyViewedHeader = styled.div`
   border-bottom: 1px solid ${COLORS.BORDER2};
 `;
 
-export const RecentlyViewedContainer = styled(Card)`
+export const TemplateListContainer = styled(Card)`
   flex: 0 1 auto;
-  border: 1px solid ${COLORS.BORDER2};
-  border-radius: 5px;
   justify-content: flex-start;
   margin-top: 10px;
   padding-bottom: 0px;
 `;
 
-export const RecentlyViewedBody = styled.div`
+export const TemplateListBody = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
 `;
 
-export const RecentlyViewedItem = styled.div`
+export const TemplateListItem = styled.div`
   font-family: Segoe UI Regular;
   flex: 1;
   padding-top: 6px;
 `;
 
-export const RecentlyViewedStatusIndicator = styled(StatusIndicator)`
+export const TemplateListStatusIndicator = styled(StatusIndicator)`
   margin-right: 10px;
   margin-left: 0px;
 `;
