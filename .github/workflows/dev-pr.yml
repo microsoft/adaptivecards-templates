@@ -28,7 +28,6 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-        Write-Host "##vso[task.setvariable variable=ACMS_APP_ID;]$(REACT_APP_ACMS_APP_ID)"
         Write-Host "##vso[task.setvariable variable=ACMS_APP_SECRET;]$(DevACMSSecret)"
 
 
