@@ -187,9 +187,6 @@ describe("Basic Post Templates", () => {
     const templateRes = await request(app)
       .get("/template")
       .set({ Authorization: "Bearer " + token })
-      .send({
-        isPublished: false
-      })
       .expect({ templates: [] });
   });
 
@@ -892,9 +889,6 @@ describe("Post Templates, and increment version", () => {
     const templateRes = await request(app)
       .get("/template")
       .set({ Authorization: "Bearer " + token })
-      .send({
-        isPublished: false
-      })
       .expect({ templates: [] });
   });
 

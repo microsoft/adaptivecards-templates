@@ -276,11 +276,11 @@ export class TemplateServiceClient {
    * @param template
    * @param isPublished
    */
-  private _getPublishedTemplates(template: ITemplate, isPublished: boolean): ITemplate {
+  private _getStateTemplates(template: ITemplate, state: TemplateState): ITemplate {
     if (!template.instances || template.instances.length === 0) return template;
     let templateInstances: ITemplateInstance[] = [];
     for (let instance of template.instances) {
-      if ((isPublished && instance.state === TemplateState.live) || (!isPublished && instance.state !== TemplateState.live)) {
+      if (state === instance.state){
         templateInstances.push(instance);
       }
     }
@@ -711,7 +711,7 @@ export class TemplateServiceClient {
   public async getTemplates(
     token?: string,
     templateId?: string,
-    isPublished?: boolean,
+    state?: TemplateState,
     templateName?: string,
     version?: string,
     owned?: boolean,
@@ -748,15 +748,16 @@ export class TemplateServiceClient {
       templates = await this._getOwnedTemplates(authId, templates, owned);
     }
 
-    if (isPublished || isPublished === false) {
+    if (state) {
       let templatesFiltered = [];
       for (let template of templates) {
-        let templateInstance = this._getPublishedTemplates(template, isPublished);
+        let templateInstance = this._getStateTemplates(template, state);
         if (template.instances && template.instances.length > 0) {
           templatesFiltered.push(templateInstance);
         }
       }
       templates = templatesFiltered;
+      console.log(templates[0]);
     }
 
     if (templateId && templates.length > 0) {
@@ -1147,13 +1148,13 @@ export class TemplateServiceClient {
         return res.status(400).json({ error: err });
       }
 
-      let isPublished: boolean | undefined = req.query.isPublished ? req.query.isPublished.toLowerCase() === "true" : undefined;
+      let state: TemplateState | undefined =  TemplateState[req.query.state as keyof typeof TemplateState]
       let owned: boolean | undefined = req.query.owned ? req.query.owned.toLowerCase() === "true" : undefined;
       let isClient: boolean | undefined = req.query.isClient ? req.query.isClient.toLowerCase() === "true" : undefined;
 
       let tagList: string[] = req.query.tags ? req.query.tags.split(",") : undefined;
 
-      this.getTemplates(token, undefined, isPublished, req.query.name, req.query.version,
+      this.getTemplates(token, undefined, state, req.query.name, req.query.version,
         owned, req.query.sortBy, req.query.sortOrder, tagList, isClient).then(response => {
           if (!response.success) {
             return res.status(200).json({ templates: [] });
@@ -1208,7 +1209,9 @@ export class TemplateServiceClient {
     router.get("/:id?", (req: Request, res: Response, _next: NextFunction) => {
       let isClient: boolean | undefined = req.query.isClient ? req.query.isClient.toLowerCase() === "true" : undefined;
       let token = parseToken(req.headers.authorization!);
-      this.getTemplates(token, req.params.id, undefined, undefined, req.query.version, undefined, undefined, undefined, undefined, isClient).then(
+      let state: TemplateState | undefined =  TemplateState[req.query.state as keyof typeof TemplateState]
+
+      this.getTemplates(token, req.params.id, state, undefined, req.query.version, undefined, undefined, undefined, undefined, isClient).then(
         response => {
           if (!response.success || (response.result && response.result.length === 0)) {
             const err = new TemplateError(ApiError.TemplateNotFound, `Template with id ${req.params.id} does not exist.`);
