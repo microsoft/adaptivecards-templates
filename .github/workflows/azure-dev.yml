@@ -17,12 +17,13 @@ variables:
 
 pool:
   vmImage: 'ubuntu-latest'
+
 steps:
 - task: AzureKeyVault@1
   inputs:
     azureSubscription: $(azureSubscription)
     keyVaultName: $(keyVault)
-    secretsFilter: '*'
+    secretsFilter: 'DevACMSSecret'
 
 - task: PowerShell@2
   inputs:
