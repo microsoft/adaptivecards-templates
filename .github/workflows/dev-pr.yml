@@ -1,15 +1,13 @@
 
-trigger: 
-  - users/daniellemott/client_secret
 # trigger: none
 
-# pr:
-#   branches:
-#     include:
-#     - dev
-#     exclude:
-#     - stage
-#     - users/*
+pr:
+  branches:
+    include:
+    - dev
+    exclude:
+    - stage
+    - users/*
 
 variables: 
   ## Add this under variables section in the pipeline
@@ -24,7 +22,7 @@ steps:
   inputs:
     azureSubscription: $(azureSubscription)
     keyVaultName: $(keyVault)
-    secretsFilter: 'DevACMSAppId', 'DevACMSSecret'
+    secretsFilter: 'DevACMSSecret'
 
 - task: PowerShell@2
   inputs:

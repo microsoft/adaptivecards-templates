@@ -1,16 +1,13 @@
 
+trigger: none
 
-trigger:
-  - users/daniellemott/client_secret
-# trigger: none
-
-# pr:
-#   branches:
-#     include:
-#     - stage
-#     exclude:
-#     - dev
-#     - users/*
+pr:
+  branches:
+    include:
+    - stage
+    exclude:
+    - dev
+    - users/*
 
 variables: 
   ## Add this under variables section in the pipeline
@@ -26,14 +23,14 @@ steps:
   inputs:
     azureSubscription: $(azureSubscription)
     keyVaultName: $(keyVault)
-    secretsFilter: 'DevACMSSecret, DevACMSAppId'
+    secretsFilter: 'StageACMSSecret'
 
 - task: PowerShell@2
   inputs:
     targetType: 'inline'
     script: |
         Write-Host "##vso[task.setvariable variable=ACMS_APP_ID;]$(REACT_APP_ACMS_APP_ID)"
-        Write-Host "##vso[task.setvariable variable=ACMS_APP_SECRET;]$(CLIENT_SECRET)"
+        Write-Host "##vso[task.setvariable variable=ACMS_APP_SECRET;]$(StageACMSSecret)"
 
 
 - task: NodeTool@0 
