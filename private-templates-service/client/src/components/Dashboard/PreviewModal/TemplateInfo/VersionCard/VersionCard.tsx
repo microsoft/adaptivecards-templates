@@ -37,7 +37,7 @@ import { updateCurrentTemplateVersion } from '../../../../../store/currentTempla
 import VersionModal from '../../../../Common/VersionModal';
 import { MANAGE } from '../../../../../assets/strings';
 import { RootState } from '../../../../../store/rootReducer';
-import { Scroller } from "../../../../../utils/Scroller";
+import { Scroller } from "../../../../../utils/AllCardsUtil/Scroller";
 
 interface Props {
   template: Template;

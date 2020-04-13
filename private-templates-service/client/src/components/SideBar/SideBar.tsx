@@ -85,6 +85,8 @@ const iconStylePink = {
   margin: "0px 10px 0px 40px"
 }
 
+const newTemplateURL = "/designer/newcard/1.0"
+
 const navMenuLinks: INavLinkGroup[] = [
   {
     links: [
@@ -99,8 +101,8 @@ const navMenuLinks: INavLinkGroup[] = [
         ariaLabel: "Link to Dashboard"
       },
       {
-        name: STRINGS.NEW_CARD,
-        url: "/designer",
+        name: "New Template",
+        url: newTemplateURL,
         iconProps: {
           iconName: "CalculatorAddition",
           style: iconStyle
@@ -110,7 +112,7 @@ const navMenuLinks: INavLinkGroup[] = [
       },
       {
         name: STRINGS.ALL_CARDS,
-        url: "/dashboard/all",
+        url: "/allcards",
         iconProps: {
           iconName: "ViewList",
           style: iconStylePink
@@ -157,7 +159,7 @@ const SideBar = (props: Props) => {
 
   const onNavClick = (event: any, element: any) => {
     event.preventDefault();
-    if (element.url === "/designer") {
+    if (element.url === newTemplateURL) {
       props.newTemplate();
     }
     history.push(element.url);

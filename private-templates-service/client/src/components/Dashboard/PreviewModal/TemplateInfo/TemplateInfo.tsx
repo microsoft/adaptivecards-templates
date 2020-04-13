@@ -13,7 +13,7 @@ import { getLatestVersion } from "../../../../utils/TemplateUtil";
 
 import { getOwnerName, getOwnerProfilePicture } from "../../../../store/templateOwner/actions";
 import { OwnerType } from "../../../../store/templateOwner/types";
-import OwnerAvatar from "../../RecentlyViewed/OwnerAvatar";
+import OwnerAvatar from "../../TemplateList/OwnerAvatar";
 
 import PublishModal from '../../../Common/PublishModal';
 import UnpublishModal from '../../../Common/UnpublishModal';
@@ -347,7 +347,7 @@ function onActionButtonClick(props: Props, state: State, val: any) {
       break;
     case EDIT_IN_DESIGNER:
       const { history } = props;
-      if (history) history.push('/designer');
+      if (history) history.push('/designer/'+ props.template.id + '/' + state.version);
       break;
     case DELETE:
       props.openModal(ModalState.Delete);

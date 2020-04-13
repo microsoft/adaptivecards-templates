@@ -1,9 +1,8 @@
 import React from 'react';
 
 import { Template } from 'adaptive-templating-service-typescript-node';
-import { getShareURL, getFullShareURL } from '../../../utils/TemplateUtil/TemplateUtil';
+import { getShareURL } from '../../../utils/TemplateUtil/TemplateUtil';
 
-import Config from '../../../Config';
 import ShareModalForm from './ShareModalForm';
 
 import ModalHOC from '../../../utils/ModalHOC';
@@ -55,7 +54,7 @@ class ShareModal extends React.Component<ShareModalProps> {
               <LinkRow>
                 <TextFieldContainer>
                   <TextField readOnly={true}
-                    prefix={Config.redirectUri.slice(-1) === "/" ? Config.redirectUri.slice(0, Config.redirectUri.length - 1) : Config.redirectUri}
+                    prefix={process.env.REACT_APP_ACMS_REDIRECT_URI}
                     defaultValue={getShareURL(this.props.template.id, this.props.templateVersion)}
                     width={100} />
                 </TextFieldContainer>
@@ -64,7 +63,7 @@ class ShareModal extends React.Component<ShareModalProps> {
                 </CopyLinkButton>
               </LinkRow>
             </ShareLinkPanel>
-            <ShareModalForm shareURL={getFullShareURL(this.props.template.id, this.props.templateVersion)} templateVersion={this.props.templateVersion} />
+            <ShareModalForm shareURL={process.env.REACT_APP_ACMS_REDIRECT_URI + getShareURL(this.props.template.id, this.props.templateVersion)} templateVersion={this.props.templateVersion} />
           </CenterPanelWrapper>
         </Modal>
       </BackDrop>
@@ -74,7 +73,7 @@ class ShareModal extends React.Component<ShareModalProps> {
 
 function onCopyURL(props: ShareModalProps) {
   let copyCode = document.createElement('textarea');
-  copyCode.innerText = getFullShareURL(props.template.id, props.templateVersion);
+  copyCode.innerText = process.env.REACT_APP_ACMS_REDIRECT_URI + getShareURL(props.template.id, props.templateVersion);
   document.body.appendChild(copyCode);
   copyCode.select();
   document.execCommand('copy');
