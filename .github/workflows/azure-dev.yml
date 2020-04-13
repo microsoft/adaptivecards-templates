@@ -5,6 +5,7 @@ trigger:
     include:
     - dev
     - stage
+    - users/grzhan/docker
 
 # no PR builds
 pr: none
