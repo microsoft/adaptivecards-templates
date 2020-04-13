@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { COLORS } from "../../globalStyles";
+import { COLORS, FONTS } from "../../globalStyles";
 
 export const Container = styled.div`
   flex: 1 1 0px;
@@ -51,7 +51,7 @@ export const TemplateNameAndDateWrapper = styled.div`
 `;
 export const TemplateName = styled.div`
   font-size: 0.95rem;
-  font-family: Segoe UI Semibold;
+  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD};
   color: black;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -59,7 +59,7 @@ export const TemplateName = styled.div`
   overflow: hidden;
 `;
 export const TemplateUpdatedAt = styled.div`
-  font-family: Segoe UI Regular;
+  font-family: ${FONTS.SEGOE_UI_REGULAR};
   font-size: 0.8rem;
   color: ${COLORS.GREY3};
 `;
