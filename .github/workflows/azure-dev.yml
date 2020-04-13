@@ -5,7 +5,7 @@ trigger:
     include:
     - dev
     - stage
-    - users/daniellemott/client_secret
+    # - users/daniellemott/client_secret
 
 # no PR builds
 pr: none
