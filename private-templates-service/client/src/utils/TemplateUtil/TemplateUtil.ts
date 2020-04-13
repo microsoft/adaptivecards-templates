@@ -18,7 +18,7 @@ export function getLatestTemplateInstanceState(template: Template): string {
 }
 
 export function initClientSDK(dispatch: any, getState: () => RootState, ): TemplateApi {
-  const api = new TemplateApi();
+  const api = new TemplateApi(state.auth.redirectUri);
   const state = getState();
   if (state.auth.accessToken) {
     api.setApiKey(0, `Bearer ${state.auth.accessToken!.accessToken}`);
