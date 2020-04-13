@@ -17,6 +17,9 @@
         "defaultValue": "West US",
         "type": "String"
       },
+      "server_farm_id": {
+        "type": "String"
+      },
       "docker_registry_server_uri": {
         "defaultValue": "https://acmsregistry.azurecr.io",
         "type": "String"
@@ -41,22 +44,8 @@
       "appInsightsInstrumentationKey": "931c613f-fdcb-40a9-bd39-314ce31bc5d6",
       "cosmos_database_name": "acms-cosmos",
       "databaseName": "acms",
-      "appServicePlanName": "acms-service-plan"
   },
   "resources": [
-      {
-        "type": "Microsoft.Web/serverfarms",
-        "apiVersion": "2018-02-01",
-        "name": "[variables('appServicePlanName')]",
-        "location": "[parameters('location')]",
-        "sku": {
-          "name": "F1"
-        },
-        "kind": "linux",
-        "properties":{
-          "reserved":true
-        }
-      },
       {
           "type": "Microsoft.Web/sites",
           "apiVersion": "2018-11-01",
@@ -64,11 +53,8 @@
           "location": "[parameters('location')]",
           "kind": "app,linux,container",
           "properties": {
-            "serverFarmId":"[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]"
-          }, 
-          "dependsOn": [
-             "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]"
-          ],
+            "serverFarmId": "[parameters('server_farm_id')]"
+          },
           "resources": [   
             {
               "apiVersion": "2015-08-01",
