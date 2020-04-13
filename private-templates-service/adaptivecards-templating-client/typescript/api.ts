@@ -324,14 +324,20 @@ export class ResourceCreated {
 }
 
 export class TagList {
-    'tags'?: Array<string>;
+    'ownedTags'?: Array<string>;
+    'allTags'?: Array<string>;
 
     static discriminator: string | undefined = undefined;
 
     static attributeTypeMap: Array<{name: string, baseName: string, type: string}> = [
         {
-            "name": "tags",
-            "baseName": "tags",
+            "name": "ownedTags",
+            "baseName": "ownedTags",
+            "type": "Array<string>"
+        },
+        {
+            "name": "allTags",
+            "baseName": "allTags",
             "type": "Array<string>"
         }    ];
 
@@ -344,7 +350,7 @@ export class Template {
     'id'?: string;
     'name'?: string;
     'instances'?: Array<TemplateInstance>;
-    'owner'?: string;
+    'authors'?: Array<string>;
     'isLive'?: boolean;
     'createdAt'?: string;
     'updatedAt'?: string;
@@ -370,9 +376,9 @@ export class Template {
             "type": "Array<TemplateInstance>"
         },
         {
-            "name": "owner",
-            "baseName": "owner",
-            "type": "string"
+            "name": "authors",
+            "baseName": "authors",
+            "type": "Array<string>"
         },
         {
             "name": "isLive",
@@ -410,7 +416,6 @@ export class TemplateInfo {
     'name'?: string;
     'instance'?: TemplatePreviewInstance;
     'tags'?: Array<string>;
-    'owner'?: string;
 
     static discriminator: string | undefined = undefined;
 
@@ -434,11 +439,6 @@ export class TemplateInfo {
             "name": "tags",
             "baseName": "tags",
             "type": "Array<string>"
-        },
-        {
-            "name": "owner",
-            "baseName": "owner",
-            "type": "string"
         }    ];
 
     static getAttributeTypeMap() {
@@ -452,6 +452,7 @@ export class TemplateInstance {
     'version'?: string;
     'publishedAt'?: string;
     'state'?: TemplateInstance.StateEnum;
+    'author'?: string;
     'isShareable'?: boolean;
     'numHits'?: number;
     'data'?: Array<any>;
@@ -486,6 +487,11 @@ export class TemplateInstance {
             "name": "state",
             "baseName": "state",
             "type": "TemplateInstance.StateEnum"
+        },
+        {
+            "name": "author",
+            "baseName": "author",
+            "type": "string"
         },
         {
             "name": "isShareable",
@@ -568,6 +574,7 @@ export class TemplatePreviewInstance {
     'version'?: string;
     'json'?: any;
     'state'?: string;
+    'author'?: string;
     'data'?: Array<any>;
 
     static discriminator: string | undefined = undefined;
@@ -586,6 +593,11 @@ export class TemplatePreviewInstance {
         {
             "name": "state",
             "baseName": "state",
+            "type": "string"
+        },
+        {
+            "name": "author",
+            "baseName": "author",
             "type": "string"
         },
         {
@@ -949,19 +961,69 @@ export class TemplateApi {
         (this.authentications as any)[TemplateApiApiKeys[key]].apiKey = value;
     }
     /**
+     * 
+     * @summary Ggt the list of owned and all tags
+     * @param {*} [options] Override http request options.
+     */
+    public allTags (options: any = {}) : Promise<{ response: http.IncomingMessage; body: TagList;  }> {
+        const localVarPath = this.basePath + '/template/tag';
+        let localVarQueryParameters: any = {};
+        let localVarHeaderParams: any = (<any>Object).assign({}, this.defaultHeaders);
+        let localVarFormParams: any = {};
+
+        (<any>Object).assign(localVarHeaderParams, options.headers);
+
+        let localVarUseFormData = false;
+
+        let localVarRequestOptions: localVarRequest.Options = {
+            method: 'GET',
+            qs: localVarQueryParameters,
+            headers: localVarHeaderParams,
+            uri: localVarPath,
+            useQuerystring: this._useQuerystring,
+            json: true,
+        };
+
+        this.authentications.bearer_auth.applyToRequest(localVarRequestOptions);
+
+        this.authentications.default.applyToRequest(localVarRequestOptions);
+
+        if (Object.keys(localVarFormParams).length) {
+            if (localVarUseFormData) {
+                (<any>localVarRequestOptions).formData = localVarFormParams;
+            } else {
+                localVarRequestOptions.form = localVarFormParams;
+            }
+        }
+        return new Promise<{ response: http.IncomingMessage; body: TagList;  }>((resolve, reject) => {
+            localVarRequest(localVarRequestOptions, (error, response, body) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    body = ObjectSerializer.deserialize(body, "TagList");
+                    if (response.statusCode && response.statusCode >= 200 && response.statusCode <= 299) {
+                        resolve({ response: response, body: body });
+                    } else {
+                        reject({ response: response, body: body });
+                    }
+                }
+            });
+        });
+    }
+    /**
      * Returns the latest version of all public templates and owned templates
      * @summary Find all templates
      * @param state Query based on if template state
      * @param isClient If true, ignores updating hits on template
      * @param name Name of template to query for
      * @param version Version of template
-     * @param owned Display only the templates owned by the user
+     * @param owned Display only the templates where the user authored a version
      * @param sortBy Sort returned templates by parameter
      * @param sortOrder 
      * @param tags List of tags to filter templates by
      * @param {*} [options] Override http request options.
      */
-    public allTemplates (state?: 'live' | 'draft' | 'deprecated', isClient?: boolean, name?: string, version?: string, owned?: boolean, sortBy?: 'alphabetical' | 'dateCreated' | 'dateUpdated', sortOrder?: 'ascending' | 'descending', tags?: string, options: any = {}) : Promise<{ response: http.IncomingMessage; body: TemplateList;  }> {
+    public allTemplates (state?: 'live' | 'draft' | 'deprecated', isClient?: boolean, name?: string, version?: string, owned?: boolean, sortBy?: 'alphabetical' | 'dateCreated' | 'dateUpdated', sortOrder?: 'ascending' | 'descending', tags?: Array<string>, options: any = {}) : Promise<{ response: http.IncomingMessage; body: TemplateList;  }> {
         const localVarPath = this.basePath + '/template';
         let localVarQueryParameters: any = {};
         let localVarHeaderParams: any = (<any>Object).assign({}, this.defaultHeaders);
@@ -996,7 +1058,7 @@ export class TemplateApi {
         }
 
         if (tags !== undefined) {
-            localVarQueryParameters['tags'] = ObjectSerializer.serialize(tags, "string");
+            localVarQueryParameters['tags'] = ObjectSerializer.serialize(tags, "Array<string>");
         }
 
         (<any>Object).assign(localVarHeaderParams, options.headers);

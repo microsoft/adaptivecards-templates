@@ -47,8 +47,8 @@ function autoCompleteTemplateModel(template: ITemplate): void {
   if (!template.isLive) {
     template.isLive = false;
   }
-  if (!template.owner) {
-    template.owner = "";
+  if (!template.authors) {
+    template.authors = [""];
   }
   if (!template.instances) {
     template.instances = [];
@@ -83,7 +83,7 @@ export function validateMatchingTemplates(a: ITemplate, b: ITemplate): void {
   }
   expect(a.name).toEqual(b.name);
   expect(a.tags).toEqual(Array.from(b.tags!));
-  expect(a.owner).toEqual(b.owner);
+  expect(a.authors).toEqual(b.authors);
   expect(a.isLive).toEqual(b.isLive);
   expect(a.deletedVersions).toEqual(Array.from(b.deletedVersions!));
 }
@@ -171,20 +171,21 @@ export function testDB(db: StorageProvider) {
     const validTemplateInstance: ITemplateInstance = {
       json: JSON.parse('{"key":"value"}'),
       version: "1.0",
-      lastEditedUser: ""
+      lastEditedUser: "",
+      author: "12301ased12"
     };
     const validTemplate: ITemplate = {
       name: "validTemplate",
       instances: [validTemplateInstance],
       tags: ["weather", "sunny"],
-      owner: "12301ased12",
+      authors: ["12301ased12"],
       isLive: true
     };
     await insertAndValidateTemplate(db, validTemplate);
   });
 
   it("Partially filled:create & save template successfully", async () => {
-    const validTemplate: ITemplate = { name: "validTemplate", owner: "John" };
+    const validTemplate: ITemplate = { name: "validTemplate", authors: ["John"] };
     await insertAndValidateTemplate(db, validTemplate);
   });
 }

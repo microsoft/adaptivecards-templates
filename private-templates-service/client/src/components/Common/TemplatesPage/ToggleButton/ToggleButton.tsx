@@ -2,8 +2,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 // Store
-import { ViewType, ViewToggleState } from "../../../store/viewToggle/types";
-import { RootState } from "../../../store/rootReducer";
+import { ViewType, ViewToggleState } from "../../../../store/viewToggle/types";
+import { RootState } from "../../../../store/rootReducer";
 // Fabric ui
 import { IconButton, IIconProps, IButtonStyles } from "office-ui-fabric-react";
 
