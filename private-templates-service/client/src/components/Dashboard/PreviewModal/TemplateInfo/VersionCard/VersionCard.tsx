@@ -94,7 +94,7 @@ class VersionCard extends React.Component<Props> {
             <VersionCardRowTitle style={{ flexBasis: `25%` }}>{STRINGS.UPDATED}</VersionCardRowTitle>
             <VersionCardRowTitle style={{ flexBasis: `20%` }}>{STRINGS.STATUS}</VersionCardRowTitle>
           </VersionCardRow>
-          <InfoVersionContainer onWheel={this.scroller.verticalScroll}>
+          <InfoVersionContainer onWheel={this.scroller.scroll}>
             {this.props.template.instances && this.props.template.instances.map((instance: TemplateInstance, index: number) => (
               <VersionCardRow key={index} onClick={(event: any) => { this.onVersionChange(event, instance.version!) }}>
                 <VersionWrapper>
