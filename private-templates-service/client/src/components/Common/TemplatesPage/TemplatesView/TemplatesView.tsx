@@ -2,25 +2,16 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { SpinnerSize } from "office-ui-fabric-react";
-import { RootState } from "../../../store/rootReducer";
-import { AllTemplateState } from "../../../store/templates/types";
-import { ViewToggleState, ViewType } from "../../../store/viewToggle/types";
-import { getAllTemplates } from "../../../store/templates/actions";
+import { RootState } from "../../../../store/rootReducer";
+import { AllTemplateState } from "../../../../store/templates/types";
+import { ViewToggleState, ViewType } from "../../../../store/viewToggle/types";
 // Components
-import { CenteredSpinner, PlaceholderText } from "../../Dashboard/styled";
+import { CenteredSpinner, PlaceholderText } from "../../../Dashboard/styled";
 import { Template } from "adaptive-templating-service-typescript-node";
-import Gallery from "../../Gallery";
-import TemplateList from "../../Dashboard/TemplateList";
+import Gallery from "../../../Gallery";
+import TemplateList from "../../../Dashboard/TemplateList";
 // Strings
-import { ALL_CARDS_PLACEHOLDER } from "../../../assets/strings";
-
-const mapDispatchToProps = (dispatch: any) => {
-  return {
-    getTemplates: (tags?: string[]) => {
-      dispatch(getAllTemplates(tags));
-    }
-  };
-};
+import { ALL_CARDS_PLACEHOLDER } from "../../../../assets/strings";
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -58,7 +49,7 @@ export class TemplatesView extends Component<Props> {
     if (!templatesState.isFetching && templatesState.templates && templatesState.templates.templates) {
       templates = templatesState.templates.templates;
     }
-
+    console.log(templates);
     return (
       <React.Fragment>
         {templatesState.isFetching ? (
@@ -77,4 +68,4 @@ export class TemplatesView extends Component<Props> {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(TemplatesView);
+export default connect(mapStateToProps)(TemplatesView);

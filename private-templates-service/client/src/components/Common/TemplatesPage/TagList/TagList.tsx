@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import Tags from "../../Common/Tags";
-import { Scroller, ScrollDirection } from "../../../utils/AllCardsUtil";
+import Tags from "../../Tags";
+import { Scroller, ScrollDirection } from "../../../../utils/AllCardsUtil";
 import { TagsContainer } from "./styled";
 
 interface TagListProps {
