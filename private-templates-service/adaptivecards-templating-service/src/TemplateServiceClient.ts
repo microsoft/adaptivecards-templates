@@ -1394,6 +1394,17 @@ export class TemplateServiceClient {
     return router;
   }
 
+  public configExpressMiddleware(): Router {
+    var router = express.Router();
+    router.get("/", (_req: Request, res: Response, _next: NextFunction) => {
+      return res.status(200).json({ 
+        redirectUri: process.env.ACMS_REDIRECT_URI, 
+        appId: process.env.ACMS_APP_ID, 
+        appInsightInstrumentationKey: process.env.ACMS_APP_INSIGHTS_INSTRUMENTATION_KEY });
+    });
+    return router;
+  }
+
   private constructor(storageProvider: StorageProvider, authProvider: AuthenticationProvider) {
     this.storageProvider = storageProvider;
     this.authProvider = authProvider;

@@ -394,6 +394,16 @@ paths:
             $ref: "#/definitions/BaseError" 
       security:
         - bearer_auth: []
+  '/config':
+    get: 
+      tags:
+        - "config"
+      summary: "Get auth provider specific env values"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: '#/definitions/Config'
 definitions:
   ResourceCreated:
     type: object
@@ -618,3 +628,12 @@ definitions:
         type: array
         items:
           $ref: "#/definitions/UpdateTemplateState"  
+  Config:
+    type: object
+    properties:
+      appId:
+        type: string
+      redirectUri:
+        type: string
+      appInsightsInstrumentationKey: 
+        type: string
