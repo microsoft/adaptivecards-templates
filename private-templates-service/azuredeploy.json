@@ -17,9 +17,6 @@
         "defaultValue": "West US",
         "type": "String"
       },
-      "server_farm_id": {
-        "type": "String"
-      },
       "docker_registry_server_uri": {
         "defaultValue": "https://acmsregistry.azurecr.io",
         "type": "String"
@@ -43,9 +40,23 @@
       "linuxFxVersion": "DOCKER|acmsregistry.azurecr.io/acmsimage",
       "appInsightsInstrumentationKey": "931c613f-fdcb-40a9-bd39-314ce31bc5d6",
       "cosmos_database_name": "acms-cosmos",
-      "databaseName": "acms"
+      "databaseName": "acms",
+      "appServicePlanName": "acms-service-plan"
   },
   "resources": [
+      {
+        "type": "Microsoft.Web/serverfarms",
+        "apiVersion": "2018-02-01",
+        "name": "[variables('appServicePlanName')]",
+        "location": "[parameters('location')]",
+        "sku": {
+          "name": "F1"
+        },
+        "kind": "linux",
+        "properties":{
+          "reserved":true
+        }
+      },
       {
           "type": "Microsoft.Web/sites",
           "apiVersion": "2018-11-01",
@@ -53,15 +64,18 @@
           "location": "[parameters('location')]",
           "kind": "app,linux,container",
           "properties": {
-            "serverFarmId": "[parameters('server_farm_id')]",
+            "serverFarmId":"[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
           }, 
+          "dependsOn": [
+             "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]"
+          ],
           "resources": [   
             {
               "apiVersion": "2015-08-01",
               "name": "appsettings",
               "type": "config",
               "dependsOn": [
-                "[concat('Microsoft.Web/Sites/', parameters('sites_adaptivecms_name'))]"
+                "[concat('Microsoft.Web/Sites/', parameters('sites_adaptivecms_name'))]",
               ],
               "properties": {
                 "ACMS_DB_CONNECTION": "[if(not(equals(parameters('mongodb_connection_string'), 'none')), listConnectionStrings(resourceId('Microsoft.DocumentDB/databaseAccounts', variables('cosmos_database_name')), '2015-04-08').connectionStrings[0].connectionString, parameters('mongodb_connection_string'))]",
