@@ -33,7 +33,7 @@ class TemplateListContent extends React.Component<Props> {
           propsOnClick(template.id);
         }
       };
-      if (!template || !template.instances || !template.instances[0] || !template.instances[0].lastEditedUser) {  
+      if (!template || !template.instances || !template.instances[0] || !template.instances[0].lastEditedUser) {
         return <div>Error loading templates</div>;
       }
 
@@ -53,7 +53,7 @@ class TemplateListContent extends React.Component<Props> {
           )}
           {displayComponents.author && (
             <TemplateListItem>
-              <OwnerInfo oID={template.instances[0]!.lastEditedUser!}></OwnerInfo>
+              <OwnerInfo oID={template.instances[0]!.lastEditedUser!} />
             </TemplateListItem>
           )}
         </TemplateListBodyRow>

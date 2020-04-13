@@ -24,11 +24,12 @@ import {
   Card,
   CardHeaderRow,
   CardHeaderText,
+  SelectedHeaderText,
   CardBody,
   VersionWrapper,
   DateWrapper,
   StatusWrapper,
-  CheckboxWrapper, 
+  CheckboxWrapper,
   VersionContainer
 } from './styled';
 
@@ -130,28 +131,28 @@ class VersionModal extends React.Component<Props, State> {
                 <CardHeaderText>Version</CardHeaderText>
                 <CardHeaderText>Published</CardHeaderText>
                 <CardHeaderText>Status</CardHeaderText>
-                <CardHeaderText>{`${this.state.versionList.filter(function (s) { return s; }).length} Selected`}</CardHeaderText>
+                <SelectedHeaderText>{`${this.state.versionList.filter(function (s) { return s; }).length} Selected`}</SelectedHeaderText>
               </CardHeaderRow>
               <CardBody>
                 <VersionContainer onWheel={this.scroller.scroll}>
-                {this.props.template.instances && this.props.template.instances.map((instance: TemplateInstance, index: number) => (
-                  <VersionCardRow>
-                    <VersionWrapper>
-                      {instance.version}
-                    </VersionWrapper>
-                    <DateWrapper>{instance.publishedAt ? getDateString(instance.publishedAt) : "Not published"}</DateWrapper>
-                    <StatusWrapper>
-                      <StatusIndicator state={instance.state!} />
-                      <Status>{instance.state && capitalizeString(instance.state.toString())}</Status>
-                    </StatusWrapper>
-                    <CheckboxWrapper><Checkbox checked={this.state.versionList[index]}
-                      onChange={() => {
-                        let updatedVersion = this.state.versionList;
-                        updatedVersion[index] = !updatedVersion[index];
-                        this.setState({ versionList: updatedVersion });
-                      }} /></CheckboxWrapper>
-                  </VersionCardRow>
-                ))}
+                  {this.props.template.instances && this.props.template.instances.map((instance: TemplateInstance, index: number) => (
+                    <VersionCardRow>
+                      <VersionWrapper>
+                        {instance.version}
+                      </VersionWrapper>
+                      <DateWrapper>{instance.publishedAt ? getDateString(instance.publishedAt) : "Not published"}</DateWrapper>
+                      <StatusWrapper>
+                        <StatusIndicator state={instance.state!} />
+                        <Status>{instance.state && capitalizeString(instance.state.toString())}</Status>
+                      </StatusWrapper>
+                      <CheckboxWrapper><Checkbox checked={this.state.versionList[index]}
+                        onChange={() => {
+                          let updatedVersion = this.state.versionList;
+                          updatedVersion[index] = !updatedVersion[index];
+                          this.setState({ versionList: updatedVersion });
+                        }} /></CheckboxWrapper>
+                    </VersionCardRow>
+                  ))}
                 </VersionContainer>
               </CardBody>
             </Card>

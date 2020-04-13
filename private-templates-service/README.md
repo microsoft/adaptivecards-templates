@@ -1,3 +1,9 @@
+[![Deploy to Azure](https://azurecomcdn.azureedge.net/mediahandler/acomblog/media/Default/blog/deploybutton.png)](https://azuredeploy.net/)
+
+[![Build Status](https://dev.azure.com/microsoft/AdaptiveCards/_apis/build/status/ACMS/Deploy%20to%20Web%20App?branchName=dev)](https://dev.azure.com/microsoft/AdaptiveCards/_build/latest?definitionId=50969&branchName=dev)
+
+[![Build Status](https://dev.azure.com/microsoft/AdaptiveCards/_apis/build/status/ACMS/Deploy%20to%20Web%20App?branchName=stage)](https://dev.azure.com/microsoft/AdaptiveCards/_build/latest?definitionId=50969&branchName=stage)
+
 # Quickstart
 
 ## Deploy to Azure

@@ -1,9 +1,9 @@
 import styled from "styled-components";
-import { OuterDashboardContainer, DashboardContainer } from "../Dashboard/styled";
-import { SearchAndFilter } from "../Dashboard/SearchPage/styled";
+import { OuterDashboardContainer, DashboardContainer } from "../../Dashboard/styled";
+import { SearchAndFilter } from "../../Dashboard/SearchPage/styled";
 
-export const OuterAllCardsContainer = styled(OuterDashboardContainer)``;
-export const AllCardsContainer = styled(DashboardContainer)`
+export const OuterCardsContainer = styled(OuterDashboardContainer)``;
+export const InnerCardsContainer = styled(DashboardContainer)`
   overflow: auto;
 `;
 export const UpperBar = styled.div`
