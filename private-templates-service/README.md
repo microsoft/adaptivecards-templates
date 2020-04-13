@@ -11,11 +11,10 @@ Prerequisites:
 
 1. Click the blue '**Deploy to Azure**'. Select the subscription and resource group under which you wish to deploy ACMS to. 
 2. Enter in the URL the portal will be hosted at into the '**Sites_adaptivecms_name**' field. Make sure this URL is added under the '**Redirect URIs**' section of your AAD App Registration. Detailed instructions and screenshots are listed below. 
-3. If you have an existing Mongo database you wish to use, enter the connection string to the database. If no connection string is added, a CosmosDB instance will be created for you. 
-4. Enter in the Azure Active Directory App Registration application (client) id into the '**App_id**' field. 
-5. Enter the id of your App Service Plan into the '**Server_farm_id**' field. 
-6. If 'Yes' is selected for '**Telemetry_opt_in**', we will collect feedback from your instance of ACMS using App Insights. 
-7. Click '**Next**' and '**Deploy**'.
+3. Enter in the Azure Active Directory App Registration application (client) id into the '**App_id**' field. 
+4. Enter the id of your App Service Plan into the '**Server_farm_id**' field. 
+5. If 'Yes' is selected for '**Telemetry_opt_in**', we will collect feedback from your instance of ACMS using App Insights. 
+6. Click '**Next**' and '**Deploy**'.
 
 Using the 'Deploy to Azure' button will fetch an image using the latest published version of [adaptivecards-templating-service](https://www.npmjs.com/package/adaptivecards-templating-service) and [adaptive-templating-service-typescript-node](https://www.npmjs.com/package/adaptive-templating-service-typescript-node). Once the deployment as finished, you will see the admin portal hosted at '**{Sites_adaptivecms_name}**.azurewebsites.net' and be able to hit the endpoints at the same URL. 
 
