@@ -48,9 +48,13 @@ paths:
             $ref: "#/definitions/BaseError"
       parameters:
         - in: query
-          name: isPublished
-          type: boolean
-          description: Query based on if template is published
+          name: state
+          type: string
+          enum:
+            - "live"
+            - "draft"
+            - "deprecated"
+          description: Query based on if template state
         - name: isClient
           in: query
           type: boolean
@@ -129,10 +133,14 @@ paths:
           description: "ID of template to return"
           required: true
           type: string
-        - name: isPublished
-          in: query
-          type: boolean
-          description: Query based on if template is published
+        - in: query
+          name: state
+          type: string
+          enum:
+            - "live"
+            - "draft"
+            - "deprecated"
+          description: Query based on if template state
         - name: isClient
           in: query
           type: boolean

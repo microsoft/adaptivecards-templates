@@ -832,7 +832,7 @@ export class TemplateApi {
     /**
      * Returns the latest version of all public templates and owned templates
      * @summary Find all templates
-     * @param isPublished Query based on if template is published
+     * @param state Query based on if template state
      * @param isClient If true, ignores updating hits on template
      * @param name Name of template to query for
      * @param version Version of template
@@ -842,14 +842,14 @@ export class TemplateApi {
      * @param tags List of tags to filter templates by
      * @param {*} [options] Override http request options.
      */
-    public allTemplates (isPublished?: boolean, isClient?: boolean, name?: string, version?: string, owned?: boolean, sortBy?: 'alphabetical' | 'dateCreated' | 'dateUpdated', sortOrder?: 'ascending' | 'descending', tags?: string, options: any = {}) : Promise<{ response: http.IncomingMessage; body: TemplateList;  }> {
+    public allTemplates (state?: 'live' | 'draft' | 'deprecated', isClient?: boolean, name?: string, version?: string, owned?: boolean, sortBy?: 'alphabetical' | 'dateCreated' | 'dateUpdated', sortOrder?: 'ascending' | 'descending', tags?: string, options: any = {}) : Promise<{ response: http.IncomingMessage; body: TemplateList;  }> {
         const localVarPath = this.basePath + '/template';
         let localVarQueryParameters: any = {};
         let localVarHeaderParams: any = (<any>Object).assign({}, this.defaultHeaders);
         let localVarFormParams: any = {};
 
-        if (isPublished !== undefined) {
-            localVarQueryParameters['isPublished'] = ObjectSerializer.serialize(isPublished, "boolean");
+        if (state !== undefined) {
+            localVarQueryParameters['state'] = ObjectSerializer.serialize(state, "'live' | 'draft' | 'deprecated'");
         }
 
         if (isClient !== undefined) {
@@ -1280,12 +1280,12 @@ export class TemplateApi {
      * Returns a single template
      * @summary Find template by id
      * @param templateId ID of template to return
-     * @param isPublished Query based on if template is published
+     * @param state Query based on if template state
      * @param isClient If true, ignores updating hits on template
      * @param version Version of template to return
      * @param {*} [options] Override http request options.
      */
-    public templateById (templateId: string, isPublished?: boolean, isClient?: boolean, version?: string, options: any = {}) : Promise<{ response: http.IncomingMessage; body: TemplateList;  }> {
+    public templateById (templateId: string, state?: 'live' | 'draft' | 'deprecated', isClient?: boolean, version?: string, options: any = {}) : Promise<{ response: http.IncomingMessage; body: TemplateList;  }> {
         const localVarPath = this.basePath + '/template/{templateId}'
             .replace('{' + 'templateId' + '}', encodeURIComponent(String(templateId)));
         let localVarQueryParameters: any = {};
@@ -1297,8 +1297,8 @@ export class TemplateApi {
             throw new Error('Required parameter templateId was null or undefined when calling templateById.');
         }
 
-        if (isPublished !== undefined) {
-            localVarQueryParameters['isPublished'] = ObjectSerializer.serialize(isPublished, "boolean");
+        if (state !== undefined) {
+            localVarQueryParameters['state'] = ObjectSerializer.serialize(state, "'live' | 'draft' | 'deprecated'");
         }
 
         if (isClient !== undefined) {
