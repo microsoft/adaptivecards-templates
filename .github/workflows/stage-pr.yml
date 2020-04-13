@@ -14,6 +14,12 @@ pool:
 
 steps:
 
+- task: AzureKeyVault@1
+  inputs:
+    azureSubscription: $(azureSubscription)
+    keyVaultName: $(keyVault)
+    secretsFilter: 'DevACMSSecret'
+
 - task: PowerShell@2
   inputs:
     targetType: 'inline'

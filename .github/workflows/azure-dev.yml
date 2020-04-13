@@ -15,6 +15,14 @@ variables:
   azureSubscription: 'Adaptive Cards (47c80630-3d74-4b3e-a2f4-57e6368cd8c6)'
   keyVault: 'AC-KeyVault-West'
 
+
+# variables:
+# - group: my-variable-group
+# - name: azureSubscription
+#   value: 'Adaptive Cards (47c80630-3d74-4b3e-a2f4-57e6368cd8c6)'
+# - name: keyVault
+#   value: 'AC-KeyVault-West'
+
 pool:
   vmImage: 'ubuntu-latest'
 
