@@ -44,7 +44,7 @@ let options: ClientOptions = {
 
 export function testDefaultTemplateParameters(template: ITemplate) {
   expect(template).toHaveProperty("name");
-  expect(template).toHaveProperty("owner");
+  expect(template).toHaveProperty("authors");
   expect(template).toHaveProperty("deletedVersions");
   expect(template).toHaveProperty("isLive");
   expect(template).toHaveProperty("updatedAt");
@@ -57,6 +57,7 @@ export function testDefaultTemplateInstanceParameters(instance: ITemplateInstanc
   expect(instance).toHaveProperty("json");
   expect(instance).toHaveProperty("version");
   expect(instance).toHaveProperty("state");
+  expect(instance).toHaveProperty("author");
   expect(instance).toHaveProperty("isShareable");
   expect(instance).toHaveProperty("numHits");
   expect(instance).toHaveProperty("data");
@@ -187,9 +188,6 @@ describe("Basic Post Templates", () => {
     const templateRes = await request(app)
       .get("/template")
       .set({ Authorization: "Bearer " + token })
-      .send({
-        isPublished: false
-      })
       .expect({ templates: [] });
   });
 
@@ -335,7 +333,7 @@ describe("Preview Templates", () => {
     let template = res.body.template;
     expect(template).toHaveProperty("_id");
     expect(template).toHaveProperty("name");
-    expect(template).toHaveProperty("owner");
+    expect(template).toHaveProperty("tags");
     expect(template).toHaveProperty("instance");
     let instance = template.instance;
     expect(instance).toHaveProperty("version");
@@ -343,7 +341,7 @@ describe("Preview Templates", () => {
     expect(instance).toHaveProperty("json");
     expect(instance).toHaveProperty("state");
     expect(instance.state).toEqual("draft");
-    expect(template).toHaveProperty("tags");
+    expect(instance).toHaveProperty("author");
   });
 
   it("should try to get posted template preview without passing version and fail", async () => {
@@ -623,7 +621,7 @@ describe("Filtering Templates", () => {
     idsToDelete.push(res.body.id);
 
     res = await request(app)
-      .get("/template?tags=weather")
+      .get("/template?tags[0]=weather")
       .set({ Authorization: "Bearer " + token });
     expect(res.status).toEqual(200);
     expect(res.body.templates).toHaveLength(1);
@@ -892,9 +890,6 @@ describe("Post Templates, and increment version", () => {
     const templateRes = await request(app)
       .get("/template")
       .set({ Authorization: "Bearer " + token })
-      .send({
-        isPublished: false
-      })
       .expect({ templates: [] });
   });
 

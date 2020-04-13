@@ -52,6 +52,8 @@ steps:
     
 - script: |
     cd private-templates-service/adaptivecards-templating-service
+    npm install
+    npm run build
     npm run test
   displayName: Run backend tests
 
