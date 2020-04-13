@@ -35,7 +35,9 @@ import {
   NotifiedGroup,
   ButtonGroup,
   CancelButton,
+  CardWrapper,
 } from './styled';
+import { ACWrapper } from '../../AdaptiveCardPanel/styled';
 
 
 interface Props {
@@ -74,7 +76,9 @@ class PublishModal extends React.Component<Props> {
           <CenterPanelWrapper>
             <CenterPanelLeft>
               <AdaptiveCardPanel>
-                <AdaptiveCard cardtemplate={template} templateVersion={this.props.templateVersion} />
+                <CardWrapper>
+                  <AdaptiveCard cardtemplate={template} templateVersion={this.props.templateVersion} />
+                </CardWrapper>
               </AdaptiveCardPanel>
               <SemiBoldText style={{ color: 'pink' }}>
                 Notified

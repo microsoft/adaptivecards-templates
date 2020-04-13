@@ -17,6 +17,7 @@ export const ACOuterPanel = styled.div`
   flex-direction: column;
   width: 55%;
   background: ${COLORS.GREY1};
+  overflow: hidden;
 `;
 
 export const TooltipContainer = styled.div`
