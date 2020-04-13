@@ -88,7 +88,9 @@ paths:
         - in: query
           name: tags
           description: List of tags to filter templates by
-          type: string
+          type: array
+          items:
+            type: string
       security:
         - bearer_auth: []
     post: 
@@ -338,6 +340,25 @@ paths:
             $ref: "#/definitions/Recent"
       security:
         - bearer_auth: []
+  '/template/tag':
+    get: 
+      tags: 
+        - "template"
+      summary: "Ggt the list of owned and all tags"
+      operationId: "allTags"
+      produces: 
+        - "application/json"
+      responses: 
+        200: 
+          description: "Successful operation"
+          schema: 
+            $ref: "#/definitions/TagList"
+        400: 
+          description: "Error while getting tags"
+          schema: 
+            $ref: "#/definitions/BaseError"
+      security:
+        - bearer_auth: []
   '/user':
     get: 
       tags:
@@ -523,7 +544,11 @@ definitions:
   TagList: 
     type: object
     properties: 
-      tags:
+      ownedTags:
+        type: array
+        items: 
+          type: string
+      allTags:
         type: array
         items: 
           type: string

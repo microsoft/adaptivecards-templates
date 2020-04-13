@@ -113,7 +113,7 @@ const navMenuLinks: INavLinkGroup[] = [
       },
       {
         name: STRINGS.ALL_CARDS,
-        url: "/allcards",
+        url: "/templates/all",
         iconProps: {
           iconName: "ViewList",
           style: iconStylePink
@@ -164,7 +164,9 @@ const SideBar = (props: Props) => {
       props.newTemplate();
     }
     history.push(element.url);
+    
   };
+
 
   const onLogoClick = () => {
     history.push("/");

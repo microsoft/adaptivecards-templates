@@ -19,6 +19,7 @@ import Dashboard from "./components/Dashboard";
 import Shared from "./components/Shared/";
 import PreviewModal from './components/Dashboard/PreviewModal';
 import ErrorMessage, { ErrorMessageProps } from "./components/ErrorMessage/ErrorMessage";
+import AllCards from "./components/AllCards";
 import NoMatch from "./components/NoMatch";
 import config from "./Config";
 
@@ -28,7 +29,6 @@ import { OuterAppWrapper, MainAppWrapper, MainApp } from "./styled";
 
 // Constants
 import Constants from "./globalConstants"
-import AllCards from "./components/AllCards";
 
 interface State {
   error: ErrorMessageProps | null;
@@ -108,6 +108,8 @@ class App extends Component<Props, State> {
     this.onIdle = this._onIdle.bind(this);
   }
 
+
+
   render() {
     let error = null;
     if (this.state.error) {
@@ -151,7 +153,7 @@ class App extends Component<Props, State> {
                   <Route path="/preview/:uuid">
                     <PreviewModal authButtonMethod={this.login} />
                   </Route>
-                  <Route exact path="/allcards">
+                  <Route exact path="/templates/all">
                     <AllCards authButtonMethod={this.login} />
                   </Route>
                   <Route component={NoMatch} />
