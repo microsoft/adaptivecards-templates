@@ -58,7 +58,7 @@ export const AdaptiveCardPanel = styled.div`
 
 export const CardWrapper = styled.div`
   height: 220px;
-  overflow: auto;
+  overflow: hidden;
 `;
 
 export const CenterPanelRight = styled.div`

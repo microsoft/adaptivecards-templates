@@ -4,11 +4,16 @@ import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 
 import { COLORS } from '../../../globalStyles';
 
+export const OuterModalWrapper = styled.div`
+  display: block;
+  height: 100%;
+`;
+
 export const ModalWrapper = styled.div`
   display: flex;
   flex-direction: row;
   align-items: stretch;
-  height: 100%;
+  min-height: 100%;
 `;
 
 export const ACOuterPanel = styled.div`
@@ -17,7 +22,6 @@ export const ACOuterPanel = styled.div`
   flex-direction: column;
   width: 55%;
   background: ${COLORS.GREY1};
-  overflow: hidden;
 `;
 
 export const TooltipContainer = styled.div`
