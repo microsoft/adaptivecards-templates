@@ -5,6 +5,9 @@ pr:
   branches:
     include:
     - stage
+    exclude:
+    - dev
+    - users/*
 
 pool:
   vmImage: 'ubuntu-latest'
