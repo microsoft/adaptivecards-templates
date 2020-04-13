@@ -321,7 +321,7 @@ export class Template {
     'id'?: string;
     'name'?: string;
     'instances'?: Array<TemplateInstance>;
-    'owner'?: string;
+    'authors'?: Array<string>;
     'isLive'?: boolean;
     'createdAt'?: string;
     'updatedAt'?: string;
@@ -347,9 +347,9 @@ export class Template {
             "type": "Array<TemplateInstance>"
         },
         {
-            "name": "owner",
-            "baseName": "owner",
-            "type": "string"
+            "name": "authors",
+            "baseName": "authors",
+            "type": "Array<string>"
         },
         {
             "name": "isLive",
@@ -387,7 +387,6 @@ export class TemplateInfo {
     'name'?: string;
     'instance'?: TemplatePreviewInstance;
     'tags'?: Array<string>;
-    'owner'?: string;
 
     static discriminator: string | undefined = undefined;
 
@@ -411,11 +410,6 @@ export class TemplateInfo {
             "name": "tags",
             "baseName": "tags",
             "type": "Array<string>"
-        },
-        {
-            "name": "owner",
-            "baseName": "owner",
-            "type": "string"
         }    ];
 
     static getAttributeTypeMap() {
@@ -429,6 +423,7 @@ export class TemplateInstance {
     'version'?: string;
     'publishedAt'?: string;
     'state'?: TemplateInstance.StateEnum;
+    'author'?: string;
     'isShareable'?: boolean;
     'numHits'?: number;
     'data'?: Array<any>;
@@ -463,6 +458,11 @@ export class TemplateInstance {
             "name": "state",
             "baseName": "state",
             "type": "TemplateInstance.StateEnum"
+        },
+        {
+            "name": "author",
+            "baseName": "author",
+            "type": "string"
         },
         {
             "name": "isShareable",
@@ -545,6 +545,7 @@ export class TemplatePreviewInstance {
     'version'?: string;
     'json'?: any;
     'state'?: string;
+    'author'?: string;
     'data'?: Array<any>;
 
     static discriminator: string | undefined = undefined;
@@ -563,6 +564,11 @@ export class TemplatePreviewInstance {
         {
             "name": "state",
             "baseName": "state",
+            "type": "string"
+        },
+        {
+            "name": "author",
+            "baseName": "author",
             "type": "string"
         },
         {
@@ -886,7 +892,7 @@ export class TemplateApi {
      * @param isClient If true, ignores updating hits on template
      * @param name Name of template to query for
      * @param version Version of template
-     * @param owned Display only the templates owned by the user
+     * @param owned Display only the templates where the user authored a version
      * @param sortBy Sort returned templates by parameter
      * @param sortOrder 
      * @param tags List of tags to filter templates by

@@ -70,7 +70,7 @@ paths:
         - in: query
           name: owned
           type: boolean
-          description: Display only the templates owned by the user
+          description: Display only the templates where the user authored a version
         - in: query
           name: sortBy
           enum:
@@ -428,8 +428,10 @@ definitions:
         type: array
         items: 
           $ref: "#/definitions/TemplateInstance"
-      owner: 
-        type: string
+      authors: 
+        type: array
+        items:
+          type: string
       isLive:
         type: boolean
       createdAt:
@@ -464,6 +466,8 @@ definitions:
           - "draft"
           - "live"
           - "deprecated"
+        type: string
+      author:
         type: string
       isShareable:
         type: boolean
@@ -571,6 +575,8 @@ definitions:
         format: JSON
       state: 
         type: string
+      author:
+        type: string
       data: 
         type: array
         items:  
@@ -589,8 +595,6 @@ definitions:
         type: array
         items:
           type: string
-      owner: 
-        type: string
   TemplatePreview: 
     type: object
     properties:
