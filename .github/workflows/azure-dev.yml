@@ -21,7 +21,7 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-        if ("$(Build.SourceBranch)" -eq "refs/heads/dev") {
+        if ("$(Build.SourceBranch)" -eq "refs/heads/users/grzhan/docker") {
           Write-Host "##vso[task.setvariable variable=ACMS_APP_ID;]$(DEV_REACT_APP_ACMS_APP_ID)"
           Write-Host "##vso[task.setvariable variable=REACT_APP_ACMS_APP_ID;]$(DEV_REACT_APP_ACMS_APP_ID)"
           Write-Host "##vso[task.setvariable variable=REACT_APP_ACMS_APP_INSIGHTS_INSTRUMENTATION_KEY;]$(REACT_APP_ACMS_APP_INSIGHTS_INSTRUMENTATION_KEY)"
