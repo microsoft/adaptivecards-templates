@@ -6,10 +6,6 @@
           "defaultValue": "adaptivecmsdeploy",
           "type": "String"
       },
-      "mongodb_connection_string": {
-        "type": "String",
-        "defaultValue": "none"
-      },
       "app_id": {
         "type": "String"
       },
@@ -64,7 +60,7 @@
                 "[concat('Microsoft.Web/Sites/', parameters('sites_adaptivecms_name'))]"
               ],
               "properties": {
-                "ACMS_DB_CONNECTION": "[if(not(equals(parameters('mongodb_connection_string'), 'none')), listConnectionStrings(resourceId('Microsoft.DocumentDB/databaseAccounts', variables('cosmos_database_name')), '2015-04-08').connectionStrings[0].connectionString, parameters('mongodb_connection_string'))]",
+                "ACMS_DB_CONNECTION": "[listConnectionStrings(resourceId('Microsoft.DocumentDB/databaseAccounts', variables('cosmos_database_name')), '2015-04-08').connectionStrings[0].connectionString]",
                 "ACMS_REDIRECT_URI": "[concat('https://', parameters('sites_adaptivecms_name'), '.azurewebsites.net/')]",
                 "ACMS_APP_ID": "[parameters('app_id')]",
                 "WEBSITES_ENABLE_APP_SERVICE_STORAGE": "false",
