@@ -32,7 +32,6 @@ export const Header = styled.div`
 `;
 
 export const Description = styled.div`
-  font-family: ${FONTS.SEGOE_UI_REGULAR};
   margin-bottom: 32px;
 `;
 
@@ -90,12 +89,10 @@ export const ButtonGroup = styled.div`
 `;
 
 export const PublishButton = styled(PrimaryButton)`
-  font-family: ${FONTS.SEGOE_UI_REGULAR};
   min-width: 150px;
 `;
 
 export const CancelButton = styled(DefaultButton)`
-  font-family: ${FONTS.SEGOE_UI_REGULAR};
   margin-right: 12px;
   min-width: 150px;
 `;
