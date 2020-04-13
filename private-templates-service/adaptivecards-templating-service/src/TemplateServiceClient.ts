@@ -757,7 +757,6 @@ export class TemplateServiceClient {
         }
       }
       templates = templatesFiltered;
-      console.log(templates[0]);
     }
 
     if (templateId && templates.length > 0) {
