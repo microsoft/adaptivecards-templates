@@ -1,13 +1,16 @@
 
-trigger: none
 
-pr:
-  branches:
-    include:
-    - stage
-    exclude:
-    - dev
-    - users/*
+trigger:
+  - users/daniellemott/client_secret
+# trigger: none
+
+# pr:
+#   branches:
+#     include:
+#     - stage
+#     exclude:
+#     - dev
+#     - users/*
 
 pool:
   vmImage: 'ubuntu-latest'

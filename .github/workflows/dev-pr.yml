@@ -1,18 +1,18 @@
 
-trigger: none
+trigger: 
+  - users/daniellemott/client_secret
+# trigger: none
 
-pr:
-  branches:
-    include:
-    - dev
-    exclude:
-    - stage
-    - users/*
+# pr:
+#   branches:
+#     include:
+#     - dev
+#     exclude:
+#     - stage
+#     - users/*
 
 pool:
   vmImage: 'ubuntu-latest'
-
-steps:
 
 steps:
 - task: AzureKeyVault@1
