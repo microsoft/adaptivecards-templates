@@ -14,10 +14,9 @@ variables:
   ## Add this under variables section in the pipeline
   azureSubscription: 'Adaptive Cards (47c80630-3d74-4b3e-a2f4-57e6368cd8c6)'
   keyVault: 'AC-KeyVault-West'
-  
+
 pool:
   vmImage: 'ubuntu-latest'
-
 steps:
 - task: AzureKeyVault@1
   inputs:
