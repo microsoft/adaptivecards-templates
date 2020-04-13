@@ -26,7 +26,7 @@ steps:
   inputs:
     azureSubscription: $(azureSubscription)
     keyVaultName: $(keyVault)
-    secretsFilter: '*DevACMSSecret'
+    secretsFilter: 'DevACMSSecret, DevACMSAppId'
 
 - task: PowerShell@2
   inputs:
