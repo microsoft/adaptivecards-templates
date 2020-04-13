@@ -271,7 +271,7 @@ export class TemplateServiceClient {
     if (!template.instances || template.instances.length === 0) return template;
     let templateInstances: ITemplateInstance[] = [];
     for (let instance of template.instances) {
-      if (state === instance.state){
+      if (state === instance.state) {
         templateInstances.push(instance);
       }
     }
@@ -433,7 +433,7 @@ export class TemplateServiceClient {
     for (let instance of templateInstances) {
       if (!authorsList.includes(instance.author)) {
         authorsList.push(instance.author);
-      } 
+      }
     }
 
     const newTemplate: Partial<ITemplate> = {
@@ -508,7 +508,7 @@ export class TemplateServiceClient {
     for (let instance of templateInstances) {
       if (!authorsList.includes(instance.author)) {
         authorsList.push(instance.author);
-      } 
+      }
     }
 
     const updatedTemplate: Partial<ITemplate> = {
@@ -933,21 +933,17 @@ export class TemplateServiceClient {
 
     let templateObj: ITemplate;
     let templateInstances = [];
+    let authorsList: string[] = [];
     for (let instance of template.instances || []) {
       if (!versionList.includes(instance.version)) {
         templateInstances.push(instance);
+        if (!authorsList.includes(instance.author)) {
+          authorsList.push(instance.author);
+        }
       }
     }
     template.instances = templateInstances;
     template.deletedVersions?.push(...versionList);
-
-    // Re-create entire author array
-    let authorsList: string[] = [];
-    for (let instance of templateInstances) {
-      if (!authorsList.includes(instance.author)) {
-        authorsList.push(instance.author);
-      } 
-    }
     template.authors = authorsList;
 
     templateObj = template;
@@ -1165,7 +1161,7 @@ export class TemplateServiceClient {
         return res.status(400).json({ error: err });
       }
 
-      let state: TemplateState | undefined =  TemplateState[req.query.state as keyof typeof TemplateState]
+      let state: TemplateState | undefined = TemplateState[req.query.state as keyof typeof TemplateState]
       let owned: boolean | undefined = req.query.owned ? req.query.owned.toLowerCase() === "true" : undefined;
       let isClient: boolean | undefined = req.query.isClient ? req.query.isClient.toLowerCase() === "true" : undefined;
 
@@ -1226,7 +1222,7 @@ export class TemplateServiceClient {
     router.get("/:id?", (req: Request, res: Response, _next: NextFunction) => {
       let isClient: boolean | undefined = req.query.isClient ? req.query.isClient.toLowerCase() === "true" : undefined;
       let token = parseToken(req.headers.authorization!);
-      let state: TemplateState | undefined =  TemplateState[req.query.state as keyof typeof TemplateState]
+      let state: TemplateState | undefined = TemplateState[req.query.state as keyof typeof TemplateState]
 
       this.getTemplates(token, req.params.id, state, undefined, req.query.version, undefined, undefined, undefined, undefined, isClient).then(
         response => {
