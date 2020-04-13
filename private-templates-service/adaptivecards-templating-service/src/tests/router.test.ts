@@ -623,7 +623,7 @@ describe("Filtering Templates", () => {
     idsToDelete.push(res.body.id);
 
     res = await request(app)
-      .get("/template?tags=weather")
+      .get("/template?tags[0]=weather")
       .set({ Authorization: "Bearer " + token });
     expect(res.status).toEqual(200);
     expect(res.body.templates).toHaveLength(1);
