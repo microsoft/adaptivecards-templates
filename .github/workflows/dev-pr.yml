@@ -30,7 +30,6 @@ steps:
     script: |
         Write-Host "##vso[task.setvariable variable=ACMS_APP_SECRET;]$(DevACMSSecret)"
 
-
 - task: NodeTool@0 
   inputs:
     versionSpec: '12.x'

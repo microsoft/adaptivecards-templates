@@ -34,13 +34,11 @@ steps:
           Write-Host "##vso[task.setvariable variable=ACMS_APP_ID;]$(DEV_REACT_APP_ACMS_APP_ID)"
           Write-Host "##vso[task.setvariable variable=REACT_APP_ACMS_APP_NAME;]$(DEV_REACT_APP_ACMS_APP_NAME)"
           Write-Host "##vso[task.setvariable variable=ACMS_APP_SECRET;]$(DevACMSSecret)"
-          Write-Host "##vso[task.setvariable variable=REACT_APP_ENV;]$(DEV_REACT_APP_ENV)"
           }
         if ("$(Build.SourceBranch)" -eq "refs/heads/stage") {
           Write-Host "##vso[task.setvariable variable=ACMS_APP_ID;]$(STAGE_REACT_APP_ACMS_APP_ID)"
           Write-Host "##vso[task.setvariable variable=REACT_APP_ACMS_APP_NAME;]$(STAGE_REACT_APP_ACMS_APP_NAME)"
           Write-Host "##vso[task.setvariable variable=ACMS_APP_SECRET;]$(StageACMSSecret)"
-          Write-Host "##vso[task.setvariable variable=REACT_APP_ENV;]$(STAGE_REACT_APP_ENV)"
           }
 
 - task: NodeTool@0 
