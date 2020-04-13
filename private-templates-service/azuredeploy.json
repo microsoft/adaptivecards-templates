@@ -34,7 +34,7 @@
               "Yes",
               "No"
           ]
-      },
+      }
   },
   "variables": {
       "linuxFxVersion": "DOCKER|acmsregistry.azurecr.io/acmsimage",
@@ -64,7 +64,7 @@
           "location": "[parameters('location')]",
           "kind": "app,linux,container",
           "properties": {
-            "serverFarmId":"[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
+            "serverFarmId":"[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]"
           }, 
           "dependsOn": [
              "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]"
@@ -75,7 +75,7 @@
               "name": "appsettings",
               "type": "config",
               "dependsOn": [
-                "[concat('Microsoft.Web/Sites/', parameters('sites_adaptivecms_name'))]",
+                "[concat('Microsoft.Web/Sites/', parameters('sites_adaptivecms_name'))]"
               ],
               "properties": {
                 "ACMS_DB_CONNECTION": "[if(not(equals(parameters('mongodb_connection_string'), 'none')), listConnectionStrings(resourceId('Microsoft.DocumentDB/databaseAccounts', variables('cosmos_database_name')), '2015-04-08').connectionStrings[0].connectionString, parameters('mongodb_connection_string'))]",
@@ -85,7 +85,7 @@
                 "DOCKER_REGISTRY_SERVER_URL": "[parameters('docker_registry_server_uri')]",
                 "DOCKER_REGISTRY_SERVER_USERNAME": "[parameters('docker_registry_server_username')]",
                 "DOCKER_REGISTRY_SERVER_PASSWORD": "[parameters('docker_registry_server_password')]",
-                "ACMS_APP_INSIGHTS_INSTRUMENTATION_KEY": "[if(equals(parameters('telemetry_opt_in'), 'Yes'), variables('appInsightsInstrumentationKey'), '')]",
+                "ACMS_APP_INSIGHTS_INSTRUMENTATION_KEY": "[if(equals(parameters('telemetry_opt_in'), 'Yes'), variables('appInsightsInstrumentationKey'), '')]"
               }
             }
           ]
