@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { COLORS } from "../../../globalStyles";
+import { COLORS, FONTS } from "../../../globalStyles";
 import { Card } from "../PreviewModal/TemplateInfo/styled";
 import { StatusIndicator } from "../PreviewModal/TemplateInfo/styled";
 
@@ -43,7 +43,7 @@ export const TemplateListBody = styled.div`
 `;
 
 export const TemplateListItem = styled.div`
-  font-family: Segoe UI Regular;
+  font-family: ${FONTS.SEGOE_UI_REGULAR};
   flex: 1;
   padding-top: 6px;
 `;

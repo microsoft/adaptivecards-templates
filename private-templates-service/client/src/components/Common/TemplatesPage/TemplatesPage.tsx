@@ -111,7 +111,6 @@ class TemplatesPage extends Component<Props, State> {
   };
   componentDidMount() {
     this.props.getTags();
-    console.log(this.props.tags.allTags);
   }
 
   componentDidUpdate(prevProps: Props) {

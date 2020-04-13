@@ -108,6 +108,9 @@ export const SKIP_TO_MAIN_CONTENT_MESSAGE = "Skip to main content";
 // Accessibility
 export const ARIA_ROLE_BUTTON = "Button";
 
+//VersionCard.tsx
+export const UPDATED = "Updated";
+
 //NoMatch.tsx
 export const ERROR_MESSAGE = "Oops, something went wrong.";
 export const GO_TO_DASHBOARD = "Go to Dashboard";

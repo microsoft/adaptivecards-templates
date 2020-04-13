@@ -47,7 +47,7 @@ class ShareModal extends React.Component<ShareModalProps> {
       <BackDrop>
         <Modal>
           <Header>{STRINGS.SHARE_MODAL_TITLE}</Header>
-          <Description>{getShareModalDescription(this.props.template, this.props.templateVersion!)}</Description>
+          <Description>{STRINGS.SHARE_MODAL_DESCRIPTION}{getShareModalDescription(this.props.template, this.props.templateVersion!)}</Description>
           <CenterPanelWrapper>
             <ShareLinkPanel>
               <SemiBoldText>{STRINGS.SHARE_WITH_LINK}</SemiBoldText>
@@ -81,7 +81,7 @@ function onCopyURL(props: ShareModalProps) {
 }
 
 function getShareModalDescription(template: Template, templateVersion: string): string {
-  return STRINGS.SHARE_MODAL_DESCRIPTION + template!.name + " - " + templateVersion;
+  return " " + template!.name + " - " + templateVersion;
 }
 
 export default ModalHOC(connect(() => { return {} }, mapDispatchToProps)(ShareModal));

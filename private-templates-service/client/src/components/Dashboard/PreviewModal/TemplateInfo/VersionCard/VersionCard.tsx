@@ -15,9 +15,9 @@ import {
   VersionCardRow,
   StatusWrapper,
   VersionIcon,
-  VersionWrapper, 
-  InfoVersionContainer, 
-  VersionOuterCard, 
+  VersionWrapper,
+  InfoVersionContainer,
+  VersionOuterCard,
   VersionCardBody
 } from './styled'
 
@@ -27,10 +27,13 @@ import {
   Status
 } from './../styled';
 
+import * as STRINGS from '../../../../../assets/strings';
+
 import { getDateString } from '../../../../../utils/versionUtils';
 import { capitalizeString } from "../../../../../utils/stringUtils";
 import { ModalState } from '../../../../../store/page/types';
 import { openModal } from '../../../../../store/page/actions';
+import { updateCurrentTemplateVersion } from '../../../../../store/currentTemplate/actions';
 import VersionModal from '../../../../Common/VersionModal';
 import { MANAGE } from '../../../../../assets/strings';
 import { RootState } from '../../../../../store/rootReducer';
@@ -41,6 +44,8 @@ interface Props {
   templateVersion: string;
   modalState?: ModalState;
   openModal: (modalState: ModalState) => void;
+  updateCurrentTemplateVersion: (template: Template, version: string) => void;
+  onSwitchVersion: (templateVersion: string) => void;
 }
 
 const mapStateToProps = (state: RootState) => {
@@ -53,6 +58,9 @@ const mapDispatchToProps = (dispatch: any) => {
   return {
     openModal: (modalState: ModalState) => {
       dispatch(openModal(modalState));
+    },
+    updateCurrentTemplateVersion: (template: Template, version: string) => {
+      dispatch(updateCurrentTemplateVersion(template, version))
     }
   }
 };
@@ -63,6 +71,11 @@ class VersionCard extends React.Component<Props> {
     super(props);
     this.scroller = new Scroller();
   }
+
+  onVersionChange = (event: any, version: string) => {
+    this.props.updateCurrentTemplateVersion(this.props.template, version);
+    this.props.onSwitchVersion(version);
+  };
 
   render() {
     return (
@@ -77,24 +90,24 @@ class VersionCard extends React.Component<Props> {
         </CardHeader>
         <VersionCardBody>
           <VersionCardRow>
-            <VersionCardRowTitle style={{ flexBasis: `15%` }}>Version</VersionCardRowTitle>
-            <VersionCardRowTitle style={{ flexBasis: `25%` }}>Updated</VersionCardRowTitle>
-            <VersionCardRowTitle style={{ flexBasis: `20%` }}>Status</VersionCardRowTitle>
+            <VersionCardRowTitle style={{ flexBasis: `15%` }}>{STRINGS.VERSION}</VersionCardRowTitle>
+            <VersionCardRowTitle style={{ flexBasis: `25%` }}>{STRINGS.UPDATED}</VersionCardRowTitle>
+            <VersionCardRowTitle style={{ flexBasis: `20%` }}>{STRINGS.STATUS}</VersionCardRowTitle>
           </VersionCardRow>
           <InfoVersionContainer onWheel={this.scroller.scroll}>
-          {this.props.template.instances && this.props.template.instances.map((instance: TemplateInstance, index: number) => (
-            <VersionCardRow key={index}>
-              <VersionWrapper>
-                {instance.version}
-                {instance.version === this.props.templateVersion && <VersionIcon iconName={'View'} />}
-              </VersionWrapper>
-              <DateWrapper>{instance.updatedAt ? getDateString(instance.updatedAt) : "N/A"}</DateWrapper>
-              <StatusWrapper>
-                <StatusIndicator state={instance.state} />
-                <Status>{instance.state && capitalizeString(instance.state.toString())}</Status>
-              </StatusWrapper>
-            </VersionCardRow>
-          ))}
+            {this.props.template.instances && this.props.template.instances.map((instance: TemplateInstance, index: number) => (
+              <VersionCardRow key={index} onClick={(event: any) => { this.onVersionChange(event, instance.version!) }}>
+                <VersionWrapper>
+                  {instance.version}
+                  {instance.version === this.props.templateVersion && <VersionIcon iconName={'View'} />}
+                </VersionWrapper>
+                <DateWrapper>{instance.updatedAt ? getDateString(instance.updatedAt) : "N/A"}</DateWrapper>
+                <StatusWrapper>
+                  <StatusIndicator state={instance.state} />
+                  <Status>{instance.state && capitalizeString(instance.state.toString())}</Status>
+                </StatusWrapper>
+              </VersionCardRow>
+            ))}
           </InfoVersionContainer>
         </VersionCardBody>
         {this.props.modalState === ModalState.Version && <VersionModal template={this.props.template} />}

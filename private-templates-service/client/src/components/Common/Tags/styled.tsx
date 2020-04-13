@@ -1,5 +1,5 @@
 import styled, { css, keyframes } from 'styled-components';
-import { COLORS } from '../../../globalStyles';
+import { COLORS, FONTS } from '../../../globalStyles';
 
 import { Icon } from 'office-ui-fabric-react';
 
@@ -15,7 +15,7 @@ export const TagCloseIcon = styled(Icon)`
   border-radius: 50%;
 
   &:hover {
-    font-weight: 700;
+    font-family: ${FONTS.SEGOE_UI_SEMI_BOLD};
     cursor: pointer;
   }
 
@@ -74,7 +74,7 @@ export const TagAddIcon = styled(Icon) <{ open: boolean }>`
   border-radius: 50%;
 
   &: hover {
-    font-weight: 700;
+    font-family: ${FONTS.SEGOE_UI_SEMI_BOLD};
     cursor: pointer;
   }
 
@@ -103,7 +103,7 @@ export const TagSubmitIcon = styled(Icon)`
   border-radius: 50%;
 
   &: hover {
-    font-weight: 700;
+    font-family: ${FONTS.SEGOE_UI_SEMI_BOLD};
     cursor: pointer;
   }
 

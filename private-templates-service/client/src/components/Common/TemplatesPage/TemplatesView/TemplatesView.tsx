@@ -49,7 +49,6 @@ export class TemplatesView extends Component<Props> {
     if (!templatesState.isFetching && templatesState.templates && templatesState.templates.templates) {
       templates = templatesState.templates.templates;
     }
-    console.log(templates);
     return (
       <React.Fragment>
         {templatesState.isFetching ? (
