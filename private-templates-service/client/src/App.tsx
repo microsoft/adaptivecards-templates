@@ -11,6 +11,7 @@ import { createBrowserHistory } from "history";
 // Redux
 import { connect } from "react-redux";
 import { setAccessToken, setGraphAccessToken, getUserDetails, getOrgDetails, getProfilePicture, logout, getConfig } from "./store/auth/actions";
+import { UserType } from "./store/auth/types";
 import { RootState } from "./store/rootReducer";
 
 // Components

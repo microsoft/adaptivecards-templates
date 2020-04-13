@@ -23,6 +23,7 @@
     "@types/helmet": "0.0.45",
     "@types/mongoose": "^5.7.8",
     "adaptivecards-templating": "^0.1.1-alpha.1",
+    "adaptivecards-templating-service": "^1.0.0-beta.0.4",
     "applicationinsights": "^1.7.3",
     "async": "^3.1.1",
     "axios": "^0.19.2",
