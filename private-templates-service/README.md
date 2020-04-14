@@ -23,7 +23,9 @@ Prerequisites:
 3. Enter in the Azure Active Directory App Registration application (client) id into the '**App_id**' field. 
 4. Enter the id of your App Service Plan into the '**Server_farm_id**' field. 
 5. If 'Yes' is selected for '**Telemetry_opt_in**', we will collect feedback from your instance of ACMS using App Insights. See details under 'Telemetry Privacy Statement' below. 
-6. Optional: If you possess an Azure Application Insights instance, enter the instrumentation key into the '**application_insights_instrumentation_key**' field. See details under 'Telemetry Privacy Statement' below.
+6. Optional: If you possess an Azure Application Insights instance, enter the instrumentation key into the '**application_insights_instrumentation_key**' field. 
+
+To create an Application Insights resource or find your instrumentation key, please see [Create an Application Insights resource](https://docs.microsoft.com/en-us/azure/azure-monitor/app/create-new-resource). See details under 'Telemetry Privacy Statement' below.
 7. Click '**Next**' and '**Deploy**'.
 
 Using the 'Deploy to Azure' button will fetch an image using the latest published version of [adaptivecards-templating-service](https://www.npmjs.com/package/adaptivecards-templating-service) and [adaptive-templating-service-typescript-node](https://www.npmjs.com/package/adaptive-templating-service-typescript-node). Once the deployment as finished, you will see the admin portal hosted at '**{Sites_adaptivecms_name}**.azurewebsites.net' and be able to hit the endpoints at the same URL. 
