@@ -83,10 +83,10 @@ class TemplatesPage extends Component<Props, State> {
 
   setSelectedTags = (): void => {
     if (this.props.page.currentPage === "Template" && this.props.page.previousPage === this.props.pageID) {
-      this.setState({ selectedTags: this.props.tags.selectedTags });
+      this.state = { selectedTags: this.props.tags.selectedTags };
     } else {
       this.props.clearSelectedTags();
-      this.setState({ selectedTags: [] });
+      this.state = { selectedTags: [] };
     }
   };
 
