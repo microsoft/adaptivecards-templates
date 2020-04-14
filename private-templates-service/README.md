@@ -112,11 +112,9 @@ app.use(function (req, res, next) {
 ```
 5. Replace the MongoDBProvider with the InMemoryProvider. 
 ```
-import { InMemoryDBProvider } from '../../adaptivecards-templating-service/src/storageproviders/InMemoryDBProvider';
-
 const mongoClient = {
   authenticationProvider: new AzureADProvider(),
-  storageProvider: new InMemoryDBProvider(),
+  storageProvider: new ACMS.InMemoryDBProvider(),
 }
 ```
 6. `cd adaptivecards-templates/private-templates-service/server` and run `npm run init-app`. This installs and links dependencies.
