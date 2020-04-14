@@ -47,7 +47,7 @@ interface Props {
   templates?: TemplateList;
   getTemplate: (templateID: string) => void;
   selectTemplate: (templateID: string) => void;
-  querySearch: (templateName: string, sortBy: SortType, isPublished?: FilterEnum, owned?: boolean) => void;
+  querySearch: (templateName: string, sortBy: SortType, state?: FilterEnum, owned?: boolean) => void;
 }
 
 interface State {
@@ -66,7 +66,7 @@ class SearchPage extends React.Component<Props, State> {
   
   componentDidUpdate = (prevProps: Props) => {
     if (this.props.filterType !== prevProps.filterType || this.props.sortType !== prevProps.sortType) {
-      this.props.querySearch(this.props.searchByTemplateName, this.props.sortType, this.props.filterType.published, this.props.filterType.owner)
+      this.props.querySearch(this.props.searchByTemplateName, this.props.sortType, this.props.filterType.state, this.props.filterType.owner)
     }
   }
   render() {

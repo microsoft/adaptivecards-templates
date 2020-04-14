@@ -7,7 +7,7 @@ import {
 
 const initialState: FilterState = {
   isFilter: false,
-  filterType: {value: "", owner: undefined, published: undefined}
+  filterType: {value: "", owner: undefined, state: undefined}
 }
 
 export function filterReducer(state = initialState, action: FilterAction): FilterState {
@@ -22,7 +22,7 @@ export function filterReducer(state = initialState, action: FilterAction): Filte
       return {
         ...state,
         isFilter: false,
-        filterType: {value: "", owner: undefined, published: undefined}
+        filterType: {value: "", owner: undefined, state: undefined}
       }
     default:
       return state;

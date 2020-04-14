@@ -13,6 +13,6 @@ export function clearFilter(): FilterAction {
   return {
     type: CLEAR_FILTER,
     text: "User has cleared the filter paramaters",
-    filterType: {value: "", published: undefined, owner: undefined}
+    filterType: {value: "", state: undefined, owner: undefined}
   }
 }

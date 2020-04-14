@@ -5,7 +5,7 @@ export interface FilterState {
   filterType: {
     value: string,
     owner: boolean | undefined,
-    published: FilterEnum
+    state: FilterEnum
   };
 }
 
@@ -19,7 +19,7 @@ export const QUERY_FILTER = "QUERY_FILTER";
 export type FilterObject =  {
   value: string,
   owner: boolean | undefined,
-  published: FilterEnum
+  state: FilterEnum
 }
 
 export interface FilterAction {

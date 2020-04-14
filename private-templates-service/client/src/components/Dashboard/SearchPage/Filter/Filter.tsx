@@ -38,15 +38,15 @@ const options: IDropdownOption[] = [
 class Filter extends React.Component<Props> {
   onChange = (event: React.FormEvent<HTMLDivElement>, option?: IDropdownOption) => {
     if (option && typeof option.key === "string") {
-      let filter: FilterObject  = { value: option.key, owner: undefined, published: undefined }
+      let filter: FilterObject  = { value: option.key, owner: undefined, state: undefined }
       if (option.key === "owner"){
         filter.owner = true;
       }
       else if (option.key === "draft"){
-        filter.published = "draft";
+        filter.state = "draft";
       }
       else if(option.key === "published"){ 
-        filter.published = "live";
+        filter.state = "live";
       }
       this.props.queryFilter(filter)
     }
