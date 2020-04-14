@@ -12,7 +12,7 @@ Prerequisites:
 4. **Navigate to [Azure Portal](https://portal.azure.com/) and navigate to Azure Active Directory and to your App Registration.**
 5. **Select 'Overview' and save the 'Application (client) ID' value.**
 6. **Select 'Certificates & secrets' under the 'Manage' heading. Create a new Client secret and save the value. Keep this tab open, we will make updates to the app registration in later steps.** 
-7. **Return back to the 'Security' section in the Flow and select 'Azure Active Directory' as the 'Identity Provider'. **
+7. **Return back to the 'Security' section in the Flow and select 'Azure Active Directory' as the 'Identity Provider'.**
 8. **Copy the 'Application (client) ID' from step 5 into the 'Client id' field. Copy the client secret from step 6 into the 'Client secret' field. Copy the 'Application (client) ID from step 5 into the 'Resource URL field.**
 9. **Save your changes by clicking 'Update connector'.**
 10. **Save the value of the 'Redirect URL' under the 'OAuth 2.0' header.** 
@@ -24,3 +24,5 @@ The default connector definition from the swagger YAML file has two main operati
 
 1. GetTemplate: Returns the template JSON given the version and templateId
 2. RenderTemplate: Returns a data-bound card JSON given the version, templateId, and data JSON
+
+![Microsoft Flow example](https://github.com/microsoft/adaptivecards-templates/blob/users/grzhan/flow/private-templates-service/flow/screenshots/flow.jpg?raw=true)
