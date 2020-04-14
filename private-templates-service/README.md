@@ -47,7 +47,7 @@ Prerequisites:
 
 2. Switch to the desired branch. The latest build is on `dev`.
 
-3. Set the below environment variables to the desired values. 
+3. Set the below environment variables to the desired values in the terminal being used to run the app. 
 
 ```
 ACMS_DB_CONNECTION // Mongo database connection string
@@ -55,7 +55,7 @@ ACMS_APP_ID // Azre Active Directory App Registration Application (client) id
 ACMS_REDIRECT_URI // http://localhost:3000
 ```
 
-4. Open `server/app.ts` and insert the following code at line 38. 
+4. Open `server/app.ts` and insert the following code at the comment. 
 
 ```
 app.use(function (req, res, next) {
@@ -94,11 +94,8 @@ ACMS_APP_ID // Azre Active Directory App Registration Application (client) id
 ACMS_REDIRECT_URI // http://localhost:3000
 ```
 
-**4. Open `server/app.ts` and replace lines 39 - 64 with the following:**
-
+4. Open `server/app.ts` and insert the following code at the comment:
 ```
-import { InMemoryDBProvider } from '../../adaptivecards-templating-service/src/storageproviders/InMemoryDBProvider';
-
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header(
@@ -111,20 +108,20 @@ app.use(function (req, res, next) {
   );
   next();
 });
-app.options('*', function (req, res) { res.sendStatus(200); });
 
-const options: ClientOptions = {
+```
+5. Replace the MongoDBProvider with the InMemoryProvider. 
+```
+import { InMemoryDBProvider } from '../../adaptivecards-templating-service/src/storageproviders/InMemoryDBProvider';
+
+const mongoClient = {
   authenticationProvider: new AzureADProvider(),
   storageProvider: new InMemoryDBProvider(),
 }
-const client: TemplateServiceClient = TemplateServiceClient.init(options);
-app.use("/template", client.expressMiddleware());
-app.use("/user", client.userExpressMiddleware());
 ```
+6. `cd adaptivecards-templates/private-templates-service/server` and run `npm run init-app`. This installs and links dependencies.
 
-5. `cd adaptivecards-templates/private-templates-service/server` and run `npm run init-app`. This installs and links dependencies.
-
-6. Run `npm run dev`. This command concurrently runs the client and server locally. Navigate to `localhost:3000` to see the site.
+7. Run `npm run dev`. This command concurrently runs the client and server locally. Navigate to `localhost:3000` to see the site.
 
    
 
