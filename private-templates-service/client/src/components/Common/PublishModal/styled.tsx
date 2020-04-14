@@ -32,7 +32,6 @@ export const Header = styled.div`
 `;
 
 export const Description = styled.div`
-  font-family: ${FONTS.SEGOE_UI_REGULAR};
   margin-bottom: 32px;
 `;
 
