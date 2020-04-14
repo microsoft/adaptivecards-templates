@@ -345,7 +345,7 @@ paths:
       tags: 
         - "template"
       summary: "Get list of owned, favorite, and all tags"
-      operationId: "getTags"
+      operationId: "allTags"
       produces: 
         - "application/json"
       responses:
@@ -353,6 +353,10 @@ paths:
           description: "successful operation"
           schema: 
             $ref: '#/definitions/Tags'
+        400: 
+          description: "Error while getting tags"
+          schema: 
+            $ref: "#/definitions/BaseError"
       security: 
         - bearer_auth: []
     post:
