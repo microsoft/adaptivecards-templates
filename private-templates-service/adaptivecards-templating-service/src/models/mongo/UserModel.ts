@@ -20,7 +20,8 @@ export const UserSchema: Schema = new Schema(
     authId: { type: String, required: true },
     recentlyViewedTemplates: { type: [String], default: [] },
     recentlyEditedTemplates: { type: [String], default: [] }, // max size 5
-    recentTags: { type: [String], default: [] } // max size 10
+    recentTags: { type: [String], default: [] }, // max size 10
+    favoriteTags: { type: [String], default: [] }
   },
   {
     versionKey: false,
