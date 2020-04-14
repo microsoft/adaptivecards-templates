@@ -6,6 +6,7 @@ import { StyledFilterDropdown } from './styled';
 import { clearFilter, queryFilter } from "../../../../store/filter/actions";
 import { THEME } from '../../../../globalStyles';
 import { FilterObject } from '../../../../store/filter/types';
+import { FilterEnum } from '../../../../store/filter/types';
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -42,10 +43,10 @@ class Filter extends React.Component<Props> {
         filter.owner = true;
       }
       else if (option.key === "draft"){
-        filter.published = false;
+        filter.published = "draft";
       }
       else if(option.key === "published"){ 
-        filter.published = true;
+        filter.published = "live";
       }
       this.props.queryFilter(filter)
     }
