@@ -11,6 +11,9 @@ function autoCompleteUserModel(user: IUser): void {
   if (!user.recentTags) {
     user.recentTags = [];
   }
+  if (!user.favoriteTags) {
+    user.favoriteTags = [];
+  }
 }
 
 function autoCompleteTemplateInstanceModel(instance: ITemplateInstance): void {
@@ -94,6 +97,7 @@ export function validateMatchingUsers(a: IUser, b: IUser): void {
   expect(a.recentlyViewedTemplates).toEqual(Array.from(b.recentlyViewedTemplates!));
   expect(a.recentlyEditedTemplates).toEqual(Array.from(b.recentlyEditedTemplates!));
   expect(a.recentTags).toEqual(Array.from(b.recentTags!));
+  expect(a.favoriteTags).toEqual(Array.from(b.favoriteTags!));
 }
 
 async function insertAndValidateUser(db: StorageProvider, user: IUser): Promise<void> {
@@ -154,7 +158,8 @@ export function testDB(db: StorageProvider) {
       authId: "51201",
       recentlyEditedTemplates: ["template1"],
       recentlyViewedTemplates: ["template2"],
-      recentTags: ["tag1", "tag2"]
+      recentTags: ["tag1", "tag2"],
+      favoriteTags: []
     };
     await insertAndValidateUser(db, validUser);
   });

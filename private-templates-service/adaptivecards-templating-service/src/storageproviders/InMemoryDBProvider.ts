@@ -150,6 +150,9 @@ export class InMemoryDBProvider implements StorageProvider {
     if (!user.recentTags) {
       user.recentTags = [];
     }
+    if (!user.favoriteTags) {
+      user.favoriteTags = [];
+    }
     this._setID(user);
   }
 

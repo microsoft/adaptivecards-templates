@@ -1,11 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-// Libraries
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { PrimaryButton } from 'office-ui-fabric-react';
-import { SearchBox } from 'office-ui-fabric-react';
-
 import { Template, PostedTemplate } from 'adaptive-templating-service-typescript-node';
 
 // Redux
@@ -13,7 +8,7 @@ import { updateTemplate } from '../../../store/currentTemplate/actions';
 import { closeModal } from '../../../store/page/actions';
 
 // Components
-import AdaptiveCard from '../AdaptiveCard';
+import AdaptiveCardPanel from '../../AdaptiveCardPanel';
 import ModalHOC from '../../../utils/ModalHOC';
 
 // Strings
@@ -27,14 +22,10 @@ import {
   Description,
   DescriptionAccent,
   CenterPanelWrapper,
-  CenterPanelLeft,
-  AdaptiveCardPanel,
-  CenterPanelRight,
-  SemiBoldText,
   BottomRow,
-  NotifiedGroup,
   ButtonGroup,
   CancelButton,
+  PublishButton,
 } from './styled';
 
 
@@ -64,34 +55,23 @@ class PublishModal extends React.Component<Props> {
   }
 
   render() {
-    const { template } = this.props;
+    const { template, templateVersion } = this.props;
 
     return (
       <BackDrop>
         <Modal>
-          <Header>Publish Template</Header>
-          <Description>Your template design will be sent for review. Once approved, your new design will go live as <DescriptionAccent>{template.name}</DescriptionAccent></Description>
+          <Header>{STRINGS.PUBLISH_CARD}</Header>
+          <Description>
+            {STRINGS.PUBLISH_MODAL_DESC}
+            <DescriptionAccent>{template.name + " - v" + templateVersion}</DescriptionAccent>
+          </Description>
           <CenterPanelWrapper>
-            <CenterPanelLeft>
-              <AdaptiveCardPanel>
-                <AdaptiveCard cardtemplate={template} templateVersion={this.props.templateVersion} />
-              </AdaptiveCardPanel>
-              <SemiBoldText style={{ color: 'pink' }}>
-                Notified
-              </SemiBoldText>
-              <SearchBox aria-label={STRINGS.SEARCH_FOR_PEOPLE} placeholder={STRINGS.SEARCH_FOR_PEOPLE} />
-            </CenterPanelLeft>
-            <CenterPanelRight>
-              <TextField label="Comments" placeholder="Enter any comments you may have for your reviewers to see. (Optional)" multiline autoAdjustHeight />
-            </CenterPanelRight>
+            <AdaptiveCardPanel template={template} version={this.props.templateVersion} />
           </CenterPanelWrapper>
           <BottomRow>
-            <NotifiedGroup>
-              FACES HERE
-            </NotifiedGroup>
             <ButtonGroup>
               <CancelButton text="Cancel" onClick={this.props.closeModal} />
-              <PrimaryButton text="Publish" onClick={this.publish} />
+              <PublishButton text="Publish" onClick={this.publish} />
             </ButtonGroup>
           </BottomRow>
         </Modal>
