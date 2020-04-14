@@ -21,4 +21,4 @@
 
 
 ### Architecture Diagram
-
+![Architecture Diagram](https://raw.githubusercontent.com/microsoft/adaptivecards-templates/users/grzhan/docs/private-templates-service/docs/architecture.png)
