@@ -1,5 +1,7 @@
 let appInsights = require('applicationinsights');
 if (process.env.ACMS_APP_INSIGHTS_INSTRUMENTATION_KEY) appInsights.setup('InstrumentationKey=' + process.env.ACMS_APP_INSIGHTS_INSTRUMENTATION_KEY).start();
+if (process.env.USER_APP_INSIGHTS_INSTRUMENTATION_KEY) appInsights.setup('InstrumentationKey=' + process.env.USER_APP_INSIGHTS_INSTRUMENTATION_KEY).start();
+
 
 import express from "express";
 import path from "path";
