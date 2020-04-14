@@ -6,8 +6,8 @@ trigger:
     - dev
     - stage
     - users/daniellemott/typo
-    exclude:
-    - users/*
+    # exclude:
+    # - users/*
 
 # no PR builds
 pr: none
