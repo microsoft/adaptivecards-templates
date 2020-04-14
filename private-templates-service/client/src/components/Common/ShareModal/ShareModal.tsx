@@ -28,11 +28,13 @@ import {
 } from './styled';
 import * as STRINGS from '../../../assets/strings';
 import { updateTemplate } from '../../../store/currentTemplate/actions';
+import { RootState } from '../../../store/rootReducer';
 
 interface ShareModalProps {
   template: Template;
   templateVersion: string;
   closeModal: () => void;
+  redirectUri?: string;
   toggleShare: (version: string, isShareable?: boolean) => void;
 }
 
@@ -47,16 +49,20 @@ const mapDispatchToProps = (dispatch: any) => {
   }
 }
 
+const mapStateToProps = (state: RootState) => {
+  return {
+    redirectUri: state.auth.redirectUri,
+  };
+};
+
 class ShareModal extends React.Component<ShareModalProps> {
 
   onChange = (event: React.MouseEvent, checked?: boolean) => {
-    console.log("checked", checked);
     this.props.toggleShare(this.props.templateVersion, checked ? checked : false);
   }
 
   render() {
     let isTemplateShared = isTemplateInstanceShareable(this.props.template, this.props.templateVersion);
-    console.log("isShared", isTemplateShared);
     return (
       <BackDrop>
         <Modal>
@@ -73,14 +79,14 @@ class ShareModal extends React.Component<ShareModalProps> {
               </TooltipHost>
             </ToggleContainer>
           </TopRowWrapper>
-          <Description>{getShareModalDescription(this.props.template, this.props.templateVersion!)}</Description>
+          <Description>{STRINGS.SHARE_MODAL_DESCRIPTION}{getShareModalDescription(this.props.template, this.props.templateVersion!)}</Description>
           <CenterPanelWrapper>
             <ShareLinkPanel>
               <SemiBoldText>{STRINGS.SHARE_WITH_LINK}</SemiBoldText>
               <LinkRow>
                 <TextFieldContainer>
                   <TextField readOnly={true}
-                    prefix={process.env.REACT_APP_ACMS_REDIRECT_URI}
+                    prefix={this.props.redirectUri!}
                     defaultValue={getShareURL(this.props.template.id, this.props.templateVersion)}
                     width={100} />
                 </TextFieldContainer>
@@ -89,7 +95,7 @@ class ShareModal extends React.Component<ShareModalProps> {
                 </CopyLinkButton>
               </LinkRow>
             </ShareLinkPanel>
-            <ShareModalForm shareURL={process.env.REACT_APP_ACMS_REDIRECT_URI + getShareURL(this.props.template.id, this.props.templateVersion)} templateVersion={this.props.templateVersion} />
+            <ShareModalForm shareURL={this.props.redirectUri! + getShareURL(this.props.template.id, this.props.templateVersion)} templateVersion={this.props.templateVersion} />
           </CenterPanelWrapper>
         </Modal>
       </BackDrop>
@@ -99,7 +105,7 @@ class ShareModal extends React.Component<ShareModalProps> {
 
 function onCopyURL(props: ShareModalProps) {
   let copyCode = document.createElement('textarea');
-  copyCode.innerText = process.env.REACT_APP_ACMS_REDIRECT_URI + getShareURL(props.template.id, props.templateVersion);
+  copyCode.innerText = props.redirectUri + getShareURL(props.template.id, props.templateVersion);
   document.body.appendChild(copyCode);
   copyCode.select();
   document.execCommand('copy');
@@ -107,7 +113,7 @@ function onCopyURL(props: ShareModalProps) {
 }
 
 function getShareModalDescription(template: Template, templateVersion: string): string {
-  return STRINGS.SHARE_MODAL_DESCRIPTION + template!.name + " - " + templateVersion;
+  return " " + template!.name + " - " + templateVersion;
 }
 
-export default ModalHOC(connect(() => { return {} }, mapDispatchToProps)(ShareModal));
+export default ModalHOC(connect(mapStateToProps, mapDispatchToProps)(ShareModal));

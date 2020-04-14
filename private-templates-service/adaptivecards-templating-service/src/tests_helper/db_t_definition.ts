@@ -11,6 +11,9 @@ function autoCompleteUserModel(user: IUser): void {
   if (!user.recentTags) {
     user.recentTags = [];
   }
+  if (!user.favoriteTags) {
+    user.favoriteTags = [];
+  }
 }
 
 function autoCompleteTemplateInstanceModel(instance: ITemplateInstance): void {
@@ -47,8 +50,8 @@ function autoCompleteTemplateModel(template: ITemplate): void {
   if (!template.isLive) {
     template.isLive = false;
   }
-  if (!template.owner) {
-    template.owner = "";
+  if (!template.authors) {
+    template.authors = [""];
   }
   if (!template.instances) {
     template.instances = [];
@@ -83,7 +86,7 @@ export function validateMatchingTemplates(a: ITemplate, b: ITemplate): void {
   }
   expect(a.name).toEqual(b.name);
   expect(a.tags).toEqual(Array.from(b.tags!));
-  expect(a.owner).toEqual(b.owner);
+  expect(a.authors).toEqual(b.authors);
   expect(a.isLive).toEqual(b.isLive);
   expect(a.deletedVersions).toEqual(Array.from(b.deletedVersions!));
 }
@@ -94,6 +97,7 @@ export function validateMatchingUsers(a: IUser, b: IUser): void {
   expect(a.recentlyViewedTemplates).toEqual(Array.from(b.recentlyViewedTemplates!));
   expect(a.recentlyEditedTemplates).toEqual(Array.from(b.recentlyEditedTemplates!));
   expect(a.recentTags).toEqual(Array.from(b.recentTags!));
+  expect(a.favoriteTags).toEqual(Array.from(b.favoriteTags!));
 }
 
 async function insertAndValidateUser(db: StorageProvider, user: IUser): Promise<void> {
@@ -154,7 +158,8 @@ export function testDB(db: StorageProvider) {
       authId: "51201",
       recentlyEditedTemplates: ["template1"],
       recentlyViewedTemplates: ["template2"],
-      recentTags: ["tag1", "tag2"]
+      recentTags: ["tag1", "tag2"],
+      favoriteTags: []
     };
     await insertAndValidateUser(db, validUser);
   });
@@ -171,20 +176,21 @@ export function testDB(db: StorageProvider) {
     const validTemplateInstance: ITemplateInstance = {
       json: JSON.parse('{"key":"value"}'),
       version: "1.0",
-      lastEditedUser: ""
+      lastEditedUser: "",
+      author: "12301ased12"
     };
     const validTemplate: ITemplate = {
       name: "validTemplate",
       instances: [validTemplateInstance],
       tags: ["weather", "sunny"],
-      owner: "12301ased12",
+      authors: ["12301ased12"],
       isLive: true
     };
     await insertAndValidateTemplate(db, validTemplate);
   });
 
   it("Partially filled:create & save template successfully", async () => {
-    const validTemplate: ITemplate = { name: "validTemplate", owner: "John" };
+    const validTemplate: ITemplate = { name: "validTemplate", authors: ["John"] };
     await insertAndValidateTemplate(db, validTemplate);
   });
 }

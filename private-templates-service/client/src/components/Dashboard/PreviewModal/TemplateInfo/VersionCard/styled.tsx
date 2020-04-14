@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { COLORS } from '../../../../../globalStyles';
+import { COLORS, FONTS } from '../../../../../globalStyles';
 import { ActionButton, Icon } from 'office-ui-fabric-react';
 import {
   VersionContainer
@@ -19,12 +19,11 @@ export const VersionCardBody = styled(CardBody)`
 
 export const CardManageButton = styled(ActionButton)`
   color: ${COLORS.GREY3};
-  font-weight: 500;
 `
 
 export const CardTitle = styled.div`
   font-size: 1.375rem;
-  font-weight: 600;
+  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD};
 `
 
 export const VersionCardHeader = styled.div`
@@ -38,18 +37,23 @@ export const VersionCardRow = styled.div`
   display: flex;
   width: 100%;
   justify-content: space-around;
-  margin-top: 8px;
-  margin-left: 16px;
-  margin-bottom: 8px;
-  margin-right: 16px;
+  padding-top: 8px;
+  padding-left: 16px;
+  padding-bottom: 8px;
+  padding-right: 16px;
   align-items: center;
+
+  &: hover {
+    background-color: ${COLORS.GREYHOVER};
+    cursor: pointer;
+  }
 `
 export const VersionCardRowTitle = styled.div`
-  font-weight: 600;
+  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD};
 `
 
 export const VersionCardRowText = styled.div`
-  font-weight: 600;
+  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD};
   align-items: center;
 `
 
@@ -79,7 +83,7 @@ margin: 0 0 0 15px;
 
 export const VersionWrapper = styled.div`
   display: flex;
-  font-weight: 600;
+  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD};
   align-items: center;
   flex-basis: 15%;
 `

@@ -48,9 +48,13 @@ paths:
             $ref: "#/definitions/BaseError"
       parameters:
         - in: query
-          name: isPublished
-          type: boolean
-          description: Query based on if template is published
+          name: state
+          type: string
+          enum:
+            - "live"
+            - "draft"
+            - "deprecated"
+          description: Query based on if template state
         - name: isClient
           in: query
           type: boolean
@@ -66,7 +70,7 @@ paths:
         - in: query
           name: owned
           type: boolean
-          description: Display only the templates owned by the user
+          description: Display only the templates where the user authored a version
         - in: query
           name: sortBy
           enum:
@@ -84,7 +88,9 @@ paths:
         - in: query
           name: tags
           description: List of tags to filter templates by
-          type: string
+          type: array
+          items:
+            type: string
       security:
         - bearer_auth: []
     post: 
@@ -129,10 +135,14 @@ paths:
           description: "ID of template to return"
           required: true
           type: string
-        - name: isPublished
-          in: query
-          type: boolean
-          description: Query based on if template is published
+        - in: query
+          name: state
+          type: string
+          enum:
+            - "live"
+            - "draft"
+            - "deprecated"
+          description: Query based on if template state
         - name: isClient
           in: query
           type: boolean
@@ -330,6 +340,67 @@ paths:
             $ref: "#/definitions/Recent"
       security:
         - bearer_auth: []
+  '/template/tag':
+    get:
+      tags: 
+        - "template"
+      summary: "Get list of owned, favorite, and all tags"
+      operationId: "allTags"
+      produces: 
+        - "application/json"
+      responses:
+        200: 
+          description: "successful operation"
+          schema: 
+            $ref: '#/definitions/Tags'
+        400: 
+          description: "Error while getting tags"
+          schema: 
+            $ref: "#/definitions/BaseError"
+      security: 
+        - bearer_auth: []
+    post:
+      summary: "Favorite tags"
+      operationId: "updateTags"
+      produces: 
+        - "application/json"
+      parameters: 
+        - in: "body"
+          name: "body"
+          description: "list of favorite tags"
+          required: true
+          schema:
+            $ref: "#/definitions/FavoriteTagList"
+      responses:
+        200: 
+          description: "successful operation"
+        400: 
+          description: "bad request"
+          schema: 
+            $ref: "#/definitions/BaseError"
+      security:
+        - bearer_auth: []
+    delete: 
+      summary: "Unfavorite tags"
+      operationId: "unFavoriteTags"
+      produces: 
+        - "application/json"
+      parameters: 
+        - in: "body"
+          name: "body"
+          description: "list of favorite tags"
+          required: true
+          schema:
+            $ref: "#/definitions/FavoriteTagList"
+      responses: 
+        200: 
+          description: "sucessful operation"
+        400: 
+          description: "bad request"
+          schema: 
+            $ref: "#/definitions/BaseError"
+      security: 
+        - bearer_auth: []
   '/user':
     get: 
       tags:
@@ -365,7 +436,32 @@ paths:
             $ref: "#/definitions/BaseError" 
       security:
         - bearer_auth: []
+  '/config':
+    get: 
+      tags:
+        - "config"
+      summary: "Get auth provider specific env values"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: '#/definitions/Config'
 definitions:
+  Tags: 
+    type: object
+    properties:
+      ownedTags:
+        type: array
+        items:
+          type: string
+      allTags:
+        type: array
+        items:
+          type: string
+      favoriteTags:
+        type: array
+        items:
+          type: string
   ResourceCreated:
     type: object
     properties:
@@ -399,8 +495,10 @@ definitions:
         type: array
         items: 
           $ref: "#/definitions/TemplateInstance"
-      owner: 
-        type: string
+      authors: 
+        type: array
+        items:
+          type: string
       isLive:
         type: boolean
       createdAt:
@@ -435,6 +533,8 @@ definitions:
           - "draft"
           - "live"
           - "deprecated"
+        type: string
+      author:
         type: string
       isShareable:
         type: boolean
@@ -515,10 +615,19 @@ definitions:
   TagList: 
     type: object
     properties: 
-      tags:
+      ownedTags:
         type: array
         items: 
           type: string
+      allTags:
+        type: array
+        items: 
+          type: string
+  FavoriteTagList:
+    type: object
+    properties: 
+      favorite: 
+        $ref: "#/definitions/TagList"
   Recent: 
     type: object
     properties: 
@@ -538,6 +647,8 @@ definitions:
         format: JSON
       state: 
         type: string
+      author:
+        type: string
       data: 
         type: array
         items:  
@@ -556,8 +667,6 @@ definitions:
         type: array
         items:
           type: string
-      owner: 
-        type: string
   TemplatePreview: 
     type: object
     properties:
@@ -581,3 +690,12 @@ definitions:
         type: array
         items:
           $ref: "#/definitions/UpdateTemplateState"  
+  Config:
+    type: object
+    properties:
+      appId:
+        type: string
+      redirectUri:
+        type: string
+      appInsightsInstrumentationKey: 
+        type: string
