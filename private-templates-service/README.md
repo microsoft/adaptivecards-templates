@@ -39,7 +39,7 @@ Using the 'Deploy to Azure' button will fetch an image using the latest publishe
 
 If "**YES**" is selected in the **Telemetry_opt_in** step in the Deploy to Azure setup, Microsoft's Azure Application Insights instrumentation key will be exposed to the app as an environment variable. The app will then send its performance data to Microsoft's Azure Application Insights instance. The code gathering telemetry is located in the first lines in the private-templates-service\server\src\app.ts file and in the componentDidUpdate function of the private-templates-service\client\src\App.tsx file.
 
-If "**NO**" is selected in the Telemetry_opt_in step in the Deploy to Azure setup, the instrumentation key will not be exposed as an environment variable and no performance data will be sent to Microsoft's Azure Application Insights instance.
+If "**NO**" is selected in the **Telemetry_opt_in** step in the Deploy to Azure setup, the instrumentation key will not be exposed as an environment variable and no performance data will be sent to Microsoft's Azure Application Insights instance.
 
 
 By accepting the **Telemetry_opt_in**, you are improving the product by sending some of your performance data to Microsoft. By accepting the **Telemetry_opt_in**, you acknowledge your responsibility to provide a privacy statement to your end user.
@@ -83,7 +83,7 @@ app.use(function (req, res, next) {
 
 5. `cd adaptivecards-templates/private-templates-service/server` and run `npm run init-app`. This installs and links dependencies.
 
-6. Run `npm run dev`. This command concurrently runs the client and server locally. Navigate to `localhost:3000` to see the site.
+6. In the same directory as step 5, run `npm run dev`. This command concurrently runs the client and server locally. Navigate to `localhost:3000` to see the site.
 
 ## Running the latest changes without MongoDB
 
@@ -128,7 +128,7 @@ const mongoClient = {
 ```
 6. `cd adaptivecards-templates/private-templates-service/server` and run `npm run init-app`. This installs and links dependencies.
 
-7. Run `npm run dev`. This command concurrently runs the client and server locally. Navigate to `localhost:3000` to see the site.
+7. In the same directory as step 6, run `npm run dev`. This command concurrently runs the client and server locally. Navigate to `localhost:3000` to see the site.
 
    
 
