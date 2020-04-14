@@ -3,11 +3,16 @@ import { TagBodyContainer, TagSetFavouriteIcon } from './styled';
 import { TagText, TagCloseIcon } from '../styled';
 import KeyCode from '../../../../globalKeyCodes';
 import { ARIA_ROLE_BUTTON } from '../../../../assets/strings';
+import { COLORS } from '../../../../globalStyles'
 
+enum FavouriteIcon {
+  NotSet = "FavoriteStar",
+  Set = "FavoriteStarFill"
+};
 
-enum FavoriteIcon {
-  NotSelected = "FavoriteStar",
-  Selected = "FavoriteStarFill"
+enum FavouriteColor {
+  NotSet = COLORS.GREY6 as any,
+  Set = COLORS.ORANGE as any
 };
 
 interface Props {
@@ -29,7 +34,8 @@ interface Props {
 interface State {
     isSelected: boolean;
     isFavourite: boolean;
-    favouriteIcon: FavoriteIcon;
+    favouriteIcon: FavouriteIcon;
+    favouriteIconColor: FavouriteColor;
 }
 
 export class TagBody extends Component<Props, State> {
@@ -38,7 +44,8 @@ export class TagBody extends Component<Props, State> {
         super(props)
         this.state = {isSelected: this.props.isSelected? this.props.isSelected : false,
                       isFavourite: this.props.isFavourite? this.props.isFavourite : false,
-                      favouriteIcon: this.props.isFavourite? FavoriteIcon.Selected : FavoriteIcon.NotSelected };
+                      favouriteIcon: this.props.isFavourite? FavouriteIcon.Set : FavouriteIcon.NotSet,
+                      favouriteIconColor: this.props.isFavourite? FavouriteColor.Set : FavouriteColor.NotSet};
         this.ref = React.createRef();
     }
     componentDidMount = () => {
@@ -64,7 +71,8 @@ export class TagBody extends Component<Props, State> {
     }
 
     setFavouriteIcon = (isFavourite: boolean):void => {
-      this.setState({favouriteIcon: isFavourite? FavoriteIcon.Selected : FavoriteIcon.NotSelected,
+      this.setState({favouriteIcon: isFavourite? FavouriteIcon.Set : FavouriteIcon.NotSet,
+                     favouriteIconColor: isFavourite? FavouriteColor.Set : FavouriteColor.NotSet,
                      isFavourite: isFavourite});
     }
 
@@ -80,7 +88,8 @@ export class TagBody extends Component<Props, State> {
       if(this.props.allowSetFavourite) {
         e.preventDefault();
         e.stopPropagation();
-        this.setState({favouriteIcon: FavoriteIcon.Selected});
+        this.setState({favouriteIcon: FavouriteIcon.Set,
+                       favouriteIconColor: FavouriteColor.Set});
       }
     }
 
@@ -119,6 +128,7 @@ export class TagBody extends Component<Props, State> {
                                        onMouseOver={this.onMouseOverFavourite} 
                                        onMouseLeave={this.onMouseLeaveFavourite}
                                        onKeyDown={this.onKeyDownFavourite}
+                                       style={{color: this.state.favouriteIconColor.toString()}}
                                        tabIndex={0} />
                 }                                
                 <TagText>{tag}</TagText>
