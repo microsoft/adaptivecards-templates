@@ -4,7 +4,6 @@ export const TagsContainer = styled.div`
   scroll-behavior: smooth;
   padding-top: 20px;
   display: flex;
-  flex-direction: row;
   flex-wrap: nowrap;
   flex-shrink: 0;
   justify-content: flex-start;
