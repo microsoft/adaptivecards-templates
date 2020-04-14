@@ -25,4 +25,142 @@ The default connector definition from the swagger YAML file has two main operati
 1. GetTemplate: Returns the template JSON given the version and templateId
 2. RenderTemplate: Returns a data-bound card JSON given the version, templateId, and data JSON
 
+
+### Creating a Flow with the Custom Connector
+
+This example flow will use the private connector we created from the steps listed under 'Creating a Custom Connector' and post the adaptive card to a Microsoft Teams channel. 
+
+Prerequisites:
+
+-   ACMS private connector 
+
+1. **Add a manual trigger ('Manually trigger a flow') with inputs for a data string, template id string, and version string.**
+
+2.  **Select insert a new step and add an action. Search for the private connector that you created previously. Select 'Get data populated template'.**
+
+3. **Select the 'Menu' button in the upper right of the connector and select 'Add new connection'. Login to your Microsoft account and save the flow.** 
+
+4. **In the 'templateId' and 'version' field, select the respective parameters from the manual trigger step.** 
+
+5. **In the 'data' field, add the following function to convert the 'data' string from the manual trigger step to json: `json(triggerBody()['text'])`.**
+
+6. **Insert another step and add an action. Search for the 'Parse JSON' data operation.**
+
+7. **Under 'Content' of the 'Parse JSON' step, add the body from 'Get data populated template'.** 
+
+8. **Under 'Schema' of the 'Parse JSON' step, add the following JSON"** 
+
+   ```json
+   {
+       "type": "object",
+       "properties": {
+           "templates": {
+               "type": "array",
+               "items": {
+                   "type": "object",
+                   "properties": {
+                       "_id": {
+                           "type": "string"
+                       },
+                       "authors": {
+                           "type": "array",
+                           "items": {
+                               "type": "string"
+                           }
+                       },
+                       "tags": {
+                           "type": "array",
+                           "items": {
+                               "type": "string"
+                           }
+                       },
+                       "deletedVersions": {
+                           "type": "array"
+                       },
+                       "isLive": {
+                           "type": "boolean"
+                       },
+                       "name": {
+                           "type": "string"
+                       },
+                       "instances": {
+                           "type": "array",
+                           "items": {
+                               "type": "object",
+                               "properties": {
+                                   "state": {
+                                       "type": "string"
+                                   },
+                                   "isShareable": {
+                                       "type": "boolean"
+                                   },
+                                   "numHits": {
+                                       "type": "integer"
+                                   },
+                                   "data": {},
+                                   "lastEditedUser": {
+                                       "type": "string"
+                                   },
+                                   "json": {},
+                                   "version": {
+                                       "type": "string"
+                                   },
+                                   "author": {
+                                       "type": "string"
+                                   },
+                                   "updatedAt": {
+                                       "type": "string"
+                                   },
+                                   "_id": {
+                                       "type": "string"
+                                   },
+                                   "createdAt": {
+                                       "type": "string"
+                                   }
+                               },
+                               "required": [
+                                   "state",
+                                   "isShareable",
+                                   "numHits",
+                                   "data",
+                                   "lastEditedUser",
+                                   "json",
+                                   "version",
+                                   "author",
+                                   "updatedAt",
+                                   "_id",
+                                   "createdAt"
+                               ]
+                           }
+                       },
+                       "updatedAt": {
+                           "type": "string"
+                       },
+                       "createdAt": {
+                           "type": "string"
+                       }
+                   },
+                   "required": [
+                       "_id",
+                       "authors",
+                       "tags",
+                       "deletedVersions",
+                       "isLive",
+                       "name",
+                       "instances",
+                       "updatedAt",
+                       "createdAt"
+                   ]
+               }
+           }
+       }
+   }
+   ```
+
+   9. **Insert a new step and add an action. Select the 'Post your own adaptive card as the Flow bot to a channel' connector.** 
+   10. **Select the 'Team' and 'Channel' that you wish to upload the adaptive card to.** 
+   11. **Under 'Message', add the following function to parse the JSON: `body('Parse_JSON')['templates'][0]['instances'][0]['json']`.** 
+
+Final Flow using the private connector and Teams: 
+
 ![Microsoft Flow example](https://github.com/microsoft/adaptivecards-templates/blob/users/grzhan/flow/private-templates-service/flow/screenshots/flow.jpg?raw=true)
