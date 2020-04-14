@@ -1227,7 +1227,7 @@ export class TemplateServiceClient {
       let tagList: string[] = req.query.tags;
      
 
-      this.getTemplates(token, undefined, state, req.query.name, req.query.version,
+      this.getTemplates(token, undefined, req.query.state, req.query.name, req.query.version,
         owned, req.query.sortBy, req.query.sortOrder, tagList, isClient).then(response => {
           if (!response.success) {
             return res.status(200).json({ templates: [] });
