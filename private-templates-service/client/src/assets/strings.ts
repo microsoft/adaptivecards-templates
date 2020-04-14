@@ -72,6 +72,8 @@ export const LIST_VIEW = "List View";
 export const GRID_VIEW = "Grid View";
 
 // PublishModal.tsx
+export const PUBLISH_CARD = "Publish Card";
+export const PUBLISH_MODAL_DESC = "Your new design will be available to your organization as ";
 export const SEARCH_FOR_PEOPLE = "Search for people";
 
 // NavBar/SideBar styled
