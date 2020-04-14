@@ -155,7 +155,7 @@ class TemplatesPage extends Component<Props, State> {
               <Filter />
             </ViewHelperBar>
           </UpperBar>
-          <TagList tags={allTags} selectedTags={this.state.selectedTags} allowEdit={false} onClick={this.tagOnClick} toggleStyle={this.tagToggleStyle} direction={ScrollDirection.Horizontal} />
+          <TagList tags={allTags} selectedTags={this.state.selectedTags} allowEdit={false} onClick={this.tagOnClick} toggleStyle={this.tagToggleStyle} direction={ScrollDirection.Horizontal} allowSetFavourite={true}/>
           <TemplatesView onClick={this.selectTemplate} selectedTags={this.state.selectedTags} getTemplates={this.props.getTemplates}/>
         </InnerCardsContainer>
       </OuterCardsContainer>

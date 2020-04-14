@@ -6,7 +6,9 @@ import { TagsContainer } from "./styled";
 interface TagListProps {
   tags: string[];
   allowEdit: boolean;
+  allowSetFavourite?: boolean;
   onClick?: (tag: string) => void;
+  onSetFavourite?: (tag: string) => void;
   direction?: ScrollDirection;
   toggleStyle?: (isSelected: boolean, ref: any) => void;
   selectedTags?: string[];
@@ -41,7 +43,12 @@ class TagList extends Component<TagListProps> {
     const flexDirection = this.getTagsFlexDirection();
     return (
       <TagsContainer ref={this.ref} style={{flexDirection: flexDirection}}>
-        <Tags tags={this.props.tags} selectedTags={this.props.selectedTags} allowEdit={this.props.allowEdit} onClick={this.props.onClick} toggleStyle={this.props.toggleStyle} />
+        <Tags tags={this.props.tags} selectedTags={this.props.selectedTags} 
+              allowEdit={this.props.allowEdit} 
+              onClick={this.props.onClick} 
+              toggleStyle={this.props.toggleStyle} 
+              allowSetFavourite={this.props.allowSetFavourite}
+              onSetFavourite={this.props.onSetFavourite} />
       </TagsContainer>
     );
   }
