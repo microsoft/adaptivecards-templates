@@ -341,23 +341,65 @@ paths:
       security:
         - bearer_auth: []
   '/template/tag':
-    get: 
+    get:
       tags: 
         - "template"
-      summary: "Ggt the list of owned and all tags"
+      summary: "Get list of owned, favorite, and all tags"
       operationId: "allTags"
       produces: 
         - "application/json"
-      responses: 
+      responses:
         200: 
-          description: "Successful operation"
+          description: "successful operation"
           schema: 
-            $ref: "#/definitions/TagList"
+            $ref: '#/definitions/Tags'
         400: 
           description: "Error while getting tags"
           schema: 
             $ref: "#/definitions/BaseError"
+      security: 
+        - bearer_auth: []
+    post:
+      summary: "Favorite tags"
+      operationId: "updateTags"
+      produces: 
+        - "application/json"
+      parameters: 
+        - in: "body"
+          name: "body"
+          description: "list of favorite tags"
+          required: true
+          schema:
+            $ref: "#/definitions/FavoriteTagList"
+      responses:
+        200: 
+          description: "successful operation"
+        400: 
+          description: "bad request"
+          schema: 
+            $ref: "#/definitions/BaseError"
       security:
+        - bearer_auth: []
+    delete: 
+      summary: "Unfavorite tags"
+      operationId: "unFavoriteTags"
+      produces: 
+        - "application/json"
+      parameters: 
+        - in: "body"
+          name: "body"
+          description: "list of favorite tags"
+          required: true
+          schema:
+            $ref: "#/definitions/FavoriteTagList"
+      responses: 
+        200: 
+          description: "sucessful operation"
+        400: 
+          description: "bad request"
+          schema: 
+            $ref: "#/definitions/BaseError"
+      security: 
         - bearer_auth: []
   '/user':
     get: 
@@ -405,6 +447,21 @@ paths:
           schema:
             $ref: '#/definitions/Config'
 definitions:
+  Tags: 
+    type: object
+    properties:
+      ownedTags:
+        type: array
+        items:
+          type: string
+      allTags:
+        type: array
+        items:
+          type: string
+      favoriteTags:
+        type: array
+        items:
+          type: string
   ResourceCreated:
     type: object
     properties:
@@ -566,6 +623,11 @@ definitions:
         type: array
         items: 
           type: string
+  FavoriteTagList:
+    type: object
+    properties: 
+      favorite: 
+        $ref: "#/definitions/TagList"
   Recent: 
     type: object
     properties: 

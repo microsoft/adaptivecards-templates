@@ -116,7 +116,8 @@ export class TemplateServiceClient {
     authId: string,
     recentlyViewed?: string[],
     recentlyEdited?: string[],
-    recentTags?: string[]
+    recentTags?: string[],
+    favoriteTags?: string[]
   ): Promise<JSONResponse<Number>> {
 
     const userQuery: Partial<IUser> = {
@@ -127,10 +128,36 @@ export class TemplateServiceClient {
     const user: Partial<IUser> = {
       recentlyViewedTemplates: recentlyViewed,
       recentlyEditedTemplates: recentlyEdited,
-      recentTags: recentTags
+      recentTags: recentTags,
+      favoriteTags: favoriteTags
     };
 
     return this.storageProvider.updateUser(userQuery, user);
+  }
+
+  public async updateFavoriteTags(favorite: string[], unfavorite: string[], token?: string): Promise<JSONResponse<Number>> {
+    let authCheck = this._checkAuthenticated(token);
+    if (!authCheck.success) {
+      return authCheck;
+    }
+
+    let tagResponse = await this.getTags(token);
+    if (!tagResponse.success || !tagResponse.result) {
+      return { success: false, errorMessage: tagResponse.errorMessage };
+    }
+    let favoriteTags: string[] = tagResponse.result.favoriteTags || [];
+    let allTags: string[] = tagResponse.result.allTags || [];
+    for (let tag of favorite) {
+      if (!favoriteTags.includes(tag) && allTags.includes(tag)) favoriteTags.push(tag);
+    }
+    for (let tag of unfavorite) {
+      if (favoriteTags.includes(tag)) {
+        let index = favoriteTags.indexOf(tag);
+        favoriteTags.splice(index, 1);
+      }
+    }
+    let authId = this.authProvider.getAuthIDFromToken(token || this.authProvider.token);
+    return this._updateUser(authId, undefined, undefined, undefined, favoriteTags);
   }
 
   /**
@@ -211,14 +238,16 @@ export class TemplateServiceClient {
     authId: string,
     recentlyViewed?: string[],
     recentlyEdited?: string[],
-    recentTags?: string[]
+    recentTags?: string[],
+    favoriteTags?: string[]
   ): Promise<JSONResponse<string>> {
     const user: IUser = {
       authId: authId,
       authIssuer: this.authProvider.issuer,
       recentlyViewedTemplates: recentlyViewed || [],
       recentlyEditedTemplates: recentlyEdited || [],
-      recentTags: recentTags || []
+      recentTags: recentTags || [],
+      favoriteTags: favoriteTags || [],
     };
 
     let newUser = await this.storageProvider.insertUser(user);
@@ -1057,10 +1086,10 @@ export class TemplateServiceClient {
   }
 
   /**
-   * @public
-   * Retrieve a list of recently used tags for the logged in user.
+   * @private
+   * @param token 
    */
-  public async getRecentTags(token?: string): Promise<JSONResponse<string[]>> {
+  private async _getUserTags(token?: string): Promise<JSONResponse<string[][]>> {
     let authCheck = this._checkAuthenticated(token);
     if (!authCheck.success) {
       return authCheck;
@@ -1073,7 +1102,31 @@ export class TemplateServiceClient {
     }
 
     let user: IUser = response.result![0];
-    return { success: true, result: user.recentTags || [] };
+    return { success: true, result:[ user.recentTags || [], user.favoriteTags || []] };
+  }
+  
+  /**
+   * @public
+   * Retrieve a list of recently used tags for the logged in user.
+   */
+  public async getRecentTags(token?: string): Promise<JSONResponse<string[]>> {
+    let response = await this._getUserTags(token);
+    if (!response.success) {
+      return { success: false, errorMessage: response.errorMessage };
+    }
+    return { success: true, result: response.result![0] };
+  }
+
+  /**
+   * @public
+   * Retrieve a list of favorite tags for the logged in user.
+   */
+  public async getFavoriteTags(token?: string): Promise<JSONResponse<string[]>> {
+    let response = await this._getUserTags(token);
+    if (!response.success) {
+      return { success: false, errorMessage: response.errorMessage };
+    }
+    return { success: true, result: response.result![1] };  
   }
 
   /**
@@ -1108,9 +1161,14 @@ export class TemplateServiceClient {
       }
     }
 
+    let favoriteTags: string[] = [];
+    let favoriteResponse = await this.getFavoriteTags(token);
+    if (favoriteResponse.success && favoriteResponse.result) favoriteTags = favoriteResponse.result;
+
     let list: TagList = {
       ownedTags: Array.from(ownedTags),
-      allTags: Array.from(allTags)
+      allTags: Array.from(allTags),
+      favoriteTags: favoriteTags
     };
     return { success: true, result: list };
   }
@@ -1223,6 +1281,30 @@ export class TemplateServiceClient {
         res.status(200).json(response.result);
       });
     });
+
+    router.post("/tag", async (req: Request, res: Response, _next: NextFunction) => {
+      let token = parseToken(req.headers.authorization!);
+      let favoriteTags: string[] = req.body.favorite || [];
+      this.updateFavoriteTags(favoriteTags, [], token).then(response => {
+        if (!response.success) {
+          const err = new TemplateError(ApiError.TagUpdateFailed, "Unable to update favorite tags.");
+          return res.status(400).json({ error: err });
+        }
+        res.status(200).send();
+      })
+    });
+
+    router.delete("/tag", async (req: Request, res: Response, _next: NextFunction) => {
+      let token = parseToken(req.headers.authorization!);
+      let unfavoriteTags: string[] = req.body.favorite || [];
+      this.updateFavoriteTags([], unfavoriteTags, token).then(response => {
+        if (!response.success) {
+          const err = new TemplateError(ApiError.TagUpdateFailed, "Unable to update favorite tags.");
+          return res.status(400).json({ error: err });
+        }
+        res.status(200).send();
+      })
+    })
 
     router.get("/:id?", (req: Request, res: Response, _next: NextFunction) => {
       let isClient: boolean | undefined = req.query.isClient ? req.query.isClient.toLowerCase() === "true" : undefined;

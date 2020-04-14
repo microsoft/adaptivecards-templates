@@ -45,6 +45,7 @@ export interface IUser {
   recentlyViewedTemplates?: string[]; // size 5
   recentlyEditedTemplates?: string[]; // max size 5
   recentTags?: string[]; // max size 10
+  favoriteTags?: string[];
 }
 
 export interface JSONResponse<T> {
@@ -108,6 +109,7 @@ export interface TemplatePreview {
 export interface TagList {
   ownedTags: any[];
   allTags: any[];
+  favoriteTags: any[];
 }
 
 /**
