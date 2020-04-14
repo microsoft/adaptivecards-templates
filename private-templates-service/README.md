@@ -37,7 +37,7 @@ Using the 'Deploy to Azure' button will fetch an image using the latest publishe
 
 ### Telemetry Privacy Statement
 
-If "**YES**" is selected in the **Telemetry_opt_in** step in the Deploy to Azure setup, Microsoft's Azure Application Insights instrumentation key will be exposed to the app as an environment variable. The app will then send its performance data to Microsoft's Azure Application Insights instance. The code gathering telemetry is located in the first lines in the private-templates-service\server\src\app.ts file and in the componentDidUpdate function of the private-templates-service\client\src\App.tsx file.
+If "**YES**" is selected in the **Telemetry_opt_in** step in the Deploy to Azure setup, Microsoft's Azure Application Insights instrumentation key will be exposed to the app as an environment variable. The app will then send its performance data to Microsoft's Azure Application Insights instance. The code gathering telemetry is located in the first lines in the `private-templates-service\server\src\app.ts` file and in the componentDidUpdate function of the `private-templates-service\client\src\App.tsx` file.
 
 If "**NO**" is selected in the **Telemetry_opt_in** step in the Deploy to Azure setup, the instrumentation key will not be exposed as an environment variable and no performance data will be sent to Microsoft's Azure Application Insights instance.
 
@@ -122,7 +122,7 @@ app.use(function (req, res, next) {
 5. Replace the MongoDBProvider with the InMemoryProvider in `server/app.ts`. 
 ```
 const mongoClient = {
-  authenticationProvider: new AzureADProvider(),
+  authenticationProvider: new AMS.AzureADProvider(),
   storageProvider: new ACMS.InMemoryDBProvider(),
 }
 ```
