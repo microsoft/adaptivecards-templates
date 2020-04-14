@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { ActionButton } from 'office-ui-fabric-react';
 
-import { BREAK, COLORS } from "../../globalStyles";
+import { BREAK, COLORS, FONTS } from "../../globalStyles";
 
 export const Banner = styled.div`
   background-color: ${COLORS.WHITE};
@@ -47,12 +47,11 @@ export const StyledLogo = styled.img`
 `;
 
 export const Styledh1 = styled.div`
-  color: ${COLORS.BLACK};
   letter-spacing: 0;
   opacity: 1;
   font-size: 1.875rem;
   margin-bottom: 0;
-  font-weight: 600;
+  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD};
 
   margin-right: 16px;
   @media only screen and (max-width: ${BREAK.SM}px) {
@@ -67,7 +66,6 @@ export const Styledh2 = styled.div`
   font-size: 0.75rem;
   margin-bottom: 0;
   padding-left: 16px;
-  font-weight: 300;
 
   @media only screen and (max-width: ${BREAK.SM}px) {
     font-size: 0.75rem;
@@ -86,7 +84,7 @@ export const StyledButtonContent = styled.div`
   display: table-cell;
   vertical-align: middle;
   text-align: center;
-`;
+  `;
 
 export const EditButton = styled(IconButton)`
   border: 0;

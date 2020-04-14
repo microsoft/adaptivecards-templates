@@ -209,6 +209,11 @@ class TemplateInfo extends React.Component<Props, State> {
     }
   }
 
+  onSwitchVersion = (version: string) => {
+    this.setState({ version: version });
+    this.props.onSwitchVersion(version);
+  }
+
   tooltipButton = (val: any, templateState: PostedTemplate.StateEnum) => {
     const tooltipID = val.text.replace(" ", "_").trim();
     if (val.text === "Publish") {
@@ -322,7 +327,7 @@ class TemplateInfo extends React.Component<Props, State> {
             </CardBody>
           </Card>
           <RowWrapper>
-            <VersionCard template={this.props.template} templateVersion={this.state.version} />
+            <VersionCard template={this.props.template} templateVersion={this.state.version} onSwitchVersion={this.onSwitchVersion} />
           </RowWrapper>
         </MainContentWrapper>
         {this.props.modalState === ModalState.Publish && <PublishModal template={this.props.template} templateVersion={this.state.version} />}
