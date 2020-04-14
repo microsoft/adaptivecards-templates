@@ -21,7 +21,7 @@ Prerequisites:
 2. Enter in the URL the portal will be hosted at into the '**Sites_adaptivecms_name**' field. Make sure this URL is added under the '**Redirect URIs**' section of your AAD App Registration. Detailed instructions and screenshots are listed below. 
 3. Enter in the Azure Active Directory App Registration application (client) id into the '**App_id**' field. 
 4. Enter the id of your App Service Plan into the '**Server_farm_id**' field. 
-5. If 'Yes' is selected for '**Telemetry_opt_in**', we will collect feedback from your instance of ACMS using App Insights. 
+5. If 'Yes' is selected for '**Telemetry_opt_in**', we will collect feedback from your instance of ACMS using App Insights. See details under 'Telemetry Privacy Statement' below. 
 6. Click '**Next**' and '**Deploy**'.
 
 Using the 'Deploy to Azure' button will fetch an image using the latest published version of [adaptivecards-templating-service](https://www.npmjs.com/package/adaptivecards-templating-service) and [adaptive-templating-service-typescript-node](https://www.npmjs.com/package/adaptive-templating-service-typescript-node). Once the deployment as finished, you will see the admin portal hosted at '**{Sites_adaptivecms_name}**.azurewebsites.net' and be able to hit the endpoints at the same URL. 
@@ -34,6 +34,15 @@ Using the 'Deploy to Azure' button will fetch an image using the latest publishe
 4. Click 'New registration'.
 5. Fill in the details for a new AAD registration. Under 'Redirect URI', enter the URL at which the admin portal is hosted at from the 'Deploy to Azure' instructions. 
 6. Click 'Register'. 
+
+### Telemetry Privacy Statement
+
+If "**YES**" is selected in the **Telemetry_opt_in** step in the Deploy to Azure setup, Microsoft's Azure Application Insights instrumentation key will be exposed to the app as an environment variable. The app will then send its performance data to Microsoft's Azure Application Insights instance. The code gathering telemetry is located in the first lines in the private-templates-service\server\src\app.ts file and in the componentDidUpdate function of the private-templates-service\client\src\App.tsx file.
+
+If "**NO**" is selected in the Telemetry_opt_in step in the Deploy to Azure setup, the instrumentation key will not be exposed as an environment variable and no performance data will be sent to Microsoft's Azure Application Insights instance.
+
+
+By accepting the **Telemetry_opt_in**, you are improving the product by sending some of your performance data to Microsoft. By accepting the **Telemetry_opt_in**, you acknowledge your responsibility to provide a privacy statement to your end user.
 
 ## Running the latest changes locally with MongoDB
 
@@ -176,3 +185,5 @@ Things to watch out for:
 
 -   You **must** have auto-saving turned off on VSCode. Saving needs to be manually triggered.
 -   Make sure you are accessing the repo by opening the repository folder in VSCode rather than particular files in the repository. To do so, in VSCode, go to File -> Open Folder and open the adaptivecards-templates folder.
+
+
