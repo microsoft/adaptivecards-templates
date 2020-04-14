@@ -119,7 +119,7 @@ app.use(function (req, res, next) {
 });
 
 ```
-5. Replace the MongoDBProvider with the InMemoryProvider. 
+5. Replace the MongoDBProvider with the InMemoryProvider in `server/app.ts`. 
 ```
 const mongoClient = {
   authenticationProvider: new AzureADProvider(),
