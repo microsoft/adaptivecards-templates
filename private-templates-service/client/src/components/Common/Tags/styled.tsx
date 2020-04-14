@@ -1,33 +1,12 @@
 import styled, { css, keyframes } from 'styled-components';
-import { COLORS } from '../../../globalStyles';
+import { COLORS, FONTS } from '../../../globalStyles';
 
 import { Icon } from 'office-ui-fabric-react';
 
-const DuplicateKeyFrame = keyframes`
-  from {
-    background-color: ${COLORS.BLUE};
-  }
 
-  to {
-    background-color: ${COLORS.GREY2};
-  }
+export const TagText = styled.div`
+  white-space: pre;
 `;
-
-export const Tag = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: baseline;
-  background-color: ${COLORS.GREY2};
-  border-radius: 1em;
-  margin: 0 16px 12px 0;
-  padding: 4px 10px 4px 16px;
-  
-  &.duplicate {
-    animation: ${DuplicateKeyFrame} 0.3s forwards;
-  }
-`;
-
-export const TagText = styled.div``;
 
 export const TagCloseIcon = styled(Icon)`
   font-size: 0.625rem;
@@ -36,7 +15,7 @@ export const TagCloseIcon = styled(Icon)`
   border-radius: 50%;
 
   &:hover {
-    font-weight: 700;
+    font-family: ${FONTS.SEGOE_UI_SEMI_BOLD};
     cursor: pointer;
   }
 
@@ -95,7 +74,7 @@ export const TagAddIcon = styled(Icon) <{ open: boolean }>`
   border-radius: 50%;
 
   &: hover {
-    font-weight: 700;
+    font-family: ${FONTS.SEGOE_UI_SEMI_BOLD};
     cursor: pointer;
   }
 
@@ -124,7 +103,7 @@ export const TagSubmitIcon = styled(Icon)`
   border-radius: 50%;
 
   &: hover {
-    font-weight: 700;
+    font-family: ${FONTS.SEGOE_UI_SEMI_BOLD};
     cursor: pointer;
   }
 

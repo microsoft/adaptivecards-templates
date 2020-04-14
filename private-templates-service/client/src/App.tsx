@@ -4,10 +4,13 @@ import { UserAgentApplication, ClientAuthError } from "msal";
 import { AuthResponse } from 'msal';
 import { initializeIcons } from '@uifabric/icons';
 import IdleTimer from 'react-idle-timer';
+import { ApplicationInsights } from '@microsoft/applicationinsights-web';
+import { ReactPlugin } from '@microsoft/applicationinsights-react-js';
+import { createBrowserHistory } from "history";
 
 // Redux
 import { connect } from "react-redux";
-import { setAccessToken, setGraphAccessToken, getUserDetails, getOrgDetails, getProfilePicture, logout } from "./store/auth/actions";
+import { setAccessToken, setGraphAccessToken, getUserDetails, getOrgDetails, getProfilePicture, logout, getConfig } from "./store/auth/actions";
 import { UserType } from "./store/auth/types";
 import { RootState } from "./store/rootReducer";
 
@@ -19,6 +22,8 @@ import Dashboard from "./components/Dashboard";
 import Shared from "./components/Shared/";
 import PreviewModal from './components/Dashboard/PreviewModal';
 import ErrorMessage, { ErrorMessageProps } from "./components/ErrorMessage/ErrorMessage";
+import AllCards from "./components/AllCards";
+import NoMatch from "./components/NoMatch";
 import config from "./Config";
 
 // CSS
@@ -27,8 +32,6 @@ import { OuterAppWrapper, MainAppWrapper, MainApp } from "./styled";
 
 // Constants
 import Constants from "./globalConstants"
-import AllCards from "./components/AllCards";
-
 
 interface State {
   error: ErrorMessageProps | null;
@@ -38,7 +41,10 @@ const mapStateToProps = (state: RootState) => {
   return {
     isAuthenticated: state.auth.isAuthenticated,
     user: state.auth.user,
-    searchByTemplateName: state.search.searchByTemplateName
+    searchByTemplateName: state.search.searchByTemplateName,
+    redirectUri: state.auth.redirectUri,
+    appId: state.auth.appId,
+    appInsightsInstrumentationKey: state.auth.appInsightsInstrumentationKey,
   };
 };
 
@@ -61,6 +67,9 @@ const mapDispatchToProps = (dispatch: any) => {
     },
     userLogout: () => {
       dispatch(logout());
+    },    
+    getConfig: () => {
+      dispatch(getConfig());
     }
   };
 };
@@ -72,41 +81,67 @@ interface Props {
   getOrgDetails: () => void;
   getProfilePicture: () => void;
   userLogout: () => void;
+  getConfig: () => void;
   isAuthenticated: boolean;
   user?: UserType;
   searchByTemplateName: string;
+  appId?: string;
+  redirectUri?: string;
+  appInsightsInstrumentationKey?: string;
 }
 
 class App extends Component<Props, State> {
-  userAgentApplication: UserAgentApplication;
+  userAgentApplication?: UserAgentApplication;
   onIdle: () => any;
+
+  componentDidUpdate() {
+    if (!this.userAgentApplication && this.props.appId && this.props.redirectUri) {
+      this.userAgentApplication = new UserAgentApplication({
+        auth: {
+          clientId: this.props.appId!,
+          redirectUri:this.props.redirectUri
+        },
+        cache: {
+          cacheLocation: "localStorage",
+          storeAuthStateInCookie: true
+        }
+      });
+  
+      let user = this.userAgentApplication.getAccount();
+
+      if (user) {
+        // Enhance user object with data from Graph
+        this.getUserInfo();
+      }
+
+      if (this.props.appInsightsInstrumentationKey) {
+        const browserHistory = createBrowserHistory({ basename: this.props.appId });
+        var reactPlugin = new ReactPlugin();
+        var appInsights = new ApplicationInsights({
+          config: {
+            instrumentationKey: this.props.appInsightsInstrumentationKey,
+            extensions: [reactPlugin],
+            extensionConfig: {
+              [reactPlugin.identifier]: { history: browserHistory }
+            }
+          }
+        });
+        appInsights.loadAppInsights();
+      }
+    }
+  }
 
   constructor(props: Props) {
     super(props);
     initializeIcons();
-    this.userAgentApplication = new UserAgentApplication({
-      auth: {
-        clientId: process.env.REACT_APP_ACMS_APP_ID!,
-        redirectUri: process.env.REACT_APP_ACMS_REDIRECT_URI
-      },
-      cache: {
-        cacheLocation: "localStorage",
-        storeAuthStateInCookie: true
-      }
-    });
-
-    let user = this.userAgentApplication.getAccount();
-
+    this.getConfigInfo();
     this.state = {
       error: null
     };
-
-    if (user) {
-      // Enhance user object with data from Graph
-      this.getUserInfo();
-    }
     this.onIdle = this._onIdle.bind(this);
   }
+
+
 
   render() {
     let error = null;
@@ -125,6 +160,7 @@ class App extends Component<Props, State> {
           element={document}
           onIdle={this.onIdle}
           timeout={Constants.LOGOUT_TIMEOUT} />
+        {this.props.appId && this.props.redirectUri && 
         <Switch>
           <Route exact path="/preview/:uuid/:version">
             <Shared authButtonMethod={this.login}></Shared>
@@ -151,14 +187,15 @@ class App extends Component<Props, State> {
                   <Route path="/preview/:uuid">
                     <PreviewModal authButtonMethod={this.login} />
                   </Route>
-                  <Route exact path="/allcards">
+                  <Route exact path="/templates/all">
                     <AllCards authButtonMethod={this.login} />
                   </Route>
+                  <Route component={NoMatch} />
                 </Switch>
               </MainApp>
             </MainAppWrapper>
           </OuterAppWrapper>
-        </Switch>
+        </Switch>}
         <div id="modal" />
       </Router >
     );
@@ -172,7 +209,7 @@ class App extends Component<Props, State> {
 
   login = async () => {
     try {
-      await this.userAgentApplication.loginPopup({
+      await this.userAgentApplication!.loginPopup({
         scopes: config.scopes,
         prompt: "select_account"
       });
@@ -210,9 +247,13 @@ class App extends Component<Props, State> {
   };
 
   logout = () => {
-    this.userAgentApplication.logout();
+    this.userAgentApplication!.logout();
     this.props.userLogout();
   };
+
+  getConfigInfo = async () => {
+    this.props.getConfig();
+  }
 
   getUserInfo = async () => {
     try {
@@ -220,14 +261,14 @@ class App extends Component<Props, State> {
       // If the cache contains a non-expired token, this function
       // will just return the cached token. Otherwise, it will
       // make a request to the Azure OAuth endpoint to get a token
-      let accessToken = await this.userAgentApplication.acquireTokenSilent(
+      let accessToken = await this.userAgentApplication!.acquireTokenSilent(
         {
-          scopes: [`api://${process.env.REACT_APP_ACMS_APP_ID}/Templates.All`]
+          scopes: [`api://${this.props.appId}/Templates.All`]
         }
       );
       this.props.setAccessToken(accessToken);
 
-      let graphAccessToken = await this.userAgentApplication.acquireTokenSilent(
+      let graphAccessToken = await this.userAgentApplication!.acquireTokenSilent(
         {
           scopes: config.scopes
         }

@@ -24,11 +24,11 @@ export function failGetAll(error: IncomingMessage): AllTemplateAction {
   }
 }
 
-export function getAllTemplates() {
+export function getAllTemplates(tags?: string[]) {
   return function (dispatch: any, getState: () => RootState) {
     dispatch(requestAllTemplates())
     const api = initClientSDK(dispatch, getState);
-    return api.allTemplates(undefined, true)
+    return api.allTemplates(undefined, true, undefined, undefined, undefined, undefined, undefined, tags)
       .then(response => {
         if (response.response.statusCode && response.response.statusCode === 200) {
           dispatch(receiveAllTemplates(response.body))

@@ -60,6 +60,7 @@ const NavBar = (props: NavBarProps) => {
           <StyledLogo aria-label={STRINGS.LOGO_DESCRIPTION} src={Logo} />
           <Styledh1>{props.currentPageTitle || ""}</Styledh1>
         </MobileBanner>
+        <SearchBar />
       </Banner>
     );
   }
