@@ -5,9 +5,8 @@ trigger:
     include:
     - dev
     - stage
-    - users/daniellemott/typo
-    # exclude:
-    # - users/*
+    exclude:
+    - users/*
 
 # no PR builds
 pr: none
@@ -70,27 +69,27 @@ steps:
     npm run deploy
   displayName: Build backend
 
-# - task: ArchiveFiles@2
-#   displayName: 'Archive the function source code'
-#   condition: succeeded()
-#   inputs:
-#     rootFolderOrFile: '$(system.defaultworkingdirectory)/private-templates-service'
-#     includeRootFolder: false
-#     archiveType: 'zip'
-#     archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
-#     replaceExistingArchive: true
+- task: ArchiveFiles@2
+  displayName: 'Archive the function source code'
+  condition: succeeded()
+  inputs:
+    rootFolderOrFile: '$(system.defaultworkingdirectory)/private-templates-service'
+    includeRootFolder: false
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    replaceExistingArchive: true
 
-# - task: PublishBuildArtifacts@1
-#   displayName: 'Publish Artifact: drop'
-#   condition: succeeded()
-#   inputs:
-#     PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact: drop'
+  condition: succeeded()
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
 
-# - task: AzureWebApp@1
-#   displayName: 'Azure Web App Deploy'
-#   condition: succeeded()
-#   inputs:
-#     azureSubscription: $(azureSubscription)
-#     appType: webAppLinux
-#     appName: $(REACT_APP_ACMS_APP_NAME)
-#     package: $(System.ArtifactsDirectory)/**/*.zip
+- task: AzureWebApp@1
+  displayName: 'Azure Web App Deploy'
+  condition: succeeded()
+  inputs:
+    azureSubscription: $(azureSubscription)
+    appType: webAppLinux
+    appName: $(REACT_APP_ACMS_APP_NAME)
+    package: $(System.ArtifactsDirectory)/**/*.zip
