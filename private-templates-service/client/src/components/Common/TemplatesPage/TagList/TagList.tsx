@@ -1,11 +1,14 @@
 import React, { Component } from "react";
-import Tags from "../../Common/Tags";
-import { Scroller, ScrollDirection } from "../../../utils/AllCardsUtil";
+import Tags from "../../Tags";
+import { Scroller, ScrollDirection } from "../../../../utils/AllCardsUtil";
 import { TagsContainer } from "./styled";
 
 interface TagListProps {
   tags: string[];
   allowEdit: boolean;
+  onClick?: (tag: string) => void;
+  toggleStyle?: (isSelected: boolean, ref: any) => void;
+  selectedTags?: string[];
 }
 class TagList extends Component<TagListProps> {
   scroller: Scroller;
@@ -26,9 +29,9 @@ class TagList extends Component<TagListProps> {
   }
   render() {
     return (
-        <TagsContainer ref={this.ref}>
-          <Tags tags={this.props.tags} allowEdit={this.props.allowEdit} />
-        </TagsContainer>
+      <TagsContainer ref={this.ref}>
+        <Tags tags={this.props.tags} selectedTags={this.props.selectedTags} allowEdit={this.props.allowEdit} onClick={this.props.onClick} toggleStyle={this.props.toggleStyle} />
+      </TagsContainer>
     );
   }
 }

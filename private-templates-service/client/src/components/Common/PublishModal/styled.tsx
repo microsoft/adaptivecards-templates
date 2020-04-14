@@ -40,6 +40,7 @@ export const DescriptionAccent = styled.span`
   font-family: ${FONTS.SEGOE_UI_SEMI_BOLD};
   color: ${COLORS.BLUE};
   white-space: nowrap;
+  font-weight: bold;
 `;
 
 export const CenterPanelWrapper = styled.div`
@@ -69,7 +70,7 @@ export const CenterPanelRight = styled.div`
 
 export const SemiBoldText = styled.div`
   font-size: 1rem;
-  font-weight: 600;
+  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD};
 `;
 
 export const BottomRow = styled.div`
