@@ -23,6 +23,8 @@ import SearchPage from "../../Dashboard/SearchPage";
 import { LIST_VIEW, GRID_VIEW } from "../../../assets/strings";
 import TagList from "./TagList";
 import { COLORS } from "../../../globalStyles";
+// Util
+import { ScrollDirection } from "../../../utils/AllCardsUtil";
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -153,7 +155,7 @@ class TemplatesPage extends Component<Props, State> {
               <Filter />
             </ViewHelperBar>
           </UpperBar>
-          <TagList tags={allTags} selectedTags={this.state.selectedTags} allowEdit={false} onClick={this.tagOnClick} toggleStyle={this.tagToggleStyle} />
+          <TagList tags={allTags} selectedTags={this.state.selectedTags} allowEdit={false} onClick={this.tagOnClick} toggleStyle={this.tagToggleStyle} direction={ScrollDirection.Horizontal} />
           <TemplatesView onClick={this.selectTemplate} selectedTags={this.state.selectedTags} getTemplates={this.props.getTemplates}/>
         </InnerCardsContainer>
       </OuterCardsContainer>
