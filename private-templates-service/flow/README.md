@@ -157,9 +157,9 @@ Prerequisites:
    }
    ```
 
-   9. **Insert a new step and add an action. Select the 'Post your own adaptive card as the Flow bot to a channel' connector.** 
-   10. **Select the 'Team' and 'Channel' that you wish to upload the adaptive card to.** 
-   11. **Under 'Message', add the following function to parse the JSON: `body('Parse_JSON')['templates'][0]['instances'][0]['json']`.** 
+9. **Insert a new step and add an action. Select the 'Post your own adaptive card as the Flow bot to a channel' connector.** 
+10. **Select the 'Team' and 'Channel' that you wish to upload the adaptive card to.** 
+11. **Under 'Message', add the following function to parse the JSON: `body('Parse_JSON')['templates'][0]['instances'][0]['json']`.** 
 
 Final Flow using the private connector and Teams: 
 
