@@ -45,6 +45,7 @@ const mapStateToProps = (state: RootState) => {
     redirectUri: state.auth.redirectUri,
     appId: state.auth.appId,
     appInsightsInstrumentationKey: state.auth.appInsightsInstrumentationKey,
+    userInsightsInstrumentationKey: state.auth.userInsightsInstrumentationKey,
   };
 };
 
@@ -67,7 +68,7 @@ const mapDispatchToProps = (dispatch: any) => {
     },
     userLogout: () => {
       dispatch(logout());
-    },    
+    },
     getConfig: () => {
       dispatch(getConfig());
     }
@@ -88,6 +89,23 @@ interface Props {
   appId?: string;
   redirectUri?: string;
   appInsightsInstrumentationKey?: string;
+  userInsightsInstrumentationKey?: string;
+}
+
+function telemetryHelper(appID: string, instrumentationKey: string) {
+  const browserHistory = createBrowserHistory({ basename: appID });
+  var reactPlugin = new ReactPlugin();
+  var appInsights = new ApplicationInsights({
+    config: {
+      instrumentationKey: instrumentationKey,
+      extensions: [reactPlugin],
+      extensionConfig: {
+        [reactPlugin.identifier]: { history: browserHistory }
+      }
+    }
+  });
+  appInsights.loadAppInsights();
+
 }
 
 class App extends Component<Props, State> {
@@ -99,14 +117,14 @@ class App extends Component<Props, State> {
       this.userAgentApplication = new UserAgentApplication({
         auth: {
           clientId: this.props.appId!,
-          redirectUri:this.props.redirectUri
+          redirectUri: this.props.redirectUri
         },
         cache: {
           cacheLocation: "localStorage",
           storeAuthStateInCookie: true
         }
       });
-  
+
       let user = this.userAgentApplication.getAccount();
 
       if (user) {
@@ -115,18 +133,11 @@ class App extends Component<Props, State> {
       }
 
       if (this.props.appInsightsInstrumentationKey) {
-        const browserHistory = createBrowserHistory({ basename: this.props.appId });
-        var reactPlugin = new ReactPlugin();
-        var appInsights = new ApplicationInsights({
-          config: {
-            instrumentationKey: this.props.appInsightsInstrumentationKey,
-            extensions: [reactPlugin],
-            extensionConfig: {
-              [reactPlugin.identifier]: { history: browserHistory }
-            }
-          }
-        });
-        appInsights.loadAppInsights();
+        telemetryHelper(this.props.appId, this.props.appInsightsInstrumentationKey);
+      }
+
+      if (this.props.userInsightsInstrumentationKey) {
+        telemetryHelper(this.props.appId, this.props.userInsightsInstrumentationKey);
       }
     }
   }
@@ -160,42 +171,42 @@ class App extends Component<Props, State> {
           element={document}
           onIdle={this.onIdle}
           timeout={Constants.LOGOUT_TIMEOUT} />
-        {this.props.appId && this.props.redirectUri && 
-        <Switch>
-          <Route exact path="/preview/:uuid/:version">
-            <Shared authButtonMethod={this.login}></Shared>
-          </Route>
-          <OuterAppWrapper>
-            <SideBar
-              authButtonMethod={
-                this.props.isAuthenticated
-                  ? this.logout
-                  : this.login
-              }
-            />
-            <MainAppWrapper>
-              <NavBar />
-              <MainApp>
-                {!this.props.isAuthenticated && error}
-                <Switch>
-                  <Route exact path="/">
-                    <Dashboard authButtonMethod={this.login} />
-                  </Route>
-                  <Route exact path="/designer/:uuid/:version">
-                    <Designer authButtonMethod={this.login} />
-                  </Route>
-                  <Route path="/preview/:uuid">
-                    <PreviewModal authButtonMethod={this.login} />
-                  </Route>
-                  <Route exact path="/templates/all">
-                    <AllCards authButtonMethod={this.login} />
-                  </Route>
-                  <Route component={NoMatch} />
-                </Switch>
-              </MainApp>
-            </MainAppWrapper>
-          </OuterAppWrapper>
-        </Switch>}
+        {this.props.appId && this.props.redirectUri &&
+          <Switch>
+            <Route exact path="/preview/:uuid/:version">
+              <Shared authButtonMethod={this.login}></Shared>
+            </Route>
+            <OuterAppWrapper>
+              <SideBar
+                authButtonMethod={
+                  this.props.isAuthenticated
+                    ? this.logout
+                    : this.login
+                }
+              />
+              <MainAppWrapper>
+                <NavBar />
+                <MainApp>
+                  {!this.props.isAuthenticated && error}
+                  <Switch>
+                    <Route exact path="/">
+                      <Dashboard authButtonMethod={this.login} />
+                    </Route>
+                    <Route exact path="/designer/:uuid/:version">
+                      <Designer authButtonMethod={this.login} />
+                    </Route>
+                    <Route path="/preview/:uuid">
+                      <PreviewModal authButtonMethod={this.login} />
+                    </Route>
+                    <Route exact path="/templates/all">
+                      <AllCards authButtonMethod={this.login} />
+                    </Route>
+                    <Route component={NoMatch} />
+                  </Switch>
+                </MainApp>
+              </MainAppWrapper>
+            </OuterAppWrapper>
+          </Switch>}
         <div id="modal" />
       </Router >
     );

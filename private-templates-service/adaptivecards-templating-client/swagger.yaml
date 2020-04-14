@@ -637,3 +637,5 @@ definitions:
         type: string
       appInsightsInstrumentationKey: 
         type: string
+      userInsightsInstrumentationKey: 
+        type: string
