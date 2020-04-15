@@ -193,7 +193,7 @@ export function getProfilePicture() {
 
 export function getConfig() {
   return function (dispatch: any) {
-    const api = new ConfigApi(window.location.href);
+    const api = new ConfigApi(window.location.origin);
 
     dispatch(requestConfig());
     return api.configGet().then((response: any) => {
