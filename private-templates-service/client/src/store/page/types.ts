@@ -2,6 +2,7 @@ export interface PageState {
   currentPageTitle?: string;
   currentPage?: string;
   modalState?: ModalState;
+  previousPage?: string;
 }
 
 export enum ModalState {
@@ -28,5 +29,6 @@ export interface PageAction {
   text: string;
   currentPageTitle?: string;
   currentPage?: string;
+  lastPage?: string;
   modalState?: ModalState;
 }

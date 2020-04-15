@@ -18,7 +18,8 @@ export function pageReducer(state = initalState, action: PageAction): PageState 
       return {
         ...state,
         currentPageTitle: action.currentPageTitle,
-        currentPage: action.currentPage
+        currentPage: action.currentPage,
+        previousPage: state.currentPage
       };
     case OPEN_MODAL:
       return {

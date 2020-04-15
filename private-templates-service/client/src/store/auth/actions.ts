@@ -9,6 +9,7 @@ import {
   GetUserDetailsAction,
   GetOrgDetailsAction,
   GetProfilePictureAction,
+  GetConfigAction,
   GET_USER_DETAILS,
   GET_USER_DETAILS_SUCCESS,
   GET_USER_DETAILS_FAILURE,
@@ -18,11 +19,15 @@ import {
   GET_PROFILE_PICTURE,
   GET_PROFILE_PICTURE_SUCCESS,
   GET_PROFILE_PICTURE_FAILURE,
+  GET_CONFIG,
+  GET_CONFIG_SUCCESS,
+  GET_CONFIG_FAILURE
 } from './types';
 
 import { getAuthenticatedClient } from '../../Services/GraphService';
 import { AuthResponse } from 'msal';
 import { RootState } from '../rootReducer';
+import { ConfigApi } from 'adaptive-templating-service-typescript-node';
 
 export function logout(): AuthAction {
   return {
@@ -40,7 +45,7 @@ export function setGraphAccessToken(graphAccessToken: AuthResponse): GraphAccess
 
 export function setAccessToken(accessToken: AuthResponse): AccessTokenAction {
   return {
-    type: ACCESS_TOKEN_SET, 
+    type: ACCESS_TOKEN_SET,
     accessToken
   }
 }
@@ -99,6 +104,27 @@ function requestProfilePictureSuccess(imageURL: string): GetProfilePictureAction
 function requestProfilePictureFailure(): GetProfilePictureAction {
   return {
     type: GET_PROFILE_PICTURE_FAILURE
+  }
+}
+
+function requestConfig(): GetConfigAction {
+  return {
+    type: GET_CONFIG
+  }
+}
+
+function requestConfigSuccess(appId: string, redirectUri: string, appInsightsInstrumentationKey: string): GetConfigAction {
+  return {
+    type: GET_CONFIG_SUCCESS,
+    redirectUri,
+    appId,
+    appInsightsInstrumentationKey
+  }
+}
+
+function requestConfigFailure(): GetConfigAction {
+  return {
+    type: GET_CONFIG_FAILURE
   }
 }
 
@@ -161,5 +187,22 @@ export function getProfilePicture() {
       }, (fail: any) => {
         dispatch(requestProfilePictureFailure());
       })
+  }
+}
+
+export function getConfig() {
+  return function (dispatch: any) {
+    const api = new ConfigApi(window.location.origin);
+
+    dispatch(requestConfig());
+    return api.configGet().then((response: any) => {
+      if (response.response.statusCode && response.response.statusCode === 200) {
+        dispatch(requestConfigSuccess(response.body.appId, response.body.redirectUri, response.body.appInsightsInstrumentationKey));
+      } else {
+        dispatch(requestConfigFailure());
+      }
+    }).catch((error: any) => {
+      dispatch(requestConfigFailure());
+    })
   }
 }
