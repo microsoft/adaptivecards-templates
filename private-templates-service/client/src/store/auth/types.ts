@@ -6,6 +6,9 @@ export interface AuthState {
   isFetching: boolean;
   accessToken?: AuthResponse;
   graphAccessToken?: AuthResponse;
+  redirectUri?: string;
+  appId?: string;
+  appInsightsInstrumentationKey?: string;
 }
 
 export interface UserType {
@@ -38,11 +41,22 @@ export const LOGIN_POPUP_BEGIN = 'LOGIN_POPUP_BEGIN';
 export const LOGIN_POPUP_FAIL = 'LOGIN_POPUP_FAIL';
 export const LOGIN_POPUP_SUCCESS = 'LOGIN_POPUP_SUCCESS';
 
+export const GET_CONFIG = 'GET_CONFIG';
+export const GET_CONFIG_SUCCESS = 'GET_CONFIG_SUCCESS';
+export const GET_CONFIG_FAILURE = 'GET_CONFIG_FAILURE';
+
 // Actions
 export interface AuthAction {
   type: typeof LOGOUT;
   text: string;
   user?: UserType;
+}
+
+export interface GetConfigAction {
+  type: typeof GET_CONFIG | typeof GET_CONFIG_SUCCESS | typeof GET_CONFIG_FAILURE;
+  redirectUri?: string;
+  appId?: string;
+  appInsightsInstrumentationKey?: string;
 }
 
 export interface GetUserDetailsAction {

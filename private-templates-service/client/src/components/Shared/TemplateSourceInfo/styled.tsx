@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { COLORS } from '../../../globalStyles';
+import { COLORS, FONTS } from '../../../globalStyles';
 
 export const HeaderWrapper = styled.div`
   display: flex;
@@ -24,7 +24,7 @@ export const TitleWrapper = styled.div`
 
 export const Title = styled.div`
   font-size: 1.375rem;
-  font-weight: 500;
+  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD};
 `;
 
 export const TemplateSourceWrapper = styled.div`
@@ -39,7 +39,7 @@ export const SourceWrapper = styled.div`
 `;
 
 export const Source = styled.div`
-  font-family: "Courier New", Courier, monospace;
+  font-family: ${FONTS.COURIER_NEW};
   font-size: 0.875rem;
   font-weight: normal;
   white-space: pre-wrap;

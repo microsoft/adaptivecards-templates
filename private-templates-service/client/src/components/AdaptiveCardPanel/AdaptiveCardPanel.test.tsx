@@ -18,7 +18,7 @@ it("Renders without crashing", () => {
       }
     ],
     "tags": [],
-    "owner": "06eabf31-88c4-452f-91e2-24a743e0f2ec",
+    "owners": [ "06eabf31-88c4-452f-91e2-24a743e0f2ec" ],
     "isPublished": "true",
     "createdAt": "2020-02-13T00:47:58.960Z",
     "updatedAt": "2020-02-13T02:29:56.482Z",

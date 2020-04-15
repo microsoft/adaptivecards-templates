@@ -18,23 +18,21 @@ const mapStateToProps = (state: RootState) => {
   };
 };
 
-
-
 class OwnerAvatar extends React.Component<Props> {
 
   render() {
     if (this.props.owner && this.props.owner.imageURLs && this.props.owner.imageURLs[this.props.oID]) {
       return (
         <Container>
-          <ProfilePic style={{height: this.props.sizeInPx || 30, width: this.props.sizeInPx || 30}} src={this.props.owner.imageURLs[this.props.oID]} alt={ALT_TEXT}></ProfilePic>
+          <ProfilePic style={{ height: this.props.sizeInPx || 30, width: this.props.sizeInPx || 30 }} src={this.props.owner.imageURLs[this.props.oID]} alt={ALT_TEXT}></ProfilePic>
         </Container>)
     }
     else if (this.props.owner && this.props.owner.displayNames && this.props.owner.displayNames[this.props.oID]) {
-      let halfSize = this.props.sizeInPx? this.props.sizeInPx / 2 : undefined;
+      let halfSize = this.props.sizeInPx ? this.props.sizeInPx / 2 : undefined;
       return (
         <Container>
-          <InitialsPic style={{height: this.props.sizeInPx || 30, width: this.props.sizeInPx || 30}} >
-            <Initials style={{fontSize: halfSize || 15}} >
+          <InitialsPic style={{ height: this.props.sizeInPx || 30, width: this.props.sizeInPx || 30 }} >
+            <Initials style={{ fontSize: halfSize || 15 }} >
               {this.props.owner.displayNames[this.props.oID][0]}
             </Initials>
           </InitialsPic>

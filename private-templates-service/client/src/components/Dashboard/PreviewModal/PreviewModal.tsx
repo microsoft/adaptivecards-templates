@@ -24,7 +24,7 @@ import TemplateInfo from './TemplateInfo';
 import requireAuthentication from '../../../utils/requireAuthentication';
 
 import * as STRINGS from '../../../assets/strings';
-import { ModalWrapper, ACOuterPanel, StyledDropdown, ACPanel, ACWrapper, DescriptorWrapper, CenteredSpinner, TooltipContainer, OuterModalWrapper } from './styled';
+import { ModalWrapper, ACOuterPanel, StyledDropdown, ACPanel, ACWrapper, DescriptorWrapper, CenteredSpinner, TooltipContainer } from './styled';
 
 import { Template } from 'adaptive-templating-service-typescript-node';
 import { ModalState } from '../../../store/page/types';
@@ -128,34 +128,32 @@ class PreviewModal extends React.Component<Props, State> {
     } = this.state;
 
     return (
-      <OuterModalWrapper>
-        <ModalWrapper>
+      <ModalWrapper>
 
-          {template && !isFetching ?
-            <React.Fragment>
-              <ACOuterPanel>
-                <TooltipContainer>
-                  <TooltipHost content={STRINGS.HOST_CONFIG_TOOLTIP} >
-                    <StyledDropdown selectedKey={selectedItem.key}
-                      onChange={this.hostConfigChange}
-                      options={DropdownOptions}
-                      tabIndex={this.props.modalState ? -1 : 0} />
-                  </TooltipHost>
-                </TooltipContainer>
-                <ACPanel>
-                  <ACWrapper>
-                    <AdaptiveCard cardtemplate={template} templateVersion={this.state.templateVersion} hostConfig={selectedItem.value} />
-                  </ACWrapper>
-                </ACPanel>
-              </ACOuterPanel>
-              <DescriptorWrapper>
-                <TemplateInfo template={template} onSwitchVersion={this.toggleTemplateVersion} />
-              </DescriptorWrapper>
-            </React.Fragment>
-            : <CenteredSpinner size={SpinnerSize.large} />
-          }
-        </ModalWrapper>
-      </OuterModalWrapper>
+        {template && !isFetching ?
+          <React.Fragment>
+            <ACOuterPanel>
+              <TooltipContainer>
+                <TooltipHost content={STRINGS.HOST_CONFIG_TOOLTIP} >
+                  <StyledDropdown selectedKey={selectedItem.key}
+                    onChange={this.hostConfigChange}
+                    options={DropdownOptions}
+                    tabIndex={this.props.modalState ? -1 : 0} />
+                </TooltipHost>
+              </TooltipContainer>
+              <ACPanel>
+                <ACWrapper>
+                  <AdaptiveCard cardtemplate={template} templateVersion={this.state.templateVersion} hostConfig={selectedItem.value} />
+                </ACWrapper>
+              </ACPanel>
+            </ACOuterPanel>
+            <DescriptorWrapper>
+              <TemplateInfo template={template} onSwitchVersion={this.toggleTemplateVersion} />
+            </DescriptorWrapper>
+          </React.Fragment>
+          : <CenteredSpinner size={SpinnerSize.large} />
+        }
+      </ModalWrapper>
     )
   }
 }
