@@ -32,6 +32,7 @@ import {
 } from './styled';
 import { Container, ACWrapper, TemplateFooterWrapper, TemplateName, TemplateStateWrapper } from '../../AdaptiveCardPanel/styled';
 import { StatusIndicator, Status, TagsWrapper } from '../../Dashboard/PreviewModal/TemplateInfo/styled';
+import { getVersionNumber } from '../../../utils/TemplateUtil/TemplateUtil';
 
 interface Props {
   designerTemplateJSON: object;
@@ -110,6 +111,13 @@ class SaveAndPublishModal extends React.Component<Props, State> {
     this.props.closeModal();
   }
 
+  getNewTemplateVersion = (): string => {
+    if (this.props.template && this.props.templateVersion) {
+      return getVersionNumber(this.props.template, this.props.templateVersion);
+    }
+    return "1.0";
+  }
+
   render() {
     let adaptiveCard = new AdaptiveCards.AdaptiveCard();
     adaptiveCard.hostConfig = new AdaptiveCards.HostConfig({
@@ -125,7 +133,7 @@ class SaveAndPublishModal extends React.Component<Props, State> {
           <Description>
             {STRINGS.SAVE_AND_PUBLISH_DESC}
             <DescriptionAccent>
-              {this.props.templateName} - {this.props.templateVersion && this.props.templateVersion !== "" ? this.props.templateVersion : "1.0"}
+              {this.props.templateName} - {this.getNewTemplateVersion()}
             </DescriptionAccent>
           </Description>
           <CenterPanelWrapper>
@@ -141,11 +149,11 @@ class SaveAndPublishModal extends React.Component<Props, State> {
                 <TemplateFooterWrapper style={{ justifyContent: "space-between", paddingRight: "20px" }}>
                   <TemplateName>{this.props.templateName ? this.props.templateName : STRINGS.UNTITLEDCARD}</TemplateName>
                   <TemplateStateWrapper style={{ justifyContent: "flex-end" }}>
-                    <StatusIndicator state={PostedTemplate.StateEnum.Draft} />
-                    <Status>{STRINGS.DRAFT}</Status>
+                    <StatusIndicator state={PostedTemplate.StateEnum.Live} />
+                    <Status>{STRINGS.LIVE}</Status>
                   </TemplateStateWrapper>
                 </TemplateFooterWrapper>
-              </Container>
+              </Container>t
             </CenterPanelLeft>
             <CenterPanelRight>
               <StyledH3>{STRINGS.CARDNAME}</StyledH3>
