@@ -7,7 +7,7 @@ export const PUBLISHED = "Published";
 
 //PreviewModal.tsx
 export const ADAPTIVE_CARD_RENDER = "Adaptive Card Preview Render";
-export const TEMPLATE_INFO = "Template Information";
+export const TEMPLATE_INFO = "Card Information";
 
 //RecentlyViewed.tsx
 export const NAME = "Name";
@@ -23,7 +23,7 @@ export const UNPUBLISH_CONFIRMATION = "Are you sure you want to unpublish ";
 
 //ShareModal.tsx
 export const SHARE_MODAL_TITLE = "Share card";
-export const SHARE_MODAL_DESCRIPTION = "Recipients will be invited to view the shared template as ";
+export const SHARE_MODAL_DESCRIPTION = "Recipients will be invited to view the shared card as ";
 export const SHARE_WITH_LINK = "Share with link";
 export const COPY_LINK = "Copy link";
 
