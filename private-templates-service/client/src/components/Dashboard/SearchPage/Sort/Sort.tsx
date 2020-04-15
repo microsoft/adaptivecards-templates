@@ -3,7 +3,7 @@ import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { RootState } from "../../../../store/rootReducer";
 import { connect } from 'react-redux';
 import { StyledSortDropdown } from "./styled";
-import { clearSort, querySort } from '../../../../store/sort/actions';
+import { querySort } from '../../../../store/sort/actions';
 import { THEME } from '../../../../globalStyles';
 import { SortType } from "../../../../store/sort/types";
 import { DATE_CREATED, ALPHABETICAL, DATE_UPDATED, DATE_CREATED_KEY, DATE_UPDATED_KEY, ALPHABETICAL_KEY, SORT_BY } from "../../../../assets/strings";

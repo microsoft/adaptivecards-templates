@@ -200,6 +200,7 @@ export const BASIC_AUTH = "Basic authentication test.";
 
 //requireShared.tsx
 export const PERMISSION_DENIED = "You do not have permission to view this page.";
+export const CHECK_URL = "Error fetching template. Check the URL.";
 
 //Sort.tsx
 export const DATE_CREATED = "Date Created";
@@ -219,3 +220,11 @@ export const PUBLISHED_KEY = "published";
 export const FILTER_PUBLISHED = "Published";
 export const FILTER_LIVE = "live";
 export const FILTER_BY = "Filter by";
+
+//TemplateListContent.tsx
+export const ERROR_LOADING_TEMPLATES = "Error loading templates";
+
+//stringUtils.tsx
+export const UTIL_LIVE = "Live";
+export const UTIL_DRAFT = "Draft";
+export const UTIL_DEPRECATED = "Deprecated";

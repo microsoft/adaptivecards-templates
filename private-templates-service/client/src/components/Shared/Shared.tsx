@@ -68,7 +68,7 @@ const Shared = (props: SharedComponentProps) => {
   if (uuid) {
     props.getTemplate(uuid);
   } else {
-    return <React.Fragment>Error fetching template. Check the URL.</React.Fragment>;
+    return <React.Fragment>{CHECK_URL}</React.Fragment>;
   }
 
   if (props.template !== undefined && props.template.instances && props.template.instances.length > 0) {

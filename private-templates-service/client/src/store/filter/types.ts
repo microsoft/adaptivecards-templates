@@ -1,4 +1,3 @@
-import { PostedTemplate } from "adaptive-templating-service-typescript-node";
 
 export interface FilterState {
   isFilter: boolean;
@@ -9,14 +8,14 @@ export interface FilterState {
   };
 }
 
-export type FilterEnum =  "draft" | "live" | "deprecated" | undefined
+export type FilterEnum = "draft" | "live" | "deprecated" | undefined
 
 
 //Action Types 
 export const CLEAR_FILTER = "CLEAR_FILTER";
 export const QUERY_FILTER = "QUERY_FILTER";
 
-export type FilterObject =  {
+export type FilterObject = {
   value: string,
   owner: boolean | undefined,
   state: FilterEnum

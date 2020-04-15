@@ -71,6 +71,7 @@ import {
   DropdownStyles,
   CenteredSpinner,
 } from './styled';
+import { getState } from '../../../../utils/stringUtils';
 
 const buttons = [
   {
@@ -224,7 +225,7 @@ class TemplateInfo extends React.Component<Props, State> {
 
   tooltipButton = (val: any, templateState: PostedTemplate.StateEnum) => {
     const tooltipID = val.text.replace(" ", "_").trim();
-    if (val.text === { PUBLISH }) {
+    if (val.text === PUBLISH) {
       return (
         <TooltipContainer>
           <TooltipHost id={tooltipID} content={templateState === PostedTemplate.StateEnum.Live ? val.altTooltip : val.tooltip}>
@@ -298,7 +299,7 @@ class TemplateInfo extends React.Component<Props, State> {
                 />
               </Title>
               <StatusIndicator state={templateState} />
-              <Status>{PostedTemplate.StateEnum[templateState]}</Status>
+              <Status>{getState(PostedTemplate.StateEnum[templateState])}</Status>
             </TitleWrapper>
             <TimeStamp>
               {TEMPLATE_INFO_UPDATED} {timestampParsed}

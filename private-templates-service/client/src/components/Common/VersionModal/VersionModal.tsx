@@ -43,11 +43,11 @@ import {
 } from '../../Dashboard/PreviewModal/TemplateInfo/styled';
 
 import { getDateString } from '../../../utils/versionUtils';
-import { capitalizeString } from "../../../utils/stringUtils";
+import { capitalizeString, getState } from "../../../utils/stringUtils";
 import ModalHOC from '../../../utils/ModalHOC';
 import { closeModal } from '../../../store/page/actions';
 import { Scroller } from '../../../utils/AllCardsUtil/Scroller';
-import { VERSIONS, THERE_ARE, VERSIONS_FOR, VERSION_HEADER, PUBLISHED_HEADER, STATUS_HEADER, NOT_PUBLISHED, SELECTED, VERSION_CANCEL, VERSION_DELETE, VERSION_UNPUBLISH, VERSION_PUBLISH } from '../../../assets/strings';
+import { THERE_ARE, VERSIONS_FOR, VERSION_HEADER, PUBLISHED_HEADER, STATUS_HEADER, NOT_PUBLISHED, SELECTED, VERSION_CANCEL, VERSION_DELETE, VERSION_UNPUBLISH, VERSION_PUBLISH } from '../../../assets/strings';
 
 interface Props {
   template: Template;
@@ -144,7 +144,7 @@ class VersionModal extends React.Component<Props, State> {
                       <DateWrapper>{instance.publishedAt ? getDateString(instance.publishedAt) : `${NOT_PUBLISHED}`}</DateWrapper>
                       <StatusWrapper>
                         <StatusIndicator state={instance.state!} />
-                        <Status>{instance.state && capitalizeString(instance.state.toString())}</Status>
+                        <Status>{getState(instance.state && capitalizeString(instance.state.toString()))}</Status>
                       </StatusWrapper>
                       <CheckboxWrapper><Checkbox checked={this.state.versionList[index]}
                         onChange={() => {
