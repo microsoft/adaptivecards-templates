@@ -253,23 +253,22 @@ class TemplateInfo extends React.Component<Props, State> {
   render() {
     const {
       tags,
-      updatedAt,
       instances,
     } = this.props.template;
     const { isFetchingTags, isFetchingOwnerName, isFetchingOwnerPic } = this.props;
 
+    let templateInstance = getTemplateInstance(this.props.template, this.state.version);
+    let templateState = templateInstance.state || PostedTemplate.StateEnum.Draft;
     let timestampParsed = "";
-    if (updatedAt) {
-      const tempDate = new Date(updatedAt);
-      timestampParsed = tempDate.toLocaleString();
+    if (templateInstance.updatedAt) {
+      const tempDate = new Date(templateInstance.updatedAt);
+      timestampParsed = tempDate.toLocaleDateString() + " at " + tempDate.toLocaleTimeString(navigator.language, {hour: '2-digit', minute:'2-digit'});
     }
 
     const { history } = this.props;
     if (!history) {
       return (<div>Error loading page</div>)
     }
-    let templateInstance = getTemplateInstance(this.props.template, this.state.version);
-    let templateState = templateInstance.state || PostedTemplate.StateEnum.Draft;
     return (
       <OuterWrapper>
         <HeaderWrapper>
