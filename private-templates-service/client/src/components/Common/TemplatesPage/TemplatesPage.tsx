@@ -20,7 +20,7 @@ import Sort from "../../Dashboard/SearchPage/Sort";
 import Filter from "../../Dashboard/SearchPage/Filter";
 import SearchPage from "../../Dashboard/SearchPage";
 // Strings
-import { LIST_VIEW, GRID_VIEW } from "../../../assets/strings";
+import { LIST_VIEW, GRID_VIEW, SEARCH_PAGE } from "../../../assets/strings";
 import TagList from "./TagList";
 import { COLORS } from "../../../globalStyles";
 import { TooltipHost } from "office-ui-fabric-react";

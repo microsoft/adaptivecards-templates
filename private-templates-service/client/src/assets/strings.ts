@@ -11,7 +11,6 @@ export const IN = "In";
 export const ADAPTIVE_CARDS = "Adaptive Cards";
 export const PORTAL = "Portal";
 
-
 //PreviewModal.tsx
 export const ADAPTIVE_CARD_RENDER = "Adaptive Card Preview Render";
 export const TEMPLATE_INFO = "Card Information";
@@ -86,6 +85,9 @@ export const RECENTLY_VIEWED = "Recently viewed";
 export const DASHBOARD_RECENTLY_EDITED_PLACEHOLDER = "No edited templates.";
 export const DASHBOARD_RECENTLY_VIEWED_PLACEHOLDER = "No recently viewed templates.";
 export const FAVORITED_TAGS = "Favorited tags";
+export const DASHBOARD_PAGE = "Dashboard";
+export const TEMPLATE_PAGE = "Templates";
+export const SEARCH_PAGE = "searchPage";
 
 // Footer.tsx
 export const SITEMAP = "Sitemap";
@@ -201,6 +203,7 @@ export const BASIC_AUTH = "Basic authentication test.";
 //requireShared.tsx
 export const PERMISSION_DENIED = "You do not have permission to view this page.";
 export const CHECK_URL = "Error fetching template. Check the URL.";
+export const SHARED_PREVIEW = "Preview";
 
 //Sort.tsx
 export const DATE_CREATED = "Date Created";
