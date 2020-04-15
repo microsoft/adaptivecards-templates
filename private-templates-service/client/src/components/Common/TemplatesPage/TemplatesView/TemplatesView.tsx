@@ -28,16 +28,13 @@ interface Props {
 }
 
 export class TemplatesView extends Component<Props> {
-  constructor(props: Props) {
-    super(props);
-  }
 
   componentDidMount() {
     this.props.getTemplates(this.props.selectedTags);
   }
 
   componentDidUpdate(prevProps: Props) {
-    if (prevProps.selectedTags.length != this.props.selectedTags.length) {
+    if (prevProps.selectedTags.length !== this.props.selectedTags.length) {
       this.props.getTemplates(this.props.selectedTags);
     }
   }

@@ -19,6 +19,7 @@ import PublishModal from '../../../Common/PublishModal';
 import UnpublishModal from '../../../Common/UnpublishModal';
 import Tags from '../../../Common/Tags';
 import ShareModal from '../../../Common/ShareModal';
+import ShareSuccessModal from '../../../Common/ShareModal/ShareSuccessModal';
 import EditNameModal from '../../../Common/EditNameModal';
 import DeleteModal from '../../../Common/DeleteModal';
 import VersionCard from './VersionCard';
@@ -337,6 +338,7 @@ class TemplateInfo extends React.Component<Props, State> {
         {this.props.modalState === ModalState.Publish && <PublishModal template={this.props.template} templateVersion={this.state.version} />}
         {this.props.modalState === ModalState.Unpublish && <UnpublishModal template={this.props.template} templateVersion={this.state.version} />}
         {this.props.modalState === ModalState.Share && <ShareModal template={this.props.template} templateVersion={this.state.version} />}
+        {this.props.modalState === ModalState.ShareSuccess && <ShareSuccessModal template={this.props.template} templateVersion={this.state.version} />}
         {this.props.modalState === ModalState.Delete && <DeleteModal template={this.props.template} templateVersion={this.state.version} />}
         {this.props.modalState === ModalState.EditName && <EditNameModal />}
       </OuterWrapper>
