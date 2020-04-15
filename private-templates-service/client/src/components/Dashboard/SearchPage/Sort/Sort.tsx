@@ -5,20 +5,19 @@ import { connect } from 'react-redux';
 import { StyledSortDropdown } from "./styled";
 import { clearSort, querySort } from '../../../../store/sort/actions';
 import { THEME } from '../../../../globalStyles';
+import { SortType } from "../../../../store/sort/types";
 
 const mapStateToProps = (state: RootState) => {
   return {
     isSearch: state.search.isSearch,
-    sortType: state.sort.sortType
+    sortType: state.sort.sortType,
+    searchByTemplateName: state.search.searchByTemplateName
   }
 }
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    clearSort: () => {
-      dispatch(clearSort());
-    },
-    querySort: (sortType: string) => {
+    querySort: (sortType: SortType ) => {
       dispatch(querySort(sortType));
     }
   }
@@ -26,21 +25,23 @@ const mapDispatchToProps = (dispatch: any) => {
 
 interface Props {
   isSearch: boolean;
-  sortType: string;
-  querySort: (sortType: string) => void;
-  clearSort: () => void;
+  sortType: SortType;
+  querySort: (sortType: SortType) => void;
+  // clear sort will be implemented there are design confirmations from Naomi
 }
 
 const options: IDropdownOption[] = [
-  { key: 'date created', text: "Date Created" },
-  { key: "date updated", text: "Date Updated" },
+  { key: 'dateCreated', text: "Date Created" },
+  { key: "dateUpdated", text: "Date Updated" },
   { key: "alphabetical", text: "Alphabetical" }
 ];
 
 class Sort extends React.Component<Props> {
   onChange = (event: React.FormEvent<HTMLDivElement>, option?: IDropdownOption) => {
     if (option && typeof option.key === "string") {
-      this.props.querySort(option.key);
+      if( option.key === "alphabetical" || option.key ==="dateCreated" || option.key === "dateUpdated"){
+        this.props.querySort(option.key);
+      }
     }
   }
 

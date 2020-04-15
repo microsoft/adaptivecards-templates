@@ -16,12 +16,23 @@ export const BackDrop = styled.div`
   justify-content: center;
 `;
 
-export const Modal = styled.div`
+export const Modal = styled.section`
   display: flex;
   flex-direction: column;
   background-color: ${COLORS.WHITE};
   width: 50%;
   padding: 48px;
+`;
+
+export const TopRowWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
+export const ToggleContainer = styled.div`
+  display: flex;
+  flex-direction: row;
 `;
 
 export const Header = styled.div`

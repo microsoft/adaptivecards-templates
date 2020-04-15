@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { COLORS, FONTS } from '../../../globalStyles';
-import { DefaultButton } from 'office-ui-fabric-react';
+import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react';
 
 export const BackDrop = styled.div`
   position: fixed;
@@ -16,7 +16,7 @@ export const BackDrop = styled.div`
   justify-content: center;
 `;
 
-export const Modal = styled.div`
+export const Modal = styled.section`
   display: flex;
   flex-direction: column;
   background-color: ${COLORS.WHITE};
@@ -25,8 +25,9 @@ export const Modal = styled.div`
 `;
 
 export const Header = styled.div`
-  font-size: 1.375rem;
   font-family: ${FONTS.SEGOE_UI_SEMI_BOLD};
+  font-size: 1.75rem;
+  font-weight: 500;
   margin-bottom: 12px;
 `;
 
@@ -35,6 +36,7 @@ export const Description = styled.div`
 `;
 
 export const DescriptionAccent = styled.span`
+  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD};
   color: ${COLORS.BLUE};
   white-space: nowrap;
   font-weight: bold;
@@ -43,6 +45,7 @@ export const DescriptionAccent = styled.span`
 export const CenterPanelWrapper = styled.div`
   display: flex;
   flex-direction: row;
+  justify-content: center;
   margin-bottom: 24px;
 `;
 
@@ -73,7 +76,7 @@ export const BottomRow = styled.div`
   display: flex;
   flex-direction: row;
   align-items: baseline;
-  justify-content: space-between;
+  justify-content: flex-end;
 `;
 
 export const NotifiedGroup = styled.div`
@@ -86,6 +89,11 @@ export const ButtonGroup = styled.div`
   flex-direction: row;
 `;
 
+export const PublishButton = styled(PrimaryButton)`
+  min-width: 150px;
+`;
+
 export const CancelButton = styled(DefaultButton)`
   margin-right: 12px;
+  min-width: 150px;
 `;

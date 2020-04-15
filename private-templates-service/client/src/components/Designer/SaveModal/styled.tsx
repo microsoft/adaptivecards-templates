@@ -16,7 +16,7 @@ export const BackDrop = styled.div`
   justify-content: center;
 `;
 
-export const Modal = styled.div`
+export const Modal = styled.section`
   display: flex;
   flex-direction: column;
   background-color: ${COLORS.WHITE};
@@ -24,7 +24,7 @@ export const Modal = styled.div`
   padding: 48px;
 `;
 
-export const ColumnWrapper = styled.div`
+export const ColumnWrapper = styled.form`
   display: flex;
   flex-direction: column;
 `;

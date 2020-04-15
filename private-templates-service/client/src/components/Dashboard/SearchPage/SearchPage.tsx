@@ -11,7 +11,10 @@ import Sort from './Sort/Sort';
 import Gallery from '../../Gallery';
 
 import { SearchAndFilter, SearchResultBanner, StyledSearchText, StyledSpinner } from './styled';
-
+import { FilterObject } from '../../../store/filter/types';
+import { querySearch } from '../../../store/search/actions';
+import { SortType } from '../../../store/sort/types';
+import { FilterEnum } from '../../../store/filter/types';
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -28,19 +31,23 @@ const mapDispatchToProps = (dispatch: any) => {
   return {
     getTemplate: (templateID: string) => {
       dispatch(getTemplate(templateID));
-    }
+    },
+    querySearch: (templateName: string, sortBy: SortType, state?: FilterEnum, owned?: boolean) => {
+      dispatch(querySearch(templateName, sortBy, state, owned))
+    } 
   }
 }
 
 interface Props {
   searchByTemplateName: string;
   isSearch: boolean
-  filterType: string;
-  sortType: string;
+  filterType: FilterObject;
+  sortType: SortType;
   loading: boolean;
   templates?: TemplateList;
   getTemplate: (templateID: string) => void;
   selectTemplate: (templateID: string) => void;
+  querySearch: (templateName: string, sortBy: SortType, state?: FilterEnum, owned?: boolean) => void;
 }
 
 interface State {
@@ -56,7 +63,12 @@ class SearchPage extends React.Component<Props, State> {
   toggleModal = () => {
     this.setState({ isPreviewOpen: !this.state.isPreviewOpen });
   };
-
+  
+  componentDidUpdate = (prevProps: Props) => {
+    if (this.props.filterType !== prevProps.filterType || this.props.sortType !== prevProps.sortType) {
+      this.props.querySearch(this.props.searchByTemplateName, this.props.sortType, this.props.filterType.state, this.props.filterType.owner)
+    }
+  }
   render() {
     if (this.props.loading) {
       return (
@@ -87,7 +99,7 @@ class SearchPage extends React.Component<Props, State> {
             <Filter />
           </SearchAndFilter>
         </SearchResultBanner>
-        <h1>filter value: {this.props.filterType}</h1>
+        <h1>filter value: {this.props.filterType.value}</h1>
         <h1>sort value: {this.props.sortType}</h1>
         <Gallery onClick={this.props.selectTemplate} templates={templates} />
       </div>

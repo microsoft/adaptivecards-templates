@@ -23,6 +23,7 @@ import SearchPage from "../../Dashboard/SearchPage";
 import { LIST_VIEW, GRID_VIEW } from "../../../assets/strings";
 import TagList from "./TagList";
 import { COLORS } from "../../../globalStyles";
+import { TooltipHost } from "office-ui-fabric-react";
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -140,21 +141,28 @@ class TemplatesPage extends Component<Props, State> {
     if (!tagsState.isFetching && tagsState.allTags && tagsState.allTags.allTags) {
       allTags = tagsState.allTags?.allTags;
     }
+    let listTooltip = "listTooltip";
+    let gridTooltip = "gridTooltip";
+
 
     return (
       <OuterCardsContainer>
         <InnerCardsContainer>
-          <UpperBar>
+          <UpperBar aria-label={this.props.pageTitle + " controls"}>
             <Title>{this.props.pageTitle}</Title>
             <ViewHelperBar>
-              <ToggleButton iconProps={{ iconName: "BulletedList" }} onClick={this.props.toggleView} viewType={ViewType.List} title={LIST_VIEW} />
-              <ToggleButton iconProps={{ iconName: "GridViewMedium" }} onClick={this.props.toggleView} viewType={ViewType.Grid} title={GRID_VIEW} />
+              <TooltipHost id={listTooltip} content={LIST_VIEW}>
+                <ToggleButton iconProps={{ iconName: "BulletedList" }} onClick={this.props.toggleView} viewType={ViewType.List} title={LIST_VIEW} />
+              </TooltipHost>
+              <TooltipHost id={gridTooltip} content={GRID_VIEW}>
+                <ToggleButton iconProps={{ iconName: "GridViewMedium" }} onClick={this.props.toggleView} viewType={ViewType.Grid} title={GRID_VIEW} />
+              </TooltipHost>
               <Sort />
               <Filter />
             </ViewHelperBar>
           </UpperBar>
           <TagList tags={allTags} selectedTags={this.state.selectedTags} allowEdit={false} onClick={this.tagOnClick} toggleStyle={this.tagToggleStyle} />
-          <TemplatesView onClick={this.selectTemplate} selectedTags={this.state.selectedTags} getTemplates={this.props.getTemplates}/>
+          <TemplatesView onClick={this.selectTemplate} selectedTags={this.state.selectedTags} getTemplates={this.props.getTemplates} />
         </InnerCardsContainer>
       </OuterCardsContainer>
     );

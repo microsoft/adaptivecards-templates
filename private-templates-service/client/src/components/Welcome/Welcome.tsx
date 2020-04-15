@@ -24,7 +24,7 @@ const WelcomeContent = (props: WelcomeProps): ReactElement => {
   // Not authenticated, present a sign in button
   return (
     <React.Fragment>
-      <Button style={{backgroundColor: COLORS.BLUE}} onClick={props.authButtonMethod}>
+      <Button style={{ backgroundColor: COLORS.BLUE }} onClick={props.authButtonMethod}>
         Click here to sign in
       </Button>
     </React.Fragment>

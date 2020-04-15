@@ -4,25 +4,38 @@ trigger: none
 pr:
   branches:
     include:
+    - stage
+    exclude:
     - dev
+    - users/*
+
+variables: 
+  ## Add this under variables section in the pipeline
+  azureSubscription: 'Adaptive Cards (47c80630-3d74-4b3e-a2f4-57e6368cd8c6)'
+  keyVault: 'AC-KeyVault-West'
 
 pool:
   vmImage: 'ubuntu-latest'
 
 steps:
 
+- task: AzureKeyVault@1
+  inputs:
+    azureSubscription: $(azureSubscription)
+    keyVaultName: $(keyVault)
+    secretsFilter: 'StageACMSSecret'
+
 - task: PowerShell@2
   inputs:
     targetType: 'inline'
     script: |
-        Write-Host "##vso[task.setvariable variable=ACMS_APP_ID;]$(REACT_APP_ACMS_APP_ID)"
-        Write-Host "##vso[task.setvariable variable=ACMS_APP_SECRET;]$(CLIENT_SECRET)"
+        Write-Host "##vso[task.setvariable variable=ACMS_APP_SECRET;]$(StageACMSSecret)"
 
 
 - task: NodeTool@0 
   inputs:
     versionSpec: '12.x'
-
+          
 - script: |
     cd private-templates-service/server
     npm run init-app
