@@ -22,6 +22,12 @@ export const DashboardContainer = styled.div`
   justify-content: flex-start;
 `;
 
+export const RecentlyEditedSection = styled.section`
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 auto;
+`;
+
 export const OuterWindow = styled.div`
   display: flex;
   flex-direction: row;

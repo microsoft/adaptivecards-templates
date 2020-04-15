@@ -12,7 +12,10 @@ import { updateTemplate, getTemplate } from '../../store/currentTemplate/actions
 import * as monaco from 'monaco-editor';
 import markdownit from 'markdown-it';
 import * as ACDesigner from 'adaptivecards-designer';
-import { DesignerWrapper } from './styled';
+import {
+  OuterDesignerWrapper,
+  DesignerWrapper
+} from './styled';
 
 import EditNameModal from '../Common/EditNameModal';
 import SaveModal from './SaveModal/SaveModal';
@@ -133,12 +136,12 @@ class Designer extends React.Component<DesignerProps> {
 
   render() {
     return (
-      <main>
+      <OuterDesignerWrapper>
         <DesignerWrapper id="designer-container" />
         {this.props.isFetching && <SpinnerModal />}
         {this.props.modalState === ModalState.Save && <SaveModal designerSampleData={designer.sampleData} designerTemplateJSON={designer.getCard()} />}
         {this.props.modalState === ModalState.EditName && <EditNameModal />}
-      </main>
+      </OuterDesignerWrapper>
     );
   }
 }

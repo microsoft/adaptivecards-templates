@@ -35,6 +35,7 @@ import {
 import {
   Title,
   DashboardContainer,
+  RecentlyEditedSection,
   OuterWindow,
   TagsContainer,
   CenteredSpinner,
@@ -159,7 +160,7 @@ class Dashboard extends React.Component<Props> {
       <OuterDashboardContainer>
         <OuterWindow>
           <DashboardContainer id={DASHBOARD_MAIN_CONTENT_ID}>
-            <section aria-label={RECENTLY_EDITED}>
+            <RecentlyEditedSection aria-label={RECENTLY_EDITED}>
               <Title>{RECENTLY_EDITED}</Title>
               {recentTemplates.isFetching || this.props.templateOwner.isFetchingName || this.props.templateOwner.isFetchingPicture ?
                 <CenteredSpinner size={SpinnerSize.large} />
@@ -171,7 +172,7 @@ class Dashboard extends React.Component<Props> {
                 ) : (
                     <RecentlyEditedPlaceholder />
                   )}
-            </section>
+            </RecentlyEditedSection>
             <section aria-label={RECENTLY_VIEWED}>
               <Title>{RECENTLY_VIEWED}</Title>
               {recentTemplates.isFetching || this.props.templateOwner.isFetchingName || this.props.templateOwner.isFetchingPicture ?
