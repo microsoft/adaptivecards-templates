@@ -30,6 +30,7 @@ import { getDateString } from "../../utils/versionUtils";
 import KeyCode from "../../globalKeyCodes";
 import * as STRINGS from "../../assets/strings"
 import { getState } from "../../utils/stringUtils";
+import { NA } from "../../assets/strings";
 
 interface Props {
   onClick?: (templateID: string) => void;
@@ -84,7 +85,7 @@ class AdaptiveCardPanel extends React.Component<Props> {
 
             <TemplateName>{template.name}</TemplateName>
             <TemplateUpdatedAt>
-              {template.updatedAt ? getDateString(template.updatedAt) : "N/A"}
+              {template.updatedAt ? getDateString(template.updatedAt) : `${NA}`}
             </TemplateUpdatedAt>
           </TemplateNameAndDateWrapper>
           <Align>

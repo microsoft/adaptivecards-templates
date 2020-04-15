@@ -42,7 +42,12 @@ export const COPY_LINK = "Copy link";
 // ShareModalForm.tsx
 export const EMAIL_RECIPIENTS = "Email Recipients";
 export const SEND_IN_OUTLOOK = "Send an Email";
+export const SUBMIT = "Submit";
 export const NO_THANKS = "No thanks";
+export const ACMS = "ACMS";
+export const SHARED = "shared";
+export const WITH_YOU = "with you";
+export const HERE_IS_THE_LINK = "Here is the link to access this Adaptive Card: ";
 
 //ShareSuccessModal.tsx
 export const SUCCESSFULLY_SHARED = "Succesfully shared!";
@@ -111,12 +116,16 @@ export const GRID_VIEW = "Grid View";
 export const PUBLISH_CARD = "Publish Card";
 export const PUBLISH_MODAL_DESC = "Your new design will be available to your organization as ";
 export const SEARCH_FOR_PEOPLE = "Search for people";
+export const PUBLISH_CANCEL = "Cancel";
+export const PUBLISH_BUTTON = "Publish"
 
 // NavBar/SideBar styled
 export const LOGO_DESCRIPTION = "Adaptive Cards Portal Icon";
 
 // SearchBar/styled.tsx
 export const SEARCHBAR_DESCRIPTION = "Searchbar";
+export const SEARCH = "search";
+export const TEMPLATES = "templates";
 
 //SaveModal.tsx
 export const SAVECARD = "Save Card";
@@ -231,3 +240,6 @@ export const ERROR_LOADING_TEMPLATES = "Error loading templates";
 export const UTIL_LIVE = "Live";
 export const UTIL_DRAFT = "Draft";
 export const UTIL_DEPRECATED = "Deprecated";
+
+//TagBody.tsx
+export const TAG_DESCRIPTION = "Tag";

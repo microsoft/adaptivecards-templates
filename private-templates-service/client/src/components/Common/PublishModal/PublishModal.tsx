@@ -28,6 +28,7 @@ import {
   CancelButton,
   PublishButton,
 } from './styled';
+import { PUBLISH_CANCEL, PUBLISH_BUTTON } from '../../../assets/strings';
 
 interface Props {
   template: Template;
@@ -74,8 +75,8 @@ class PublishModal extends React.Component<Props> {
           </CenterPanelWrapper>
           <BottomRow>
             <ButtonGroup>
-              <CancelButton text="Cancel" onClick={this.props.closeModal} />
-              <PublishButton text="Publish" onClick={this.publish} />
+              <CancelButton text={PUBLISH_CANCEL} onClick={this.props.closeModal} />
+              <PublishButton text={PUBLISH_BUTTON} onClick={this.publish} />
             </ButtonGroup>
           </BottomRow>
         </Modal>
