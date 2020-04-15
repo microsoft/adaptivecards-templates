@@ -148,7 +148,7 @@ class TemplatesPage extends Component<Props, State> {
     return (
       <OuterCardsContainer>
         <InnerCardsContainer>
-          <UpperBar>
+          <UpperBar aria-label={this.props.pageTitle + " controls"}>
             <Title>{this.props.pageTitle}</Title>
             <ViewHelperBar>
               <TooltipHost id={listTooltip} content={LIST_VIEW}>

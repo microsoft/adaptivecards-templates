@@ -38,7 +38,8 @@ import {
   DELETE_BUTTON_TOOLTIP,
   SHARE_BUTTON_TOOLTIP,
   PUBLISH_BUTTON_TOOLTIP,
-  UNPUBLISH_BUTTON_TOOLTIP
+  UNPUBLISH_BUTTON_TOOLTIP,
+  TAGS
 } from "../../../../assets/strings";
 import { TooltipContainer } from '../styled';
 import {
@@ -271,6 +272,8 @@ class TemplateInfo extends React.Component<Props, State> {
     }
     let templateInstance = getTemplateInstance(this.props.template, this.state.version);
     let templateState = templateInstance.state || PostedTemplate.StateEnum.Draft;
+
+    let tagCardID = "Card tags";
     return (
       <OuterWrapper>
         <HeaderWrapper>
@@ -301,7 +304,7 @@ class TemplateInfo extends React.Component<Props, State> {
         <MainContentWrapper>
           <RowWrapper>
             {cards.map((val) => (
-              <Card key={val.header}>
+              <Card key={val.header} aria-label={val.header}>
                 <CardHeader>
                   {val.header}
                 </CardHeader>
@@ -315,16 +318,18 @@ class TemplateInfo extends React.Component<Props, State> {
               </Card>
             ))}
           </RowWrapper>
-          <Card>
-            <CardHeader>Tags</CardHeader>
-            <CardBody>
-              <TagsWrapper>
-                {isFetchingTags ?
-                  <CenteredSpinner size={SpinnerSize.large} />
-                  : <Tags updateTags={this.saveTags} tagRemove={this.tagRemove} tags={tags} allowAddTag={true} allowEdit={true} />
-                }
-              </TagsWrapper>
-            </CardBody>
+          <Card aria-label={TAGS}>
+            <form aria-labelledby={tagCardID}>
+              <CardHeader id={tagCardID}>{TAGS}</CardHeader>
+              <CardBody>
+                <TagsWrapper>
+                  {isFetchingTags ?
+                    <CenteredSpinner size={SpinnerSize.large} />
+                    : <Tags updateTags={this.saveTags} tagRemove={this.tagRemove} tags={tags} allowAddTag={true} allowEdit={true} />
+                  }
+                </TagsWrapper>
+              </CardBody>
+            </form>
           </Card>
           <RowWrapper>
             <VersionCard template={this.props.template} templateVersion={this.state.version} onSwitchVersion={this.onSwitchVersion} />

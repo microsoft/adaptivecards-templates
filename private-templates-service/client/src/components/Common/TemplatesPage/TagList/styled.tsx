@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const TagsContainer = styled.div`
+export const TagsContainer = styled.section`
   scroll-behavior: smooth;
   padding-top: 20px;
   display: flex;

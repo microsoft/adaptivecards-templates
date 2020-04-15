@@ -11,7 +11,7 @@ import { Template } from "adaptive-templating-service-typescript-node";
 import Gallery from "../../../Gallery";
 import TemplateList from "../../../Dashboard/TemplateList";
 // Strings
-import { ALL_CARDS_PLACEHOLDER } from "../../../../assets/strings";
+import { ALL_CARDS_PLACEHOLDER, ALL_CARDS } from "../../../../assets/strings";
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -47,7 +47,7 @@ export class TemplatesView extends Component<Props> {
       templates = templatesState.templates.templates;
     }
     return (
-      <React.Fragment>
+      <section aria-label={ALL_CARDS}>
         {templatesState.isFetching ? (
           <CenteredSpinner size={SpinnerSize.large} />
         ) : templates.length ? (
@@ -59,7 +59,7 @@ export class TemplatesView extends Component<Props> {
         ) : (
               <PlaceholderText>{ALL_CARDS_PLACEHOLDER}</PlaceholderText>
             )}
-      </React.Fragment>
+      </section>
     );
   }
 }

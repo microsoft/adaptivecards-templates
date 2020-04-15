@@ -133,12 +133,12 @@ class Designer extends React.Component<DesignerProps> {
 
   render() {
     return (
-      <React.Fragment>
+      <main>
         <DesignerWrapper id="designer-container" />
         {this.props.isFetching && <SpinnerModal />}
         {this.props.modalState === ModalState.Save && <SaveModal designerSampleData={designer.sampleData} designerTemplateJSON={designer.getCard()} />}
         {this.props.modalState === ModalState.EditName && <EditNameModal />}
-      </React.Fragment>
+      </main>
     );
   }
 }

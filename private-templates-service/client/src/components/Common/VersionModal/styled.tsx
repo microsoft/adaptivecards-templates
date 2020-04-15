@@ -16,7 +16,7 @@ export const BackDrop = styled.div`
   justify-content: center;
 `;
 
-export const Modal = styled.div`
+export const Modal = styled.section`
   display: flex;
   flex-direction: column;
   background-color: ${COLORS.WHITE};

@@ -76,7 +76,7 @@ const NavBar = (props: NavBarProps) => {
       history.replace('/')
     }
   }
-  
+
   switch (props.currentPage.toLowerCase()) {
     case "dashboard":
       return (
@@ -104,9 +104,9 @@ const NavBar = (props: NavBarProps) => {
           <MobileBanner>
             <StyledLogo aria-label={STRINGS.LOGO_DESCRIPTION} src={Logo} />
             <Styledh1>{((props.templateID === "" || props.templateID === undefined) && STRINGS.UNTITLEDCARD) || props.templateName}</Styledh1>
-            {(props.templateID !== "" && props.templateID !== undefined ) && <EditButton onClick={editName} iconProps={{ iconName: 'Edit' }} />}
+            {(props.templateID !== "" && props.templateID !== undefined) && <EditButton onClick={editName} iconProps={{ iconName: 'Edit' }} />}
           </MobileBanner>
-          <ActionButton onClick={() => { history.goBack()}}>
+          <ActionButton onClick={() => { history.goBack() }}>
             <StyledButton>
               <StyledButtonContent>
                 Finish
