@@ -327,7 +327,8 @@ class TemplateInfo extends React.Component<Props, State> {
                       <CenteredSpinner size={SpinnerSize.large} /> :
                       <IconWrapper><OwnerList oids={oids}/></IconWrapper>)}
                   {val.header === "Usage" && <UsageNumber>{templateInstance.numHits}</UsageNumber>}
-                  {(val.header === "Author") ? (this.props.owner && this.props.owner.displayNames) ? this.props.owner.displayNames[templateInstance.lastEditedUser!] : "" : val.bodyText}
+                  {(val.header === "Author") ? (this.props.owner && this.props.owner.displayNames) ? this.props.owner.displayNames[templateInstance.lastEditedUser!] : "" : 
+                    (val.header === "People")? oids.length + " " + val.bodyText : val.bodyText}
                 </CardBody>
               </Card>
             ))}

@@ -24,7 +24,6 @@ const getPersonaProps = (persona: IFacepilePersona) => {
 const facepileProps: IFacepileProps = {
   personas: [],
   maxDisplayablePersonas: 3,
-  ariaLabel: 'List of collaborators',
   getPersonaProps: getPersonaProps
 };
 
