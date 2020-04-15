@@ -271,6 +271,8 @@ class TemplateInfo extends React.Component<Props, State> {
     }
     let templateInstance = getTemplateInstance(this.props.template, this.state.version);
     let templateState = templateInstance.state || PostedTemplate.StateEnum.Draft;
+
+    let tagCardID = "Card tags";
     return (
       <OuterWrapper>
         <HeaderWrapper>
@@ -316,15 +318,17 @@ class TemplateInfo extends React.Component<Props, State> {
             ))}
           </RowWrapper>
           <Card aria-label={TAGS}>
-            <CardHeader>{TAGS}</CardHeader>
-            <CardBody>
-              <TagsWrapper>
-                {isFetchingTags ?
-                  <CenteredSpinner size={SpinnerSize.large} />
-                  : <Tags updateTags={this.saveTags} tagRemove={this.tagRemove} tags={tags} allowAddTag={true} allowEdit={true} />
-                }
-              </TagsWrapper>
-            </CardBody>
+            <form aria-labelledby={tagCardID}>
+              <CardHeader id={tagCardID}>{TAGS}</CardHeader>
+              <CardBody>
+                <TagsWrapper>
+                  {isFetchingTags ?
+                    <CenteredSpinner size={SpinnerSize.large} />
+                    : <Tags updateTags={this.saveTags} tagRemove={this.tagRemove} tags={tags} allowAddTag={true} allowEdit={true} />
+                  }
+                </TagsWrapper>
+              </CardBody>
+            </form>
           </Card>
           <RowWrapper>
             <VersionCard template={this.props.template} templateVersion={this.state.version} onSwitchVersion={this.onSwitchVersion} />
