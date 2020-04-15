@@ -104,13 +104,15 @@ class SaveModal extends React.Component<Props, State> {
     adaptiveCard.parse(this.props.designerTemplateJSON);
     let renderedCard = adaptiveCard.render();
 
+    let modalTitle = "saveModalTitle";
+
     return (
       <BackDrop>
-        <Modal>
-          <ColumnWrapper>
+        <Modal aria-label={SAVECARD}>
+          <ColumnWrapper aria-labelledby={modalTitle}>
             <TitleWrapper>
               <StyledTitle>{SAVECARD}</StyledTitle>
-              <div>{SAVETEXT}</div>
+              <div id={modalTitle}>{SAVETEXT}</div>
             </TitleWrapper>
             <MiddleRowWrapper>
               <Container style={{ margin: "0 80px 24px 0" }} >
@@ -131,7 +133,7 @@ class SaveModal extends React.Component<Props, State> {
               </Container>
               <InfoWrapper>
                 <StyledH3>{CARDNAME}</StyledH3>
-                <StyledTextField onChange={this.onChange} placeholder = {MYCARD} defaultValue = {UNTITLEDCARD}/>
+                <StyledTextField onChange={this.onChange} placeholder={MYCARD} defaultValue={UNTITLEDCARD} />
                 <StyledH3>{TAGS}</StyledH3>
                 <TagsWrapper>
                   <Tags updateTags={this.saveTags} tagRemove={this.tagRemove} tags={this.state.tags} allowAddTag={true} allowEdit={true} />

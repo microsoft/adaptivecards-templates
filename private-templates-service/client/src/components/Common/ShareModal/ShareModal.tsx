@@ -8,7 +8,9 @@ import ShareModalForm from './ShareModalForm';
 import ModalHOC from '../../../utils/ModalHOC';
 
 import { closeModal } from '../../../store/page/actions';
+import { updateTemplate } from '../../../store/currentTemplate/actions';
 import { connect } from 'react-redux';
+import { RootState } from '../../../store/rootReducer';
 
 import { TextField, Toggle, TooltipHost } from 'office-ui-fabric-react';
 
@@ -26,9 +28,8 @@ import {
   ToggleContainer,
   TopRowWrapper
 } from './styled';
+import { DescriptionAccent } from '../PublishModal/styled';
 import * as STRINGS from '../../../assets/strings';
-import { updateTemplate } from '../../../store/currentTemplate/actions';
-import { RootState } from '../../../store/rootReducer';
 
 interface ShareModalProps {
   template: Template;
@@ -65,7 +66,7 @@ class ShareModal extends React.Component<ShareModalProps> {
     let isTemplateShared = isTemplateInstanceShareable(this.props.template, this.props.templateVersion);
     return (
       <BackDrop>
-        <Modal>
+        <Modal aria-label={STRINGS.SHARE_MODAL_TITLE}>
           <TopRowWrapper>
             <Header>{STRINGS.SHARE_MODAL_TITLE}</Header>
             <ToggleContainer>
@@ -79,7 +80,12 @@ class ShareModal extends React.Component<ShareModalProps> {
               </TooltipHost>
             </ToggleContainer>
           </TopRowWrapper>
-          <Description>{STRINGS.SHARE_MODAL_DESCRIPTION}{getShareModalDescription(this.props.template, this.props.templateVersion!)}</Description>
+          <Description>
+            {STRINGS.SHARE_MODAL_DESCRIPTION}
+            <DescriptionAccent>
+              {this.props.template.name} - {this.props.templateVersion}
+            </DescriptionAccent>
+          </Description>
           <CenterPanelWrapper>
             <ShareLinkPanel>
               <SemiBoldText>{STRINGS.SHARE_WITH_LINK}</SemiBoldText>
@@ -110,10 +116,6 @@ function onCopyURL(props: ShareModalProps) {
   copyCode.select();
   document.execCommand('copy');
   copyCode.remove();
-}
-
-function getShareModalDescription(template: Template, templateVersion: string): string {
-  return " " + template!.name + " - " + templateVersion;
 }
 
 export default ModalHOC(connect(mapStateToProps, mapDispatchToProps)(ShareModal));

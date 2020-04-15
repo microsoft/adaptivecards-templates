@@ -179,7 +179,7 @@ const SideBar = (props: Props) => {
   }
 
   return (
-    <OuterSideBarWrapper>
+    <OuterSideBarWrapper aria-label={"navbar"}>
       <MainItems>
         <LogoWrapper onClick={onLogoClick} tabIndex={props.modalState ? -1 : 0} onKeyDown={onKeyDown}>
           <Logo aria-label={STRINGS.LOGO_DESCRIPTION} src={mainLogo} />

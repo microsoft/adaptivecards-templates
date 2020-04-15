@@ -5,6 +5,9 @@ import { connect } from "react-redux";
 import { querySearch, clearSearch } from "../../../store/search/actions";
 import { COLORS, BREAK } from "../../../globalStyles";
 import * as STRINGS from "../../../assets/strings";
+import { clearFilter } from '../../../store/filter/actions';
+import { clearSort } from '../../../store/sort/actions';
+
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -23,6 +26,12 @@ const mapDispatchToProps = (dispatch: any) => {
     },
     clearSearch: () => {
       dispatch(clearSearch());
+    },
+    clearFilter: () => {
+      dispatch(clearFilter());
+    },
+    clearSort: () => {
+      dispatch(clearSort());
     }
   };
 };
@@ -34,6 +43,8 @@ interface Props {
   isSearchBarVisible?: boolean;
   search: (searchByTemplateName: string) => void;
   clearSearch: () => void;
+  clearFilter: () => void;
+  clearSort: () => void;
 }
 
 interface State {
@@ -73,6 +84,7 @@ class SearchBar extends React.Component<Props, State> {
 
   componentDidMount() {
     window.addEventListener("resize", this.dimentionsUpdate.bind(this));
+    this.onClear();
   }
 
   dimentionsUpdate = (e: Event) => {
@@ -85,6 +97,8 @@ class SearchBar extends React.Component<Props, State> {
 
   onClear = () => {
     this.props.clearSearch();
+    this.props.clearSort();
+    this.props.clearFilter();
   };
 
   onSearch = (searchByTemplateName: string) => {

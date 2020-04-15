@@ -4,7 +4,7 @@ import { ActionButton } from 'office-ui-fabric-react';
 
 import { BREAK, COLORS, FONTS } from "../../globalStyles";
 
-export const Banner = styled.div`
+export const Banner = styled.header`
   background-color: ${COLORS.WHITE};
   display: flex;
   flex-direction: row;
