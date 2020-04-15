@@ -53,7 +53,7 @@ class ShareModal extends React.Component<ShareModalProps> {
   render() {
     return (
       <BackDrop>
-        <Modal>
+        <Modal aria-label={STRINGS.SHARE_MODAL_TITLE}>
           <Header>{STRINGS.SHARE_MODAL_TITLE}</Header>
           <Description>{STRINGS.SHARE_MODAL_DESCRIPTION}{getShareModalDescription(this.props.template, this.props.templateVersion!)}</Description>
           <CenterPanelWrapper>

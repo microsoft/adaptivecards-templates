@@ -37,7 +37,8 @@ import {
   DELETE_BUTTON_TOOLTIP,
   SHARE_BUTTON_TOOLTIP,
   PUBLISH_BUTTON_TOOLTIP,
-  UNPUBLISH_BUTTON_TOOLTIP
+  UNPUBLISH_BUTTON_TOOLTIP,
+  TAGS
 } from "../../../../assets/strings";
 import { TooltipContainer } from '../styled';
 import {
@@ -300,7 +301,7 @@ class TemplateInfo extends React.Component<Props, State> {
         <MainContentWrapper>
           <RowWrapper>
             {cards.map((val) => (
-              <Card key={val.header}>
+              <Card key={val.header} aria-label={val.header}>
                 <CardHeader>
                   {val.header}
                 </CardHeader>
@@ -314,8 +315,8 @@ class TemplateInfo extends React.Component<Props, State> {
               </Card>
             ))}
           </RowWrapper>
-          <Card>
-            <CardHeader>Tags</CardHeader>
+          <Card aria-label={TAGS}>
+            <CardHeader>{TAGS}</CardHeader>
             <CardBody>
               <TagsWrapper>
                 {isFetchingTags ?
@@ -347,7 +348,7 @@ function onActionButtonClick(props: Props, state: State, val: any) {
       break;
     case EDIT_IN_DESIGNER:
       const { history } = props;
-      if (history) history.push('/designer/'+ props.template.id + '/' + state.version);
+      if (history) history.push('/designer/' + props.template.id + '/' + state.version);
       break;
     case DELETE:
       props.openModal(ModalState.Delete);

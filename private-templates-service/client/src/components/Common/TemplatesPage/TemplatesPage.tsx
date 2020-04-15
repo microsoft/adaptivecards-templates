@@ -144,7 +144,7 @@ class TemplatesPage extends Component<Props, State> {
     return (
       <OuterCardsContainer>
         <InnerCardsContainer>
-          <UpperBar>
+          <UpperBar aria-label={this.props.pageTitle + " controls"}>
             <Title>{this.props.pageTitle}</Title>
             <ViewHelperBar>
               <ToggleButton iconProps={{ iconName: "BulletedList" }} onClick={this.props.toggleView} viewType={ViewType.List} title={LIST_VIEW} />
@@ -154,7 +154,7 @@ class TemplatesPage extends Component<Props, State> {
             </ViewHelperBar>
           </UpperBar>
           <TagList tags={allTags} selectedTags={this.state.selectedTags} allowEdit={false} onClick={this.tagOnClick} toggleStyle={this.tagToggleStyle} />
-          <TemplatesView onClick={this.selectTemplate} selectedTags={this.state.selectedTags} getTemplates={this.props.getTemplates}/>
+          <TemplatesView onClick={this.selectTemplate} selectedTags={this.state.selectedTags} getTemplates={this.props.getTemplates} />
         </InnerCardsContainer>
       </OuterCardsContainer>
     );

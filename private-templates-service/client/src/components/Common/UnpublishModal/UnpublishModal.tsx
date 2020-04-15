@@ -63,8 +63,8 @@ class UnpublishModal extends React.Component<Props> {
 
     return (
       <BackDrop>
-        <Modal>
-          <Header>Unpublish Template</Header>
+        <Modal aria-label={STRINGS.UNPUBLISH_TEMPLATE}>
+          <Header>{STRINGS.UNPUBLISH_TEMPLATE}</Header>
           <Description style={{ marginBottom: 0 }}>{STRINGS.UNPUBLISH_CONFIRMATION}<DescriptionAccent>{template.name} - {this.props.templateVersion}</DescriptionAccent>?</Description>
           <Description>{STRINGS.UNPUBLISH_WARNING}</Description>
           <CenterPanelWrapper>

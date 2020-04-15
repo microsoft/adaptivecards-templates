@@ -131,7 +131,7 @@ class PreviewModal extends React.Component<Props, State> {
       <ModalWrapper>
         {template && !isFetching ?
           <React.Fragment>
-            <ACOuterPanel>
+            <ACOuterPanel aria-label={STRINGS.ADAPTIVE_CARD_RENDER}>
               <TooltipContainer>
                 <TooltipHost content={STRINGS.HOST_CONFIG_TOOLTIP} >
                   <StyledDropdown selectedKey={selectedItem.key}
@@ -146,7 +146,7 @@ class PreviewModal extends React.Component<Props, State> {
                 </ACWrapper>
               </ACPanel>
             </ACOuterPanel>
-            <DescriptorWrapper>
+            <DescriptorWrapper aria-label={STRINGS.TEMPLATE_INFO}>
               <TemplateInfo template={template} onSwitchVersion={this.toggleTemplateVersion} />
             </DescriptorWrapper>
           </React.Fragment>

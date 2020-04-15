@@ -59,7 +59,7 @@ class PublishModal extends React.Component<Props> {
 
     return (
       <BackDrop>
-        <Modal>
+        <Modal aria-label={STRINGS.PUBLISH_CARD}>
           <Header>{STRINGS.PUBLISH_CARD}</Header>
           <Description>
             {STRINGS.PUBLISH_MODAL_DESC}
