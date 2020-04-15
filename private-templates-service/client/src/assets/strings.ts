@@ -32,6 +32,11 @@ export const EMAIL_RECIPIENTS = "Email Recipients";
 export const SEND_IN_OUTLOOK = "Send an Email";
 export const NO_THANKS = "No thanks";
 
+//ShareSuccessModal.tsx
+export const SUCCESSFULLY_SHARED = "Succesfully shared!";
+export const SHARE_SUCCESS_DESC = "Recipients will be able to view the card as ";
+export const OKAY_BUTTON = "Okay";
+
 // DeleteModal.tsx
 export const DELETE_WARNING = "Once a template is deleted, your organization will not be able to use it.";
 export const DELETE_CONFIRMATION = "Are you sure you want to delete ";
