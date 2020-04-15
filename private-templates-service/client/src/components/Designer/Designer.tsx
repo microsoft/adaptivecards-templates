@@ -17,6 +17,7 @@ import { DesignerWrapper } from './styled';
 import EditNameModal from '../Common/EditNameModal';
 import SaveModal from './SaveModal/SaveModal';
 import SpinnerModal from '../Common/SpinnerModal';
+import { DESIGNER_PUBLISH, DESIGNER_SAVE } from '../../assets/strings';
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -95,11 +96,11 @@ class Designer extends React.Component<DesignerProps> {
     }
     designer = initDesigner();
 
-    let publishButton = new ACDesigner.ToolbarButton("publishButton", "Publish", "", (sender) => (alert("Published!")));
+    let publishButton = new ACDesigner.ToolbarButton("publishButton", DESIGNER_PUBLISH, "", (sender) => (alert("Published!")));
     publishButton.separator = true;
     designer.toolbar.insertElementAfter(publishButton, ACDesigner.CardDesigner.ToolbarCommands.TogglePreview);
 
-    let saveButton = new ACDesigner.ToolbarButton("saveButton", "Save", "", (sender) => (onSave(designer, this.props)));
+    let saveButton = new ACDesigner.ToolbarButton("saveButton", DESIGNER_SAVE, "", (sender) => (onSave(designer, this.props)));
     saveButton.separator = true;
     designer.toolbar.insertElementAfter(saveButton, ACDesigner.CardDesigner.ToolbarCommands.TogglePreview);
   }
@@ -125,7 +126,7 @@ class Designer extends React.Component<DesignerProps> {
     // TODO: REMOVE ONCE PUBLISH IS COMPLETED IN DESIGNER
     const buttons = document.getElementsByClassName('acd-toolbar-button');
     for (let i = 0; i < buttons.length; i++) {
-      if (buttons[i].innerHTML === 'Publish') {
+      if (buttons[i].innerHTML === DESIGNER_PUBLISH) {
         (buttons[i] as HTMLElement).style.color = 'pink';
       }
     }

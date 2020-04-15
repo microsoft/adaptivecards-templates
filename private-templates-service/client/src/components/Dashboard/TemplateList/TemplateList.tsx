@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Template } from "adaptive-templating-service-typescript-node";
 import { TemplateListContainer, TemplateListHeader, TemplateListHeaderItem } from "./styled";
 import TemplateListContent from "./TemplateListContent";
-import { TEMPLATE_LIST_NAME, TEMPLATE_LIST_NAME, TEMPLATE_LIST_STATUS, TEMPLATE_LIST_OWNER, TEMPLATE_LIST_DATE } from "../../../assets/strings";
+import { TEMPLATE_LIST_NAME, TEMPLATE_LIST_STATUS, TEMPLATE_LIST_OWNER, TEMPLATE_LIST_DATE } from "../../../assets/strings";
 
 interface Props {
   templates: Template[];

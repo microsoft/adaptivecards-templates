@@ -46,6 +46,7 @@ import {
   ERROR_LOADING_PAGE,
   VERSION_LIST_DROPDOWN,
   TEMPLATE_INFO_UPDATED,
+  REQUESTS,
 } from "../../../../assets/strings";
 import { TooltipContainer } from '../styled';
 import {

@@ -4,6 +4,13 @@ export const NEW_CARD = "New Card";
 export const ALL_CARDS = "All Cards";
 export const DRAFTS = "Drafts";
 export const PUBLISHED = "Published";
+export const NAVBAR = "navbar";
+export const SIGN = "Sign";
+export const OUT = "Out";
+export const IN = "In";
+export const ADAPTIVE_CARDS = "Adaptive Cards";
+export const PORTAL = "Portal";
+
 
 //PreviewModal.tsx
 export const ADAPTIVE_CARD_RENDER = "Adaptive Card Preview Render";
@@ -167,3 +174,48 @@ export const TEMPLATE_LIST_NAME = "Name";
 export const TEMPLATE_LIST_DATE = "Date Modified";
 export const TEMPLATE_LIST_STATUS = "Status";
 export const TEMPLATE_LIST_OWNER = "Owner";
+
+//Designer.tsx
+export const DESIGNER_PUBLISH = "Publish";
+export const DESIGNER_SAVE = "Save";
+
+//ToolTipEditButton.tsx
+export const EDIT_TEMPLATE_NAME = "Edit Template Name";
+
+//NavBar.tsx
+export const BACK = "Back";
+export const FINISH = "Finish";
+export const PREVIEW = "PREVIEW";
+export const ID = "ID";
+
+//TemplateSourceInfo.tsx
+export const TEMPLATE_JSON = "Template JSON";
+export const COPY_JSON = "Copy JSON";
+export const UNDEFINED = "undefined";
+
+//Welcome.tsx
+export const CLICK_HERE = "Click here to sign in";
+export const ADMIN_PORTAL = "Admin Portal";
+export const BASIC_AUTH = "Basic authentication test.";
+
+//requireShared.tsx
+export const PERMISSION_DENIED = "You do not have permission to view this page.";
+
+//Sort.tsx
+export const DATE_CREATED = "Date Created";
+export const DATE_UPDATED = "Date Updated";
+export const ALPHABETICAL = "Alphabetical";
+export const DATE_CREATED_KEY = "dateCreated";
+export const DATE_UPDATED_KEY = "dateUpdated";
+export const ALPHABETICAL_KEY = "alphabetical";
+export const SORT_BY = "Sort by";
+
+//Filter.tsx
+export const OWNER_KEY = "owner";
+export const CREATED_BY_ME = "Created by me";
+export const DRAFT_KEY = "draft";
+export const FILTER_DRAFT = "Draft";
+export const PUBLISHED_KEY = "published";
+export const FILTER_PUBLISHED = "Published";
+export const FILTER_LIVE = "live";
+export const FILTER_BY = "Filter by";

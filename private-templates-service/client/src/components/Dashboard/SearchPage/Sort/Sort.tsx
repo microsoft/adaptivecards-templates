@@ -6,6 +6,7 @@ import { StyledSortDropdown } from "./styled";
 import { clearSort, querySort } from '../../../../store/sort/actions';
 import { THEME } from '../../../../globalStyles';
 import { SortType } from "../../../../store/sort/types";
+import { DATE_CREATED, ALPHABETICAL, DATE_UPDATED, DATE_CREATED_KEY, DATE_UPDATED_KEY, ALPHABETICAL_KEY, SORT_BY } from "../../../../assets/strings";
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -17,7 +18,7 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    querySort: (sortType: SortType ) => {
+    querySort: (sortType: SortType) => {
       dispatch(querySort(sortType));
     }
   }
@@ -31,15 +32,15 @@ interface Props {
 }
 
 const options: IDropdownOption[] = [
-  { key: 'dateCreated', text: "Date Created" },
-  { key: "dateUpdated", text: "Date Updated" },
-  { key: "alphabetical", text: "Alphabetical" }
+  { key: DATE_CREATED_KEY, text: DATE_CREATED },
+  { key: DATE_UPDATED_KEY, text: DATE_UPDATED },
+  { key: ALPHABETICAL_KEY, text: ALPHABETICAL }
 ];
 
 class Sort extends React.Component<Props> {
   onChange = (event: React.FormEvent<HTMLDivElement>, option?: IDropdownOption) => {
     if (option && typeof option.key === "string") {
-      if( option.key === "alphabetical" || option.key ==="dateCreated" || option.key === "dateUpdated"){
+      if (option.key === ALPHABETICAL_KEY || option.key === DATE_CREATED_KEY || option.key === DATE_UPDATED_KEY) {
         this.props.querySort(option.key);
       }
     }
@@ -48,7 +49,7 @@ class Sort extends React.Component<Props> {
   render() {
     return (
       <StyledSortDropdown
-        placeHolder="Sort by"
+        placeHolder={SORT_BY}
         options={options}
         onChange={this.onChange}
         theme={THEME.LIGHT}
