@@ -8,7 +8,7 @@ export const ModalWrapper = styled.main`
   display: flex;
   flex-direction: row;
   align-items: stretch;
-  min-height: 100%;
+  height: 100%;
 `;
 
 export const ACOuterPanel = styled.section`
