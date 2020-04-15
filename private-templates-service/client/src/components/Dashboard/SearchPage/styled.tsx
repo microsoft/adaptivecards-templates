@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { FONTS } from '../../../globalStyles';
 
 export const SearchAndFilter = styled.div`
   
@@ -18,7 +19,7 @@ export const SearchResultBanner = styled.div`
 export const StyledSearchText = styled.div`
   letter-spacing 0;
   font-size: 1.625rem;
-  font-weight: 600;
+  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD};
 `;
 
 export const StyledSpinner = styled.div`

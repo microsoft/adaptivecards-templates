@@ -85,15 +85,6 @@ export class TemplateServiceClient {
     if (!userResponse.success) {
       return { success: false, errorMessage: ServiceErrorMessage.UserNotFound };
     }
-    let userId = userResponse.result;
-
-    // Remove all unpublished templates under user
-    const template: Partial<ITemplate> = {
-      owner: userId,
-      isLive: false
-    };
-
-    let deleteTemplateResponse = await this.storageProvider.removeTemplate(template);
 
     const user: IUser = {
       authId: authId,
@@ -102,7 +93,7 @@ export class TemplateServiceClient {
 
     let removeUserResponse = await this.storageProvider.removeUser(user);
 
-    if (!deleteTemplateResponse.success || !removeUserResponse.success) {
+    if (!removeUserResponse.success) {
       return {
         success: false,
         errorMessage: ServiceErrorMessage.DeleteUserInfoFailed
@@ -124,7 +115,8 @@ export class TemplateServiceClient {
     authId: string,
     recentlyViewed?: string[],
     recentlyEdited?: string[],
-    recentTags?: string[]
+    recentTags?: string[],
+    favoriteTags?: string[]
   ): Promise<JSONResponse<Number>> {
 
     const userQuery: Partial<IUser> = {
@@ -135,10 +127,36 @@ export class TemplateServiceClient {
     const user: Partial<IUser> = {
       recentlyViewedTemplates: recentlyViewed,
       recentlyEditedTemplates: recentlyEdited,
-      recentTags: recentTags
+      recentTags: recentTags,
+      favoriteTags: favoriteTags
     };
 
     return this.storageProvider.updateUser(userQuery, user);
+  }
+
+  public async updateFavoriteTags(favorite: string[], unfavorite: string[], token?: string): Promise<JSONResponse<Number>> {
+    let authCheck = this._checkAuthenticated(token);
+    if (!authCheck.success) {
+      return authCheck;
+    }
+
+    let tagResponse = await this.getTags(token);
+    if (!tagResponse.success || !tagResponse.result) {
+      return { success: false, errorMessage: tagResponse.errorMessage };
+    }
+    let favoriteTags: string[] = tagResponse.result.favoriteTags || [];
+    let allTags: string[] = tagResponse.result.allTags || [];
+    for (let tag of favorite) {
+      if (!favoriteTags.includes(tag) && allTags.includes(tag)) favoriteTags.push(tag);
+    }
+    for (let tag of unfavorite) {
+      if (favoriteTags.includes(tag)) {
+        let index = favoriteTags.indexOf(tag);
+        favoriteTags.splice(index, 1);
+      }
+    }
+    let authId = this.authProvider.getAuthIDFromToken(token || this.authProvider.token);
+    return this._updateUser(authId, undefined, undefined, undefined, favoriteTags);
   }
 
   /**
@@ -210,7 +228,7 @@ export class TemplateServiceClient {
 
   /**
    * @private
-   * Creates new user object, updates instance ownerID if successful.
+   * Creates new user object, updates instance authorID if successful.
    * @param {string[]} recentlyViewed - list of template ids last viewed by the logged in user, should be of length 5 or less
    * @param {string[]} recentlyEdited - list of template ids last edited by the logged in user, should be of length 5 or less
    * @param {string[]} recentTags - list of tags last used by the logged in user, should be of length 10 or less
@@ -219,14 +237,16 @@ export class TemplateServiceClient {
     authId: string,
     recentlyViewed?: string[],
     recentlyEdited?: string[],
-    recentTags?: string[]
+    recentTags?: string[],
+    favoriteTags?: string[]
   ): Promise<JSONResponse<string>> {
     const user: IUser = {
       authId: authId,
       authIssuer: this.authProvider.issuer,
       recentlyViewedTemplates: recentlyViewed || [],
       recentlyEditedTemplates: recentlyEdited || [],
-      recentTags: recentTags || []
+      recentTags: recentTags || [],
+      favoriteTags: favoriteTags || [],
     };
 
     let newUser = await this.storageProvider.insertUser(user);
@@ -276,11 +296,11 @@ export class TemplateServiceClient {
    * @param template
    * @param isPublished
    */
-  private _getPublishedTemplates(template: ITemplate, isPublished: boolean): ITemplate {
+  private _getStateTemplates(template: ITemplate, state: TemplateState): ITemplate {
     if (!template.instances || template.instances.length === 0) return template;
     let templateInstances: ITemplateInstance[] = [];
     for (let instance of template.instances) {
-      if ((isPublished && instance.state === TemplateState.live) || (!isPublished && instance.state !== TemplateState.live)) {
+      if (state === instance.state) {
         templateInstances.push(instance);
       }
     }
@@ -298,10 +318,11 @@ export class TemplateServiceClient {
     let user = await this._getUserID(authId);
     let result: ITemplate[] = [];
     if (!user.success) return result;
-    for (let instance of templates) {
-      let isOwner = instance.owner === user.result;
-      if ((isOwner && owned) || (!isOwner && !owned)) {
-        result.push(instance);
+
+    for (let template of templates) {
+      let isAuthor = template.authors.includes(user.result!);
+      if ((isAuthor && owned) || (!isAuthor && !owned)) {
+        result.push(template);
       }
     }
     return result;
@@ -309,7 +330,7 @@ export class TemplateServiceClient {
 
   /**
    * @private
-   * Updates existing template, assumes that owner user exists/has already been created.
+   * Updates existing template, assumes that Author user exists/has already been created.
    * Will check that the templateId given actually exists.
    * @param {string} templateId - template id to update
    * @param {string} name
@@ -361,11 +382,14 @@ export class TemplateServiceClient {
       version = incrementVersion(existingTemplate);
     }
     let authId = this.authProvider.getAuthIDFromToken(token || this.authProvider.token);
+    let userResponse = await this._getUserID(authId);
+    if (!userResponse.success) return { success: false, errorMessage: userResponse.errorMessage };
 
     let templateInstance: ITemplateInstance = {
       json: template ? template : JSON.parse("{}"),
       version: version || "1.0",
       state: templateState,
+      author: userResponse.result!,
       data: [],
       publishedAt: state === TemplateState.live ? new Date(Date.now()) : undefined,
       updatedAt: new Date(Date.now()),
@@ -410,6 +434,7 @@ export class TemplateServiceClient {
           templateInstance.state = templateInstance.state !== TemplateState.deprecated && templateInstance.state !== TemplateState.draft &&
             instance.state !== TemplateState.draft ? TemplateState.draft :
             templateInstance.state || instance.state;
+          templateInstance.author = instance.author; // author should not be able to be overwritten
           templateInstance.data = templateData || instance.data;
           templateInstance.publishedAt = templateInstance.publishedAt || instance.publishedAt;
           templateInstance.isShareable = templateInstance.isShareable || instance.isShareable;
@@ -431,14 +456,20 @@ export class TemplateServiceClient {
     } else {
       templateInstances.push(templateInstance);
     }
-    let userResponse = await this._getUserID(authId);
-    if (!userResponse.success) return { success: false, errorMessage: userResponse.errorMessage };
+
+    // Re-create entire author array
+    let authorsList: string[] = [];
+    for (let instance of templateInstances) {
+      if (!authorsList.includes(instance.author)) {
+        authorsList.push(instance.author);
+      }
+    }
 
     const newTemplate: Partial<ITemplate> = {
       name: templateName,
       instances: templateInstances,
       tags: tags,
-      owner: userResponse.result,
+      authors: authorsList,
       updatedAt: new Date(Date.now()),
       isLive: anyVersionsLive(templateInstances)
     };
@@ -459,10 +490,10 @@ export class TemplateServiceClient {
 
     let authId = this.authProvider.getAuthIDFromToken(token || this.authProvider.token);
     let userResponse = await this._getUser(authId);
-
-    if (!userResponse.success) {
+    if (!userResponse.success || (userResponse.result && userResponse.result.length === 0)) {
       return { success: false, errorMessage: userResponse.errorMessage };
     }
+    const userId = userResponse.result![0]._id;
 
     // Check if version already exists
     let response = await this.getTemplates(token, templateId, undefined, undefined, undefined, undefined, undefined, undefined, undefined, true);
@@ -485,6 +516,7 @@ export class TemplateServiceClient {
               version: incrementVersionStr(latestVersion),
               publishedAt: new Date(Date.now()),
               state: TemplateState.live,
+              author: userId!,
               isShareable: false,
               numHits: 0,
               data: instance.data,
@@ -499,8 +531,18 @@ export class TemplateServiceClient {
       }
       templateInstances.push(instance);
     }
+
+    // Re-create entire author array
+    let authorsList: string[] = [];
+    for (let instance of templateInstances) {
+      if (!authorsList.includes(instance.author)) {
+        authorsList.push(instance.author);
+      }
+    }
+
     const updatedTemplate: Partial<ITemplate> = {
-      instances: templateInstances
+      instances: templateInstances,
+      authors: authorsList,
     };
     return this.storageProvider.updateTemplate({ _id: templateId }, updatedTemplate);
   }
@@ -540,9 +582,10 @@ export class TemplateServiceClient {
     let authId = this.authProvider.getAuthIDFromToken(token || this.authProvider.token);
     let userResponse = await this._getUser(authId);
 
-    if (!userResponse.success) {
+    if (!userResponse.success || (userResponse.result && userResponse.result.length === 0)) {
       return { success: false, errorMessage: userResponse.errorMessage };
     }
+    let userId = userResponse.result![0]._id;
 
     // Updating existing template
     if (templateId) {
@@ -601,6 +644,7 @@ export class TemplateServiceClient {
       version: version || "1.0",
       publishedAt: isPublished ? new Date(Date.now()) : undefined,
       state: isPublished ? TemplateState.live : state ? state : TemplateState.draft,
+      author: userId!,
       isShareable: isShareable || false,
       numHits: 0,
       data: data ? (data instanceof Array ? data : [data]) : [],
@@ -612,14 +656,9 @@ export class TemplateServiceClient {
 
     let newTags = tags ? (tags instanceof Array ? tags : [tags]) : [];
 
-    let userIdResponse = await this._getUserID(authId);
-    if (!userIdResponse.success) {
-      return userIdResponse;
-    }
-
     const newTemplate: ITemplate = {
       name: templateName,
-      owner: userIdResponse.result!,
+      authors: [userId!],
       instances: [templateInstance],
       tags: newTags,
       deletedVersions: [],
@@ -701,7 +740,7 @@ export class TemplateServiceClient {
      * @param {boolean} isPublished - search only for live templates
      * @param {string} templateName - name to query for
      * @param {string} version - version number, used with templateId
-     * @param {boolean} owned - If false, will retrieve all public templates regardless of owner
+     * @param {boolean} owned - If false, will retrieve all public templates that are not owned
      * @param {SortBy} sortBy - one of dateCreated, dateModified, alphabetical
      * @param {SortOrder} sortOrder - one of ascending, descending
      * @param {string[]} tags - filter by one or more tags
@@ -711,7 +750,7 @@ export class TemplateServiceClient {
   public async getTemplates(
     token?: string,
     templateId?: string,
-    isPublished?: boolean,
+    state?: TemplateState,
     templateName?: string,
     version?: string,
     owned?: boolean,
@@ -735,7 +774,7 @@ export class TemplateServiceClient {
       _id: templateId,
       name: templateName,
       tags: tags,
-      owner: owned ? userId : undefined
+      authors: owned ? [userId!] : undefined
     };
 
     let response = await this.storageProvider.getTemplates(templateQuery, sortBy, sortOrder);
@@ -748,10 +787,10 @@ export class TemplateServiceClient {
       templates = await this._getOwnedTemplates(authId, templates, owned);
     }
 
-    if (isPublished || isPublished === false) {
+    if (state) {
       let templatesFiltered = [];
       for (let template of templates) {
-        let templateInstance = this._getPublishedTemplates(template, isPublished);
+        let templateInstance = this._getStateTemplates(template, state);
         if (template.instances && template.instances.length > 0) {
           templatesFiltered.push(templateInstance);
         }
@@ -760,7 +799,7 @@ export class TemplateServiceClient {
     }
 
     if (templateId && templates.length > 0) {
-      if (templates![0].owner !== userId && templates![0].isLive === false) return { success: true, result: [] };
+      if (!templates![0].authors.includes(userId!) && templates![0].isLive === false) return { success: true, result: [] };
 
       await this._updateRecentTemplate(authId, templateId, true);
 
@@ -775,7 +814,7 @@ export class TemplateServiceClient {
     // Filter for the latest template version (instance)
     let resultTemplates: ITemplate[] = [];
     for (let template of templates) {
-      if (template.isLive === false && template.owner !== userId) continue;
+      if (template.isLive === false && !template.authors.includes(userId!)) continue;
       if (!template.instances) continue;
       if (version) {
         for (let instance of template.instances) {
@@ -811,8 +850,6 @@ export class TemplateServiceClient {
     version?: string,
     isClient?: boolean,
     token?: string,
-
-
   ): Promise<JSONResponse<ITemplate[]>> {
     let authCheck = this._checkAuthenticated(token);
     if (!authCheck.success) {
@@ -847,7 +884,7 @@ export class TemplateServiceClient {
     sortTemplateByVersion(templates![0]);
 
     let template = templates[0];
-    if (template.isLive === false && template.owner !== userId) return { success: false, errorMessage: "Invalid user ID" };
+    if (template.isLive === false && !template.authors.includes(userId!)) return { success: false, errorMessage: "Invalid user ID" };
     if (!template.instances) { return { success: false, errorMessage: "Invalid template ID" } };
     let selectedInstance = template.instances[0];
     if (version) {
@@ -862,7 +899,6 @@ export class TemplateServiceClient {
     selectedInstance.json = boundJSON;
     template.instances = [selectedInstance];
     return { success: true, result: [template] };
-
   }
 
   /**
@@ -920,19 +956,25 @@ export class TemplateServiceClient {
     }
     let template = response.result[0];
 
-    if (template.owner !== userResponse.result![0]._id && !template.isLive) {
+    if (!template.authors.includes(userResponse.result![0]._id!) && !template.isLive) {
       return { success: false, errorMessage: ServiceErrorMessage.UnauthorizedAction };
     }
 
     let templateObj: ITemplate;
     let templateInstances = [];
+    let authorsList: string[] = [];
     for (let instance of template.instances || []) {
       if (!versionList.includes(instance.version)) {
         templateInstances.push(instance);
+        if (!authorsList.includes(instance.author)) {
+          authorsList.push(instance.author);
+        }
       }
     }
     template.instances = templateInstances;
     template.deletedVersions?.push(...versionList);
+    template.authors = authorsList;
+
     templateObj = template;
 
     // No instances, delete template object entirely
@@ -969,22 +1011,23 @@ export class TemplateServiceClient {
       return { success: false, errorMessage: ServiceErrorMessage.FailedToRetrievePreview };
     }
 
+    let userInfo = await this._searchUserInfo(templateVersion.author);
+    if (!userInfo.success || !userInfo.result) {
+      return { success: false, errorMessage: ServiceErrorMessage.FailedToRetrievePreview };
+    }
+
     let templateInstance: TemplateInstancePreview = {
       version: version,
       json: templateVersion.json,
       state: templateVersion.state || TemplateState.draft,
+      author: userInfo.result!,
       data: templateVersion.data ? templateVersion.data : []
     };
 
-    let userInfo = await this._searchUserInfo(template.owner);
-    if (!userInfo.success || !userInfo.result) {
-      return { success: false, errorMessage: ServiceErrorMessage.FailedToRetrievePreview };
-    }
     logger.info(`Template of user with oid ${userInfo.result!} was requested in template preview.`);
     let templatePreview: TemplatePreview = {
       _id: templateId,
       name: template.name,
-      owner: userInfo.result!,
       instance: templateInstance,
       tags: template.tags || []
     };
@@ -1042,10 +1085,10 @@ export class TemplateServiceClient {
   }
 
   /**
-   * @public
-   * Retrieve a list of recently used tags for the logged in user.
+   * @private
+   * @param token 
    */
-  public async getRecentTags(token?: string): Promise<JSONResponse<string[]>> {
+  private async _getUserTags(token?: string): Promise<JSONResponse<string[][]>> {
     let authCheck = this._checkAuthenticated(token);
     if (!authCheck.success) {
       return authCheck;
@@ -1058,7 +1101,31 @@ export class TemplateServiceClient {
     }
 
     let user: IUser = response.result![0];
-    return { success: true, result: user.recentTags || [] };
+    return { success: true, result:[ user.recentTags || [], user.favoriteTags || []] };
+  }
+  
+  /**
+   * @public
+   * Retrieve a list of recently used tags for the logged in user.
+   */
+  public async getRecentTags(token?: string): Promise<JSONResponse<string[]>> {
+    let response = await this._getUserTags(token);
+    if (!response.success) {
+      return { success: false, errorMessage: response.errorMessage };
+    }
+    return { success: true, result: response.result![0] };
+  }
+
+  /**
+   * @public
+   * Retrieve a list of favorite tags for the logged in user.
+   */
+  public async getFavoriteTags(token?: string): Promise<JSONResponse<string[]>> {
+    let response = await this._getUserTags(token);
+    if (!response.success) {
+      return { success: false, errorMessage: response.errorMessage };
+    }
+    return { success: true, result: response.result![1] };  
   }
 
   /**
@@ -1083,7 +1150,7 @@ export class TemplateServiceClient {
     if (!response.success || !response.result) return { success: false, errorMessage: response.errorMessage };
     for (let template of response.result) {
       if (!template.tags) continue;
-      if (template.owner === userResponse.result![0]._id) {
+      if (template.authors.includes(userResponse.result![0]._id!)) {
         for (let tag of template.tags) {
           ownedTags.add(tag);
         }
@@ -1093,9 +1160,14 @@ export class TemplateServiceClient {
       }
     }
 
+    let favoriteTags: string[] = [];
+    let favoriteResponse = await this.getFavoriteTags(token);
+    if (favoriteResponse.success && favoriteResponse.result) favoriteTags = favoriteResponse.result;
+
     let list: TagList = {
       ownedTags: Array.from(ownedTags),
-      allTags: Array.from(allTags)
+      allTags: Array.from(allTags),
+      favoriteTags: favoriteTags
     };
     return { success: true, result: list };
   }
@@ -1147,13 +1219,12 @@ export class TemplateServiceClient {
         return res.status(400).json({ error: err });
       }
 
-      let isPublished: boolean | undefined = req.query.isPublished ? req.query.isPublished.toLowerCase() === "true" : undefined;
+      let state: TemplateState | undefined = TemplateState[req.query.state as keyof typeof TemplateState]
       let owned: boolean | undefined = req.query.owned ? req.query.owned.toLowerCase() === "true" : undefined;
       let isClient: boolean | undefined = req.query.isClient ? req.query.isClient.toLowerCase() === "true" : undefined;
-
-      let tagList: string[] = req.query.tags ? req.query.tags.split(",") : undefined;
-
-      this.getTemplates(token, undefined, isPublished, req.query.name, req.query.version,
+      let tagList: string[] = req.query.tags;
+      
+      this.getTemplates(token, undefined, state, req.query.name, req.query.version,
         owned, req.query.sortBy, req.query.sortOrder, tagList, isClient).then(response => {
           if (!response.success) {
             return res.status(200).json({ templates: [] });
@@ -1205,10 +1276,36 @@ export class TemplateServiceClient {
       });
     });
 
+    router.post("/tag", async (req: Request, res: Response, _next: NextFunction) => {
+      let token = parseToken(req.headers.authorization!);
+      let favoriteTags: string[] = req.body.favorite || [];
+      this.updateFavoriteTags(favoriteTags, [], token).then(response => {
+        if (!response.success) {
+          const err = new TemplateError(ApiError.TagUpdateFailed, "Unable to update favorite tags.");
+          return res.status(400).json({ error: err });
+        }
+        res.status(200).send();
+      })
+    });
+
+    router.delete("/tag", async (req: Request, res: Response, _next: NextFunction) => {
+      let token = parseToken(req.headers.authorization!);
+      let unfavoriteTags: string[] = req.body.favorite || [];
+      this.updateFavoriteTags([], unfavoriteTags, token).then(response => {
+        if (!response.success) {
+          const err = new TemplateError(ApiError.TagUpdateFailed, "Unable to update favorite tags.");
+          return res.status(400).json({ error: err });
+        }
+        res.status(200).send();
+      })
+    })
+
     router.get("/:id?", (req: Request, res: Response, _next: NextFunction) => {
       let isClient: boolean | undefined = req.query.isClient ? req.query.isClient.toLowerCase() === "true" : undefined;
       let token = parseToken(req.headers.authorization!);
-      this.getTemplates(token, req.params.id, undefined, undefined, req.query.version, undefined, undefined, undefined, undefined, isClient).then(
+      let state: TemplateState | undefined = TemplateState[req.query.state as keyof typeof TemplateState]
+
+      this.getTemplates(token, req.params.id, state, undefined, req.query.version, undefined, undefined, undefined, undefined, isClient).then(
         response => {
           if (!response.success || (response.result && response.result.length === 0)) {
             const err = new TemplateError(ApiError.TemplateNotFound, `Template with id ${req.params.id} does not exist.`);
@@ -1376,6 +1473,17 @@ export class TemplateServiceClient {
       });
     });
 
+    return router;
+  }
+
+  public configExpressMiddleware(): Router {
+    var router = express.Router();
+    router.get("/", (_req: Request, res: Response, _next: NextFunction) => {
+      return res.status(200).json({ 
+        redirectUri: process.env.ACMS_REDIRECT_URI, 
+        appId: process.env.ACMS_APP_ID, 
+        appInsightInstrumentationKey: process.env.ACMS_APP_INSIGHTS_INSTRUMENTATION_KEY });
+    });
     return router;
   }
 

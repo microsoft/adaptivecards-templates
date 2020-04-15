@@ -1,20 +1,72 @@
+[![Deploy to Azure](https://azurecomcdn.azureedge.net/mediahandler/acomblog/media/Default/blog/deploybutton.png)](https://azuredeploy.net/)
+
+
+| Branch | Build Status |
+| ------ | ------------ |
+|  dev   | [![Build Status](https://dev.azure.com/microsoft/AdaptiveCards/_apis/build/status/ACMS/Deploy%20to%20Web%20App?branchName=dev)](https://dev.azure.com/microsoft/AdaptiveCards/_build/latest?definitionId=50969&branchName=dev) |
+|  stage | [![Build Status](https://dev.azure.com/microsoft/AdaptiveCards/_apis/build/status/ACMS/Deploy%20to%20Web%20App?branchName=stage)](https://dev.azure.com/microsoft/AdaptiveCards/_build/latest?definitionId=50969&branchName=stage) |
+
 # Quickstart
-These steps will get our end-to-end app running locally. If any steps fail, try the longer steps below.
+
+## Deploy to Azure
+
+Prerequisites: 
+
+- Azure account
+- Azure Active Directory (AAD) App Registration (instructions below)
+- [Azure resource group](https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resource-groups-portal)
+- Azure App Service Plan
+
+1. Click the blue '**Deploy to Azure**'. Select the subscription and resource group under which you wish to deploy ACMS to. 
+2. Enter in the URL the portal will be hosted at into the '**Sites_adaptivecms_name**' field. Make sure this URL is added under the '**Redirect URIs**' section of your AAD App Registration. Detailed instructions and screenshots are listed below. 
+3. Enter in the Azure Active Directory App Registration application (client) id into the '**App_id**' field. 
+4. Enter the id of your App Service Plan into the '**Server_farm_id**' field. 
+5. If 'Yes' is selected for '**Telemetry_opt_in**', we will collect feedback from your instance of ACMS using App Insights. See details under 'Telemetry Privacy Statement' below. 
+6. Click '**Next**' and '**Deploy**'.
+
+Using the 'Deploy to Azure' button will fetch an image using the latest published version of [adaptivecards-templating-service](https://www.npmjs.com/package/adaptivecards-templating-service) and [adaptive-templating-service-typescript-node](https://www.npmjs.com/package/adaptive-templating-service-typescript-node). Once the deployment as finished, you will see the admin portal hosted at '**{Sites_adaptivecms_name}**.azurewebsites.net' and be able to hit the endpoints at the same URL. 
+
+### Creating a new AAD App Registration
+
+1. Go to the [Azure Portal](portal.azure.com). 
+2. In the searchbar, type 'Azure Active Directory' and select the AAD service. 
+3. Select 'App Registrations' under the 'Manage' header. 
+4. Click 'New registration'.
+5. Fill in the details for a new AAD registration. Under 'Redirect URI', enter the URL at which the admin portal is hosted at from the 'Deploy to Azure' instructions. 
+6. Click 'Register'. 
+
+### Telemetry Privacy Statement
+
+If "**YES**" is selected in the **Telemetry_opt_in** step in the Deploy to Azure setup, Microsoft's Azure Application Insights instrumentation key will be exposed to the app as an environment variable. The app will then send its performance data to Microsoft's Azure Application Insights instance. The code gathering telemetry is located in the first lines in the `private-templates-service\server\src\app.ts` file and in the componentDidUpdate function of the `private-templates-service\client\src\App.tsx` file.
+
+If "**NO**" is selected in the **Telemetry_opt_in** step in the Deploy to Azure setup, the instrumentation key will not be exposed as an environment variable and no performance data will be sent to Microsoft's Azure Application Insights instance.
+
+
+By accepting the **Telemetry_opt_in**, you are improving the product by sending some of your performance data to Microsoft. By accepting the **Telemetry_opt_in**, you acknowledge your responsibility to provide a privacy statement to your end user.
+
+## Running the latest changes locally with MongoDB
 
 Prerequisites:
+
 -   Git
 -   [Node v12](https://nodejs.org/en/download/)
+-   MongoDB 
 
-**1. Clone the reponsitory.**
+1. Clone the repository.
 
-**2. Switch to the desired branch. The latest build is on `dev`**
+2. Switch to the desired branch. The latest build is on `dev`.
 
-**3. `cd adaptivecards-templates/private-templates-service/server` and run `npm run init-app`. This installs and links dependencies.**
+3. Set the below environment variables to the desired values in the terminal being used to run the app. 
 
-**4. Open `server/app.ts` and replace mongoose code lines 39 - 64 with the following:**
 ```
-import { InMemoryDBProvider } from '../../adaptivecards-templating-service/src/storageproviders/InMemoryDBProvider';
+ACMS_DB_CONNECTION // Mongo database connection string
+ACMS_APP_ID // Azre Active Directory App Registration Application (client) id 
+ACMS_REDIRECT_URI // http://localhost:3000
+```
 
+4. Open `server/app.ts` and insert the following code at the comment. 
+
+```
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header(
@@ -27,118 +79,58 @@ app.use(function (req, res, next) {
   );
   next();
 });
-app.options('*', function (req, res) { res.sendStatus(200); });
+```
 
-const mongoClient: ClientOptions = {
-  authenticationProvider: new AzureADProvider(),
-  storageProvider: new InMemoryDBProvider(),
+5. `cd adaptivecards-templates/private-templates-service/server` and run `npm run init-app`. This installs and links dependencies.
+
+6. In the same directory as step 5, run `npm run dev`. This command concurrently runs the client and server locally. Navigate to `localhost:3000` to see the site.
+
+## Running the latest changes without MongoDB
+
+Prerequisites:
+
+-   Git
+-   [Node v12](https://nodejs.org/en/download/)
+
+1. Clone the repository.
+
+2. Switch to the desired branch. The latest build is on `dev`.
+
+3. Set the below environment variables to the desired values. 
+
+```
+ACMS_APP_ID // Azre Active Directory App Registration Application (client) id 
+ACMS_REDIRECT_URI // http://localhost:3000
+```
+
+4. Open `server/app.ts` and insert the following code at the comment:
+```
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, Content-Type, Accept, Authorization, api_key"
+  );
+  res.header(
+    "Access-Control-Allow-Methods",
+    "GET, POST, OPTIONS, DELETE"
+  );
+  next();
+});
+
+```
+5. Replace the MongoDBProvider with the InMemoryProvider in `server/app.ts`. 
+```
+const mongoClient = {
+  authenticationProvider: new AMS.AzureADProvider(),
+  storageProvider: new ACMS.InMemoryDBProvider(),
 }
-const client: TemplateServiceClient = TemplateServiceClient.init(mongoClient);
-app.use("/template", client.expressMiddleware());
-app.use("/user", client.userExpressMiddleware());
 ```
+6. `cd adaptivecards-templates/private-templates-service/server` and run `npm run init-app`. This installs and links dependencies.
 
-**5. In 50 in AzureADProvider.ts, replace `#{CLIENT_ID_TOKEN}#` with your client ID token. Ask a dev for this string! `result = result && "#{CLIENT_ID_TOKEN}#" === decodedToken.payload.aud;`**
+7. In the same directory as step 6, run `npm run dev`. This command concurrently runs the client and server locally. Navigate to `localhost:3000` to see the site.
 
-**6. Run `npm run dev`. This command concurrently runs the client and server locally. Navigate to `localhost:3000` to see the site.**
-
-# Running the frontend and backend of Adaptive Cards CMS Locally
-
-To run this web application locally, you must have the following installed on your system:
-
--   Git
--   [Node v12](https://nodejs.org/en/download/)
-
-**1. Clone the repository.**
-
-**2. Switch to the appropriate branch.**
-
-**3. In the `adaptivecards-templates/private-templates-service/server/app.ts` file, add the following:**
-`
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, Content-Type, Accept, Authorization, api_key"
-  );
-  res.header(
-    "Access-Control-Allow-Methods",
-    "GET, POST, OPTIONS, DELETE"
-  );
-  next();
-});`
-
-**4. In the `adaptivecards-templates/private-templates-service/server/app.ts` file, replace ` "#{DB_CONNECTION_TOKEN}#"` with the real DB connection string. Make sure to NOT commit this file.**
-
-**5. Under the `adaptivecards-templates/private-templates-service/server`, run `npm run link-client`. Please note you may have to run  `sudo npm run link-client` if you are having errors with permissions.**
-
-**6. Inside of `adaptivecards-templates/private-templates-service/server` run `npm install`, run `tsc`, and run `npm run dev` to launch the client and server in your default browser.**
-
-**You're good to go!**
-
-# Running the backend
-
-To run this web application locally, you must have the following installed on your system:
-
--   Git
--   [Node v12](https://nodejs.org/en/download/)
-
-**1. Clone the repository.**
-
-**2. Switch to the appropriate branch.**
-
-**3. In the `adaptivecards-templates/private-templates-service/server/app.ts` file, add the following:
-`
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, Content-Type, Accept, Authorization, api_key"
-  );
-  res.header(
-    "Access-Control-Allow-Methods",
-    "GET, POST, OPTIONS, DELETE"
-  );
-  next();
-});
-`**
-
-**4.  In the `adaptivecards-templates/private-templates-service/server/app.ts` file, replace ` "#{DB_CONNECTION_TOKEN}#"` with the real DB connection string. Make sure to not commit this file.**
-
-**5. Under the `private-templates-service\adaptivecards-templating-service` directory, run `npm link`.**
-
-**6. Under the `adaptivecards-templates/private-templates-service/server` directory, run `npm link adaptivecards-templating-service`, run `npm install`, run `tsc`, and run `npm run start`.**
-
-**You're good to go!**
-
-# Running the frontend
-
-To run this web application locally, you must have the following installed on your system:
-
--   Git
--   [Node v12](https://nodejs.org/en/download/)
-
-**1. Clone the repository.**
-
-**2. Switch to the appropriate branch.**
-
-**3. In the `private-templates-service\adaptivecards-templating-client\typescript\api.ts` file, replace `http://localhost:5000` (defaultBasePath) with `https://adaptivecms.azurewebsites.net`.**
-
-**4.  Under the `private-templates-service\server` directory, run `npm run link-client`.**
-
-**5. Under the `private-templates-service\client` directory, run `npm install` and `npm run start`.**
-
-**You're good to go!**
-
-## Development
-
-**1. Run the command `npm install` in both the `server` and the `client` diretories.**
-**2. Navigate to the `server` folder and run the follwing command `npm run link-client`. If you are getting an error about permission, run the command `sudo npm run link-client`.**
-**3. Inside the `server` folder, run the command `npm run dev`. This will run both the frontend and the backend together. You may now navigate to `localhost:3000` in your browser.**
-
-## Troubleshooting
-
--   When running `npm start`, confirm in your shell that the localhost port matches the port in the `Config.tsx` redirectUri. It should be port 3000 but it can be different.
+   
 
 # Nodejs download on WSL
 
@@ -150,80 +142,7 @@ curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
 sudo apt-get install -y nodejs
 ```
 
-# Running the Adaptive Cards Template Service API Locally
 
-## Installation steps
-
-Using the endpoints currently requires installing MongoDB locally. Download [MongoDB's Community Server](https://www.mongodb.com/download-center/community?jmp=nav).
-
-Download [Postman](https://app.getpostman.com/app/download/win64) to test the endpoints.
-
-#### Setting up your own app with Azure AD for testing
-
-If you have a client secret for the app deployed at https://adaptivecms.azurewebsites.net/, ignore this step.
-
-Login to Azure portal and go to Azure Active Directory. Click App registrations, and create a new registration. Under supported account types, select '_Accounts in any organizational directory (Any Azure AD directory - Multitenant) and personal Microsoft accounts_' and click Register.
-
-Select the app you just registered and go to Authentication. Under Implicit Grant, enable both Access tokens and ID tokens. Under Certificates & secrets, add a new Client secret and record the value.
-
-### Running the backend
-
-Under `adaptivecards-templates/private-template-service/src/config/config.ts`, add the client ID of the Azure AD app under the clientID field.
-
-Under `adaptivecards-templates/private-template-service` run `npm install`.
-
-Run `npm start`.
-
-### Using Postman to test endpoints
-
-#### Obtaining an access token
-
-Post a request to https://login.microsoftonline.com/{tenant_id}/oauth2/token using Postman.
-In the body add keys grant_type, client_id, client_secret, and resource.
-
-**grant_type**: client_credentials
-
-**client_id**: {client id for app registered with Azure AD}
-
-**client_secret**: {client secret for app registered with Azure AD}
-
-**resource**: {client_id}
-
-Post the request and copy the access_token field in the response.
-
-#### Sending a request
-
-Create a new request with Postman and select either GET or POST for `http://localhost:5000/template`. Under Headers, add the key 'Authorization' and add the value as 'Bearer {access_token}'.
-
-Leaving out the Authorization header should return a 401 Unauthorized error.
-
-### Get templates
-
-This endpoint returns a list of all known templates.
-
-> `HTTP GET https://localhost:5000/template`
-
-**Response excerpt**
-
-```json
-[
-	{
-		"_id": "5e2f6de4c4a23957d4dfb4dc",
-		"template": "{}",
-		"isPublished": false,
-		"created": "2020-01-27T23:10:28.564Z",
-		"__v": 0
-	}
-]
-```
-
-This endpoint returns a template given the template id.
-
-> `HTTP GET https://localhost:5000/template/{template_id}`
-
-### Post a template
-
-This endpoints creates a new template and returns 201 if successfully created.
 
 # Linting and Code Convention Setup for VSCode
 
@@ -266,3 +185,5 @@ Things to watch out for:
 
 -   You **must** have auto-saving turned off on VSCode. Saving needs to be manually triggered.
 -   Make sure you are accessing the repo by opening the repository folder in VSCode rather than particular files in the repository. To do so, in VSCode, go to File -> Open Folder and open the adaptivecards-templates folder.
+
+
