@@ -1,0 +1,207 @@
+swagger: '2.0'
+info: {title: ACMS, description: '', version: '1.0'}
+host: adaptivecms.azurewebsites.net
+basePath: /
+schemes: [https]
+consumes: []
+produces: []
+paths:
+  /template/{templateId}:
+    get:
+      responses:
+        default:
+          description: default
+          schema:
+            type: object
+            properties:
+              templates:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    _id: {type: string, description: _id}
+                    tags:
+                      type: array
+                      items: {type: string}
+                      description: tags
+                    deletedVersions:
+                      type: array
+                      items: {}
+                      description: deletedVersions
+                    isLive: {type: boolean, description: isLive}
+                    name: {type: string, description: name}
+                    owner: {type: string, description: owner}
+                    instances:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          publishedAt: {type: string, description: publishedAt}
+                          state: {type: string, description: state}
+                          isShareable: {type: boolean, description: isShareable}
+                          numHits: {type: integer, format: int32, description: numHits}
+                          data:
+                            type: array
+                            items:
+                              type: array
+                              items:
+                                type: object
+                                properties: {}
+                            description: data
+                          lastEditedUser: {type: string, description: lastEditedUser}
+                          json:
+                            type: object
+                            properties:
+                              $schema: {type: string, description: $schema}
+                              type: {type: string, description: type}
+                              version: {type: string, description: version}
+                              speak: {type: string, description: speak}
+                              body:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    type: {type: string, description: type}
+                                    items:
+                                      type: array
+                                      items:
+                                        type: object
+                                        properties:
+                                          type: {type: string, description: type}
+                                          columns:
+                                            type: array
+                                            items:
+                                              type: object
+                                              properties:
+                                                type: {type: string, description: type}
+                                                width: {type: string, description: width}
+                                                items:
+                                                  type: array
+                                                  items:
+                                                    type: object
+                                                    properties:
+                                                      type: {type: string, description: type}
+                                                      url: {type: string, description: url}
+                                                      size: {type: string, description: size}
+                                                      text: {type: string, description: text}
+                                                      horizontalAlignment: {type: string,
+                                                        description: horizontalAlignment}
+                                                      weight: {type: string, description: weight}
+                                                      spacing: {type: string, description: spacing}
+                                                  description: items
+                                                separator: {type: boolean, description: separator}
+                                                spacing: {type: string, description: spacing}
+                                            description: columns
+                                      description: items
+                                description: body
+                            description: json
+                          version: {type: string, description: version}
+                          updatedAt: {type: string, description: updatedAt}
+                          createdAt: {type: string, description: createdAt}
+                      description: instances
+                    updatedAt: {type: string, description: updatedAt}
+                    createdAt: {type: string, description: createdAt}
+                description: templates
+      summary: Get template json
+      description: Get template json given template id & version
+      operationId: GetTemplate
+      parameters:
+      - {name: version, in: query, required: false, type: number}
+      - {name: templateId, in: path, required: true, type: string}
+    post:
+      responses:
+        default:
+          description: default
+          schema:
+            type: object
+            properties:
+              templates:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    _id: {type: string, description: _id}
+                    tags:
+                      type: array
+                      items: {}
+                      description: tags
+                    deletedVersions:
+                      type: array
+                      items: {}
+                      description: deletedVersions
+                    isLive: {type: boolean, description: isLive}
+                    name: {type: string, description: name}
+                    owner: {type: string, description: owner}
+                    instances:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          publishedAt: {type: string, description: publishedAt}
+                          state: {type: string, description: state}
+                          isShareable: {type: boolean, description: isShareable}
+                          numHits: {type: integer, format: int32, description: numHits}
+                          data:
+                            type: array
+                            items:
+                              type: object
+                              properties: {}
+                            description: data
+                          lastEditedUser: {type: string, description: lastEditedUser}
+                          json:
+                            type: object
+                            properties:
+                              type: {type: string, description: type}
+                              version: {type: string, description: version}
+                              body:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    type: {type: string, description: type}
+                                    text: {type: string, description: text}
+                                description: body
+                              $schema: {type: string, description: $schema}
+                            description: json
+                          version: {type: string, description: version}
+                          updatedAt: {type: string, description: updatedAt}
+                          _id: {type: string, description: _id}
+                          createdAt: {type: string, description: createdAt}
+                      description: instances
+                    updatedAt: {type: string, description: updatedAt}
+                    createdAt: {type: string, description: createdAt}
+                description: templates
+      summary: Get data populated template
+      description: Render template with given data
+      operationId: RenderTemplate
+      parameters:
+      - {name: templateId, in: path, required: true, type: string}
+      - name: body
+        in: body
+        required: false
+        schema:
+          type: object
+          properties:
+            version: {type: string, description: version}
+            data:
+              type: object
+              properties: {}
+              description: data
+            bindData:
+              type: string
+              enum: ['true']
+              default: 'true'
+              description: bindData
+definitions: {}
+parameters: {}
+responses: {}
+securityDefinitions:
+  oauth2_auth:
+    type: oauth2
+    flow: accessCode
+    authorizationUrl: https://login.windows.net/common/oauth2/authorize
+    tokenUrl: https://login.windows.net/common/oauth2/authorize
+    scopes: {}
+security:
+- oauth2_auth: []
+tags: []

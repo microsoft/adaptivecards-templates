@@ -26,6 +26,7 @@ import TagList from "./TagList";
 import { COLORS } from "../../../globalStyles";
 // Util
 import { ScrollDirection } from "../../../utils/AllCardsUtil";
+import { TooltipHost } from "office-ui-fabric-react";
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -165,15 +166,22 @@ class TemplatesPage extends Component<Props, State> {
         favoriteTags = tagsState.allTags.favoriteTags;
       }
     }
+    let listTooltip = "listTooltip";
+    let gridTooltip = "gridTooltip";
+
 
     return (
       <OuterCardsContainer>
         <InnerCardsContainer>
-          <UpperBar>
+          <UpperBar aria-label={this.props.pageTitle + " controls"}>
             <Title>{this.props.pageTitle}</Title>
             <ViewHelperBar>
-              <ToggleButton iconProps={{ iconName: "BulletedList" }} onClick={this.props.toggleView} viewType={ViewType.List} title={LIST_VIEW} />
-              <ToggleButton iconProps={{ iconName: "GridViewMedium" }} onClick={this.props.toggleView} viewType={ViewType.Grid} title={GRID_VIEW} />
+              <TooltipHost id={listTooltip} content={LIST_VIEW}>
+                <ToggleButton iconProps={{ iconName: "BulletedList" }} onClick={this.props.toggleView} viewType={ViewType.List} title={LIST_VIEW} />
+              </TooltipHost>
+              <TooltipHost id={gridTooltip} content={GRID_VIEW}>
+                <ToggleButton iconProps={{ iconName: "GridViewMedium" }} onClick={this.props.toggleView} viewType={ViewType.Grid} title={GRID_VIEW} />
+              </TooltipHost>
               <Sort />
               <Filter />
             </ViewHelperBar>

@@ -44,7 +44,7 @@ class TagList extends Component<TagListProps> {
 
     const flexDirection = this.getTagsFlexDirection();
     return (
-      <TagsContainer ref={this.ref} style={{flexDirection: flexDirection}}>
+      <TagsContainer ref={this.ref} style={{flexDirection: flexDirection}} aria-label={"All tags"}>
         <Tags tags={this.props.tags} 
               selectedTags={this.props.selectedTags} 
               favoriteTags={this.props.favoriteTags}

@@ -1,6 +1,7 @@
 import { JSONResponse, IUser, ITemplate, SortBy, SortOrder, ITemplateInstance, TemplateState } from "../models/models";
 import { StorageProvider } from "./IStorageProvider";
 import * as Utils from "../util/inmemorydbutils/inmemorydbutils";
+import { MongoUtils } from "../util/mongoutils/mongoutils";
 import uuidv4 from "uuid/v4";
 
 export class InMemoryDBProvider implements StorageProvider {
@@ -253,17 +254,21 @@ export class InMemoryDBProvider implements StorageProvider {
   }
 
   protected _matchTemplate(query: Partial<ITemplate>, template: ITemplate): boolean {
-    if (
-      (query.name && !template.name.toLocaleUpperCase().includes(query.name.toLocaleUpperCase())) ||
-      (query._id && !(query._id === template._id)) ||
-      (query.isLive && !(query.isLive === template.isLive)) ||
-      (query.tags && template.tags && !Utils.ifContainsList(template.tags, query.tags)) ||
-      (query.authors && !query.authors.every((value: string) => template.authors.includes(value)))
-    ) {
-      return false;
+    query = MongoUtils.removeUndefinedFields(query);
+    if(!Object.keys(query).length) {
+      return true;
     }
-    return true;
-  }
+    else if (
+      (query.name && template.name.toLocaleUpperCase().includes(query.name.toLocaleUpperCase())) ||  
+      (query._id && (query._id === template._id)) ||
+      (query.isLive && (query.isLive === template.isLive)) || 
+      (query.tags && template.tags && Utils.ifContainsList(template.tags,query.tags)) || 
+      (query.authors && query.authors.every((value:string) => template.authors.includes(value)))
+    ){
+      return true;
+    }
+      return false
+    }
 
   async connect(): Promise<JSONResponse<Boolean>> {
     return Promise.resolve({ success: true });

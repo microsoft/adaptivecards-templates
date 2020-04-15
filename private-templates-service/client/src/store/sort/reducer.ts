@@ -7,7 +7,7 @@ import {
 
 const initialState: SortState = {
   isSort: false,
-  sortType: ""
+  sortType: undefined
 }
 
 export function sortReducer(state = initialState, action: SortAction): SortState {
@@ -22,7 +22,7 @@ export function sortReducer(state = initialState, action: SortAction): SortState
       return {
         ...state,
         isSort: false,
-        sortType: ""
+        sortType: undefined
       }
     default:
       return state;
