@@ -19,6 +19,7 @@ import PublishModal from '../../../Common/PublishModal';
 import UnpublishModal from '../../../Common/UnpublishModal';
 import Tags from '../../../Common/Tags';
 import ShareModal from '../../../Common/ShareModal';
+import ShareSuccessModal from '../../../Common/ShareModal/ShareSuccessModal';
 import EditNameModal from '../../../Common/EditNameModal';
 import DeleteModal from '../../../Common/DeleteModal';
 import VersionCard from './VersionCard';
@@ -37,7 +38,8 @@ import {
   DELETE_BUTTON_TOOLTIP,
   SHARE_BUTTON_TOOLTIP,
   PUBLISH_BUTTON_TOOLTIP,
-  UNPUBLISH_BUTTON_TOOLTIP
+  UNPUBLISH_BUTTON_TOOLTIP,
+  TAGS
 } from "../../../../assets/strings";
 import { TooltipContainer } from '../styled';
 import {
@@ -270,6 +272,8 @@ class TemplateInfo extends React.Component<Props, State> {
     }
     let templateInstance = getTemplateInstance(this.props.template, this.state.version);
     let templateState = templateInstance.state || PostedTemplate.StateEnum.Draft;
+
+    let tagCardID = "Card tags";
     return (
       <OuterWrapper>
         <HeaderWrapper>
@@ -300,7 +304,7 @@ class TemplateInfo extends React.Component<Props, State> {
         <MainContentWrapper>
           <RowWrapper>
             {cards.map((val) => (
-              <Card key={val.header}>
+              <Card key={val.header} aria-label={val.header}>
                 <CardHeader>
                   {val.header}
                 </CardHeader>
@@ -314,16 +318,18 @@ class TemplateInfo extends React.Component<Props, State> {
               </Card>
             ))}
           </RowWrapper>
-          <Card>
-            <CardHeader>Tags</CardHeader>
-            <CardBody>
-              <TagsWrapper>
-                {isFetchingTags ?
-                  <CenteredSpinner size={SpinnerSize.large} />
-                  : <Tags updateTags={this.saveTags} tagRemove={this.tagRemove} tags={tags} allowAddTag={true} allowEdit={true} />
-                }
-              </TagsWrapper>
-            </CardBody>
+          <Card aria-label={TAGS}>
+            <form aria-labelledby={tagCardID}>
+              <CardHeader id={tagCardID}>{TAGS}</CardHeader>
+              <CardBody>
+                <TagsWrapper>
+                  {isFetchingTags ?
+                    <CenteredSpinner size={SpinnerSize.large} />
+                    : <Tags updateTags={this.saveTags} tagRemove={this.tagRemove} tags={tags} allowAddTag={true} allowEdit={true} />
+                  }
+                </TagsWrapper>
+              </CardBody>
+            </form>
           </Card>
           <RowWrapper>
             <VersionCard template={this.props.template} templateVersion={this.state.version} onSwitchVersion={this.onSwitchVersion} />
@@ -332,6 +338,7 @@ class TemplateInfo extends React.Component<Props, State> {
         {this.props.modalState === ModalState.Publish && <PublishModal template={this.props.template} templateVersion={this.state.version} />}
         {this.props.modalState === ModalState.Unpublish && <UnpublishModal template={this.props.template} templateVersion={this.state.version} />}
         {this.props.modalState === ModalState.Share && <ShareModal template={this.props.template} templateVersion={this.state.version} />}
+        {this.props.modalState === ModalState.ShareSuccess && <ShareSuccessModal template={this.props.template} templateVersion={this.state.version} />}
         {this.props.modalState === ModalState.Delete && <DeleteModal template={this.props.template} templateVersion={this.state.version} />}
         {this.props.modalState === ModalState.EditName && <EditNameModal />}
       </OuterWrapper>
@@ -347,7 +354,7 @@ function onActionButtonClick(props: Props, state: State, val: any) {
       break;
     case EDIT_IN_DESIGNER:
       const { history } = props;
-      if (history) history.push('/designer/'+ props.template.id + '/' + state.version);
+      if (history) history.push('/designer/' + props.template.id + '/' + state.version);
       break;
     case DELETE:
       props.openModal(ModalState.Delete);

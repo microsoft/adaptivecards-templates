@@ -71,7 +71,7 @@ const EditNameModal = (props: Props) => {
 
   return (
     <BackDrop>
-      <Modal>
+      <Modal aria-label={EDIT_CARD_NAME}>
         <Header>{EDIT_CARD_NAME}</Header>
         <Description>{EDIT_CARD_SUBHEADER}</Description>
         <EditWrapper onSubmit={handleSubmit} >

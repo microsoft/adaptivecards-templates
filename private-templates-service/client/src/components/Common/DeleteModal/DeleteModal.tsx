@@ -67,7 +67,7 @@ class DeleteModal extends React.Component<Props> {
 
     return (
       <BackDrop>
-        <Modal>
+        <Modal aria-label={STRINGS.DELETE_TITLE}>
           <Header>{STRINGS.DELETE_TITLE}</Header>
           <div>{STRINGS.DELETE_CONFIRMATION}<DescriptionAccent>{template.name} - {this.props.templateVersion}</DescriptionAccent>?</div>
           <Description>{STRINGS.DELETE_WARNING}</Description>

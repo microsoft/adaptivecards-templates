@@ -29,7 +29,7 @@ class TagList extends Component<TagListProps> {
   }
   render() {
     return (
-      <TagsContainer ref={this.ref}>
+      <TagsContainer ref={this.ref} aria-label={"All tags"}>
         <Tags tags={this.props.tags} selectedTags={this.props.selectedTags} allowEdit={this.props.allowEdit} onClick={this.props.onClick} toggleStyle={this.props.toggleStyle} />
       </TagsContainer>
     );
