@@ -37,7 +37,15 @@ import {
   DELETE_BUTTON_TOOLTIP,
   SHARE_BUTTON_TOOLTIP,
   PUBLISH_BUTTON_TOOLTIP,
-  UNPUBLISH_BUTTON_TOOLTIP
+  UNPUBLISH_BUTTON_TOOLTIP,
+  TEMPLATE_INFO_VERSION,
+  ERROR_LOADING_PAGE,
+  VERSION_LIST_DROPDOWN,
+  TEMPLATE_INFO_UPDATED,
+  USAGE,
+  REQUESTS,
+  OWNER,
+  TEMPLATE_INFO_TAGS
 } from "../../../../assets/strings";
 import { TooltipContainer } from '../styled';
 import {
@@ -91,13 +99,13 @@ const buttons = [
 // TODO: Dynamically show info. Backend not ready
 const cards = [
   {
-    header: 'Owner',
+    header: OWNER,
     iconName: 'Contact',
     bodyText: 'Henry Trent'
   },
   {
-    header: 'Usage',
-    bodyText: 'Requests'
+    header: USAGE,
+    bodyText: REQUESTS
   }
 ];
 
@@ -185,7 +193,7 @@ class TemplateInfo extends React.Component<Props, State> {
     let options: IDropdownOption[] = [];
     for (let instance of instances) {
       if (!instance.version) continue;
-      options.push({ key: instance.version, text: `Version ${instance.version}` });
+      options.push({ key: instance.version, text: `${TEMPLATE_INFO_VERSION} ${instance.version}` });
     }
     return options;
   }
@@ -215,7 +223,7 @@ class TemplateInfo extends React.Component<Props, State> {
 
   tooltipButton = (val: any, templateState: PostedTemplate.StateEnum) => {
     const tooltipID = val.text.replace(" ", "_").trim();
-    if (val.text === "Publish") {
+    if (val.text === { PUBLISH }) {
       return (
         <TooltipContainer>
           <TooltipHost id={tooltipID} content={templateState === PostedTemplate.StateEnum.Live ? val.altTooltip : val.tooltip}>
@@ -266,7 +274,7 @@ class TemplateInfo extends React.Component<Props, State> {
 
     const { history } = this.props;
     if (!history) {
-      return (<div>Error loading page</div>)
+      return (<div>{ERROR_LOADING_PAGE}</div>)
     }
     let templateInstance = getTemplateInstance(this.props.template, this.state.version);
     let templateState = templateInstance.state || PostedTemplate.StateEnum.Draft;
@@ -277,12 +285,12 @@ class TemplateInfo extends React.Component<Props, State> {
             <TitleWrapper>
               <Title>
                 <StyledVersionDropdown
-                  placeholder={`Version ${this.state.version}`}
+                  placeholder={`${TEMPLATE_INFO_VERSION} ${this.state.version}`}
                   options={this.versionList(instances)}
                   onChange={this.onVersionChange}
                   theme={THEME.LIGHT}
                   styles={DropdownStyles}
-                  ariaLabel="Version List Dropdown"
+                  ariaLabel={VERSION_LIST_DROPDOWN}
                   tabIndex={this.props.modalState ? -1 : 0}
                 />
               </Title>
@@ -290,7 +298,7 @@ class TemplateInfo extends React.Component<Props, State> {
               <Status>{PostedTemplate.StateEnum[templateState]}</Status>
             </TitleWrapper>
             <TimeStamp>
-              Updated {timestampParsed}
+              {TEMPLATE_INFO_UPDATED} {timestampParsed}
             </TimeStamp>
           </TopRowWrapper>
           <ActionsWrapper>
@@ -308,14 +316,14 @@ class TemplateInfo extends React.Component<Props, State> {
                   {val.iconName && ((isFetchingOwnerName || isFetchingOwnerPic) ?
                     <CenteredSpinner size={SpinnerSize.large} /> :
                     <IconWrapper><OwnerAvatar sizeInPx={50} oID={templateInstance.lastEditedUser!} /></IconWrapper>)}
-                  {val.header === "Usage" && <UsageNumber>{templateInstance.numHits}</UsageNumber>}
-                  {(val.header === "Owner") ? (this.props.owner && this.props.owner.displayNames) ? this.props.owner.displayNames[templateInstance.lastEditedUser!] : "" : val.bodyText}
+                  {val.header === `${USAGE}` && <UsageNumber>{templateInstance.numHits}</UsageNumber>}
+                  {(val.header === `${OWNER}`) ? (this.props.owner && this.props.owner.displayNames) ? this.props.owner.displayNames[templateInstance.lastEditedUser!] : "" : val.bodyText}
                 </CardBody>
               </Card>
             ))}
           </RowWrapper>
           <Card>
-            <CardHeader>Tags</CardHeader>
+            <CardHeader>{TEMPLATE_INFO_TAGS}</CardHeader>
             <CardBody>
               <TagsWrapper>
                 {isFetchingTags ?
@@ -347,7 +355,7 @@ function onActionButtonClick(props: Props, state: State, val: any) {
       break;
     case EDIT_IN_DESIGNER:
       const { history } = props;
-      if (history) history.push('/designer/'+ props.template.id + '/' + state.version);
+      if (history) history.push('/designer/' + props.template.id + '/' + state.version);
       break;
     case DELETE:
       props.openModal(ModalState.Delete);

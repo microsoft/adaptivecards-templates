@@ -35,7 +35,7 @@ import { ModalState } from '../../../../../store/page/types';
 import { openModal } from '../../../../../store/page/actions';
 import { updateCurrentTemplateVersion } from '../../../../../store/currentTemplate/actions';
 import VersionModal from '../../../../Common/VersionModal';
-import { MANAGE } from '../../../../../assets/strings';
+import { MANAGE, RECENT_RELEASES, NA } from '../../../../../assets/strings';
 import { RootState } from '../../../../../store/rootReducer';
 import { Scroller } from "../../../../../utils/AllCardsUtil/Scroller";
 
@@ -82,7 +82,7 @@ class VersionCard extends React.Component<Props> {
       <VersionOuterCard key="Recent Releases" style={{ flex: '1 0 auto' }}>
         <CardHeader>
           <VersionCardHeader>
-            <CardTitle>Recent Releases</CardTitle>
+            <CardTitle>{RECENT_RELEASES}</CardTitle>
             <CardManageButton onClick={() => { this.props.openModal(ModalState.Version) }} tabIndex={this.props.modalState ? -1 : 0}>
               {MANAGE}
             </CardManageButton>
@@ -101,7 +101,7 @@ class VersionCard extends React.Component<Props> {
                   {instance.version}
                   {instance.version === this.props.templateVersion && <VersionIcon iconName={'View'} />}
                 </VersionWrapper>
-                <DateWrapper>{instance.updatedAt ? getDateString(instance.updatedAt) : "N/A"}</DateWrapper>
+                <DateWrapper>{instance.updatedAt ? getDateString(instance.updatedAt) : `${NA}`}</DateWrapper>
                 <StatusWrapper>
                   <StatusIndicator state={instance.state} />
                   <Status>{instance.state && capitalizeString(instance.state.toString())}</Status>

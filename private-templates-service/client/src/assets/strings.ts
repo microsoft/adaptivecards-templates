@@ -17,6 +17,8 @@ export const UNPUBLISH_CARD = "Unpublish card";
 export const UNPUBLISH_CARD_DESC = " will be deprecated and no longer available to your organization until you choose to publish it."
 export const UNPUBLISH_WARNING = "Once a template is unpublished, your organization will not be able to use it.";
 export const UNPUBLISH_CONFIRMATION = "Are you sure you want to unpublish ";
+export const CANCEL_BUTTON = "Cancel";
+export const UNPUBLISH_BUTTON = "Unpublish";
 
 //ShareModal.tsx
 export const SHARING = "Sharing";
@@ -44,6 +46,14 @@ export const SHARE = "Share";
 export const PUBLISH = "Publish";
 export const UNPUBLISH = "Unpublish";
 export const MANAGE = "Manage";
+export const TEMPLATE_INFO_VERSION = "Version";
+export const ERROR_LOADING_PAGE = "Error loading page";
+export const VERSION_LIST_DROPDOWN = "Version List Dropdown";
+export const TEMPLATE_INFO_UPDATED = "Updated";
+export const USAGE = "Usage";
+export const REQUESTS = "Requests";
+export const OWNER = "Owner";
+export const TEMPLATE_INFO_TAGS = "Tags";
 
 // EditNameModal.tsx
 export const EDIT_CARD_NAME = "Edit Card Name";
@@ -122,3 +132,29 @@ export const UPDATED = "Updated";
 //NoMatch.tsx
 export const ERROR_MESSAGE = "Oops, something went wrong.";
 export const GO_TO_DASHBOARD = "Go to Dashboard";
+
+//AdaptiveCard.tsx 
+export const ERROR = "Error";
+
+//VersionModal.tsx
+export const VERSIONS = "Versions";
+export const THERE_ARE = "There are";
+export const VERSIONS_FOR = "versions for";
+export const VERSION_HEADER = "Version";
+export const PUBLISHED_HEADER = "Published";
+export const STATUS_HEADER = "Status";
+export const SELECTED = "Selected";
+export const NOT_PUBLISHED = "Not published";
+export const VERSION_CANCEL = "Cancel";
+export const VERSION_DELETE = "Delete";
+export const VERSION_UNPUBLISH = "Unpublish";
+export const VERSION_PUBLISH = "Publish";
+
+//VersionCard.tsx
+export const RECENT_RELEASES = "Recent Releases";
+export const NA = "N/A";
+
+export const TEMPLATE_LIST_NAME = "Name";
+export const TEMPLATE_LIST_DATE = "Date Modified";
+export const TEMPLATE_LIST_STATUS = "Status";
+export const TEMPLATE_LIST_OWNER = "Owner";
