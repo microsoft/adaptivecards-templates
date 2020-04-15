@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Template } from 'adaptive-templating-service-typescript-node';
-import { getShareURL } from '../../../utils/TemplateUtil/TemplateUtil';
+import { getShareURL, isTemplateInstanceShareable } from '../../../utils/TemplateUtil/TemplateUtil';
 
 import ShareModalForm from './ShareModalForm';
 
@@ -10,7 +10,7 @@ import ModalHOC from '../../../utils/ModalHOC';
 import { closeModal } from '../../../store/page/actions';
 import { connect } from 'react-redux';
 
-import { TextField } from 'office-ui-fabric-react';
+import { TextField, Toggle, TooltipHost } from 'office-ui-fabric-react';
 
 import {
   BackDrop,
@@ -22,22 +22,29 @@ import {
   SemiBoldText,
   LinkRow,
   TextFieldContainer,
-  CopyLinkButton
+  CopyLinkButton,
+  ToggleContainer,
+  TopRowWrapper
 } from './styled';
 import * as STRINGS from '../../../assets/strings';
+import { updateTemplate } from '../../../store/currentTemplate/actions';
 import { RootState } from '../../../store/rootReducer';
 
 interface ShareModalProps {
   template: Template;
-  templateVersion?: string;
+  templateVersion: string;
   closeModal: () => void;
   redirectUri?: string;
+  toggleShare: (version: string, isShareable?: boolean) => void;
 }
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
     closeModal: () => {
       dispatch(closeModal());
+    },
+    toggleShare: (version: string, isShareable?: boolean) => {
+      dispatch(updateTemplate(undefined, version, undefined, undefined, undefined, undefined, undefined, isShareable));
     }
   }
 }
@@ -50,11 +57,28 @@ const mapStateToProps = (state: RootState) => {
 
 class ShareModal extends React.Component<ShareModalProps> {
 
+  onChange = (event: React.MouseEvent, checked?: boolean) => {
+    this.props.toggleShare(this.props.templateVersion, checked ? checked : false);
+  }
+
   render() {
+    let isTemplateShared = isTemplateInstanceShareable(this.props.template, this.props.templateVersion);
     return (
       <BackDrop>
         <Modal>
-          <Header>{STRINGS.SHARE_MODAL_TITLE}</Header>
+          <TopRowWrapper>
+            <Header>{STRINGS.SHARE_MODAL_TITLE}</Header>
+            <ToggleContainer>
+              <TooltipHost content={isTemplateShared ? STRINGS.SHARING_ON_TOOLTIP : STRINGS.SHARING_OFF_TOOLTIP}>
+                <Toggle
+                  label={<div>{STRINGS.SHARING}{' '}</div>}
+                  defaultChecked={isTemplateShared}
+                  inlineLabel
+                  onChange={this.onChange}
+                />
+              </TooltipHost>
+            </ToggleContainer>
+          </TopRowWrapper>
           <Description>{STRINGS.SHARE_MODAL_DESCRIPTION}{getShareModalDescription(this.props.template, this.props.templateVersion!)}</Description>
           <CenterPanelWrapper>
             <ShareLinkPanel>

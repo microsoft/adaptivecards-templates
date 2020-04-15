@@ -13,18 +13,24 @@ export const STATUS = "Status";
 export const AUTHOR = "Author";
 
 // UnpublishModal.tsx
+export const UNPUBLISH_CARD = "Unpublish card";
+export const UNPUBLISH_CARD_DESC = " will be deprecated and no longer available to your organization until you choose to publish it."
 export const UNPUBLISH_WARNING = "Once a template is unpublished, your organization will not be able to use it.";
 export const UNPUBLISH_CONFIRMATION = "Are you sure you want to unpublish ";
 
 //ShareModal.tsx
-export const SHARE_MODAL_TITLE = "Share template";
-export const SHARE_MODAL_DESCRIPTION = "Recipients will be invited to view the shared template as ";
+export const SHARING = "Sharing";
+export const SHARE_MODAL_TITLE = "Share card";
+export const SHARE_MODAL_DESCRIPTION = "Your new design will be available to your organization as ";
+export const SHARING_OFF_TOOLTIP = "Sharing is off. Turn on to allow others to view this card.";
+export const SHARING_ON_TOOLTIP = "Sharing is on. Anyone you share this card with can view it."
 export const SHARE_WITH_LINK = "Share with link";
 export const COPY_LINK = "Copy link";
 
 // ShareModalForm.tsx
 export const EMAIL_RECIPIENTS = "Email Recipients";
-export const SEND_IN_OUTLOOK = "Send in Outlook";
+export const SEND_IN_OUTLOOK = "Send an Email";
+export const NO_THANKS = "No thanks";
 
 // DeleteModal.tsx
 export const DELETE_WARNING = "Once a template is deleted, your organization will not be able to use it.";

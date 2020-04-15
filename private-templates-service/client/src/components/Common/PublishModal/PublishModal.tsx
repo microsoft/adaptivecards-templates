@@ -5,7 +5,8 @@ import { Template, PostedTemplate } from 'adaptive-templating-service-typescript
 
 // Redux
 import { updateTemplate } from '../../../store/currentTemplate/actions';
-import { closeModal } from '../../../store/page/actions';
+import { ModalState } from '../../../store/page/types';
+import { openModal, closeModal } from '../../../store/page/actions';
 
 // Components
 import AdaptiveCardPanel from '../../AdaptiveCardPanel';
@@ -29,11 +30,11 @@ import {
   PublishButton,
 } from './styled';
 
-
 interface Props {
   template: Template;
   templateVersion: string;
   publishTemplate: (templateVersion: string) => void;
+  openModal: (modalState: ModalState) => void;
   closeModal: () => void;
 }
 
@@ -41,6 +42,9 @@ const mapDispatchToProps = (dispatch: any) => {
   return {
     publishTemplate: (templateVersion: string) => {
       dispatch(updateTemplate(undefined, templateVersion, undefined, undefined, undefined, PostedTemplate.StateEnum.Live));
+    },
+    openModal: (modalState: ModalState) => {
+      dispatch(openModal(modalState));
     },
     closeModal: () => {
       dispatch(closeModal());
@@ -52,7 +56,7 @@ class PublishModal extends React.Component<Props> {
 
   publish = () => {
     this.props.publishTemplate(this.props.templateVersion ? this.props.templateVersion : "1.0");
-    this.props.closeModal();
+    this.props.openModal(ModalState.Share);
   }
 
   render() {
