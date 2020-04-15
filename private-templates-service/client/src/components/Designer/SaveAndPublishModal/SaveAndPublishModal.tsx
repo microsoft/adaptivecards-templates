@@ -153,7 +153,7 @@ class SaveAndPublishModal extends React.Component<Props, State> {
                     <Status>{STRINGS.LIVE}</Status>
                   </TemplateStateWrapper>
                 </TemplateFooterWrapper>
-              </Container>t
+              </Container>
             </CenterPanelLeft>
             <CenterPanelRight>
               <StyledH3>{STRINGS.CARDNAME}</StyledH3>
