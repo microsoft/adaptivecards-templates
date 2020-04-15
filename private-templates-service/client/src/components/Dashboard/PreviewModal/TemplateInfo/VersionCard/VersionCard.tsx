@@ -79,10 +79,10 @@ class VersionCard extends React.Component<Props> {
 
   render() {
     return (
-      <VersionOuterCard key="Recent Releases" style={{ flex: '1 0 auto' }}>
+      <VersionOuterCard key={STRINGS.RECENT_RELEASES} style={{ flex: '1 0 auto' }} aria-label={STRINGS.RECENT_RELEASES}>
         <CardHeader>
           <VersionCardHeader>
-            <CardTitle>{RECENT_RELEASES}</CardTitle>
+            <CardTitle>{STRINGS.RECENT_RELEASES}</CardTitle>
             <CardManageButton onClick={() => { this.props.openModal(ModalState.Version) }} tabIndex={this.props.modalState ? -1 : 0}>
               {MANAGE}
             </CardManageButton>

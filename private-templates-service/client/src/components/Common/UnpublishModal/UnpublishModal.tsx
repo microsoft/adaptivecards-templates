@@ -62,7 +62,7 @@ class UnpublishModal extends React.Component<Props> {
 
     return (
       <BackDrop>
-        <Modal>
+        <Modal aria-label={STRINGS.UNPUBLISH_CARD}>
           <Header>{STRINGS.UNPUBLISH_CARD}</Header>
           <Description style={{ marginBottom: 0 }}>
             <DescriptionAccent>{template.name} - {this.props.templateVersion}</DescriptionAccent>
