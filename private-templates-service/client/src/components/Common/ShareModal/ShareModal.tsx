@@ -118,4 +118,4 @@ function onCopyURL(props: ShareModalProps) {
   copyCode.remove();
 }
 
-export default ModalHOC(connect(() => { return {} }, mapDispatchToProps)(ShareModal));
+export default ModalHOC(connect(mapStateToProps, mapDispatchToProps)(ShareModal));
