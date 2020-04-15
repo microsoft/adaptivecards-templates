@@ -120,7 +120,7 @@ class SaveAndPublishModal extends React.Component<Props, State> {
 
     return (
       <BackDrop>
-        <Modal>
+        <Modal aria-label={STRINGS.SAVE_AND_PUBLISH_CARD}>
           <Header>{STRINGS.SAVE_AND_PUBLISH_CARD}</Header>
           <Description>
             {STRINGS.SAVE_AND_PUBLISH_DESC}
