@@ -14,7 +14,7 @@ import TemplateList from "../../../Dashboard/TemplateList";
 import RecentlyEditedPlaceholder from '../../../Dashboard/RecentlyEditedPlaceholder';
 
 // Strings
-import { ALL_CARDS_PLACEHOLDER, ALL_CARDS } from "../../../../assets/strings";
+import { ALL_CARDS } from "../../../../assets/strings";
 
 const mapStateToProps = (state: RootState) => {
   return {
