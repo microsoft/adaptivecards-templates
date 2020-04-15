@@ -55,8 +55,8 @@ export const SAVE = "Save";
 export const NEW_TEMPLATE_NAME = "Untitled Card";
 
 // Dashboard.tsx
-export const DASHBOARD_RECENTLY_EDITED_PLACEHOLDER = "No edited templates.";
-export const DASHBOARD_RECENTLY_VIEWED_PLACEHOLDER = "No recently viewed templates.";
+export const DASHBOARD_RECENTLY_EDITED_PLACEHOLDER = "Create your first adaptive card!";
+export const DASHBOARD_PLACEHOLDER_BUTTON = "Create Card";
 export const FAVORITED_TAGS = "Favorited tags";
 
 // Footer.tsx
@@ -122,3 +122,7 @@ export const UPDATED = "Updated";
 //NoMatch.tsx
 export const ERROR_MESSAGE = "Oops, something went wrong.";
 export const GO_TO_DASHBOARD = "Go to Dashboard";
+
+// TemplateListContent.tsx
+export const NO_CARDS_PLACEHOLDER = "No cards found.";
+export const TEMPLATE_LIST_ERROR = "Error loading card.";

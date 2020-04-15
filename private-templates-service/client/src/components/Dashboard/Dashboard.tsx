@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { withRouter, RouteComponentProps } from "react-router-dom";
+
 import { RootState } from "../../store/rootReducer";
 import { UserType } from "../../store/auth/types";
 import { getAllTemplates } from "../../store/templates/actions";
@@ -19,26 +20,23 @@ import { SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 
 import requireAuthentication from "../../utils/requireAuthentication";
 
+import RecentlyEditedPlaceholder from './RecentlyEditedPlaceholder';
 import Gallery from "../Gallery";
 import SearchPage from "./SearchPage/SearchPage";
 import TemplateList from "./TemplateList";
 import Tags from "../Common/Tags";
 import Footer from "./Footer";
 import {
-  DASHBOARD_RECENTLY_EDITED_PLACEHOLDER,
-  DASHBOARD_RECENTLY_VIEWED_PLACEHOLDER,
   FAVORITED_TAGS
 } from '../../assets/strings';
-
 
 import {
   Title,
   DashboardContainer,
   OuterWindow,
   TagsContainer,
-  PlaceholderText,
   CenteredSpinner,
-  OuterDashboardContainer
+  OuterDashboardContainer,
 } from "./styled";
 
 const mapStateToProps = (state: RootState) => {
@@ -169,26 +167,20 @@ class Dashboard extends React.Component<Props> {
                     templates={recentlyEditedTemplates}
                   ></Gallery>
                 ) : (
-                    <PlaceholderText>
-                      {DASHBOARD_RECENTLY_EDITED_PLACEHOLDER}
-                    </PlaceholderText>
+                    <RecentlyEditedPlaceholder />
                   )}
             </React.Fragment>
             <React.Fragment>
               <Title>Recently Viewed</Title>
               {recentTemplates.isFetching || this.props.templateOwner.isFetchingName || this.props.templateOwner.isFetchingPicture ?
                 <CenteredSpinner size={SpinnerSize.large} />
-                : recentlyViewedTemplates.length ? (
+                : (
                   <TemplateList
                     onClick={this.selectTemplate}
                     templates={recentlyViewedTemplates}
                     displayComponents={{ author: true, status: true, dateModified: true, templateName: true, version: false }}
                   />
-                ) : (
-                    <PlaceholderText>
-                      {DASHBOARD_RECENTLY_VIEWED_PLACEHOLDER}
-                    </PlaceholderText>
-                  )}
+                )}
             </React.Fragment>
           </DashboardContainer>
           <TagsContainer>

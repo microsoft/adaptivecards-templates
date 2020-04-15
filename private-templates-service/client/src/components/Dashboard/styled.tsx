@@ -3,11 +3,6 @@ import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 
 import { COLORS, FONTS } from "../../globalStyles";
 
-export const PlaceholderText = styled.h5`
-  font-family: ${FONTS.SEGOE_UI_REGULAR};
-  padding-top: 20px;
-`;
-
 export const Title = styled.h1`
   padding-top: 15px;
   font-size: 1.5rem;

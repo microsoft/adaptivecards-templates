@@ -77,17 +77,14 @@ class TemplatesPage extends Component<Props, State> {
     super(props);
     this.props.setPage(props.pageTitle, props.pageID);
     this.props.setSearchBarVisible(true);
-    this.setSelectedTags();
-  }
 
-  setSelectedTags = (): void => {
     if (this.props.page.currentPage === "Template" && this.props.page.previousPage === this.props.pageID) {
       this.state = { selectedTags: this.props.tags.selectedTags };
     } else {
       this.props.clearSelectedTags();
       this.state = { selectedTags: [] };
     }
-  };
+  }
 
   tagOnClick = (tag: string): void => {
     this.setState((state) => {
@@ -154,7 +151,7 @@ class TemplatesPage extends Component<Props, State> {
             </ViewHelperBar>
           </UpperBar>
           <TagList tags={allTags} selectedTags={this.state.selectedTags} allowEdit={false} onClick={this.tagOnClick} toggleStyle={this.tagToggleStyle} />
-          <TemplatesView onClick={this.selectTemplate} selectedTags={this.state.selectedTags} getTemplates={this.props.getTemplates}/>
+          <TemplatesView onClick={this.selectTemplate} selectedTags={this.state.selectedTags} getTemplates={this.props.getTemplates} />
         </InnerCardsContainer>
       </OuterCardsContainer>
     );
