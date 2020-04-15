@@ -35,7 +35,9 @@ export class MongoDBProvider implements StorageProvider {
     if (query.authors && query.authors.length) {
       templateQuery.authors = { $all: clone(query.authors) }
     }
-
+    if(templateQuery.name && templateQuery.tags){
+      return {$or: [{name:templateQuery.name}, {tags:templateQuery.tags}]}
+    }
     return templateQuery;
   }
   async getUsers(query: Partial<IUser>): Promise<JSONResponse<IUser[]>> {
