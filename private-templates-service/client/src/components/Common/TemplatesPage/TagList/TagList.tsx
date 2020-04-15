@@ -6,12 +6,14 @@ import { TagsContainer } from "./styled";
 interface TagListProps {
   tags: string[];
   allowEdit: boolean;
-  allowSetFavourite?: boolean;
+  allowSetFavorite?: boolean;
   onClick?: (tag: string) => void;
-  onSetFavourite?: (tag: string) => void;
+  onAddFavoriteTag?: (tag: string) => void;
+  onRemoveFavoriteTag?: (tag: string) => void;
   direction?: ScrollDirection;
   toggleStyle?: (isSelected: boolean, ref: any) => void;
   selectedTags?: string[];
+  favoriteTags?: string[];
 }
 class TagList extends Component<TagListProps> {
   scroller: Scroller;
@@ -43,12 +45,15 @@ class TagList extends Component<TagListProps> {
     const flexDirection = this.getTagsFlexDirection();
     return (
       <TagsContainer ref={this.ref} style={{flexDirection: flexDirection}}>
-        <Tags tags={this.props.tags} selectedTags={this.props.selectedTags} 
+        <Tags tags={this.props.tags} 
+              selectedTags={this.props.selectedTags} 
+              favoriteTags={this.props.favoriteTags}
               allowEdit={this.props.allowEdit} 
               onClick={this.props.onClick} 
               toggleStyle={this.props.toggleStyle} 
-              allowSetFavourite={this.props.allowSetFavourite}
-              onSetFavourite={this.props.onSetFavourite} />
+              allowSetFavorite={this.props.allowSetFavorite}
+              onAddFavoriteTag={this.props.onAddFavoriteTag}
+              onRemoveFavoriteTag={this.props.onRemoveFavoriteTag} />
       </TagsContainer>
     );
   }

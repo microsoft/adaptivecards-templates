@@ -28,16 +28,18 @@ interface Props {
   tags?: string[];
   allowEdit?: boolean;
   allowAddTag?: boolean;
-  allowSetFavourite?: boolean;
+  allowSetFavorite?: boolean;
   templateID?: string;
   template?: Template;
   updateTags?: (tags: string[]) => void;
   tagRemove?: (tag: string) => void;
   modalState?: ModalState;
   onClick?: (tag: string) => void;
-  onSetFavourite?: (tag: string) => void;
+  onAddFavoriteTag?: (tag: string) => void;
+  onRemoveFavoriteTag?: (tag: string) => void;
   toggleStyle?: (isSelected: boolean, ref: any) => void;
   selectedTags?: string[];
+  favoriteTags?: string[];
 }
 
 interface State {
@@ -138,6 +140,7 @@ class Tags extends React.Component<Props, State>  {
     const {
       isAdding
     } = this.state;
+
     return (
       <React.Fragment>
         {tags && tags.map((tag: string) => (
@@ -148,8 +151,11 @@ class Tags extends React.Component<Props, State>  {
                   allowEdit={allowEdit}
                   toggleStyle={toggleStyle}
                   isSelected={this.props.selectedTags ? (this.props.selectedTags.includes(tag) ? true : false) : undefined} 
-                  allowSetFavourite={this.props.allowSetFavourite}
-                  onSetFavourite={this.props.onSetFavourite}
+                  isFavorite={this.props.favoriteTags ? (this.props.favoriteTags.includes(tag) ? true : false) : undefined}
+                  allowSetFavorite={this.props.allowSetFavorite}
+                  onAddFavoriteTag={this.props.onAddFavoriteTag}
+                  onRemoveFavoriteTag={this.props.onRemoveFavoriteTag}
+
           />
         ))}
         {allowAddTag && <AddTagWrapper onSubmit={this.submitNewTag} open={isAdding} >

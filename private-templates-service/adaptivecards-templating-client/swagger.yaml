@@ -360,16 +360,18 @@ paths:
       security: 
         - bearer_auth: []
     post:
+      tags: 
+        - "template"
       summary: "Favorite tags"
       operationId: "updateTags"
       produces: 
         - "application/json"
       parameters: 
         - in: "body"
-          name: "body"
+          name: "favorite"
           description: "list of favorite tags"
           required: true
-          schema:
+          schema: 
             $ref: "#/definitions/FavoriteTagList"
       responses:
         200: 
@@ -381,16 +383,18 @@ paths:
       security:
         - bearer_auth: []
     delete: 
+      tags: 
+        - "template"
       summary: "Unfavorite tags"
       operationId: "unFavoriteTags"
       produces: 
         - "application/json"
       parameters: 
         - in: "body"
-          name: "body"
+          name: "favorite"
           description: "list of favorite tags"
           required: true
-          schema:
+          schema: 
             $ref: "#/definitions/FavoriteTagList"
       responses: 
         200: 
@@ -612,22 +616,13 @@ definitions:
         type: array
         items: 
           type: string
-  TagList: 
-    type: object
-    properties: 
-      ownedTags:
-        type: array
-        items: 
-          type: string
-      allTags:
-        type: array
-        items: 
-          type: string
   FavoriteTagList:
     type: object
-    properties: 
-      favorite: 
-        $ref: "#/definitions/TagList"
+    properties:
+      favorite:
+        type: array
+        items:
+          type: string
   Recent: 
     type: object
     properties: 
@@ -636,7 +631,9 @@ definitions:
       recentlyEdited: 
         $ref: "#/definitions/TemplateList"
       recentlyUsed:
-        $ref: "#/definitions/TagList"
+        type: array
+        items:
+          type: string
   TemplatePreviewInstance:
     type: object
     properties:
