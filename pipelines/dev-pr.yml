@@ -1,13 +1,23 @@
 
-trigger: none
-
-pr:
+trigger:
+  batch: true
   branches:
     include:
     - dev
-    exclude:
     - stage
-    - users/*
+    - users/daniellemott/add_policheck
+    # exclude:
+    # - users/*
+
+# trigger: none
+
+# pr:
+#   branches:
+#     include:
+#     - dev
+#     exclude:
+#     - stage
+#     - users/*
 
 variables: 
   ## Add this under variables section in the pipeline
@@ -24,8 +34,13 @@ jobs:
     inputs:
       inputType: 'Basic'
       targetType: 'F'
-      targetArgument: '$(Build.SourcesDirectory)'
+      targetArgument: '$(system.defaultworkingdirectory)/private-templates-service'
       result: 'PoliCheck.xml'
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: '$(system.defaultworkingdirectory)/private-templates-service'
+      ArtifactName: 'PoliCheck.xml'
+      publishLocation: 'Container'
 
 - job: Linux
   pool:
