@@ -29,7 +29,9 @@ import Footer from "./Footer";
 import {
   FAVORITED_TAGS,
   RECENTLY_EDITED,
-  RECENTLY_VIEWED
+  RECENTLY_VIEWED,
+  DASHBOARD_PAGE,
+  TEMPLATE_PAGE
 } from '../../assets/strings';
 
 import {
@@ -99,7 +101,7 @@ interface Props extends RouteComponentProps {
 class Dashboard extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
-    props.setPage("Dashboard", "Dashboard");
+    props.setPage(DASHBOARD_PAGE, DASHBOARD_PAGE);
     props.setSearchBarVisible(true);
     props.getRecentTemplates();
     props.setSkipLinkContentID(DASHBOARD_MAIN_CONTENT_ID);
@@ -107,9 +109,9 @@ class Dashboard extends React.Component<Props> {
   componentDidUpdate(prevProps: Props) {
     if (this.props.isSearch !== prevProps.isSearch) {
       if (this.props.isSearch) {
-        this.props.setPage("Templates", "searchPage");
+        this.props.setPage(TEMPLATE_PAGE, "searchPage");
       } else {
-        this.props.setPage("Dashboard", "Dashboard");
+        this.props.setPage(DASHBOARD_PAGE, "Dashboard");
       }
     }
     if (prevProps.recentTemplates !== this.props.recentTemplates &&
