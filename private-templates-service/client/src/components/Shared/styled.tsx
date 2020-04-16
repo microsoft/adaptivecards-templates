@@ -32,6 +32,7 @@ export const ACPanel = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  overflow: auto;
 `;
 
 export const ACWrapper = styled.div`
