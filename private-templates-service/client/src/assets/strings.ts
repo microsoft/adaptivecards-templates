@@ -10,6 +10,12 @@ export const OUT = "Out";
 export const IN = "In";
 export const ADAPTIVE_CARDS = "Adaptive Cards";
 export const PORTAL = "Portal";
+export const ARIA_DASHBOARD = "Link to Dashboard";
+export const ARIA_NEW_CARD = "Link to New Card";
+export const ARIA_ALL_CARDS = "Link to All Cards";
+export const ARIA_DRAFTS = "Link to Drafts";
+export const ARIA_PUBLISHED = "Link to Published Cards";
+export const ARIA_TAGS = "Link to Tags";
 
 //PreviewModal.tsx
 export const ADAPTIVE_CARD_RENDER = "Adaptive Card Preview Render";
@@ -111,6 +117,7 @@ export const ALL_CARDS_PLACEHOLDER = "Nothing to display yet.";
 // TemplatesPage.tsx
 export const LIST_VIEW = "List View";
 export const GRID_VIEW = "Grid View";
+export const CONTROLS = " controls";
 
 // PublishModal.tsx
 export const PUBLISH_CARD = "Publish Card";
@@ -243,3 +250,6 @@ export const UTIL_DEPRECATED = "Deprecated";
 
 //TagBody.tsx
 export const TAG_DESCRIPTION = "Tag";
+
+//TagList.tsx
+export const ALL_TAGS = "All tags";

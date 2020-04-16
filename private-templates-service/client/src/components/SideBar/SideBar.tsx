@@ -30,7 +30,7 @@ import {
 } from "./styled";
 import { INavLinkGroup, INavStyles } from "office-ui-fabric-react";
 import SkipLink from "../Common/SkipLink";
-import { NAVBAR, OUT, IN, ADAPTIVE_CARDS, PORTAL } from "../../assets/strings";
+import { NAVBAR, OUT, IN, ADAPTIVE_CARDS, PORTAL, ARIA_DASHBOARD, ARIA_NEW_CARD, ARIA_ALL_CARDS, ARIA_DRAFTS, ARIA_PUBLISHED, ARIA_TAGS } from "../../assets/strings";
 
 
 interface Props {
@@ -100,7 +100,7 @@ const navMenuLinks: INavLinkGroup[] = [
           style: iconStyle
         },
         title: "",
-        ariaLabel: "Link to Dashboard"
+        ariaLabel: ARIA_DASHBOARD
       },
       {
         name: "New Template",
@@ -110,7 +110,7 @@ const navMenuLinks: INavLinkGroup[] = [
           style: iconStyle
         },
         title: "",
-        ariaLabel: "Link to New Card"
+        ariaLabel: ARIA_NEW_CARD
       },
       {
         name: STRINGS.ALL_CARDS,
@@ -120,7 +120,7 @@ const navMenuLinks: INavLinkGroup[] = [
           style: iconStylePink
         },
         title: "",
-        ariaLabel: "Link to All Cards"
+        ariaLabel: ARIA_ALL_CARDS
       },
       {
         name: STRINGS.DRAFTS,
@@ -130,7 +130,7 @@ const navMenuLinks: INavLinkGroup[] = [
           style: iconStylePink
         },
         title: "",
-        ariaLabel: "Link to Drafts"
+        ariaLabel: ARIA_DRAFTS
       },
       {
         name: STRINGS.PUBLISHED,
@@ -140,7 +140,7 @@ const navMenuLinks: INavLinkGroup[] = [
           style: iconStylePink
         },
         title: "",
-        ariaLabel: "Link to Published Cards"
+        ariaLabel: ARIA_PUBLISHED
       },
       {
         name: STRINGS.TAGS,
@@ -150,7 +150,7 @@ const navMenuLinks: INavLinkGroup[] = [
           style: iconStylePink
         },
         title: "",
-        ariaLabel: "Link to Tags"
+        ariaLabel: ARIA_TAGS
       }
     ]
   }
