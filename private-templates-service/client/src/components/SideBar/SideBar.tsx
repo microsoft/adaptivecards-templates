@@ -102,7 +102,7 @@ const navMenuLinks: INavLinkGroup[] = [
         ariaLabel: "Link to Dashboard"
       },
       {
-        name: "New Template",
+        name: STRINGS.NEW_CARD,
         url: newTemplateURL,
         iconProps: {
           iconName: "CalculatorAddition",
@@ -120,36 +120,6 @@ const navMenuLinks: INavLinkGroup[] = [
         },
         title: "",
         ariaLabel: "Link to All Cards"
-      },
-      {
-        name: STRINGS.DRAFTS,
-        url: "/drafts",
-        iconProps: {
-          iconName: "SingleColumnEdit",
-          style: iconStylePink
-        },
-        title: "",
-        ariaLabel: "Link to Drafts"
-      },
-      {
-        name: STRINGS.PUBLISHED,
-        url: "/published",
-        iconProps: {
-          iconName: "PublishContent",
-          style: iconStylePink
-        },
-        title: "",
-        ariaLabel: "Link to Published Cards"
-      },
-      {
-        name: STRINGS.TAGS,
-        url: "/tags",
-        iconProps: {
-          iconName: "Tag",
-          style: iconStylePink
-        },
-        title: "",
-        ariaLabel: "Link to Tags"
       }
     ]
   }

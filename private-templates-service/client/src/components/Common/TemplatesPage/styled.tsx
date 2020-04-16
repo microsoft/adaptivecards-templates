@@ -6,7 +6,7 @@ export const OuterCardsContainer = styled(OuterDashboardContainer)``;
 export const InnerCardsContainer = styled(DashboardContainer)`
   overflow: auto;
 `;
-export const UpperBar = styled.div`
+export const UpperBar = styled.section`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
