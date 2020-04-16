@@ -1,4 +1,3 @@
-
 export interface FilterState {
   isFilter: boolean;
   filterType: {
@@ -8,8 +7,7 @@ export interface FilterState {
   };
 }
 
-export type FilterEnum = "draft" | "live" | "deprecated" | undefined
-
+export type FilterEnum = "draft" | "live" | "deprecated" | undefined;
 
 //Action Types 
 export const CLEAR_FILTER = "CLEAR_FILTER";

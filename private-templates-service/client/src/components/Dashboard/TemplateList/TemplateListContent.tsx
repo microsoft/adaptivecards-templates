@@ -2,8 +2,6 @@ import React from "react";
 
 import { Template } from "adaptive-templating-service-typescript-node";
 
-import { TemplateListBodyRow, TemplateListItem, TemplateListBody, TemplateListStatusIndicator, StatusWrapper } from "./styled";
-
 import { ListViewComponents } from "./TemplateList";
 import { getDateString } from "../../../utils/versionUtils";
 import { capitalizeString, getState } from "../../../utils/stringUtils";
@@ -11,7 +9,20 @@ import { Status } from "../PreviewModal/TemplateInfo/styled";
 import { TemplateStateWrapper } from "../../AdaptiveCardPanel/styled";
 import OwnerInfo from "./OwnerInfo";
 import KeyCode from "../../../globalKeyCodes";
-import { ERROR_LOADING_TEMPLATES } from "../../../assets/strings";
+
+import {
+  TemplateListBodyRow,
+  TemplateListItem,
+  TemplateListBody,
+  TemplateListStatusIndicator,
+  StatusWrapper,
+  PlaceholderWrapper,
+} from "./styled";
+
+import {
+  NO_CARDS_PLACEHOLDER,
+  TEMPLATE_LIST_ERROR
+} from '../../../assets/strings';
 
 interface Props {
   templates: Template[];
@@ -23,6 +34,15 @@ class TemplateListContent extends React.Component<Props> {
   render() {
     const { templates, propsOnClick, displayComponents } = this.props;
     let rows: JSX.Element[] = [];
+
+    if (templates.length === 0) {
+      return (
+        <PlaceholderWrapper>
+          {NO_CARDS_PLACEHOLDER}
+        </PlaceholderWrapper>
+      )
+    }
+
     rows = templates.map((template: Template) => {
       let onClick = () => {
         if (propsOnClick && template.id) {
@@ -35,7 +55,7 @@ class TemplateListContent extends React.Component<Props> {
         }
       };
       if (!template || !template.instances || !template.instances[0] || !template.instances[0].lastEditedUser) {
-        return <div>{ERROR_LOADING_TEMPLATES}</div>;
+        return <div>{TEMPLATE_LIST_ERROR}</div>;
       }
 
 

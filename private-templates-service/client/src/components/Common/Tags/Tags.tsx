@@ -55,7 +55,7 @@ class Tags extends React.Component<Props, State>  {
     }
     this.tagRefs = {};
   }
-  
+
 
   openNewTag = () => {
     this.setState({ isAdding: true }, () => {
@@ -74,7 +74,7 @@ class Tags extends React.Component<Props, State>  {
   submitNewTag = (e: any): void => {
     e.preventDefault();
     if (this.addTagInput && this.addTagInput.current && this.props.tags) {
-      const tag = this.addTagInput.current.value;
+      let tag = this.addTagInput.current.value.trim();
       if (this.props.tags.includes(tag)) {
         this.highlightTag(tag, this.props.tags);
       }
@@ -140,12 +140,12 @@ class Tags extends React.Component<Props, State>  {
       <React.Fragment>
         {tags && tags.map((tag: string) => (
           <TagBody setRef={(ref: HTMLDivElement) => this.tagRefs[tag] = ref}
-                  tag={tag} tagRemove={tagRemove} onAnimationEnd={this.onAnimationEnd} 
-                  key={tag} onClick={onClick} onKeyDownRemoveTag={this.onKeyDownRemoveTag} 
-                  ifModalState={modalState? true : false}
-                  allowEdit={allowEdit}
-                  toggleStyle={toggleStyle}
-                  isSelected={this.props.selectedTags ? (this.props.selectedTags.includes(tag) ? true : false) : undefined} 
+            tag={tag} tagRemove={tagRemove} onAnimationEnd={this.onAnimationEnd}
+            key={tag} onClick={onClick} onKeyDownRemoveTag={this.onKeyDownRemoveTag}
+            ifModalState={modalState ? true : false}
+            allowEdit={allowEdit}
+            toggleStyle={toggleStyle}
+            isSelected={this.props.selectedTags ? (this.props.selectedTags.includes(tag) ? true : false) : undefined}
           />
         ))}
         {allowAddTag && <AddTagWrapper onSubmit={this.submitNewTag} open={isAdding} >

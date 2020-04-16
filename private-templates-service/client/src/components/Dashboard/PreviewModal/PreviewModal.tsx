@@ -129,6 +129,7 @@ class PreviewModal extends React.Component<Props, State> {
 
     return (
       <ModalWrapper>
+
         {template && !isFetching ?
           <React.Fragment>
             <ACOuterPanel aria-label={STRINGS.ADAPTIVE_CARD_RENDER}>

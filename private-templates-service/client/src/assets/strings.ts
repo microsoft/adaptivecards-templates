@@ -80,6 +80,11 @@ export const USAGE = "Usage";
 export const REQUESTS = "Requests";
 export const OWNER = "Owner";
 export const TEMPLATE_INFO_TAGS = "Tags";
+export const TEMPLATE_AUTHOR = "Author";
+export const PEOPLE = "People";
+export const COLLABORATORS = "Collaborators";
+export const TEMPLATE_AT = " at ";
+
 
 // EditNameModal.tsx
 export const EDIT_CARD_NAME = "Edit Card Name";
@@ -93,8 +98,8 @@ export const NEW_TEMPLATE_NAME = "Untitled Card";
 // Dashboard.tsx
 export const RECENTLY_EDITED = "Recently edited";
 export const RECENTLY_VIEWED = "Recently viewed";
-export const DASHBOARD_RECENTLY_EDITED_PLACEHOLDER = "No edited templates.";
-export const DASHBOARD_RECENTLY_VIEWED_PLACEHOLDER = "No recently viewed templates.";
+export const DASHBOARD_RECENTLY_EDITED_PLACEHOLDER = "Create your first adaptive card!";
+export const DASHBOARD_PLACEHOLDER_BUTTON = "Create Card";
 export const FAVORITED_TAGS = "Favorited tags";
 export const DASHBOARD_PAGE = "Dashboard";
 export const TEMPLATE_PAGE = "Templates";
@@ -142,6 +147,12 @@ export const DRAFT = "Draft";
 export const CARDNAME = "Card Name";
 export const TAGS = "Tags";
 export const MYCARD = "My Card";
+
+//SaveAndPublishModal.tsx
+export const SAVE_AND_PUBLISH_DESC = "Your new design will be available to your organization as ";
+export const SAVE_AND_PUBLISH = "Save and publish";
+export const SAVE_AND_PUBLISH_CARD = SAVE_AND_PUBLISH + " card";
+export const LIVE = "Live";
 
 //OwnerAvatar.tsx
 export const ERROR_LOADING_IMAGE = "Error loading image";
@@ -253,3 +264,10 @@ export const TAG_DESCRIPTION = "Tag";
 
 //TagList.tsx
 export const ALL_TAGS = "All tags";
+//NoMatch.tsx
+export const TAG_ERROR_MESSAGE = "Oops, something went wrong.";
+export const TAG_GO_TO_DASHBOARD = "Go to Dashboard";
+
+// TemplateListContent.tsx
+export const NO_CARDS_PLACEHOLDER = "No cards found.";
+export const TEMPLATE_LIST_ERROR = "Error loading card.";

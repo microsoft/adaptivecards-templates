@@ -4,6 +4,14 @@ import { TemplateListContainer, TemplateListHeader, TemplateListHeaderItem } fro
 import TemplateListContent from "./TemplateListContent";
 import { TEMPLATE_LIST_NAME, TEMPLATE_LIST_STATUS, TEMPLATE_LIST_OWNER, TEMPLATE_LIST_DATE } from "../../../assets/strings";
 
+export interface ListViewComponents {
+  templateName: boolean;
+  version: boolean;
+  dateModified: boolean;
+  status: boolean;
+  author: boolean;
+}
+
 interface Props {
   templates: Template[];
   onClick?: (id: string) => any;
@@ -25,13 +33,6 @@ export class TemplateList extends Component<Props> {
       </TemplateListContainer>
     );
   }
-}
-export interface ListViewComponents {
-  templateName: boolean;
-  version: boolean;
-  dateModified: boolean;
-  status: boolean;
-  author: boolean;
 }
 
 export default TemplateList;

@@ -59,3 +59,7 @@ export const TemplateListStatusIndicator = styled(StatusIndicator)`
 export const StatusWrapper = styled.div`
   padding-top: 3px;
 `
+
+export const PlaceholderWrapper = styled.div`
+  margin: 64px auto;
+`;
