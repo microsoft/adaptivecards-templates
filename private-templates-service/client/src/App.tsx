@@ -8,8 +8,8 @@ import { ApplicationInsights } from '@microsoft/applicationinsights-web';
 import { ReactPlugin } from '@microsoft/applicationinsights-react-js';
 import { createBrowserHistory } from "history";
 
-//shit
 // ^ swear word for testing PoliCheck only
+let shit = "shit";
 
 // Redux
 import { connect } from "react-redux";
