@@ -17,99 +17,98 @@ variables:
   azureSubscription: 'Adaptive Cards (47c80630-3d74-4b3e-a2f4-57e6368cd8c6)'
   keyVault: 'AC-KeyVault-West'
 
+stages:
+- stage: A
+  jobs:
+  - job: Windows
+    pool:
+      vmImage: 'windows-latest'
 
-jobs:
-- job: Windows
-  pool:
-    vmImage: 'windows-latest'
+    steps:
+    - task: PoliCheck@1
+      inputs:
+        inputType: 'Basic'
+        targetType: 'F'
+        targetArgument: '$(Build.SourcesDirectory)'
+        result: 'PoliCheck.xml'
 
-  steps:
-  - task: PoliCheck@1
-    inputs:
-      inputType: 'Basic'
-      targetType: 'F'
-      targetArgument: '$(Build.SourcesDirectory)'
-      result: 'PoliCheck.xml'
+- stage: B
+  jobs:
+  - job: Linux
+    pool:
+      vmImage: 'ubuntu-latest'
 
-- job: Linux
-  pool:
-    vmImage: 'ubuntu-latest'
+    steps:
+    - task: AzureKeyVault@1
+      inputs:
+        azureSubscription: $(azureSubscription)
+        keyVaultName: $(keyVault)
+        secretsFilter: 'DevACMSSecret, StageACMSSecret'
 
-  steps:
-  - task: AzureKeyVault@1
-    inputs:
-      azureSubscription: $(azureSubscription)
-      keyVaultName: $(keyVault)
-      secretsFilter: 'DevACMSSecret, StageACMSSecret'
+    - task: PowerShell@2
+      inputs:
+        targetType: 'inline'
+        script: |
+            if ("$(Build.SourceBranch)" -eq "refs/heads/dev") {
+              Write-Host "##vso[task.setvariable variable=ACMS_APP_ID;]$(DEV_REACT_APP_ACMS_APP_ID)"
+              Write-Host "##vso[task.setvariable variable=REACT_APP_ACMS_APP_NAME;]$(DEV_REACT_APP_ACMS_APP_NAME)"
+              Write-Host "##vso[task.setvariable variable=ACMS_APP_SECRET;]$(DevACMSSecret)"
+              }
+            if ("$(Build.SourceBranch)" -eq "refs/heads/stage") {
+              Write-Host "##vso[task.setvariable variable=ACMS_APP_ID;]$(STAGE_REACT_APP_ACMS_APP_ID)"
+              Write-Host "##vso[task.setvariable variable=REACT_APP_ACMS_APP_NAME;]$(STAGE_REACT_APP_ACMS_APP_NAME)"
+              Write-Host "##vso[task.setvariable variable=ACMS_APP_SECRET;]$(StageACMSSecret)"
+              }
 
-  - task: PowerShell@2
-    inputs:
-      targetType: 'inline'
-      script: |
-          if ("$(Build.SourceBranch)" -eq "refs/heads/dev") {
-            Write-Host "##vso[task.setvariable variable=ACMS_APP_ID;]$(DEV_REACT_APP_ACMS_APP_ID)"
-            Write-Host "##vso[task.setvariable variable=REACT_APP_ACMS_APP_NAME;]$(DEV_REACT_APP_ACMS_APP_NAME)"
-            Write-Host "##vso[task.setvariable variable=ACMS_APP_SECRET;]$(DevACMSSecret)"
-            }
-          if ("$(Build.SourceBranch)" -eq "refs/heads/stage") {
-            Write-Host "##vso[task.setvariable variable=ACMS_APP_ID;]$(STAGE_REACT_APP_ACMS_APP_ID)"
-            Write-Host "##vso[task.setvariable variable=REACT_APP_ACMS_APP_NAME;]$(STAGE_REACT_APP_ACMS_APP_NAME)"
-            Write-Host "##vso[task.setvariable variable=ACMS_APP_SECRET;]$(StageACMSSecret)"
-            }
+    - task: NodeTool@0 
+      inputs:
+        versionSpec: '12.x'
 
-  - task: PowerShell@2
-    inputs:
-      filePath: '$(system.defaultworkingdirectory)/private-templates-service/policheck.ps1'
+    - script: |
+        cd private-templates-service/server
+        npm run init-app
+        cd ../client
+        npm run build
+      displayName: Build App
 
-  - task: NodeTool@0 
-    inputs:
-      versionSpec: '12.x'
+    - script: |
+        cd private-templates-service/client
+        npm run test
+      displayName: Run frontend tests
+        
+    - script: |
+        cd private-templates-service/adaptivecards-templating-service
+        npm install
+        npm run build
+        npm run test
+      displayName: Run backend tests
 
-  - script: |
-      cd private-templates-service/server
-      npm run init-app
-      cd ../client
-      npm run build
-    displayName: Build App
+    - script: |
+        cd private-templates-service/server
+        npm run deploy
+      displayName: Build backend
 
-  - script: |
-      cd private-templates-service/client
-      npm run test
-    displayName: Run frontend tests
-      
-  - script: |
-      cd private-templates-service/adaptivecards-templating-service
-      npm install
-      npm run build
-      npm run test
-    displayName: Run backend tests
+    # - task: ArchiveFiles@2
+    #   displayName: 'Archive the function source code'
+    #   condition: succeeded()
+    #   inputs:
+    #     rootFolderOrFile: '$(system.defaultworkingdirectory)/private-templates-service'
+    #     includeRootFolder: false
+    #     archiveType: 'zip'
+    #     archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    #     replaceExistingArchive: true
 
-  - script: |
-      cd private-templates-service/server
-      npm run deploy
-    displayName: Build backend
+    # - task: PublishBuildArtifacts@1
+    #   displayName: 'Publish Artifact: drop'
+    #   condition: succeeded()
+    #   inputs:
+    #     PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
 
-  # - task: ArchiveFiles@2
-  #   displayName: 'Archive the function source code'
-  #   condition: succeeded()
-  #   inputs:
-  #     rootFolderOrFile: '$(system.defaultworkingdirectory)/private-templates-service'
-  #     includeRootFolder: false
-  #     archiveType: 'zip'
-  #     archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
-  #     replaceExistingArchive: true
-
-  # - task: PublishBuildArtifacts@1
-  #   displayName: 'Publish Artifact: drop'
-  #   condition: succeeded()
-  #   inputs:
-  #     PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
-
-  # - task: AzureWebApp@1
-  #   displayName: 'Azure Web App Deploy'
-  #   condition: succeeded()
-  #   inputs:
-  #     azureSubscription: $(azureSubscription)
-  #     appType: webAppLinux
-  #     appName: $(REACT_APP_ACMS_APP_NAME)
-  #     package: $(System.ArtifactsDirectory)/**/*.zip
+    # - task: AzureWebApp@1
+    #   displayName: 'Azure Web App Deploy'
+    #   condition: succeeded()
+    #   inputs:
+    #     azureSubscription: $(azureSubscription)
+    #     appType: webAppLinux
+    #     appName: $(REACT_APP_ACMS_APP_NAME)
+    #     package: $(System.ArtifactsDirectory)/**/*.zip
