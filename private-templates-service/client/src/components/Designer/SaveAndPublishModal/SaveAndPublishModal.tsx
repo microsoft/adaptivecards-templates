@@ -84,7 +84,10 @@ class SaveAndPublishModal extends React.Component<Props, State> {
 
   constructor(props: Props) {
     super(props);
-    this.state = { tags: this.getTags(this.props.template), templateName: (this.props.templateName ? this.props.templateName : STRINGS.UNTITLEDCARD) }
+    this.state = {
+      tags: this.getTags(this.props.template),
+      templateName: (this.props.templateName ? this.props.templateName : STRINGS.UNTITLEDCARD)
+    }
   }
 
   getTags = (template?: Template): Array<string> => {

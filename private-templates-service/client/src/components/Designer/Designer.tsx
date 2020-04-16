@@ -139,7 +139,7 @@ class Designer extends React.Component<DesignerProps> {
         {this.props.modalState === ModalState.Share && <ShareModal template={this.props.template} templateVersion={this.props.version} />}
         {this.props.modalState === ModalState.ShareSuccess && <ShareSuccessModal template={this.props.template} templateVersion={this.props.version} />}
         {this.props.modalState === ModalState.EditName && <EditNameModal />}
-      </main>
+      </main >
     );
   }
 }

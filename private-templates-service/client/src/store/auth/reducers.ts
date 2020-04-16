@@ -20,7 +20,7 @@ import {
   GET_PROFILE_PICTURE,
   GET_PROFILE_PICTURE_FAILURE,
   GET_PROFILE_PICTURE_SUCCESS,
-  GET_CONFIG, 
+  GET_CONFIG,
   GET_CONFIG_SUCCESS,
   GET_CONFIG_FAILURE
 } from './types';
@@ -31,9 +31,10 @@ const initialState: AuthState = {
   isFetching: false,
   accessToken: undefined,
   graphAccessToken: undefined,
-  redirectUri: undefined, 
+  redirectUri: undefined,
   appId: undefined,
-  appInsightsInstrumentationKey: undefined
+  appInsightsInstrumentationKey: undefined,
+  userInsightsInstrumentationKey: undefined
 }
 
 const initialUserState: UserType = {
@@ -90,10 +91,11 @@ export function authReducer(state = initialState, action: AuthAction | AccessTok
       }
     case GET_CONFIG_SUCCESS:
       return {
-        ...state, 
+        ...state,
         appId: action.appId,
         redirectUri: action.redirectUri,
-        appInsightsInstrumentationKey: action.appInsightsInstrumentationKey
+        appInsightsInstrumentationKey: action.appInsightsInstrumentationKey,
+        userInsightsInstrumentationKey: action.userInsightsInstrumentationKey,
       }
     case ACCESS_TOKEN_SET:
       return {

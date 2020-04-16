@@ -26,6 +26,7 @@ import {
   BottomRow,
   ButtonGroup,
   CancelButton,
+  CardWrapper,
   PublishButton,
 } from './styled';
 import { getVersionNumber } from '../../../utils/TemplateUtil/TemplateUtil';
@@ -78,7 +79,9 @@ class PublishModal extends React.Component<Props> {
             <DescriptionAccent>{template.name + " - v" + this.getNewTemplateVersion()}</DescriptionAccent>
           </Description>
           <CenterPanelWrapper>
-            <AdaptiveCardPanel template={template} version={this.props.templateVersion} />
+            <CardWrapper>
+              <AdaptiveCardPanel template={template} version={this.props.templateVersion} />
+            </CardWrapper>
           </CenterPanelWrapper>
           <BottomRow>
             <ButtonGroup>
