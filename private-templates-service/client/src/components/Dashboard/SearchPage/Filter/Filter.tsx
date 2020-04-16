@@ -6,7 +6,6 @@ import { StyledFilterDropdown } from './styled';
 import { clearFilter, queryFilter } from "../../../../store/filter/actions";
 import { THEME } from '../../../../globalStyles';
 import { FilterObject } from '../../../../store/filter/types';
-import { FilterEnum } from '../../../../store/filter/types';
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -38,14 +37,14 @@ const options: IDropdownOption[] = [
 class Filter extends React.Component<Props> {
   onChange = (event: React.FormEvent<HTMLDivElement>, option?: IDropdownOption) => {
     if (option && typeof option.key === "string") {
-      let filter: FilterObject  = { value: option.key, owner: undefined, state: undefined }
-      if (option.key === "owner"){
+      let filter: FilterObject = { value: option.key, owner: undefined, state: undefined }
+      if (option.key === "owner") {
         filter.owner = true;
       }
-      else if (option.key === "draft"){
+      else if (option.key === "draft") {
         filter.state = "draft";
       }
-      else if(option.key === "published"){ 
+      else if (option.key === "published") {
         filter.state = "live";
       }
       this.props.queryFilter(filter)
