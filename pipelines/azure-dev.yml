@@ -29,7 +29,7 @@ stages:
       inputs:
         inputType: 'Basic'
         targetType: 'F'
-        targetArgument: '$(system.defaultworkingdirectory)/private-templates-service'
+        targetArgument: '$(Build.SourcesDirectory)'
         result: 'PoliCheck.xml'
 
 - stage: Build_test_deploy
