@@ -81,11 +81,6 @@ const iconStyle = {
   margin: "0px 10px 0px 40px"
 };
 
-const iconStylePink = {
-  color: 'pink',
-  margin: "0px 10px 0px 40px"
-}
-
 const newTemplateURL = "/designer/newcard/1.0"
 
 const navMenuLinks: INavLinkGroup[] = [
@@ -116,7 +111,7 @@ const navMenuLinks: INavLinkGroup[] = [
         url: "/templates/all",
         iconProps: {
           iconName: "ViewList",
-          style: iconStylePink
+          style: iconStyle
         },
         title: "",
         ariaLabel: "Link to All Cards"
