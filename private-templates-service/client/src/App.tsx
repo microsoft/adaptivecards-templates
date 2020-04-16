@@ -8,9 +8,6 @@ import { ApplicationInsights } from '@microsoft/applicationinsights-web';
 import { ReactPlugin } from '@microsoft/applicationinsights-react-js';
 import { createBrowserHistory } from "history";
 
-// ^ swear word for testing PoliCheck only
-let shit = "shit";
-
 // Redux
 import { connect } from "react-redux";
 import { setAccessToken, setGraphAccessToken, getUserDetails, getOrgDetails, getProfilePicture, logout, getConfig } from "./store/auth/actions";
