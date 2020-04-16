@@ -44,7 +44,7 @@ steps:
 
 - task: PowerShell@2
   inputs:
-    filePath: 'system.defaultworkingdirectory)/private-templates-service/policheck.ps1'
+    filePath: '$(system.defaultworkingdirectory)/private-templates-service/policheck.ps1'
 
 - task: NodeTool@0 
   inputs:
