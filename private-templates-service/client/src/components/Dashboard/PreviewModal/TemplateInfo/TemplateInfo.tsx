@@ -95,8 +95,7 @@ const buttons = [
 const cards = [
   {
     header: 'Author',
-    iconName: 'Contact',
-    bodyText: 'Henry Trent'
+    iconName: 'Contact'
   },
   {
     header: 'People',
