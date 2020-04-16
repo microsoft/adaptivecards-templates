@@ -30,6 +30,11 @@ jobs:
       targetType: 'F'
       targetArgument: '$(Build.SourcesDirectory)'
       result: 'PoliCheck.xml'
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+      ArtifactName: 'PoliCheck.xml'
+      publishLocation: 'Container'
 
 - job: Linux
   pool:
@@ -56,10 +61,6 @@ jobs:
             Write-Host "##vso[task.setvariable variable=REACT_APP_ACMS_APP_NAME;]$(STAGE_REACT_APP_ACMS_APP_NAME)"
             Write-Host "##vso[task.setvariable variable=ACMS_APP_SECRET;]$(StageACMSSecret)"
             }
-
-  - task: PowerShell@2
-    inputs:
-      filePath: '$(system.defaultworkingdirectory)/private-templates-service/policheck.ps1'
 
   - task: NodeTool@0 
     inputs:
