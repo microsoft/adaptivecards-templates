@@ -18,9 +18,13 @@ import EditNameModal from '../Common/EditNameModal';
 import SaveModal from './SaveModal/SaveModal';
 import SpinnerModal from '../Common/SpinnerModal';
 import SaveAndPublishModal from './SaveAndPublishModal/SaveAndPublishModal';
+import ShareModal from '../Common/ShareModal';
+import { Template } from 'adaptive-templating-service-typescript-node';
+import ShareSuccessModal from '../Common/ShareModal/ShareSuccessModal';
 
 const mapStateToProps = (state: RootState) => {
   return {
+    template: state.currentTemplate.template,
     templateID: state.currentTemplate.templateID,
     templateJSON: state.currentTemplate.templateJSON,
     templateName: state.currentTemplate.templateName,
@@ -49,6 +53,7 @@ const mapDispatchToProps = (dispatch: any) => {
 }
 
 interface DesignerProps extends RouteComponentProps<MatchParams> {
+  template: Template;
   templateID: string;
   templateJSON: object;
   templateName: string;
@@ -131,8 +136,10 @@ class Designer extends React.Component<DesignerProps> {
         {this.props.isFetching && <SpinnerModal />}
         {this.props.modalState === ModalState.Save && <SaveModal designerSampleData={designer.sampleData} designerTemplateJSON={designer.getCard()} />}
         {this.props.modalState === ModalState.SaveAndPublish && <SaveAndPublishModal designerTemplateJSON={designer.getCard()} designerSampleDataJSON={designer.sampleData} />}
+        {this.props.modalState === ModalState.Share && <ShareModal template={this.props.template} templateVersion={this.props.version} />}
+        {this.props.modalState === ModalState.ShareSuccess && <ShareSuccessModal template={this.props.template} templateVersion={this.props.version} />}
         {this.props.modalState === ModalState.EditName && <EditNameModal />}
-      </main>
+      </main >
     );
   }
 }
