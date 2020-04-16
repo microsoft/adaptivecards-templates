@@ -14,6 +14,7 @@ import { getLatestVersion } from "../../../../utils/TemplateUtil";
 import { getOwnerName, getOwnerProfilePicture } from "../../../../store/templateOwner/actions";
 import { OwnerType } from "../../../../store/templateOwner/types";
 import OwnerAvatar from "../../TemplateList/OwnerAvatar";
+import OwnerList from "./OwnerList";
 
 import PublishModal from '../../../Common/PublishModal';
 import UnpublishModal from '../../../Common/UnpublishModal';
@@ -93,9 +94,12 @@ const buttons = [
 // TODO: Dynamically show info. Backend not ready
 const cards = [
   {
-    header: 'Owner',
-    iconName: 'Contact',
-    bodyText: 'Henry Trent'
+    header: 'Author',
+    iconName: 'Contact'
+  },
+  {
+    header: 'People',
+    bodyText: 'Collaborators'
   },
   {
     header: 'Usage',
@@ -169,9 +173,10 @@ class TemplateInfo extends React.Component<Props, State> {
     super(props);
     const currentVersion = getLatestVersion(this.props.template);
     this.state = { version: currentVersion }
-    let templateInstance = getTemplateInstance(this.props.template, currentVersion);
-    this.props.getOwnerName(templateInstance.lastEditedUser!);
-    this.props.getOwnerProfilePicture(templateInstance.lastEditedUser!);
+    for (let instance of this.props.template.instances || []) {
+      this.props.getOwnerName(instance.lastEditedUser!);
+      this.props.getOwnerProfilePicture(instance.lastEditedUser!);
+    }
   }
 
   componentDidUpdate(prevProps: Props, prevState: State) {
@@ -255,23 +260,28 @@ class TemplateInfo extends React.Component<Props, State> {
   render() {
     const {
       tags,
-      updatedAt,
       instances,
     } = this.props.template;
     const { isFetchingTags, isFetchingOwnerName, isFetchingOwnerPic } = this.props;
 
+    let templateInstance = getTemplateInstance(this.props.template, this.state.version);
+    let templateState = templateInstance.state || PostedTemplate.StateEnum.Draft;
     let timestampParsed = "";
-    if (updatedAt) {
-      const tempDate = new Date(updatedAt);
-      timestampParsed = tempDate.toLocaleString();
+    if (templateInstance.updatedAt) {
+      const tempDate = new Date(templateInstance.updatedAt);
+      timestampParsed = tempDate.toLocaleDateString() + " at " + tempDate.toLocaleTimeString(navigator.language, {hour: '2-digit', minute:'2-digit'});
+    }
+    let oids: string[] = []
+    for (let instance of this.props.template.instances || []) {
+      if (instance.lastEditedUser && !oids.includes(instance.lastEditedUser)){
+        oids.push(instance.lastEditedUser!);
+      }
     }
 
     const { history } = this.props;
     if (!history) {
       return (<div>Error loading page</div>)
     }
-    let templateInstance = getTemplateInstance(this.props.template, this.state.version);
-    let templateState = templateInstance.state || PostedTemplate.StateEnum.Draft;
 
     let tagCardID = "Card tags";
     return (
@@ -312,8 +322,12 @@ class TemplateInfo extends React.Component<Props, State> {
                   {val.iconName && ((isFetchingOwnerName || isFetchingOwnerPic) ?
                     <CenteredSpinner size={SpinnerSize.large} /> :
                     <IconWrapper><OwnerAvatar sizeInPx={50} oID={templateInstance.lastEditedUser!} /></IconWrapper>)}
+                  {val.header === "People" && ((isFetchingOwnerName || isFetchingOwnerPic) ?
+                      <CenteredSpinner size={SpinnerSize.large} /> :
+                      <IconWrapper><OwnerList oids={oids}/></IconWrapper>)}
                   {val.header === "Usage" && <UsageNumber>{templateInstance.numHits}</UsageNumber>}
-                  {(val.header === "Owner") ? (this.props.owner && this.props.owner.displayNames) ? this.props.owner.displayNames[templateInstance.lastEditedUser!] : "" : val.bodyText}
+                  {(val.header === "Author") ? (this.props.owner && this.props.owner.displayNames) ? this.props.owner.displayNames[templateInstance.lastEditedUser!] : "" : 
+                    (val.header === "People")? oids.length + " " + val.bodyText : val.bodyText}
                 </CardBody>
               </Card>
             ))}

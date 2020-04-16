@@ -101,7 +101,7 @@ export const RowWrapper = styled.div`
 `;
 
 export const Card = styled.section`
-  flex: 0.47 0 0;
+  flex: 0.32 0 0;
   display: flex;
   flex-direction: column;
   border: 1px solid ${COLORS.BORDER2};
