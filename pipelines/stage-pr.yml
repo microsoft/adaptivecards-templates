@@ -51,13 +51,6 @@ stages:
         script: |
             Write-Host "##vso[task.setvariable variable=ACMS_APP_SECRET;]$(StageACMSSecret)"
 
-    - task: PoliCheck@1
-      inputs:
-        inputType: 'Basic'
-        targetType: 'F'
-        targetArgument: '$(Build.SourcesDirectory)'
-        result: 'PoliCheck.xml'
-
     - task: NodeTool@0 
       inputs:
         versionSpec: '12.x'
