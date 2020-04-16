@@ -25,3 +25,8 @@ export interface TagsAction {
   tag?: string;
   error?: IncomingMessage;
 }
+
+export enum TagsUpdateType {
+  AddFavorite,
+  RemoveFavorite
+}

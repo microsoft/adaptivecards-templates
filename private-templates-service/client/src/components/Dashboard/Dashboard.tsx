@@ -13,7 +13,7 @@ import { setSearchBarVisible } from "../../store/search/actions";
 import { getOwnerProfilePicture, getOwnerName } from "../../store/templateOwner/actions";
 import { OwnerState } from "../../store/templateOwner/types";
 import { setSkipLinkContentID } from "../../store/skiplink/actions";
-import { getAllTags, addSelectedTag, clearSelectedTags } from "../../store/tags/actions";
+import { getAllTags, addSelectedTag, clearSelectedTags, removeFavoriteTags, addFavoriteTags } from "../../store/tags/actions";
 import { TagsState } from "../../store/tags/types";
 
 import { Template } from "adaptive-templating-service-typescript-node";
@@ -90,6 +90,12 @@ const mapDispatchToProps = (dispatch: any) => {
     },
     clearSelectedTags: () => {
       dispatch(clearSelectedTags());
+    },
+    onAddFavoriteTag: (tag: string) => {
+      dispatch(addFavoriteTags(tag))
+    },
+    onRemoveFavoriteTag: (tag: string) => {
+      dispatch(removeFavoriteTags(tag))
     }
   };
 };
@@ -111,6 +117,8 @@ interface Props extends RouteComponentProps {
   getTags: () => void;
   addSelectedTag: (tag: string) => void;
   clearSelectedTags: () => void;
+  onAddFavoriteTag: (tag: string) => void;
+  onRemoveFavoriteTag: (tag: string) => void;
   isSearch: boolean;
 }
 class Dashboard extends React.Component<Props> {
@@ -229,6 +237,8 @@ class Dashboard extends React.Component<Props> {
                    allowEdit={false} 
                    onClick={this.tagOnClick} 
                    allowSetFavorite={true}
+                   onAddFavoriteTag={this.props.onAddFavoriteTag}
+                   onRemoveFavoriteTag={this.props.onRemoveFavoriteTag}
                    favoriteTags={favoriteTags}/>     
           </TagsContainer>
         </OuterWindow>

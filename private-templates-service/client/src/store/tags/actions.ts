@@ -4,14 +4,14 @@ import { REQUEST_ALL_TAGS_GET,
          CLEAR_SELECTED_TAGS, 
          REMOVE_SELECTED_TAG,
          ADD_SELECTED_TAG, 
-         REQUEST_UPDATE_FAVORITE_TAGS, 
-         REQUEST_UPDATE_FAVORITE_TAGS_SUCCESS,
-         REQUEST_UPDATE_FAVORITE_TAGS_FAIL,
+         TagsUpdateType,
          TagsAction } from "./types";
-import { Tags } from "adaptive-templating-service-typescript-node";
+import { Tags, FavoriteTagList } from "adaptive-templating-service-typescript-node";
 import { IncomingMessage } from "http";
 import { RootState } from "../rootReducer";
 import { initClientSDK } from "../../utils/TemplateUtil";
+
+
 
 export function requestAllTags(): TagsAction {
   return {
@@ -53,25 +53,6 @@ export function clearSelectedTags(): TagsAction {
   };
 }
 
-export function requestUpdateFavoriteTags(): TagsAction {
-  return {
-    type: REQUEST_UPDATE_FAVORITE_TAGS
-  }
-}
-
-export function requestUpdateFavoriteTagsSuccess(): TagsAction {
-  return {
-    type: REQUEST_UPDATE_FAVORITE_TAGS_SUCCESS
-  }
-}
-
-export function requestUpdateFavoriteTagsFail(error: IncomingMessage): TagsAction {
-  return {
-    type: REQUEST_UPDATE_FAVORITE_TAGS_FAIL
-  }
-}
-
-
 
 export function getAllTags() {
   return function(dispatch: any, getState: () => RootState) {
@@ -93,41 +74,20 @@ export function getAllTags() {
 }
 
 export function addFavoriteTags(tags: string | string[]) {
-  return function(dispatch: any, getState: () => RootState) {
-    dispatch(requestUpdateFavoriteTags());
-    const api = initClientSDK(dispatch, getState);
-    const favorite: string[] = [];
-    return api
-      .updateTags({favorite: favorite.concat(tags)})
-      .then((response) => {
-        if (response.response.statusCode && response.response.statusCode === 200) {
-          dispatch(requestUpdateFavoriteTagsSuccess());
-        } else {
-          dispatch(requestUpdateFavoriteTagsFail(response.response));
-        }
-      })
-      .catch((response) => {
-        dispatch(requestUpdateFavoriteTagsFail(response.response));
-      });
-  };
+  return _updateFavoriteTags(tags, TagsUpdateType.AddFavorite)
 }
 
 export function removeFavoriteTags(tags: string | string[]) {
+  return _updateFavoriteTags(tags, TagsUpdateType.RemoveFavorite);
+}
+
+export function _updateFavoriteTags(tags: string | string[], type: TagsUpdateType) {
   return function(dispatch: any, getState: () => RootState) {
-    dispatch(requestUpdateFavoriteTags());
     const api = initClientSDK(dispatch, getState);
-    const favorite: string[] = [];
-    return api
-      .unFavoriteTags({favorite: favorite.concat(tags)})
-      .then((response) => {
-        if (response.response.statusCode && response.response.statusCode === 200) {
-          dispatch(requestUpdateFavoriteTagsSuccess());
-        } else {
-          dispatch(requestUpdateFavoriteTagsFail(response.response));
-        }
-      })
-      .catch((response) => {
-        dispatch(requestUpdateFavoriteTagsFail(response.response));
-      });
+    const favorite: string[] = new Array().concat(tags)
+    if(type === TagsUpdateType.AddFavorite) {
+      return api.updateTags({favorite: favorite});
+    }
+    return api.unFavoriteTags({favorite: favorite});
   };
 }
