@@ -5,8 +5,9 @@ trigger:
     include:
     - dev
     - stage
-    exclude:
-    - users/*
+    - users/daniellemott/add_policheck
+    # exclude:
+    # - users/*
 
 # no PR builds
 pr: none
@@ -41,6 +42,13 @@ steps:
           Write-Host "##vso[task.setvariable variable=ACMS_APP_SECRET;]$(StageACMSSecret)"
           }
 
+- task: PoliCheck@1
+  inputs:
+    inputType: 'Basic'
+    targetType: 'F'
+    targetArgument: '$(Build.SourcesDirectory)'
+    result: 'PoliCheck.xml'
+
 - task: NodeTool@0 
   inputs:
     versionSpec: '12.x'
@@ -69,27 +77,27 @@ steps:
     npm run deploy
   displayName: Build backend
 
-- task: ArchiveFiles@2
-  displayName: 'Archive the function source code'
-  condition: succeeded()
-  inputs:
-    rootFolderOrFile: '$(system.defaultworkingdirectory)/private-templates-service'
-    includeRootFolder: false
-    archiveType: 'zip'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
-    replaceExistingArchive: true
+# - task: ArchiveFiles@2
+#   displayName: 'Archive the function source code'
+#   condition: succeeded()
+#   inputs:
+#     rootFolderOrFile: '$(system.defaultworkingdirectory)/private-templates-service'
+#     includeRootFolder: false
+#     archiveType: 'zip'
+#     archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+#     replaceExistingArchive: true
 
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish Artifact: drop'
-  condition: succeeded()
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+# - task: PublishBuildArtifacts@1
+#   displayName: 'Publish Artifact: drop'
+#   condition: succeeded()
+#   inputs:
+#     PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
 
-- task: AzureWebApp@1
-  displayName: 'Azure Web App Deploy'
-  condition: succeeded()
-  inputs:
-    azureSubscription: $(azureSubscription)
-    appType: webAppLinux
-    appName: $(REACT_APP_ACMS_APP_NAME)
-    package: $(System.ArtifactsDirectory)/**/*.zip
+# - task: AzureWebApp@1
+#   displayName: 'Azure Web App Deploy'
+#   condition: succeeded()
+#   inputs:
+#     azureSubscription: $(azureSubscription)
+#     appType: webAppLinux
+#     appName: $(REACT_APP_ACMS_APP_NAME)
+#     package: $(System.ArtifactsDirectory)/**/*.zip
