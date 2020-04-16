@@ -131,7 +131,7 @@ class Designer extends React.Component<DesignerProps> {
 
   render() {
     return (
-      <React.Fragment>
+      <main>
         <DesignerWrapper id="designer-container" />
         {this.props.isFetching && <SpinnerModal />}
         {this.props.modalState === ModalState.Save && <SaveModal designerSampleData={designer.sampleData} designerTemplateJSON={designer.getCard()} />}
@@ -139,7 +139,7 @@ class Designer extends React.Component<DesignerProps> {
         {this.props.modalState === ModalState.Share && <ShareModal template={this.props.template} templateVersion={this.props.version} />}
         {this.props.modalState === ModalState.ShareSuccess && <ShareSuccessModal template={this.props.template} templateVersion={this.props.version} />}
         {this.props.modalState === ModalState.EditName && <EditNameModal />}
-      </React.Fragment>
+      </main>
     );
   }
 }

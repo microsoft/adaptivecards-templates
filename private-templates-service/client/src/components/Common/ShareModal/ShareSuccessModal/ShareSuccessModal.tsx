@@ -30,7 +30,7 @@ class ShareSuccessModal extends React.Component<Props> {
   render() {
     return (
       <BackDrop>
-        <Modal>
+        <Modal aria-label={STRINGS.SUCCESSFULLY_SHARED}>
           <Header>{STRINGS.SUCCESSFULLY_SHARED}</Header>
           <Description>
             {STRINGS.SHARE_SUCCESS_DESC}

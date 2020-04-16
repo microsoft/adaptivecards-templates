@@ -40,7 +40,7 @@ const footerLinks = [
 class Footer extends React.Component {
   render() {
     return (
-      <React.Fragment>
+      <footer>
         <FooterOuterContainer>
           <FooterContainer>
             <FooterContents>
@@ -50,7 +50,7 @@ class Footer extends React.Component {
             </FooterContents>
           </FooterContainer>
         </FooterOuterContainer>
-      </React.Fragment>
+      </footer>
     );
   }
 }

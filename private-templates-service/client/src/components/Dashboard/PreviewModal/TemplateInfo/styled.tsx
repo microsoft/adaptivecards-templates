@@ -100,7 +100,7 @@ export const RowWrapper = styled.div`
   justify-content: space-between;
 `;
 
-export const Card = styled.div`
+export const Card = styled.section`
   flex: 0.47 0 0;
   display: flex;
   flex-direction: column;
