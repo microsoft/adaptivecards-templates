@@ -28,7 +28,7 @@ jobs:
     inputs:
       inputType: 'Basic'
       targetType: 'F'
-      targetArgument: '$(Build.SourcesDirectory)'
+      targetArgument: '$(system.defaultworkingdirectory)/private-templates-service'
       result: 'PoliCheck.xml'
   - task: PublishBuildArtifacts@1
     inputs:
