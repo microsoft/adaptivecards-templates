@@ -5,6 +5,10 @@ export const ALL_CARDS = "All Cards";
 export const DRAFTS = "Drafts";
 export const PUBLISHED = "Published";
 
+//PreviewModal.tsx
+export const ADAPTIVE_CARD_RENDER = "Adaptive Card Preview Render";
+export const TEMPLATE_INFO = "Card Information";
+
 //RecentlyViewed.tsx
 export const NAME = "Name";
 export const VERSION = "Version";
@@ -40,7 +44,7 @@ export const OKAY_BUTTON = "Okay";
 // DeleteModal.tsx
 export const DELETE_WARNING = "Once a template is deleted, your organization will not be able to use it.";
 export const DELETE_CONFIRMATION = "Are you sure you want to delete ";
-export const DELETE_TITLE = "Delete Template";
+export const DELETE_TITLE = "Delete Card";
 
 //TemplateInfo.tsx
 export const EDIT_IN_DESIGNER = "Edit in designer";
@@ -60,6 +64,8 @@ export const SAVE = "Save";
 export const NEW_TEMPLATE_NAME = "Untitled Card";
 
 // Dashboard.tsx
+export const RECENTLY_EDITED = "Recently edited";
+export const RECENTLY_VIEWED = "Recently viewed";
 export const DASHBOARD_RECENTLY_EDITED_PLACEHOLDER = "No edited templates.";
 export const DASHBOARD_RECENTLY_VIEWED_PLACEHOLDER = "No recently viewed templates.";
 export const FAVORITED_TAGS = "Favorited tags";
@@ -128,7 +134,11 @@ export const SKIP_TO_MAIN_CONTENT_MESSAGE = "Skip to main content";
 export const ARIA_ROLE_BUTTON = "Button";
 
 //VersionCard.tsx
+export const RECENT_RELEASES = "Recent Releases"
 export const UPDATED = "Updated";
+
+//VersionModal.tsx
+export const VERSIONS = "Versions";
 
 //NoMatch.tsx
 export const ERROR_MESSAGE = "Oops, something went wrong.";

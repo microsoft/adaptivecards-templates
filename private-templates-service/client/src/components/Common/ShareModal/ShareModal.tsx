@@ -66,7 +66,7 @@ class ShareModal extends React.Component<ShareModalProps> {
     let isTemplateShared = isTemplateInstanceShareable(this.props.template, this.props.templateVersion);
     return (
       <BackDrop>
-        <Modal>
+        <Modal aria-label={STRINGS.SHARE_MODAL_TITLE}>
           <TopRowWrapper>
             <Header>{STRINGS.SHARE_MODAL_TITLE}</Header>
             <ToggleContainer>

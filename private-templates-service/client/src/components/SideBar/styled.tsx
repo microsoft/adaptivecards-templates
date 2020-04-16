@@ -4,7 +4,7 @@ import { Icon } from "office-ui-fabric-react/lib/Icon";
 import { ActionButton } from "office-ui-fabric-react";
 import { COLORS, BREAK, FONTS } from "../../globalStyles";
 
-export const OuterSideBarWrapper = styled.div`
+export const OuterSideBarWrapper = styled.nav`
   display: flex;
   flex-direction: column;
   justify-content: space-between;

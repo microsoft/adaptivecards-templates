@@ -27,7 +27,9 @@ import Footer from "./Footer";
 import {
   DASHBOARD_RECENTLY_EDITED_PLACEHOLDER,
   DASHBOARD_RECENTLY_VIEWED_PLACEHOLDER,
-  FAVORITED_TAGS
+  FAVORITED_TAGS,
+  RECENTLY_EDITED,
+  RECENTLY_VIEWED
 } from '../../assets/strings';
 
 
@@ -159,8 +161,8 @@ class Dashboard extends React.Component<Props> {
       <OuterDashboardContainer>
         <OuterWindow>
           <DashboardContainer id={DASHBOARD_MAIN_CONTENT_ID}>
-            <React.Fragment>
-              <Title>Recently Edited</Title>
+            <section aria-label={RECENTLY_EDITED}>
+              <Title>{RECENTLY_EDITED}</Title>
               {recentTemplates.isFetching || this.props.templateOwner.isFetchingName || this.props.templateOwner.isFetchingPicture ?
                 <CenteredSpinner size={SpinnerSize.large} />
                 : recentlyEditedTemplates.length ? (
@@ -173,9 +175,9 @@ class Dashboard extends React.Component<Props> {
                       {DASHBOARD_RECENTLY_EDITED_PLACEHOLDER}
                     </PlaceholderText>
                   )}
-            </React.Fragment>
-            <React.Fragment>
-              <Title>Recently Viewed</Title>
+            </section>
+            <section aria-label={RECENTLY_VIEWED}>
+              <Title>{RECENTLY_VIEWED}</Title>
               {recentTemplates.isFetching || this.props.templateOwner.isFetchingName || this.props.templateOwner.isFetchingPicture ?
                 <CenteredSpinner size={SpinnerSize.large} />
                 : recentlyViewedTemplates.length ? (
@@ -189,9 +191,9 @@ class Dashboard extends React.Component<Props> {
                       {DASHBOARD_RECENTLY_VIEWED_PLACEHOLDER}
                     </PlaceholderText>
                   )}
-            </React.Fragment>
+            </section>
           </DashboardContainer>
-          <TagsContainer>
+          <TagsContainer aria-label={FAVORITED_TAGS}>
             <Title style={{ marginRight: "150px", color: 'pink' }}>{FAVORITED_TAGS}</Title>
             <Tags tags={tags} allowEdit={false}></Tags>
           </TagsContainer>

@@ -56,7 +56,7 @@ export interface JSONResponse<T> {
 
 export enum SortBy {
   dateCreated = "createdAt",
-  dateModified = "updatedAt",
+  dateUpdated = "updatedAt",
   alphabetical = "name"
 }
 

@@ -32,7 +32,7 @@ import {
   CheckboxWrapper,
   VersionContainer
 } from './styled';
-
+import * as STRINGS from '../../../assets/strings';
 import {
   VersionCardRow,
 } from '../../Dashboard/PreviewModal/TemplateInfo/VersionCard/styled';
@@ -122,8 +122,8 @@ class VersionModal extends React.Component<Props, State> {
     const { template } = this.props;
     return (
       <BackDrop>
-        <Modal>
-          <Header>Versions</Header>
+        <Modal aria-label={STRINGS.VERSIONS}>
+          <Header>{STRINGS.VERSIONS}</Header>
           <Description>There are {template.instances!.length} versions for <DescriptionAccent>{template.name}</DescriptionAccent></Description>
           <CenterPanelWrapper>
             <Card>
