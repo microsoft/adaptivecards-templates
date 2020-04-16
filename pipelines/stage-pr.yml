@@ -1,15 +1,13 @@
 
-trigger:
-- users/daniellemott/add_policheck
-# trigger: none
+trigger: none
 
-# pr:
-#   branches:
-#     include:
-#     - stage
-#     exclude:
-#     - dev
-#     - users/*
+pr:
+  branches:
+    include:
+    - stage
+    exclude:
+    - dev
+    - users/*
 
 variables: 
   ## Add this under variables section in the pipeline
