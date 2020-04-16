@@ -5,9 +5,8 @@ trigger:
     include:
     - dev
     - stage
-    - users/daniellemott/add_policheck
-    # exclude:
-    # - users/*
+    exclude:
+    - users/*
 
 # no PR builds
 pr: none
@@ -18,7 +17,7 @@ variables:
   keyVault: 'AC-KeyVault-West'
 
 stages:
-- stage: Run_poliCheck
+- stage: Run_policheck
   jobs:
   - job: Windows
     pool:
@@ -34,8 +33,8 @@ stages:
 
 - stage: Build_test_deploy
   dependsOn:
-  - Run_poliCheck
-  condition: succeeded('Run_poliCheck')
+  - Run_policheck
+  condition: succeeded('Run_policheck')
   jobs:
   - job: Linux
     pool:
