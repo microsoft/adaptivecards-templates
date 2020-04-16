@@ -18,7 +18,7 @@ variables:
   keyVault: 'AC-KeyVault-West'
 
 stages:
-- stage: A
+- stage: Run_poliCheck
   jobs:
   - job: Windows
     pool:
@@ -32,7 +32,10 @@ stages:
         targetArgument: '$(Build.SourcesDirectory)'
         result: 'PoliCheck.xml'
 
-- stage: B
+- stage: Build_test_deploy
+  dependsOn:
+  - Run_poliCheck
+  condition: succeeded('Run_poliCheck')
   jobs:
   - job: Linux
     pool:
