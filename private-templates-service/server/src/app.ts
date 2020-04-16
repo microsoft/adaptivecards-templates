@@ -1,5 +1,5 @@
 let appInsights = require('applicationinsights');
-appInsights.setup('InstrumentationKey=' + process.env.ACMS_APP_INSIGHTS_INSTRUMENTATION_KEY).start();
+if (process.env.ACMS_APP_INSIGHTS_INSTRUMENTATION_KEY) appInsights.setup('InstrumentationKey=' + process.env.ACMS_APP_INSIGHTS_INSTRUMENTATION_KEY).start();
 
 import express from "express";
 import path from "path";
@@ -35,6 +35,8 @@ app.use(session({
   saveUninitialized: true
 }));
 app.use(helmet.noSniff());
+
+// If running locally, add the code specified in README enabling CORS
 
 mongoose.set('useFindAndModify', false)
 let mongoDB = new ACMS.MongoDBProvider({ connectionString: process.env.ACMS_DB_CONNECTION });

@@ -1,8 +1,5 @@
 import React from 'react';
 
-// Libraries
-import { PrimaryButton } from 'office-ui-fabric-react'
-
 import { Template, PostedTemplate } from 'adaptive-templating-service-typescript-node';
 
 // Redux
@@ -31,6 +28,7 @@ import {
   DescriptionAccent,
   ButtonGroup,
   CancelButton,
+  PublishButton,
 } from '../../Common/PublishModal/styled';
 
 interface Props {
@@ -63,17 +61,19 @@ class UnpublishModal extends React.Component<Props> {
 
     return (
       <BackDrop>
-        <Modal>
-          <Header>Unpublish Template</Header>
-          <Description style={{ marginBottom: 0 }}>{STRINGS.UNPUBLISH_CONFIRMATION}<DescriptionAccent>{template.name} - {this.props.templateVersion}</DescriptionAccent>?</Description>
-          <Description>{STRINGS.UNPUBLISH_WARNING}</Description>
+        <Modal aria-label={STRINGS.UNPUBLISH_CARD}>
+          <Header>{STRINGS.UNPUBLISH_CARD}</Header>
+          <Description style={{ marginBottom: 0 }}>
+            <DescriptionAccent>{template.name} - {this.props.templateVersion}</DescriptionAccent>
+            {STRINGS.UNPUBLISH_CARD_DESC}
+          </Description>
           <CenterPanelWrapper>
             <AdaptiveCardPanel template={template} />
           </CenterPanelWrapper>
           <BottomRow>
             <ButtonGroup>
               <CancelButton text="Cancel" onClick={this.props.closeModal} />
-              <PrimaryButton text="Unpublish" onClick={this.unpublish} />
+              <PublishButton text="Unpublish" onClick={this.unpublish} />
             </ButtonGroup>
           </BottomRow>
         </Modal>

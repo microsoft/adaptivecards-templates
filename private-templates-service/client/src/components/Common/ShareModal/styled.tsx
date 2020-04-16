@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { COLORS } from '../../../globalStyles';
+import { COLORS, FONTS } from '../../../globalStyles';
 import { DefaultButton, Button } from 'office-ui-fabric-react';
 
 export const BackDrop = styled.div`
@@ -16,7 +16,7 @@ export const BackDrop = styled.div`
   justify-content: center;
 `;
 
-export const Modal = styled.div`
+export const Modal = styled.section`
   display: flex;
   flex-direction: column;
   background-color: ${COLORS.WHITE};
@@ -24,9 +24,20 @@ export const Modal = styled.div`
   padding: 48px;
 `;
 
+export const TopRowWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
+export const ToggleContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
 export const Header = styled.div`
   font-size: 1.375rem;
-  font-weight: 500;
+  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD};
   margin-bottom: 12px;
 `;
 
@@ -74,7 +85,7 @@ export const EmailPanel = styled.div`
 
 export const SemiBoldText = styled.div`
   font-size: 1rem;
-  font-weight: 600;
+  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD};
 `;
 
 export const BottomRow = styled.div`

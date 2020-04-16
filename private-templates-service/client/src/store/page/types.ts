@@ -2,10 +2,12 @@ export interface PageState {
   currentPageTitle?: string;
   currentPage?: string;
   modalState?: ModalState;
+  previousPage?: string;
 }
 
 export enum ModalState {
   Share,
+  ShareSuccess,
   Publish,
   Unpublish,
   Version,
@@ -26,5 +28,6 @@ export interface PageAction {
   text: string;
   currentPageTitle?: string;
   currentPage?: string;
+  lastPage?: string;
   modalState?: ModalState;
 }

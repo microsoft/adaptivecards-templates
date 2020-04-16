@@ -1,20 +1,20 @@
 import styled from "styled-components";
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 
-import { COLORS } from "../../globalStyles";
+import { COLORS, FONTS } from "../../globalStyles";
 
 export const PlaceholderText = styled.h5`
-  font-family: Segoe UI Regular;
+  font-family: ${FONTS.SEGOE_UI_REGULAR};
   padding-top: 20px;
 `;
 
 export const Title = styled.h1`
   padding-top: 15px;
   font-size: 1.5rem;
-  font-weight: 700;
+  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD};
 `;
 
-export const OuterDashboardContainer = styled.div`
+export const OuterDashboardContainer = styled.main`
   display: contents;
   height: calc(100vh - 61px);
 `;
@@ -35,7 +35,7 @@ export const OuterWindow = styled.div`
   height: auto;
   flex: 1;
 `;
-export const TagsContainer = styled.div`
+export const TagsContainer = styled.section`
   background-color: ${COLORS.GREY1};
   display: flex;
   flex-direction: column;

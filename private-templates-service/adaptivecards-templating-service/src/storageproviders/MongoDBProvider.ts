@@ -28,11 +28,16 @@ export class MongoDBProvider implements StorageProvider {
     if (query.tags && query.tags.length) {
       templateQuery.tags = {
         $all: clone(query.tags).map(x => {
-          return x.toLocaleLowerCase();
+          return new RegExp(`^${x}$`, "i");
         })
       };
     }
-
+    if (query.authors && query.authors.length) {
+      templateQuery.authors = { $all: clone(query.authors) }
+    }
+    if(templateQuery.name && templateQuery.tags){
+      return {$or: [{name:templateQuery.name}, {tags:templateQuery.tags}]}
+    }
     return templateQuery;
   }
   async getUsers(query: Partial<IUser>): Promise<JSONResponse<IUser[]>> {
@@ -85,6 +90,7 @@ export class MongoDBProvider implements StorageProvider {
         return Promise.resolve({ success: false, errorMessage: e });
       });
   }
+
   // Updates Only one user
   async updateUser(query: Partial<IUser>, updateQuery: Partial<IUser>): Promise<JSONResponse<Number>> {
     let userQuery: any = this._constructUserQuery(query);

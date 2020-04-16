@@ -1,11 +1,12 @@
 import styled from "styled-components";
 
-export const TagsContainer = styled.div`
+export const TagsContainer = styled.section`
   scroll-behavior: smooth;
   padding-top: 20px;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
+  flex-shrink: 0;
   justify-content: flex-start;
   overflow-x: hidden;
   overflow-y: hidden;

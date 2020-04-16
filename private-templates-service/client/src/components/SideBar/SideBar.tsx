@@ -7,7 +7,7 @@ import { UserType } from "../../store/auth/types";
 import { ModalState } from "../../store/page/types";
 import { newTemplate } from "../../store/currentTemplate/actions";
 
-import { COLORS } from "../../globalStyles";
+import { COLORS, FONTS } from "../../globalStyles";
 import UserAvatar from "./UserAvatar";
 import mainLogo from "../../assets/adaptive-cards-100-logo.png";
 import * as STRINGS from "../../assets/strings";
@@ -71,7 +71,8 @@ const navMenuLinksProps: Partial<INavStyles> = {
   },
   linkText: {
     color: COLORS.WHITE,
-    fontSize: "0.875rem"
+    fontSize: "0.875rem",
+    fontFamily: FONTS.SEGOE_UI_REGULAR,
   }
 };
 
@@ -112,7 +113,7 @@ const navMenuLinks: INavLinkGroup[] = [
       },
       {
         name: STRINGS.ALL_CARDS,
-        url: "/allcards",
+        url: "/templates/all",
         iconProps: {
           iconName: "ViewList",
           style: iconStylePink
@@ -163,22 +164,24 @@ const SideBar = (props: Props) => {
       props.newTemplate();
     }
     history.push(element.url);
+
   };
+
 
   const onLogoClick = () => {
     history.push("/");
   }
-  
-  const onKeyDown = (e:React.KeyboardEvent) => {
-    if(e.keyCode === KeyCode.ENTER){
+
+  const onKeyDown = (e: React.KeyboardEvent) => {
+    if (e.keyCode === KeyCode.ENTER) {
       history.push("/");
     }
-  } 
+  }
 
   return (
-    <OuterSideBarWrapper>
+    <OuterSideBarWrapper aria-label={"navbar"}>
       <MainItems>
-        <LogoWrapper onClick={onLogoClick} tabIndex={props.modalState? -1 : 0} onKeyDown={onKeyDown}>
+        <LogoWrapper onClick={onLogoClick} tabIndex={props.modalState ? -1 : 0} onKeyDown={onKeyDown}>
           <Logo aria-label={STRINGS.LOGO_DESCRIPTION} src={mainLogo} />
           <LogoTextWrapper>
             <LogoTextHeader>Adaptive Cards</LogoTextHeader>

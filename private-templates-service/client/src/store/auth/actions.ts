@@ -9,7 +9,7 @@ import {
   GetUserDetailsAction,
   GetOrgDetailsAction,
   GetProfilePictureAction,
-  GetConfigAction, 
+  GetConfigAction,
   GET_USER_DETAILS,
   GET_USER_DETAILS_SUCCESS,
   GET_USER_DETAILS_FAILURE,
@@ -19,8 +19,8 @@ import {
   GET_PROFILE_PICTURE,
   GET_PROFILE_PICTURE_SUCCESS,
   GET_PROFILE_PICTURE_FAILURE,
-  GET_CONFIG, 
-  GET_CONFIG_SUCCESS, 
+  GET_CONFIG,
+  GET_CONFIG_SUCCESS,
   GET_CONFIG_FAILURE
 } from './types';
 
@@ -45,7 +45,7 @@ export function setGraphAccessToken(graphAccessToken: AuthResponse): GraphAccess
 
 export function setAccessToken(accessToken: AuthResponse): AccessTokenAction {
   return {
-    type: ACCESS_TOKEN_SET, 
+    type: ACCESS_TOKEN_SET,
     accessToken
   }
 }
@@ -192,18 +192,17 @@ export function getProfilePicture() {
 
 export function getConfig() {
   return function (dispatch: any) {
-    const api = new ConfigApi(window.location.href);
+    const api = new ConfigApi(window.location.origin);
 
     dispatch(requestConfig());
     return api.configGet().then((response: any) => {
-        if (response.response.statusCode && response.response.statusCode === 200) {
-          dispatch(requestConfigSuccess(response.body.appId, response.body.redirectUri, response.body.appInsightsInstrumentationKey));
-        } else {
-          dispatch(requestConfigFailure());
-        }
-      }).catch((error: any) => {
+      if (response.response.statusCode && response.response.statusCode === 200) {
+        dispatch(requestConfigSuccess(response.body.appId, response.body.redirectUri, response.body.appInsightsInstrumentationKey));
+      } else {
         dispatch(requestConfigFailure());
-      })
-    }
+      }
+    }).catch((error: any) => {
+      dispatch(requestConfigFailure());
+    })
+  }
 }
-

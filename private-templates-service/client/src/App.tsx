@@ -22,6 +22,7 @@ import Dashboard from "./components/Dashboard";
 import Shared from "./components/Shared/";
 import PreviewModal from './components/Dashboard/PreviewModal';
 import ErrorMessage, { ErrorMessageProps } from "./components/ErrorMessage/ErrorMessage";
+import AllCards from "./components/AllCards";
 import NoMatch from "./components/NoMatch";
 import config from "./Config";
 
@@ -31,7 +32,6 @@ import { OuterAppWrapper, MainAppWrapper, MainApp } from "./styled";
 
 // Constants
 import Constants from "./globalConstants"
-import AllCards from "./components/AllCards";
 
 interface State {
   error: ErrorMessageProps | null;
@@ -69,7 +69,7 @@ const mapDispatchToProps = (dispatch: any) => {
       dispatch(logout());
     },
     getConfig: () => {
-      dispatch(getConfig())
+      dispatch(getConfig());
     }
   };
 };
@@ -106,9 +106,9 @@ class App extends Component<Props, State> {
           storeAuthStateInCookie: true
         }
       });
-  
+
       let user = this.userAgentApplication.getAccount();
-  
+
       if (user) {
         // Enhance user object with data from Graph
         this.getUserInfo();
@@ -141,6 +141,8 @@ class App extends Component<Props, State> {
     this.onIdle = this._onIdle.bind(this);
   }
 
+
+
   render() {
     let error = null;
     if (this.state.error) {
@@ -158,42 +160,42 @@ class App extends Component<Props, State> {
           element={document}
           onIdle={this.onIdle}
           timeout={Constants.LOGOUT_TIMEOUT} />
-        {this.props.appId && this.props.redirectUri && 
-        <Switch>
-          <Route exact path="/preview/:uuid/:version">
-            <Shared authButtonMethod={this.login}></Shared>
-          </Route>
-          <OuterAppWrapper>
-            <SideBar
-              authButtonMethod={
-                this.props.isAuthenticated
-                  ? this.logout
-                  : this.login
-              }
-            />
-            <MainAppWrapper>
-              <NavBar />
-              <MainApp>
-                {!this.props.isAuthenticated && error}
-                <Switch>
-                  <Route exact path="/">
-                    <Dashboard authButtonMethod={this.login} />
-                  </Route>
-                  <Route exact path="/designer/:uuid/:version">
-                    <Designer authButtonMethod={this.login} />
-                  </Route>
-                  <Route path="/preview/:uuid">
-                    <PreviewModal authButtonMethod={this.login} />
-                  </Route>
-                  <Route exact path="/allcards">
-                    <AllCards authButtonMethod={this.login} />
-                  </Route>
-                  <Route component={NoMatch} />
-                </Switch>
-              </MainApp>
-            </MainAppWrapper>
-          </OuterAppWrapper>
-        </Switch>}
+        {this.props.appId && this.props.redirectUri &&
+          <Switch>
+            <Route exact path="/preview/:uuid/:version">
+              <Shared authButtonMethod={this.login}></Shared>
+            </Route>
+            <OuterAppWrapper>
+              <SideBar
+                authButtonMethod={
+                  this.props.isAuthenticated
+                    ? this.logout
+                    : this.login
+                }
+              />
+              <MainAppWrapper>
+                <NavBar />
+                <MainApp>
+                  {!this.props.isAuthenticated && error}
+                  <Switch>
+                    <Route exact path="/">
+                      <Dashboard authButtonMethod={this.login} />
+                    </Route>
+                    <Route exact path="/designer/:uuid/:version">
+                      <Designer authButtonMethod={this.login} />
+                    </Route>
+                    <Route path="/preview/:uuid">
+                      <PreviewModal authButtonMethod={this.login} />
+                    </Route>
+                    <Route exact path="/templates/all">
+                      <AllCards authButtonMethod={this.login} />
+                    </Route>
+                    <Route component={NoMatch} />
+                  </Switch>
+                </MainApp>
+              </MainAppWrapper>
+            </OuterAppWrapper>
+          </Switch>}
         <div id="modal" />
       </Router >
     );
@@ -245,7 +247,7 @@ class App extends Component<Props, State> {
   };
 
   logout = () => {
-    if (this.userAgentApplication) this.userAgentApplication.logout();
+    this.userAgentApplication!.logout();
     this.props.userLogout();
   };
 
