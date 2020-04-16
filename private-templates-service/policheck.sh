@@ -1,0 +1,1 @@
+/F:$(Build.SourcesDirectory) /T:9 /O:PoliCheck.xml
