@@ -1102,9 +1102,9 @@ export class TemplateServiceClient {
     }
 
     let user: IUser = response.result![0];
-    return { success: true, result:[ user.recentTags || [], user.favoriteTags || []] };
+    return { success: true, result: [user.recentTags || [], user.favoriteTags || []] };
   }
-  
+
   /**
    * @public
    * Retrieve a list of recently used tags for the logged in user.
@@ -1126,7 +1126,7 @@ export class TemplateServiceClient {
     if (!response.success) {
       return { success: false, errorMessage: response.errorMessage };
     }
-    return { success: true, result: response.result![1] };  
+    return { success: true, result: response.result![1] };
   }
 
   /**
@@ -1210,7 +1210,7 @@ export class TemplateServiceClient {
 
     router.get("/", (req: Request, res: Response, _next: NextFunction) => {
       let token = parseToken(req.headers.authorization!);
-      
+
       if (req.query.sortBy && !(req.query.sortBy in SortBy)) {
         const err = new TemplateError(ApiError.InvalidQueryParam, "Sort by value is not valid.");
         return res.status(400).json({ error: err });
@@ -1225,7 +1225,7 @@ export class TemplateServiceClient {
       let owned: boolean | undefined = req.query.owned ? req.query.owned.toLowerCase() === "true" : undefined;
       let isClient: boolean | undefined = req.query.isClient ? req.query.isClient.toLowerCase() === "true" : undefined;
       let tagList: string[] = req.query.tags;
-     
+
       this.getTemplates(token, undefined, state, req.query.name, req.query.version,
         owned, req.query.sortBy, req.query.sortOrder, tagList, isClient).then(response => {
           if (!response.success) {
@@ -1481,10 +1481,12 @@ export class TemplateServiceClient {
   public configExpressMiddleware(): Router {
     var router = express.Router();
     router.get("/", (_req: Request, res: Response, _next: NextFunction) => {
-      return res.status(200).json({ 
-        redirectUri: process.env.ACMS_REDIRECT_URI, 
-        appId: process.env.ACMS_APP_ID, 
-        appInsightInstrumentationKey: process.env.ACMS_APP_INSIGHTS_INSTRUMENTATION_KEY });
+      return res.status(200).json({
+        redirectUri: process.env.ACMS_REDIRECT_URI,
+        appId: process.env.ACMS_APP_ID,
+        appInsightsInstrumentationKey: process.env.ACMS_APP_INSIGHTS_INSTRUMENTATION_KEY,
+        userInsightsInstrumentationKey: process.env.USER_APP_INSIGHTS_INSTRUMENTATION_KEY,
+      });
     });
     return router;
   }

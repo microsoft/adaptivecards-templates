@@ -9,6 +9,8 @@ export interface AuthState {
   redirectUri?: string;
   appId?: string;
   appInsightsInstrumentationKey?: string;
+  userInsightsInstrumentationKey?: string;
+
 }
 
 export interface UserType {
@@ -57,6 +59,7 @@ export interface GetConfigAction {
   redirectUri?: string;
   appId?: string;
   appInsightsInstrumentationKey?: string;
+  userInsightsInstrumentationKey?: string;
 }
 
 export interface GetUserDetailsAction {
