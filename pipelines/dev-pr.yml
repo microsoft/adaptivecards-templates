@@ -1,33 +1,41 @@
 
-trigger: none
+trigger: users/daniellemott/add_policheck
 
-pr:
-  branches:
-    include:
-    - dev
-    exclude:
-    - stage
-    - users/*
+# trigger: none
+
+# pr:
+#   branches:
+#     include:
+#     - dev
+#     exclude:
+#     - stage
+#     - users/*
 
 variables: 
   ## Add this under variables section in the pipeline
   azureSubscription: 'Adaptive Cards (47c80630-3d74-4b3e-a2f4-57e6368cd8c6)'
   keyVault: 'AC-KeyVault-West'
 
-jobs:
-  - job: Windows
-    pool:
-      vmImage: 'windows-latest'
+stages:
+- stage: Run_policheck_dev_pr
+  jobs:
+    - job: Windows
+      pool:
+        vmImage: 'windows-latest'
 
-    steps:
-    - task: PoliCheck@1
-      inputs:
-        inputType: 'Basic'
-        targetType: 'F'
-        targetArgument: '$(Build.SourcesDirectory)'
-        result: 'PoliCheck.xml'
+      steps:
+      - task: PoliCheck@1
+        inputs:
+          inputType: 'Basic'
+          targetType: 'F'
+          targetArgument: '$(Build.SourcesDirectory)'
+          result: 'PoliCheck.xml'
 
-
+- stage: Run_dev_tests
+  dependsOn:
+  - Run_policheck_dev_pr
+  condition: succeeded('Run_policheck_dev_pr')
+  jobs:
   - job: Linux
     pool:
       vmImage: 'ubuntu-latest'
