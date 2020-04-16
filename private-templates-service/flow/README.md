@@ -163,4 +163,4 @@ Prerequisites:
 
 Final Flow using the private connector and Teams: 
 
-![Microsoft Flow example](https://github.com/microsoft/adaptivecards-templates/blob/users/grzhan/flow/private-templates-service/flow/screenshots/flow.jpg?raw=true)
+![Microsoft Flow example](https://github.com/microsoft/adaptivecards-templates/blob/dev/private-templates-service/flow/screenshots/flow.jpg?raw=true)
