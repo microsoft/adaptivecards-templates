@@ -1,5 +1,6 @@
 
-trigger: users/daniellemott/add_policheck
+trigger: 
+- users/daniellemott/add_policheck
 
 # trigger: none
 
