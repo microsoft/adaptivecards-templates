@@ -13,7 +13,7 @@ import { setSearchBarVisible } from "../../store/search/actions";
 import { getOwnerProfilePicture, getOwnerName } from "../../store/templateOwner/actions";
 import { OwnerState } from "../../store/templateOwner/types";
 import { setSkipLinkContentID } from "../../store/skiplink/actions";
-import { getAllTags, addSelectedTag } from "../../store/tags/actions";
+import { getAllTags, addSelectedTag, clearSelectedTags } from "../../store/tags/actions";
 import { TagsState } from "../../store/tags/types";
 
 import { Template } from "adaptive-templating-service-typescript-node";
@@ -25,6 +25,7 @@ import Gallery from "../Gallery";
 import SearchPage from "./SearchPage/SearchPage";
 import TemplateList from "./TemplateList";
 import Footer from "./Footer";
+import TagList from "../Common/TemplatesPage/TagList";
 import {
   DASHBOARD_RECENTLY_EDITED_PLACEHOLDER,
   DASHBOARD_RECENTLY_VIEWED_PLACEHOLDER,
@@ -43,7 +44,6 @@ import {
   CenteredSpinner,
   OuterDashboardContainer
 } from "./styled";
-import TagList from "../Common/TemplatesPage/TagList";
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -87,6 +87,9 @@ const mapDispatchToProps = (dispatch: any) => {
     },
     addSelectedTag: (tag: string) => {
       dispatch(addSelectedTag(tag))
+    },
+    clearSelectedTags: () => {
+      dispatch(clearSelectedTags());
     }
   };
 };
@@ -107,6 +110,7 @@ interface Props extends RouteComponentProps {
   setSkipLinkContentID: (id: string) => void;
   getTags: () => void;
   addSelectedTag: (tag: string) => void;
+  clearSelectedTags: () => void;
   isSearch: boolean;
 }
 class Dashboard extends React.Component<Props> {
@@ -145,6 +149,7 @@ class Dashboard extends React.Component<Props> {
   };
 
   tagOnClick = (tag: string) => {
+    this.props.clearSelectedTags();
     this.props.addSelectedTag(tag);
     this.props.history.push("/templates/all", {redirect: true});
   }
