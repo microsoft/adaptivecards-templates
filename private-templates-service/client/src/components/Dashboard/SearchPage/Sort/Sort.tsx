@@ -3,7 +3,7 @@ import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { RootState } from "../../../../store/rootReducer";
 import { connect } from 'react-redux';
 import { StyledSortDropdown } from "./styled";
-import { clearSort, querySort } from '../../../../store/sort/actions';
+import { querySort } from '../../../../store/sort/actions';
 import { THEME } from '../../../../globalStyles';
 import { SortType } from "../../../../store/sort/types";
 
@@ -17,7 +17,7 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    querySort: (sortType: SortType ) => {
+    querySort: (sortType: SortType) => {
       dispatch(querySort(sortType));
     }
   }
@@ -39,7 +39,7 @@ const options: IDropdownOption[] = [
 class Sort extends React.Component<Props> {
   onChange = (event: React.FormEvent<HTMLDivElement>, option?: IDropdownOption) => {
     if (option && typeof option.key === "string") {
-      if( option.key === "alphabetical" || option.key ==="dateCreated" || option.key === "dateUpdated"){
+      if (option.key === "alphabetical" || option.key === "dateCreated" || option.key === "dateUpdated") {
         this.props.querySort(option.key);
       }
     }

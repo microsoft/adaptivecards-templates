@@ -78,17 +78,14 @@ class TemplatesPage extends Component<Props, State> {
     super(props);
     this.props.setPage(props.pageTitle, props.pageID);
     this.props.setSearchBarVisible(true);
-    this.setSelectedTags();
-  }
 
-  setSelectedTags = (): void => {
     if (this.props.page.currentPage === "Template" && this.props.page.previousPage === this.props.pageID) {
       this.state = { selectedTags: this.props.tags.selectedTags };
     } else {
       this.props.clearSelectedTags();
       this.state = { selectedTags: [] };
     }
-  };
+  }
 
   tagOnClick = (tag: string): void => {
     this.setState((state) => {

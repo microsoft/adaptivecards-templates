@@ -283,11 +283,9 @@ export class TemplateServiceClient {
       }
       templateInstances.push(instance);
     }
-
     const updatedTemplate: Partial<ITemplate> = {
       instances: templateInstances
     };
-
     return this.storageProvider.updateTemplate(queryTemplate, updatedTemplate);
   }
 
@@ -394,6 +392,7 @@ export class TemplateServiceClient {
       data: [],
       publishedAt: state === TemplateState.live ? new Date(Date.now()) : undefined,
       updatedAt: new Date(Date.now()),
+      createdAt: new Date(Date.now()),
       numHits: 0,
       isShareable: isShareable,
       lastEditedUser: authId
@@ -510,6 +509,7 @@ export class TemplateServiceClient {
         if (request.version === instance.version) {
           if (instance.state && checkValidTemplateState(instance.state, request.state)) {
             instance.state = request.state;
+            instance.updatedAt = new Date(Date.now());
           }
           if (instance.state === TemplateState.deprecated && request.state === TemplateState.live) {
             const instanceCopy: ITemplateInstance = {
@@ -639,7 +639,6 @@ export class TemplateServiceClient {
         errorMessage: ServiceErrorMessage.InvalidTemplate
       };
     }
-
     const templateInstance: ITemplateInstance = {
       json: template,
       version: version || "1.0",
@@ -650,6 +649,7 @@ export class TemplateServiceClient {
       numHits: 0,
       data: data ? (data instanceof Array ? data : [data]) : [],
       updatedAt: new Date(Date.now()),
+      createdAt: new Date(Date.now()),
       lastEditedUser: authId
     };
 
@@ -801,7 +801,6 @@ export class TemplateServiceClient {
 
     if (templateId && templates.length > 0) {
       if (!templates![0].authors.includes(userId!) && templates![0].isLive === false) return { success: true, result: [] };
-
       await this._updateRecentTemplate(authId, templateId, true);
 
       if (isClient === undefined || isClient === false) {
@@ -986,7 +985,6 @@ export class TemplateServiceClient {
     const query: Partial<ITemplate> = {
       _id: templateId
     };
-
     return this.storageProvider.updateTemplate(query, templateObj);
   }
 

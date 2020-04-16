@@ -3,6 +3,14 @@ import { Template } from "adaptive-templating-service-typescript-node";
 import { TemplateListContainer, TemplateListHeader, TemplateListHeaderItem } from "./styled";
 import TemplateListContent from "./TemplateListContent";
 
+export interface ListViewComponents {
+  templateName: boolean;
+  version: boolean;
+  dateModified: boolean;
+  status: boolean;
+  author: boolean;
+}
+
 interface Props {
   templates: Template[];
   onClick?: (id: string) => any;
@@ -24,13 +32,6 @@ export class TemplateList extends Component<Props> {
       </TemplateListContainer>
     );
   }
-}
-export interface ListViewComponents {
-  templateName: boolean;
-  version: boolean;
-  dateModified: boolean;
-  status: boolean;
-  author: boolean;
 }
 
 export default TemplateList;
