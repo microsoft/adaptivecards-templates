@@ -108,6 +108,12 @@ export const CARDNAME = "Card Name";
 export const TAGS = "Tags";
 export const MYCARD = "My Card";
 
+//SaveAndPublishModal.tsx
+export const SAVE_AND_PUBLISH_DESC = "Your new design will be available to your organization as ";
+export const SAVE_AND_PUBLISH = "Save and publish";
+export const SAVE_AND_PUBLISH_CARD = SAVE_AND_PUBLISH + " card";
+export const LIVE = "Live";
+
 //OwnerAvatar.tsx
 export const ERROR_LOADING_IMAGE = "Error loading image";
 export const ALT_TEXT = "Template owner profile picture";

@@ -160,7 +160,7 @@ class Dashboard extends React.Component<Props> {
       <OuterDashboardContainer>
         <OuterWindow>
           <DashboardContainer id={DASHBOARD_MAIN_CONTENT_ID}>
-            <RecentlyEditedSection aria-label={RECENTLY_EDITED}>
+            <RecentlyEditedSection aria-label={RECENTLY_EDITED} isPlaceholder={recentlyEditedTemplates.length === 0}>
               <Title>{RECENTLY_EDITED}</Title>
               {recentTemplates.isFetching || this.props.templateOwner.isFetchingName || this.props.templateOwner.isFetchingPicture ?
                 <CenteredSpinner size={SpinnerSize.large} />
