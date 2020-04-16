@@ -19,12 +19,11 @@ variables:
 
 
 jobs:
-  - job: Windows
-    pool:
-      vmImage: 'windows-latest'
+- job: Windows
+  pool:
+    vmImage: 'windows-latest'
 
   steps:
-
   - task: PoliCheck@1
     inputs:
       inputType: 'Basic'
@@ -32,9 +31,9 @@ jobs:
       targetArgument: '$(Build.SourcesDirectory)'
       result: 'PoliCheck.xml'
 
-  - job: Linux
-    pool:
-      vmImage: 'ubuntu-latest'
+- job: Linux
+  pool:
+    vmImage: 'ubuntu-latest'
 
   steps:
   - task: AzureKeyVault@1
