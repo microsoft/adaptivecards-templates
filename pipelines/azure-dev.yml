@@ -32,7 +32,7 @@ jobs:
       result: 'PoliCheck.xml'
   - task: PublishBuildArtifacts@1
     inputs:
-      PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+      PathtoPublish: '$(system.defaultworkingdirectory)/private-templates-service'
       ArtifactName: 'PoliCheck.xml'
       publishLocation: 'Container'
 
