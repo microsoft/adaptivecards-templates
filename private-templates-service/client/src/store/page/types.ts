@@ -14,6 +14,7 @@ export enum ModalState {
   EditName,
   Delete,
   Save,
+  SaveAndPublish,
   Spinner
 }
 

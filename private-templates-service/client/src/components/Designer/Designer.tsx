@@ -17,6 +17,7 @@ import { DesignerWrapper } from './styled';
 import EditNameModal from '../Common/EditNameModal';
 import SaveModal from './SaveModal/SaveModal';
 import SpinnerModal from '../Common/SpinnerModal';
+import SaveAndPublishModal from './SaveAndPublishModal/SaveAndPublishModal';
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -95,7 +96,7 @@ class Designer extends React.Component<DesignerProps> {
     }
     designer = initDesigner();
 
-    let publishButton = new ACDesigner.ToolbarButton("publishButton", "Publish", "", (sender) => (alert("Published!")));
+    let publishButton = new ACDesigner.ToolbarButton("publishButton", "Publish", "", (sender) => (this.props.openModal(ModalState.SaveAndPublish)));
     publishButton.separator = true;
     designer.toolbar.insertElementAfter(publishButton, ACDesigner.CardDesigner.ToolbarCommands.TogglePreview);
 
@@ -121,14 +122,6 @@ class Designer extends React.Component<DesignerProps> {
     else {
       designer.sampleData = {};
     }
-
-    // TODO: REMOVE ONCE PUBLISH IS COMPLETED IN DESIGNER
-    const buttons = document.getElementsByClassName('acd-toolbar-button');
-    for (let i = 0; i < buttons.length; i++) {
-      if (buttons[i].innerHTML === 'Publish') {
-        (buttons[i] as HTMLElement).style.color = 'pink';
-      }
-    }
   }
 
   render() {
@@ -137,6 +130,7 @@ class Designer extends React.Component<DesignerProps> {
         <DesignerWrapper id="designer-container" />
         {this.props.isFetching && <SpinnerModal />}
         {this.props.modalState === ModalState.Save && <SaveModal designerSampleData={designer.sampleData} designerTemplateJSON={designer.getCard()} />}
+        {this.props.modalState === ModalState.SaveAndPublish && <SaveAndPublishModal designerTemplateJSON={designer.getCard()} designerSampleDataJSON={designer.sampleData} />}
         {this.props.modalState === ModalState.EditName && <EditNameModal />}
       </main>
     );
