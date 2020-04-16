@@ -25,7 +25,6 @@ import {
 
 import {
   Container,
-  ACWrapper,
 } from '../../AdaptiveCardPanel/styled'
 
 import {
@@ -36,6 +35,7 @@ import {
   DescriptionAccent,
   ButtonGroup,
   CancelButton,
+  CardWrapper,
 } from '../../Common/PublishModal/styled';
 
 interface Props {
@@ -73,9 +73,9 @@ class DeleteModal extends React.Component<Props> {
           <Description>{STRINGS.DELETE_WARNING}</Description>
           <CenterPanelWrapper>
             <Container>
-              <ACWrapper>
+              <CardWrapper>
                 <AdaptiveCard cardtemplate={template} templateVersion={this.props.templateVersion} />
-              </ACWrapper>
+              </CardWrapper>
             </Container>
           </CenterPanelWrapper>
           <BottomRow>

@@ -60,6 +60,11 @@ export const AdaptiveCardPanel = styled.div`
   margin-bottom: 16px;
 `;
 
+export const CardWrapper = styled.div`
+  height: 220px;
+  overflow: hidden;
+`;
+
 export const CenterPanelRight = styled.div`
   display: flex;
   flex-direction: column;

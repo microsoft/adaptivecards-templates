@@ -26,6 +26,7 @@ import {
   BottomRow,
   ButtonGroup,
   CancelButton,
+  CardWrapper,
   PublishButton,
 } from './styled';
 
@@ -70,7 +71,9 @@ class PublishModal extends React.Component<Props> {
             <DescriptionAccent>{template.name + " - v" + templateVersion}</DescriptionAccent>
           </Description>
           <CenterPanelWrapper>
-            <AdaptiveCardPanel template={template} version={this.props.templateVersion} />
+            <CardWrapper>
+              <AdaptiveCardPanel template={template} version={this.props.templateVersion} />
+            </CardWrapper>
           </CenterPanelWrapper>
           <BottomRow>
             <ButtonGroup>
