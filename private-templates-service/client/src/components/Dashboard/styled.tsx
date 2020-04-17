@@ -3,11 +3,6 @@ import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 
 import { COLORS, FONTS } from "../../globalStyles";
 
-export const PlaceholderText = styled.h5`
-  font-family: ${FONTS.SEGOE_UI_REGULAR};
-  padding-top: 20px;
-`;
-
 export const Title = styled.h1`
   padding-top: 15px;
   font-size: 1.5rem;
@@ -25,6 +20,14 @@ export const DashboardContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+`;
+
+export const RecentlyEditedSection = styled.section<{ isPlaceholder: boolean }>`
+  ${props => props.isPlaceholder && `
+    display: flex;
+    flex-direction: column;
+    flex: 1 0 auto;
+  `}
 `;
 
 export const OuterWindow = styled.div`

@@ -21,7 +21,7 @@ import Sort from "../../Dashboard/SearchPage/Sort";
 import Filter from "../../Dashboard/SearchPage/Filter";
 import SearchPage from "../../Dashboard/SearchPage";
 // Strings
-import { LIST_VIEW, GRID_VIEW } from "../../../assets/strings";
+import { LIST_VIEW, GRID_VIEW, CONTROLS } from "../../../assets/strings";
 import TagList from "./TagList";
 import { COLORS } from "../../../globalStyles";
 // Util
@@ -107,7 +107,7 @@ class TemplatesPage extends Component<Props, State> {
       this.props.clearSelectedTags();
       this.state = { selectedTags: [] };
     }
-  };
+  }
 
   tagOnClick = (tag: string): void => {
     this.setState((state) => {
@@ -173,7 +173,7 @@ class TemplatesPage extends Component<Props, State> {
     return (
       <OuterCardsContainer>
         <InnerCardsContainer>
-          <UpperBar aria-label={this.props.pageTitle + " controls"}>
+          <UpperBar aria-label={this.props.pageTitle + `${CONTROLS}`}>
             <Title>{this.props.pageTitle}</Title>
             <ViewHelperBar>
               <TooltipHost id={listTooltip} content={LIST_VIEW}>

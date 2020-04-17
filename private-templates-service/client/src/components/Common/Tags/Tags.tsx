@@ -59,7 +59,7 @@ class Tags extends React.Component<Props, State>  {
     }
     this.tagRefs = {};
   }
-  
+
 
   openNewTag = () => {
     this.setState({ isAdding: true }, () => {
@@ -78,7 +78,7 @@ class Tags extends React.Component<Props, State>  {
   submitNewTag = (e: any): void => {
     e.preventDefault();
     if (this.addTagInput && this.addTagInput.current && this.props.tags) {
-      const tag = this.addTagInput.current.value;
+      let tag = this.addTagInput.current.value.trim();
       if (this.props.tags.includes(tag)) {
         this.highlightTag(tag, this.props.tags);
       }

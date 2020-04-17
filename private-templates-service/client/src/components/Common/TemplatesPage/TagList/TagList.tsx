@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Tags from "../../Tags";
 import { Scroller, ScrollDirection } from "../../../../utils/AllCardsUtil";
 import { TagsContainer } from "./styled";
+import { ALL_TAGS } from "../../../../assets/strings";
 
 interface TagListProps {
   tags: string[];
@@ -44,7 +45,7 @@ class TagList extends Component<TagListProps> {
 
     const flexDirection = this.getTagsFlexDirection();
     return (
-      <TagsContainer ref={this.ref} style={{flexDirection: flexDirection}} aria-label={"All tags"}>
+      <TagsContainer ref={this.ref} style={{flexDirection: flexDirection}} aria-label={ALL_TAGS}>
         <Tags tags={this.props.tags} 
               selectedTags={this.props.selectedTags} 
               favoriteTags={this.props.favoriteTags}

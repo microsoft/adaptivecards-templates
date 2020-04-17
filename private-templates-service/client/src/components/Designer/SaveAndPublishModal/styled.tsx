@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { COLORS, FONTS } from '../../../globalStyles';
-import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react';
+
+import { TextField, PrimaryButton, DefaultButton } from 'office-ui-fabric-react';
 
 export const BackDrop = styled.div`
   position: fixed;
@@ -16,11 +17,11 @@ export const BackDrop = styled.div`
   justify-content: center;
 `;
 
-export const Modal = styled.section`
+export const Modal = styled.form`
   display: flex;
   flex-direction: column;
   background-color: ${COLORS.WHITE};
-  width: 50%;
+  width: 60%;
   padding: 48px;
 `;
 
@@ -32,6 +33,7 @@ export const Header = styled.div`
 `;
 
 export const Description = styled.div`
+  font-family: ${FONTS.SEGOE_UI_REGULAR};
   margin-bottom: 32px;
 `;
 
@@ -39,7 +41,6 @@ export const DescriptionAccent = styled.span`
   font-family: ${FONTS.SEGOE_UI_SEMI_BOLD};
   color: ${COLORS.BLUE};
   white-space: nowrap;
-  font-weight: bold;
 `;
 
 export const CenterPanelWrapper = styled.div`
@@ -56,15 +57,6 @@ export const CenterPanelLeft = styled.div`
   margin-right: 8px;
 `;
 
-export const AdaptiveCardPanel = styled.div`
-  margin-bottom: 16px;
-`;
-
-export const CardWrapper = styled.div`
-  height: 220px;
-  overflow: hidden;
-`;
-
 export const CenterPanelRight = styled.div`
   display: flex;
   flex-direction: column;
@@ -72,9 +64,23 @@ export const CenterPanelRight = styled.div`
   margin-left: 8px;
 `;
 
-export const SemiBoldText = styled.div`
-  font-size: 1rem;
-  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD};
+export const Card = styled.div`
+  pointer-events: none;
+`;
+
+export const StyledH3 = styled.h3`
+  font-size: 0.85rem;
+  font-weight: 500;
+`;
+
+export const StyledTextField = styled(TextField)`
+  margin-bottom: 15px;
+`;
+
+export const TagsWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
 `;
 
 export const BottomRow = styled.div`
@@ -84,21 +90,18 @@ export const BottomRow = styled.div`
   justify-content: flex-end;
 `;
 
-export const NotifiedGroup = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
 export const ButtonGroup = styled.div`
   display: flex;
   flex-direction: row;
 `;
 
 export const PublishButton = styled(PrimaryButton)`
+  font-family: ${FONTS.SEGOE_UI_REGULAR};
   min-width: 150px;
 `;
 
 export const CancelButton = styled(DefaultButton)`
+  font-family: ${FONTS.SEGOE_UI_REGULAR};
   margin-right: 12px;
   min-width: 150px;
 `;

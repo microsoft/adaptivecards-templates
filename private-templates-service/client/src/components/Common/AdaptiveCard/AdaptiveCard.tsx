@@ -7,6 +7,7 @@ import * as ACData from "adaptivecards-templating";
 import markdownit from "markdown-it";
 
 import { Card } from './styled';
+import { ERROR } from '../../../assets/strings';
 
 interface Props {
   onClick?: () => void;
@@ -52,7 +53,7 @@ export function renderAdaptiveCard(template: Template, hostConfig?: any): any {
 
     return renderedCard;
   } catch (e) {
-    return <div>Error</div>;
+    return <div>{ERROR}</div>;
   }
 }
 

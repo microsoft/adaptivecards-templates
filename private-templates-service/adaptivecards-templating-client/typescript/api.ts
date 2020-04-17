@@ -180,6 +180,7 @@ export class Config {
     'appId'?: string;
     'redirectUri'?: string;
     'appInsightsInstrumentationKey'?: string;
+    'userInsightsInstrumentationKey'?: string;
 
     static discriminator: string | undefined = undefined;
 
@@ -197,6 +198,11 @@ export class Config {
         {
             "name": "appInsightsInstrumentationKey",
             "baseName": "appInsightsInstrumentationKey",
+            "type": "string"
+        },
+        {
+            "name": "userInsightsInstrumentationKey",
+            "baseName": "userInsightsInstrumentationKey",
             "type": "string"
         }    ];
 
