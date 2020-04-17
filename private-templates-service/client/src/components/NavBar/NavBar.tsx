@@ -16,6 +16,7 @@ import Logo from '../../assets/adaptive-cards-100-logo.png';
 import * as STRINGS from "../../assets/strings";
 
 import { Banner, Styledh1, StyledLogo, MobileBanner, BaselineBanner, StyledButton, Styledh2, StyledButtonContent, EditButton, BackButton, ButtonTextWrapper } from './styled';
+import { FINISH, BACK, ID, PREVIEW } from "../../assets/strings";
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
@@ -109,7 +110,7 @@ const NavBar = (props: NavBarProps) => {
           <ActionButton onClick={() => { history.goBack() }}>
             <StyledButton>
               <StyledButtonContent>
-                Finish
+                {FINISH}
               </StyledButtonContent>
             </StyledButton>
           </ActionButton>
@@ -120,8 +121,8 @@ const NavBar = (props: NavBarProps) => {
         <Banner>
           <MobileBanner>
             <StyledLogo aria-label={STRINGS.LOGO_DESCRIPTION} src={Logo} />
-            <Styledh1>{props.template ? (props.version ? props.template.name + " - " + props.version : props.template.name) : "Preview"}</Styledh1>
-            <Styledh2>{props.template ? "ID: " + props.template.id : ""}</Styledh2>
+            <Styledh1>{props.template ? (props.version ? props.template.name + " - " + props.version : props.template.name) : `${PREVIEW}`}</Styledh1>
+            <Styledh2>{props.template ? `${ID}: ` + props.template.id : ""}</Styledh2>
           </MobileBanner>
         </Banner>
       );
@@ -133,7 +134,7 @@ const NavBar = (props: NavBarProps) => {
             <Styledh1>{(props.template && props.template.name) || props.currentPageTitle}</Styledh1>
             {!props.isFetching && <TooltipEditButton editName={editName} modalState={props.modalState} />}
           </BaselineBanner>
-          <BackButton iconProps={{ iconName: 'Back' }} onClick={onBackButton} tabIndex={props.modalState ? -1 : 0} ><ButtonTextWrapper>Back</ButtonTextWrapper></BackButton>
+          <BackButton iconProps={{ iconName: 'Back' }} onClick={onBackButton} tabIndex={props.modalState ? -1 : 0} ><ButtonTextWrapper>{BACK}</ButtonTextWrapper></BackButton>
         </Banner>
       );
     case "all cards":

@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { withRouter, RouteComponentProps } from "react-router-dom";
+
 import { RootState } from "../../store/rootReducer";
 import { UserType } from "../../store/auth/types";
 import { getAllTemplates } from "../../store/templates/actions";
@@ -13,34 +14,36 @@ import { setSearchBarVisible } from "../../store/search/actions";
 import { getOwnerProfilePicture, getOwnerName } from "../../store/templateOwner/actions";
 import { OwnerState } from "../../store/templateOwner/types";
 import { setSkipLinkContentID } from "../../store/skiplink/actions";
+import { getAllTags, addSelectedTag, clearSelectedTags, removeFavoriteTags, addFavoriteTags } from "../../store/tags/actions";
+import { TagsState } from "../../store/tags/types";
 
 import { Template } from "adaptive-templating-service-typescript-node";
 import { SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 
 import requireAuthentication from "../../utils/requireAuthentication";
 
+import RecentlyEditedPlaceholder from './RecentlyEditedPlaceholder';
 import Gallery from "../Gallery";
 import SearchPage from "./SearchPage/SearchPage";
 import TemplateList from "./TemplateList";
-import Tags from "../Common/Tags";
 import Footer from "./Footer";
+import TagList from "../Common/TemplatesPage/TagList";
 import {
-  DASHBOARD_RECENTLY_EDITED_PLACEHOLDER,
-  DASHBOARD_RECENTLY_VIEWED_PLACEHOLDER,
   FAVORITED_TAGS,
   RECENTLY_EDITED,
-  RECENTLY_VIEWED
+  RECENTLY_VIEWED,
+  DASHBOARD_PAGE,
+  TEMPLATE_PAGE
 } from '../../assets/strings';
-
 
 import {
   Title,
   DashboardContainer,
+  RecentlyEditedSection,
   OuterWindow,
   TagsContainer,
-  PlaceholderText,
   CenteredSpinner,
-  OuterDashboardContainer
+  OuterDashboardContainer,
 } from "./styled";
 
 const mapStateToProps = (state: RootState) => {
@@ -51,6 +54,7 @@ const mapStateToProps = (state: RootState) => {
     isSearch: state.search.isSearch,
     recentTemplates: state.recentTemplates,
     templateOwner: state.templateOwner,
+    tags: state.tags
   };
 };
 const mapDispatchToProps = (dispatch: any) => {
@@ -78,6 +82,21 @@ const mapDispatchToProps = (dispatch: any) => {
     },
     setSkipLinkContentID: (id: string) => {
       dispatch(setSkipLinkContentID(id));
+    },
+    getTags: () => {
+      dispatch(getAllTags());
+    },
+    addSelectedTag: (tag: string) => {
+      dispatch(addSelectedTag(tag))
+    },
+    clearSelectedTags: () => {
+      dispatch(clearSelectedTags());
+    },
+    onAddFavoriteTag: (tag: string) => {
+      dispatch(addFavoriteTags(tag))
+    },
+    onRemoveFavoriteTag: (tag: string) => {
+      dispatch(removeFavoriteTags(tag))
     }
   };
 };
@@ -87,6 +106,7 @@ interface Props extends RouteComponentProps {
   recentTemplates: RecentTemplatesState;
   templates: AllTemplateState;
   templateOwner: OwnerState;
+  tags: TagsState;
   setPage: (currentPageTitle: string, currentPage: string) => void;
   setSearchBarVisible: (isSearchBarVisible: boolean) => void;
   getTemplates: () => void;
@@ -95,22 +115,31 @@ interface Props extends RouteComponentProps {
   getOwnerName: (oID: string) => void;
   getOwnerProfilePicture: (oID: string) => void;
   setSkipLinkContentID: (id: string) => void;
+  getTags: () => void;
+  addSelectedTag: (tag: string) => void;
+  clearSelectedTags: () => void;
+  onAddFavoriteTag: (tag: string) => void;
+  onRemoveFavoriteTag: (tag: string) => void;
   isSearch: boolean;
 }
 class Dashboard extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
-    props.setPage("Dashboard", "Dashboard");
+    props.setPage(DASHBOARD_PAGE, DASHBOARD_PAGE);
     props.setSearchBarVisible(true);
     props.getRecentTemplates();
     props.setSkipLinkContentID(DASHBOARD_MAIN_CONTENT_ID);
   }
+
+  componentDidMount() {
+    this.props.getTags();
+  }
   componentDidUpdate(prevProps: Props) {
     if (this.props.isSearch !== prevProps.isSearch) {
       if (this.props.isSearch) {
-        this.props.setPage("Templates", "searchPage");
+        this.props.setPage(TEMPLATE_PAGE, "searchPage");
       } else {
-        this.props.setPage("Dashboard", "Dashboard");
+        this.props.setPage(DASHBOARD_PAGE, "Dashboard");
       }
     }
     if (prevProps.recentTemplates !== this.props.recentTemplates &&
@@ -128,6 +157,11 @@ class Dashboard extends React.Component<Props> {
     this.props.history.push("/preview/" + templateID);
   };
 
+  tagOnClick = (tag: string) => {
+    this.props.clearSelectedTags();
+    this.props.addSelectedTag(tag);
+    this.props.history.push("/templates/all", {redirect: true});
+  }
   render() {
     if (this.props.isSearch) {
       return (
@@ -137,9 +171,10 @@ class Dashboard extends React.Component<Props> {
       );
     }
     //TODO add sort functionality to separate templates displayed in recent vs draft
-    let recentTemplates = this.props.recentTemplates;
+    const {recentTemplates, tags} = this.props;
     let recentlyEditedTemplates = new Array<Template>();
     let recentlyViewedTemplates = new Array<Template>();
+    let favoriteTags: string[] = [];
 
     if (
       !recentTemplates.isFetching &&
@@ -156,12 +191,15 @@ class Dashboard extends React.Component<Props> {
       recentlyViewedTemplates = recentTemplates.recentlyViewed.templates;
     }
     // TODO: Get tags and make them clickable
-    let tags: string[] = [];
+    // let tags: string[] = ["hey", "one", "john"];
+    if (!tags.isFetching && tags.allTags && tags.allTags.favoriteTags) {
+      favoriteTags = tags.allTags.favoriteTags;
+    }
     return (
       <OuterDashboardContainer>
         <OuterWindow>
           <DashboardContainer id={DASHBOARD_MAIN_CONTENT_ID}>
-            <section aria-label={RECENTLY_EDITED}>
+            <RecentlyEditedSection aria-label={RECENTLY_EDITED} isPlaceholder={recentlyEditedTemplates.length === 0}>
               <Title>{RECENTLY_EDITED}</Title>
               {recentTemplates.isFetching || this.props.templateOwner.isFetchingName || this.props.templateOwner.isFetchingPicture ?
                 <CenteredSpinner size={SpinnerSize.large} />
@@ -171,31 +209,32 @@ class Dashboard extends React.Component<Props> {
                     templates={recentlyEditedTemplates}
                   ></Gallery>
                 ) : (
-                    <PlaceholderText>
-                      {DASHBOARD_RECENTLY_EDITED_PLACEHOLDER}
-                    </PlaceholderText>
+                    <RecentlyEditedPlaceholder />
                   )}
-            </section>
+            </RecentlyEditedSection>
             <section aria-label={RECENTLY_VIEWED}>
               <Title>{RECENTLY_VIEWED}</Title>
               {recentTemplates.isFetching || this.props.templateOwner.isFetchingName || this.props.templateOwner.isFetchingPicture ?
                 <CenteredSpinner size={SpinnerSize.large} />
-                : recentlyViewedTemplates.length ? (
+                : (
                   <TemplateList
                     onClick={this.selectTemplate}
                     templates={recentlyViewedTemplates}
                     displayComponents={{ author: true, status: true, dateModified: true, templateName: true, version: false }}
+                    
                   />
-                ) : (
-                    <PlaceholderText>
-                      {DASHBOARD_RECENTLY_VIEWED_PLACEHOLDER}
-                    </PlaceholderText>
-                  )}
+                )}
             </section>
           </DashboardContainer>
           <TagsContainer aria-label={FAVORITED_TAGS}>
-            <Title style={{ marginRight: "150px", color: 'pink' }}>{FAVORITED_TAGS}</Title>
-            <Tags tags={tags} allowEdit={false}></Tags>
+          <Title style={{ marginRight: "150px" }}>{FAVORITED_TAGS}</Title>
+          <TagList tags={favoriteTags} 
+                   allowEdit={false} 
+                   onClick={this.tagOnClick} 
+                   allowSetFavorite={true}
+                   onAddFavoriteTag={this.props.onAddFavoriteTag}
+                   onRemoveFavoriteTag={this.props.onRemoveFavoriteTag}
+                   favoriteTags={favoriteTags}/>     
           </TagsContainer>
         </OuterWindow>
         <Footer />

@@ -30,6 +30,7 @@ import {
 } from "./styled";
 import { INavLinkGroup, INavStyles } from "office-ui-fabric-react";
 import SkipLink from "../Common/SkipLink";
+import { NAVBAR, OUT, IN, ADAPTIVE_CARDS, PORTAL, ARIA_DASHBOARD, ARIA_NEW_CARD, ARIA_ALL_CARDS, ARIA_DRAFTS, ARIA_PUBLISHED, ARIA_TAGS } from "../../assets/strings";
 
 
 interface Props {
@@ -86,7 +87,7 @@ const iconStylePink = {
   margin: "0px 10px 0px 40px"
 }
 
-const newTemplateURL = "/designer/newcard/1.0"
+export const newTemplateURL = "/designer/newcard/1.0"
 
 const navMenuLinks: INavLinkGroup[] = [
   {
@@ -99,7 +100,7 @@ const navMenuLinks: INavLinkGroup[] = [
           style: iconStyle
         },
         title: "",
-        ariaLabel: "Link to Dashboard"
+        ariaLabel: ARIA_DASHBOARD
       },
       {
         name: "New Template",
@@ -109,7 +110,7 @@ const navMenuLinks: INavLinkGroup[] = [
           style: iconStyle
         },
         title: "",
-        ariaLabel: "Link to New Card"
+        ariaLabel: ARIA_NEW_CARD
       },
       {
         name: STRINGS.ALL_CARDS,
@@ -119,7 +120,7 @@ const navMenuLinks: INavLinkGroup[] = [
           style: iconStylePink
         },
         title: "",
-        ariaLabel: "Link to All Cards"
+        ariaLabel: ARIA_ALL_CARDS
       },
       {
         name: STRINGS.DRAFTS,
@@ -129,7 +130,7 @@ const navMenuLinks: INavLinkGroup[] = [
           style: iconStylePink
         },
         title: "",
-        ariaLabel: "Link to Drafts"
+        ariaLabel: ARIA_DRAFTS
       },
       {
         name: STRINGS.PUBLISHED,
@@ -139,7 +140,7 @@ const navMenuLinks: INavLinkGroup[] = [
           style: iconStylePink
         },
         title: "",
-        ariaLabel: "Link to Published Cards"
+        ariaLabel: ARIA_PUBLISHED
       },
       {
         name: STRINGS.TAGS,
@@ -149,7 +150,7 @@ const navMenuLinks: INavLinkGroup[] = [
           style: iconStylePink
         },
         title: "",
-        ariaLabel: "Link to Tags"
+        ariaLabel: ARIA_TAGS
       }
     ]
   }
@@ -179,13 +180,13 @@ const SideBar = (props: Props) => {
   }
 
   return (
-    <OuterSideBarWrapper aria-label={"navbar"}>
+    <OuterSideBarWrapper aria-label={NAVBAR}>
       <MainItems>
         <LogoWrapper onClick={onLogoClick} tabIndex={props.modalState ? -1 : 0} onKeyDown={onKeyDown}>
           <Logo aria-label={STRINGS.LOGO_DESCRIPTION} src={mainLogo} />
           <LogoTextWrapper>
-            <LogoTextHeader>Adaptive Cards</LogoTextHeader>
-            <LogoTextSubHeader>Portal</LogoTextSubHeader>
+            <LogoTextHeader>{ADAPTIVE_CARDS}</LogoTextHeader>
+            <LogoTextSubHeader>{PORTAL}</LogoTextSubHeader>
           </LogoTextWrapper>
         </LogoWrapper>
         <UserWrapper>
@@ -199,7 +200,7 @@ const SideBar = (props: Props) => {
         {props.isAuthenticated && <SkipLink />}
       </MainItems>
 
-      <SignOut onClick={props.authButtonMethod} tabIndex={props.modalState ? -1 : 0}>Sign {props.isAuthenticated ? "Out" : "In"}</SignOut>
+      <SignOut onClick={props.authButtonMethod} tabIndex={props.modalState ? -1 : 0}>{STRINGS.SIGN} {props.isAuthenticated ? `${OUT}` : `${IN}`}</SignOut>
     </OuterSideBarWrapper>
   );
 };

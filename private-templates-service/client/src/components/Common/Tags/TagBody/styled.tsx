@@ -1,5 +1,6 @@
 import styled, { keyframes } from "styled-components";
 import { COLORS } from "../../../../globalStyles";
+import { Icon } from "office-ui-fabric-react";
 
 const DuplicateKeyFrame = keyframes`
   from {
@@ -23,4 +24,8 @@ export const TagBodyContainer = styled.div`
   &.duplicate {
     animation: ${DuplicateKeyFrame} 0.3s forwards;
   }
+`;
+
+export const TagSetFavouriteIcon = styled(Icon)`
+margin-right: 10px;
 `;

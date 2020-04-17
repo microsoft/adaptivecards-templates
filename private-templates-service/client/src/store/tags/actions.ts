@@ -1,8 +1,17 @@
-import { REQUEST_ALL_TAGS_GET, REQUEST_ALL_TAGS_GET_SUCCESS, REQUEST_ALL_TAGS_GET_FAIL, CLEAR_SELECTED_TAGS, REMOVE_SELECTED_TAG, ADD_SELECTED_TAG, TagsAction } from "./types";
-import { TagList } from "adaptive-templating-service-typescript-node";
+import { REQUEST_ALL_TAGS_GET,
+         REQUEST_ALL_TAGS_GET_SUCCESS,
+         REQUEST_ALL_TAGS_GET_FAIL, 
+         CLEAR_SELECTED_TAGS, 
+         REMOVE_SELECTED_TAG,
+         ADD_SELECTED_TAG, 
+         TagsUpdateType,
+         TagsAction } from "./types";
+import { Tags } from "adaptive-templating-service-typescript-node";
 import { IncomingMessage } from "http";
 import { RootState } from "../rootReducer";
 import { initClientSDK } from "../../utils/TemplateUtil";
+
+
 
 export function requestAllTags(): TagsAction {
   return {
@@ -10,7 +19,7 @@ export function requestAllTags(): TagsAction {
   };
 }
 
-export function receiveAllTags(tags: TagList): TagsAction {
+export function receiveAllTags(tags: Tags): TagsAction {
   return {
     type: REQUEST_ALL_TAGS_GET_SUCCESS,
     allTags: tags,
@@ -44,6 +53,7 @@ export function clearSelectedTags(): TagsAction {
   };
 }
 
+
 export function getAllTags() {
   return function(dispatch: any, getState: () => RootState) {
     dispatch(requestAllTags());
@@ -60,5 +70,24 @@ export function getAllTags() {
       .catch((response) => {
         dispatch(failGetAllTags(response.response));
       });
+  };
+}
+
+export function addFavoriteTags(tags: string | string[]) {
+  return _updateFavoriteTags(tags, TagsUpdateType.AddFavorite)
+}
+
+export function removeFavoriteTags(tags: string | string[]) {
+  return _updateFavoriteTags(tags, TagsUpdateType.RemoveFavorite);
+}
+
+export function _updateFavoriteTags(tags: string | string[], type: TagsUpdateType) {
+  return function(dispatch: any, getState: () => RootState) {
+    const api = initClientSDK(dispatch, getState);
+    const favorite: string[] = new Array().concat(tags)
+    if(type === TagsUpdateType.AddFavorite) {
+      return api.updateTags({favorite: favorite});
+    }
+    return api.unFavoriteTags({favorite: favorite});
   };
 }

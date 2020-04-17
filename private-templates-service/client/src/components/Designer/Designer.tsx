@@ -12,7 +12,10 @@ import { updateTemplate, getTemplate } from '../../store/currentTemplate/actions
 import * as monaco from 'monaco-editor';
 import markdownit from 'markdown-it';
 import * as ACDesigner from 'adaptivecards-designer';
-import { DesignerWrapper } from './styled';
+import {
+  OuterDesignerWrapper,
+  DesignerWrapper
+} from './styled';
 
 import EditNameModal from '../Common/EditNameModal';
 import SaveModal from './SaveModal/SaveModal';
@@ -21,6 +24,8 @@ import SaveAndPublishModal from './SaveAndPublishModal/SaveAndPublishModal';
 import ShareModal from '../Common/ShareModal';
 import { Template } from 'adaptive-templating-service-typescript-node';
 import ShareSuccessModal from '../Common/ShareModal/ShareSuccessModal';
+
+import { DESIGNER_PUBLISH, DESIGNER_SAVE } from '../../assets/strings';
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -101,11 +106,11 @@ class Designer extends React.Component<DesignerProps> {
     }
     designer = initDesigner();
 
-    let publishButton = new ACDesigner.ToolbarButton("publishButton", "Publish", "", (sender) => (this.props.openModal(ModalState.SaveAndPublish)));
+    let publishButton = new ACDesigner.ToolbarButton("publishButton", DESIGNER_PUBLISH, "", (sender) => (this.props.openModal(ModalState.SaveAndPublish)));
     publishButton.separator = true;
     designer.toolbar.insertElementAfter(publishButton, ACDesigner.CardDesigner.ToolbarCommands.TogglePreview);
 
-    let saveButton = new ACDesigner.ToolbarButton("saveButton", "Save", "", (sender) => (onSave(designer, this.props)));
+    let saveButton = new ACDesigner.ToolbarButton("saveButton", DESIGNER_SAVE, "", (sender) => (onSave(designer, this.props)));
     saveButton.separator = true;
     designer.toolbar.insertElementAfter(saveButton, ACDesigner.CardDesigner.ToolbarCommands.TogglePreview);
   }
@@ -131,7 +136,7 @@ class Designer extends React.Component<DesignerProps> {
 
   render() {
     return (
-      <main>
+      <OuterDesignerWrapper>
         <DesignerWrapper id="designer-container" />
         {this.props.isFetching && <SpinnerModal />}
         {this.props.modalState === ModalState.Save && <SaveModal designerSampleData={designer.sampleData} designerTemplateJSON={designer.getCard()} />}
@@ -139,7 +144,7 @@ class Designer extends React.Component<DesignerProps> {
         {this.props.modalState === ModalState.Share && <ShareModal template={this.props.template} templateVersion={this.props.version} />}
         {this.props.modalState === ModalState.ShareSuccess && <ShareSuccessModal template={this.props.template} templateVersion={this.props.version} />}
         {this.props.modalState === ModalState.EditName && <EditNameModal />}
-      </main >
+      </OuterDesignerWrapper>
     );
   }
 }

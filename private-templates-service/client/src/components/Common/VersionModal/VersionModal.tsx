@@ -43,10 +43,11 @@ import {
 } from '../../Dashboard/PreviewModal/TemplateInfo/styled';
 
 import { getDateString } from '../../../utils/versionUtils';
-import { capitalizeString } from "../../../utils/stringUtils";
+import { capitalizeString, getState } from "../../../utils/stringUtils";
 import ModalHOC from '../../../utils/ModalHOC';
 import { closeModal } from '../../../store/page/actions';
 import { Scroller } from '../../../utils/AllCardsUtil/Scroller';
+import { THERE_ARE, VERSIONS_FOR, VERSION_HEADER, PUBLISHED_HEADER, STATUS_HEADER, NOT_PUBLISHED, SELECTED, VERSION_CANCEL, VERSION_DELETE, VERSION_UNPUBLISH, VERSION_PUBLISH } from '../../../assets/strings';
 
 interface Props {
   template: Template;
@@ -134,14 +135,14 @@ class VersionModal extends React.Component<Props, State> {
       <BackDrop>
         <Modal aria-label={STRINGS.VERSIONS}>
           <Header>{STRINGS.VERSIONS}</Header>
-          <Description>There are {template.instances!.length} versions for <DescriptionAccent>{template.name}</DescriptionAccent></Description>
+          <Description>{THERE_ARE} {template.instances!.length} {VERSIONS_FOR} <DescriptionAccent>{template.name}</DescriptionAccent></Description>
           <CenterPanelWrapper>
             <Card>
               <CardHeaderRow>
-                <CardHeaderText>Version</CardHeaderText>
-                <CardHeaderText>Published</CardHeaderText>
-                <CardHeaderText>Status</CardHeaderText>
-                <SelectedHeaderText>{`${this.state.versionList.filter(function (s) { return s; }).length} Selected`}</SelectedHeaderText>
+                <CardHeaderText>{VERSION_HEADER}</CardHeaderText>
+                <CardHeaderText>{PUBLISHED_HEADER}</CardHeaderText>
+                <CardHeaderText>{STATUS_HEADER}</CardHeaderText>
+                <SelectedHeaderText>{`${this.state.versionList.filter(function (s) { return s; }).length} ${SELECTED}`}</SelectedHeaderText>
               </CardHeaderRow>
               <CardBody>
                 <VersionContainer onWheel={this.scroller.scroll}>
@@ -150,10 +151,10 @@ class VersionModal extends React.Component<Props, State> {
                       <VersionWrapper>
                         {instance.version}
                       </VersionWrapper>
-                      <DateWrapper>{instance.publishedAt ? getDateString(instance.publishedAt) : "Not published"}</DateWrapper>
+                      <DateWrapper>{instance.publishedAt ? getDateString(instance.publishedAt) : `${NOT_PUBLISHED}`}</DateWrapper>
                       <StatusWrapper>
                         <StatusIndicator state={instance.state!} />
-                        <Status>{instance.state && capitalizeString(instance.state.toString())}</Status>
+                        <Status>{getState(instance.state && capitalizeString(instance.state.toString()))}</Status>
                       </StatusWrapper>
                       <CheckboxWrapper><Checkbox checked={this.state.versionList[index]}
                         onChange={() => {
@@ -169,10 +170,10 @@ class VersionModal extends React.Component<Props, State> {
           </CenterPanelWrapper>
           <BottomRow>
             <ButtonGroup>
-              <LightButton text="Cancel" onClick={this.props.closeModal} />
-              <LightButton text="Delete" onClick={this.delete} />
-              <PrimaryStyleButton disabled={this.containsState(PostedTemplate.StateEnum.Draft) || this.containsState(PostedTemplate.StateEnum.Deprecated)} text="Unpublish" onClick={this.unpublish} />
-              <PrimaryStyleButton disabled={this.containsState(PostedTemplate.StateEnum.Live)} text="Publish" onClick={this.publish} />
+              <LightButton text={VERSION_CANCEL} onClick={this.props.closeModal} />
+              <LightButton text={VERSION_DELETE} onClick={this.delete} />
+              <PrimaryStyleButton disabled={this.containsState(PostedTemplate.StateEnum.Draft) || this.containsState(PostedTemplate.StateEnum.Deprecated)} text={VERSION_UNPUBLISH} onClick={this.unpublish} />
+              <PrimaryStyleButton disabled={this.containsState(PostedTemplate.StateEnum.Live)} text={VERSION_PUBLISH} onClick={this.publish} />
             </ButtonGroup>
           </BottomRow>
         </Modal>

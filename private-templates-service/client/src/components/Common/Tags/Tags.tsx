@@ -28,14 +28,18 @@ interface Props {
   tags?: string[];
   allowEdit?: boolean;
   allowAddTag?: boolean;
+  allowSetFavorite?: boolean;
   templateID?: string;
   template?: Template;
   updateTags?: (tags: string[]) => void;
   tagRemove?: (tag: string) => void;
   modalState?: ModalState;
   onClick?: (tag: string) => void;
+  onAddFavoriteTag?: (tag: string) => void;
+  onRemoveFavoriteTag?: (tag: string) => void;
   toggleStyle?: (isSelected: boolean, ref: any) => void;
   selectedTags?: string[];
+  favoriteTags?: string[];
 }
 
 interface State {
@@ -55,7 +59,7 @@ class Tags extends React.Component<Props, State>  {
     }
     this.tagRefs = {};
   }
-  
+
 
   openNewTag = () => {
     this.setState({ isAdding: true }, () => {
@@ -74,7 +78,7 @@ class Tags extends React.Component<Props, State>  {
   submitNewTag = (e: any): void => {
     e.preventDefault();
     if (this.addTagInput && this.addTagInput.current && this.props.tags) {
-      const tag = this.addTagInput.current.value;
+      let tag = this.addTagInput.current.value.trim();
       if (this.props.tags.includes(tag)) {
         this.highlightTag(tag, this.props.tags);
       }
@@ -136,6 +140,7 @@ class Tags extends React.Component<Props, State>  {
     const {
       isAdding
     } = this.state;
+
     return (
       <React.Fragment>
         {tags && tags.map((tag: string) => (
@@ -146,6 +151,11 @@ class Tags extends React.Component<Props, State>  {
                   allowEdit={allowEdit}
                   toggleStyle={toggleStyle}
                   isSelected={this.props.selectedTags ? (this.props.selectedTags.includes(tag) ? true : false) : undefined} 
+                  isFavorite={this.props.favoriteTags ? (this.props.favoriteTags.includes(tag) ? true : false) : undefined}
+                  allowSetFavorite={this.props.allowSetFavorite}
+                  onAddFavoriteTag={this.props.onAddFavoriteTag}
+                  onRemoveFavoriteTag={this.props.onRemoveFavoriteTag}
+
           />
         ))}
         {allowAddTag && <AddTagWrapper onSubmit={this.submitNewTag} open={isAdding} >

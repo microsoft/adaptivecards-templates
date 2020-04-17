@@ -5,13 +5,16 @@ import { SpinnerSize } from "office-ui-fabric-react";
 import { RootState } from "../../../../store/rootReducer";
 import { AllTemplateState } from "../../../../store/templates/types";
 import { ViewToggleState, ViewType } from "../../../../store/viewToggle/types";
-// Components
-import { CenteredSpinner, PlaceholderText } from "../../../Dashboard/styled";
 import { Template } from "adaptive-templating-service-typescript-node";
+
+// Components
+import { CenteredSpinner } from "../../../Dashboard/styled";
 import Gallery from "../../../Gallery";
 import TemplateList from "../../../Dashboard/TemplateList";
+import RecentlyEditedPlaceholder from '../../../Dashboard/RecentlyEditedPlaceholder';
+
 // Strings
-import { ALL_CARDS_PLACEHOLDER, ALL_CARDS } from "../../../../assets/strings";
+import { ALL_CARDS } from "../../../../assets/strings";
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -50,15 +53,18 @@ export class TemplatesView extends Component<Props> {
       <section aria-label={ALL_CARDS}>
         {templatesState.isFetching ? (
           <CenteredSpinner size={SpinnerSize.large} />
-        ) : templates.length ? (
-          toggleState.viewType === ViewType.List ? (
-            <TemplateList templates={templates} displayComponents={{ author: true, dateModified: true, templateName: true, status: true, version: false }} onClick={onClick} />
-          ) : (
-              <Gallery onClick={onClick} templates={templates} />
-            )
         ) : (
-              <PlaceholderText>{ALL_CARDS_PLACEHOLDER}</PlaceholderText>
-            )}
+            toggleState.viewType === ViewType.List ? (
+              <TemplateList templates={templates} displayComponents={{ author: true, dateModified: true, templateName: true, status: true, version: false }} onClick={onClick} />
+            ) : (
+                templates.length ? (
+                  <Gallery onClick={onClick} templates={templates} />
+                )
+                  : (
+                    <RecentlyEditedPlaceholder />
+                  )
+              )
+          )}
       </section>
     );
   }
