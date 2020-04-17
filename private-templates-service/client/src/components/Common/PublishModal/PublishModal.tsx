@@ -29,6 +29,7 @@ import {
   CardWrapper,
   PublishButton,
 } from './styled';
+import { PUBLISH_CANCEL, PUBLISH_BUTTON } from '../../../assets/strings';
 import { getVersionNumber } from '../../../utils/TemplateUtil/TemplateUtil';
 
 interface Props {
@@ -85,8 +86,8 @@ class PublishModal extends React.Component<Props> {
           </CenterPanelWrapper>
           <BottomRow>
             <ButtonGroup>
-              <CancelButton text="Cancel" onClick={this.props.closeModal} />
-              <PublishButton text="Publish" onClick={this.publish} />
+              <CancelButton text={PUBLISH_CANCEL} onClick={this.props.closeModal} />
+              <PublishButton text={PUBLISH_BUTTON} onClick={this.publish} />
             </ButtonGroup>
           </BottomRow>
         </Modal>

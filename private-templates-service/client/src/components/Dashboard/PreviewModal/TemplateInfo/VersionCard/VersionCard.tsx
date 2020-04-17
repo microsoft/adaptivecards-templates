@@ -30,12 +30,12 @@ import {
 import * as STRINGS from '../../../../../assets/strings';
 
 import { getDateString } from '../../../../../utils/versionUtils';
-import { capitalizeString } from "../../../../../utils/stringUtils";
+import { getStateFromInstance } from "../../../../../utils/stringUtils";
 import { ModalState } from '../../../../../store/page/types';
 import { openModal } from '../../../../../store/page/actions';
 import { updateCurrentTemplateVersion } from '../../../../../store/currentTemplate/actions';
 import VersionModal from '../../../../Common/VersionModal';
-import { MANAGE } from '../../../../../assets/strings';
+import { MANAGE, NA } from '../../../../../assets/strings';
 import { RootState } from '../../../../../store/rootReducer';
 import { Scroller } from "../../../../../utils/AllCardsUtil/Scroller";
 
@@ -101,10 +101,10 @@ class VersionCard extends React.Component<Props> {
                   {instance.version}
                   {instance.version === this.props.templateVersion && <VersionIcon iconName={'View'} />}
                 </VersionWrapper>
-                <DateWrapper>{instance.updatedAt ? getDateString(instance.updatedAt) : "N/A"}</DateWrapper>
+                <DateWrapper>{instance.updatedAt ? getDateString(instance.updatedAt) : `${NA}`}</DateWrapper>
                 <StatusWrapper>
                   <StatusIndicator state={instance.state} />
-                  <Status>{instance.state && capitalizeString(instance.state.toString())}</Status>
+                  <Status>{getStateFromInstance(instance)}</Status>
                 </StatusWrapper>
               </VersionCardRow>
             ))}

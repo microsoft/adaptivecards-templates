@@ -30,6 +30,7 @@ import {
 } from "./styled";
 import { INavLinkGroup, INavStyles } from "office-ui-fabric-react";
 import SkipLink from "../Common/SkipLink";
+import { NAVBAR, OUT, IN, ADAPTIVE_CARDS, PORTAL, ARIA_DASHBOARD, ARIA_NEW_CARD, ARIA_ALL_CARDS, ARIA_DRAFTS, ARIA_PUBLISHED, ARIA_TAGS } from "../../assets/strings";
 
 
 interface Props {
@@ -94,7 +95,7 @@ const navMenuLinks: INavLinkGroup[] = [
           style: iconStyle
         },
         title: "",
-        ariaLabel: "Link to Dashboard"
+        ariaLabel: ARIA_DASHBOARD
       },
       {
         name: STRINGS.NEW_CARD,
@@ -104,7 +105,7 @@ const navMenuLinks: INavLinkGroup[] = [
           style: iconStyle
         },
         title: "",
-        ariaLabel: "Link to New Card"
+        ariaLabel: ARIA_NEW_CARD
       },
       {
         name: STRINGS.ALL_CARDS,
@@ -144,13 +145,13 @@ const SideBar = (props: Props) => {
   }
 
   return (
-    <OuterSideBarWrapper aria-label={"navbar"}>
+    <OuterSideBarWrapper aria-label={NAVBAR}>
       <MainItems>
         <LogoWrapper onClick={onLogoClick} tabIndex={props.modalState ? -1 : 0} onKeyDown={onKeyDown}>
           <Logo aria-label={STRINGS.LOGO_DESCRIPTION} src={mainLogo} />
           <LogoTextWrapper>
-            <LogoTextHeader>Adaptive Cards</LogoTextHeader>
-            <LogoTextSubHeader>Portal</LogoTextSubHeader>
+            <LogoTextHeader>{ADAPTIVE_CARDS}</LogoTextHeader>
+            <LogoTextSubHeader>{PORTAL}</LogoTextSubHeader>
           </LogoTextWrapper>
         </LogoWrapper>
         <UserWrapper>
@@ -164,7 +165,7 @@ const SideBar = (props: Props) => {
         {props.isAuthenticated && <SkipLink />}
       </MainItems>
 
-      <SignOut onClick={props.authButtonMethod} tabIndex={props.modalState ? -1 : 0}>Sign {props.isAuthenticated ? "Out" : "In"}</SignOut>
+      <SignOut onClick={props.authButtonMethod} tabIndex={props.modalState ? -1 : 0}>{STRINGS.SIGN} {props.isAuthenticated ? `${OUT}` : `${IN}`}</SignOut>
     </OuterSideBarWrapper>
   );
 };

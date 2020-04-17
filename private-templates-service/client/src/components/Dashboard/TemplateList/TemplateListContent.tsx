@@ -2,15 +2,27 @@ import React from "react";
 
 import { Template } from "adaptive-templating-service-typescript-node";
 
-import { TemplateListBodyRow, TemplateListItem, TemplateListBody, TemplateListStatusIndicator, StatusWrapper } from "./styled";
-
 import { ListViewComponents } from "./TemplateList";
 import { getDateString } from "../../../utils/versionUtils";
-import { capitalizeString } from "../../../utils/stringUtils";
+import { capitalizeString, getState } from "../../../utils/stringUtils";
 import { Status } from "../PreviewModal/TemplateInfo/styled";
 import { TemplateStateWrapper } from "../../AdaptiveCardPanel/styled";
 import OwnerInfo from "./OwnerInfo";
 import KeyCode from "../../../globalKeyCodes";
+
+import {
+  TemplateListBodyRow,
+  TemplateListItem,
+  TemplateListBody,
+  TemplateListStatusIndicator,
+  StatusWrapper,
+  PlaceholderWrapper,
+} from "./styled";
+
+import {
+  NO_CARDS_PLACEHOLDER,
+  TEMPLATE_LIST_ERROR
+} from '../../../assets/strings';
 
 interface Props {
   templates: Template[];
@@ -22,6 +34,15 @@ class TemplateListContent extends React.Component<Props> {
   render() {
     const { templates, propsOnClick, displayComponents } = this.props;
     let rows: JSX.Element[] = [];
+
+    if (templates.length === 0) {
+      return (
+        <PlaceholderWrapper>
+          {NO_CARDS_PLACEHOLDER}
+        </PlaceholderWrapper>
+      )
+    }
+
     rows = templates.map((template: Template) => {
       let onClick = () => {
         if (propsOnClick && template.id) {
@@ -34,9 +55,12 @@ class TemplateListContent extends React.Component<Props> {
         }
       };
       if (!template || !template.instances || !template.instances[0] || !template.instances[0].lastEditedUser) {
-        return <div>Error loading templates</div>;
+        return <div>{TEMPLATE_LIST_ERROR}</div>;
       }
 
+
+      let stateEnum = template.instances[0].state && capitalizeString(template.instances[0].state.toString());
+      let stateStr = getState(stateEnum);
       return (
         <TemplateListBodyRow key={template.instances[0]!.lastEditedUser!} onClick={onClick} onKeyDown={onKeyDown} tabIndex={0}>
           {displayComponents.templateName && <TemplateListItem>{template.name}</TemplateListItem>}
@@ -46,7 +70,7 @@ class TemplateListContent extends React.Component<Props> {
               <TemplateStateWrapper>
                 <TemplateListStatusIndicator state={template.instances[0].state} />
                 <StatusWrapper>
-                  <Status>{template.instances[0].state && capitalizeString(template.instances[0].state.toString())}</Status>
+                  <Status>{stateStr}</Status>
                 </StatusWrapper>
               </TemplateStateWrapper>
             </TemplateListItem>
