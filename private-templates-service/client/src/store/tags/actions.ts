@@ -6,7 +6,7 @@ import { REQUEST_ALL_TAGS_GET,
          ADD_SELECTED_TAG, 
          TagsUpdateType,
          TagsAction } from "./types";
-import { Tags, FavoriteTagList } from "adaptive-templating-service-typescript-node";
+import { Tags } from "adaptive-templating-service-typescript-node";
 import { IncomingMessage } from "http";
 import { RootState } from "../rootReducer";
 import { initClientSDK } from "../../utils/TemplateUtil";

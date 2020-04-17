@@ -11,6 +11,7 @@ import { clearFilter } from '../../../store/filter/actions';
 import { clearSort } from '../../../store/sort/actions';
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { buildAdressBarURL } from "../../../utils/queryUtil";
+import { SEARCH, TEMPLATES } from "../../../assets/strings";
 
 
 const mapStateToProps = (state: RootState) => {
@@ -126,7 +127,7 @@ class SearchBar extends React.Component<Props, State> {
       return (
         <StyledSearchBox
           ariaLabel={STRINGS.SEARCHBAR_DESCRIPTION}
-          placeholder={"search" + (this.state.isMobile ? "" : " templates")}
+          placeholder={`${SEARCH}` + (this.state.isMobile ? "" : " " + `${TEMPLATES}`)}
           onSearch={this.onSearch} // will trigger when "Enter" is pressed
           onClear={this.onClear} // will trigger when "Esc" or "X" is pressed
           styles={placeHolderStyles}

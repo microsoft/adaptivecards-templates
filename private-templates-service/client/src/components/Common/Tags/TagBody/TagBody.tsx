@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { TagBodyContainer, TagSetFavouriteIcon } from "./styled";
 import { TagText, TagCloseIcon } from "../styled";
 import KeyCode from "../../../../globalKeyCodes";
-import { ARIA_ROLE_BUTTON } from "../../../../assets/strings";
+import { ARIA_ROLE_BUTTON, TAG_DESCRIPTION } from "../../../../assets/strings";
 import { COLORS } from "../../../../globalStyles";
 
 interface FavouriteIcon {
@@ -130,7 +130,7 @@ export class TagBody extends Component<Props, State> {
         onClick={this.onClick}
         tabIndex={this.props.ifModalState ? -1 : 0}
         onKeyDown={this.onKeyDownTag}
-        aria-label={`${tag} Tag`}
+        aria-label={`${tag} ${TAG_DESCRIPTION}`}
         aria-pressed={this.props.isSelected !== undefined ? this.state.isSelected : undefined}
         role={this.props.isSelected !== undefined ? ARIA_ROLE_BUTTON : undefined}
       >

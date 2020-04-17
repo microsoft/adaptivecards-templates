@@ -44,6 +44,7 @@ const mapStateToProps = (state: RootState) => {
     redirectUri: state.auth.redirectUri,
     appId: state.auth.appId,
     appInsightsInstrumentationKey: state.auth.appInsightsInstrumentationKey,
+    userInsightsInstrumentationKey: state.auth.userInsightsInstrumentationKey,
   };
 };
 
@@ -86,6 +87,23 @@ interface Props {
   appId?: string;
   redirectUri?: string;
   appInsightsInstrumentationKey?: string;
+  userInsightsInstrumentationKey?: string;
+}
+
+function telemetryHelper(appID: string, instrumentationKey: string) {
+  const browserHistory = createBrowserHistory({ basename: appID });
+  var reactPlugin = new ReactPlugin();
+  var appInsights = new ApplicationInsights({
+    config: {
+      instrumentationKey: instrumentationKey,
+      extensions: [reactPlugin],
+      extensionConfig: {
+        [reactPlugin.identifier]: { history: browserHistory }
+      }
+    }
+  });
+  appInsights.loadAppInsights();
+
 }
 
 class App extends Component<Props, State> {
@@ -113,18 +131,11 @@ class App extends Component<Props, State> {
       }
 
       if (this.props.appInsightsInstrumentationKey) {
-        const browserHistory = createBrowserHistory({ basename: this.props.appId });
-        var reactPlugin = new ReactPlugin();
-        var appInsights = new ApplicationInsights({
-          config: {
-            instrumentationKey: this.props.appInsightsInstrumentationKey,
-            extensions: [reactPlugin],
-            extensionConfig: {
-              [reactPlugin.identifier]: { history: browserHistory }
-            }
-          }
-        });
-        appInsights.loadAppInsights();
+        telemetryHelper(this.props.appId, this.props.appInsightsInstrumentationKey);
+      }
+
+      if (this.props.userInsightsInstrumentationKey) {
+        telemetryHelper(this.props.appId, this.props.userInsightsInstrumentationKey);
       }
     }
   }

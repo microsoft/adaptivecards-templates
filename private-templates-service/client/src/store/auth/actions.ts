@@ -113,12 +113,13 @@ function requestConfig(): GetConfigAction {
   }
 }
 
-function requestConfigSuccess(appId: string, redirectUri: string, appInsightsInstrumentationKey: string): GetConfigAction {
+function requestConfigSuccess(appId: string, redirectUri: string, appInsightsInstrumentationKey: string, userInsightsInstrumentationKey: string): GetConfigAction {
   return {
     type: GET_CONFIG_SUCCESS,
     redirectUri,
     appId,
-    appInsightsInstrumentationKey
+    appInsightsInstrumentationKey,
+    userInsightsInstrumentationKey,
   }
 }
 
@@ -197,7 +198,7 @@ export function getConfig() {
     dispatch(requestConfig());
     return api.configGet().then((response: any) => {
       if (response.response.statusCode && response.response.statusCode === 200) {
-        dispatch(requestConfigSuccess(response.body.appId, response.body.redirectUri, response.body.appInsightsInstrumentationKey));
+        dispatch(requestConfigSuccess(response.body.appId, response.body.redirectUri, response.body.appInsightsInstrumentationKey, response.body.userInsightsInstrumentationKey));
       } else {
         dispatch(requestConfigFailure());
       }

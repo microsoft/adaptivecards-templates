@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { getTemplate } from '../../store/currentTemplate/actions';
 
 import { Template } from 'adaptive-templating-service-typescript-node';
+import { PERMISSION_DENIED } from '../../assets/strings';
 
 interface MatchParams {
   uuid: string;
@@ -59,7 +60,7 @@ const requireShared = <P extends object>(Component: React.ComponentType<P>) => {
         <React.Fragment>
           {this.isShared() ?
             <Component {...this.props} /> :
-            <React.Fragment>You do not have permission to view this page.</React.Fragment>}
+            <React.Fragment>{PERMISSION_DENIED}</React.Fragment>}
         </React.Fragment>
       );
     }

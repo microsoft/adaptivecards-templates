@@ -57,3 +57,14 @@ export function populateTemplate(getState: () => RootState): PostedTemplate {
 export function getShareURL(templateID?: string, templateVersion?: string): string {
   return "/preview/" + templateID + "/" + templateVersion;
 }
+
+export function getVersionNumber(template: Template, currentVersion: string): string {
+  let templateInstance = getTemplateInstance(template, currentVersion);
+  if (templateInstance && templateInstance.state === PostedTemplate.StateEnum.Draft) {
+    return currentVersion;
+  }
+  else {
+    let currentVersionNumber = +currentVersion;
+    return (currentVersionNumber + 0.1).toString().slice(0, 3);
+  }
+}

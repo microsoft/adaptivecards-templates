@@ -1,6 +1,7 @@
 import React from 'react';
 import { TopRowWrapper, TitleWrapper, Title, HeaderWrapper, TemplateSourceWrapper, SourceWrapper, Source } from './styled';
 import { ActionButton, ScrollablePane } from 'office-ui-fabric-react';
+import { TEMPLATE_JSON, COPY_JSON, UNDEFINED } from '../../../assets/strings';
 
 interface TemplateSourceInfoProps {
   templateJSON?: object;
@@ -30,10 +31,10 @@ class TemplateSourceInfo extends React.Component<TemplateSourceInfoProps> {
         <HeaderWrapper>
           <TopRowWrapper>
             <TitleWrapper>
-              <Title>Template JSON</Title>
+              <Title>{TEMPLATE_JSON}</Title>
             </TitleWrapper>
             <ActionButton iconProps={{ iconName: 'Copy' }} onClick={this.onCopy}>
-              Copy JSON
+              {COPY_JSON}
             </ActionButton>
           </TopRowWrapper>
         </HeaderWrapper>
@@ -41,7 +42,7 @@ class TemplateSourceInfo extends React.Component<TemplateSourceInfoProps> {
           <ScrollablePane initialScrollPosition={0} scrollbarVisibility="always">
             <SourceWrapper>
               <Source>
-                {sourceJSON ? sourceJSON : 'undefined'}
+                {sourceJSON ? sourceJSON : `${UNDEFINED}`}
               </Source>
             </SourceWrapper>
           </ScrollablePane>

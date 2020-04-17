@@ -26,8 +26,11 @@ import {
   BottomRow,
   ButtonGroup,
   CancelButton,
+  CardWrapper,
   PublishButton,
 } from './styled';
+import { PUBLISH_CANCEL, PUBLISH_BUTTON } from '../../../assets/strings';
+import { getVersionNumber } from '../../../utils/TemplateUtil/TemplateUtil';
 
 interface Props {
   template: Template;
@@ -58,8 +61,15 @@ class PublishModal extends React.Component<Props> {
     this.props.openModal(ModalState.Share);
   }
 
+  getNewTemplateVersion = (): string => {
+    if (this.props.template && this.props.templateVersion) {
+      return getVersionNumber(this.props.template, this.props.templateVersion);
+    }
+    return "1.0";
+  }
+
   render() {
-    const { template, templateVersion } = this.props;
+    const { template } = this.props;
 
     return (
       <BackDrop>
@@ -67,15 +77,17 @@ class PublishModal extends React.Component<Props> {
           <Header>{STRINGS.PUBLISH_CARD}</Header>
           <Description>
             {STRINGS.PUBLISH_MODAL_DESC}
-            <DescriptionAccent>{template.name + " - v" + templateVersion}</DescriptionAccent>
+            <DescriptionAccent>{template.name + " - v" + this.getNewTemplateVersion()}</DescriptionAccent>
           </Description>
           <CenterPanelWrapper>
-            <AdaptiveCardPanel template={template} version={this.props.templateVersion} />
+            <CardWrapper>
+              <AdaptiveCardPanel template={template} version={this.props.templateVersion} />
+            </CardWrapper>
           </CenterPanelWrapper>
           <BottomRow>
             <ButtonGroup>
-              <CancelButton text="Cancel" onClick={this.props.closeModal} />
-              <PublishButton text="Publish" onClick={this.publish} />
+              <CancelButton text={PUBLISH_CANCEL} onClick={this.props.closeModal} />
+              <PublishButton text={PUBLISH_BUTTON} onClick={this.publish} />
             </ButtonGroup>
           </BottomRow>
         </Modal>

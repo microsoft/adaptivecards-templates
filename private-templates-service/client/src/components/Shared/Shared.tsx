@@ -17,6 +17,7 @@ import { getTemplate } from '../../store/currentTemplate/actions';
 import { ModalBackdrop, ModalWrapper, ACPanel, ACWrapper, DescriptorWrapper, CenteredSpinner } from './styled';
 
 import { Template, TemplateInstance } from 'adaptive-templating-service-typescript-node';
+import { CHECK_URL, SHARED_PREVIEW } from '../../assets/strings';
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -61,14 +62,14 @@ const Shared = (props: SharedComponentProps) => {
 
   useEffect(() => {
     if (template !== undefined) {
-      setPage(template.name || "Preview", "sharedPage");
+      setPage(template.name || SHARED_PREVIEW, "sharedPage");
     }
   }, [template, setPage])
 
   if (uuid) {
     props.getTemplate(uuid);
   } else {
-    return <React.Fragment>Error fetching template. Check the URL.</React.Fragment>;
+    return <React.Fragment>{CHECK_URL}</React.Fragment>;
   }
 
   if (props.template !== undefined && props.template.instances && props.template.instances.length > 0) {
