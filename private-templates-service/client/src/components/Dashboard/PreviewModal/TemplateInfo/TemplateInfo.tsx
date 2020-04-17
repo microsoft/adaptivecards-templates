@@ -95,7 +95,7 @@ const buttons = [
 const cards = [
   {
     header: 'Author',
-    iconName: 'Contact'
+    iconName: 'Contact',
   },
   {
     header: 'People',
@@ -176,14 +176,6 @@ class TemplateInfo extends React.Component<Props, State> {
     for (let instance of this.props.template.instances || []) {
       this.props.getOwnerName(instance.lastEditedUser!);
       this.props.getOwnerProfilePicture(instance.lastEditedUser!);
-    }
-  }
-
-  componentDidUpdate(prevProps: Props, prevState: State) {
-    let templateInstance = getTemplateInstance(this.props.template, this.state.version);
-    if (this.state.version !== prevState.version && templateInstance.lastEditedUser) {
-      this.props.getOwnerName(templateInstance.lastEditedUser!);
-      this.props.getOwnerProfilePicture(templateInstance.lastEditedUser!);
     }
   }
 
@@ -271,13 +263,12 @@ class TemplateInfo extends React.Component<Props, State> {
       const tempDate = new Date(templateInstance.updatedAt);
       timestampParsed = tempDate.toLocaleDateString() + " at " + tempDate.toLocaleTimeString(navigator.language, {hour: '2-digit', minute:'2-digit'});
     }
-    let oids: string[] = []
+    let oids = new Set();
     for (let instance of this.props.template.instances || []) {
-      if (instance.lastEditedUser && !oids.includes(instance.lastEditedUser)){
-        oids.push(instance.lastEditedUser!);
+      if (instance.lastEditedUser){
+        oids.add(instance.lastEditedUser!);
       }
     }
-
     const { history } = this.props;
     if (!history) {
       return (<div>Error loading page</div>)
@@ -324,10 +315,10 @@ class TemplateInfo extends React.Component<Props, State> {
                     <IconWrapper><OwnerAvatar sizeInPx={50} oID={templateInstance.lastEditedUser!} /></IconWrapper>)}
                   {val.header === "People" && ((isFetchingOwnerName || isFetchingOwnerPic) ?
                       <CenteredSpinner size={SpinnerSize.large} /> :
-                      <IconWrapper><OwnerList oids={oids}/></IconWrapper>)}
+                      <IconWrapper><OwnerList oids={Array.from(oids) as string[]}/></IconWrapper>)}
                   {val.header === "Usage" && <UsageNumber>{templateInstance.numHits}</UsageNumber>}
                   {(val.header === "Author") ? (this.props.owner && this.props.owner.displayNames) ? this.props.owner.displayNames[templateInstance.lastEditedUser!] : "" : 
-                    (val.header === "People")? oids.length + " " + val.bodyText : val.bodyText}
+                    (val.header === "People")? oids.size + " " + val.bodyText : val.bodyText}
                 </CardBody>
               </Card>
             ))}
