@@ -28,14 +28,18 @@ interface Props {
   tags?: string[];
   allowEdit?: boolean;
   allowAddTag?: boolean;
+  allowSetFavorite?: boolean;
   templateID?: string;
   template?: Template;
   updateTags?: (tags: string[]) => void;
   tagRemove?: (tag: string) => void;
   modalState?: ModalState;
   onClick?: (tag: string) => void;
+  onAddFavoriteTag?: (tag: string) => void;
+  onRemoveFavoriteTag?: (tag: string) => void;
   toggleStyle?: (isSelected: boolean, ref: any) => void;
   selectedTags?: string[];
+  favoriteTags?: string[];
 }
 
 interface State {
@@ -136,16 +140,22 @@ class Tags extends React.Component<Props, State>  {
     const {
       isAdding
     } = this.state;
+
     return (
       <React.Fragment>
         {tags && tags.map((tag: string) => (
           <TagBody setRef={(ref: HTMLDivElement) => this.tagRefs[tag] = ref}
-            tag={tag} tagRemove={tagRemove} onAnimationEnd={this.onAnimationEnd}
-            key={tag} onClick={onClick} onKeyDownRemoveTag={this.onKeyDownRemoveTag}
-            ifModalState={modalState ? true : false}
-            allowEdit={allowEdit}
-            toggleStyle={toggleStyle}
-            isSelected={this.props.selectedTags ? (this.props.selectedTags.includes(tag) ? true : false) : undefined}
+                  tag={tag} tagRemove={tagRemove} onAnimationEnd={this.onAnimationEnd} 
+                  key={tag} onClick={onClick} onKeyDownRemoveTag={this.onKeyDownRemoveTag} 
+                  ifModalState={modalState? true : false}
+                  allowEdit={allowEdit}
+                  toggleStyle={toggleStyle}
+                  isSelected={this.props.selectedTags ? (this.props.selectedTags.includes(tag) ? true : false) : undefined} 
+                  isFavorite={this.props.favoriteTags ? (this.props.favoriteTags.includes(tag) ? true : false) : undefined}
+                  allowSetFavorite={this.props.allowSetFavorite}
+                  onAddFavoriteTag={this.props.onAddFavoriteTag}
+                  onRemoveFavoriteTag={this.props.onRemoveFavoriteTag}
+
           />
         ))}
         {allowAddTag && <AddTagWrapper onSubmit={this.submitNewTag} open={isAdding} >

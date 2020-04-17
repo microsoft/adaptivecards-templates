@@ -212,7 +212,7 @@ export class Config {
 }
 
 export class FavoriteTagList {
-  'favorite'?: TagList;
+  'favorite'?: Array<string>;
 
   static discriminator: string | undefined = undefined;
 
@@ -220,7 +220,7 @@ export class FavoriteTagList {
     {
       "name": "favorite",
       "baseName": "favorite",
-      "type": "TagList"
+      "type": "Array<string>"
     }];
 
   static getAttributeTypeMap() {
@@ -303,7 +303,7 @@ export namespace PostedTemplate {
 export class Recent {
   'recentlyViewed'?: TemplateList;
   'recentlyEdited'?: TemplateList;
-  'recentlyUsed'?: TagList;
+  'recentlyUsed'?: Array<string>;
 
   static discriminator: string | undefined = undefined;
 
@@ -321,7 +321,7 @@ export class Recent {
     {
       "name": "recentlyUsed",
       "baseName": "recentlyUsed",
-      "type": "TagList"
+      "type": "Array<string>"
     }];
 
   static getAttributeTypeMap() {
@@ -343,29 +343,6 @@ export class ResourceCreated {
 
   static getAttributeTypeMap() {
     return ResourceCreated.attributeTypeMap;
-  }
-}
-
-export class TagList {
-  'ownedTags'?: Array<string>;
-  'allTags'?: Array<string>;
-
-  static discriminator: string | undefined = undefined;
-
-  static attributeTypeMap: Array<{ name: string, baseName: string, type: string }> = [
-    {
-      "name": "ownedTags",
-      "baseName": "ownedTags",
-      "type": "Array<string>"
-    },
-    {
-      "name": "allTags",
-      "baseName": "allTags",
-      "type": "Array<string>"
-    }];
-
-  static getAttributeTypeMap() {
-    return TagList.attributeTypeMap;
   }
 }
 
@@ -806,7 +783,6 @@ let typeMap: { [index: string]: any } = {
   "PostedTemplate": PostedTemplate,
   "Recent": Recent,
   "ResourceCreated": ResourceCreated,
-  "TagList": TagList,
   "Tags": Tags,
   "Template": Template,
   "TemplateInfo": TemplateInfo,
@@ -957,167 +933,7 @@ export class ConfigApi {
         if (error) {
           reject(error);
         } else {
-
           body = ObjectSerializer.deserialize(body, "Config");
-          if (response.statusCode && response.statusCode >= 200 && response.statusCode <= 299) {
-            resolve({ response: response, body: body });
-          } else {
-            reject({ response: response, body: body });
-          }
-        }
-      });
-    });
-  }
-}
-export enum DefaultApiApiKeys {
-  bearer_auth,
-}
-
-export class DefaultApi {
-  protected _basePath = defaultBasePath;
-  protected defaultHeaders: any = {};
-  protected _useQuerystring: boolean = false;
-
-  protected authentications = {
-    'default': <Authentication>new VoidAuth(),
-    'bearer_auth': new ApiKeyAuth('header', 'Authorization'),
-  }
-
-  constructor(basePath?: string);
-  constructor(basePathOrUsername: string, password?: string, basePath?: string) {
-    if (password) {
-      if (basePath) {
-        this.basePath = basePath;
-      }
-    } else {
-      if (basePathOrUsername) {
-        this.basePath = basePathOrUsername
-      }
-    }
-  }
-
-  set useQuerystring(value: boolean) {
-    this._useQuerystring = value;
-  }
-
-  set basePath(basePath: string) {
-    this._basePath = basePath;
-  }
-
-  get basePath() {
-    return this._basePath;
-  }
-
-  public setDefaultAuthentication(auth: Authentication) {
-    this.authentications.default = auth;
-  }
-
-  public setApiKey(key: DefaultApiApiKeys, value: string) {
-    (this.authentications as any)[DefaultApiApiKeys[key]].apiKey = value;
-  }
-  /**
-   * 
-   * @summary Unfavorite tags
-   * @param body list of favorite tags
-   * @param {*} [options] Override http request options.
-   */
-  public unFavoriteTags(body: FavoriteTagList, options: any = {}): Promise<{ response: http.IncomingMessage; body?: any; }> {
-    const localVarPath = this.basePath + '/template/tag';
-    let localVarQueryParameters: any = {};
-    let localVarHeaderParams: any = (<any>Object).assign({}, this.defaultHeaders);
-    let localVarFormParams: any = {};
-
-    // verify required parameter 'body' is not null or undefined
-    if (body === null || body === undefined) {
-      throw new Error('Required parameter body was null or undefined when calling unFavoriteTags.');
-    }
-
-    (<any>Object).assign(localVarHeaderParams, options.headers);
-
-    let localVarUseFormData = false;
-
-    let localVarRequestOptions: localVarRequest.Options = {
-      method: 'DELETE',
-      qs: localVarQueryParameters,
-      headers: localVarHeaderParams,
-      uri: localVarPath,
-      useQuerystring: this._useQuerystring,
-      json: true,
-      body: ObjectSerializer.serialize(body, "FavoriteTagList")
-    };
-
-    this.authentications.bearer_auth.applyToRequest(localVarRequestOptions);
-
-    this.authentications.default.applyToRequest(localVarRequestOptions);
-
-    if (Object.keys(localVarFormParams).length) {
-      if (localVarUseFormData) {
-        (<any>localVarRequestOptions).formData = localVarFormParams;
-      } else {
-        localVarRequestOptions.form = localVarFormParams;
-      }
-    }
-    return new Promise<{ response: http.IncomingMessage; body?: any; }>((resolve, reject) => {
-      localVarRequest(localVarRequestOptions, (error, response, body) => {
-        if (error) {
-          reject(error);
-        } else {
-          if (response.statusCode && response.statusCode >= 200 && response.statusCode <= 299) {
-            resolve({ response: response, body: body });
-          } else {
-            reject({ response: response, body: body });
-          }
-        }
-      });
-    });
-  }
-  /**
-   * 
-   * @summary Favorite tags
-   * @param body list of favorite tags
-   * @param {*} [options] Override http request options.
-   */
-  public updateTags(body: FavoriteTagList, options: any = {}): Promise<{ response: http.IncomingMessage; body?: any; }> {
-    const localVarPath = this.basePath + '/template/tag';
-    let localVarQueryParameters: any = {};
-    let localVarHeaderParams: any = (<any>Object).assign({}, this.defaultHeaders);
-    let localVarFormParams: any = {};
-
-    // verify required parameter 'body' is not null or undefined
-    if (body === null || body === undefined) {
-      throw new Error('Required parameter body was null or undefined when calling updateTags.');
-    }
-
-    (<any>Object).assign(localVarHeaderParams, options.headers);
-
-    let localVarUseFormData = false;
-
-    let localVarRequestOptions: localVarRequest.Options = {
-      method: 'POST',
-      qs: localVarQueryParameters,
-      headers: localVarHeaderParams,
-      uri: localVarPath,
-      useQuerystring: this._useQuerystring,
-      json: true,
-      body: ObjectSerializer.serialize(body, "FavoriteTagList")
-    };
-
-    this.authentications.bearer_auth.applyToRequest(localVarRequestOptions);
-
-    this.authentications.default.applyToRequest(localVarRequestOptions);
-
-    if (Object.keys(localVarFormParams).length) {
-      if (localVarUseFormData) {
-        (<any>localVarRequestOptions).formData = localVarFormParams;
-      } else {
-        localVarRequestOptions.form = localVarFormParams;
-      }
-    }
-    return new Promise<{ response: http.IncomingMessage; body?: any; }>((resolve, reject) => {
-      localVarRequest(localVarRequestOptions, (error, response, body) => {
-        if (error) {
-          reject(error);
-        } else {
           if (response.statusCode && response.statusCode >= 200 && response.statusCode <= 299) {
             resolve({ response: response, body: body });
           } else {
@@ -1174,12 +990,11 @@ export class TemplateApi {
   public setApiKey(key: TemplateApiApiKeys, value: string) {
     (this.authentications as any)[TemplateApiApiKeys[key]].apiKey = value;
   }
-
   /**
- *
- * @summary Get list of owned, favorite, and all tags
- * @param {*} [options] Override http request options.
- */
+   * 
+   * @summary Get list of owned, favorite, and all tags
+   * @param {*} [options] Override http request options.
+   */
   public allTags(options: any = {}): Promise<{ response: http.IncomingMessage; body: Tags; }> {
     const localVarPath = this.basePath + '/template/tag';
     let localVarQueryParameters: any = {};
@@ -1225,7 +1040,6 @@ export class TemplateApi {
       });
     });
   }
-
   /**
    * Returns the latest version of all public templates and owned templates
    * @summary Find all templates
@@ -1268,6 +1082,7 @@ export class TemplateApi {
     if (sortBy !== undefined) {
       localVarQueryParameters['sortBy'] = ObjectSerializer.serialize(sortBy, "'alphabetical' | 'dateCreated' | 'dateUpdated'");
     }
+
     if (sortOrder !== undefined) {
       localVarQueryParameters['sortOrder'] = ObjectSerializer.serialize(sortOrder, "'ascending' | 'descending'");
     }
@@ -1315,7 +1130,6 @@ export class TemplateApi {
       });
     });
   }
-
   /**
    * 
    * @summary Batch delete template version operation
@@ -1801,6 +1615,118 @@ export class TemplateApi {
           reject(error);
         } else {
           body = ObjectSerializer.deserialize(body, "TemplatePreview");
+          if (response.statusCode && response.statusCode >= 200 && response.statusCode <= 299) {
+            resolve({ response: response, body: body });
+          } else {
+            reject({ response: response, body: body });
+          }
+        }
+      });
+    });
+  }
+  /**
+   * 
+   * @summary Unfavorite tags
+   * @param favorite list of favorite tags
+   * @param {*} [options] Override http request options.
+   */
+  public unFavoriteTags(favorite: FavoriteTagList, options: any = {}): Promise<{ response: http.IncomingMessage; body?: any; }> {
+    const localVarPath = this.basePath + '/template/tag';
+    let localVarQueryParameters: any = {};
+    let localVarHeaderParams: any = (<any>Object).assign({}, this.defaultHeaders);
+    let localVarFormParams: any = {};
+
+    // verify required parameter 'favorite' is not null or undefined
+    if (favorite === null || favorite === undefined) {
+      throw new Error('Required parameter favorite was null or undefined when calling unFavoriteTags.');
+    }
+
+    (<any>Object).assign(localVarHeaderParams, options.headers);
+
+    let localVarUseFormData = false;
+
+    let localVarRequestOptions: localVarRequest.Options = {
+      method: 'DELETE',
+      qs: localVarQueryParameters,
+      headers: localVarHeaderParams,
+      uri: localVarPath,
+      useQuerystring: this._useQuerystring,
+      json: true,
+      body: ObjectSerializer.serialize(favorite, "FavoriteTagList")
+    };
+
+    this.authentications.bearer_auth.applyToRequest(localVarRequestOptions);
+
+    this.authentications.default.applyToRequest(localVarRequestOptions);
+
+    if (Object.keys(localVarFormParams).length) {
+      if (localVarUseFormData) {
+        (<any>localVarRequestOptions).formData = localVarFormParams;
+      } else {
+        localVarRequestOptions.form = localVarFormParams;
+      }
+    }
+    return new Promise<{ response: http.IncomingMessage; body?: any; }>((resolve, reject) => {
+      localVarRequest(localVarRequestOptions, (error, response, body) => {
+        if (error) {
+          reject(error);
+        } else {
+          if (response.statusCode && response.statusCode >= 200 && response.statusCode <= 299) {
+            resolve({ response: response, body: body });
+          } else {
+            reject({ response: response, body: body });
+          }
+        }
+      });
+    });
+  }
+  /**
+   * 
+   * @summary Favorite tags
+   * @param favorite list of favorite tags
+   * @param {*} [options] Override http request options.
+   */
+  public updateTags(favorite: FavoriteTagList, options: any = {}): Promise<{ response: http.IncomingMessage; body?: any; }> {
+    const localVarPath = this.basePath + '/template/tag';
+    let localVarQueryParameters: any = {};
+    let localVarHeaderParams: any = (<any>Object).assign({}, this.defaultHeaders);
+    let localVarFormParams: any = {};
+
+    // verify required parameter 'favorite' is not null or undefined
+    if (favorite === null || favorite === undefined) {
+      throw new Error('Required parameter favorite was null or undefined when calling updateTags.');
+    }
+
+    (<any>Object).assign(localVarHeaderParams, options.headers);
+
+    let localVarUseFormData = false;
+
+    let localVarRequestOptions: localVarRequest.Options = {
+      method: 'POST',
+      qs: localVarQueryParameters,
+      headers: localVarHeaderParams,
+      uri: localVarPath,
+      useQuerystring: this._useQuerystring,
+      json: true,
+      body: ObjectSerializer.serialize(favorite, "FavoriteTagList")
+    };
+
+    this.authentications.bearer_auth.applyToRequest(localVarRequestOptions);
+
+    this.authentications.default.applyToRequest(localVarRequestOptions);
+
+    if (Object.keys(localVarFormParams).length) {
+      if (localVarUseFormData) {
+        (<any>localVarRequestOptions).formData = localVarFormParams;
+      } else {
+        localVarRequestOptions.form = localVarFormParams;
+      }
+    }
+    return new Promise<{ response: http.IncomingMessage; body?: any; }>((resolve, reject) => {
+      localVarRequest(localVarRequestOptions, (error, response, body) => {
+        if (error) {
+          reject(error);
+        } else {
           if (response.statusCode && response.statusCode >= 200 && response.statusCode <= 299) {
             resolve({ response: response, body: body });
           } else {

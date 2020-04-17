@@ -7,9 +7,14 @@ import { ALL_TAGS } from "../../../../assets/strings";
 interface TagListProps {
   tags: string[];
   allowEdit: boolean;
+  allowSetFavorite?: boolean;
   onClick?: (tag: string) => void;
+  onAddFavoriteTag?: (tag: string) => void;
+  onRemoveFavoriteTag?: (tag: string) => void;
+  direction?: ScrollDirection;
   toggleStyle?: (isSelected: boolean, ref: any) => void;
   selectedTags?: string[];
+  favoriteTags?: string[];
 }
 class TagList extends Component<TagListProps> {
   scroller: Scroller;
@@ -28,10 +33,28 @@ class TagList extends Component<TagListProps> {
       this.ref.current.removeEventListener("wheel", this.scroller.scroll);
     }
   }
+  
+  getTagsFlexDirection = () => {
+    if(this.props.direction && this.props.direction === ScrollDirection.Horizontal) {
+      return "row";
+    }
+    return "column";
+    
+  }
   render() {
+
+    const flexDirection = this.getTagsFlexDirection();
     return (
-      <TagsContainer ref={this.ref} aria-label={ALL_TAGS}>
-        <Tags tags={this.props.tags} selectedTags={this.props.selectedTags} allowEdit={this.props.allowEdit} onClick={this.props.onClick} toggleStyle={this.props.toggleStyle} />
+      <TagsContainer ref={this.ref} style={{flexDirection: flexDirection}} aria-label={ALL_TAGS}>
+        <Tags tags={this.props.tags} 
+              selectedTags={this.props.selectedTags} 
+              favoriteTags={this.props.favoriteTags}
+              allowEdit={this.props.allowEdit} 
+              onClick={this.props.onClick} 
+              toggleStyle={this.props.toggleStyle} 
+              allowSetFavorite={this.props.allowSetFavorite}
+              onAddFavoriteTag={this.props.onAddFavoriteTag}
+              onRemoveFavoriteTag={this.props.onRemoveFavoriteTag} />
       </TagsContainer>
     );
   }

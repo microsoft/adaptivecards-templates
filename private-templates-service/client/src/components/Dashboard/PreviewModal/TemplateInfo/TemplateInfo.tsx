@@ -4,6 +4,8 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 import { RootState } from '../../../../store/rootReducer';
 import { openModal, closeModal } from '../../../../store/page/actions';
+import { addFavoriteTags, removeFavoriteTags, getAllTags } from '../../../../store/tags/actions';
+import { TagsState } from '../../../../store/tags/types';
 import { ModalState } from '../../../../store/page/types';
 import { updateCurrentTemplateVersion, updateTemplateTags } from '../../../../store/currentTemplate/actions';
 
@@ -132,7 +134,11 @@ interface Props extends RouteComponentProps {
   isFetchingOwnerPic: boolean;
   getOwnerName: (oID: string) => void;
   getOwnerProfilePicture: (oID: string) => void;
+  onAddFavoriteTag: (tag: string) => void;
+  onRemoveFavoriteTag: (tag: string) => void;
   owner?: OwnerType;
+  allTags: TagsState;
+  getTags: () => void;
 }
 
 const mapStateToProps = (state: RootState) => {
@@ -142,7 +148,8 @@ const mapStateToProps = (state: RootState) => {
     isFetchingTags: state.currentTemplate.isFetchingTags,
     owner: state.templateOwner.owners,
     isFetchingOwnerName: state.templateOwner.isFetchingName,
-    isFetchingOwnerPic: state.templateOwner.isFetchingPicture
+    isFetchingOwnerPic: state.templateOwner.isFetchingPicture,
+    allTags: state.tags
   };
 };
 
@@ -165,6 +172,15 @@ const mapDispatchToProps = (dispatch: any) => {
     },
     getOwnerProfilePicture: (oid: string) => {
       dispatch(getOwnerProfilePicture(oid));
+    },
+    onAddFavoriteTag: (tag: string) => {
+      dispatch(addFavoriteTags(tag))
+    },
+    onRemoveFavoriteTag: (tag: string) => {
+      dispatch(removeFavoriteTags(tag))
+    },
+    getTags: () => {
+      dispatch(getAllTags());
     }
   }
 };
@@ -189,6 +205,7 @@ class TemplateInfo extends React.Component<Props, State> {
       this.props.getOwnerName(instance.lastEditedUser!);
       this.props.getOwnerProfilePicture(instance.lastEditedUser!);
     }
+    this.props.getTags();
   }
 
   componentDidUpdate(prevProps: Props, prevState: State) {
@@ -273,7 +290,7 @@ class TemplateInfo extends React.Component<Props, State> {
       tags,
       instances,
     } = this.props.template;
-    const { isFetchingTags, isFetchingOwnerName, isFetchingOwnerPic } = this.props;
+    const { isFetchingTags, isFetchingOwnerName, isFetchingOwnerPic, allTags } = this.props;
 
     let templateInstance = getTemplateInstance(this.props.template, this.state.version);
     let templateState = templateInstance.state || PostedTemplate.StateEnum.Draft;
@@ -293,8 +310,12 @@ class TemplateInfo extends React.Component<Props, State> {
     if (!history) {
       return (<div>{ERROR_LOADING_PAGE}</div>)
     }
-
+    let favoriteTags: string[] = [];
+    if (!allTags.isFetching && allTags.allTags && allTags?.allTags.favoriteTags) {
+      favoriteTags = allTags.allTags.favoriteTags;
+    }
     let tagCardID = "Card tags";
+
     return (
       <OuterWrapper>
         <HeaderWrapper>
@@ -350,7 +371,7 @@ class TemplateInfo extends React.Component<Props, State> {
                 <TagsWrapper>
                   {isFetchingTags ?
                     <CenteredSpinner size={SpinnerSize.large} />
-                    : <Tags updateTags={this.saveTags} tagRemove={this.tagRemove} tags={tags} allowAddTag={true} allowEdit={true} />
+                    : <Tags updateTags={this.saveTags} allowSetFavorite={true} favoriteTags={favoriteTags} onAddFavoriteTag={this.props.onAddFavoriteTag} onRemoveFavoriteTag={this.props.onRemoveFavoriteTag} tagRemove={this.tagRemove} tags={tags} allowAddTag={true} allowEdit={true} />
                   }
                 </TagsWrapper>
               </CardBody>
