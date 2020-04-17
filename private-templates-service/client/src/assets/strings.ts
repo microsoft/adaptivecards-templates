@@ -78,7 +78,6 @@ export const VERSION_LIST_DROPDOWN = "Version List Dropdown";
 export const TEMPLATE_INFO_UPDATED = "Updated";
 export const USAGE = "Usage";
 export const REQUESTS = "Requests";
-export const AUTHOR = "Author";
 export const TEMPLATE_INFO_TAGS = "Tags";
 export const TEMPLATE_AUTHOR = "Author";
 export const PEOPLE = "People";
