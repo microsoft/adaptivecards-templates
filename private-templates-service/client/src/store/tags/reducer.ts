@@ -1,9 +1,9 @@
 import { REQUEST_ALL_TAGS_GET, REQUEST_ALL_TAGS_GET_SUCCESS, REQUEST_ALL_TAGS_GET_FAIL, CLEAR_SELECTED_TAGS, REMOVE_SELECTED_TAG, ADD_SELECTED_TAG, TagsAction, TagsState } from "./types";
-import { TagList } from "adaptive-templating-service-typescript-node";
+import { Tags } from "adaptive-templating-service-typescript-node";
 
 const initialState: TagsState = {
   isFetching: false,
-  allTags: new TagList(),
+  allTags: new Tags(),
   selectedTags: [],
 };
 
@@ -24,7 +24,7 @@ export function tagsReducer(state = initialState, action: TagsAction): TagsState
       return {
         ...state,
         isFetching: false,
-        allTags: new TagList(),
+        allTags: new Tags()
       };
     case ADD_SELECTED_TAG:
       return {

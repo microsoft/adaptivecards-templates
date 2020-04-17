@@ -46,6 +46,7 @@ export const TagsContainer = styled.section`
   justify-content: flex-start;
   width: 300px;
   padding-left: 30px;
+  margin-top:5px;
 `;
 
 export const CenteredSpinner = styled(Spinner)`

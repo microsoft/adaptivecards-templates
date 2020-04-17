@@ -4,6 +4,8 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 import { RootState } from '../../../../store/rootReducer';
 import { openModal, closeModal } from '../../../../store/page/actions';
+import { addFavoriteTags, removeFavoriteTags, getAllTags } from '../../../../store/tags/actions';
+import { TagsState } from '../../../../store/tags/types';
 import { ModalState } from '../../../../store/page/types';
 import { updateCurrentTemplateVersion, updateTemplateTags } from '../../../../store/currentTemplate/actions';
 
@@ -40,7 +42,18 @@ import {
   SHARE_BUTTON_TOOLTIP,
   PUBLISH_BUTTON_TOOLTIP,
   UNPUBLISH_BUTTON_TOOLTIP,
-  TAGS
+  TAGS,
+  USAGE,
+  OWNER,
+  TEMPLATE_INFO_VERSION,
+  ERROR_LOADING_PAGE,
+  VERSION_LIST_DROPDOWN,
+  TEMPLATE_INFO_UPDATED,
+  REQUESTS,
+  TEMPLATE_AUTHOR,
+  PEOPLE,
+  TEMPLATE_AT,
+  COLLABORATORS,
 } from "../../../../assets/strings";
 import { TooltipContainer } from '../styled';
 import {
@@ -65,6 +78,7 @@ import {
   DropdownStyles,
   CenteredSpinner,
 } from './styled';
+import { getState } from '../../../../utils/stringUtils';
 
 const buttons = [
   {
@@ -94,16 +108,16 @@ const buttons = [
 // TODO: Dynamically show info. Backend not ready
 const cards = [
   {
-    header: 'Author',
+    header: TEMPLATE_AUTHOR,
     iconName: 'Contact'
   },
   {
-    header: 'People',
-    bodyText: 'Collaborators'
+    header: PEOPLE,
+    bodyText: COLLABORATORS
   },
   {
-    header: 'Usage',
-    bodyText: 'Requests'
+    header: USAGE,
+    bodyText: REQUESTS
   }
 ];
 
@@ -120,7 +134,11 @@ interface Props extends RouteComponentProps {
   isFetchingOwnerPic: boolean;
   getOwnerName: (oID: string) => void;
   getOwnerProfilePicture: (oID: string) => void;
+  onAddFavoriteTag: (tag: string) => void;
+  onRemoveFavoriteTag: (tag: string) => void;
   owner?: OwnerType;
+  allTags: TagsState;
+  getTags: () => void;
 }
 
 const mapStateToProps = (state: RootState) => {
@@ -130,7 +148,8 @@ const mapStateToProps = (state: RootState) => {
     isFetchingTags: state.currentTemplate.isFetchingTags,
     owner: state.templateOwner.owners,
     isFetchingOwnerName: state.templateOwner.isFetchingName,
-    isFetchingOwnerPic: state.templateOwner.isFetchingPicture
+    isFetchingOwnerPic: state.templateOwner.isFetchingPicture,
+    allTags: state.tags
   };
 };
 
@@ -153,6 +172,15 @@ const mapDispatchToProps = (dispatch: any) => {
     },
     getOwnerProfilePicture: (oid: string) => {
       dispatch(getOwnerProfilePicture(oid));
+    },
+    onAddFavoriteTag: (tag: string) => {
+      dispatch(addFavoriteTags(tag))
+    },
+    onRemoveFavoriteTag: (tag: string) => {
+      dispatch(removeFavoriteTags(tag))
+    },
+    getTags: () => {
+      dispatch(getAllTags());
     }
   }
 };
@@ -177,6 +205,7 @@ class TemplateInfo extends React.Component<Props, State> {
       this.props.getOwnerName(instance.lastEditedUser!);
       this.props.getOwnerProfilePicture(instance.lastEditedUser!);
     }
+    this.props.getTags();
   }
 
   componentDidUpdate(prevProps: Props, prevState: State) {
@@ -192,7 +221,7 @@ class TemplateInfo extends React.Component<Props, State> {
     let options: IDropdownOption[] = [];
     for (let instance of instances) {
       if (!instance.version) continue;
-      options.push({ key: instance.version, text: `Version ${instance.version}` });
+      options.push({ key: instance.version, text: `${TEMPLATE_INFO_VERSION} ${instance.version}` });
     }
     return options;
   }
@@ -222,7 +251,7 @@ class TemplateInfo extends React.Component<Props, State> {
 
   tooltipButton = (val: any, templateState: PostedTemplate.StateEnum) => {
     const tooltipID = val.text.replace(" ", "_").trim();
-    if (val.text === "Publish") {
+    if (val.text === PUBLISH) {
       return (
         <TooltipContainer>
           <TooltipHost id={tooltipID} content={templateState === PostedTemplate.StateEnum.Live ? val.altTooltip : val.tooltip}>
@@ -254,7 +283,6 @@ class TemplateInfo extends React.Component<Props, State> {
         </TooltipContainer>
       );
     }
-
   }
 
   render() {
@@ -262,28 +290,32 @@ class TemplateInfo extends React.Component<Props, State> {
       tags,
       instances,
     } = this.props.template;
-    const { isFetchingTags, isFetchingOwnerName, isFetchingOwnerPic } = this.props;
+    const { isFetchingTags, isFetchingOwnerName, isFetchingOwnerPic, allTags } = this.props;
 
     let templateInstance = getTemplateInstance(this.props.template, this.state.version);
     let templateState = templateInstance.state || PostedTemplate.StateEnum.Draft;
     let timestampParsed = "";
     if (templateInstance.updatedAt) {
       const tempDate = new Date(templateInstance.updatedAt);
-      timestampParsed = tempDate.toLocaleDateString() + " at " + tempDate.toLocaleTimeString(navigator.language, {hour: '2-digit', minute:'2-digit'});
+      timestampParsed = tempDate.toLocaleDateString() + TEMPLATE_AT + tempDate.toLocaleTimeString(navigator.language, { hour: '2-digit', minute: '2-digit' });
     }
     let oids: string[] = []
     for (let instance of this.props.template.instances || []) {
-      if (instance.lastEditedUser && !oids.includes(instance.lastEditedUser)){
+      if (instance.lastEditedUser && !oids.includes(instance.lastEditedUser)) {
         oids.push(instance.lastEditedUser!);
       }
     }
 
     const { history } = this.props;
     if (!history) {
-      return (<div>Error loading page</div>)
+      return (<div>{ERROR_LOADING_PAGE}</div>)
     }
-
+    let favoriteTags: string[] = [];
+    if (!allTags.isFetching && allTags.allTags && allTags?.allTags.favoriteTags) {
+      favoriteTags = allTags.allTags.favoriteTags;
+    }
     let tagCardID = "Card tags";
+
     return (
       <OuterWrapper>
         <HeaderWrapper>
@@ -291,20 +323,20 @@ class TemplateInfo extends React.Component<Props, State> {
             <TitleWrapper>
               <Title>
                 <StyledVersionDropdown
-                  placeholder={`Version ${this.state.version}`}
+                  placeholder={`${TEMPLATE_INFO_VERSION} ${this.state.version}`}
                   options={this.versionList(instances)}
                   onChange={this.onVersionChange}
                   theme={THEME.LIGHT}
                   styles={DropdownStyles}
-                  ariaLabel="Version List Dropdown"
+                  ariaLabel={VERSION_LIST_DROPDOWN}
                   tabIndex={this.props.modalState ? -1 : 0}
                 />
               </Title>
               <StatusIndicator state={templateState} />
-              <Status>{PostedTemplate.StateEnum[templateState]}</Status>
+              <Status>{getState(PostedTemplate.StateEnum[templateState])}</Status>
             </TitleWrapper>
             <TimeStamp>
-              Updated {timestampParsed}
+              {TEMPLATE_INFO_UPDATED} {timestampParsed}
             </TimeStamp>
           </TopRowWrapper>
           <ActionsWrapper>
@@ -322,12 +354,12 @@ class TemplateInfo extends React.Component<Props, State> {
                   {val.iconName && ((isFetchingOwnerName || isFetchingOwnerPic) ?
                     <CenteredSpinner size={SpinnerSize.large} /> :
                     <IconWrapper><OwnerAvatar sizeInPx={50} oID={templateInstance.lastEditedUser!} /></IconWrapper>)}
-                  {val.header === "People" && ((isFetchingOwnerName || isFetchingOwnerPic) ?
-                      <CenteredSpinner size={SpinnerSize.large} /> :
-                      <IconWrapper><OwnerList oids={oids}/></IconWrapper>)}
-                  {val.header === "Usage" && <UsageNumber>{templateInstance.numHits}</UsageNumber>}
-                  {(val.header === "Author") ? (this.props.owner && this.props.owner.displayNames) ? this.props.owner.displayNames[templateInstance.lastEditedUser!] : "" : 
-                    (val.header === "People")? oids.length + " " + val.bodyText : val.bodyText}
+                  {val.header === PEOPLE && ((isFetchingOwnerName || isFetchingOwnerPic) ?
+                    <CenteredSpinner size={SpinnerSize.large} /> :
+                    <IconWrapper><OwnerList oids={oids} /></IconWrapper>)}
+                  {val.header === USAGE && <UsageNumber>{templateInstance.numHits}</UsageNumber>}
+                  {(val.header === TEMPLATE_AUTHOR) ? (this.props.owner && this.props.owner.displayNames) ? this.props.owner.displayNames[templateInstance.lastEditedUser!] : "" :
+                    (val.header === PEOPLE) ? oids.length + " " + val.bodyText : val.bodyText}
                 </CardBody>
               </Card>
             ))}
@@ -339,7 +371,7 @@ class TemplateInfo extends React.Component<Props, State> {
                 <TagsWrapper>
                   {isFetchingTags ?
                     <CenteredSpinner size={SpinnerSize.large} />
-                    : <Tags updateTags={this.saveTags} tagRemove={this.tagRemove} tags={tags} allowAddTag={true} allowEdit={true} />
+                    : <Tags updateTags={this.saveTags} allowSetFavorite={true} favoriteTags={favoriteTags} onAddFavoriteTag={this.props.onAddFavoriteTag} onRemoveFavoriteTag={this.props.onRemoveFavoriteTag} tagRemove={this.tagRemove} tags={tags} allowAddTag={true} allowEdit={true} />
                   }
                 </TagsWrapper>
               </CardBody>

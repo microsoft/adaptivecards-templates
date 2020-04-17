@@ -25,6 +25,8 @@ import ShareModal from '../Common/ShareModal';
 import { Template } from 'adaptive-templating-service-typescript-node';
 import ShareSuccessModal from '../Common/ShareModal/ShareSuccessModal';
 
+import { DESIGNER_PUBLISH, DESIGNER_SAVE } from '../../assets/strings';
+
 const mapStateToProps = (state: RootState) => {
   return {
     template: state.currentTemplate.template,
@@ -104,11 +106,11 @@ class Designer extends React.Component<DesignerProps> {
     }
     designer = initDesigner();
 
-    let publishButton = new ACDesigner.ToolbarButton("publishButton", "Publish", "", (sender) => (this.props.openModal(ModalState.SaveAndPublish)));
+    let publishButton = new ACDesigner.ToolbarButton("publishButton", DESIGNER_PUBLISH, "", (sender) => (this.props.openModal(ModalState.SaveAndPublish)));
     publishButton.separator = true;
     designer.toolbar.insertElementAfter(publishButton, ACDesigner.CardDesigner.ToolbarCommands.TogglePreview);
 
-    let saveButton = new ACDesigner.ToolbarButton("saveButton", "Save", "", (sender) => (onSave(designer, this.props)));
+    let saveButton = new ACDesigner.ToolbarButton("saveButton", DESIGNER_SAVE, "", (sender) => (onSave(designer, this.props)));
     saveButton.separator = true;
     designer.toolbar.insertElementAfter(saveButton, ACDesigner.CardDesigner.ToolbarCommands.TogglePreview);
   }

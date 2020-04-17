@@ -4,7 +4,7 @@ import { Template } from "adaptive-templating-service-typescript-node";
 
 import { ListViewComponents } from "./TemplateList";
 import { getDateString } from "../../../utils/versionUtils";
-import { capitalizeString } from "../../../utils/stringUtils";
+import { capitalizeString, getState } from "../../../utils/stringUtils";
 import { Status } from "../PreviewModal/TemplateInfo/styled";
 import { TemplateStateWrapper } from "../../AdaptiveCardPanel/styled";
 import OwnerInfo from "./OwnerInfo";
@@ -58,6 +58,9 @@ class TemplateListContent extends React.Component<Props> {
         return <div>{TEMPLATE_LIST_ERROR}</div>;
       }
 
+
+      let stateEnum = template.instances[0].state && capitalizeString(template.instances[0].state.toString());
+      let stateStr = getState(stateEnum);
       return (
         <TemplateListBodyRow key={template.instances[0]!.lastEditedUser!} onClick={onClick} onKeyDown={onKeyDown} tabIndex={0}>
           {displayComponents.templateName && <TemplateListItem>{template.name}</TemplateListItem>}
@@ -67,7 +70,7 @@ class TemplateListContent extends React.Component<Props> {
               <TemplateStateWrapper>
                 <TemplateListStatusIndicator state={template.instances[0].state} />
                 <StatusWrapper>
-                  <Status>{template.instances[0].state && capitalizeString(template.instances[0].state.toString())}</Status>
+                  <Status>{stateStr}</Status>
                 </StatusWrapper>
               </TemplateStateWrapper>
             </TemplateListItem>
