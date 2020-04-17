@@ -5,8 +5,9 @@ trigger:
     include:
     - dev
     - stage
-    exclude:
-    - users/*
+    - users/daniellemott/add_policheck
+    # exclude:
+    # - users/*
 
 # no PR builds
 pr: none
@@ -27,11 +28,11 @@ jobs:
     inputs:
       inputType: 'Basic'
       targetType: 'F'
-      targetArgument: '$(system.defaultworkingdirectory)/private-templates-service'
+      targetArgument: '$(Build.SourcesDirectory)'
       result: 'PoliCheck.xml'
   - task: PublishBuildArtifacts@1
     inputs:
-      PathtoPublish: '$(system.defaultworkingdirectory)/private-templates-service'
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)'
       ArtifactName: 'PoliCheck.xml'
       publishLocation: 'Container'
 
