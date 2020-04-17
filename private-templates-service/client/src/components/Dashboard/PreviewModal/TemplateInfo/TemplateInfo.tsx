@@ -54,6 +54,7 @@ import {
   PEOPLE,
   TEMPLATE_AT,
   COLLABORATORS,
+  COLLABORATOR,
 } from "../../../../assets/strings";
 import { TooltipContainer } from '../styled';
 import {
@@ -105,7 +106,6 @@ const buttons = [
   },
 ];
 
-// TODO: Dynamically show info. Backend not ready
 const cards = [
   {
     header: TEMPLATE_AUTHOR,
@@ -350,7 +350,7 @@ class TemplateInfo extends React.Component<Props, State> {
                       <IconWrapper><OwnerList oids={Array.from(oids) as string[]}/></IconWrapper>)}
                   {val.header === USAGE && <UsageNumber>{templateInstance.numHits}</UsageNumber>}
                   {(val.header === AUTHOR) ? (this.props.owner && this.props.owner.displayNames) ? this.props.owner.displayNames[templateInstance.lastEditedUser!] : "" : 
-                    (val.header === PEOPLE)? oids.size + " " + val.bodyText : val.bodyText}
+                    (val.header === PEOPLE)? oids.size + " " + (oids.size === 1? COLLABORATOR : val.bodyText) : val.bodyText}
                 </CardBody>
               </Card>
             ))}

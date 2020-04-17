@@ -82,6 +82,7 @@ export const TEMPLATE_INFO_TAGS = "Tags";
 export const TEMPLATE_AUTHOR = "Author";
 export const PEOPLE = "People";
 export const COLLABORATORS = "Collaborators";
+export const COLLABORATOR = "Collaborator";
 export const TEMPLATE_AT = " at ";
 
 
