@@ -162,13 +162,6 @@ class Dashboard extends React.Component<Props> {
     this.props.history.push("/templates/all", {redirect: true});
   }
   render() {
-    if (this.props.isSearch) {
-      return (
-        <DashboardContainer>
-          <SearchPage selectTemplate={this.selectTemplate} />
-        </DashboardContainer>
-      );
-    }
     //TODO add sort functionality to separate templates displayed in recent vs draft
     const {recentTemplates, tags} = this.props;
     let recentlyEditedTemplates = new Array<Template>();

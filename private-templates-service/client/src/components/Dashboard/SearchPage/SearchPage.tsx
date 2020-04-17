@@ -39,7 +39,7 @@ const mapDispatchToProps = (dispatch: any) => {
 }
 
 interface Props {
-  searchByTemplateName: string;
+  searchByTemplateName: string | undefined;
   isSearch: boolean
   filterType: FilterObject;
   sortType: SortType;
@@ -65,9 +65,9 @@ class SearchPage extends React.Component<Props, State> {
   };
   
   componentDidUpdate = (prevProps: Props) => {
-    if (this.props.filterType !== prevProps.filterType || this.props.sortType !== prevProps.sortType) {
-      this.props.querySearch(this.props.searchByTemplateName, this.props.sortType, this.props.filterType.state, this.props.filterType.owner)
-    }
+    // if (this.props.filterType !== prevProps.filterType || this.props.sortType !== prevProps.sortType) {
+    //   this.props.querySearch(this.props.searchByTemplateName, this.props.sortType, this.props.filterType.state, this.props.filterType.owner)
+    // }
   }
   render() {
     if (this.props.loading) {

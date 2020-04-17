@@ -5,7 +5,7 @@ export interface SearchState {
   isSearch: boolean;
   searchValue: string;
   isSearchBarVisible?: boolean;
-  searchByTemplateName: string;
+  searchByTemplateName: string | undefined;
   templates?: TemplateList;
   loading: boolean;
   error?: IncomingMessage;
@@ -26,7 +26,7 @@ export interface SearchAction {
   typeof QUERY_SEARCH_FAILURE |
   typeof CLEAR_SEARCH |
   typeof SET_SEARCHBAR_VISIBLE;
-  searchByTemplateName: string;
+  searchByTemplateName: string | undefined;
   cards?: TemplateList;
   error?: IncomingMessage;
   isSearchBarVisible?: boolean;

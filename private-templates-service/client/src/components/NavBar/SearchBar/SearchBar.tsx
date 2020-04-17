@@ -3,10 +3,14 @@ import { StyledSearchBox } from "./styled";
 import { RootState } from "../../../store/rootReducer";
 import { connect } from "react-redux";
 import { querySearch, clearSearch } from "../../../store/search/actions";
+import { FilterObject } from "../../../store/filter/types";
+import { SortType } from "../../../store/sort/types";
 import { COLORS, BREAK } from "../../../globalStyles";
 import * as STRINGS from "../../../assets/strings";
 import { clearFilter } from '../../../store/filter/actions';
 import { clearSort } from '../../../store/sort/actions';
+import { RouteComponentProps, withRouter } from "react-router-dom";
+import { buildAdressBarURL } from "../../../utils/queryUtil";
 
 
 const mapStateToProps = (state: RootState) => {
@@ -15,7 +19,11 @@ const mapStateToProps = (state: RootState) => {
     searchValue: state.search.searchValue,
     isAuthenticated: state.auth.isAuthenticated,
     isSearchBarVisible: state.search.isSearchBarVisible,
-    searchByTemplateName: state.search.searchByTemplateName
+    searchByTemplateName: state.search.searchByTemplateName,
+    filter: state.filter.filterType,
+    sort: state.sort.sortType,
+    selectedTags: state.tags.selectedTags
+    
   };
 };
 
@@ -36,11 +44,14 @@ const mapDispatchToProps = (dispatch: any) => {
   };
 };
 
-interface Props {
+interface Props extends RouteComponentProps {
   isSearch: boolean;
-  searchByTemplateName: string;
+  searchByTemplateName: string | undefined;
   isAuthenticated: boolean;
   isSearchBarVisible?: boolean;
+  selectedTags: string[];
+  filter: FilterObject;
+  sort: SortType;
   search: (searchByTemplateName: string) => void;
   clearSearch: () => void;
   clearFilter: () => void;
@@ -101,11 +112,12 @@ class SearchBar extends React.Component<Props, State> {
     this.props.clearFilter();
   };
 
-  onSearch = (searchByTemplateName: string) => {
-    if (searchByTemplateName === "") {
+  onSearch = (searchByTemplateName: string | undefined) => {
+    if (!searchByTemplateName) {
       this.props.clearSearch();
     } else {
       this.props.search(searchByTemplateName);
+      this.props.history.push(buildAdressBarURL("/templates/all", this.props.selectedTags, this.props.filter.owner, this.props.searchByTemplateName, this.props.sort, this.props.filter.state));
     }
   };
 
@@ -128,4 +140,4 @@ class SearchBar extends React.Component<Props, State> {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SearchBar);
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(SearchBar));

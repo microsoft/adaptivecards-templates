@@ -12,31 +12,51 @@ import Gallery from "../../../Gallery";
 import TemplateList from "../../../Dashboard/TemplateList";
 // Strings
 import { ALL_CARDS_PLACEHOLDER, ALL_CARDS } from "../../../../assets/strings";
+import { SearchState } from "../../../../store/search/types";
+import { FilterObject, FilterEnum } from "../../../../store/filter/types";
+import { SortType } from "../../../../store/sort/types";
+import { RouteComponentProps, withRouter } from "react-router-dom";
+import { buildAdressBarURL } from "../../../../utils/queryUtil";
 
 const mapStateToProps = (state: RootState) => {
   return {
     templates: state.allTemplates,
-    toggleState: state.allCardsViewToggle
+    toggleState: state.allCardsViewToggle,
+    filter: state.filter.filterType,
+    search: state.search,
+    sort: state.sort.sortType
   };
 };
-interface Props {
+interface Props extends RouteComponentProps{
   onClick: (templateID: string) => void;
-  getTemplates: (tags?: string[]) => void;
+  getTemplates: (tags?: string[], ifOwned?: boolean, name?: string, sortBy?: SortType, filterState?: FilterEnum) => void;
   templates: AllTemplateState;
   toggleState: ViewToggleState;
   selectedTags: string[];
+  search: SearchState;
+  filter: FilterObject;
+  sort: SortType;
+  basePath: string;
 }
 
 export class TemplatesView extends Component<Props> {
 
   componentDidMount() {
-    this.props.getTemplates(this.props.selectedTags);
+    this.props.history.replace(buildAdressBarURL(this.props.basePath, this.props.selectedTags, this.props.filter.owner, this.props.search.searchByTemplateName, this.props.sort, this.props.filter.state));
+    this.props.getTemplates(this.props.selectedTags, this.props.filter.owner, this.props.search.searchByTemplateName, this.props.sort, this.props.filter.state);
   }
 
   componentDidUpdate(prevProps: Props) {
-    if (prevProps.selectedTags.length !== this.props.selectedTags.length) {
-      this.props.getTemplates(this.props.selectedTags);
-    }
+    const props: Props = this.props;
+    if (prevProps.selectedTags.length !== props.selectedTags.length
+           || prevProps.filter.owner !== props.filter.owner
+           || prevProps.filter.state !== props.filter.state
+           || prevProps.sort !== props.sort
+           || prevProps.search.searchByTemplateName !== props.search.searchByTemplateName
+       ) {
+         this.props.history.replace(buildAdressBarURL(this.props.basePath, this.props.selectedTags, this.props.filter.owner, this.props.search.searchByTemplateName, this.props.sort, this.props.filter.state));
+         this.props.getTemplates(this.props.selectedTags, this.props.filter.owner, this.props.search.searchByTemplateName, this.props.sort, this.props.filter.state);
+        }
   }
 
   render() {
@@ -64,4 +84,4 @@ export class TemplatesView extends Component<Props> {
   }
 }
 
-export default connect(mapStateToProps)(TemplatesView);
+export default connect(mapStateToProps)(withRouter(TemplatesView));

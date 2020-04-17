@@ -58,7 +58,7 @@ export function querySearch(searchByTemplateName: string, sortValue?: SortType, 
 export function clearSearch(): SearchAction {
   return {
     type: CLEAR_SEARCH,
-    searchByTemplateName: ""
+    searchByTemplateName: undefined
   }
 }
 

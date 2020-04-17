@@ -11,6 +11,8 @@ import { ViewType } from "../../../store/viewToggle/types";
 import { setViewToggleType } from "../../../store/viewToggle/actions";
 import { setPage } from "../../../store/page/actions";
 import { PageState } from "../../../store/page/types";
+import { SortType } from "../../../store/sort/types";
+import { FilterEnum, FilterObject } from "../../../store/filter/types";
 // Components
 import { setSearchBarVisible } from "../../../store/search/actions";
 import { Title } from "../../Dashboard/styled";
@@ -19,7 +21,6 @@ import ToggleButton from "./ToggleButton";
 import TemplatesView from "./TemplatesView";
 import Sort from "../../Dashboard/SearchPage/Sort";
 import Filter from "../../Dashboard/SearchPage/Filter";
-import SearchPage from "../../Dashboard/SearchPage";
 // Strings
 import { LIST_VIEW, GRID_VIEW } from "../../../assets/strings";
 import TagList from "./TagList";
@@ -27,12 +28,15 @@ import { COLORS } from "../../../globalStyles";
 // Util
 import { ScrollDirection } from "../../../utils/AllCardsUtil";
 import { TooltipHost } from "office-ui-fabric-react";
+import { SearchState } from "../../../store/search/types";
 
 const mapStateToProps = (state: RootState) => {
   return {
-    isSearch: state.search.isSearch,
     tags: state.tags,
     page: state.page,
+    filter: state.filter.filterType,
+    search: state.search,
+    sort: state.sort.sortType
   };
 };
 const mapDispatchToProps = (dispatch: any) => {
@@ -73,7 +77,7 @@ interface Props extends RouteComponentProps<{}, StaticContext, HistoryState> {
   setSearchBarVisible: (isSearchBarVisible: boolean) => void;
   toggleView: (viewType: ViewType) => void;
   getTags: () => void;
-  getTemplates: (tags?: string[]) => void;
+  getTemplates: (tags?: string[], ifOwned?: boolean, name?: string, sortBy?: SortType, filterState?: FilterEnum) => void;
   addSelectedTag: (tag: string) => void;
   removeSelectedTag: (tag: string) => void;
   clearSelectedTags: () => void;
@@ -81,9 +85,13 @@ interface Props extends RouteComponentProps<{}, StaticContext, HistoryState> {
   onRemoveFavoriteTag: (tag: string) => void;
   pageTitle: string;
   pageID: string;
-  isSearch: boolean;
+  // basePath: string;
+  search: SearchState;
+  filter: FilterObject;
+  sort: SortType;
   tags: TagsState;
   page: PageState;
+  basePath: string;
 }
 
 interface State {
@@ -119,6 +127,7 @@ class TemplatesPage extends Component<Props, State> {
         return { selectedTags: state.selectedTags.concat(tag) };
       }
     });
+    // this.props.history.replace()
   };
   tagToggleStyle = (isSelected: boolean, ref: any) => {
     if (!isSelected) {
@@ -134,8 +143,8 @@ class TemplatesPage extends Component<Props, State> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    if (this.props.isSearch !== prevProps.isSearch) {
-      if (this.props.isSearch) {
+    if (this.props.search.isSearch !== prevProps.search.isSearch) {
+      if (this.props.search.isSearch) {
         this.props.setPage(this.props.pageTitle, "searchPage");
       } else {
         this.props.setPage(this.props.pageTitle, this.props.pageID);
@@ -148,13 +157,6 @@ class TemplatesPage extends Component<Props, State> {
   };
 
   render() {
-    if (this.props.isSearch) {
-      return (
-        <InnerCardsContainer>
-          <SearchPage selectTemplate={this.selectTemplate} />
-        </InnerCardsContainer>
-      );
-    }
     let tagsState: TagsState = this.props.tags;
     let allTags: string[] = [];
     let favoriteTags: string[] = [];
@@ -168,7 +170,6 @@ class TemplatesPage extends Component<Props, State> {
     }
     let listTooltip = "listTooltip";
     let gridTooltip = "gridTooltip";
-
 
     return (
       <OuterCardsContainer>
@@ -187,7 +188,7 @@ class TemplatesPage extends Component<Props, State> {
             </ViewHelperBar>
           </UpperBar>
           <TagList tags={allTags} selectedTags={this.state.selectedTags} allowEdit={false} favoriteTags={favoriteTags} onClick={this.tagOnClick} toggleStyle={this.tagToggleStyle} direction={ScrollDirection.Horizontal} allowSetFavorite={true} onAddFavoriteTag={this.props.onAddFavoriteTag} onRemoveFavoriteTag={this.props.onRemoveFavoriteTag}/>
-          <TemplatesView onClick={this.selectTemplate} selectedTags={this.state.selectedTags} getTemplates={this.props.getTemplates}/>
+          <TemplatesView onClick={this.selectTemplate} selectedTags={this.state.selectedTags} getTemplates={this.props.getTemplates} basePath={this.props.basePath}/>
         </InnerCardsContainer>
       </OuterCardsContainer>
     );

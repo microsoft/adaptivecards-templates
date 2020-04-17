@@ -12,7 +12,7 @@ import { TemplateList } from "adaptive-templating-service-typescript-node";
 const initialState: SearchState = {
   isSearch: false,
   searchValue: "",
-  searchByTemplateName: "",
+  searchByTemplateName: undefined,
   loading: false,
   templates: new TemplateList(),
   error: undefined
