@@ -1,26 +1,12 @@
 import * as React from "react";
-import { connect } from 'react-redux';
 import { useHistory } from "react-router-dom";
-
-import { setSearchBarVisible } from "../../store/search/actions";
-
 import { Centered, OuterContainer, ErrorWrapper, ErrorMessage, DashboardButton } from "./styled";
-import { ERROR_MESSAGE, GO_TO_DASHBOARD, TAG_ERROR_MESSAGE, TAG_GO_TO_DASHBOARD } from "../../assets/strings";
+import { TAG_GO_TO_DASHBOARD, TAG_ERROR_MESSAGE } from "../../assets/strings";
 
-const mapDispatchToProps = (dispatch: any) => {
-  return {
-    setSearchBarVisible: (isSearchBarVisible: boolean) => {
-      dispatch(setSearchBarVisible(isSearchBarVisible));
-    },
-  }
-}
 
-interface Props {
-  setSearchBarVisible: (isSearchBarVisible: boolean) => void;
-}
 
-const NoMatch = (props: Props) => {
-  props.setSearchBarVisible(true);
+
+const NoMatch = () => {
   const history = useHistory();
 
   const onDashboardClick = () => {
@@ -42,4 +28,4 @@ const NoMatch = (props: Props) => {
   );
 }
 
-export default connect(null, mapDispatchToProps)(NoMatch);
+export default NoMatch;

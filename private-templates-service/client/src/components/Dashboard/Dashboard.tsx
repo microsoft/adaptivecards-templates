@@ -10,7 +10,6 @@ import { getRecentTemplates } from "../../store/recentTemplates/actions";
 import { RecentTemplatesState } from "../../store/recentTemplates/types";
 import { setPage } from "../../store/page/actions";
 import { getTemplate } from "../../store/currentTemplate/actions";
-import { setSearchBarVisible } from "../../store/search/actions";
 import { getOwnerProfilePicture, getOwnerName } from "../../store/templateOwner/actions";
 import { OwnerState } from "../../store/templateOwner/types";
 import { setSkipLinkContentID } from "../../store/skiplink/actions";
@@ -51,7 +50,6 @@ const mapStateToProps = (state: RootState) => {
     isAuthenticated: state.auth.isAuthenticated,
     user: state.auth.user,
     templates: state.allTemplates,
-    isSearch: state.search.isSearch,
     recentTemplates: state.recentTemplates,
     templateOwner: state.templateOwner,
     tags: state.tags
@@ -61,9 +59,6 @@ const mapDispatchToProps = (dispatch: any) => {
   return {
     setPage: (currentPageTitle: string, currentPage: string) => {
       dispatch(setPage(currentPageTitle, currentPage));
-    },
-    setSearchBarVisible: (isSearchBarVisible: boolean) => {
-      dispatch(setSearchBarVisible(isSearchBarVisible));
     },
     getTemplates: () => {
       dispatch(getAllTemplates());
@@ -108,7 +103,6 @@ interface Props extends RouteComponentProps {
   templateOwner: OwnerState;
   tags: TagsState;
   setPage: (currentPageTitle: string, currentPage: string) => void;
-  setSearchBarVisible: (isSearchBarVisible: boolean) => void;
   getTemplates: () => void;
   getRecentTemplates: () => void;
   getTemplate: (templateID: string) => void;
@@ -126,7 +120,6 @@ class Dashboard extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
     props.setPage(DASHBOARD_PAGE, DASHBOARD_PAGE);
-    props.setSearchBarVisible(true);
     props.getRecentTemplates();
     props.setSkipLinkContentID(DASHBOARD_MAIN_CONTENT_ID);
   }

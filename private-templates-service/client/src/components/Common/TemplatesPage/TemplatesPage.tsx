@@ -14,7 +14,6 @@ import { PageState } from "../../../store/page/types";
 import { SortType } from "../../../store/sort/types";
 import { FilterEnum, FilterObject } from "../../../store/filter/types";
 // Components
-import { setSearchBarVisible } from "../../../store/search/actions";
 import { Title } from "../../Dashboard/styled";
 import { InnerCardsContainer, OuterCardsContainer, UpperBar, ViewHelperBar } from "./styled";
 import ToggleButton from "./ToggleButton";
@@ -44,9 +43,6 @@ const mapDispatchToProps = (dispatch: any) => {
     setPage: (currentPageTitle: string, currentPage: string) => {
       dispatch(setPage(currentPageTitle, currentPage));
     },
-    setSearchBarVisible: (isSearchBarVisible: boolean) => {
-      dispatch(setSearchBarVisible(isSearchBarVisible));
-    },
     toggleView: (viewType: ViewType) => {
       dispatch(setViewToggleType(viewType));
     },
@@ -74,7 +70,6 @@ interface HistoryState {
 
 interface Props extends RouteComponentProps<{}, StaticContext, HistoryState> {
   setPage: (currentPageTitle: string, currentPage: string) => void;
-  setSearchBarVisible: (isSearchBarVisible: boolean) => void;
   toggleView: (viewType: ViewType) => void;
   getTags: () => void;
   getTemplates: (tags?: string[], ifOwned?: boolean, name?: string, sortBy?: SortType, filterState?: FilterEnum) => void;
@@ -85,7 +80,6 @@ interface Props extends RouteComponentProps<{}, StaticContext, HistoryState> {
   onRemoveFavoriteTag: (tag: string) => void;
   pageTitle: string;
   pageID: string;
-  // basePath: string;
   search: SearchState;
   filter: FilterObject;
   sort: SortType;
@@ -101,7 +95,6 @@ class TemplatesPage extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.props.setPage(props.pageTitle, props.pageID);
-    this.props.setSearchBarVisible(true);
     this.setSelectedTags();
   }
 
@@ -140,16 +133,6 @@ class TemplatesPage extends Component<Props, State> {
   };
   componentDidMount() {
     this.props.getTags();
-  }
-
-  componentDidUpdate(prevProps: Props) {
-    if (this.props.search.isSearch !== prevProps.search.isSearch) {
-      if (this.props.search.isSearch) {
-        this.props.setPage(this.props.pageTitle, "searchPage");
-      } else {
-        this.props.setPage(this.props.pageTitle, this.props.pageID);
-      }
-    }
   }
 
   selectTemplate = (templateID: string) => {

@@ -6,6 +6,9 @@ import { RootState } from "../../store/rootReducer";
 import { UserType } from "../../store/auth/types";
 import { ModalState } from "../../store/page/types";
 import { newTemplate } from "../../store/currentTemplate/actions";
+import { clearSearch } from "../../store/search/actions";
+import { clearFilter } from "../../store/filter/actions";
+import { clearSort } from "../../store/sort/actions";
 
 import { COLORS, FONTS } from "../../globalStyles";
 import UserAvatar from "./UserAvatar";
@@ -28,7 +31,7 @@ import {
   LogoTextHeader,
   LogoTextSubHeader
 } from "./styled";
-import { INavLinkGroup, INavStyles } from "office-ui-fabric-react";
+import { INavLinkGroup, INavStyles, INavLink } from "office-ui-fabric-react";
 import SkipLink from "../Common/SkipLink";
 import { NAVBAR, OUT, IN, ADAPTIVE_CARDS, PORTAL, ARIA_DASHBOARD, ARIA_NEW_CARD, ARIA_ALL_CARDS, ARIA_DRAFTS, ARIA_PUBLISHED, ARIA_TAGS } from "../../assets/strings";
 
@@ -40,6 +43,9 @@ interface Props {
   templateID: string | undefined;
   newTemplate: () => void;
   modalState?: ModalState;
+  clearSearch: () => void;
+  clearFilter: () => void;
+  clearSort: () => void;
 }
 
 const mapStateToProps = (state: RootState) => {
@@ -55,6 +61,15 @@ const mapDispatchToProps = (dispatch: any) => {
   return {
     newTemplate: () => {
       dispatch(newTemplate());
+    },
+    clearSearch: () => {
+      dispatch(clearSearch())
+    },
+    clearFilter: () => {
+      dispatch(clearFilter());
+    },
+    clearSort: () => {
+      dispatch(clearSort());
     }
   };
 };
@@ -159,12 +174,19 @@ const navMenuLinks: INavLinkGroup[] = [
 const SideBar = (props: Props) => {
   const history = useHistory();
 
-  const onNavClick = (event: any, element: any) => {
+  const onNavClick = (event: any, element?: INavLink) => {
     event.preventDefault();
-    if (element.url === newTemplateURL) {
+    if(!element!.url.startsWith("/templates/all")) {
+      props.clearSearch();
+      props.clearFilter();
+      props.clearSort();
+      console.log("search is cleant");
+    }
+    if (element!.url === newTemplateURL) {
       props.newTemplate();
     }
-    history.push(element.url);
+    console.log(element!.url);
+    history.push(element!.url);
 
   };
 

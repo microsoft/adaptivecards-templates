@@ -45,8 +45,9 @@ interface Props extends RouteComponentProps{
 export class TemplatesView extends Component<Props> {
 
   componentDidMount() {
-    this.props.history.replace(buildAdressBarURL(this.props.basePath, this.props.selectedTags, this.props.filter.owner, this.props.search.searchByTemplateName, this.props.sort, this.props.filter.state));
-    this.props.getTemplates(this.props.selectedTags, this.props.filter.owner, this.props.search.searchByTemplateName, this.props.sort, this.props.filter.state);
+    console.log(this.props);
+    this.props.history.replace(buildAdressBarURL(this.props.basePath, this.props.selectedTags, this.props.filter.owner, this.props.search.query, this.props.sort, this.props.filter.state));
+    this.props.getTemplates(this.props.selectedTags, this.props.filter.owner, this.props.search.query, this.props.sort, this.props.filter.state);
   }
 
   componentDidUpdate(prevProps: Props) {
@@ -55,14 +56,17 @@ export class TemplatesView extends Component<Props> {
            || prevProps.filter.owner !== props.filter.owner
            || prevProps.filter.state !== props.filter.state
            || prevProps.sort !== props.sort
-           || prevProps.search.searchByTemplateName !== props.search.searchByTemplateName
+           || prevProps.search.query !== props.search.query
        ) {
-         this.props.history.replace(buildAdressBarURL(this.props.basePath, this.props.selectedTags, this.props.filter.owner, this.props.search.searchByTemplateName, this.props.sort, this.props.filter.state));
-         this.props.getTemplates(this.props.selectedTags, this.props.filter.owner, this.props.search.searchByTemplateName, this.props.sort, this.props.filter.state);
+          console.log(this.props);
+          console.log(prevProps);
+         this.props.history.replace(buildAdressBarURL(this.props.basePath, this.props.selectedTags, this.props.filter.owner, this.props.search.query, this.props.sort, this.props.filter.state));
+         this.props.getTemplates(this.props.selectedTags, this.props.filter.owner, this.props.search.query, this.props.sort, this.props.filter.state);
         }
   }
 
   render() {
+    console.log(this.props.search.query);
     const { toggleState, onClick } = this.props;
     let templatesState: AllTemplateState = this.props.templates;
     let templates: Template[] = [];

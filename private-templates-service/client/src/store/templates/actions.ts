@@ -26,7 +26,7 @@ export function failGetAll(error: IncomingMessage): AllTemplateAction {
   }
 }
 
-export function getAllTemplates(tags?: string[], ifOwned: boolean = true, name?: string, sortBy: SortType = "alphabetical", filterState?: FilterEnum) {
+export function getAllTemplates(tags?: string[], ifOwned?: boolean, name?: string, sortBy: SortType = "alphabetical", filterState?: FilterEnum) {
   return function (dispatch: any, getState: () => RootState) {
     dispatch(requestAllTemplates())
     const api = initClientSDK(dispatch, getState);
