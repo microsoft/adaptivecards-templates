@@ -135,7 +135,7 @@ class VersionModal extends React.Component<Props, State> {
                 <SelectedHeaderText>{`${this.state.versionList.filter(function (s) { return s; }).length} ${SELECTED}`}</SelectedHeaderText>
               </CardHeaderRow>
               <CardBody>
-                <VersionContainer onWheel={this.scroller.scroll}>
+                <VersionContainer>
                   {this.props.template.instances && this.props.template.instances.map((instance: TemplateInstance, index: number) => (
                     <VersionCardRow>
                       <VersionWrapper>
