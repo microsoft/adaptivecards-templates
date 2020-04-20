@@ -2,133 +2,197 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-      "sites_adaptivecms_name": {
-          "defaultValue": "adaptivecmsdeploy",
-          "type": "String"
-      },
-      "mongodb_connection_string": {
-        "type": "String"
-      },
-      "app_id": {
-        "type": "String"
-      },
-      "location": {
-        "defaultValue": "West US",
-        "type": "String"
-      },
-      "server_farm_id": {
-        "type": "String"
-      },
-      "telemetry_opt_in": {
-          "type": "string",
-          "allowedValues": [
-              "Yes",
-              "No"
-          ]
-      },
+    "sites_adaptivecms_name": {
+      "defaultValue": "adaptivecmsdeploy",
+      "type": "String"
+    },
+    "app_id": {
+      "type": "String"
+    },
+    "location": {
+      "defaultValue": "West US",
+      "type": "String"
+    },
+    "server_farm_id": {
+      "type": "String"
+    },
+    "docker_registry_server_uri": {
+      "defaultValue": "https://acmsregistry.azurecr.io",
+      "type": "String"
+    },
+    "docker_registry_server_username": {
+      "defaultValue": "ACMSRegistry",
+      "type": "String"
+    },
+    "docker_registry_server_password": {
+      "type": "String"
+    },
+    "telemetry_opt_in": {
+      "type": "string",
+      "allowedValues": [
+        "Yes",
+        "No"
+      ]
+    },
+    "application_insights_instrumentation_key": {
+      "type": "String"
+    }
   },
   "variables": {
-      "linuxFxVersion": "DOCKER|gracez72/acms:1.0",
-      "appInsightsInstrumentationKey": "931c613f-fdcb-40a9-bd39-314ce31bc5d6",
-      "dockerRegistryServerUrl": "https://index.docker.io"
+    "linuxFxVersion": "DOCKER|acmsregistry.azurecr.io/acmsimage",
+    "appInsightsInstrumentationKey": "931c613f-fdcb-40a9-bd39-314ce31bc5d6",
+    "cosmos_database_name": "acms-cosmos-test",
+    "databaseName": "acms",
   },
   "resources": [
-      {
-          "type": "Microsoft.Web/sites",
-          "apiVersion": "2018-11-01",
-          "name": "[parameters('sites_adaptivecms_name')]",
-          "location": "[parameters('location')]",
-          "kind": "app,linux,container",
-          "properties": {
-            "serverFarmId": "[parameters('server_farm_id')]",
-          }, 
-          "resources": [   
-            {
-              "apiVersion": "2015-08-01",
-              "name": "appsettings",
-              "type": "config",
-              "dependsOn": [
-                "[concat('Microsoft.Web/Sites/', parameters('sites_adaptivecms_name'))]"
-              ],
-              "properties": {
-                "ACMS_DB_CONNECTION": "[parameters('mongodb_connection_string')]",
-                "ACMS_REDIRECT_URI": "[concat('https://', parameters('sites_adaptivecms_name'), '.azurewebsites.net/')]",
-                "ACMS_APP_ID": "[parameters('app_id')]",
-                "WEBSITES_ENABLE_APP_SERVICE_STORAGE": "false",
-                "DOCKER_REGISTRY_SERVER_URL": "[variables('dockerRegistryServerUrl')]",
-                "ACMS_APP_INSIGHTS_INSTRUMENTATION_KEY": "[if(equals(parameters('telemetry_opt_in'), 'Yes'), variables('appInsightsInstrumentationKey'), '')]",
-              }
-            }
-          ]
+    {
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2018-11-01",
+      "name": "[parameters('sites_adaptivecms_name')]",
+      "location": "[parameters('location')]",
+      "kind": "app,linux,container",
+      "properties": {
+        "serverFarmId": "[parameters('server_farm_id')]"
       },
-      {
-          "type": "Microsoft.Web/sites/config",
-          "apiVersion": "2018-11-01",
-          "name": "[concat(parameters('sites_adaptivecms_name'), '/web')]",
-          "location": "[parameters('location')]",
+      "resources": [
+        {
+          "apiVersion": "2015-08-01",
+          "name": "appsettings",
+          "type": "config",
           "dependsOn": [
-              "[resourceId('Microsoft.Web/sites', parameters('sites_adaptivecms_name'))]"
+            "[concat('Microsoft.Web/Sites/', parameters('sites_adaptivecms_name'))]"
           ],
           "properties": {
-              "numberOfWorkers": 1,
-              "netFrameworkVersion": "v4.0",
-              "linuxFxVersion": "[variables('linuxFxVersion')]",
-              "requestTracingEnabled": false,
-              "remoteDebuggingEnabled": false,
-              "remoteDebuggingVersion": "VS2019",
-              "httpLoggingEnabled": false,
-              "logsDirectorySizeLimit": 35,
-              "detailedErrorLoggingEnabled": false,
-              "publishingUsername": "$adaptivecms",
-              "scmType": "VSTSRM",
-              "use32BitWorkerProcess": true,
-              "webSocketsEnabled": false,
-              "alwaysOn": false,
-              "managedPipelineMode": "Integrated",
-              "virtualApplications": [
-                  {
-                      "virtualPath": "/",
-                      "physicalPath": "site\\wwwroot",
-                      "preloadEnabled": false
-                  }
-              ],
-              "loadBalancing": "LeastRequests",
-              "experiments": {
-                  "rampUpRules": []
-              },
-              "autoHealEnabled": false,
-              "cors": {
-                  "allowedOrigins": [
-                      "http://localhost:3000"
-                  ],
-                  "supportCredentials": false
-              },
-              "localMySqlEnabled": false,
-              "managedServiceIdentityId": 2921,
-              "ipSecurityRestrictions": [
-                  {
-                      "ipAddress": "Any",
-                      "action": "Allow",
-                      "priority": 1,
-                      "name": "Allow all",
-                      "description": "Allow all access"
-                  }
-              ],
-              "scmIpSecurityRestrictions": [
-                  {
-                      "ipAddress": "Any",
-                      "action": "Allow",
-                      "priority": 1,
-                      "name": "Allow all",
-                      "description": "Allow all access"
-                  }
-              ],
-              "scmIpSecurityRestrictionsUseMain": false,
-              "http20Enabled": false,
-              "minTlsVersion": "1.2",
-              "ftpsState": "AllAllowed",
-              "reservedInstanceCount": 0
+            "ACMS_DB_CONNECTION": "[listConnectionStrings(resourceId('Microsoft.DocumentDB/databaseAccounts', variables('cosmos_database_name')), '2015-04-08').connectionStrings[0].connectionString]",
+            "ACMS_REDIRECT_URI": "[concat('https://', parameters('sites_adaptivecms_name'), '.azurewebsites.net/')]",
+            "ACMS_APP_ID": "[parameters('app_id')]",
+            "WEBSITES_ENABLE_APP_SERVICE_STORAGE": "false",
+            "DOCKER_REGISTRY_SERVER_URL": "[parameters('docker_registry_server_uri')]",
+            "DOCKER_REGISTRY_SERVER_USERNAME": "[parameters('docker_registry_server_username')]",
+            "DOCKER_REGISTRY_SERVER_PASSWORD": "[parameters('docker_registry_server_password')]",
+            "ACMS_APP_INSIGHTS_INSTRUMENTATION_KEY": "[if(equals(parameters('telemetry_opt_in'), 'Yes'), variables('appInsightsInstrumentationKey'), '')]",
+            "USER_APP_INSIGHTS_INSTRUMENTATION_KEY": "[parameters('application_insights_instrumentation_key')]"
           }
+        }
+      ]
+    },
+    {
+      "type": "Microsoft.Web/sites/config",
+      "apiVersion": "2018-11-01",
+      "name": "[concat(parameters('sites_adaptivecms_name'), '/web')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', parameters('sites_adaptivecms_name'))]"
+      ],
+      "properties": {
+        "numberOfWorkers": 1,
+        "netFrameworkVersion": "v4.0",
+        "linuxFxVersion": "[variables('linuxFxVersion')]",
+        "requestTracingEnabled": false,
+        "remoteDebuggingEnabled": false,
+        "remoteDebuggingVersion": "VS2019",
+        "httpLoggingEnabled": false,
+        "logsDirectorySizeLimit": 35,
+        "detailedErrorLoggingEnabled": false,
+        "publishingUsername": "$adaptivecms",
+        "scmType": "VSTSRM",
+        "use32BitWorkerProcess": true,
+        "webSocketsEnabled": false,
+        "alwaysOn": false,
+        "managedPipelineMode": "Integrated",
+        "virtualApplications": [
+          {
+            "virtualPath": "/",
+            "physicalPath": "site\\wwwroot",
+            "preloadEnabled": false
+          }
+        ],
+        "loadBalancing": "LeastRequests",
+        "experiments": {
+          "rampUpRules": []
+        },
+        "autoHealEnabled": false,
+        "cors": {
+          "allowedOrigins": [
+            "http://localhost:3000"
+          ],
+          "supportCredentials": false
+        },
+        "localMySqlEnabled": false,
+        "managedServiceIdentityId": 2921,
+        "ipSecurityRestrictions": [
+          {
+            "ipAddress": "Any",
+            "action": "Allow",
+            "priority": 1,
+            "name": "Allow all",
+            "description": "Allow all access"
+          }
+        ],
+        "scmIpSecurityRestrictions": [
+          {
+            "ipAddress": "Any",
+            "action": "Allow",
+            "priority": 1,
+            "name": "Allow all",
+            "description": "Allow all access"
+          }
+        ],
+        "scmIpSecurityRestrictionsUseMain": false,
+        "http20Enabled": false,
+        "minTlsVersion": "1.2",
+        "ftpsState": "AllAllowed",
+        "reservedInstanceCount": 0
       }
+    },
+    {
+      "type": "Microsoft.DocumentDB/databaseAccounts",
+      "name": "[variables('cosmos_database_name')]",
+      "apiVersion": "2019-08-01",
+      "location": "[parameters('location')]",
+      "kind": "MongoDB",
+      "properties": {
+        "consistencyPolicy": {
+          "defaultConsistencyLevel": "Session",
+          "maxIntervalInSeconds": 5,
+          "maxStalenessPrefix": 100
+        },
+        "locations": [
+          {
+            "locationName": "[parameters('location')]",
+            "provisioningState": "Succeeded",
+            "failoverPriority": 0,
+            "isZoneRedundant": false
+          }
+        ],
+        "capabilities": [
+          {
+            "name": "EnableMongo"
+          }
+        ],
+        "databaseAccountOfferType": "Standard",
+        "enableAutomaticFailover": false,
+        "enableMultipleWriteLocations": false,
+        "isVirtualNetworkFilterEnabled": false,
+        "virtualNetworkRules": [],
+        "disableKeyBasedMetadataWriteAccess": false
+      }
+    },
+    {
+      "type": "Microsoft.DocumentDB/databaseAccounts/mongodbDatabases",
+      "name": "[concat(variables('cosmos_database_name'), '/', variables('databaseName'))]",
+      "apiVersion": "2019-08-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.DocumentDB/databaseAccounts/', variables('cosmos_database_name'))]"
+      ],
+      "properties": {
+        "resource": {
+          "id": "[variables('databaseName')]"
+        },
+        "options": {
+          "throughput": "400"
+        }
+      }
+    }
   ]
-}  
+}
