@@ -779,7 +779,6 @@ export class TemplateServiceClient {
     };
 
     let response = await this.storageProvider.getTemplates(templateQuery, sortBy, sortOrder);
-    console.log(response.result);
 
     if (!response.success || !response.result) return response;
 
