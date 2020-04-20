@@ -39,16 +39,6 @@ class Filter extends React.Component<Props> {
   onChange = (event: React.FormEvent<HTMLDivElement>, option?: IDropdownOption) => {
     if (option && typeof option.key === "string") {
       let filter: FilterObject = { value: option.key, owner: undefined, state: undefined }
-<<<<<<< HEAD
-      if (option.key === "owner") {
-        filter.owner = true;
-      }
-      else if (option.key === "draft") {
-        filter.state = "draft";
-      }
-      else if (option.key === "published") {
-        filter.state = "live";
-=======
       if (option.key === OWNER_KEY) {
         filter.owner = true;
       }
@@ -57,7 +47,6 @@ class Filter extends React.Component<Props> {
       }
       else if (option.key === PUBLISHED_KEY) {
         filter.state = FILTER_LIVE;
->>>>>>> dev
       }
       this.props.queryFilter(filter)
     }
