@@ -55,6 +55,7 @@ export const VersionCardRowHover = styled(VersionCardRow)`
     cursor: pointer;
   };
 `
+
 export const VersionCardRowTitle = styled.div`
   font-family: ${FONTS.SEGOE_UI_SEMI_BOLD};
 `
@@ -71,7 +72,6 @@ export const StatusWrapper = styled.div`
   flex-basis: 25%;
   display: flex;
   justify-content: flex-start;
-
 `
 
 export const VersionWrapper = styled.div`
@@ -91,8 +91,6 @@ export const VersionIcon = styled(Icon)`
   color: ${COLORS.BLUE};
   padding: 6px 0 0 15px;
 `
-
-
 
 export const InfoVersionContainer = styled(VersionContainer)`
   max-height: 150px;

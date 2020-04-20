@@ -40,7 +40,6 @@ import { updateCurrentTemplateVersion } from '../../../../../store/currentTempla
 import VersionModal from '../../../../Common/VersionModal';
 import { MANAGE, NA } from '../../../../../assets/strings';
 import { RootState } from '../../../../../store/rootReducer';
-import { Scroller } from "../../../../../utils/AllCardsUtil/Scroller";
 
 interface Props {
   template: Template;
@@ -69,12 +68,6 @@ const mapDispatchToProps = (dispatch: any) => {
 };
 
 class VersionCard extends React.Component<Props> {
-  scroller: Scroller;
-  constructor(props: Props) {
-    super(props);
-    this.scroller = new Scroller();
-  }
-
   onVersionChange = (event: any, version: string) => {
     this.props.updateCurrentTemplateVersion(this.props.template, version);
     this.props.onSwitchVersion(version);

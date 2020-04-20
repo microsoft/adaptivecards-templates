@@ -46,7 +46,6 @@ import { getDateString } from '../../../utils/versionUtils';
 import { capitalizeString, getState } from "../../../utils/stringUtils";
 import ModalHOC from '../../../utils/ModalHOC';
 import { closeModal } from '../../../store/page/actions';
-import { Scroller } from '../../../utils/AllCardsUtil/Scroller';
 import { THERE_ARE, VERSIONS_FOR, VERSION_HEADER, PUBLISHED_HEADER, STATUS_HEADER, NOT_PUBLISHED, SELECTED, VERSION_CANCEL, VERSION_DELETE, VERSION_UNPUBLISH, VERSION_PUBLISH } from '../../../assets/strings';
 
 interface Props {
@@ -75,10 +74,8 @@ interface State {
 }
 
 class VersionModal extends React.Component<Props, State> {
-  scroller: Scroller;
   constructor(props: Props) {
     super(props);
-    this.scroller = new Scroller();
     this.state = { versionList: this.props.template.instances ? new Array(this.props.template.instances.length) : [] }
   }
 
