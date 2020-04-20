@@ -30,7 +30,7 @@ import {
 } from "./styled";
 import { INavLinkGroup, INavStyles } from "office-ui-fabric-react";
 import SkipLink from "../Common/SkipLink";
-import { NAVBAR, OUT, IN, ADAPTIVE_CARDS, PORTAL, ARIA_DASHBOARD, ARIA_NEW_CARD, ARIA_ALL_CARDS, ARIA_DRAFTS, ARIA_PUBLISHED, ARIA_TAGS } from "../../assets/strings";
+import { NAVBAR, OUT, IN, ADAPTIVE_CARDS, PORTAL, ARIA_DASHBOARD, ARIA_NEW_CARD } from "../../assets/strings";
 
 
 interface Props {
