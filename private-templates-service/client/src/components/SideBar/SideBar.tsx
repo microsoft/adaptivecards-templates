@@ -82,7 +82,7 @@ const iconStyle = {
   margin: "0px 10px 0px 40px"
 };
 
-const newTemplateURL = "/designer/newcard/1.0"
+export const newTemplateURL = "/designer/newcard/1.0"
 
 const navMenuLinks: INavLinkGroup[] = [
   {
