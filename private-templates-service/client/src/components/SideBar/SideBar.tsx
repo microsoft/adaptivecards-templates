@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 
 import { connect } from "react-redux";
 import { RootState } from "../../store/rootReducer";
-import { UserType } from "../../store/auth/types";
+import { UserType, AuthState } from "../../store/auth/types";
 import { ModalState } from "../../store/page/types";
 import { newTemplate } from "../../store/currentTemplate/actions";
 
@@ -35,7 +35,7 @@ import { NAVBAR, OUT, IN, ADAPTIVE_CARDS, PORTAL, ARIA_DASHBOARD, ARIA_NEW_CARD,
 
 interface Props {
   authButtonMethod: () => void;
-  isAuthenticated: boolean;
+  auth: AuthState
   user?: UserType;
   templateID: string | undefined;
   newTemplate: () => void;
@@ -44,7 +44,7 @@ interface Props {
 
 const mapStateToProps = (state: RootState) => {
   return {
-    isAuthenticated: state.auth.isAuthenticated,
+    auth: state.auth,
     user: state.auth.user,
     templateID: state.currentTemplate.templateID,
     modalState: state.page.modalState
@@ -178,7 +178,7 @@ const SideBar = (props: Props) => {
       history.push("/");
     }
   }
-
+  
   return (
     <OuterSideBarWrapper aria-label={NAVBAR}>
       <MainItems>
@@ -196,11 +196,11 @@ const SideBar = (props: Props) => {
             <Title>{props.user && props.user.organization}</Title>
           </Name>
         </UserWrapper>
-        {props.isAuthenticated && <NavMenu styles={navMenuLinksProps} groups={navMenuLinks} onLinkClick={onNavClick} />}
-        {props.isAuthenticated && <SkipLink />}
+        {props.auth.isAuthenticated && props.auth.graphAccessToken && <NavMenu styles={navMenuLinksProps} groups={navMenuLinks} onLinkClick={onNavClick} />}
+        {props.auth.isAuthenticated && props.auth.graphAccessToken && <SkipLink />}
       </MainItems>
 
-      <SignOut onClick={props.authButtonMethod} tabIndex={props.modalState ? -1 : 0}>{STRINGS.SIGN} {props.isAuthenticated ? `${OUT}` : `${IN}`}</SignOut>
+      <SignOut onClick={props.authButtonMethod} tabIndex={props.modalState ? -1 : 0}>{STRINGS.SIGN} {props.auth.isAuthenticated ? `${OUT}` : `${IN}`}</SignOut>
     </OuterSideBarWrapper>
   );
 };
