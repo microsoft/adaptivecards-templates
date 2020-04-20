@@ -122,6 +122,19 @@ interface Props extends RouteComponentProps {
   onRemoveFavoriteTag: (tag: string) => void;
   isSearch: boolean;
 }
+
+function notIn(val: string, arr: string[]): boolean {
+  if (val && arr) {
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i] === val) {
+        return false;
+      }
+    }
+    return true;
+  }
+  return false;
+}
+
 class Dashboard extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
@@ -145,8 +158,10 @@ class Dashboard extends React.Component<Props> {
     if (prevProps.recentTemplates !== this.props.recentTemplates &&
       this.props.recentTemplates.recentlyViewed && this.props.recentTemplates.recentlyViewed.templates) {
       let templates = this.props.recentTemplates.recentlyViewed.templates;
+      let alreadySent: string[] = [];
       for (let template of templates) {
-        if (template.instances && template.instances[0].lastEditedUser) {
+        if (template.instances && template.instances[0].lastEditedUser && notIn(template.instances[0].lastEditedUser, alreadySent)) {
+          alreadySent.push(template.instances[0].lastEditedUser);
           this.props.getOwnerName(template.instances[0].lastEditedUser);
           this.props.getOwnerProfilePicture(template.instances[0].lastEditedUser);
         }
@@ -160,7 +175,7 @@ class Dashboard extends React.Component<Props> {
   tagOnClick = (tag: string) => {
     this.props.clearSelectedTags();
     this.props.addSelectedTag(tag);
-    this.props.history.push("/templates/all", {redirect: true});
+    this.props.history.push("/templates/all", { redirect: true });
   }
   render() {
     if (this.props.isSearch) {
@@ -171,7 +186,7 @@ class Dashboard extends React.Component<Props> {
       );
     }
     //TODO add sort functionality to separate templates displayed in recent vs draft
-    const {recentTemplates, tags} = this.props;
+    const { recentTemplates, tags } = this.props;
     let recentlyEditedTemplates = new Array<Template>();
     let recentlyViewedTemplates = new Array<Template>();
     let favoriteTags: string[] = [];
@@ -221,20 +236,20 @@ class Dashboard extends React.Component<Props> {
                     onClick={this.selectTemplate}
                     templates={recentlyViewedTemplates}
                     displayComponents={{ author: true, status: true, dateModified: true, templateName: true, version: false }}
-                    
+
                   />
                 )}
             </section>
           </DashboardContainer>
           <TagsContainer aria-label={FAVORITED_TAGS}>
-          <Title style={{ marginRight: "150px" }}>{FAVORITED_TAGS}</Title>
-          <TagList tags={favoriteTags} 
-                   allowEdit={false} 
-                   onClick={this.tagOnClick} 
-                   allowSetFavorite={true}
-                   onAddFavoriteTag={this.props.onAddFavoriteTag}
-                   onRemoveFavoriteTag={this.props.onRemoveFavoriteTag}
-                   favoriteTags={favoriteTags}/>     
+            <Title style={{ marginRight: "150px" }}>{FAVORITED_TAGS}</Title>
+            <TagList tags={favoriteTags}
+              allowEdit={false}
+              onClick={this.tagOnClick}
+              allowSetFavorite={true}
+              onAddFavoriteTag={this.props.onAddFavoriteTag}
+              onRemoveFavoriteTag={this.props.onRemoveFavoriteTag}
+              favoriteTags={favoriteTags} />
           </TagsContainer>
         </OuterWindow>
         <Footer />

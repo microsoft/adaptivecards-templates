@@ -185,6 +185,18 @@ const mapDispatchToProps = (dispatch: any) => {
   }
 };
 
+function notIn(val: string, arr: string[]): boolean {
+  if (val && arr) {
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i] === val) {
+        return false;
+      }
+    }
+    return true;
+  }
+  return false;
+}
+
 function getTemplateInstance(template: Template, version: string): TemplateInstance {
   for (let instance of template.instances!) {
     if (instance.version === version) return instance;
@@ -201,9 +213,13 @@ class TemplateInfo extends React.Component<Props, State> {
     super(props);
     const currentVersion = getLatestVersion(this.props.template);
     this.state = { version: currentVersion }
+    let alreadySent: string[] = [];
     for (let instance of this.props.template.instances || []) {
-      this.props.getOwnerName(instance.lastEditedUser!);
-      this.props.getOwnerProfilePicture(instance.lastEditedUser!);
+      if (notIn(instance.lastEditedUser!, alreadySent)) {
+        alreadySent.push(instance.lastEditedUser!);
+        this.props.getOwnerName(instance.lastEditedUser!);
+        this.props.getOwnerProfilePicture(instance.lastEditedUser!);
+      }
     }
     this.props.getTags();
   }
