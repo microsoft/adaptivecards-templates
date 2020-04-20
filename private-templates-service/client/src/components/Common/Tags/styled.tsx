@@ -5,7 +5,9 @@ import { Icon } from 'office-ui-fabric-react';
 
 
 export const TagText = styled.div`
-  white-space: pre;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; 
 `;
 
 export const TagCloseIcon = styled(Icon)`
