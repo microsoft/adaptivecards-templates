@@ -117,7 +117,6 @@ class SearchBar extends React.Component<Props, State> {
 
   render() {
     if (this.props.isAuthenticated) {
-      console.log(this.props.query);
       return (
         <StyledSearchBox
           ariaLabel={STRINGS.SEARCHBAR_DESCRIPTION}

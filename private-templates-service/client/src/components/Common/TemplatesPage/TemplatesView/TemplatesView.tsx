@@ -45,7 +45,7 @@ interface Props extends RouteComponentProps{
 export class TemplatesView extends Component<Props> {
 
   componentDidMount() {
-    console.log(this.props);
+
     this.props.history.replace(buildAdressBarURL(this.props.basePath, this.props.selectedTags, this.props.filter.owner, this.props.search.query, this.props.sort, this.props.filter.state));
     this.props.getTemplates(this.props.selectedTags, this.props.filter.owner, this.props.search.query, this.props.sort, this.props.filter.state);
   }
@@ -58,15 +58,12 @@ export class TemplatesView extends Component<Props> {
            || prevProps.sort !== props.sort
            || prevProps.search.query !== props.search.query
        ) {
-          console.log(this.props);
-          console.log(prevProps);
          this.props.history.replace(buildAdressBarURL(this.props.basePath, this.props.selectedTags, this.props.filter.owner, this.props.search.query, this.props.sort, this.props.filter.state));
          this.props.getTemplates(this.props.selectedTags, this.props.filter.owner, this.props.search.query, this.props.sort, this.props.filter.state);
         }
   }
 
   render() {
-    console.log(this.props.search.query);
     const { toggleState, onClick } = this.props;
     let templatesState: AllTemplateState = this.props.templates;
     let templates: Template[] = [];

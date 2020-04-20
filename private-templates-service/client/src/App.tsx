@@ -173,7 +173,6 @@ class App extends Component<Props, State> {
           <Switch>
             <Route exact path="/preview/:uuid/:version">
               <Shared authButtonMethod={this.login}></Shared>
-              {console.log("matched")}
             </Route>
             <OuterAppWrapper>
               <SideBar

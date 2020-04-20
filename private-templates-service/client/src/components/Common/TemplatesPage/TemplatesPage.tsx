@@ -120,7 +120,6 @@ class TemplatesPage extends Component<Props, State> {
         return { selectedTags: state.selectedTags.concat(tag) };
       }
     });
-    // this.props.history.replace()
   };
   tagToggleStyle = (isSelected: boolean, ref: any) => {
     if (!isSelected) {

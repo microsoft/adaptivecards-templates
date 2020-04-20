@@ -180,14 +180,11 @@ const SideBar = (props: Props) => {
       props.clearSearch();
       props.clearFilter();
       props.clearSort();
-      console.log("search is cleant");
     }
     if (element!.url === newTemplateURL) {
       props.newTemplate();
     }
-    console.log(element!.url);
     history.push(element!.url);
-
   };
 
 
