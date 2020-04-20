@@ -110,7 +110,7 @@ export const Card = styled.section`
   margin-bottom: 24px;
 `;
 
-export const CardHeader = styled.div`
+export const CardHeader = styled.h2`
   display: flex;
   flex-direction: column;
   align-items: center;

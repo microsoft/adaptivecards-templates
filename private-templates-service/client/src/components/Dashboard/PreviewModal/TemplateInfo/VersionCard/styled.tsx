@@ -21,7 +21,7 @@ export const CardManageButton = styled(ActionButton)`
   color: ${COLORS.GREY3};
 `
 
-export const CardTitle = styled.div`
+export const CardTitle = styled.h2`
   font-size: 1.375rem;
   font-family: ${FONTS.SEGOE_UI_SEMI_BOLD};
 `

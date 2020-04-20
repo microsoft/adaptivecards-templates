@@ -3,7 +3,7 @@ import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 
 import { COLORS, FONTS } from "../../globalStyles";
 
-export const Title = styled.h1`
+export const Title = styled.h2`
   padding-top: 15px;
   font-size: 1.5rem;
   font-family: ${FONTS.SEGOE_UI_SEMI_BOLD};
