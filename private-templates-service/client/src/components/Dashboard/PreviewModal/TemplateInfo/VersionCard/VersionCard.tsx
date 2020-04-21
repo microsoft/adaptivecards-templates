@@ -79,7 +79,7 @@ class VersionCard extends React.Component<Props> {
 
   render() {
     return (
-      <VersionOuterCard key={STRINGS.RECENT_RELEASES} style={{ flex: '1 0 auto' }} aria-label={STRINGS.RECENT_RELEASES}>
+      <VersionOuterCard key={STRINGS.RECENT_RELEASES} style={{ flex: '1 1 auto' }} aria-label={STRINGS.RECENT_RELEASES}>
         <CardHeader>
           <VersionCardHeader>
             <CardTitle>{STRINGS.RECENT_RELEASES}</CardTitle>
@@ -94,7 +94,7 @@ class VersionCard extends React.Component<Props> {
             <VersionCardRowTitle style={{ flexBasis: `25%` }}>{STRINGS.UPDATED}</VersionCardRowTitle>
             <VersionCardRowTitle style={{ flexBasis: `20%` }}>{STRINGS.STATUS}</VersionCardRowTitle>
           </VersionCardRow>
-          <InfoVersionContainer onWheel={this.scroller.scroll}>
+          <InfoVersionContainer>
             {this.props.template.instances && this.props.template.instances.map((instance: TemplateInstance, index: number) => (
               <VersionCardRow key={index} onClick={(event: any) => { this.onVersionChange(event, instance.version!) }}>
                 <VersionWrapper>

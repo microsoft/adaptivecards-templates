@@ -90,6 +90,7 @@ export const MainContentWrapper = styled.div`
   flex-direction: column;
   align-items: stretch;
   padding: 32px 32px 0 40px;
+  overflow: hidden;
 `;
 
 export const RowWrapper = styled.div`
