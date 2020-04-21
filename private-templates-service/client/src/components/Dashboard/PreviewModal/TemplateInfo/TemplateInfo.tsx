@@ -44,7 +44,6 @@ import {
   UNPUBLISH_BUTTON_TOOLTIP,
   TAGS,
   USAGE,
-  AUTHOR,
   TEMPLATE_INFO_VERSION,
   ERROR_LOADING_PAGE,
   VERSION_LIST_DROPDOWN,
@@ -349,7 +348,7 @@ class TemplateInfo extends React.Component<Props, State> {
                       <CenteredSpinner size={SpinnerSize.large} /> :
                       <IconWrapper><OwnerList oids={Array.from(oids) as string[]}/></IconWrapper>)}
                   {val.header === USAGE && <UsageNumber>{templateInstance.numHits}</UsageNumber>}
-                  {(val.header === AUTHOR) ? (this.props.owner && this.props.owner.displayNames) ? this.props.owner.displayNames[templateInstance.lastEditedUser!] : "" : 
+                  {(val.header === TEMPLATE_AUTHOR) ? (this.props.owner && this.props.owner.displayNames) ? this.props.owner.displayNames[templateInstance.lastEditedUser!] : "" : 
                     (val.header === PEOPLE)? oids.size + " " + (oids.size === 1? COLLABORATOR : val.bodyText) : val.bodyText}
                 </CardBody>
               </Card>
