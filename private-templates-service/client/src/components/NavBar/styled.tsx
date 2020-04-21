@@ -46,7 +46,7 @@ export const StyledLogo = styled.img`
   }
 `;
 
-export const Styledh1 = styled.div`
+export const Styledh1 = styled.h1`
   letter-spacing: 0;
   opacity: 1;
   font-size: 1.875rem;
@@ -59,7 +59,7 @@ export const Styledh1 = styled.div`
   }
 `;
 
-export const Styledh2 = styled.div`
+export const Styledh2 = styled.h2`
   color: ${COLORS.WHITE};
   letter-spacing: 0;
   opacity: 1;
