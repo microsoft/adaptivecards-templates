@@ -24,13 +24,16 @@
       ]
     },
     "application_insights_instrumentation_key": {
+      "type": "String",
+      "defaultValue": ""
+    },
+    "cosmos_database_name": {
       "type": "String"
     }
   },
   "variables": {
     "linuxFxVersion": "DOCKER|gracez72/acms:1.0",
     "appInsightsInstrumentationKey": "931c613f-fdcb-40a9-bd39-314ce31bc5d6",
-    "cosmos_database_name": "acms-cosmos",
     "databaseName": "acms",
     "docker_registry_server_url": "https://index.docker.io"
   },
@@ -53,7 +56,7 @@
             "[concat('Microsoft.Web/Sites/', parameters('sites_adaptivecms_name'))]"
           ],
           "properties": {
-            "ACMS_DB_CONNECTION": "[listConnectionStrings(resourceId('Microsoft.DocumentDB/databaseAccounts', variables('cosmos_database_name')), '2015-04-08').connectionStrings[0].connectionString]",
+            "ACMS_DB_CONNECTION": "[listConnectionStrings(resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('cosmos_database_name')), '2015-04-08').connectionStrings[0].connectionString]",
             "ACMS_REDIRECT_URI": "[concat('https://', parameters('sites_adaptivecms_name'), '.azurewebsites.net/')]",
             "ACMS_APP_ID": "[parameters('app_id')]",
             "WEBSITES_ENABLE_APP_SERVICE_STORAGE": "false",
