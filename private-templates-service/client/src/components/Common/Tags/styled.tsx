@@ -15,7 +15,7 @@ export const TagCloseIcon = styled(Icon)`
   border-radius: 50%;
 
   &:hover {
-    font-weight: 700;
+    font-weight: bold;
     cursor: pointer;
   }
 
@@ -74,7 +74,7 @@ export const TagAddIcon = styled(Icon) <{ open: boolean }>`
   border-radius: 50%;
 
   &: hover {
-    font-weight: 700;
+    font-weight: bold;
     cursor: pointer;
   }
 
@@ -103,7 +103,7 @@ export const TagSubmitIcon = styled(Icon)`
   border-radius: 50%;
 
   &: hover {
-    font-weight: 700;
+    font-weight: bold;
     cursor: pointer;
   }
 
