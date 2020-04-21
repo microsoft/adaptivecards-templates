@@ -19,12 +19,20 @@ Prerequisites:
 - Optional: [Azure Application Insights](https://docs.microsoft.com/en-us/azure/azure-monitor/app/app-insights-overview)
 
 1. Click the blue '**Deploy to Azure**'. Select the subscription and resource group under which you wish to deploy ACMS to. 
+
 2. Enter in the URL the portal will be hosted at into the '**Sites_adaptivecms_name**' field. Make sure this URL is added under the '**Redirect URIs**' section of your AAD App Registration. Detailed instructions and screenshots are listed below. 
-3. Enter in the Azure Active Directory App Registration application (client) id into the '**App_id**' field. 
-4. Enter the id of your App Service Plan into the '**Server_farm_id**' field. 
+
+3. Enter in the Azure Active Directory App Registration application (client) id into the '**Azure_active_directory_app_registration_id**' field. 
+
+4. Enter the id of your App Service Plan into the '**App_service_plan_subscription**' field. The format should be as follows: 
+
+   `/subscriptions/{subscription_id}/resourceGroups/{resource_group_name}/providers/Microsoft.Web/serverfarms/{App_service_plan_name}`
+
 5. If 'Yes' is selected for '**Telemetry_opt_in**', we will collect feedback from your instance of ACMS using App Insights. See details under 'Telemetry Privacy Statement' below. 
-6. Optional: If you possess an Azure Application Insights instance, enter the instrumentation key into the '**application_insights_instrumentation_key**' field. 
-To create an Application Insights resource or find your instrumentation key, please see [Create an Application Insights resource](https://docs.microsoft.com/en-us/azure/azure-monitor/app/create-new-resource). Also, please read the 'Telemetry Privacy Statement' below.
+
+6. Optional: If you possess an Azure Application Insights instance, enter the instrumentation key into the '**Application_insights_instrumentation_key**' field. 
+  To create an Application Insights resource or find your instrumentation key, please see [Create an Application Insights resource](https://docs.microsoft.com/en-us/azure/azure-monitor/app/create-new-resource). Also, please read the 'Telemetry Privacy Statement' below.
+
 7. Click '**Next**' and '**Deploy**'.
 
 Using the 'Deploy to Azure' button will fetch an image using the latest published version of [adaptivecards-templating-service](https://www.npmjs.com/package/adaptivecards-templating-service) and [adaptive-templating-service-typescript-node](https://www.npmjs.com/package/adaptive-templating-service-typescript-node). Once the deployment as finished, you will see the admin portal hosted at '**{Sites_adaptivecms_name}**.azurewebsites.net' and be able to hit the endpoints at the same URL. 
@@ -51,6 +59,32 @@ By accepting the **Telemetry_opt_in**, you are improving the product by sending 
 **application_insights_instrumentation_key**
 
 By supplying an instrumentation key in the **application_insights_instrumentation_key** field, you acknowledge your responsibility to provide a privacy statement to your end user.
+
+### Debugging Common Issues
+
+##### Deployment Errors
+
+These errors occur on the 'Deploy to Azure' page opened after clicking the button and mean that the fields entered are invalid.  
+
+- **InvalidTemplateDeployment**: The template deployment 'AdaptiveCardsTemplates' is not valid according to the validation procedure. The tracking id is '{correlation_id}'. See inner errors for details.
+
+  If you have Azure CLI installed, try running the following command to see error details: 
+
+  ```bash
+  az monitor activity-log --correlation-id xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+  ```
+
+  Or in PowerShell: 
+
+  ```powershell
+  Get-AzureRMLog -CorrelationId xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx -DetailedOutput
+  ```
+
+  The following issues may have caused the template to be invalid: 
+
+  - The value entered in the 'cosmos_database_name' field in the deployment form has already been used. This value must be unique. 
+  - The value entered in the 'Azure_active_directory_app_registration_id' field does not exist. 
+  - The value entered in the 'App_service_plan_subscription' field does not exist. Ensure that it is in the following format: `/subscriptions/{subscription_id}/resourceGroups/{resource_group_name}/providers/Microsoft.Web/serverfarms/{App_service_plan_name}`
 
 ## Running the latest changes locally with MongoDB
 
@@ -193,5 +227,4 @@ Things to watch out for:
 
 -   You **must** have auto-saving turned off on VSCode. Saving needs to be manually triggered.
 -   Make sure you are accessing the repo by opening the repository folder in VSCode rather than particular files in the repository. To do so, in VSCode, go to File -> Open Folder and open the adaptivecards-templates folder.
-
 
