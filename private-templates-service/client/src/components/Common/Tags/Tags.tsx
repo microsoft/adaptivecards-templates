@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { RefObject } from 'react';
 import { connect } from 'react-redux';
 
 import { RootState } from '../../../store/rootReducer';
@@ -49,7 +49,7 @@ interface State {
 
 class Tags extends React.Component<Props, State>  {
   addTagInput = React.createRef<HTMLInputElement>();
-  tagRefs: { [ref: string]: HTMLDivElement };
+  tagRefs: { [ref: string]: RefObject<HTMLDivElement> };
 
   constructor(props: Props) {
     super(props);
@@ -91,8 +91,8 @@ class Tags extends React.Component<Props, State>  {
 
   highlightTag = (tagToHighlight: string, currentTags: string[]): void => {
     for (let tag of currentTags) {
-      if (tag === tagToHighlight && tag in this.tagRefs) {
-        this.tagRefs[tag].classList.add('duplicate'); // Add the class that renders an animation
+      if (tag === tagToHighlight && tag in this.tagRefs && this.tagRefs[tag] !== null && this.tagRefs[tag]!.current) {
+        this.tagRefs[tag]!.current!.classList.add('duplicate'); // Add the class that renders an animation
       }
     }
   }
@@ -144,17 +144,17 @@ class Tags extends React.Component<Props, State>  {
     return (
       <React.Fragment>
         {tags && tags.map((tag: string) => (
-          <TagBody setRef={(ref: HTMLDivElement) => this.tagRefs[tag] = ref}
-                  tag={tag} tagRemove={tagRemove} onAnimationEnd={this.onAnimationEnd} 
-                  key={tag} onClick={onClick} onKeyDownRemoveTag={this.onKeyDownRemoveTag} 
-                  ifModalState={modalState? true : false}
-                  allowEdit={allowEdit}
-                  toggleStyle={toggleStyle}
-                  isSelected={this.props.selectedTags ? (this.props.selectedTags.includes(tag) ? true : false) : undefined} 
-                  isFavorite={this.props.favoriteTags ? (this.props.favoriteTags.includes(tag) ? true : false) : undefined}
-                  allowSetFavorite={this.props.allowSetFavorite}
-                  onAddFavoriteTag={this.props.onAddFavoriteTag}
-                  onRemoveFavoriteTag={this.props.onRemoveFavoriteTag}
+          <TagBody setRef={(ref: any) => this.tagRefs[tag] = ref}
+            tag={tag} tagRemove={tagRemove} onAnimationEnd={this.onAnimationEnd}
+            key={tag} onClick={onClick} onKeyDownRemoveTag={this.onKeyDownRemoveTag}
+            ifModalState={modalState ? true : false}
+            allowEdit={allowEdit}
+            toggleStyle={toggleStyle}
+            isSelected={this.props.selectedTags ? (this.props.selectedTags.includes(tag) ? true : false) : undefined}
+            isFavorite={this.props.favoriteTags ? (this.props.favoriteTags.includes(tag) ? true : false) : undefined}
+            allowSetFavorite={this.props.allowSetFavorite}
+            onAddFavoriteTag={this.props.onAddFavoriteTag}
+            onRemoveFavoriteTag={this.props.onRemoveFavoriteTag}
 
           />
         ))}

@@ -253,7 +253,7 @@ class TemplateInfo extends React.Component<Props, State> {
     const tooltipID = val.text.replace(" ", "_").trim();
     if (val.text === PUBLISH) {
       return (
-        <TooltipContainer>
+        <TooltipContainer key={val.text}>
           <TooltipHost id={tooltipID} content={templateState === PostedTemplate.StateEnum.Live ? val.altTooltip : val.tooltip}>
             <ActionButton key={templateState === PostedTemplate.StateEnum.Live ? val.altText : val.text}
               iconProps={val.icon}
@@ -269,7 +269,7 @@ class TemplateInfo extends React.Component<Props, State> {
     }
     else {
       return (
-        <TooltipContainer>
+        <TooltipContainer key={val.text}>
           <TooltipHost id={tooltipID} content={val.tooltip}>
             <ActionButton key={val.text}
               iconProps={val.icon}
@@ -365,17 +365,15 @@ class TemplateInfo extends React.Component<Props, State> {
             ))}
           </RowWrapper>
           <Card aria-label={TAGS}>
-            <form aria-labelledby={tagCardID}>
-              <CardHeader id={tagCardID}>{TAGS}</CardHeader>
-              <CardBody>
-                <TagsWrapper>
-                  {isFetchingTags ?
-                    <CenteredSpinner size={SpinnerSize.large} />
-                    : <Tags updateTags={this.saveTags} allowSetFavorite={true} favoriteTags={favoriteTags} onAddFavoriteTag={this.props.onAddFavoriteTag} onRemoveFavoriteTag={this.props.onRemoveFavoriteTag} tagRemove={this.tagRemove} tags={tags} allowAddTag={true} allowEdit={true} />
-                  }
-                </TagsWrapper>
-              </CardBody>
-            </form>
+            <CardHeader id={tagCardID}>{TAGS}</CardHeader>
+            <CardBody>
+              <TagsWrapper>
+                {isFetchingTags ?
+                  <CenteredSpinner size={SpinnerSize.large} />
+                  : <Tags updateTags={this.saveTags} allowSetFavorite={true} favoriteTags={favoriteTags} onAddFavoriteTag={this.props.onAddFavoriteTag} onRemoveFavoriteTag={this.props.onRemoveFavoriteTag} tagRemove={this.tagRemove} tags={tags} allowAddTag={true} allowEdit={true} />
+                }
+              </TagsWrapper>
+            </CardBody>
           </Card>
           <RowWrapper>
             <VersionCard template={this.props.template} templateVersion={this.state.version} onSwitchVersion={this.onSwitchVersion} />
