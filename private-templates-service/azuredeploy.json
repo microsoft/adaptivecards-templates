@@ -9,22 +9,11 @@
     "app_id": {
       "type": "String"
     },
-    "location": {
+    "siteLocation": {
       "defaultValue": "West US",
       "type": "String"
     },
     "server_farm_id": {
-      "type": "String"
-    },
-    "docker_registry_server_uri": {
-      "defaultValue": "https://acmsregistry.azurecr.io",
-      "type": "String"
-    },
-    "docker_registry_server_username": {
-      "defaultValue": "ACMSRegistry",
-      "type": "String"
-    },
-    "docker_registry_server_password": {
       "type": "String"
     },
     "telemetry_opt_in": {
@@ -39,17 +28,18 @@
     }
   },
   "variables": {
-    "linuxFxVersion": "DOCKER|acmsregistry.azurecr.io/acmsimage",
+    "linuxFxVersion": "DOCKER|gracez72/acms:1.0",
     "appInsightsInstrumentationKey": "931c613f-fdcb-40a9-bd39-314ce31bc5d6",
     "cosmos_database_name": "acms-cosmos",
     "databaseName": "acms",
+    "docker_registry_server_url": "https://index.docker.io"
   },
   "resources": [
     {
       "type": "Microsoft.Web/sites",
       "apiVersion": "2018-11-01",
       "name": "[parameters('sites_adaptivecms_name')]",
-      "location": "[parameters('location')]",
+      "location": "[parameters('siteLocation')]",
       "kind": "app,linux,container",
       "properties": {
         "serverFarmId": "[parameters('server_farm_id')]"
@@ -67,9 +57,7 @@
             "ACMS_REDIRECT_URI": "[concat('https://', parameters('sites_adaptivecms_name'), '.azurewebsites.net/')]",
             "ACMS_APP_ID": "[parameters('app_id')]",
             "WEBSITES_ENABLE_APP_SERVICE_STORAGE": "false",
-            "DOCKER_REGISTRY_SERVER_URL": "[parameters('docker_registry_server_uri')]",
-            "DOCKER_REGISTRY_SERVER_USERNAME": "[parameters('docker_registry_server_username')]",
-            "DOCKER_REGISTRY_SERVER_PASSWORD": "[parameters('docker_registry_server_password')]",
+            "DOCKER_REGISTRY_SERVER_URL": "[variables('docker_registry_server_url')]",
             "ACMS_APP_INSIGHTS_INSTRUMENTATION_KEY": "[if(equals(parameters('telemetry_opt_in'), 'Yes'), variables('appInsightsInstrumentationKey'), '')]",
             "USER_APP_INSIGHTS_INSTRUMENTATION_KEY": "[parameters('application_insights_instrumentation_key')]"
           }
@@ -80,7 +68,7 @@
       "type": "Microsoft.Web/sites/config",
       "apiVersion": "2018-11-01",
       "name": "[concat(parameters('sites_adaptivecms_name'), '/web')]",
-      "location": "[parameters('location')]",
+      "location": "[parameters('siteLocation')]",
       "dependsOn": [
         "[resourceId('Microsoft.Web/sites', parameters('sites_adaptivecms_name'))]"
       ],
@@ -149,7 +137,7 @@
       "type": "Microsoft.DocumentDB/databaseAccounts",
       "name": "[variables('cosmos_database_name')]",
       "apiVersion": "2019-08-01",
-      "location": "[parameters('location')]",
+      "location": "[parameters('siteLocation')]",
       "kind": "MongoDB",
       "properties": {
         "consistencyPolicy": {
@@ -159,7 +147,7 @@
         },
         "locations": [
           {
-            "locationName": "[parameters('location')]",
+            "locationName": "[parameters('siteLocation')]",
             "provisioningState": "Succeeded",
             "failoverPriority": 0,
             "isZoneRedundant": false
