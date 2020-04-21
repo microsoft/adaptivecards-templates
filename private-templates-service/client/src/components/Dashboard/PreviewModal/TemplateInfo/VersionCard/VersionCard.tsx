@@ -18,12 +18,15 @@ import {
   VersionWrapper,
   InfoVersionContainer,
   VersionOuterCard,
-  VersionCardBody
+  VersionCardBody,
+  VersionCardRowHover,
+  VersionElementsContainer,
+  StatusElementsContainer,
+  StatusIndicatorOverride
 } from './styled'
 
 import {
   CardHeader,
-  StatusIndicator,
   Status
 } from './../styled';
 
@@ -37,7 +40,6 @@ import { updateCurrentTemplateVersion } from '../../../../../store/currentTempla
 import VersionModal from '../../../../Common/VersionModal';
 import { MANAGE, NA } from '../../../../../assets/strings';
 import { RootState } from '../../../../../store/rootReducer';
-import { Scroller } from "../../../../../utils/AllCardsUtil/Scroller";
 
 interface Props {
   template: Template;
@@ -66,12 +68,6 @@ const mapDispatchToProps = (dispatch: any) => {
 };
 
 class VersionCard extends React.Component<Props> {
-  scroller: Scroller;
-  constructor(props: Props) {
-    super(props);
-    this.scroller = new Scroller();
-  }
-
   onVersionChange = (event: any, version: string) => {
     this.props.updateCurrentTemplateVersion(this.props.template, version);
     this.props.onSwitchVersion(version);
@@ -92,21 +88,25 @@ class VersionCard extends React.Component<Props> {
           <VersionCardRow>
             <VersionCardRowTitle style={{ flexBasis: `15%` }}>{STRINGS.VERSION}</VersionCardRowTitle>
             <VersionCardRowTitle style={{ flexBasis: `25%` }}>{STRINGS.UPDATED}</VersionCardRowTitle>
-            <VersionCardRowTitle style={{ flexBasis: `20%` }}>{STRINGS.STATUS}</VersionCardRowTitle>
+            <VersionCardRowTitle style={{ flexBasis: `25%` }}>{STRINGS.STATUS}</VersionCardRowTitle>
           </VersionCardRow>
           <InfoVersionContainer>
             {this.props.template.instances && this.props.template.instances.map((instance: TemplateInstance, index: number) => (
-              <VersionCardRow key={index} onClick={(event: any) => { this.onVersionChange(event, instance.version!) }}>
+              <VersionCardRowHover key={index} onClick={(event: any) => { this.onVersionChange(event, instance.version!) }}>
                 <VersionWrapper>
-                  {instance.version}
-                  {instance.version === this.props.templateVersion && <VersionIcon iconName={'View'} />}
+                  <VersionElementsContainer>
+                    {instance.version}
+                    {instance.version === this.props.templateVersion && <VersionIcon iconName={'View'} />}
+                  </VersionElementsContainer>
                 </VersionWrapper>
                 <DateWrapper>{instance.updatedAt ? getDateString(instance.updatedAt) : `${NA}`}</DateWrapper>
                 <StatusWrapper>
-                  <StatusIndicator state={instance.state} />
-                  <Status>{getStateFromInstance(instance)}</Status>
+                  <StatusElementsContainer>
+                    <StatusIndicatorOverride state={instance.state} />
+                    <Status>{getStateFromInstance(instance)}</Status>
+                  </StatusElementsContainer>
                 </StatusWrapper>
-              </VersionCardRow>
+              </VersionCardRowHover>
             ))}
           </InfoVersionContainer>
         </VersionCardBody>
