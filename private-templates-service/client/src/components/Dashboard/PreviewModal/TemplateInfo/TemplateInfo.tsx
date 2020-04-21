@@ -201,10 +201,10 @@ class TemplateInfo extends React.Component<Props, State> {
     super(props);
     const currentVersion = getLatestVersion(this.props.template);
     this.state = { version: currentVersion }
-    let alreadySent: string[] = [];
+    let alreadySent = new Set();
     for (let instance of this.props.template.instances || []) {
-      if (!alreadySent || !alreadySent.includes(instance.lastEditedUser!)) {
-        alreadySent.push(instance.lastEditedUser!);
+      if (!(alreadySent.has(instance.lastEditedUser!))) {
+        alreadySent.add(instance.lastEditedUser!);
         this.props.getOwnerName(instance.lastEditedUser!);
         this.props.getOwnerProfilePicture(instance.lastEditedUser!);
       }

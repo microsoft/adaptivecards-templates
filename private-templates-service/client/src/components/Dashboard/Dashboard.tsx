@@ -146,10 +146,10 @@ class Dashboard extends React.Component<Props> {
     if (prevProps.recentTemplates !== this.props.recentTemplates &&
       this.props.recentTemplates.recentlyViewed && this.props.recentTemplates.recentlyViewed.templates) {
       let templates = this.props.recentTemplates.recentlyViewed.templates;
-      let alreadySent: string[] = [];
+      let alreadySent = new Set();
       for (let template of templates) {
-        if (template.instances && template.instances[0].lastEditedUser && (!alreadySent || !alreadySent.includes(template.instances[0].lastEditedUser))) {
-          alreadySent.push(template.instances[0].lastEditedUser);
+        if (template.instances && template.instances[0].lastEditedUser && (!(alreadySent.has(template.instances[0].lastEditedUser)))) {
+          alreadySent.add(template.instances[0].lastEditedUser);
           this.props.getOwnerName(template.instances[0].lastEditedUser);
           this.props.getOwnerProfilePicture(template.instances[0].lastEditedUser);
         }
