@@ -33,7 +33,7 @@ import {
 } from "./styled";
 import { INavLinkGroup, INavStyles, INavLink } from "office-ui-fabric-react";
 import SkipLink from "../Common/SkipLink";
-import { NAVBAR, OUT, IN, ADAPTIVE_CARDS, PORTAL, ARIA_DASHBOARD, ARIA_NEW_CARD, ARIA_ALL_CARDS, ARIA_DRAFTS, ARIA_PUBLISHED, ARIA_TAGS } from "../../assets/strings";
+import { NAVBAR, OUT, IN, ADAPTIVE_CARDS, PORTAL, ARIA_DASHBOARD, ARIA_NEW_CARD } from "../../assets/strings";
 
 
 interface Props {
@@ -97,11 +97,6 @@ const iconStyle = {
   margin: "0px 10px 0px 40px"
 };
 
-const iconStylePink = {
-  color: 'pink',
-  margin: "0px 10px 0px 40px"
-}
-
 export const newTemplateURL = "/designer/newcard/1.0"
 
 const navMenuLinks: INavLinkGroup[] = [
@@ -118,7 +113,7 @@ const navMenuLinks: INavLinkGroup[] = [
         ariaLabel: ARIA_DASHBOARD
       },
       {
-        name: "New Template",
+        name: STRINGS.NEW_CARD,
         url: newTemplateURL,
         iconProps: {
           iconName: "CalculatorAddition",
@@ -132,40 +127,10 @@ const navMenuLinks: INavLinkGroup[] = [
         url: "/templates/all",
         iconProps: {
           iconName: "ViewList",
-          style: iconStylePink
+          style: iconStyle
         },
         title: "",
-        ariaLabel: ARIA_ALL_CARDS
-      },
-      {
-        name: STRINGS.DRAFTS,
-        url: "/drafts",
-        iconProps: {
-          iconName: "SingleColumnEdit",
-          style: iconStylePink
-        },
-        title: "",
-        ariaLabel: ARIA_DRAFTS
-      },
-      {
-        name: STRINGS.PUBLISHED,
-        url: "/published",
-        iconProps: {
-          iconName: "PublishContent",
-          style: iconStylePink
-        },
-        title: "",
-        ariaLabel: ARIA_PUBLISHED
-      },
-      {
-        name: STRINGS.TAGS,
-        url: "/tags",
-        iconProps: {
-          iconName: "Tag",
-          style: iconStylePink
-        },
-        title: "",
-        ariaLabel: ARIA_TAGS
+        ariaLabel: "Link to All Cards"
       }
     ]
   }
