@@ -138,7 +138,7 @@
     },
     {
       "type": "Microsoft.DocumentDB/databaseAccounts",
-      "name": "[variables('cosmos_database_name')]",
+      "name": "[parameters('cosmos_database_name')]",
       "apiVersion": "2019-08-01",
       "location": "[parameters('siteLocation')]",
       "kind": "MongoDB",
@@ -171,10 +171,10 @@
     },
     {
       "type": "Microsoft.DocumentDB/databaseAccounts/mongodbDatabases",
-      "name": "[concat(variables('cosmos_database_name'), '/', variables('databaseName'))]",
+      "name": "[concat(parameters('cosmos_database_name'), '/', variables('databaseName'))]",
       "apiVersion": "2019-08-01",
       "dependsOn": [
-        "[resourceId('Microsoft.DocumentDB/databaseAccounts/', variables('cosmos_database_name'))]"
+        "[resourceId('Microsoft.DocumentDB/databaseAccounts/', parameters('cosmos_database_name'))]"
       ],
       "properties": {
         "resource": {
