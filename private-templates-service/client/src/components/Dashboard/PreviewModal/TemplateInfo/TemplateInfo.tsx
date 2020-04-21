@@ -206,6 +206,8 @@ function getTemplateInstance(template: Template, version: string): TemplateInsta
 
 interface State {
   version: string
+
+
 }
 
 class TemplateInfo extends React.Component<Props, State> {
@@ -302,6 +304,14 @@ class TemplateInfo extends React.Component<Props, State> {
   }
 
   render() {
+    let truth = false;
+    if (this.props.owner && this.props.owner!.displayNames!) {
+      console.log(this.props.owner.imageURLs!);
+      console.log(Object.keys(this.props.owner.imageURLs!).length);
+      console.log(Object.keys(this.props.owner.imageURLs!).length == this.props.template.instances?.length);
+      truth = (Object.keys(this.props.owner.imageURLs!).length == this.props.template.instances?.length);
+    }
+
     const {
       tags,
       instances,
@@ -331,7 +341,6 @@ class TemplateInfo extends React.Component<Props, State> {
       favoriteTags = allTags.allTags.favoriteTags;
     }
     let tagCardID = "Card tags";
-
     return (
       <OuterWrapper>
         <HeaderWrapper>
@@ -370,7 +379,7 @@ class TemplateInfo extends React.Component<Props, State> {
                   {val.iconName && ((isFetchingOwnerName || isFetchingOwnerPic) ?
                     <CenteredSpinner size={SpinnerSize.large} /> :
                     <IconWrapper><OwnerAvatar sizeInPx={50} oID={templateInstance.lastEditedUser!} /></IconWrapper>)}
-                  {val.header === PEOPLE && ((isFetchingOwnerName || isFetchingOwnerPic) ?
+                  {val.header === PEOPLE && ((isFetchingOwnerName || isFetchingOwnerPic || !truth) ?
                     <CenteredSpinner size={SpinnerSize.large} /> :
                     <IconWrapper><OwnerList oids={oids} /></IconWrapper>)}
                   {val.header === USAGE && <UsageNumber>{templateInstance.numHits}</UsageNumber>}

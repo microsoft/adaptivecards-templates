@@ -16,10 +16,10 @@ const mapStateToProps = (state: RootState) => {
     owner: state.templateOwner.owners,
   };
 };
-const getPersonaProps = (persona: IFacepilePersona) => {	
-  return {	
+const getPersonaProps = (persona: IFacepilePersona) => {
+  return {
     hidePersonaDetails: true
-  }	
+  }
 };
 const facepileProps: IFacepileProps = {
   personas: [],
@@ -31,7 +31,7 @@ class OwnerList extends React.Component<Props> {
 
   render() {
     let facepilePersonas: IFacepilePersona[] = [];
-    for (let oid of this.props.oids){
+    for (let oid of this.props.oids) {
       if (this.props.owner && this.props.owner.displayNames && this.props.owner.displayNames[oid]) {
         if (this.props.owner.imageURLs![oid]) {
           facepilePersonas.push({ imageUrl: this.props.owner.imageURLs![oid] });
