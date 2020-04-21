@@ -60,12 +60,7 @@ class SearchPage extends React.Component<Props, State> {
   toggleModal = () => {
     this.setState({ isPreviewOpen: !this.state.isPreviewOpen });
   };
-  
-  componentDidUpdate = (prevProps: Props) => {
-    // if (this.props.filterType !== prevProps.filterType || this.props.sortType !== prevProps.sortType) {
-    //   this.props.setSearchQuery(this.props.query, this.props.sortType, this.props.filterType.state, this.props.filterType.owner)
-    // }
-  }
+
   render() {
     if (this.props.loading) {
       return (
