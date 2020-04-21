@@ -1,11 +1,15 @@
-# Using ACMS with Microsoft Flow
+# Using ACMS with Microsoft Power Automate
 
-### Creating a Custom Connector
+### Overview
+Microsoft Power Automate is a platform where you can create automated workflows without coding. By creating a customer connector, users can integrate the ACMS API seamlessly into power automate flows. The following instruction will lead you setp-by-step how to create a customer connector that connects your own ACMS API and power automate account and provide an example of how to use the customer connector into flows.
 
-Prerequisites:
+### Step1. Creating a Custom Connector
+
+#### Prerequisites
 -   Azure Active Directory App Registration 
 -   ACMS ([instructions on deploying ACMS](https://github.com/microsoft/adaptivecards-templates/blob/dev/private-templates-service/README.md))
 
+#### Instructions
 1. **Navigate to 'Custom connectors' under the Data header on the navigation bar on the left side of [Microsoft Flow](https://flow.microsoft.com/).** 
 2. **Under the 'General' step, add the URL of the ACMS admin portal under the 'Host' field. Provide any additional information eg. a description for your connector and move to 'Security'.**
 3. **Under 'Authentication type', select 'OAuth 2.0'.** 
@@ -26,14 +30,15 @@ The default connector definition from the swagger YAML file has two main operati
 2. RenderTemplate: Returns a data-bound card JSON given the version, templateId, and data JSON
 
 
-### Creating a Flow with the Custom Connector
+### Step2. Creating a Flow with the Custom Connector
 
 This example flow will use the private connector we created from the steps listed under 'Creating a Custom Connector' and post the adaptive card to a Microsoft Teams channel. 
 
-Prerequisites:
+#### Prerequisites
 
--   ACMS private connector 
+-   ACMS private connector (Step 1)
 
+#### Instructions
 1. **Add a manual trigger ('Manually trigger a flow') with inputs for a data string, template id string, and version string.**
 
 2.  **Select insert a new step and add an action. Search for the private connector that you created previously. Select 'Get data populated template'.**

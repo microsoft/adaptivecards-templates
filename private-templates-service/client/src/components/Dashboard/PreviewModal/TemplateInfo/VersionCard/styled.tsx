@@ -2,18 +2,16 @@ import styled from 'styled-components';
 import { COLORS, FONTS } from '../../../../../globalStyles';
 import { ActionButton, Icon } from 'office-ui-fabric-react';
 import {
-  VersionContainer
-} from '../../../../Common/VersionModal/styled';
-
-import {
   Card,
   CardBody,
   StatusIndicator
 } from './../styled';
 import { TemplateStateWrapper } from '../../../../AdaptiveCardPanel/styled';
+import { VersionContainer } from '../../../../Common/VersionModal/styled';
 
 export const VersionOuterCard = styled(Card)`
   overflow-y: hidden;
+  margin-bottom: 0px;
 `
 export const VersionCardBody = styled(CardBody)`
   overflow-y: hidden;
@@ -24,7 +22,7 @@ export const CardManageButton = styled(ActionButton)`
   color: ${COLORS.GREY3};
 `
 
-export const CardTitle = styled.div`
+export const CardTitle = styled.h2`
   font-size: 1.375rem;
   font-family: ${FONTS.SEGOE_UI_SEMI_BOLD};
   margin-left: 40px;
@@ -44,7 +42,7 @@ export const VersionCardRow = styled.div`
   width: 100%;
   padding-top: 8px;
   padding-left: 16px;
-  padding-bottom: 8px;
+  padding-bottom: 9px;
   padding-right: 16px;
 `
 
@@ -91,7 +89,6 @@ export const VersionIcon = styled(Icon)`
   color: ${COLORS.BLUE};
   padding: 6px 0 0 15px;
 `
-
 export const InfoVersionContainer = styled(VersionContainer)`
   max-height: 150px;
 `
@@ -107,4 +104,5 @@ export const StatusIndicatorOverride = styled(StatusIndicator)`
 
 export const StatusElementsContainer = styled(TemplateStateWrapper)`
   width: 100px;
-`
+  max-height: 7.5rem;
+`;

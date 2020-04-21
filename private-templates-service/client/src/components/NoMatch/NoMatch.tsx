@@ -5,7 +5,7 @@ import { useHistory } from "react-router-dom";
 import { setSearchBarVisible } from "../../store/search/actions";
 
 import { Centered, OuterContainer, ErrorWrapper, ErrorMessage, DashboardButton } from "./styled";
-import { ERROR_MESSAGE, GO_TO_DASHBOARD, TAG_ERROR_MESSAGE, TAG_GO_TO_DASHBOARD } from "../../assets/strings";
+import { TAG_ERROR_MESSAGE, TAG_GO_TO_DASHBOARD } from "../../assets/strings";
 
 const mapDispatchToProps = (dispatch: any) => {
   return {

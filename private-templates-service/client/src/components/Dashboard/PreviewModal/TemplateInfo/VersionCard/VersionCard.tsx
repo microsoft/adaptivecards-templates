@@ -75,7 +75,7 @@ class VersionCard extends React.Component<Props> {
 
   render() {
     return (
-      <VersionOuterCard key={STRINGS.RECENT_RELEASES} style={{ flex: '1 0 auto' }} aria-label={STRINGS.RECENT_RELEASES}>
+      <VersionOuterCard key={STRINGS.RECENT_RELEASES} style={{ flex: '1 1 auto' }} aria-label={STRINGS.RECENT_RELEASES}>
         <CardHeader>
           <VersionCardHeader>
             <CardTitle>{STRINGS.RECENT_RELEASES}</CardTitle>

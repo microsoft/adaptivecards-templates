@@ -79,6 +79,16 @@ class VersionModal extends React.Component<Props, State> {
     this.state = { versionList: this.props.template.instances ? new Array(this.props.template.instances.length) : [] }
   }
 
+  containsState = (state: PostedTemplate.StateEnum): boolean => {
+    let instances = this.props.template.instances || [];
+    for (let i = 0; i < this.state.versionList.length; i++){
+      if (instances[i].state == state && this.state.versionList[i]){
+        return true;
+      }
+    }
+    return false;
+  }
+
   delete = () => {
     let list = this.props.template.instances!;
     let versionList: string[] = [];
@@ -159,8 +169,8 @@ class VersionModal extends React.Component<Props, State> {
             <ButtonGroup>
               <LightButton text={VERSION_CANCEL} onClick={this.props.closeModal} />
               <LightButton text={VERSION_DELETE} onClick={this.delete} />
-              <PrimaryStyleButton text={VERSION_UNPUBLISH} onClick={this.unpublish} />
-              <PrimaryStyleButton text={VERSION_PUBLISH} onClick={this.publish} />
+              <PrimaryStyleButton disabled={this.containsState(PostedTemplate.StateEnum.Draft) || this.containsState(PostedTemplate.StateEnum.Deprecated)} text={VERSION_UNPUBLISH} onClick={this.unpublish} />
+              <PrimaryStyleButton disabled={this.containsState(PostedTemplate.StateEnum.Live)} text={VERSION_PUBLISH} onClick={this.publish} />
             </ButtonGroup>
           </BottomRow>
         </Modal>

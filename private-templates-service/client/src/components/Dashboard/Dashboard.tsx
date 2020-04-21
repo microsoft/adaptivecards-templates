@@ -227,7 +227,7 @@ class Dashboard extends React.Component<Props> {
             </section>
           </DashboardContainer>
           <TagsContainer aria-label={FAVORITED_TAGS}>
-          <Title style={{ marginRight: "150px" }}>{FAVORITED_TAGS}</Title>
+          <Title>{FAVORITED_TAGS}</Title>
           <TagList tags={favoriteTags} 
                    allowEdit={false} 
                    onClick={this.tagOnClick} 

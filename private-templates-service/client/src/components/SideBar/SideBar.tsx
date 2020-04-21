@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 
 import { connect } from "react-redux";
 import { RootState } from "../../store/rootReducer";
-import { UserType } from "../../store/auth/types";
+import { UserType, AuthState } from "../../store/auth/types";
 import { ModalState } from "../../store/page/types";
 import { newTemplate } from "../../store/currentTemplate/actions";
 
@@ -30,12 +30,12 @@ import {
 } from "./styled";
 import { INavLinkGroup, INavStyles } from "office-ui-fabric-react";
 import SkipLink from "../Common/SkipLink";
-import { NAVBAR, OUT, IN, ADAPTIVE_CARDS, PORTAL, ARIA_DASHBOARD, ARIA_NEW_CARD, ARIA_ALL_CARDS, ARIA_DRAFTS, ARIA_PUBLISHED, ARIA_TAGS } from "../../assets/strings";
+import { NAVBAR, OUT, IN, ADAPTIVE_CARDS, PORTAL, ARIA_DASHBOARD, ARIA_NEW_CARD } from "../../assets/strings";
 
 
 interface Props {
   authButtonMethod: () => void;
-  isAuthenticated: boolean;
+  auth: AuthState
   user?: UserType;
   templateID: string | undefined;
   newTemplate: () => void;
@@ -44,7 +44,7 @@ interface Props {
 
 const mapStateToProps = (state: RootState) => {
   return {
-    isAuthenticated: state.auth.isAuthenticated,
+    auth: state.auth,
     user: state.auth.user,
     templateID: state.currentTemplate.templateID,
     modalState: state.page.modalState
@@ -82,11 +82,6 @@ const iconStyle = {
   margin: "0px 10px 0px 40px"
 };
 
-const iconStylePink = {
-  color: 'pink',
-  margin: "0px 10px 0px 40px"
-}
-
 export const newTemplateURL = "/designer/newcard/1.0"
 
 const navMenuLinks: INavLinkGroup[] = [
@@ -103,7 +98,7 @@ const navMenuLinks: INavLinkGroup[] = [
         ariaLabel: ARIA_DASHBOARD
       },
       {
-        name: "New Template",
+        name: STRINGS.NEW_CARD,
         url: newTemplateURL,
         iconProps: {
           iconName: "CalculatorAddition",
@@ -117,40 +112,10 @@ const navMenuLinks: INavLinkGroup[] = [
         url: "/templates/all",
         iconProps: {
           iconName: "ViewList",
-          style: iconStylePink
+          style: iconStyle
         },
         title: "",
-        ariaLabel: ARIA_ALL_CARDS
-      },
-      {
-        name: STRINGS.DRAFTS,
-        url: "/drafts",
-        iconProps: {
-          iconName: "SingleColumnEdit",
-          style: iconStylePink
-        },
-        title: "",
-        ariaLabel: ARIA_DRAFTS
-      },
-      {
-        name: STRINGS.PUBLISHED,
-        url: "/published",
-        iconProps: {
-          iconName: "PublishContent",
-          style: iconStylePink
-        },
-        title: "",
-        ariaLabel: ARIA_PUBLISHED
-      },
-      {
-        name: STRINGS.TAGS,
-        url: "/tags",
-        iconProps: {
-          iconName: "Tag",
-          style: iconStylePink
-        },
-        title: "",
-        ariaLabel: ARIA_TAGS
+        ariaLabel: "Link to All Cards"
       }
     ]
   }
@@ -178,7 +143,7 @@ const SideBar = (props: Props) => {
       history.push("/");
     }
   }
-
+  
   return (
     <OuterSideBarWrapper aria-label={NAVBAR}>
       <MainItems>
@@ -196,11 +161,11 @@ const SideBar = (props: Props) => {
             <Title>{props.user && props.user.organization}</Title>
           </Name>
         </UserWrapper>
-        {props.isAuthenticated && <NavMenu styles={navMenuLinksProps} groups={navMenuLinks} onLinkClick={onNavClick} />}
-        {props.isAuthenticated && <SkipLink />}
+        {props.auth.isAuthenticated && props.auth.graphAccessToken && <NavMenu styles={navMenuLinksProps} groups={navMenuLinks} onLinkClick={onNavClick} />}
+        {props.auth.isAuthenticated && props.auth.graphAccessToken && <SkipLink />}
       </MainItems>
 
-      <SignOut onClick={props.authButtonMethod} tabIndex={props.modalState ? -1 : 0}>{STRINGS.SIGN} {props.isAuthenticated ? `${OUT}` : `${IN}`}</SignOut>
+      <SignOut onClick={props.authButtonMethod} tabIndex={props.modalState ? -1 : 0}>{STRINGS.SIGN} {props.auth.isAuthenticated ? `${OUT}` : `${IN}`}</SignOut>
     </OuterSideBarWrapper>
   );
 };

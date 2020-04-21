@@ -14,65 +14,46 @@ variables:
   azureSubscription: 'Adaptive Cards (47c80630-3d74-4b3e-a2f4-57e6368cd8c6)'
   keyVault: 'AC-KeyVault-West'
 
-jobs:
-- job: Windows
-  pool:
-    vmImage: 'windows-latest'
+pool:
+  vmImage: 'ubuntu-latest'
 
-  steps:
-  - task: PoliCheck@1
-    inputs:
-      inputType: 'Basic'
-      targetType: 'F'
-      targetArgument: '$(system.defaultworkingdirectory)/private-templates-service'
-      result: 'PoliCheck.xml'
-  - task: PublishBuildArtifacts@1
-    inputs:
-      PathtoPublish: '$(system.defaultworkingdirectory)/private-templates-service'
-      ArtifactName: 'PoliCheck.xml'
-      publishLocation: 'Container'
+steps:
+- task: AzureKeyVault@1
+  inputs:
+    azureSubscription: $(azureSubscription)
+    keyVaultName: $(keyVault)
+    secretsFilter: 'DevACMSSecret'
 
-- job: Linux
-  pool:
-    vmImage: 'ubuntu-latest'
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+        Write-Host "##vso[task.setvariable variable=ACMS_APP_SECRET;]$(DevACMSSecret)"
 
-  steps:
-  - task: AzureKeyVault@1
-    inputs:
-      azureSubscription: $(azureSubscription)
-      keyVaultName: $(keyVault)
-      secretsFilter: 'DevACMSSecret'
+- task: NodeTool@0 
+  inputs:
+    versionSpec: '12.x'
 
-  - task: PowerShell@2
-    inputs:
-      targetType: 'inline'
-      script: |
-          Write-Host "##vso[task.setvariable variable=ACMS_APP_SECRET;]$(DevACMSSecret)"
+- script: |
+    cd private-templates-service/server
+    npm run init-app
+    cd ../client
+    npm run build
+  displayName: Build App
 
-  - task: NodeTool@0 
-    inputs:
-      versionSpec: '12.x'
+- script: |
+    cd private-templates-service/client
+    npm run test
+  displayName: Run frontend tests
+    
+- script: |
+    cd private-templates-service/adaptivecards-templating-service
+    npm install
+    npm run build
+    npm run test
+  displayName: Run backend tests
 
-  - script: |
-      cd private-templates-service/server
-      npm run init-app
-      cd ../client
-      npm run build
-    displayName: Build App
-
-  - script: |
-      cd private-templates-service/client
-      npm run test
-    displayName: Run frontend tests
-      
-  - script: |
-      cd private-templates-service/adaptivecards-templating-service
-      npm install
-      npm run build
-      npm run test
-    displayName: Run backend tests
-
-  - script: |
-      cd private-templates-service/server
-      npm run deploy
-    displayName: Build backend
+- script: |
+    cd private-templates-service/server
+    npm run deploy
+  displayName: Build backend
