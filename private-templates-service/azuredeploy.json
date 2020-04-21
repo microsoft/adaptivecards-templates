@@ -6,7 +6,7 @@
       "defaultValue": "adaptivecmsdeploy",
       "type": "String"
     },
-    "app_id": {
+    "azure_active_directory_app_registration_id": {
       "type": "String"
     },
     "siteLocation": {
@@ -58,7 +58,7 @@
           "properties": {
             "ACMS_DB_CONNECTION": "[listConnectionStrings(resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('cosmos_database_name')), '2015-04-08').connectionStrings[0].connectionString]",
             "ACMS_REDIRECT_URI": "[concat('https://', parameters('sites_adaptivecms_name'), '.azurewebsites.net/')]",
-            "ACMS_APP_ID": "[parameters('app_id')]",
+            "ACMS_APP_ID": "[parameters('azure_active_directory_app_registration_id')]",
             "WEBSITES_ENABLE_APP_SERVICE_STORAGE": "false",
             "DOCKER_REGISTRY_SERVER_URL": "[variables('docker_registry_server_url')]",
             "ACMS_APP_INSIGHTS_INSTRUMENTATION_KEY": "[if(equals(parameters('telemetry_opt_in'), 'Yes'), variables('appInsightsInstrumentationKey'), '')]",
