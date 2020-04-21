@@ -1,13 +1,9 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import React from "react";
+import { connect } from "react-redux";
+
+import { Template, TemplateInstance } from "adaptive-templating-service-typescript-node";
 
 import {
-  Template,
-  TemplateInstance
-} from 'adaptive-templating-service-typescript-node';
-
-import {
-  CardManageButton,
   CardTitle,
   VersionCardHeader,
   VersionCardRowTitle,
@@ -22,30 +18,25 @@ import {
   VersionCardRowHover,
   VersionElementsContainer,
   StatusElementsContainer,
-  StatusIndicatorOverride
-} from './styled'
+  StatusIndicatorOverride,
+} from "./styled";
 
-import {
-  CardHeader,
-  Status
-} from './../styled';
+import { CardHeader, Status } from "./../styled";
 
-import * as STRINGS from '../../../../../assets/strings';
+import * as STRINGS from "../../../../../assets/strings";
 
-import { getDateString } from '../../../../../utils/versionUtils';
+import { getDateString } from "../../../../../utils/versionUtils";
 import { getStateFromInstance } from "../../../../../utils/stringUtils";
-import { ModalState } from '../../../../../store/page/types';
-import { openModal } from '../../../../../store/page/actions';
-import { updateCurrentTemplateVersion } from '../../../../../store/currentTemplate/actions';
-import VersionModal from '../../../../Common/VersionModal';
-import { MANAGE, NA } from '../../../../../assets/strings';
-import { RootState } from '../../../../../store/rootReducer';
+import { ModalState } from "../../../../../store/page/types";
+import { updateCurrentTemplateVersion } from "../../../../../store/currentTemplate/actions";
+import VersionModal from "../../../../Common/VersionModal";
+import { NA } from "../../../../../assets/strings";
+import { RootState } from "../../../../../store/rootReducer";
 
 interface Props {
   template: Template;
   templateVersion: string;
   modalState?: ModalState;
-  openModal: (modalState: ModalState) => void;
   updateCurrentTemplateVersion: (template: Template, version: string) => void;
   onSwitchVersion: (templateVersion: string) => void;
 }
@@ -53,18 +44,15 @@ interface Props {
 const mapStateToProps = (state: RootState) => {
   return {
     modalState: state.page.modalState,
-  }
-}
+  };
+};
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    openModal: (modalState: ModalState) => {
-      dispatch(openModal(modalState));
-    },
     updateCurrentTemplateVersion: (template: Template, version: string) => {
-      dispatch(updateCurrentTemplateVersion(template, version))
-    }
-  }
+      dispatch(updateCurrentTemplateVersion(template, version));
+    },
+  };
 };
 
 class VersionCard extends React.Component<Props> {
@@ -75,13 +63,10 @@ class VersionCard extends React.Component<Props> {
 
   render() {
     return (
-      <VersionOuterCard key={STRINGS.RECENT_RELEASES} style={{ flex: '1 1 auto' }} aria-label={STRINGS.RECENT_RELEASES}>
+      <VersionOuterCard key={STRINGS.RECENT_RELEASES} style={{ flex: "1 1 auto" }} aria-label={STRINGS.RECENT_RELEASES}>
         <CardHeader>
           <VersionCardHeader>
             <CardTitle>{STRINGS.RECENT_RELEASES}</CardTitle>
-            <CardManageButton onClick={() => { this.props.openModal(ModalState.Version) }} tabIndex={this.props.modalState ? -1 : 0}>
-              {MANAGE}
-            </CardManageButton>
           </VersionCardHeader>
         </CardHeader>
         <VersionCardBody>
@@ -91,23 +76,29 @@ class VersionCard extends React.Component<Props> {
             <VersionCardRowTitle style={{ flexBasis: `25%` }}>{STRINGS.STATUS}</VersionCardRowTitle>
           </VersionCardRow>
           <InfoVersionContainer>
-            {this.props.template.instances && this.props.template.instances.map((instance: TemplateInstance, index: number) => (
-              <VersionCardRowHover key={index} onClick={(event: any) => { this.onVersionChange(event, instance.version!) }}>
-                <VersionWrapper>
-                  <VersionElementsContainer>
-                    {instance.version}
-                    {instance.version === this.props.templateVersion && <VersionIcon iconName={'View'} />}
-                  </VersionElementsContainer>
-                </VersionWrapper>
-                <DateWrapper>{instance.updatedAt ? getDateString(instance.updatedAt) : `${NA}`}</DateWrapper>
-                <StatusWrapper>
-                  <StatusElementsContainer>
-                    <StatusIndicatorOverride state={instance.state} />
-                    <Status>{getStateFromInstance(instance)}</Status>
-                  </StatusElementsContainer>
-                </StatusWrapper>
-              </VersionCardRowHover>
-            ))}
+            {this.props.template.instances &&
+              this.props.template.instances.map((instance: TemplateInstance, index: number) => (
+                <VersionCardRowHover
+                  key={index}
+                  onClick={(event: any) => {
+                    this.onVersionChange(event, instance.version!);
+                  }}
+                >
+                  <VersionWrapper>
+                    <VersionElementsContainer>
+                      {instance.version}
+                      {instance.version === this.props.templateVersion && <VersionIcon iconName={"View"} />}
+                    </VersionElementsContainer>
+                  </VersionWrapper>
+                  <DateWrapper>{instance.updatedAt ? getDateString(instance.updatedAt) : `${NA}`}</DateWrapper>
+                  <StatusWrapper>
+                    <StatusElementsContainer>
+                      <StatusIndicatorOverride state={instance.state} />
+                      <Status>{getStateFromInstance(instance)}</Status>
+                    </StatusElementsContainer>
+                  </StatusWrapper>
+                </VersionCardRowHover>
+              ))}
           </InfoVersionContainer>
         </VersionCardBody>
         {this.props.modalState === ModalState.Version && <VersionModal template={this.props.template} />}
@@ -117,4 +108,3 @@ class VersionCard extends React.Component<Props> {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(VersionCard);
-

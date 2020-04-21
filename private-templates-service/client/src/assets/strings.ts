@@ -84,6 +84,8 @@ export const PEOPLE = "People";
 export const COLLABORATORS = "Collaborators";
 export const COLLABORATOR = "Collaborator";
 export const TEMPLATE_AT = " at ";
+export const NEW_VERSION = "New version";
+
 
 
 // EditNameModal.tsx
@@ -166,6 +168,8 @@ export const DELETE_BUTTON_TOOLTIP = "Delete card version";
 export const SHARE_BUTTON_TOOLTIP = "Share this card via link or e-mail";
 export const PUBLISH_BUTTON_TOOLTIP = "Publishing this card makes it available to your organization";
 export const UNPUBLISH_BUTTON_TOOLTIP = "Unpublishing this card makes it deprecated";
+export const MANAGE_BUTTON_TOOLTIP = "Manage multiple versions of template at once"
+export const NEW_VERSION_BUTTON_TOOLTIP = "Create new version of this template";
 
 // SkipLink.tsx
 export const SKIP_TO_MAIN_CONTENT_MESSAGE = "Skip to main content";
