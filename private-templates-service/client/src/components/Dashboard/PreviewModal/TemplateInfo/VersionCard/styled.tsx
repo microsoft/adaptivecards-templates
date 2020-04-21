@@ -9,6 +9,7 @@ import { VersionContainer } from '../../../../Common/VersionModal/styled';
 
 export const VersionOuterCard = styled(Card)`
   overflow-y: hidden;
+  margin-bottom: 0px;
 `
 export const VersionCardBody = styled(CardBody)`
   overflow-y: hidden;
@@ -85,5 +86,5 @@ export const VersionWrapper = styled.div`
   flex-basis: 15%;
 `
 export const InfoVersionContainer = styled(VersionContainer)`
-  max-height: 150px;
+  max-height: 7.5rem;
 `;

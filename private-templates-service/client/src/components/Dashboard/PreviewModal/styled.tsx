@@ -50,6 +50,7 @@ export const ACWrapper = styled.div`
 export const DescriptorWrapper = styled.section`
   display: flex;
   width: 45%;
+  flex-direction: column;
   border-left: 1px solid ${COLORS.BORDER2};
   overflow: auto;
 `;
