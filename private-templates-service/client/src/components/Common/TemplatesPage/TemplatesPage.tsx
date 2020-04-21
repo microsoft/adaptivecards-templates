@@ -1,5 +1,5 @@
 // React
-import React, { Component} from "react";
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { StaticContext } from "react-router"
@@ -101,7 +101,8 @@ class TemplatesPage extends Component<Props, State> {
     const { currentPage, previousPage } = this.props.page;
     const { pageID } = this.props;
     const { location } = this.props.history;
-    if (currentPage === "Template" && previousPage === pageID || location.state && location.state.redirect) {
+    if ((currentPage === "Template" && previousPage === pageID)
+      || (location.state && location.state.redirect)) {
       this.state = { selectedTags: this.props.tags.selectedTags };
     } else {
       this.props.clearSelectedTags();
@@ -159,10 +160,10 @@ class TemplatesPage extends Component<Props, State> {
     let allTags: string[] = [];
     let favoriteTags: string[] = [];
     if (!tagsState.isFetching && tagsState.allTags) {
-      if(tagsState.allTags.allTags) {
+      if (tagsState.allTags.allTags) {
         allTags = tagsState.allTags.allTags
       }
-      if(tagsState.allTags.favoriteTags) {
+      if (tagsState.allTags.favoriteTags) {
         favoriteTags = tagsState.allTags.favoriteTags;
       }
     }
@@ -186,8 +187,8 @@ class TemplatesPage extends Component<Props, State> {
               <Filter />
             </ViewHelperBar>
           </UpperBar>
-          <TagList tags={allTags} selectedTags={this.state.selectedTags} allowEdit={false} favoriteTags={favoriteTags} onClick={this.tagOnClick} toggleStyle={this.tagToggleStyle} direction={ScrollDirection.Horizontal} allowSetFavorite={true} onAddFavoriteTag={this.props.onAddFavoriteTag} onRemoveFavoriteTag={this.props.onRemoveFavoriteTag}/>
-          <TemplatesView onClick={this.selectTemplate} selectedTags={this.state.selectedTags} getTemplates={this.props.getTemplates}/>
+          <TagList tags={allTags} selectedTags={this.state.selectedTags} allowEdit={false} favoriteTags={favoriteTags} onClick={this.tagOnClick} toggleStyle={this.tagToggleStyle} direction={ScrollDirection.Horizontal} allowSetFavorite={true} onAddFavoriteTag={this.props.onAddFavoriteTag} onRemoveFavoriteTag={this.props.onRemoveFavoriteTag} />
+          <TemplatesView onClick={this.selectTemplate} selectedTags={this.state.selectedTags} getTemplates={this.props.getTemplates} />
         </InnerCardsContainer>
       </OuterCardsContainer>
     );

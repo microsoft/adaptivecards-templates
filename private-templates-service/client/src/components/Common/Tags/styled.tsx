@@ -1,5 +1,5 @@
 import styled, { css, keyframes } from 'styled-components';
-import { COLORS, FONTS } from '../../../globalStyles';
+import { COLORS } from '../../../globalStyles';
 
 import { Icon } from 'office-ui-fabric-react';
 

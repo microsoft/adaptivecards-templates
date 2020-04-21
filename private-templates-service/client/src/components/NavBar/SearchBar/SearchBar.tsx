@@ -115,7 +115,7 @@ class SearchBar extends React.Component<Props, State> {
       return (
         <StyledSearchBox
           ariaLabel={STRINGS.SEARCHBAR_DESCRIPTION}
-          placeholder={`${SEARCH}` + (this.state.isMobile ? "" : " " + `${TEMPLATES}`)}
+          placeholder={(`${SEARCH}${!this.state.isMobile && ` ${TEMPLATES}`}`)}
           onSearch={this.onSearch} // will trigger when "Enter" is pressed
           onClear={this.onClear} // will trigger when "Esc" or "X" is pressed
           styles={placeHolderStyles}
