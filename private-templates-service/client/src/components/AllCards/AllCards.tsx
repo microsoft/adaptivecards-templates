@@ -13,6 +13,7 @@ import { FilterEnum } from "../../store/filter/types";
 import { ALL_CARDS, ALL_CARDS_TITLE } from "../../assets/strings";
 // Utils
 import requireAuthentication from "../../utils/requireAuthentication";
+import { allTemplatesURL } from "../SideBar/SideBar";
 const mapDispatchToProps = (dispatch: any) => {
   return {
     getTemplates: (tags?: string[], ifOwned?: boolean, name?: string, sortBy?: SortType, filterState?: FilterEnum) => {
@@ -36,7 +37,7 @@ export class AllCards extends Component<Props> {
         getTemplates={this.props.getTemplates}
         pageTitle={ALL_CARDS_TITLE}
         pageID={ALL_CARDS}
-        basePath={"/templates/all"}
+        basePath={allTemplatesURL}
       />
     );
   }

@@ -12,6 +12,7 @@ import { clearSort } from '../../../store/sort/actions';
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { buildAdressBarURL } from "../../../utils/queryUtil";
 import { SEARCH, TEMPLATES } from "../../../assets/strings";
+import { allTemplatesURL } from "../../SideBar/SideBar";
 
 
 const mapStateToProps = (state: RootState) => {
@@ -111,7 +112,7 @@ class SearchBar extends React.Component<Props, State> {
       this.props.clearSearch();
     } else {
       this.props.search(query);
-      this.props.history.push(buildAdressBarURL("/templates/all", this.props.selectedTags, this.props.filter.owner, this.props.query, this.props.sort, this.props.filter.state));
+      this.props.history.push(buildAdressBarURL(allTemplatesURL, this.props.selectedTags, this.props.filter.owner, this.props.query, this.props.sort, this.props.filter.state));
     }
   };
 

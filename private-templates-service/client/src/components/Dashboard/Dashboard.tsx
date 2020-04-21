@@ -24,6 +24,7 @@ import requireAuthentication from "../../utils/requireAuthentication";
 import RecentlyEditedPlaceholder from './RecentlyEditedPlaceholder';
 import Gallery from "../Gallery";
 import SearchPage from "./SearchPage/SearchPage";
+import { allTemplatesURL } from "../SideBar/SideBar";
 import TemplateList from "./TemplateList";
 import Footer from "./Footer";
 import TagList from "../Common/TemplatesPage/TagList";
@@ -44,6 +45,7 @@ import {
   CenteredSpinner,
   OuterDashboardContainer,
 } from "./styled";
+
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -153,7 +155,7 @@ class Dashboard extends React.Component<Props> {
   tagOnClick = (tag: string) => {
     this.props.clearSelectedTags();
     this.props.addSelectedTag(tag);
-    this.props.history.push("/templates/all", {redirect: true});
+    this.props.history.push(allTemplatesURL, {redirect: true});
   }
   render() {
     //TODO add sort functionality to separate templates displayed in recent vs draft

@@ -98,6 +98,7 @@ const iconStyle = {
 };
 
 export const newTemplateURL = "/designer/newcard/1.0"
+export const allTemplatesURL = "/templates/all"
 
 const navMenuLinks: INavLinkGroup[] = [
   {
@@ -141,7 +142,7 @@ const SideBar = (props: Props) => {
 
   const onNavClick = (event: any, element?: INavLink) => {
     event.preventDefault();
-    if(!element!.url.startsWith("/templates/all")) {
+    if(!element!.url.startsWith(allTemplatesURL)) {
       props.clearSearch();
       props.clearFilter();
       props.clearSort();
