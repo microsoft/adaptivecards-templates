@@ -11,7 +11,6 @@ import {
 
 import { getAuthenticatedClient } from '../../Services/GraphService';
 import { RootState } from '../rootReducer';
-import { GraphRequest } from '@microsoft/microsoft-graph-client';
 
 function requestOwnerName(): GetOwnerNameAction {
   return {
