@@ -31,7 +31,7 @@ Prerequisites:
 5. If 'Yes' is selected for '**Telemetry_opt_in**', we will collect feedback from your instance of ACMS using App Insights. See details under 'Telemetry Privacy Statement' below. 
 
 6. Optional: If you possess an Azure Application Insights instance, enter the instrumentation key into the '**Application_insights_instrumentation_key**' field. 
-  To create an Application Insights resource or find your instrumentation key, please see [Create an Application Insights resource](https://docs.microsoft.com/en-us/azure/azure-monitor/app/create-new-resource). Also, please read the 'Telemetry Privacy Statement' below.
+    To create an Application Insights resource or find your instrumentation key, please see [Create an Application Insights resource](https://docs.microsoft.com/en-us/azure/azure-monitor/app/create-new-resource). Also, please read the 'Telemetry Privacy Statement' below.
 
 7. Click '**Next**' and '**Deploy**'.
 
@@ -85,6 +85,11 @@ These errors occur on the 'Deploy to Azure' page opened after clicking the butto
   - The value entered in the 'cosmos_database_name' field in the deployment form has already been used. This value must be unique. 
   - The value entered in the 'Azure_active_directory_app_registration_id' field does not exist. 
   - The value entered in the 'App_service_plan_subscription' field does not exist. Ensure that it is in the following format: `/subscriptions/{subscription_id}/resourceGroups/{resource_group_name}/providers/Microsoft.Web/serverfarms/{App_service_plan_name}`
+  - The location selected is not the same as the location of the App service plan that you have selected.
+  
+##### Checking on your deployment
+
+To check on the status of your deployment, you can either check on the Deploy to Azure page, which will provide updates on which resources were created, or you can check on the [Azure Portal](portal.azure.com) under the resource group where the app was deployed. On the left side navigation bar, under the 'Settings' header, click 'Deployments'. Here, you can click the deployment and check on the status of each of the resources created and operation details. 
 
 ## Running the latest changes locally with MongoDB
 
@@ -227,4 +232,5 @@ Things to watch out for:
 
 -   You **must** have auto-saving turned off on VSCode. Saving needs to be manually triggered.
 -   Make sure you are accessing the repo by opening the repository folder in VSCode rather than particular files in the repository. To do so, in VSCode, go to File -> Open Folder and open the adaptivecards-templates folder.
+
 
