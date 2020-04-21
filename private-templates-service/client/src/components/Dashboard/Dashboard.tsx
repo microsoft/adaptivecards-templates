@@ -118,6 +118,7 @@ interface Props extends RouteComponentProps {
   onRemoveFavoriteTag: (tag: string) => void;
   isSearch: boolean;
 }
+
 class Dashboard extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
@@ -140,8 +141,10 @@ class Dashboard extends React.Component<Props> {
     if (prevProps.recentTemplates !== this.props.recentTemplates &&
       this.props.recentTemplates.recentlyViewed && this.props.recentTemplates.recentlyViewed.templates) {
       let templates = this.props.recentTemplates.recentlyViewed.templates;
+      let alreadySent = new Set();
       for (let template of templates) {
-        if (template.instances && template.instances[0].lastEditedUser) {
+        if (template.instances && template.instances[0].lastEditedUser && (!(alreadySent.has(template.instances[0].lastEditedUser)))) {
+          alreadySent.add(template.instances[0].lastEditedUser);
           this.props.getOwnerName(template.instances[0].lastEditedUser);
           this.props.getOwnerProfilePicture(template.instances[0].lastEditedUser);
         }
@@ -159,7 +162,7 @@ class Dashboard extends React.Component<Props> {
   }
   render() {
     //TODO add sort functionality to separate templates displayed in recent vs draft
-    const {recentTemplates, tags} = this.props;
+    const { recentTemplates, tags } = this.props;
     let recentlyEditedTemplates = new Array<Template>();
     let recentlyViewedTemplates = new Array<Template>();
     let favoriteTags: string[] = [];
@@ -209,20 +212,20 @@ class Dashboard extends React.Component<Props> {
                     onClick={this.selectTemplate}
                     templates={recentlyViewedTemplates}
                     displayComponents={{ author: true, status: true, dateModified: true, templateName: true, version: false }}
-                    
+
                   />
                 )}
             </section>
           </DashboardContainer>
           <TagsContainer aria-label={FAVORITED_TAGS}>
-          <Title style={{ marginRight: "150px" }}>{FAVORITED_TAGS}</Title>
-          <TagList tags={favoriteTags} 
-                   allowEdit={false} 
-                   onClick={this.tagOnClick} 
-                   allowSetFavorite={true}
-                   onAddFavoriteTag={this.props.onAddFavoriteTag}
-                   onRemoveFavoriteTag={this.props.onRemoveFavoriteTag}
-                   favoriteTags={favoriteTags}/>     
+            <Title>{FAVORITED_TAGS}</Title>
+            <TagList tags={favoriteTags}
+              allowEdit={false}
+              onClick={this.tagOnClick}
+              allowSetFavorite={true}
+              onAddFavoriteTag={this.props.onAddFavoriteTag}
+              onRemoveFavoriteTag={this.props.onRemoveFavoriteTag}
+              favoriteTags={favoriteTags} />
           </TagsContainer>
         </OuterWindow>
         <Footer />

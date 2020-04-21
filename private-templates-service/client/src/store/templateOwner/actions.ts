@@ -89,6 +89,10 @@ export function getOwnerProfilePicture(oID: string) {
         const imageURL = URL.createObjectURL(image);
         dispatch(requestOwnerProfilePictureSuccess(imageURL, oID));
       }, (fail: any) => {
+        // if user doesn't have a custom profile picture
+        if (oID && fail.statusCode && fail.statusCode == 404) {
+          dispatch(requestOwnerProfilePictureSuccess("-1", oID))
+        }
         dispatch(requestOwnerProfilePictureFailure());
       })
   }

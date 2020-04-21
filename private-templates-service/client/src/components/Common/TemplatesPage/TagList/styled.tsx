@@ -10,4 +10,5 @@ export const TagsContainer = styled.section`
   overflow-x: hidden;
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
+  max-width: 100%;
 `;
