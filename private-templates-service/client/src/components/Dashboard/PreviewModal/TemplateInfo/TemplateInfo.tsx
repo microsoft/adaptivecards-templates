@@ -53,6 +53,7 @@ import {
   PEOPLE,
   TEMPLATE_AT,
   COLLABORATORS,
+  COLLABORATOR,
 } from "../../../../assets/strings";
 import { TooltipContainer } from '../styled';
 import {
@@ -104,7 +105,6 @@ const buttons = [
   },
 ];
 
-// TODO: Dynamically show info. Backend not ready
 const cards = [
   {
     header: TEMPLATE_AUTHOR,
@@ -207,14 +207,6 @@ class TemplateInfo extends React.Component<Props, State> {
     this.props.getTags();
   }
 
-  componentDidUpdate(prevProps: Props, prevState: State) {
-    let templateInstance = getTemplateInstance(this.props.template, this.state.version);
-    if (this.state.version !== prevState.version && templateInstance.lastEditedUser) {
-      this.props.getOwnerName(templateInstance.lastEditedUser!);
-      this.props.getOwnerProfilePicture(templateInstance.lastEditedUser!);
-    }
-  }
-
   versionList = (instances: TemplateInstance[] | undefined): IDropdownOption[] => {
     if (!instances) return [];
     let options: IDropdownOption[] = [];
@@ -298,13 +290,12 @@ class TemplateInfo extends React.Component<Props, State> {
       const tempDate = new Date(templateInstance.updatedAt);
       timestampParsed = tempDate.toLocaleDateString() + TEMPLATE_AT + tempDate.toLocaleTimeString(navigator.language, { hour: '2-digit', minute: '2-digit' });
     }
-    let oids: string[] = []
+    let oids = new Set();
     for (let instance of this.props.template.instances || []) {
-      if (instance.lastEditedUser && !oids.includes(instance.lastEditedUser)) {
-        oids.push(instance.lastEditedUser!);
+      if (instance.lastEditedUser){
+        oids.add(instance.lastEditedUser!);
       }
     }
-
     const { history } = this.props;
     if (!history) {
       return (<div>{ERROR_LOADING_PAGE}</div>)
@@ -354,11 +345,11 @@ class TemplateInfo extends React.Component<Props, State> {
                     <CenteredSpinner size={SpinnerSize.large} /> :
                     <IconWrapper><OwnerAvatar sizeInPx={50} oID={templateInstance.lastEditedUser!} /></IconWrapper>)}
                   {val.header === PEOPLE && ((isFetchingOwnerName || isFetchingOwnerPic) ?
-                    <CenteredSpinner size={SpinnerSize.large} /> :
-                    <IconWrapper><OwnerList oids={oids} /></IconWrapper>)}
+                      <CenteredSpinner size={SpinnerSize.large} /> :
+                      <IconWrapper><OwnerList oids={Array.from(oids) as string[]}/></IconWrapper>)}
                   {val.header === USAGE && <UsageNumber>{templateInstance.numHits}</UsageNumber>}
-                  {(val.header === TEMPLATE_AUTHOR) ? (this.props.owner && this.props.owner.displayNames) ? this.props.owner.displayNames[templateInstance.lastEditedUser!] : "" :
-                    (val.header === PEOPLE) ? oids.length + " " + val.bodyText : val.bodyText}
+                  {(val.header === TEMPLATE_AUTHOR) ? (this.props.owner && this.props.owner.displayNames) ? this.props.owner.displayNames[templateInstance.lastEditedUser!] : "" : 
+                    (val.header === PEOPLE)? oids.size + " " + (oids.size === 1? COLLABORATOR : val.bodyText) : val.bodyText}
                 </CardBody>
               </Card>
             ))}
