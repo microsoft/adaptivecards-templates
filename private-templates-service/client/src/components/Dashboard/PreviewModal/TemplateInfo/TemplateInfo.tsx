@@ -192,7 +192,7 @@ function getTemplateInstance(template: Template, version: string): TemplateInsta
 }
 
 interface State {
-  version: string
+  version: string;
 }
 
 class TemplateInfo extends React.Component<Props, State> {
@@ -200,9 +200,13 @@ class TemplateInfo extends React.Component<Props, State> {
     super(props);
     const currentVersion = getLatestVersion(this.props.template);
     this.state = { version: currentVersion }
+    let alreadySent = new Set();
     for (let instance of this.props.template.instances || []) {
-      this.props.getOwnerName(instance.lastEditedUser!);
-      this.props.getOwnerProfilePicture(instance.lastEditedUser!);
+      if (!(alreadySent.has(instance.lastEditedUser!))) {
+        alreadySent.add(instance.lastEditedUser!);
+        this.props.getOwnerName(instance.lastEditedUser!);
+        this.props.getOwnerProfilePicture(instance.lastEditedUser!);
+      }
     }
     this.props.getTags();
   }
@@ -277,6 +281,7 @@ class TemplateInfo extends React.Component<Props, State> {
   }
 
   render() {
+
     const {
       tags,
       instances,
@@ -292,10 +297,16 @@ class TemplateInfo extends React.Component<Props, State> {
     }
     let oids = new Set();
     for (let instance of this.props.template.instances || []) {
-      if (instance.lastEditedUser){
+      if (instance.lastEditedUser) {
         oids.add(instance.lastEditedUser!);
       }
     }
+
+    let isDoneFetching = false;
+    if (this.props.owner && this.props.owner!.imageURLs!) {
+      isDoneFetching = (Object.keys(this.props.owner.imageURLs!).length == oids.size);
+    }
+
     const { history } = this.props;
     if (!history) {
       return (<div>{ERROR_LOADING_PAGE}</div>)
@@ -305,7 +316,6 @@ class TemplateInfo extends React.Component<Props, State> {
       favoriteTags = allTags.allTags.favoriteTags;
     }
     let tagCardID = "Card tags";
-
     return (
       <OuterWrapper>
         <HeaderWrapper>
@@ -344,12 +354,12 @@ class TemplateInfo extends React.Component<Props, State> {
                   {val.iconName && ((isFetchingOwnerName || isFetchingOwnerPic) ?
                     <CenteredSpinner size={SpinnerSize.large} /> :
                     <IconWrapper><OwnerAvatar sizeInPx={50} oID={templateInstance.lastEditedUser!} /></IconWrapper>)}
-                  {val.header === PEOPLE && ((isFetchingOwnerName || isFetchingOwnerPic) ?
-                      <CenteredSpinner size={SpinnerSize.large} /> :
-                      <IconWrapper><OwnerList oids={Array.from(oids) as string[]}/></IconWrapper>)}
+                  {val.header === PEOPLE && ((isFetchingOwnerName || isFetchingOwnerPic || !isDoneFetching) ?
+                    <CenteredSpinner size={SpinnerSize.large} /> :
+                    <IconWrapper><OwnerList oids={Array.from(oids) as string[]} /></IconWrapper>)}
                   {val.header === USAGE && <UsageNumber>{templateInstance.numHits}</UsageNumber>}
-                  {(val.header === TEMPLATE_AUTHOR) ? (this.props.owner && this.props.owner.displayNames) ? this.props.owner.displayNames[templateInstance.lastEditedUser!] : "" : 
-                    (val.header === PEOPLE)? oids.size + " " + (oids.size === 1? COLLABORATOR : val.bodyText) : val.bodyText}
+                  {(val.header === TEMPLATE_AUTHOR) ? (this.props.owner && this.props.owner.displayNames) ? this.props.owner.displayNames[templateInstance.lastEditedUser!] : "" :
+                    (val.header === PEOPLE) ? oids.size + " " + (oids.size === 1 ? COLLABORATOR : val.bodyText) : val.bodyText}
                 </CardBody>
               </Card>
             ))}
