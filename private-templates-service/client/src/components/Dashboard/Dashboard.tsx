@@ -123,18 +123,6 @@ interface Props extends RouteComponentProps {
   isSearch: boolean;
 }
 
-function notIn(val: string, arr: string[]): boolean {
-  if (val && arr) {
-    for (let i = 0; i < arr.length; i++) {
-      if (arr[i] === val) {
-        return false;
-      }
-    }
-    return true;
-  }
-  return false;
-}
-
 class Dashboard extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
@@ -160,7 +148,7 @@ class Dashboard extends React.Component<Props> {
       let templates = this.props.recentTemplates.recentlyViewed.templates;
       let alreadySent: string[] = [];
       for (let template of templates) {
-        if (template.instances && template.instances[0].lastEditedUser && notIn(template.instances[0].lastEditedUser, alreadySent)) {
+        if (template.instances && template.instances[0].lastEditedUser && (!alreadySent || !alreadySent.includes(template.instances[0].lastEditedUser))) {
           alreadySent.push(template.instances[0].lastEditedUser);
           this.props.getOwnerName(template.instances[0].lastEditedUser);
           this.props.getOwnerProfilePicture(template.instances[0].lastEditedUser);

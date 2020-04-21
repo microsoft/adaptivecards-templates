@@ -185,18 +185,6 @@ const mapDispatchToProps = (dispatch: any) => {
   }
 };
 
-function notIn(val: string, arr: string[]): boolean {
-  if (val && arr) {
-    for (let i = 0; i < arr.length; i++) {
-      if (arr[i] === val) {
-        return false;
-      }
-    }
-    return true;
-  }
-  return false;
-}
-
 function getTemplateInstance(template: Template, version: string): TemplateInstance {
   for (let instance of template.instances!) {
     if (instance.version === version) return instance;
@@ -205,9 +193,7 @@ function getTemplateInstance(template: Template, version: string): TemplateInsta
 }
 
 interface State {
-  version: string
-
-
+  version: string;
 }
 
 class TemplateInfo extends React.Component<Props, State> {
@@ -217,7 +203,7 @@ class TemplateInfo extends React.Component<Props, State> {
     this.state = { version: currentVersion }
     let alreadySent: string[] = [];
     for (let instance of this.props.template.instances || []) {
-      if (notIn(instance.lastEditedUser!, alreadySent)) {
+      if (!alreadySent || !alreadySent.includes(instance.lastEditedUser!)) {
         alreadySent.push(instance.lastEditedUser!);
         this.props.getOwnerName(instance.lastEditedUser!);
         this.props.getOwnerProfilePicture(instance.lastEditedUser!);
@@ -304,13 +290,6 @@ class TemplateInfo extends React.Component<Props, State> {
   }
 
   render() {
-    let truth = false;
-    if (this.props.owner && this.props.owner!.displayNames!) {
-      console.log(this.props.owner.imageURLs!);
-      console.log(Object.keys(this.props.owner.imageURLs!).length);
-      console.log(Object.keys(this.props.owner.imageURLs!).length == this.props.template.instances?.length);
-      truth = (Object.keys(this.props.owner.imageURLs!).length == this.props.template.instances?.length);
-    }
 
     const {
       tags,
@@ -330,6 +309,11 @@ class TemplateInfo extends React.Component<Props, State> {
       if (instance.lastEditedUser && !oids.includes(instance.lastEditedUser)) {
         oids.push(instance.lastEditedUser!);
       }
+    }
+
+    let isDoneFetching = false;
+    if (this.props.owner && this.props.owner!.imageURLs!) {
+      isDoneFetching = (Object.keys(this.props.owner.imageURLs!).length == oids.length);
     }
 
     const { history } = this.props;
@@ -379,7 +363,7 @@ class TemplateInfo extends React.Component<Props, State> {
                   {val.iconName && ((isFetchingOwnerName || isFetchingOwnerPic) ?
                     <CenteredSpinner size={SpinnerSize.large} /> :
                     <IconWrapper><OwnerAvatar sizeInPx={50} oID={templateInstance.lastEditedUser!} /></IconWrapper>)}
-                  {val.header === PEOPLE && ((isFetchingOwnerName || isFetchingOwnerPic || !truth) ?
+                  {val.header === PEOPLE && ((isFetchingOwnerName || isFetchingOwnerPic || !isDoneFetching) ?
                     <CenteredSpinner size={SpinnerSize.large} /> :
                     <IconWrapper><OwnerList oids={oids} /></IconWrapper>)}
                   {val.header === USAGE && <UsageNumber>{templateInstance.numHits}</UsageNumber>}

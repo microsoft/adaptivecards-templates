@@ -33,7 +33,7 @@ class OwnerList extends React.Component<Props> {
     let facepilePersonas: IFacepilePersona[] = [];
     for (let oid of this.props.oids) {
       if (this.props.owner && this.props.owner.displayNames && this.props.owner.displayNames[oid]) {
-        if (this.props.owner.imageURLs![oid]) {
+        if (this.props.owner.imageURLs![oid] && (this.props.owner.imageURLs![oid] !== "-1")) {
           facepilePersonas.push({ imageUrl: this.props.owner.imageURLs![oid] });
         } else {
           facepilePersonas.push({ personaName: this.props.owner.displayNames[oid] });
