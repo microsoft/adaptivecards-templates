@@ -1,17 +1,15 @@
-import styled from 'styled-components';
+  import styled from 'styled-components';
 import { COLORS, FONTS } from '../../../../../globalStyles';
 import { ActionButton, Icon } from 'office-ui-fabric-react';
-import {
-  VersionContainer
-} from '../../../../Common/VersionModal/styled';
-
 import {
   Card,
   CardBody
 } from './../styled';
+import { VersionContainer } from '../../../../Common/VersionModal/styled';
 
 export const VersionOuterCard = styled(Card)`
   overflow-y: hidden;
+  margin-bottom: 0px;
 `
 export const VersionCardBody = styled(CardBody)`
   overflow-y: hidden;
@@ -37,9 +35,9 @@ export const VersionCardRow = styled.div`
   display: flex;
   width: 100%;
   justify-content: space-around;
-  padding-top: 8px;
+  padding-top: 9px;
   padding-left: 16px;
-  padding-bottom: 8px;
+  padding-bottom: 9px;
   padding-right: 16px;
   align-items: center;
 
@@ -87,7 +85,6 @@ export const VersionWrapper = styled.div`
   align-items: center;
   flex-basis: 15%;
 `
-
 export const InfoVersionContainer = styled(VersionContainer)`
-  max-height: 150px;
-`
+  max-height: 7.5rem;
+`;
