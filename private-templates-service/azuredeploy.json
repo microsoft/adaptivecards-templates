@@ -13,7 +13,7 @@
       "defaultValue": "West US",
       "type": "String"
     },
-    "server_farm_id": {
+    "app_service_plan_subscription": {
       "type": "String"
     },
     "telemetry_opt_in": {
@@ -45,7 +45,7 @@
       "location": "[parameters('siteLocation')]",
       "kind": "app,linux,container",
       "properties": {
-        "serverFarmId": "[parameters('server_farm_id')]"
+        "serverFarmId": "[parameters('app_service_plan_subscription')]"
       },
       "resources": [
         {
