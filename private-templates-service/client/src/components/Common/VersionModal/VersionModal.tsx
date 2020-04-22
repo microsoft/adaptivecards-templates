@@ -81,8 +81,8 @@ class VersionModal extends React.Component<Props, State> {
 
   containsState = (state: PostedTemplate.StateEnum): boolean => {
     let instances = this.props.template.instances || [];
-    for (let i = 0; i < this.state.versionList.length; i++){
-      if (instances[i].state == state && this.state.versionList[i]){
+    for (let i = 0; i < this.state.versionList.length; i++) {
+      if (instances[i].state === state && this.state.versionList[i]) {
         return true;
       }
     }

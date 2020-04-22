@@ -167,7 +167,7 @@ export function testDB(db: StorageProvider) {
   it("Partially filled: create & save user successfully", async () => {
     const validUser: IUser = {
       authIssuer: "Microsoft Oauth2",
-      authId: "51201"
+      authId: "51202"
     };
     await insertAndValidateUser(db, validUser);
   });
