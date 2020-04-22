@@ -375,7 +375,7 @@ class TemplateInfo extends React.Component<Props, State> {
           </RowWrapper>
           <Card aria-label={TAGS}>
             <form aria-labelledby={tagCardID}>
-              <CardHeader id={tagCardID}>{TAGS}</CardHeader>
+              <CardHeader id={tagCardID} style={{alignItems: "flex-start", paddingLeft: "2.5rem"}}>{TAGS}</CardHeader>
               <CardBody style={{alignItems: "flex-start"}}>
                 <TagsWrapper>
                   {isFetchingTags ?
