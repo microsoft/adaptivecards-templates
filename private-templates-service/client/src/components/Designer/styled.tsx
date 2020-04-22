@@ -4,7 +4,7 @@ export const OuterDesignerWrapper = styled.main`
   display: flex;
   flex-direction: column;
   height: 100%;
-  overscroll-behaviour: contain;
+  overscroll-behavior: contain;
 `;
 
 export const DesignerWrapper = styled.div`
