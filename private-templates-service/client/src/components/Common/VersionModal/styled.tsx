@@ -63,8 +63,9 @@ export const LightButton = styled(DefaultButton)`
   margin-right: 12px;
 `;
 
-export const PrimaryStyleButton = styled(PrimaryButton)`
+export const PrimaryStyleButton = styled(PrimaryButton)<{ disabled: boolean }>`
   margin-right: 12px;
+  background-color: ${props => props.disabled && COLORS.GREY2}
 `;
 
 export const Card = styled.div`

@@ -12,8 +12,8 @@
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "server": "nodemon --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' --exec ts-node src/server.ts | bunyan",
     "client": "cd ../client && npm start",
-    "link-client": "cd ../adaptivecards-templating-client/typescript && npm install && npm run build && npm link && cd ../../client && npm uninstall adaptive-templating-service-typescript-node && npm link adaptive-templating-service-typescript-node && npm install && cd src && npm link adaptive-templating-service-typescript-node",
-    "init-app": "cd ../server && npm install && npm uninstall adaptivecards-templating-service && cd ../adaptivecards-templating-service && npm install && npm run build && npm link && cd ../server && npm link adaptivecards-templating-service && npm run build && npm run link-client"
+    "link-client": "cd ../adaptivecards-templating-client/typescript && npm install && npm run build && npm link && cd ../../client && npm link adaptive-templating-service-typescript-node && npm install && cd src && npm link adaptive-templating-service-typescript-node",
+    "init-app": "cd ../server && npm install && cd ../adaptivecards-templating-service && npm install && npm run build && npm link && cd ../server && npm link adaptivecards-templating-service && npm run build && npm run link-client"
   },
   "author": "",
   "license": "ISC",
@@ -23,7 +23,6 @@
     "@types/helmet": "0.0.45",
     "@types/mongoose": "^5.7.8",
     "adaptivecards-templating": "^0.1.1-alpha.1",
-    "adaptivecards-templating-service": "^1.0.0-beta.0.4",
     "applicationinsights": "^1.7.3",
     "async": "^3.1.1",
     "axios": "^0.19.2",

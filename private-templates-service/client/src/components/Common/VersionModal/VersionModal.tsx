@@ -46,7 +46,6 @@ import { getDateString } from '../../../utils/versionUtils';
 import { capitalizeString, getState } from "../../../utils/stringUtils";
 import ModalHOC from '../../../utils/ModalHOC';
 import { closeModal } from '../../../store/page/actions';
-import { Scroller } from '../../../utils/AllCardsUtil/Scroller';
 import { THERE_ARE, VERSIONS_FOR, VERSION_HEADER, PUBLISHED_HEADER, STATUS_HEADER, NOT_PUBLISHED, SELECTED, VERSION_CANCEL, VERSION_DELETE, VERSION_UNPUBLISH, VERSION_PUBLISH } from '../../../assets/strings';
 
 interface Props {
@@ -75,11 +74,19 @@ interface State {
 }
 
 class VersionModal extends React.Component<Props, State> {
-  scroller: Scroller;
   constructor(props: Props) {
     super(props);
-    this.scroller = new Scroller();
     this.state = { versionList: this.props.template.instances ? new Array(this.props.template.instances.length) : [] }
+  }
+
+  containsState = (state: PostedTemplate.StateEnum): boolean => {
+    let instances = this.props.template.instances || [];
+    for (let i = 0; i < this.state.versionList.length; i++){
+      if (instances[i].state == state && this.state.versionList[i]){
+        return true;
+      }
+    }
+    return false;
   }
 
   delete = () => {
@@ -135,7 +142,7 @@ class VersionModal extends React.Component<Props, State> {
                 <SelectedHeaderText>{`${this.state.versionList.filter(function (s) { return s; }).length} ${SELECTED}`}</SelectedHeaderText>
               </CardHeaderRow>
               <CardBody>
-                <VersionContainer onWheel={this.scroller.scroll}>
+                <VersionContainer>
                   {this.props.template.instances && this.props.template.instances.map((instance: TemplateInstance, index: number) => (
                     <VersionCardRow>
                       <VersionWrapper>
@@ -162,8 +169,8 @@ class VersionModal extends React.Component<Props, State> {
             <ButtonGroup>
               <LightButton text={VERSION_CANCEL} onClick={this.props.closeModal} />
               <LightButton text={VERSION_DELETE} onClick={this.delete} />
-              <PrimaryStyleButton text={VERSION_UNPUBLISH} onClick={this.unpublish} />
-              <PrimaryStyleButton text={VERSION_PUBLISH} onClick={this.publish} />
+              <PrimaryStyleButton disabled={this.containsState(PostedTemplate.StateEnum.Draft) || this.containsState(PostedTemplate.StateEnum.Deprecated)} text={VERSION_UNPUBLISH} onClick={this.unpublish} />
+              <PrimaryStyleButton disabled={this.containsState(PostedTemplate.StateEnum.Live)} text={VERSION_PUBLISH} onClick={this.publish} />
             </ButtonGroup>
           </BottomRow>
         </Modal>

@@ -53,6 +53,7 @@ import {
   PEOPLE,
   TEMPLATE_AT,
   COLLABORATORS,
+  COLLABORATOR,
 } from "../../../../assets/strings";
 import { TooltipContainer } from '../styled';
 import {
@@ -104,7 +105,6 @@ const buttons = [
   },
 ];
 
-// TODO: Dynamically show info. Backend not ready
 const cards = [
   {
     header: TEMPLATE_AUTHOR,
@@ -192,7 +192,7 @@ function getTemplateInstance(template: Template, version: string): TemplateInsta
 }
 
 interface State {
-  version: string
+  version: string;
 }
 
 class TemplateInfo extends React.Component<Props, State> {
@@ -200,19 +200,15 @@ class TemplateInfo extends React.Component<Props, State> {
     super(props);
     const currentVersion = getLatestVersion(this.props.template);
     this.state = { version: currentVersion }
+    let alreadySent = new Set();
     for (let instance of this.props.template.instances || []) {
-      this.props.getOwnerName(instance.lastEditedUser!);
-      this.props.getOwnerProfilePicture(instance.lastEditedUser!);
+      if (!(alreadySent.has(instance.lastEditedUser!))) {
+        alreadySent.add(instance.lastEditedUser!);
+        this.props.getOwnerName(instance.lastEditedUser!);
+        this.props.getOwnerProfilePicture(instance.lastEditedUser!);
+      }
     }
     this.props.getTags();
-  }
-
-  componentDidUpdate(prevProps: Props, prevState: State) {
-    let templateInstance = getTemplateInstance(this.props.template, this.state.version);
-    if (this.state.version !== prevState.version && templateInstance.lastEditedUser) {
-      this.props.getOwnerName(templateInstance.lastEditedUser!);
-      this.props.getOwnerProfilePicture(templateInstance.lastEditedUser!);
-    }
   }
 
   versionList = (instances: TemplateInstance[] | undefined): IDropdownOption[] => {
@@ -285,6 +281,7 @@ class TemplateInfo extends React.Component<Props, State> {
   }
 
   render() {
+
     const {
       tags,
       instances,
@@ -298,11 +295,16 @@ class TemplateInfo extends React.Component<Props, State> {
       const tempDate = new Date(templateInstance.updatedAt);
       timestampParsed = tempDate.toLocaleDateString() + TEMPLATE_AT + tempDate.toLocaleTimeString(navigator.language, { hour: '2-digit', minute: '2-digit' });
     }
-    let oids: string[] = []
+    let oids = new Set();
     for (let instance of this.props.template.instances || []) {
-      if (instance.lastEditedUser && !oids.includes(instance.lastEditedUser)) {
-        oids.push(instance.lastEditedUser!);
+      if (instance.lastEditedUser) {
+        oids.add(instance.lastEditedUser!);
       }
+    }
+
+    let isDoneFetching = false;
+    if (this.props.owner && this.props.owner!.imageURLs!) {
+      isDoneFetching = (Object.keys(this.props.owner.imageURLs!).length == oids.size);
     }
 
     const { history } = this.props;
@@ -314,7 +316,6 @@ class TemplateInfo extends React.Component<Props, State> {
       favoriteTags = allTags.allTags.favoriteTags;
     }
     let tagCardID = "Card tags";
-
     return (
       <OuterWrapper>
         <HeaderWrapper>
@@ -353,12 +354,12 @@ class TemplateInfo extends React.Component<Props, State> {
                   {val.iconName && ((isFetchingOwnerName || isFetchingOwnerPic) ?
                     <CenteredSpinner size={SpinnerSize.large} /> :
                     <IconWrapper><OwnerAvatar sizeInPx={50} oID={templateInstance.lastEditedUser!} /></IconWrapper>)}
-                  {val.header === PEOPLE && ((isFetchingOwnerName || isFetchingOwnerPic) ?
+                  {val.header === PEOPLE && ((isFetchingOwnerName || isFetchingOwnerPic || !isDoneFetching) ?
                     <CenteredSpinner size={SpinnerSize.large} /> :
-                    <IconWrapper><OwnerList oids={oids} /></IconWrapper>)}
+                    <IconWrapper><OwnerList oids={Array.from(oids) as string[]} /></IconWrapper>)}
                   {val.header === USAGE && <UsageNumber>{templateInstance.numHits}</UsageNumber>}
                   {(val.header === TEMPLATE_AUTHOR) ? (this.props.owner && this.props.owner.displayNames) ? this.props.owner.displayNames[templateInstance.lastEditedUser!] : "" :
-                    (val.header === PEOPLE) ? oids.length + " " + val.bodyText : val.bodyText}
+                    (val.header === PEOPLE) ? oids.size + " " + (oids.size === 1 ? COLLABORATOR : val.bodyText) : val.bodyText}
                 </CardBody>
               </Card>
             ))}
@@ -376,9 +377,7 @@ class TemplateInfo extends React.Component<Props, State> {
               </CardBody>
             </form>
           </Card>
-          <RowWrapper>
-            <VersionCard template={this.props.template} templateVersion={this.state.version} onSwitchVersion={this.onSwitchVersion} />
-          </RowWrapper>
+          <VersionCard template={this.props.template} templateVersion={this.state.version} onSwitchVersion={this.onSwitchVersion} />
         </MainContentWrapper>
         {this.props.modalState === ModalState.Publish && <PublishModal template={this.props.template} templateVersion={this.state.version} />}
         {this.props.modalState === ModalState.Unpublish && <UnpublishModal template={this.props.template} templateVersion={this.state.version} />}

@@ -89,7 +89,8 @@ export const MainContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  padding: 32px 32px 0 40px;
+  padding: 8px 32px 0px 40px;
+  overflow: hidden;
 `;
 
 export const RowWrapper = styled.div`
@@ -110,7 +111,7 @@ export const Card = styled.section`
   margin-bottom: 24px;
 `;
 
-export const CardHeader = styled.div`
+export const CardHeader = styled.h2`
   display: flex;
   flex-direction: column;
   align-items: center;
