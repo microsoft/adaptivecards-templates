@@ -28,6 +28,7 @@ import { COLORS } from "../../../globalStyles";
 import { ScrollDirection } from "../../../utils/AllCardsUtil";
 import { TooltipHost } from "office-ui-fabric-react";
 import { SearchState } from "../../../store/search/types";
+import { buildAdressBarURL } from "../../../utils/queryUtil";
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -132,6 +133,19 @@ class TemplatesPage extends Component<Props, State> {
   };
   componentDidMount() {
     this.props.getTags();
+    this.props.history.replace(buildAdressBarURL(this.props.basePath, this.state.selectedTags, this.props.filter.owner, this.props.search.query, this.props.sort, this.props.filter.state));
+  }
+
+  componentDidUpdate(prevProps: Props, prevState: State) {
+    const props: Props = this.props;
+    if (prevState.selectedTags.length !== this.state.selectedTags.length
+      || prevProps.filter.owner !== props.filter.owner
+      || prevProps.filter.state !== props.filter.state
+      || prevProps.sort !== props.sort
+      || prevProps.search.query !== props.search.query
+    ) {
+      this.props.history.replace(buildAdressBarURL(this.props.basePath, this.state.selectedTags, this.props.filter.owner, this.props.search.query, this.props.sort, this.props.filter.state));
+    }
   }
 
   selectTemplate = (templateID: string) => {

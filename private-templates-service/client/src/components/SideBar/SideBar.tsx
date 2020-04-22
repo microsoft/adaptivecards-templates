@@ -150,7 +150,11 @@ const SideBar = (props: Props) => {
     if (element!.url === newTemplateURL) {
       props.newTemplate();
     }
-    history.push(element!.url);
+    if(element!.url.startsWith(allTemplatesURL) && history.location.pathname.startsWith(allTemplatesURL)) {
+      history.push(`${history.location.pathname}${history.location.search}`);
+    } else {
+      history.push(element!.url);
+    }
   };
 
 

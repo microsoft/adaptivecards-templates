@@ -14,12 +14,11 @@ import TemplateList from "../../../Dashboard/TemplateList";
 import RecentlyEditedPlaceholder from '../../../Dashboard/RecentlyEditedPlaceholder';
 
 // Strings
-import { ALL_CARDS_PLACEHOLDER, ALL_CARDS } from "../../../../assets/strings";
+import { ALL_CARDS } from "../../../../assets/strings";
 import { SearchState } from "../../../../store/search/types";
 import { FilterObject, FilterEnum } from "../../../../store/filter/types";
 import { SortType } from "../../../../store/sort/types";
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import { buildAdressBarURL } from "../../../../utils/queryUtil";
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -45,8 +44,6 @@ interface Props extends RouteComponentProps{
 export class TemplatesView extends Component<Props> {
 
   componentDidMount() {
-
-    this.props.history.replace(buildAdressBarURL(this.props.basePath, this.props.selectedTags, this.props.filter.owner, this.props.search.query, this.props.sort, this.props.filter.state));
     this.props.getTemplates(this.props.selectedTags, this.props.filter.owner, this.props.search.query, this.props.sort, this.props.filter.state);
   }
 
@@ -58,7 +55,6 @@ export class TemplatesView extends Component<Props> {
            || prevProps.sort !== props.sort
            || prevProps.search.query !== props.search.query
        ) {
-         this.props.history.replace(buildAdressBarURL(this.props.basePath, this.props.selectedTags, this.props.filter.owner, this.props.search.query, this.props.sort, this.props.filter.state));
          this.props.getTemplates(this.props.selectedTags, this.props.filter.owner, this.props.search.query, this.props.sort, this.props.filter.state);
         }
   }
