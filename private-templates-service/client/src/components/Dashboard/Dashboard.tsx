@@ -23,7 +23,6 @@ import requireAuthentication from "../../utils/requireAuthentication";
 
 import RecentlyEditedPlaceholder from './RecentlyEditedPlaceholder';
 import Gallery from "../Gallery";
-import SearchPage from "./SearchPage/SearchPage";
 import { allTemplatesURL } from "../SideBar/SideBar";
 import TemplateList from "./TemplateList";
 import Footer from "./Footer";

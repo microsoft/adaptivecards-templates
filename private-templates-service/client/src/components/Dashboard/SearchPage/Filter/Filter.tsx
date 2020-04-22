@@ -1,6 +1,5 @@
 import React from "react";
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { RootState } from "../../../../store/rootReducer";
 import { connect } from 'react-redux';
 import { StyledFilterDropdown } from './styled';
 import { clearFilter, queryFilter } from "../../../../store/filter/actions";

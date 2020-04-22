@@ -1,4 +1,3 @@
-import { TemplateList } from "adaptive-templating-service-typescript-node";
 import { IncomingMessage } from "http";
 
 export interface SearchState {
