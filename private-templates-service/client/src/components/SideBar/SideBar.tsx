@@ -6,6 +6,9 @@ import { RootState } from "../../store/rootReducer";
 import { UserType, AuthState } from "../../store/auth/types";
 import { ModalState } from "../../store/page/types";
 import { newTemplate } from "../../store/currentTemplate/actions";
+import { clearSearch } from "../../store/search/actions";
+import { clearFilter } from "../../store/filter/actions";
+import { clearSort } from "../../store/sort/actions";
 
 import { COLORS, FONTS } from "../../globalStyles";
 import UserAvatar from "./UserAvatar";
@@ -28,7 +31,7 @@ import {
   LogoTextHeader,
   LogoTextSubHeader
 } from "./styled";
-import { INavLinkGroup, INavStyles } from "office-ui-fabric-react";
+import { INavLinkGroup, INavStyles, INavLink } from "office-ui-fabric-react";
 import SkipLink from "../Common/SkipLink";
 import { NAVBAR, OUT, IN, ADAPTIVE_CARDS, PORTAL, ARIA_DASHBOARD, ARIA_NEW_CARD } from "../../assets/strings";
 
@@ -40,6 +43,9 @@ interface Props {
   templateID: string | undefined;
   newTemplate: () => void;
   modalState?: ModalState;
+  clearSearch: () => void;
+  clearFilter: () => void;
+  clearSort: () => void;
 }
 
 const mapStateToProps = (state: RootState) => {
@@ -55,6 +61,15 @@ const mapDispatchToProps = (dispatch: any) => {
   return {
     newTemplate: () => {
       dispatch(newTemplate());
+    },
+    clearSearch: () => {
+      dispatch(clearSearch())
+    },
+    clearFilter: () => {
+      dispatch(clearFilter());
+    },
+    clearSort: () => {
+      dispatch(clearSort());
     }
   };
 };
@@ -83,6 +98,7 @@ const iconStyle = {
 };
 
 export const newTemplateURL = "/designer/newcard/1.0"
+export const allTemplatesURL = "/templates/all"
 
 const navMenuLinks: INavLinkGroup[] = [
   {
@@ -124,13 +140,21 @@ const navMenuLinks: INavLinkGroup[] = [
 const SideBar = (props: Props) => {
   const history = useHistory();
 
-  const onNavClick = (event: any, element: any) => {
+  const onNavClick = (event: any, element?: INavLink) => {
     event.preventDefault();
-    if (element.url === newTemplateURL) {
+    if(!element!.url.startsWith(allTemplatesURL)) {
+      props.clearSearch();
+      props.clearFilter();
+      props.clearSort();
+    }
+    if (element!.url === newTemplateURL) {
       props.newTemplate();
     }
-    history.push(element.url);
-
+    if(element!.url.startsWith(allTemplatesURL) && history.location.pathname.startsWith(allTemplatesURL)) {
+      history.push(`${history.location.pathname}${history.location.search}`);
+    } else {
+      history.push(element!.url);
+    }
   };
 
 

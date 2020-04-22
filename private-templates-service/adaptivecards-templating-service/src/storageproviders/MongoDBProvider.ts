@@ -7,9 +7,11 @@ import { clone } from "../util/inmemorydbutils/inmemorydbutils";
 
 export class MongoDBProvider implements StorageProvider {
   worker: MongoWorker;
+  locale: string;
 
-  constructor(params: MongoConnectionParams = {}) {
+  constructor(params: MongoConnectionParams = {}, locale: string = "en") {
     this.worker = new MongoWorker(params);
+    this.locale = locale;
   }
 
   // Construct functions are introduced to be able to search by
@@ -34,9 +36,6 @@ export class MongoDBProvider implements StorageProvider {
     }
     if (query.authors && query.authors.length) {
       templateQuery.authors = { $all: clone(query.authors) }
-    }
-    if(templateQuery.name && templateQuery.tags){
-      return {$or: [{name:templateQuery.name}, {tags:templateQuery.tags}]}
     }
     return templateQuery;
   }
@@ -73,6 +72,7 @@ export class MongoDBProvider implements StorageProvider {
       .map(templateModels => {
         return MongoUtils.restoreJSONTypeOfTemplate(templateModels);
       })
+      .collation({locale: this.locale, strength: 1})
       .sort({ [sortBy]: sortOrder })
       .then(templates => {
         if (templates.length) {

@@ -10,7 +10,6 @@ import { getRecentTemplates } from "../../store/recentTemplates/actions";
 import { RecentTemplatesState } from "../../store/recentTemplates/types";
 import { setPage } from "../../store/page/actions";
 import { getTemplate } from "../../store/currentTemplate/actions";
-import { setSearchBarVisible } from "../../store/search/actions";
 import { getOwnerProfilePicture, getOwnerName } from "../../store/templateOwner/actions";
 import { OwnerState } from "../../store/templateOwner/types";
 import { setSkipLinkContentID } from "../../store/skiplink/actions";
@@ -24,7 +23,7 @@ import requireAuthentication from "../../utils/requireAuthentication";
 
 import RecentlyEditedPlaceholder from './RecentlyEditedPlaceholder';
 import Gallery from "../Gallery";
-import SearchPage from "./SearchPage/SearchPage";
+import { allTemplatesURL } from "../SideBar/SideBar";
 import TemplateList from "./TemplateList";
 import Footer from "./Footer";
 import TagList from "../Common/TemplatesPage/TagList";
@@ -46,12 +45,12 @@ import {
   OuterDashboardContainer,
 } from "./styled";
 
+
 const mapStateToProps = (state: RootState) => {
   return {
     isAuthenticated: state.auth.isAuthenticated,
     user: state.auth.user,
     templates: state.allTemplates,
-    isSearch: state.search.isSearch,
     recentTemplates: state.recentTemplates,
     templateOwner: state.templateOwner,
     tags: state.tags
@@ -61,9 +60,6 @@ const mapDispatchToProps = (dispatch: any) => {
   return {
     setPage: (currentPageTitle: string, currentPage: string) => {
       dispatch(setPage(currentPageTitle, currentPage));
-    },
-    setSearchBarVisible: (isSearchBarVisible: boolean) => {
-      dispatch(setSearchBarVisible(isSearchBarVisible));
     },
     getTemplates: () => {
       dispatch(getAllTemplates());
@@ -108,7 +104,6 @@ interface Props extends RouteComponentProps {
   templateOwner: OwnerState;
   tags: TagsState;
   setPage: (currentPageTitle: string, currentPage: string) => void;
-  setSearchBarVisible: (isSearchBarVisible: boolean) => void;
   getTemplates: () => void;
   getRecentTemplates: () => void;
   getTemplate: (templateID: string) => void;
@@ -127,7 +122,6 @@ class Dashboard extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
     props.setPage(DASHBOARD_PAGE, DASHBOARD_PAGE);
-    props.setSearchBarVisible(true);
     props.getRecentTemplates();
     props.setSkipLinkContentID(DASHBOARD_MAIN_CONTENT_ID);
   }
@@ -163,16 +157,9 @@ class Dashboard extends React.Component<Props> {
   tagOnClick = (tag: string) => {
     this.props.clearSelectedTags();
     this.props.addSelectedTag(tag);
-    this.props.history.push("/templates/all", { redirect: true });
+    this.props.history.push(allTemplatesURL, {redirect: true});
   }
   render() {
-    if (this.props.isSearch) {
-      return (
-        <DashboardContainer>
-          <SearchPage selectTemplate={this.selectTemplate} />
-        </DashboardContainer>
-      );
-    }
     //TODO add sort functionality to separate templates displayed in recent vs draft
     const { recentTemplates, tags } = this.props;
     let recentlyEditedTemplates = new Array<Template>();
