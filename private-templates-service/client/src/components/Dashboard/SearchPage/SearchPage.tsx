@@ -12,18 +12,15 @@ import Gallery from '../../Gallery';
 
 import { SearchAndFilter, SearchResultBanner, StyledSearchText, StyledSpinner } from './styled';
 import { FilterObject } from '../../../store/filter/types';
-import { querySearch } from '../../../store/search/actions';
 import { SortType } from '../../../store/sort/types';
 import { FilterEnum } from '../../../store/filter/types';
+import { querySearchSet } from '../../../store/search/actions';
 
 const mapStateToProps = (state: RootState) => {
   return {
-    searchByTemplateName: state.search.searchByTemplateName,
-    isSearch: state.search.isSearch,
+    query: state.search.query,
     filterType: state.filter.filterType,
-    sortType: state.sort.sortType,
-    loading: state.search.loading,
-    templates: state.search.templates,
+    sortType: state.sort.sortType
   }
 }
 
@@ -32,14 +29,14 @@ const mapDispatchToProps = (dispatch: any) => {
     getTemplate: (templateID: string) => {
       dispatch(getTemplate(templateID));
     },
-    querySearch: (templateName: string, sortBy: SortType, state?: FilterEnum, owned?: boolean) => {
-      dispatch(querySearch(templateName, sortBy, state, owned))
+    setSearchQuery: (templateName: string) => {
+      dispatch(querySearchSet(templateName))
     } 
   }
 }
 
 interface Props {
-  searchByTemplateName: string;
+  query: string | undefined;
   isSearch: boolean
   filterType: FilterObject;
   sortType: SortType;
@@ -47,7 +44,7 @@ interface Props {
   templates?: TemplateList;
   getTemplate: (templateID: string) => void;
   selectTemplate: (templateID: string) => void;
-  querySearch: (templateName: string, sortBy: SortType, state?: FilterEnum, owned?: boolean) => void;
+  setSearchQuery: (templateName: string, sortBy: SortType, state?: FilterEnum, owned?: boolean) => void;
 }
 
 interface State {
@@ -63,12 +60,7 @@ class SearchPage extends React.Component<Props, State> {
   toggleModal = () => {
     this.setState({ isPreviewOpen: !this.state.isPreviewOpen });
   };
-  
-  componentDidUpdate = (prevProps: Props) => {
-    if (this.props.filterType !== prevProps.filterType || this.props.sortType !== prevProps.sortType) {
-      this.props.querySearch(this.props.searchByTemplateName, this.props.sortType, this.props.filterType.state, this.props.filterType.owner)
-    }
-  }
+
   render() {
     if (this.props.loading) {
       return (
@@ -85,9 +77,9 @@ class SearchPage extends React.Component<Props, State> {
     }
 
     if (this.props.templates?.templates?.length === 0) {
-      searchText = "No Results Found For '" + this.props.searchByTemplateName + "'";
+      searchText = "No Results Found For '" + this.props.query + "'";
     } else {
-      searchText = "Template Results For '" + this.props.searchByTemplateName + "'";
+      searchText = "Template Results For '" + this.props.query + "'";
     }
 
     return (

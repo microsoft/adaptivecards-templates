@@ -41,7 +41,6 @@ const mapStateToProps = (state: RootState) => {
   return {
     isAuthenticated: state.auth.isAuthenticated,
     user: state.auth.user,
-    searchByTemplateName: state.search.searchByTemplateName,
     redirectUri: state.auth.redirectUri,
     appId: state.auth.appId,
     appInsightsInstrumentationKey: state.auth.appInsightsInstrumentationKey,
@@ -85,7 +84,6 @@ interface Props {
   getConfig: () => void;
   isAuthenticated: boolean;
   user?: UserType;
-  searchByTemplateName: string;
   appId?: string;
   redirectUri?: string;
   appInsightsInstrumentationKey?: string;
@@ -198,7 +196,7 @@ class App extends Component<Props, State> {
                     <Route path="/preview/:uuid">
                       <PreviewModal authButtonMethod={this.login} />
                     </Route>
-                    <Route exact path="/templates/all">
+                    <Route path="/templates/all">
                       <AllCards authButtonMethod={this.login} />
                     </Route>
                     <Route component={NoMatch} />

@@ -41,7 +41,7 @@ app.use(helmet.noSniff());
 // If running locally, add the code specified in README enabling CORS
 
 mongoose.set('useFindAndModify', false)
-let mongoDB = new ACMS.MongoDBProvider({ connectionString: process.env.ACMS_DB_CONNECTION });
+let mongoDB = new ACMS.MongoDBProvider({ connectionString: process.env.ACMS_DB_CONNECTION}, "en");
 mongoDB.connect()
   .then(
     (res: any) => {

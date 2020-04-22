@@ -1,18 +1,11 @@
 import React from "react";
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { RootState } from "../../../../store/rootReducer";
 import { connect } from 'react-redux';
 import { StyledFilterDropdown } from './styled';
 import { clearFilter, queryFilter } from "../../../../store/filter/actions";
 import { THEME } from '../../../../globalStyles';
 import { FilterObject } from '../../../../store/filter/types';
 import { OWNER_KEY, CREATED_BY_ME, FILTER_DRAFT, DRAFT_KEY, PUBLISHED_KEY, FILTER_PUBLISHED, FILTER_LIVE, FILTER_BY } from "../../../../assets/strings";
-
-const mapStateToProps = (state: RootState) => {
-  return {
-    searchByTemplateName: state.search.searchByTemplateName,
-  }
-}
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
@@ -43,10 +36,12 @@ class Filter extends React.Component<Props> {
         filter.owner = true;
       }
       else if (option.key === DRAFT_KEY) {
+        filter.owner = true;
         filter.state = DRAFT_KEY;
       }
       else if (option.key === PUBLISHED_KEY) {
         filter.state = FILTER_LIVE;
+        filter.owner = undefined;
       }
       this.props.queryFilter(filter)
     }
@@ -64,4 +59,4 @@ class Filter extends React.Component<Props> {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Filter);
+export default connect(null, mapDispatchToProps)(Filter);

@@ -1218,14 +1218,16 @@ export class TemplateServiceClient {
         const err = new TemplateError(ApiError.InvalidQueryParam, "Sort order value is not valid.");
         return res.status(400).json({ error: err });
       }
-
+          
+      let sortOrder: SortOrder = req.query.sortOrder? SortOrder[req.query.sortOrder as keyof typeof SortOrder] : SortOrder.ascending;
+      let sortBy: SortBy =  req.query.sortBy? SortBy[req.query.sortBy as keyof typeof SortBy] : SortBy.alphabetical;
       let state: TemplateState | undefined = TemplateState[req.query.state as keyof typeof TemplateState];
       let owned: boolean | undefined = req.query.owned ? req.query.owned.toLowerCase() === "true" : undefined;
       let isClient: boolean | undefined = req.query.isClient ? req.query.isClient.toLowerCase() === "true" : undefined;
       let tagList: string[] = req.query.tags;
 
       this.getTemplates(token, undefined, state, req.query.name, req.query.version,
-        owned, req.query.sortBy, req.query.sortOrder, tagList, isClient).then(response => {
+        owned, sortBy, sortOrder, tagList, isClient).then(response => {
           if (!response.success) {
             return res.status(200).json({ templates: [] });
           }

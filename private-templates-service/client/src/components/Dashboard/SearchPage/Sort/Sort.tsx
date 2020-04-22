@@ -10,9 +10,7 @@ import { DATE_CREATED, ALPHABETICAL, DATE_UPDATED, DATE_CREATED_KEY, DATE_UPDATE
 
 const mapStateToProps = (state: RootState) => {
   return {
-    isSearch: state.search.isSearch,
-    sortType: state.sort.sortType,
-    searchByTemplateName: state.search.searchByTemplateName
+    sortType: state.sort.sortType
   }
 }
 
@@ -25,7 +23,6 @@ const mapDispatchToProps = (dispatch: any) => {
 }
 
 interface Props {
-  isSearch: boolean;
   sortType: SortType;
   querySort: (sortType: SortType) => void;
   // clear sort will be implemented there are design confirmations from Naomi
