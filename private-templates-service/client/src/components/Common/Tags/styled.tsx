@@ -36,7 +36,7 @@ const ExpandAddKeyframe = keyframes`
   }
 `;
 
-export const AddTagWrapper = styled.div<{ open: boolean }>`
+export const AddTagWrapper = styled.form<{ open: boolean }>`
   display: flex;
   flex-direction: row;
   align-items: baseline;
