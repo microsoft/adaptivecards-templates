@@ -2,7 +2,7 @@ import React from "react";
 import { StyledSearchBox } from "./styled";
 import { RootState } from "../../../store/rootReducer";
 import { connect } from "react-redux";
-import { clearSearch, querySearchSet} from "../../../store/search/actions";
+import { clearSearch, querySearchSet } from "../../../store/search/actions";
 import { FilterObject } from "../../../store/filter/types";
 import { SortType } from "../../../store/sort/types";
 import { COLORS, BREAK } from "../../../globalStyles";
@@ -22,7 +22,7 @@ const mapStateToProps = (state: RootState) => {
     filter: state.filter.filterType,
     sort: state.sort.sortType,
     selectedTags: state.tags.selectedTags
-    
+
   };
 };
 
@@ -121,8 +121,8 @@ class SearchBar extends React.Component<Props, State> {
       return (
         <StyledSearchBox
           ariaLabel={STRINGS.SEARCHBAR_DESCRIPTION}
-          placeholder={`${SEARCH}` + (this.state.isMobile ? "" : " " + `${TEMPLATES}`)}
-          value={this.props.query? this.props.query : ""}
+          placeholder={`${SEARCH}${!this.state.isMobile && ` ${TEMPLATES}`}`}
+          value={this.props.query ? this.props.query : ""}
           onSearch={this.onSearch} // will trigger when "Enter" is pressed
           onClear={this.onClear} // will trigger when "Esc" or "X" is pressed
           styles={placeHolderStyles}

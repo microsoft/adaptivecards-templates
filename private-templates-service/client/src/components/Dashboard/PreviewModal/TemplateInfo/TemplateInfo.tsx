@@ -89,13 +89,13 @@ const buttons = [
     text: EDIT_IN_DESIGNER,
     altText: NEW_VERSION,
     icon: { iconName: 'SingleColumnEdit' },
-    altIcon: {iconName: 'CalculatorAddition'},
+    altIcon: { iconName: 'CalculatorAddition' },
     tooltip: EDIT_IN_DESIGNER_TOOLTIP,
     altTooltip: NEW_VERSION_BUTTON_TOOLTIP
   },
   {
     text: MANAGE,
-    icon: { iconName: 'Settings'},
+    icon: { iconName: 'Settings' },
     tooltip: MANAGE_BUTTON_TOOLTIP
   },
   {
@@ -112,7 +112,7 @@ const buttons = [
     text: PUBLISH,
     altText: UNPUBLISH,
     icon: { iconName: 'PublishContent' },
-    altIcon: {iconName: 'PublishContent'},
+    altIcon: { iconName: 'PublishContent' },
     tooltip: PUBLISH_BUTTON_TOOLTIP,
     altTooltip: UNPUBLISH_BUTTON_TOOLTIP
   },
@@ -262,7 +262,7 @@ class TemplateInfo extends React.Component<Props, State> {
     let text: string = "";
     let tooltip: string = "";
     let icon: IIconProps = {};
-    if(val.text === PUBLISH || val.text === EDIT_IN_DESIGNER) {
+    if (val.text === PUBLISH || val.text === EDIT_IN_DESIGNER) {
       text = templateState === PostedTemplate.StateEnum.Live ? val.altText : val.text;
       tooltip = templateState === PostedTemplate.StateEnum.Live ? val.altTooltip : val.tooltip;
       icon = templateState === PostedTemplate.StateEnum.Live ? val.altIcon : val.icon;
@@ -274,7 +274,7 @@ class TemplateInfo extends React.Component<Props, State> {
       icon = val.icon;
     }
     return (
-      <TooltipContainer>
+      <TooltipContainer key={val.text}>
         <TooltipHost id={tooltipID} content={tooltip}>
           <ActionButton key={text}
             iconProps={icon}
@@ -313,7 +313,7 @@ class TemplateInfo extends React.Component<Props, State> {
 
     let isDoneFetching = false;
     if (this.props.owner && this.props.owner!.imageURLs!) {
-      isDoneFetching = (Object.keys(this.props.owner.imageURLs!).length == oids.size);
+      isDoneFetching = (Object.keys(this.props.owner.imageURLs!).length === oids.size);
     }
 
     const { history } = this.props;
@@ -375,8 +375,8 @@ class TemplateInfo extends React.Component<Props, State> {
           </RowWrapper>
           <Card aria-label={TAGS}>
             <form aria-labelledby={tagCardID}>
-              <CardHeader id={tagCardID} style={{alignItems: "flex-start", paddingLeft: "2.5rem"}}>{TAGS}</CardHeader>
-              <CardBody style={{alignItems: "flex-start"}}>
+              <CardHeader id={tagCardID} style={{ alignItems: "flex-start", paddingLeft: "2.5rem" }}>{TAGS}</CardHeader>
+              <CardBody style={{ alignItems: "flex-start" }}>
                 <TagsWrapper>
                   {isFetchingTags ?
                     <CenteredSpinner size={SpinnerSize.large} />
@@ -394,7 +394,7 @@ class TemplateInfo extends React.Component<Props, State> {
         {this.props.modalState === ModalState.ShareSuccess && <ShareSuccessModal template={this.props.template} templateVersion={this.state.version} />}
         {this.props.modalState === ModalState.Delete && <DeleteModal template={this.props.template} templateVersion={this.state.version} />}
         {this.props.modalState === ModalState.EditName && <EditNameModal />}
-        
+
       </OuterWrapper>
     );
   }
