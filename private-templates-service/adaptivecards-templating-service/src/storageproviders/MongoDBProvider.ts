@@ -7,9 +7,11 @@ import { clone } from "../util/inmemorydbutils/inmemorydbutils";
 
 export class MongoDBProvider implements StorageProvider {
   worker: MongoWorker;
+  locale: string;
 
-  constructor(params: MongoConnectionParams = {}) {
+  constructor(params: MongoConnectionParams = {}, locale: string = "en") {
     this.worker = new MongoWorker(params);
+    this.locale = locale;
   }
 
   // Construct functions are introduced to be able to search by
@@ -28,11 +30,13 @@ export class MongoDBProvider implements StorageProvider {
     if (query.tags && query.tags.length) {
       templateQuery.tags = {
         $all: clone(query.tags).map(x => {
-          return x.toLocaleLowerCase();
+          return new RegExp(`^${x}$`, "i");
         })
       };
     }
-
+    if (query.authors && query.authors.length) {
+      templateQuery.authors = { $all: clone(query.authors) }
+    }
     return templateQuery;
   }
   async getUsers(query: Partial<IUser>): Promise<JSONResponse<IUser[]>> {
@@ -68,6 +72,7 @@ export class MongoDBProvider implements StorageProvider {
       .map(templateModels => {
         return MongoUtils.restoreJSONTypeOfTemplate(templateModels);
       })
+      .collation({locale: this.locale, strength: 1})
       .sort({ [sortBy]: sortOrder })
       .then(templates => {
         if (templates.length) {
@@ -85,6 +90,7 @@ export class MongoDBProvider implements StorageProvider {
         return Promise.resolve({ success: false, errorMessage: e });
       });
   }
+
   // Updates Only one user
   async updateUser(query: Partial<IUser>, updateQuery: Partial<IUser>): Promise<JSONResponse<Number>> {
     let userQuery: any = this._constructUserQuery(query);

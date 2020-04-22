@@ -29,10 +29,13 @@ import { getLatestVersion, getLatestTemplateInstanceState } from "../../utils/Te
 import { getDateString } from "../../utils/versionUtils";
 import KeyCode from "../../globalKeyCodes";
 import * as STRINGS from "../../assets/strings"
+import { getState } from "../../utils/stringUtils";
+import { NA } from "../../assets/strings";
 
 interface Props {
   onClick?: (templateID: string) => void;
   template: Template;
+  version?: string;
   pageTitle?: string;
 }
 
@@ -56,7 +59,7 @@ class AdaptiveCardPanel extends React.Component<Props> {
   }
 
   isComponentNavigable = () => {
-    if(this.props.pageTitle) {
+    if (this.props.pageTitle) {
       let pageTitle: string = this.props.pageTitle.toLowerCase();
       return pageTitle === STRINGS.DASHBOARD.toLowerCase() || pageTitle === STRINGS.ALL_CARDS_TITLE.toLowerCase();
     }
@@ -65,7 +68,7 @@ class AdaptiveCardPanel extends React.Component<Props> {
 
   render() {
     let template = this.props.template;
-    let version = getLatestVersion(this.props.template);
+    let version = this.props.version ? this.props.version : getLatestVersion(this.props.template);
     let state = getLatestTemplateInstanceState(template);
 
     const isComponentNavigable = this.isComponentNavigable();
@@ -82,7 +85,7 @@ class AdaptiveCardPanel extends React.Component<Props> {
 
             <TemplateName>{template.name}</TemplateName>
             <TemplateUpdatedAt>
-              {template.updatedAt ? getDateString(template.updatedAt) : "N/A"}
+              {template.updatedAt ? getDateString(template.updatedAt) : `${NA}`}
             </TemplateUpdatedAt>
           </TemplateNameAndDateWrapper>
           <Align>
@@ -90,7 +93,7 @@ class AdaptiveCardPanel extends React.Component<Props> {
               <StatusIndicator state={isStateDefined ? template!.instances![0].state : PostedTemplate.StateEnum.Draft}
                 style={{ marginRight: "10px" }}
               />
-              <Status>{state}</Status>
+              <Status>{getState(state)}</Status>
             </TemplateStateWrapper>
           </Align>
         </TemplateFooterWrapper>

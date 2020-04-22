@@ -3,6 +3,8 @@ import { TemplateList } from 'adaptive-templating-service-typescript-node';
 import { IncomingMessage } from "http";
 import { RootState } from "../rootReducer";
 import { initClientSDK } from "../../utils/TemplateUtil";
+import { SortType } from "../sort/types";
+import { FilterEnum } from "../filter/types";
 
 export function requestAllTemplates(): AllTemplateAction {
   return {
@@ -24,11 +26,11 @@ export function failGetAll(error: IncomingMessage): AllTemplateAction {
   }
 }
 
-export function getAllTemplates() {
+export function getAllTemplates(tags?: string[], ifOwned?: boolean, name?: string, sortBy: SortType = "alphabetical", filterState?: FilterEnum) {
   return function (dispatch: any, getState: () => RootState) {
     dispatch(requestAllTemplates())
     const api = initClientSDK(dispatch, getState);
-    return api.allTemplates(undefined, true)
+    return api.allTemplates(filterState, true, name, undefined, ifOwned, sortBy, undefined, tags)
       .then(response => {
         if (response.response.statusCode && response.response.statusCode === 200) {
           dispatch(receiveAllTemplates(response.body))

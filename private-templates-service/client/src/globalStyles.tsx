@@ -8,11 +8,14 @@ export const COLORS = {
   GREY2: "#EAEAEA",
   GREY3: "#6F6F6F",
   GREY4: "#5C5C5C",
+  GREY5: "#A8C0D3",
+  GREY6: "#9F9F9F",
   GREYHOVER: "#F5F4F4",
   GREY_SEARCH_BAR_DARK: "#A1A1A1",
   GREY_BOX_SHADOW: "#E0E0E0",
   GREEN: "#00D610",
   YELLOW: "#FFBD53",
+  ORANGE: "#FFBD53",
   BLUE: "#016FC4",
   BLUE2: "#02599C",
   BLUE3: "#5390FF",
@@ -23,7 +26,7 @@ export const COLORS = {
 export const BREAK = {
   SM: 768,
   MD: 992,
-  LG: 1200
+  LG: 1200,
 };
 
 export const THEME = {
@@ -50,8 +53,8 @@ export const THEME = {
       neutralPrimary: "#ffffff",
       neutralDark: "#f4f4f4",
       black: "#f8f8f8",
-      white: "#02599c"
-    }
+      white: "#02599c",
+    },
   }),
   LIGHT: createTheme({
     palette: {
@@ -76,7 +79,13 @@ export const THEME = {
       neutralPrimary: "#323130",
       neutralDark: "#201f1e",
       black: "#000000",
-      white: "#ffffff"
-    }
-  })
+      white: "#ffffff",
+    },
+  }),
+};
+
+export const FONTS = {
+  SEGOE_UI_REGULAR: "Segoe UI Regular, Helvetica Neue, sans-serif",
+  SEGOE_UI_SEMI_BOLD: "Segoe UI Semibold, Helvetica Neue, sans-serif",
+  COURIER_NEW: "Courier New, Courier, monospace",
 };

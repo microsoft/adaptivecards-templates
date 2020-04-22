@@ -11,16 +11,16 @@ import Sort from './Sort/Sort';
 import Gallery from '../../Gallery';
 
 import { SearchAndFilter, SearchResultBanner, StyledSearchText, StyledSpinner } from './styled';
-
+import { FilterObject } from '../../../store/filter/types';
+import { SortType } from '../../../store/sort/types';
+import { FilterEnum } from '../../../store/filter/types';
+import { querySearchSet } from '../../../store/search/actions';
 
 const mapStateToProps = (state: RootState) => {
   return {
-    searchByTemplateName: state.search.searchByTemplateName,
-    isSearch: state.search.isSearch,
+    query: state.search.query,
     filterType: state.filter.filterType,
-    sortType: state.sort.sortType,
-    loading: state.search.loading,
-    templates: state.search.templates,
+    sortType: state.sort.sortType
   }
 }
 
@@ -28,19 +28,23 @@ const mapDispatchToProps = (dispatch: any) => {
   return {
     getTemplate: (templateID: string) => {
       dispatch(getTemplate(templateID));
-    }
+    },
+    setSearchQuery: (templateName: string) => {
+      dispatch(querySearchSet(templateName))
+    } 
   }
 }
 
 interface Props {
-  searchByTemplateName: string;
+  query: string | undefined;
   isSearch: boolean
-  filterType: string;
-  sortType: string;
+  filterType: FilterObject;
+  sortType: SortType;
   loading: boolean;
   templates?: TemplateList;
   getTemplate: (templateID: string) => void;
   selectTemplate: (templateID: string) => void;
+  setSearchQuery: (templateName: string, sortBy: SortType, state?: FilterEnum, owned?: boolean) => void;
 }
 
 interface State {
@@ -73,9 +77,9 @@ class SearchPage extends React.Component<Props, State> {
     }
 
     if (this.props.templates?.templates?.length === 0) {
-      searchText = "No Results Found For '" + this.props.searchByTemplateName + "'";
+      searchText = "No Results Found For '" + this.props.query + "'";
     } else {
-      searchText = "Template Results For '" + this.props.searchByTemplateName + "'";
+      searchText = "Template Results For '" + this.props.query + "'";
     }
 
     return (
@@ -87,7 +91,7 @@ class SearchPage extends React.Component<Props, State> {
             <Filter />
           </SearchAndFilter>
         </SearchResultBanner>
-        <h1>filter value: {this.props.filterType}</h1>
+        <h1>filter value: {this.props.filterType.value}</h1>
         <h1>sort value: {this.props.sortType}</h1>
         <Gallery onClick={this.props.selectTemplate} templates={templates} />
       </div>

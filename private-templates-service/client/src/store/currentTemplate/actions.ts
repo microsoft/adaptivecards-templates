@@ -243,7 +243,6 @@ export function updateTemplate(templateID?: string, currentVersion?: string, tem
     newTemplate.state = state;
     newTemplate.tags = tags;
     newTemplate.isShareable = isShareable;
-
     if (id === null || id === undefined || id === "") {
       dispatch(requestNewTemplateUpdate());
       return api.createTemplate(newTemplate).then(response => {

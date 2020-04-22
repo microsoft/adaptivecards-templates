@@ -2,38 +2,58 @@ import React from "react";
 import { StyledSearchBox } from "./styled";
 import { RootState } from "../../../store/rootReducer";
 import { connect } from "react-redux";
-import { querySearch, clearSearch } from "../../../store/search/actions";
+import { clearSearch, querySearchSet} from "../../../store/search/actions";
+import { FilterObject } from "../../../store/filter/types";
+import { SortType } from "../../../store/sort/types";
 import { COLORS, BREAK } from "../../../globalStyles";
 import * as STRINGS from "../../../assets/strings";
+import { clearFilter } from '../../../store/filter/actions';
+import { clearSort } from '../../../store/sort/actions';
+import { RouteComponentProps, withRouter } from "react-router-dom";
+import { buildAdressBarURL } from "../../../utils/queryUtil";
+import { SEARCH, TEMPLATES } from "../../../assets/strings";
+import { allTemplatesURL } from "../../SideBar/SideBar";
+
 
 const mapStateToProps = (state: RootState) => {
   return {
-    isSearch: state.search.isSearch,
-    searchValue: state.search.searchValue,
     isAuthenticated: state.auth.isAuthenticated,
-    isSearchBarVisible: state.search.isSearchBarVisible,
-    searchByTemplateName: state.search.searchByTemplateName
+    query: state.search.query,
+    filter: state.filter.filterType,
+    sort: state.sort.sortType,
+    selectedTags: state.tags.selectedTags
+    
   };
 };
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    search: (searchByTemplateName: string) => {
-      dispatch(querySearch(searchByTemplateName));
+    search: (query: string) => {
+      dispatch(querySearchSet(query));
     },
     clearSearch: () => {
       dispatch(clearSearch());
+    },
+    clearFilter: () => {
+      dispatch(clearFilter());
+    },
+    clearSort: () => {
+      dispatch(clearSort());
     }
   };
 };
 
-interface Props {
-  isSearch: boolean;
-  searchByTemplateName: string;
+interface Props extends RouteComponentProps {
+  query: string | undefined;
   isAuthenticated: boolean;
   isSearchBarVisible?: boolean;
-  search: (searchByTemplateName: string) => void;
+  selectedTags: string[];
+  filter: FilterObject;
+  sort: SortType;
+  search: (query: string) => void;
   clearSearch: () => void;
+  clearFilter: () => void;
+  clearSort: () => void;
 }
 
 interface State {
@@ -87,20 +107,22 @@ class SearchBar extends React.Component<Props, State> {
     this.props.clearSearch();
   };
 
-  onSearch = (searchByTemplateName: string) => {
-    if (searchByTemplateName === "") {
+  onSearch = (query: string | undefined) => {
+    if (!query) {
       this.props.clearSearch();
     } else {
-      this.props.search(searchByTemplateName);
+      this.props.search(query);
+      this.props.history.push(buildAdressBarURL(allTemplatesURL, this.props.selectedTags, this.props.filter.owner, this.props.query, this.props.sort, this.props.filter.state));
     }
   };
 
   render() {
-    if (this.props.isAuthenticated && this.props.isSearchBarVisible) {
+    if (this.props.isAuthenticated) {
       return (
         <StyledSearchBox
           ariaLabel={STRINGS.SEARCHBAR_DESCRIPTION}
-          placeholder={"search" + (this.state.isMobile ? "" : " templates")}
+          placeholder={`${SEARCH}` + (this.state.isMobile ? "" : " " + `${TEMPLATES}`)}
+          value={this.props.query? this.props.query : ""}
           onSearch={this.onSearch} // will trigger when "Enter" is pressed
           onClear={this.onClear} // will trigger when "Esc" or "X" is pressed
           styles={placeHolderStyles}
@@ -114,4 +136,4 @@ class SearchBar extends React.Component<Props, State> {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SearchBar);
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(SearchBar));

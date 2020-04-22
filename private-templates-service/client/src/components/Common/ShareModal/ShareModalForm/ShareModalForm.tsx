@@ -1,8 +1,9 @@
 import React from 'react';
 
 import { connect } from 'react-redux';
+import { ModalState } from '../../../../store/page/types';
 import { updateTemplate } from '../../../../store/currentTemplate/actions';
-import { closeModal } from '../../../../store/page/actions';
+import { openModal, closeModal } from '../../../../store/page/actions';
 import { UserType } from '../../../../store/auth/types';
 import { RootState } from '../../../../store/rootReducer';
 
@@ -12,10 +13,12 @@ import { EmailPanel, SemiBoldText, BottomRow, ButtonGroup, CancelButton, SendMai
 import * as STRINGS from '../../../../assets/strings';
 
 import { Template } from 'adaptive-templating-service-typescript-node';
+import { ACMS, SHARED, WITH_YOU, HERE_IS_THE_LINK, SUBMIT } from '../../../../assets/strings';
 
 interface ShareModalFormProps {
   shareURL: string;
   templateVersion?: string;
+  openModal: (modalState: ModalState) => void;
   closeModal: () => void;
   shareTemplate: (version: string, isShareable: boolean) => void;
   user?: UserType;
@@ -31,6 +34,9 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
+    openModal: (modalState: ModalState) => {
+      dispatch(openModal(modalState));
+    },
     closeModal: () => {
       dispatch(closeModal());
     },
@@ -44,7 +50,7 @@ class ShareModalForm extends React.Component<ShareModalFormProps> {
 
   shareTemplate = () => {
     this.props.shareTemplate(this.props.templateVersion ? this.props.templateVersion : "1.0", true);
-    this.props.closeModal();
+    this.props.openModal(ModalState.ShareSuccess);
   }
 
   render() {
@@ -56,8 +62,8 @@ class ShareModalForm extends React.Component<ShareModalFormProps> {
         </EmailPanel>
         <BottomRow>
           <ButtonGroup>
-            <CancelButton text="Cancel" onClick={this.props.closeModal} />
-            <PrimaryButton type="submit" value="Submit" text="Done" onClick={this.shareTemplate} />
+            <CancelButton text={STRINGS.NO_THANKS} onClick={this.props.closeModal} />
+            <PrimaryButton type="submit" value={SUBMIT} text={STRINGS.SHARE} onClick={this.shareTemplate} />
           </ButtonGroup>
         </BottomRow>
       </React.Fragment>
@@ -69,8 +75,8 @@ function initMailingLink(props: ShareModalFormProps): string {
   let templateName = props.template!.name;
 
   const to = "";
-  const subject = "ACMS: " + props.user!.displayName + " shared " + templateName + " with you";
-  const body = "Here is the link to access this Adaptive Card: " + props.shareURL;
+  const subject = ACMS + ": " + props.user!.displayName + " " + SHARED + " " + templateName + " " + WITH_YOU;
+  const body = HERE_IS_THE_LINK + props.shareURL;
 
   let mailingLink = "mailto:" + to + "?subject=" + subject + "&body=" + body;
 

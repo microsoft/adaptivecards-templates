@@ -1,19 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-// Libraries
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { PrimaryButton } from 'office-ui-fabric-react';
-import { SearchBox } from 'office-ui-fabric-react';
-
 import { Template, PostedTemplate } from 'adaptive-templating-service-typescript-node';
 
 // Redux
 import { updateTemplate } from '../../../store/currentTemplate/actions';
-import { closeModal } from '../../../store/page/actions';
+import { ModalState } from '../../../store/page/types';
+import { openModal, closeModal } from '../../../store/page/actions';
 
 // Components
-import AdaptiveCard from '../AdaptiveCard';
+import AdaptiveCardPanel from '../../AdaptiveCardPanel';
 import ModalHOC from '../../../utils/ModalHOC';
 
 // Strings
@@ -27,21 +23,20 @@ import {
   Description,
   DescriptionAccent,
   CenterPanelWrapper,
-  CenterPanelLeft,
-  AdaptiveCardPanel,
-  CenterPanelRight,
-  SemiBoldText,
   BottomRow,
-  NotifiedGroup,
   ButtonGroup,
   CancelButton,
+  CardWrapper,
+  PublishButton,
 } from './styled';
-
+import { PUBLISH_CANCEL, PUBLISH_BUTTON } from '../../../assets/strings';
+import { getVersionNumber } from '../../../utils/TemplateUtil/TemplateUtil';
 
 interface Props {
   template: Template;
   templateVersion: string;
   publishTemplate: (templateVersion: string) => void;
+  openModal: (modalState: ModalState) => void;
   closeModal: () => void;
 }
 
@@ -49,6 +44,9 @@ const mapDispatchToProps = (dispatch: any) => {
   return {
     publishTemplate: (templateVersion: string) => {
       dispatch(updateTemplate(undefined, templateVersion, undefined, undefined, undefined, PostedTemplate.StateEnum.Live));
+    },
+    openModal: (modalState: ModalState) => {
+      dispatch(openModal(modalState));
     },
     closeModal: () => {
       dispatch(closeModal());
@@ -60,7 +58,14 @@ class PublishModal extends React.Component<Props> {
 
   publish = () => {
     this.props.publishTemplate(this.props.templateVersion ? this.props.templateVersion : "1.0");
-    this.props.closeModal();
+    this.props.openModal(ModalState.Share);
+  }
+
+  getNewTemplateVersion = (): string => {
+    if (this.props.template && this.props.templateVersion) {
+      return getVersionNumber(this.props.template, this.props.templateVersion);
+    }
+    return "1.0";
   }
 
   render() {
@@ -68,30 +73,21 @@ class PublishModal extends React.Component<Props> {
 
     return (
       <BackDrop>
-        <Modal>
-          <Header>Publish Template</Header>
-          <Description>Your template design will be sent for review. Once approved, your new design will go live as <DescriptionAccent>{template.name}</DescriptionAccent></Description>
+        <Modal aria-label={STRINGS.PUBLISH_CARD}>
+          <Header>{STRINGS.PUBLISH_CARD}</Header>
+          <Description>
+            {STRINGS.PUBLISH_MODAL_DESC}
+            <DescriptionAccent>{template.name + " - v" + this.getNewTemplateVersion()}</DescriptionAccent>
+          </Description>
           <CenterPanelWrapper>
-            <CenterPanelLeft>
-              <AdaptiveCardPanel>
-                <AdaptiveCard cardtemplate={template} templateVersion={this.props.templateVersion} />
-              </AdaptiveCardPanel>
-              <SemiBoldText style={{ color: 'pink' }}>
-                Notified
-              </SemiBoldText>
-              <SearchBox aria-label={STRINGS.SEARCH_FOR_PEOPLE} placeholder={STRINGS.SEARCH_FOR_PEOPLE} />
-            </CenterPanelLeft>
-            <CenterPanelRight>
-              <TextField label="Comments" placeholder="Enter any comments you may have for your reviewers to see. (Optional)" multiline autoAdjustHeight />
-            </CenterPanelRight>
+            <CardWrapper>
+              <AdaptiveCardPanel template={template} version={this.props.templateVersion} />
+            </CardWrapper>
           </CenterPanelWrapper>
           <BottomRow>
-            <NotifiedGroup>
-              FACES HERE
-            </NotifiedGroup>
             <ButtonGroup>
-              <CancelButton text="Cancel" onClick={this.props.closeModal} />
-              <PrimaryButton text="Publish" onClick={this.publish} />
+              <CancelButton text={PUBLISH_CANCEL} onClick={this.props.closeModal} />
+              <PublishButton text={PUBLISH_BUTTON} onClick={this.publish} />
             </ButtonGroup>
           </BottomRow>
         </Modal>

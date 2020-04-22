@@ -12,14 +12,24 @@ import { updateTemplate, getTemplate } from '../../store/currentTemplate/actions
 import * as monaco from 'monaco-editor';
 import markdownit from 'markdown-it';
 import * as ACDesigner from 'adaptivecards-designer';
-import { DesignerWrapper } from './styled';
+import {
+  OuterDesignerWrapper,
+  DesignerWrapper
+} from './styled';
 
 import EditNameModal from '../Common/EditNameModal';
 import SaveModal from './SaveModal/SaveModal';
 import SpinnerModal from '../Common/SpinnerModal';
+import SaveAndPublishModal from './SaveAndPublishModal/SaveAndPublishModal';
+import ShareModal from '../Common/ShareModal';
+import { Template } from 'adaptive-templating-service-typescript-node';
+import ShareSuccessModal from '../Common/ShareModal/ShareSuccessModal';
+
+import { DESIGNER_PUBLISH, DESIGNER_SAVE } from '../../assets/strings';
 
 const mapStateToProps = (state: RootState) => {
   return {
+    template: state.currentTemplate.template,
     templateID: state.currentTemplate.templateID,
     templateJSON: state.currentTemplate.templateJSON,
     templateName: state.currentTemplate.templateName,
@@ -48,6 +58,7 @@ const mapDispatchToProps = (dispatch: any) => {
 }
 
 interface DesignerProps extends RouteComponentProps<MatchParams> {
+  template: Template;
   templateID: string;
   templateJSON: object;
   templateName: string;
@@ -72,7 +83,7 @@ class Designer extends React.Component<DesignerProps> {
   constructor(props: DesignerProps) {
     super(props);
     props.setPage(this.props.templateName, "Designer");
-    if(this.props.match.params.uuid !== "newcard"){
+    if (this.props.match.params.uuid !== "newcard") {
       this.props.getTemplate(this.props.match.params.uuid);
     }
   }
@@ -81,8 +92,8 @@ class Designer extends React.Component<DesignerProps> {
     if (this.props.location.pathname === '/designer/newcard/1.0' && this.props.templateID && this.props.version) {
       this.props.history.replace('/designer/' + this.props.templateID + '/' + this.props.version);
     }
-    if (this.props.templateJSON){
-      designer.setCard({...this.props.templateJSON});
+    if (this.props.templateJSON) {
+      designer.setCard({ ...this.props.templateJSON });
     }
   }
   componentWillMount() {
@@ -95,11 +106,11 @@ class Designer extends React.Component<DesignerProps> {
     }
     designer = initDesigner();
 
-    let publishButton = new ACDesigner.ToolbarButton("publishButton", "Publish", "", (sender) => (alert("Published!")));
+    let publishButton = new ACDesigner.ToolbarButton("publishButton", DESIGNER_PUBLISH, "", (sender) => (this.props.openModal(ModalState.SaveAndPublish)));
     publishButton.separator = true;
     designer.toolbar.insertElementAfter(publishButton, ACDesigner.CardDesigner.ToolbarCommands.TogglePreview);
 
-    let saveButton = new ACDesigner.ToolbarButton("saveButton", "Save", "", (sender) => (onSave(designer, this.props)));
+    let saveButton = new ACDesigner.ToolbarButton("saveButton", DESIGNER_SAVE, "", (sender) => (onSave(designer, this.props)));
     saveButton.separator = true;
     designer.toolbar.insertElementAfter(saveButton, ACDesigner.CardDesigner.ToolbarCommands.TogglePreview);
   }
@@ -112,7 +123,7 @@ class Designer extends React.Component<DesignerProps> {
     designer.monacoModuleLoaded(monaco);
 
     if (this.props.templateJSON) {
-      designer.setCard({...this.props.templateJSON});
+      designer.setCard({ ...this.props.templateJSON });
     }
 
     if (this.props.sampleDataJSON) {
@@ -121,24 +132,19 @@ class Designer extends React.Component<DesignerProps> {
     else {
       designer.sampleData = {};
     }
-
-    // TODO: REMOVE ONCE PUBLISH IS COMPLETED IN DESIGNER
-    const buttons = document.getElementsByClassName('acd-toolbar-button');
-    for (let i = 0; i < buttons.length; i++) {
-      if (buttons[i].innerHTML === 'Publish') {
-        (buttons[i] as HTMLElement).style.color = 'pink';
-      }
-    }
   }
 
   render() {
     return (
-      <React.Fragment>
+      <OuterDesignerWrapper>
         <DesignerWrapper id="designer-container" />
-        {this.props.isFetching && <SpinnerModal/>}
-        {this.props.modalState === ModalState.Save && <SaveModal designerSampleData = {designer.sampleData} designerTemplateJSON = {designer.getCard()}/>}
-        {this.props.modalState === ModalState.EditName && <EditNameModal/>}
-      </React.Fragment> 
+        {this.props.isFetching && <SpinnerModal />}
+        {this.props.modalState === ModalState.Save && <SaveModal designerSampleData={designer.sampleData} designerTemplateJSON={designer.getCard()} />}
+        {this.props.modalState === ModalState.SaveAndPublish && <SaveAndPublishModal designerTemplateJSON={designer.getCard()} designerSampleDataJSON={designer.sampleData} />}
+        {this.props.modalState === ModalState.Share && <ShareModal template={this.props.template} templateVersion={this.props.version} />}
+        {this.props.modalState === ModalState.ShareSuccess && <ShareSuccessModal template={this.props.template} templateVersion={this.props.version} />}
+        {this.props.modalState === ModalState.EditName && <EditNameModal />}
+      </OuterDesignerWrapper>
     );
   }
 }
@@ -163,7 +169,7 @@ function initDesigner(): ACDesigner.CardDesigner {
 }
 
 function onSave(designer: ACDesigner.CardDesigner, props: DesignerProps): void {
-  if(props.templateID === "" || props.templateID === undefined){
+  if (props.templateID === "" || props.templateID === undefined) {
     props.openModal(ModalState.Save);
   }
   else if (JSON.stringify(props.templateJSON) !== JSON.stringify(designer.getCard()) || props.sampleDataJSON !== designer.sampleData) {

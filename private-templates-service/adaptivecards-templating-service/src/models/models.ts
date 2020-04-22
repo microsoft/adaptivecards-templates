@@ -17,6 +17,7 @@ export interface ITemplateInstance {
   version: string;
   publishedAt?: Date;
   state?: TemplateState;
+  author: string;
   isShareable?: boolean;
   numHits?: number;
   data?: JSON[];
@@ -28,7 +29,7 @@ export interface ITemplateInstance {
 export interface ITemplate {
   _id?: string;
   name: string;
-  owner: string;
+  authors: string[];
   instances?: ITemplateInstance[];
   tags?: string[];
   deletedVersions?: string[];
@@ -44,6 +45,7 @@ export interface IUser {
   recentlyViewedTemplates?: string[]; // size 5
   recentlyEditedTemplates?: string[]; // max size 5
   recentTags?: string[]; // max size 10
+  favoriteTags?: string[];
 }
 
 export interface JSONResponse<T> {
@@ -54,7 +56,7 @@ export interface JSONResponse<T> {
 
 export enum SortBy {
   dateCreated = "createdAt",
-  dateModified = "updatedAt",
+  dateUpdated = "updatedAt",
   alphabetical = "name"
 }
 
@@ -85,6 +87,7 @@ export interface TemplateInstancePreview {
   version: string;
   json: JSON;
   state: string;
+  author: string;
   data: JSON[];
 }
 
@@ -95,7 +98,6 @@ export interface TemplateInstancePreview {
 export interface TemplatePreview {
   _id: string;
   name: string;
-  owner: string;
   instance: TemplateInstancePreview;
   tags: string[];
 }
@@ -107,6 +109,7 @@ export interface TemplatePreview {
 export interface TagList {
   ownedTags: any[];
   allTags: any[];
+  favoriteTags: any[];
 }
 
 /**

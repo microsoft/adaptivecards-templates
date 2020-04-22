@@ -4,19 +4,21 @@ import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 
 import { COLORS } from '../../../globalStyles';
 
-export const ModalWrapper = styled.div`
+export const ModalWrapper = styled.main`
   display: flex;
   flex-direction: row;
   align-items: stretch;
   height: 100%;
 `;
 
-export const ACOuterPanel = styled.div`
+export const ACOuterPanel = styled.section`
   flex: 1 0 auto;
   display: flex;
-  flex-direction: column;
   width: 55%;
+  flex-direction: column;
   background: ${COLORS.GREY1};
+  overflow: auto;
+  margin-top: 5px;
 `;
 
 export const TooltipContainer = styled.div`
@@ -45,14 +47,12 @@ export const ACWrapper = styled.div`
   max-width: 90%;
 `;
 
-export const DescriptorWrapper = styled.div`
+export const DescriptorWrapper = styled.section`
   display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  flex: 1 0 auto;
   width: 45%;
-  background: ${COLORS.WHITE};
+  flex-direction: column;
   border-left: 1px solid ${COLORS.BORDER2};
+  overflow: auto;
 `;
 
 export const CenteredSpinner = styled(Spinner)`

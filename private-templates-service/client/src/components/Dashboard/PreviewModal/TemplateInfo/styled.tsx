@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { COLORS } from '../../../../globalStyles';
+import { COLORS, FONTS } from '../../../../globalStyles';
 
 import { Dropdown, IDropdownStyles } from "office-ui-fabric-react";
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
@@ -12,7 +12,6 @@ export const StyledVersionDropdown = styled(Dropdown)`
 
 export const DropdownStyles: Partial<IDropdownStyles> = {
   dropdown: {
-    fontSize: 22
   },
   title: {
     marginLeft: 10,
@@ -20,6 +19,9 @@ export const DropdownStyles: Partial<IDropdownStyles> = {
     marginTop: 5,
     marginBottom: 5,
     borderWidth: 0,
+    fontSize: 18,
+    fontFamily: FONTS.SEGOE_UI_SEMI_BOLD,
+    color: COLORS.BLACK
   },
 }
 
@@ -54,7 +56,7 @@ export const TitleWrapper = styled.div`
 
 export const Title = styled.div`
   font-size: 1.375rem;
-  font-weight: 500;
+  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD};
 `;
 
 export const StatusIndicator = styled.div<{ state?: PostedTemplate.StateEnum }>`
@@ -69,12 +71,10 @@ export const StatusIndicator = styled.div<{ state?: PostedTemplate.StateEnum }>`
 
 export const Status = styled.div`
   font-size: 0.875rem;
-  font-weight: 400;
   padding-right: 7px;
 `
 export const TimeStamp = styled.div`
   font-size: 0.875rem;
-  font-weight: 400;
   white-space: nowrap;
   margin-left: 64px;
 `;
@@ -89,7 +89,8 @@ export const MainContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  padding: 32px 32px 0 40px;
+  padding: 8px 32px 0px 40px;
+  overflow: hidden;
 `;
 
 export const RowWrapper = styled.div`
@@ -100,8 +101,8 @@ export const RowWrapper = styled.div`
   justify-content: space-between;
 `;
 
-export const Card = styled.div`
-  flex: 0.47 0 0;
+export const Card = styled.section`
+  flex: 0.32 0 0;
   display: flex;
   flex-direction: column;
   border: 1px solid ${COLORS.BORDER2};
@@ -110,13 +111,12 @@ export const Card = styled.div`
   margin-bottom: 24px;
 `;
 
-export const CardHeader = styled.div`
+export const CardHeader = styled.h2`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-bottom: 8px;
   font-size: 1.375rem;
-  font-weight: 600;
+  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD};
   border-bottom: 1px solid ${COLORS.BORDER};
 `;
 
@@ -125,7 +125,6 @@ export const CardBody = styled.div`
   flex-direction: column;
   align-items: center;
   font-size: 0.875rem;
-  font-weight: 400;
   padding-top: 8px;
 `;
 
@@ -143,7 +142,7 @@ export const IconWrapper = styled.div`
 
 export const UsageNumber = styled.div`
   font-size: 1.75rem;
-  font-weight: 600;
+  font-weight: bold;
   height: 4rem;
   padding: 0.5rem;
   color: ${COLORS.BLUE};
@@ -153,6 +152,7 @@ export const TagsWrapper = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  justify-content: flex-start;
   padding: 16px 24px 0;
 `;
 

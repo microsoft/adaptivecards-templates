@@ -2,17 +2,20 @@ export interface PageState {
   currentPageTitle?: string;
   currentPage?: string;
   modalState?: ModalState;
+  previousPage?: string;
 }
 
 export enum ModalState {
   Share,
+  ShareSuccess,
   Publish,
   Unpublish,
   Version,
   EditName,
   Delete,
   Save,
-  Spinner
+  Spinner,
+  SaveAndPublish
 }
 
 // Action Types
@@ -26,5 +29,6 @@ export interface PageAction {
   text: string;
   currentPageTitle?: string;
   currentPage?: string;
+  lastPage?: string;
   modalState?: ModalState;
 }

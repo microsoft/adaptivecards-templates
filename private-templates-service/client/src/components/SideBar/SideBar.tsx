@@ -3,11 +3,14 @@ import { useHistory } from "react-router-dom";
 
 import { connect } from "react-redux";
 import { RootState } from "../../store/rootReducer";
-import { UserType } from "../../store/auth/types";
+import { UserType, AuthState } from "../../store/auth/types";
 import { ModalState } from "../../store/page/types";
 import { newTemplate } from "../../store/currentTemplate/actions";
+import { clearSearch } from "../../store/search/actions";
+import { clearFilter } from "../../store/filter/actions";
+import { clearSort } from "../../store/sort/actions";
 
-import { COLORS } from "../../globalStyles";
+import { COLORS, FONTS } from "../../globalStyles";
 import UserAvatar from "./UserAvatar";
 import mainLogo from "../../assets/adaptive-cards-100-logo.png";
 import * as STRINGS from "../../assets/strings";
@@ -28,22 +31,26 @@ import {
   LogoTextHeader,
   LogoTextSubHeader
 } from "./styled";
-import { INavLinkGroup, INavStyles } from "office-ui-fabric-react";
+import { INavLinkGroup, INavStyles, INavLink } from "office-ui-fabric-react";
 import SkipLink from "../Common/SkipLink";
+import { NAVBAR, OUT, IN, ADAPTIVE_CARDS, PORTAL, ARIA_DASHBOARD, ARIA_NEW_CARD } from "../../assets/strings";
 
 
 interface Props {
   authButtonMethod: () => void;
-  isAuthenticated: boolean;
+  auth: AuthState
   user?: UserType;
   templateID: string | undefined;
   newTemplate: () => void;
   modalState?: ModalState;
+  clearSearch: () => void;
+  clearFilter: () => void;
+  clearSort: () => void;
 }
 
 const mapStateToProps = (state: RootState) => {
   return {
-    isAuthenticated: state.auth.isAuthenticated,
+    auth: state.auth,
     user: state.auth.user,
     templateID: state.currentTemplate.templateID,
     modalState: state.page.modalState
@@ -54,6 +61,15 @@ const mapDispatchToProps = (dispatch: any) => {
   return {
     newTemplate: () => {
       dispatch(newTemplate());
+    },
+    clearSearch: () => {
+      dispatch(clearSearch())
+    },
+    clearFilter: () => {
+      dispatch(clearFilter());
+    },
+    clearSort: () => {
+      dispatch(clearSort());
     }
   };
 };
@@ -71,7 +87,8 @@ const navMenuLinksProps: Partial<INavStyles> = {
   },
   linkText: {
     color: COLORS.WHITE,
-    fontSize: "0.875rem"
+    fontSize: "0.875rem",
+    fontFamily: FONTS.SEGOE_UI_REGULAR,
   }
 };
 
@@ -80,12 +97,8 @@ const iconStyle = {
   margin: "0px 10px 0px 40px"
 };
 
-const iconStylePink = {
-  color: 'pink',
-  margin: "0px 10px 0px 40px"
-}
-
-const newTemplateURL = "/designer/newcard/1.0"
+export const newTemplateURL = "/designer/newcard/1.0"
+export const allTemplatesURL = "/templates/all"
 
 const navMenuLinks: INavLinkGroup[] = [
   {
@@ -98,57 +111,27 @@ const navMenuLinks: INavLinkGroup[] = [
           style: iconStyle
         },
         title: "",
-        ariaLabel: "Link to Dashboard"
+        ariaLabel: ARIA_DASHBOARD
       },
       {
-        name: "New Template",
+        name: STRINGS.NEW_CARD,
         url: newTemplateURL,
         iconProps: {
           iconName: "CalculatorAddition",
           style: iconStyle
         },
         title: "",
-        ariaLabel: "Link to New Card"
+        ariaLabel: ARIA_NEW_CARD
       },
       {
         name: STRINGS.ALL_CARDS,
-        url: "/allcards",
+        url: "/templates/all",
         iconProps: {
           iconName: "ViewList",
-          style: iconStylePink
+          style: iconStyle
         },
         title: "",
         ariaLabel: "Link to All Cards"
-      },
-      {
-        name: STRINGS.DRAFTS,
-        url: "/drafts",
-        iconProps: {
-          iconName: "SingleColumnEdit",
-          style: iconStylePink
-        },
-        title: "",
-        ariaLabel: "Link to Drafts"
-      },
-      {
-        name: STRINGS.PUBLISHED,
-        url: "/published",
-        iconProps: {
-          iconName: "PublishContent",
-          style: iconStylePink
-        },
-        title: "",
-        ariaLabel: "Link to Published Cards"
-      },
-      {
-        name: STRINGS.TAGS,
-        url: "/tags",
-        iconProps: {
-          iconName: "Tag",
-          style: iconStylePink
-        },
-        title: "",
-        ariaLabel: "Link to Tags"
       }
     ]
   }
@@ -157,32 +140,42 @@ const navMenuLinks: INavLinkGroup[] = [
 const SideBar = (props: Props) => {
   const history = useHistory();
 
-  const onNavClick = (event: any, element: any) => {
+  const onNavClick = (event: any, element?: INavLink) => {
     event.preventDefault();
-    if (element.url === newTemplateURL) {
+    if(!element!.url.startsWith(allTemplatesURL)) {
+      props.clearSearch();
+      props.clearFilter();
+      props.clearSort();
+    }
+    if (element!.url === newTemplateURL) {
       props.newTemplate();
     }
-    history.push(element.url);
+    if(element!.url.startsWith(allTemplatesURL) && history.location.pathname.startsWith(allTemplatesURL)) {
+      history.push(`${history.location.pathname}${history.location.search}`);
+    } else {
+      history.push(element!.url);
+    }
   };
+
 
   const onLogoClick = () => {
     history.push("/");
   }
-  
-  const onKeyDown = (e:React.KeyboardEvent) => {
-    if(e.keyCode === KeyCode.ENTER){
+
+  const onKeyDown = (e: React.KeyboardEvent) => {
+    if (e.keyCode === KeyCode.ENTER) {
       history.push("/");
     }
-  } 
-
+  }
+  
   return (
-    <OuterSideBarWrapper>
+    <OuterSideBarWrapper aria-label={NAVBAR}>
       <MainItems>
-        <LogoWrapper onClick={onLogoClick} tabIndex={props.modalState? -1 : 0} onKeyDown={onKeyDown}>
+        <LogoWrapper onClick={onLogoClick} tabIndex={props.modalState ? -1 : 0} onKeyDown={onKeyDown}>
           <Logo aria-label={STRINGS.LOGO_DESCRIPTION} src={mainLogo} />
           <LogoTextWrapper>
-            <LogoTextHeader>Adaptive Cards</LogoTextHeader>
-            <LogoTextSubHeader>Portal</LogoTextSubHeader>
+            <LogoTextHeader>{ADAPTIVE_CARDS}</LogoTextHeader>
+            <LogoTextSubHeader>{PORTAL}</LogoTextSubHeader>
           </LogoTextWrapper>
         </LogoWrapper>
         <UserWrapper>
@@ -192,11 +185,11 @@ const SideBar = (props: Props) => {
             <Title>{props.user && props.user.organization}</Title>
           </Name>
         </UserWrapper>
-        {props.isAuthenticated && <NavMenu styles={navMenuLinksProps} groups={navMenuLinks} onLinkClick={onNavClick} />}
-        {props.isAuthenticated && <SkipLink />}
+        {props.auth.isAuthenticated && props.auth.graphAccessToken && <NavMenu styles={navMenuLinksProps} groups={navMenuLinks} onLinkClick={onNavClick} />}
+        {props.auth.isAuthenticated && props.auth.graphAccessToken && <SkipLink />}
       </MainItems>
 
-      <SignOut onClick={props.authButtonMethod} tabIndex={props.modalState ? -1 : 0}>Sign {props.isAuthenticated ? "Out" : "In"}</SignOut>
+      <SignOut onClick={props.authButtonMethod} tabIndex={props.modalState ? -1 : 0}>{STRINGS.SIGN} {props.auth.isAuthenticated ? `${OUT}` : `${IN}`}</SignOut>
     </OuterSideBarWrapper>
   );
 };

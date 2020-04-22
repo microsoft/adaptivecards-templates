@@ -1,0 +1,30 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "sites_adaptivecms_name": {
+      "value": null
+    },
+    "server_farm_id": {
+      "value": null
+    },
+    "mongodb_connection_string": {
+      "value": null
+    },
+    "app_id": {
+      "value": null
+    },
+    "docker_registry_server_uri": {
+      "value": null
+    },
+    "docker_registry_server_username": {
+      "value": null
+    },
+    "docker_registry_server_password": {
+      "value": null
+    },
+    "application_insights_instrumentation_key": {
+      "value": null
+    }
+  }
+}

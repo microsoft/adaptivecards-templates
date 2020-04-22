@@ -7,6 +7,7 @@ import {
   GetUserDetailsAction,
   GetOrgDetailsAction,
   GetProfilePictureAction,
+  GetConfigAction,
   LOGOUT,
   ACCESS_TOKEN_SET,
   GRAPH_ACCESS_TOKEN_SET,
@@ -19,6 +20,9 @@ import {
   GET_PROFILE_PICTURE,
   GET_PROFILE_PICTURE_FAILURE,
   GET_PROFILE_PICTURE_SUCCESS,
+  GET_CONFIG,
+  GET_CONFIG_SUCCESS,
+  GET_CONFIG_FAILURE
 } from './types';
 
 const initialState: AuthState = {
@@ -26,7 +30,11 @@ const initialState: AuthState = {
   user: undefined,
   isFetching: false,
   accessToken: undefined,
-  graphAccessToken: undefined
+  graphAccessToken: undefined,
+  redirectUri: undefined,
+  appId: undefined,
+  appInsightsInstrumentationKey: undefined,
+  userInsightsInstrumentationKey: undefined
 }
 
 const initialUserState: UserType = {
@@ -56,11 +64,12 @@ function user(user = initialUserState, action: AuthAction | AccessTokenAction | 
   }
 }
 
-export function authReducer(state = initialState, action: AuthAction | AccessTokenAction | GraphAccessTokenAction | GetUserDetailsAction | GetOrgDetailsAction | GetProfilePictureAction): AuthState {
+export function authReducer(state = initialState, action: AuthAction | AccessTokenAction | GraphAccessTokenAction | GetUserDetailsAction | GetOrgDetailsAction | GetProfilePictureAction | GetConfigAction): AuthState {
   switch (action.type) {
     case GET_USER_DETAILS:
     case GET_ORG_DETAILS:
     case GET_PROFILE_PICTURE:
+    case GET_CONFIG:
       return {
         ...state,
         isFetching: true,
@@ -68,6 +77,7 @@ export function authReducer(state = initialState, action: AuthAction | AccessTok
     case GET_USER_DETAILS_FAILURE:
     case GET_ORG_DETAILS_FAILURE:
     case GET_PROFILE_PICTURE_FAILURE:
+    case GET_CONFIG_FAILURE:
       return {
         ...state,
         isFetching: false,
@@ -78,6 +88,14 @@ export function authReducer(state = initialState, action: AuthAction | AccessTok
       return {
         ...state,
         user: user(state.user, action),
+      }
+    case GET_CONFIG_SUCCESS:
+      return {
+        ...state,
+        appId: action.appId,
+        redirectUri: action.redirectUri,
+        appInsightsInstrumentationKey: action.appInsightsInstrumentationKey,
+        userInsightsInstrumentationKey: action.userInsightsInstrumentationKey,
       }
     case ACCESS_TOKEN_SET:
       return {

@@ -1,20 +1,15 @@
 import styled from "styled-components";
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 
-import { COLORS } from "../../globalStyles";
+import { COLORS, FONTS } from "../../globalStyles";
 
-export const PlaceholderText = styled.h5`
-  font-family: Segoe UI Regular;
-  padding-top: 20px;
-`;
-
-export const Title = styled.h1`
+export const Title = styled.h2`
   padding-top: 15px;
   font-size: 1.5rem;
-  font-weight: 700;
+  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD};
 `;
 
-export const OuterDashboardContainer = styled.div`
+export const OuterDashboardContainer = styled.main`
   display: contents;
   height: calc(100vh - 61px);
 `;
@@ -27,6 +22,14 @@ export const DashboardContainer = styled.div`
   justify-content: flex-start;
 `;
 
+export const RecentlyEditedSection = styled.section<{ isPlaceholder: boolean }>`
+  ${props => props.isPlaceholder && `
+    display: flex;
+    flex-direction: column;
+    flex: 1 0 auto;
+  `}
+`;
+
 export const OuterWindow = styled.div`
   display: flex;
   flex-direction: row;
@@ -35,7 +38,7 @@ export const OuterWindow = styled.div`
   height: auto;
   flex: 1;
 `;
-export const TagsContainer = styled.div`
+export const TagsContainer = styled.section`
   background-color: ${COLORS.GREY1};
   display: flex;
   flex-direction: column;
@@ -43,6 +46,7 @@ export const TagsContainer = styled.div`
   justify-content: flex-start;
   width: 300px;
   padding-left: 30px;
+  margin-top:5px;
 `;
 
 export const CenteredSpinner = styled(Spinner)`

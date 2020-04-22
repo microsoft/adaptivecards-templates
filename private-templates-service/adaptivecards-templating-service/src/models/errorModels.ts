@@ -25,6 +25,7 @@ export enum ApiError {
   DeleteUserInfoFailed = "DeleteUserInfoFailed",
   DeleteTemplateVersionFailed = "DeleteTemplateVersionFailed",
   DataBindingFailed = "DataBindingFailed",
+  TagUpdateFailed = "TagUpdateFailed",
 }
 
 /**

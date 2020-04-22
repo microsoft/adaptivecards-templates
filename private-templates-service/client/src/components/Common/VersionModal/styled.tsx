@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { COLORS } from '../../../globalStyles';
+import { COLORS, FONTS } from '../../../globalStyles';
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react';
 
 export const BackDrop = styled.div`
@@ -16,7 +16,7 @@ export const BackDrop = styled.div`
   justify-content: center;
 `;
 
-export const Modal = styled.div`
+export const Modal = styled.section`
   display: flex;
   flex-direction: column;
   background-color: ${COLORS.WHITE};
@@ -27,7 +27,7 @@ export const Modal = styled.div`
 
 export const Header = styled.div`
   font-size: 1.375rem;
-  font-weight: 500;
+  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD};
   margin-bottom: 12px;
 `;
 
@@ -37,6 +37,7 @@ export const Description = styled.div`
 
 export const DescriptionAccent = styled.span`
   color: ${COLORS.BLUE};
+  font-weight: bold;
   white-space: nowrap;
 `;
 
@@ -62,8 +63,9 @@ export const LightButton = styled(DefaultButton)`
   margin-right: 12px;
 `;
 
-export const PrimaryStyleButton = styled(PrimaryButton)`
+export const PrimaryStyleButton = styled(PrimaryButton)<{ disabled: boolean }>`
   margin-right: 12px;
+  background-color: ${props => props.disabled && COLORS.GREY2}
 `;
 
 export const Card = styled.div`
@@ -87,8 +89,13 @@ export const CardHeaderRow = styled.div`
 `;
 
 export const CardHeaderText = styled.div`
-  font-weight: 600;
-  flex-basis: 15%
+  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD};
+  flex-basis: 15%;
+`;
+
+export const SelectedHeaderText = styled.div`
+  font-family: ${FONTS.SEGOE_UI_REGULAR};
+  flex-basis: 15%;
 `;
 
 export const CardBody = styled.div`
@@ -96,7 +103,7 @@ export const CardBody = styled.div`
   flex-direction: column;
   align-items: center;
   font-size: 0.875rem ;
-  font-weight: 400;
+  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD};
   padding-top: 8px;
   overflow-y: hidden;
 `;
@@ -110,11 +117,11 @@ export const StatusWrapper = styled.div`
   display: flex;
   flex-basis: 15%;
   align-items: center;
-` 
+`
 
 export const VersionWrapper = styled.div`
   display: flex;
-  font-weight: 600;
+  font-family: ${FONTS.SEGOE_UI_SEMI_BOLD};
   align-items: center;
   flex-basis: 15%;
 `
