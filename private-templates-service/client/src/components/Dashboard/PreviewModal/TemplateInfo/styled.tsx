@@ -115,7 +115,6 @@ export const CardHeader = styled.h2`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-bottom: 8px;
   font-size: 1.375rem;
   font-family: ${FONTS.SEGOE_UI_SEMI_BOLD};
   border-bottom: 1px solid ${COLORS.BORDER};
@@ -153,6 +152,7 @@ export const TagsWrapper = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  justify-content: flex-start;
   padding: 16px 24px 0;
 `;
 
