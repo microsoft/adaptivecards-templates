@@ -95,7 +95,11 @@ class Designer extends React.Component<DesignerProps> {
     if (this.props.templateJSON) {
       designer.setCard({ ...this.props.templateJSON });
     }
+    else {
+      designer.setCard(require('../../assets/default-adaptivecards/defaultAdaptiveCard.json'));
+    }
   }
+
   componentWillMount() {
     ACDesigner.GlobalSettings.enableDataBindingSupport = true;
     ACDesigner.GlobalSettings.showSampleDataEditorToolbox = true;
@@ -132,6 +136,7 @@ class Designer extends React.Component<DesignerProps> {
     else {
       designer.sampleData = {};
     }
+
   }
 
   render() {
