@@ -136,6 +136,7 @@ class Designer extends React.Component<DesignerProps> {
     else {
       designer.sampleData = {};
     }
+
   }
 
   render() {
