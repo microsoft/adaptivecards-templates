@@ -376,7 +376,7 @@ class TemplateInfo extends React.Component<Props, State> {
           <Card aria-label={TAGS}>
             <form aria-labelledby={tagCardID}>
               <CardHeader id={tagCardID}>{TAGS}</CardHeader>
-              <CardBody>
+              <CardBody style={{alignItems: "flex-start"}}>
                 <TagsWrapper>
                   {isFetchingTags ?
                     <CenteredSpinner size={SpinnerSize.large} />

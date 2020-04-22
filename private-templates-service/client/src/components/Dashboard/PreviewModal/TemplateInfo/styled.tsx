@@ -152,6 +152,7 @@ export const TagsWrapper = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  justify-content: flex-start;
   padding: 16px 24px 0;
 `;
 
