@@ -43,7 +43,7 @@ class TemplateListContent extends React.Component<Props> {
       )
     }
 
-    rows = templates.map((template: Template) => {
+    rows = templates.map((template: Template, index: number) => {
       let onClick = () => {
         if (propsOnClick && template.id) {
           propsOnClick(template.id);
@@ -62,7 +62,7 @@ class TemplateListContent extends React.Component<Props> {
       let stateEnum = template.instances[0].state && capitalizeString(template.instances[0].state.toString());
       let stateStr = getState(stateEnum);
       return (
-        <TemplateListBodyRow key={template.instances[0]!.lastEditedUser!} onClick={onClick} onKeyDown={onKeyDown} tabIndex={0}>
+        <TemplateListBodyRow key={index} onClick={onClick} onKeyDown={onKeyDown} tabIndex={0}>
           {displayComponents.templateName && <TemplateListItem>{template.name}</TemplateListItem>}
           {displayComponents.dateModified && <TemplateListItem>{template.updatedAt ? getDateString(template.updatedAt) : "N/A"}</TemplateListItem>}
           {displayComponents.status && (
