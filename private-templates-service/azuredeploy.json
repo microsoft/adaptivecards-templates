@@ -6,14 +6,14 @@
       "defaultValue": "adaptivecmsdeploy",
       "type": "String"
     },
-    "app_id": {
+    "azure_active_directory_app_registration_id": {
       "type": "String"
     },
     "siteLocation": {
       "defaultValue": "West US",
       "type": "String"
     },
-    "server_farm_id": {
+    "app_service_plan_subscription": {
       "type": "String"
     },
     "telemetry_opt_in": {
@@ -24,13 +24,16 @@
       ]
     },
     "application_insights_instrumentation_key": {
+      "type": "String",
+      "defaultValue": ""
+    },
+    "cosmos_database_name": {
       "type": "String"
     }
   },
   "variables": {
     "linuxFxVersion": "DOCKER|gracez72/acms:1.0",
     "appInsightsInstrumentationKey": "931c613f-fdcb-40a9-bd39-314ce31bc5d6",
-    "cosmos_database_name": "acms-cosmos",
     "databaseName": "acms",
     "docker_registry_server_url": "https://index.docker.io"
   },
@@ -42,7 +45,7 @@
       "location": "[parameters('siteLocation')]",
       "kind": "app,linux,container",
       "properties": {
-        "serverFarmId": "[parameters('server_farm_id')]"
+        "serverFarmId": "[parameters('app_service_plan_subscription')]"
       },
       "resources": [
         {
@@ -53,9 +56,9 @@
             "[concat('Microsoft.Web/Sites/', parameters('sites_adaptivecms_name'))]"
           ],
           "properties": {
-            "ACMS_DB_CONNECTION": "[listConnectionStrings(resourceId('Microsoft.DocumentDB/databaseAccounts', variables('cosmos_database_name')), '2015-04-08').connectionStrings[0].connectionString]",
+            "ACMS_DB_CONNECTION": "[listConnectionStrings(resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('cosmos_database_name')), '2015-04-08').connectionStrings[0].connectionString]",
             "ACMS_REDIRECT_URI": "[concat('https://', parameters('sites_adaptivecms_name'), '.azurewebsites.net/')]",
-            "ACMS_APP_ID": "[parameters('app_id')]",
+            "ACMS_APP_ID": "[parameters('azure_active_directory_app_registration_id')]",
             "WEBSITES_ENABLE_APP_SERVICE_STORAGE": "false",
             "DOCKER_REGISTRY_SERVER_URL": "[variables('docker_registry_server_url')]",
             "ACMS_APP_INSIGHTS_INSTRUMENTATION_KEY": "[if(equals(parameters('telemetry_opt_in'), 'Yes'), variables('appInsightsInstrumentationKey'), '')]",
@@ -135,7 +138,7 @@
     },
     {
       "type": "Microsoft.DocumentDB/databaseAccounts",
-      "name": "[variables('cosmos_database_name')]",
+      "name": "[parameters('cosmos_database_name')]",
       "apiVersion": "2019-08-01",
       "location": "[parameters('siteLocation')]",
       "kind": "MongoDB",
@@ -168,10 +171,10 @@
     },
     {
       "type": "Microsoft.DocumentDB/databaseAccounts/mongodbDatabases",
-      "name": "[concat(variables('cosmos_database_name'), '/', variables('databaseName'))]",
+      "name": "[concat(parameters('cosmos_database_name'), '/', variables('databaseName'))]",
       "apiVersion": "2019-08-01",
       "dependsOn": [
-        "[resourceId('Microsoft.DocumentDB/databaseAccounts/', variables('cosmos_database_name'))]"
+        "[resourceId('Microsoft.DocumentDB/databaseAccounts/', parameters('cosmos_database_name'))]"
       ],
       "properties": {
         "resource": {
