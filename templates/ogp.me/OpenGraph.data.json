@@ -1,0 +1,25 @@
+{
+    "type": "website",
+    "title": "Yelp",
+    "url": "http://yelp.com",
+    "image": "https://s3-media0.fl.yelpcdn.com/assets/public/yelp_og_image.seo_metadata.yji-f9149736ad8d1b00fe04bcb018398e6a.png",
+    "description": "People use Yelp to search for everything from the city's tastiest burger to the most renowned cardiologist. What will you uncover in your neighborhood?",
+    "determiner": "the",
+    "site_name": "Yelp",
+    "audio": "",
+    "video": "",
+    "article": {
+        "published_time": "2020-02-06T05:05:10Z",
+        "modified_time": "2020-02-06T05:05:10Z",
+        "expiration_time": "",
+        "section": "Technology",
+        "author": [
+            {
+                "first_name": "Matt",
+                "last_name": "Hidinger",
+                "username": "",
+                "gender": "male"
+            }
+        ]
+    }
+}
