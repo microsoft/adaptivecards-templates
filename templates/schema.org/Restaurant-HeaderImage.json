@@ -5,14 +5,15 @@
     "body": [
         {
             "type": "Container",
-            "$when": "{showHeaderImage}",
+            "$when": "${showHeaderImage}",
             "backgroundImage": {
-                "url": "{image}",
+                "url": "${image}",
                 "verticalAlignment": "Center",
                 "horizontalAlignment": "Center"
             },
             "minHeight": "200px",
-            "bleed": true
+            "bleed": true,
+            "items": []
         },
         {
             "type": "ColumnSet",
@@ -23,24 +24,24 @@
                     "items": [
                         {
                             "type": "TextBlock",
-                            "text": "{address.addressLocality}, {address.addressRegion}"
+                            "text": "${address.addressLocality}, ${address.addressRegion}"
                         },
                         {
                             "type": "TextBlock",
-                            "text": "{name}",
+                            "text": "${name}",
                             "weight": "Bolder",
                             "size": "ExtraLarge",
                             "spacing": "None"
                         },
                         {
                             "type": "TextBlock",
-                            "text": "{aggregateRating.ratingValue} ★★★☆ ({aggregateRating.reviewCount}) · {priceRange}",
+                            "text": "${aggregateRating.ratingValue} ★★★☆ ({aggregateRating.reviewCount}) · ${priceRange}",
                             "isSubtle": true,
                             "spacing": "None"
                         },
                         {
                             "type": "TextBlock",
-                            "text": "**{review[0].author}** said \"{review[0].description}\"",
+                            "text": "**{review[0].author}** said \"${review[0].description}\"",
                             "size": "Small",
                             "wrap": true,
                             "maxLines": 3
@@ -53,11 +54,11 @@
                     "items": [
                         {
                             "type": "Image",
-                            "url": "{image}",
+                            "url": "${image}",
                             "size": "auto"
                         }
                     ],
-                    "$when": "{showHeaderImage == false}"
+                    "$when": "${showHeaderImage == false}"
                 }
             ]
         }
@@ -66,7 +67,7 @@
         {
             "type": "Action.OpenUrl",
             "title": "More Info",
-            "url": "{url}"
+            "url": "${url}"
         }
     ]
 }

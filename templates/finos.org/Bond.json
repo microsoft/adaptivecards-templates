@@ -61,24 +61,24 @@
   "body": [
     {
       "type": "TextBlock",
-      "text": "**Side:** {side.value}"
+      "text": "**Side:** ${side.value}"
     },
     {
       "type": "TextBlock",
-      "text": "**Description:** {description.value}"
+      "text": "**Description:** ${description.value}"
     },
     {
       "type": "TextBlock",
-      "text": "**Asset Type:** {assetType.value}"
+      "text": "**Asset Type:** ${assetType.value}"
     },
     {
       "type": "TextBlock",
-      "text": "**Trade Date:** {tradeDate.value} *(we need a Unix formatting function)*",
+      "text": "**Trade Date:** ${tradeDate.value} *(we need a Unix formatting function)*",
       "wrap": true
     },
     {
       "type": "TextBlock",
-      "text": "**Face Value:** {faceValue.value} *(we need number formatting functions)*",
+      "text": "**Face Value:** ${faceValue.value} *(we need number formatting functions)*",
       "wrap": true
     },
     {
@@ -89,12 +89,12 @@
       "text": "Ratings"
     },
     {
-      "$data": "{ratings}",
+      "$data": "${ratings}",
       "type": "Container",
       "items": [
         {
           "type": "TextBlock",
-          "text": "**{institute.name.value}:** {institute.rating.value}"
+          "text": "**${institute.name.value}:** ${institute.rating.value}"
         }
       ]
     }

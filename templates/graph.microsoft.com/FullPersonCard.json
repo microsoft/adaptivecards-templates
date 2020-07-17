@@ -24,7 +24,7 @@
                                             "type": "Image",
                                             "altText": "",
                                             "size": "Small",
-                                            "url": "https://graph.microsoft.com/v1.0/users/{profile.mail}/photo/$value",
+                                            "url": "https://graph.microsoft.com/v1.0/users/${profile.mail}/photo/$value",
                                             "style": "Person"
                                         }
                                     ]
@@ -35,17 +35,17 @@
                                     "items": [
                                         {
                                             "type": "TextBlock",
-                                            "text": "{profile.displayName}"
+                                            "text": "${profile.displayName}"
                                         },
                                         {
                                             "type": "TextBlock",
-                                            "text": "{profile.jobTitle}",
+                                            "text": "${profile.jobTitle}",
                                             "spacing": "None",
                                             "isSubtle": true
                                         },
                                         {
                                             "type": "TextBlock",
-                                            "text": "{profile.officeLocation}",
+                                            "text": "${profile.officeLocation}",
                                             "spacing": "None",
                                             "isSubtle": true
                                         }
@@ -69,7 +69,7 @@
             "items": [
                 {
                     "type": "TextBlock",
-                    "text": "People reporting to {profile.displayName} ({length(reports.value)})",
+                    "text": "People reporting to ${profile.displayName} (${length(reports.value)})",
                     "wrap": true
                 },
                 {
@@ -89,7 +89,7 @@
                                                 {
                                                     "type": "Image",
                                                     "altText": "",
-                                                    "url": "https://graph.microsoft.com/v1.0/users/{reports[0].mail}/photo/$value",
+                                                    "url": "https://graph.microsoft.com/v1.0/users/${reports[0].mail}/photo/$value",
                                                     "size": "Small",
                                                     "style": "Person"
                                                 }
@@ -101,11 +101,11 @@
                                             "items": [
                                                 {
                                                     "type": "TextBlock",
-                                                    "text": "{reports.value[0].displayName}"
+                                                    "text": "${reports.value[0].displayName}"
                                                 },
                                                 {
                                                     "type": "TextBlock",
-                                                    "text": "{reports.value[0].jobTitle}",
+                                                    "text": "${reports.value[0].jobTitle}",
                                                     "isSubtle": true,
                                                     "spacing": "None"
                                                 }

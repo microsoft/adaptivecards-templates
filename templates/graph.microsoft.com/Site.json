@@ -5,7 +5,7 @@
     "body": [
         {
             "type": "ColumnSet",
-            "$data": "{value}",
+            "$data": "${value}",
             "columns": [
                 {
                     "type": "Column",
@@ -13,13 +13,13 @@
                     "items": [
                         {
                             "type": "TextBlock",
-                            "text": "{displayName}",
+                            "text": "${displayName}",
                             "size": "Medium",
                             "weight": "Bolder"
                         },
                         {
                             "type": "TextBlock",
-                            "text": "{description}",
+                            "text": "${description}",
                             "spacing": "Small",
                             "wrap": true,
                             "maxLines": 2
@@ -36,7 +36,7 @@
                                 {
                                     "type": "Action.OpenUrl",
                                     "title": "View site",
-                                    "url": "{webUrl}"
+                                    "url": "${webUrl}"
                                 }
                             ]
                         }

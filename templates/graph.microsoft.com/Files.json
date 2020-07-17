@@ -13,7 +13,7 @@
             "items": [
                 {
                     "type": "TextBlock",
-                    "text": "{name}",
+                    "text": "${name}",
                     "weight": "Bolder"
                 },
                 {
@@ -21,20 +21,20 @@
                     "facts": [
                         {
                             "title": "Created",
-                            "value": "{{DATE({createdDateTime}, SHORT)}} by {createdBy.user.displayName}"
+                            "value": "{{DATE({createdDateTime}, SHORT)}} by ${createdBy.user.displayName}"
                         },
                         {
                             "title": "Modified",
-                            "value": "{{DATE({lastModifiedDateTime}, SHORT)}} by {lastModifiedBy.user.displayName}"
+                            "value": "{{DATE({lastModifiedDateTime}, SHORT)}} by ${lastModifiedBy.user.displayName}"
                         }
                     ]
                 }
             ],
-            "$data": "{value}",
+            "$data": "${value}",
             "style": "emphasis",
             "selectAction": {
                 "type": "Action.OpenUrl",
-                "url": "{webUrl}"
+                "url": "${webUrl}"
             }
         }
     ],

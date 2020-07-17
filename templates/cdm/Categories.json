@@ -5,7 +5,7 @@
         {
             "type": "Container",
             "spacing": "Medium",
-            "$data": "{value}",
+            "$data": "${value}",
             "items": [
                 {
                     "type": "ColumnSet",
@@ -16,7 +16,7 @@
                             "items": [
                                 {
                                     "type": "Image",
-                                    "url": "data:image/png;{substr(Picture, 104, -1)}"
+                                    "url": "data:image/png;${substr(Picture, 104, -1)}"
                                 }
                             ]
                         },
@@ -26,12 +26,12 @@
                             "items": [
                                 {
                                     "type": "TextBlock",
-                                    "text": "{CategoryName}",
+                                    "text": "${CategoryName}",
                                     "size": "Medium"
                                 },
                                 {
                                     "type": "TextBlock",
-                                    "text": "{Description}",
+                                    "text": "${Description}",
                                     "spacing": "Small"
                                 }
                             ]

@@ -22,30 +22,30 @@
             "type": "TextBlock",
             "size": "Medium",
             "weight": "Bolder",
-            "text": "{displayName}"
+            "text": "${displayName}"
         },
         {
             "type": "FactSet",
             "facts": [
                 {
                     "title": "Given name",
-                    "value": "{givenName}"
+                    "value": "${givenName}"
                 },
                 {
                     "title": "Surname",
-                    "value": "{surname}"
+                    "value": "${surname}"
                 },
                 {
                     "title": "Job title",
-                    "value": "{jobTitle}"
+                    "value": "${jobTitle}"
                 },
                 {
                     "title": "Office location",
-                    "value": "{officeLocation}"
+                    "value": "${officeLocation}"
                 },
                 {
                     "title": "Email",
-                    "value": "{mail}"
+                    "value": "${mail}"
                 }
             ]
         },
@@ -56,8 +56,8 @@
         },
         {
             "type": "TextBlock",
-            "text": "{$data}",
-            "$data": "{businessPhones}",
+            "text": "${$data}",
+            "$data": "${businessPhones}",
             "spacing": "None"
         }
     ],

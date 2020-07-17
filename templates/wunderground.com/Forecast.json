@@ -491,7 +491,7 @@
 					"items": [
 						{
 							"type": "TextBlock",
-							"text": "{hourly_forecast[0].condition}",
+							"text": "${hourly_forecast[0].condition}",
 							"weight": "bolder"
 						},
 						{
@@ -514,7 +514,7 @@
 					"items": [
 						{
 							"type": "TextBlock",
-							"text": "{hourly_forecast[0].temp.english}°",
+							"text": "${hourly_forecast[0].temp.english}°",
 							"size": "large",
 							"weight": "bolder"
 						}
@@ -526,7 +526,7 @@
 					"items": [
 						{
 							"type": "Image",
-							"url": "{hourly_forecast[0].icon_url}",
+							"url": "${hourly_forecast[0].icon_url}",
 							"size": "small"
 						}
 					]
@@ -541,19 +541,19 @@
 					"items": [
 						{
 							"type": "TextBlock",
-							"text": "{hourly_forecast[1].temp.english}°",
+							"text": "${hourly_forecast[1].temp.english}°",
 							"size": "small",
 							"horizontalAlignment": "center"
 						},
 						{
 							"type": "Image",
-							"url": "{hourly_forecast[1].icon_url}",
+							"url": "${hourly_forecast[1].icon_url}",
 							"size": "small",
 							"spacing": "none"
 						},
 						{
 							"type": "TextBlock",
-							"text": "{hourly_forecast[1].FCTTIME.hour}",
+							"text": "${hourly_forecast[1].FCTTIME.hour}",
 							"size": "small",
 							"isSubtle": true,
 							"horizontalAlignment": "center",
@@ -566,19 +566,19 @@
 					"items": [
 						{
 							"type": "TextBlock",
-							"text": "{hourly_forecast[2].temp.english}°",
+							"text": "${hourly_forecast[2].temp.english}°",
 							"size": "small",
 							"horizontalAlignment": "center"
 						},
 						{
 							"type": "Image",
-							"url": "{hourly_forecast[2].icon_url}",
+							"url": "${hourly_forecast[2].icon_url}",
 							"size": "small",
 							"spacing": "none"
 						},
 						{
 							"type": "TextBlock",
-							"text": "{hourly_forecast[2].FCTTIME.hour}",
+							"text": "${hourly_forecast[2].FCTTIME.hour}",
 							"size": "small",
 							"isSubtle": true,
 							"horizontalAlignment": "center",
@@ -591,19 +591,19 @@
 					"items": [
 						{
 							"type": "TextBlock",
-							"text": "{hourly_forecast[3].temp.english}°",
+							"text": "${hourly_forecast[3].temp.english}°",
 							"size": "small",
 							"horizontalAlignment": "center"
 						},
 						{
 							"type": "Image",
-							"url": "{hourly_forecast[3].icon_url}",
+							"url": "${hourly_forecast[3].icon_url}",
 							"size": "small",
 							"spacing": "none"
 						},
 						{
 							"type": "TextBlock",
-							"text": "{hourly_forecast[3].FCTTIME.hour}",
+							"text": "${hourly_forecast[3].FCTTIME.hour}",
 							"size": "small",
 							"isSubtle": true,
 							"horizontalAlignment": "center",
@@ -616,19 +616,19 @@
 					"items": [
 						{
 							"type": "TextBlock",
-							"text": "{hourly_forecast[4].temp.english}°",
+							"text": "${hourly_forecast[4].temp.english}°",
 							"size": "small",
 							"horizontalAlignment": "center"
 						},
 						{
 							"type": "Image",
-							"url": "{hourly_forecast[4].icon_url}",
+							"url": "${hourly_forecast[4].icon_url}",
 							"size": "small",
 							"spacing": "none"
 						},
 						{
 							"type": "TextBlock",
-							"text": "{hourly_forecast[4].FCTTIME.hour}",
+							"text": "${hourly_forecast[4].FCTTIME.hour}",
 							"size": "small",
 							"isSubtle": true,
 							"horizontalAlignment": "center",
@@ -641,19 +641,19 @@
 					"items": [
 						{
 							"type": "TextBlock",
-							"text": "{hourly_forecast[5].temp.english}°",
+							"text": "${hourly_forecast[5].temp.english}°",
 							"size": "small",
 							"horizontalAlignment": "center"
 						},
 						{
 							"type": "Image",
-							"url": "{hourly_forecast[5].icon_url}",
+							"url": "${hourly_forecast[5].icon_url}",
 							"size": "small",
 							"spacing": "none"
 						},
 						{
 							"type": "TextBlock",
-							"text": "{hourly_forecast[5].FCTTIME.hour}",
+							"text": "${hourly_forecast[5].FCTTIME.hour}",
 							"size": "small",
 							"isSubtle": true,
 							"horizontalAlignment": "center",

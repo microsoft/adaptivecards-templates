@@ -13,7 +13,7 @@
                         {
                             "type": "Image",
                             "altText": "",
-                            "url": "https://graph.microsoft.com/v1.0/users/{mail}/photo/$value",
+                            "url": "https://graph.microsoft.com/v1.0/users/${mail}/photo/$value",
                             "style": "Person",
                             "size": "Small"
                         }
@@ -26,7 +26,7 @@
                         {
                             "type": "TextBlock",
                             "weight": "Bolder",
-                            "text": "{displayName}"
+                            "text": "${displayName}"
                         },
                         {
                             "type": "Container",
@@ -34,23 +34,23 @@
                             "items": [
                                 {
                                     "type": "TextBlock",
-                                    "text": "{toUpper(jobTitle)}",
+                                    "text": "${toUpper(jobTitle)}",
                                     "spacing": "Small"
                                 },
                                 {
                                     "type": "TextBlock",
-                                    "text": "{officeLocation}",
+                                    "text": "${officeLocation}",
                                     "spacing": "None"
                                 },
                                 {
                                     "type": "TextBlock",
-                                    "text": "{$data}",
-                                    "$data": "{businessPhones}",
+                                    "text": "${$data}",
+                                    "$data": "${businessPhones}",
                                     "spacing": "None"
                                 },
                                 {
                                     "type": "TextBlock",
-                                    "text": "{mail}",
+                                    "text": "${mail}",
                                     "spacing": "None"
                                 }
                             ]

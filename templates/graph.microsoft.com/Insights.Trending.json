@@ -5,20 +5,20 @@
     "body": [
         {
             "type": "Container",
-            "$data": "{value}",
+            "$data": "${value}",
             "items": [
                 {
                     "type": "TextBlock",
-                    "text": "{resourceVisualization.title}"
+                    "text": "${resourceVisualization.title}"
                 },
                 {
                     "type": "TextBlock",
-                    "text": "{resourceVisualization.previewText}"
+                    "text": "${resourceVisualization.previewText}"
                 },
                 {
                     "type": "Image",
                     "altText": "",
-                    "url": "{resourceVisualization.previewImageUrl}"
+                    "url": "${resourceVisualization.previewImageUrl}"
                 }
             ],
             "separator": true

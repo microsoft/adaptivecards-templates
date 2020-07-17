@@ -10,7 +10,7 @@
                         {
                             "type": "Image",
                             "style": "Person",
-                            "url": "{$root.person.avatarurl}",
+                            "url": "${$root.person.avatarurl}",
                             "size": "Small"
                         }
                     ],
@@ -22,13 +22,13 @@
                         {
                             "type": "TextBlock",
                             "weight": "Bolder",
-                            "text": "{$root.person.firstname} {$root.person.lastname}",
+                            "text": "${$root.person.firstname} ${$root.person.lastname}",
                             "wrap": true
                         },
                         {
                             "type": "TextBlock",
                             "spacing": "None",
-                            "text": "{$root.person.title}",
+                            "text": "${$root.person.title}",
                             "isSubtle": true,
                             "wrap": true
                         }
@@ -42,19 +42,19 @@
             "facts": [
                 {
                     "title": "Phone:",
-                    "value": "{$root.person.phonenumberoffice}"
+                    "value": "${$root.person.phonenumberoffice}"
                 },
                 {
                     "title": "Mobile:",
-                    "value": "{$root.person.phonenumbermobile}"
+                    "value": "${$root.person.phonenumbermobile}"
                 },
                 {
                     "title": "Email",
-                    "value": "{$root.person.imhandle}"
+                    "value": "${$root.person.imhandle}"
                 },
                 {
                     "title": "Address",
-                    "value": "{$root.person.address.line}, {$root.person.address.zipcode} {$root.person.address.city}"
+                    "value": "${$root.person.address.line}, ${$root.person.address.zipcode} {$root.person.address.city}"
                 }
             ]
         },
@@ -80,7 +80,7 @@
                     "items": [
                         {
                             "type": "TextBlock",
-                            "text": "@{$root.person.twitter}",
+                            "text": "@${$root.person.twitter}",
                             "horizontalAlignment": "Center",
                             "spacing": "Medium"
                         }
@@ -105,7 +105,7 @@
                     "items": [
                         {
                             "type": "TextBlock",
-                            "text": "{$root.person.imhandle}",
+                            "text": "${$root.person.imhandle}",
                             "horizontalAlignment": "Center",
                             "spacing": "Large"
                         }

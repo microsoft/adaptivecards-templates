@@ -16,7 +16,7 @@
                 "type": "Column",
                 "items": [
                   {
-                    "$when": "{$root.completed}",
+                    "$when": "${$root.completed}",
                     "type": "TextBlock",
                     "color": "Good",
                     "text": "Completed"
@@ -26,26 +26,26 @@
                     "size": "Medium",
                     "weight": "Bolder",
                     "wrap": true,
-                    "text": "[{$root.content}]({$root.rooturl}/tasks/{$root.id})"
+                    "text": "[${$root.content}](${$root.rooturl}/tasks/${$root.id})"
                   },
                   {
                     "type": "FactSet",
                     "facts": [
                       {
                         "title": "Project:",
-                        "value": "[{$root['project-name']}]({$root.rooturl}/projects/{$root['project-id']})"
+                        "value": "[${$root['project-name']}](${$root.rooturl}/projects/${$root['project-id']})"
                       },
                       {
                         "title": "TaskList:",
-                        "value": "[{$root['todo-list-name']}]({$root.rooturl}/tasklists/{$root['todo-list-id']})"
+                        "value": "[${$root['todo-list-name']}](${$root.rooturl}/tasklists/${$root['todo-list-id']})"
                       },
                       {
                         "title": "Assigned to:",
-                        "value": "{$root['responsible-party-names']}"
+                        "value": "${$root['responsible-party-names']}"
                       },
                       {
                         "title": "Due date:",
-                        "value": "{$root['due-date']}"
+                        "value": "${$root['due-date']}"
                       }
                     ]
                   },
@@ -57,7 +57,7 @@
                   },
                   {
                     "type": "TextBlock",
-                    "text": "{$root.description}",
+                    "text": "${$root.description}",
                     "wrap": true
                   },
                   {
@@ -69,7 +69,7 @@
                           {
                             "type": "Image",
                             "style": "Person",
-                            "url": "{$root['creator-avatar-url']}",
+                            "url": "${$root['creator-avatar-url']}",
                             "size": "Small"
                           }
                         ],
@@ -80,7 +80,7 @@
                         "items": [
                           {
                             "type": "TextBlock",
-                            "text": "Created {$root['created-on']}",
+                            "text": "Created ${$root['created-on']}",
                             "isSubtle": true,
                             "wrap": true,
                             "size": "Small"
@@ -88,7 +88,7 @@
                           {
                             "type": "TextBlock",
                             "spacing": "None",
-                            "text": "by [{$root['creator-firstname']} {$root['creator-lastname']}]({$root.rooturl}/people/{$root['creator-id']})",
+                            "text": "by [${$root['creator-firstname']} ${$root['creator-lastname']}](${$root.rooturl}/people/${$root['creator-id']})",
                             "isSubtle": true,
                             "wrap": true
                           }
@@ -148,9 +148,9 @@
                 "type": "FactSet",
                 "facts": [
                   {
-                    "$data": "{$root.timeEntries}",
-                    "title": "{$data.userFirstName} {$data.userLastName}",
-                    "value": "{$data.dateFormatted} - {$data.hours}h {$data.minutes}m"
+                    "$data": "${$root.timeEntries}",
+                    "title": "${$data.userFirstName} ${$data.userLastName}",
+                    "value": "${$data.dateFormatted} - ${$data.hours}h {$data.minutes}m"
                   }
                 ]
               },
@@ -159,21 +159,21 @@
                 "facts": [
                   {
                     "title": "Estimated",
-                    "value": "{$root['estimated']}"
+                    "value": "${$root['estimated']}"
                   },
                   {
                     "title": "Total",
-                    "value": "{$root['total']}"
+                    "value": "${$root['total']}"
                   }
                 ]
               }
             ]
           }
         ],
-        "$when": "{$root['timeIsLogged'] > 0}"
+        "$when": "${$root['timeIsLogged'] > 0}"
       },
       {
-        "$when": "{$root['attachments-count'] > 0}",
+        "$when": "${$root['attachments-count'] > 0}",
         "type": "Container",
         "spacing": "Medium",
         "items": [
@@ -210,16 +210,16 @@
             ]
           },
           {
-            "$data": "{$root.attachments}",
+            "$data": "${$root.attachments}",
             "type": "Container",
             "items": [
               {
                 "type": "TextBlock",
-                "text": "{$data.filenameOnDisk}"
+                "text": "${$data.filenameOnDisk}"
               },
               {
                 "type": "Image",
-                "url": "{$data.thumbURL}"
+                "url": "${$data.thumbURL}"
               }
             ]
           }
@@ -227,7 +227,7 @@
         "separator": true
       },
       {
-        "$when": "{$root['comments-count'] > 0}",
+        "$when": "${$root['comments-count'] > 0}",
         "type": "Container",
         "spacing": "Medium",
         "items": [
@@ -267,8 +267,8 @@
       },
       {
         "type": "Container",
-        "$when": "{$root['comments-count'] > 0}",
-        "$data": "{$root.comments}",
+        "$when": "${$root['comments-count'] > 0}",
+        "$data": "${$root.comments}",
         "items": [
           {
             "type": "ColumnSet",
@@ -279,7 +279,7 @@
                   {
                     "type": "Image",
                     "style": "Person",
-                    "url": "{$data['author-avatar-url']}",
+                    "url": "${$data['author-avatar-url']}",
                     "size": "Small"
                   }
                 ],
@@ -297,7 +297,7 @@
                           {
                             "type": "TextBlock",
                             "weight": "Bolder",
-                            "text": " [{$data['author-firstname']} {$data['author-lastname']}]({$root.rooturl}/people/{$data['author_id']}) ( {$data['author-company']} )",
+                            "text": " [${$data['author-firstname']} ${$data['author-lastname']}](${$root.rooturl}/people/${$data['author_id']}) ( ${$data['author-company']} )",
                             "isSubtle": true,
                             "wrap": true
                           }
@@ -310,7 +310,7 @@
                           {
                             "type": "TextBlock",
                             "spacing": "None",
-                            "text": "{$data['datetime']}",
+                            "text": "${$data['datetime']}",
                             "isSubtle": true,
                             "wrap": true
                           }
@@ -326,7 +326,7 @@
           },
           {
             "type": "TextBlock",
-            "text": "{$data.body}",
+            "text": "${$data.body}",
             "wrap": true
           }
         ],
@@ -377,7 +377,7 @@
               "type": "Action.Submit",
               "title": "Submit",
               "data": {
-                "taskId": "{$root.id}",
+                "taskId": "${$root.id}",
                 "type": "comment"
               }
             }
@@ -512,7 +512,7 @@
               "type": "Action.Submit",
               "title": "Submit",
               "data": {
-                "taskId": "{$root.id}",
+                "taskId": "${$root.id}",
                 "type": "time"
               }
             }

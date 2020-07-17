@@ -1308,18 +1308,18 @@
                     "items": [
                         {
                             "type": "TextBlock",
-                            "text": "{current.weather[0].main}",
+                            "text": "${current.weather[0].main}",
                             "weight": "Bolder"
                         },
                         {
                             "type": "TextBlock",
-                            "text": "{current.name}",
+                            "text": "${current.name}",
                             "isSubtle": true,
                             "spacing": "None"
                         },
                         {
                             "type": "TextBlock",
-                            "text": "High: {current.main.temp_max}° Low: {current.main.temp_min}°",
+                            "text": "High: ${current.main.temp_max}° Low: {current.main.temp_min}°",
                             "isSubtle": true,
                             "spacing": "None"
                         }
@@ -1331,7 +1331,7 @@
                     "items": [
                         {
                             "type": "TextBlock",
-                            "text": "{current.main.temp}°",
+                            "text": "${current.main.temp}°",
                             "size": "Large",
                             "weight": "Bolder"
                         }
@@ -1343,7 +1343,7 @@
                     "items": [
                         {
                             "type": "Image",
-                            "url": "http://openweathermap.org/img/w/{current.weather[0].icon}.png",
+                            "url": "http://openweathermap.org/img/w/${current.weather[0].icon}.png",
                             "size": "Small"
                         }
                     ]
@@ -1358,19 +1358,19 @@
                     "items": [
                         {
                             "type": "TextBlock",
-                            "text": "{list[0].main.temp}°",
+                            "text": "${list[0].main.temp}°",
                             "size": "Small",
                             "horizontalAlignment": "Center"
                         },
                         {
                             "type": "Image",
-                            "url": "http://openweathermap.org/img/w/{list[0].weather[0].icon}.png",
+                            "url": "http://openweathermap.org/img/w/${list[0].weather[0].icon}.png",
                             "size": "Small",
                             "spacing": "None"
                         },
                         {
                             "type": "TextBlock",
-                            "text": "{{DATE({parseDateFromEpoch(list[0].dt * 1000)})}}",
+                            "text": "{{DATE(${formatEpoch(list[0].dt * 1000)})}}",
                             "size": "Small",
                             "isSubtle": true,
                             "horizontalAlignment": "Center",
@@ -1384,19 +1384,19 @@
                     "items": [
                         {
                             "type": "TextBlock",
-                            "text": "{list[1].main.temp}°",
+                            "text": "${list[1].main.temp}°",
                             "size": "Small",
                             "horizontalAlignment": "Center"
                         },
                         {
                             "type": "Image",
-                            "url": "http://openweathermap.org/img/w/{list[1].weather[0].icon}.png",
+                            "url": "http://openweathermap.org/img/w/${list[1].weather[0].icon}.png",
                             "size": "Small",
                             "spacing": "None"
                         },
                         {
                             "type": "TextBlock",
-                            "text": "{list[1].dt}",
+                            "text": "${list[1].dt}",
                             "size": "Small",
                             "isSubtle": true,
                             "horizontalAlignment": "Center",
@@ -1410,19 +1410,19 @@
                     "items": [
                         {
                             "type": "TextBlock",
-                            "text": "{list[2].main.temp}°",
+                            "text": "${list[2].main.temp}°",
                             "size": "Small",
                             "horizontalAlignment": "Center"
                         },
                         {
                             "type": "Image",
-                            "url": "http://openweathermap.org/img/w/{list[2].weather[0].icon}.png",
+                            "url": "http://openweathermap.org/img/w/${list[2].weather[0].icon}.png",
                             "size": "Small",
                             "spacing": "None"
                         },
                         {
                             "type": "TextBlock",
-                            "text": "{list[2].dt}",
+                            "text": "${list[2].dt}",
                             "size": "Small",
                             "isSubtle": true,
                             "horizontalAlignment": "Center",
@@ -1436,19 +1436,19 @@
                     "items": [
                         {
                             "type": "TextBlock",
-                            "text": "{list[3].main.temp}°",
+                            "text": "${list[3].main.temp}°",
                             "size": "Small",
                             "horizontalAlignment": "Center"
                         },
                         {
                             "type": "Image",
-                            "url": "http://openweathermap.org/img/w/{list[3].weather[0].icon}.png",
+                            "url": "http://openweathermap.org/img/w/${list[3].weather[0].icon}.png",
                             "size": "Small",
                             "spacing": "None"
                         },
                         {
                             "type": "TextBlock",
-                            "text": "{list[3].dt}",
+                            "text": "${list[3].dt}",
                             "size": "Small",
                             "isSubtle": true,
                             "horizontalAlignment": "Center",
@@ -1462,19 +1462,19 @@
                     "items": [
                         {
                             "type": "TextBlock",
-                            "text": "{list[4].main.temp}°",
+                            "text": "${list[4].main.temp}°",
                             "size": "Small",
                             "horizontalAlignment": "Center"
                         },
                         {
                             "type": "Image",
-                            "url": "http://openweathermap.org/img/w/{list[4].weather[0].icon}.png",
+                            "url": "http://openweathermap.org/img/w/${list[4].weather[0].icon}.png",
                             "size": "Small",
                             "spacing": "None"
                         },
                         {
                             "type": "TextBlock",
-                            "text": "{list[4].dt}",
+                            "text": "${list[4].dt}",
                             "size": "Small",
                             "isSubtle": true,
                             "horizontalAlignment": "Center",
