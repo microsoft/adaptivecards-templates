@@ -24,9 +24,7 @@ Prerequisites:
 
 3. Enter in the Azure Active Directory App Registration application (client) id into the '**Azure_active_directory_app_registration_id**' field. 
 
-4. Enter the id of your App Service Plan into the '**App_service_plan_subscription**' field. The format should be as follows: 
-
-   `/subscriptions/{subscription_id}/resourceGroups/{resource_group_name}/providers/Microsoft.Web/serverfarms/{App_service_plan_name}`
+4. Enter the id of your App Service Plan into the '**App_service_plan_subscription**' field OR you can leave the default value. This value needs to be unique, please make sure there is no duplicate plan with same name.
 
 5. If 'Yes' is selected for '**Telemetry_opt_in**', we will collect feedback from your instance of ACMS using App Insights. See details under 'Telemetry Privacy Statement' below. 
 
@@ -43,8 +41,12 @@ Using the 'Deploy to Azure' button will fetch an image using the latest publishe
 2. In the searchbar, type 'Azure Active Directory' and select the AAD service. 
 3. Select 'App Registrations' under the 'Manage' header. 
 4. Click 'New registration'.
-5. Fill in the details for a new AAD registration. Under 'Redirect URI', enter the URL at which the admin portal is hosted at from the 'Deploy to Azure' instructions. 
+5. Fill in the details for a new AAD registration. Select "Accounts in any organizational directory" for supported account types. Under 'Redirect URI', enter the URL at which the admin portal is hosted at from the 'Deploy to Azure' instructions, i.e. **Sites_adaptivecms_name**.azurewebsites.net
 6. Click 'Register'. 
+7. Go to registered application, and click on "Authentication" under "Manage" section. Select "Access tokens" and "ID Tokens" in grant types. Save settings.
+8. Click on "Expose an API" under "Manage" section, and create Application ID URI. Click on "Add scope" to add scopes, and set Scope Name as "Templates.All", and set concent to "Admins and Users"
+9. Click on "API Permissions" under "Manage" section, add deligated permissions for "openid", "Profile", and "User.Read" and provide admin concent. 
+
 
 ### Telemetry Privacy Statement
 
