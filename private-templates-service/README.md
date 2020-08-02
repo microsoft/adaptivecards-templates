@@ -31,7 +31,8 @@ Prerequisites:
 6. Optional: If you possess an Azure Application Insights instance, enter the instrumentation key into the '**Application_insights_instrumentation_key**' field. 
     To create an Application Insights resource or find your instrumentation key, please see [Create an Application Insights resource](https://docs.microsoft.com/en-us/azure/azure-monitor/app/create-new-resource). Also, please read the 'Telemetry Privacy Statement' below.
 
-7. Click '**Next**' and '**Deploy**'.
+7. Enter "Cosmos_database_name", name should be all lowercase. 
+8. Click '**Next**' and '**Deploy**'.
 
 Using the 'Deploy to Azure' button will fetch an image using the latest published version of [adaptivecards-templating-service](https://www.npmjs.com/package/adaptivecards-templating-service) and [adaptive-templating-service-typescript-node](https://www.npmjs.com/package/adaptive-templating-service-typescript-node). Once the deployment as finished, you will see the admin portal hosted at '**{Sites_adaptivecms_name}**.azurewebsites.net' and be able to hit the endpoints at the same URL. 
 
@@ -73,7 +74,7 @@ These errors occur on the 'Deploy to Azure' page opened after clicking the butto
   If you have Azure CLI installed, try running the following command to see error details: 
 
   ```bash
-  az monitor activity-log --correlation-id xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+  az monitor activity-log list --correlation-id xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
   ```
 
   Or in PowerShell: 
@@ -86,7 +87,7 @@ These errors occur on the 'Deploy to Azure' page opened after clicking the butto
 
   - The value entered in the 'cosmos_database_name' field in the deployment form has already been used. This value must be unique. 
   - The value entered in the 'Azure_active_directory_app_registration_id' field does not exist. 
-  - The value entered in the 'App_service_plan_subscription' field does not exist. Ensure that it is in the following format: `/subscriptions/{subscription_id}/resourceGroups/{resource_group_name}/providers/Microsoft.Web/serverfarms/{App_service_plan_name}`
+  - The value entered in the 'App_service_plan_subscription' field, a duplicate plan exists. 
   - The location selected is not the same as the location of the App service plan that you have selected.
   
 ##### Checking on your deployment
