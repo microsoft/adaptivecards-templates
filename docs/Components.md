@@ -1,10 +1,13 @@
+## Components
+
+- [ ] Pre-populate some initial components
 
 ## Designer
 
 - [ ] As Component is dropped on, open the dialog
 - [ ] Clicking the ... next to the `name` does the same thing
 - [ ] When selected, the property sheet loads the `schema` and pulls the `name`, `displayName`, and property `type`, 
-
+- [ ] Property sheet view selector
 
 ## API
 
