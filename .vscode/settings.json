@@ -1,7 +1,12 @@
 {
     "azureFunctions.deploySubpath": "src",
-    "azureFunctions.projectLanguage": "TypeScript",
+    "azureFunctions.projectLanguage": "JavaScript",
     "azureFunctions.projectRuntime": "~2",
     "debug.internalConsoleOptions": "neverOpen",
-    "azureFunctions.preDeployTask": "npm prune"
+    "azureFunctions.preDeployTask": "npm prune",
+    "files.exclude": {
+        "obj": true,
+        "bin": true
+    },
+    "azureFunctions.postDeployTask": "npm install"
 }

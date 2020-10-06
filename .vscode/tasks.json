@@ -2,21 +2,24 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "type": "func",
-            "command": "host start",
-            "problemMatcher": "$func-watch",
-            "isBackground": true,
-            "dependsOn": "npm build",
-            "options": {
-                "cwd": "${workspaceFolder}/src"
-            }
-        },
-        {
             "type": "shell",
             "label": "npm build",
             "command": "npm run build",
             "dependsOn": "npm install",
             "problemMatcher": "$tsc",
+            "options": {
+                "cwd": "${workspaceFolder}/src"
+            }
+        },
+        {
+            "type": "func",
+            "command": "host start",
+            "problemMatcher": "$func-watch",
+            "isBackground": true,
+            "dependsOn": [
+                "func: extensions install",
+                "npm install"
+            ],
             "options": {
                 "cwd": "${workspaceFolder}/src"
             }
@@ -33,7 +36,7 @@
             "type": "shell",
             "label": "npm prune",
             "command": "npm prune --production",
-            "dependsOn": "npm build",
+            "dependsOn": "func: extensions install",
             "problemMatcher": [],
             "options": {
                 "cwd": "${workspaceFolder}/src"
