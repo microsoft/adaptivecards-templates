@@ -4,7 +4,7 @@
 import { AzureFunction, Context, HttpRequest } from "@azure/functions";
 import * as ACT from "adaptivecards-templating";
 
-const httpTrigger: AzureFunction = async function(
+const httpTrigger: AzureFunction = async function (
   context: Context,
   req: HttpRequest
 ): Promise<void> {
@@ -12,7 +12,7 @@ const httpTrigger: AzureFunction = async function(
   if (!template) {
     context.res = {
       status: 400,
-      body: "Missing 'template' in the request body"
+      body: "Missing 'template' in the request body",
     };
     return;
   }
@@ -21,21 +21,20 @@ const httpTrigger: AzureFunction = async function(
   if (!data) {
     context.res = {
       status: 400,
-      body: "Missing 'data' in the request body"
+      body: "Missing 'data' in the request body",
     };
     return;
   }
 
-  const dataContext = new ACT.EvaluationContext();
-  dataContext.$root = data;
-
   const acTemplate = new ACT.Template(template);
-  
+
   context.res = {
-    body: acTemplate.expand(dataContext),
+    body: acTemplate.expand({
+      $root: data
+    }),
     headers: {
-      "Content-Type": "application/json"
-    }
+      "Content-Type": "application/json",
+    },
   };
 };
 

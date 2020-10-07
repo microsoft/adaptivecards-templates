@@ -1,0 +1,62 @@
+name: Deploy Node.js project to Azure Function App
+
+on:
+  [push]
+
+# CONFIGURATION
+# For help, go to https://github.com/Azure/Actions
+#
+# 1. Set up the following secrets in your repository:
+#   AZURE_FUNCTIONAPP_PUBLISH_PROFILE - a publish profile for you Azure Function app
+#   AZURE_STORAGE_ACCESSKEY - the access key for the storage account that will store the templates and componeonts
+#
+# 2. Change these variables for your configuration:
+env:
+  AZURE_FUNCTIONAPP_NAME: adaptivecardsapi 
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: './src'      # set this to the path to your web app project, defaults to the repository root
+  AZURE_STORAGEACCOUNT_NAME: adaptivecardstemplates
+  NODE_VERSION: '10.x'                     # set this to the node version to use (supports 8.x, 10.x, 12.x)
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: 'Checkout GitHub Action'
+      uses: actions/checkout@master
+
+    - name: Setup Node ${{ env.NODE_VERSION }} Environment
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+
+    - name: 'Resolve Project Dependencies Using Npm'
+      shell: bash
+      run: |
+        pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
+        npm install
+        npm run generate
+        npm run build --if-present
+        npm run test --if-present
+        npm prune --production
+        popd
+
+    - name: 'Run Azure Functions Action'
+      uses: Azure/functions-action@v1
+      id: fa
+      with:
+        app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
+        package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
+        publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
+
+    - name: 'Copy the templates and components from GitHub to Blob storage'
+      shell: bash
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential libssl-dev libffi-dev python3-dev python3-pip
+        sudo python3 -m pip install --upgrade pip
+        sudo pip3 install setuptools wheel
+        sudo pip3 install blobxfer
+        blobxfer upload --storage-account ${{ env.AZURE_STORAGEACCOUNT_NAME }} --storage-account-key "${{ secrets.AZURE_STORAGE_ACCESSKEY }}" --local-path ./templates --remote-path templates --skip-on-lmt-ge
+        blobxfer upload --storage-account ${{ env.AZURE_STORAGEACCOUNT_NAME }} --storage-account-key "${{ secrets.AZURE_STORAGE_ACCESSKEY }}" --local-path ./components --remote-path components --skip-on-lmt-ge
+
+# For more samples to get started with GitHub Action workflows to deploy to Azure, refer to https://github.com/Azure/actions-workflow-samples

@@ -1,0 +1,50 @@
+{
+    "type": "AdaptiveComponent",
+    "name": "schema.org/Thing",
+    "sampleData": {
+        "name": "Adaptive Cards",
+        "description": "An open-source, cross-platform card format",
+        "image": "https://adaptivecards.io/content/adaptive-card-200.png"
+    },
+    "schema": {
+        "properties": {
+            "name": {
+                "type": "string",
+                "displayName": "Name"
+            },
+            "description": {
+                "type": "string",
+                "displayName": "Description",
+                "editor:isMultiLine": "true"
+            },
+            "image": {
+                "type": "string",
+                "displayName": "Image"
+            }
+        }
+    },
+    "views": {
+        "default": {
+            "type": "Container",
+            "items": [
+                {
+                    "type": "Image",
+                    "url": "${image}",
+                    "altText": "Image for ${name}"
+                },
+                {
+                    "type": "TextBlock",
+                    "text": "${name}",
+                    "weight": "bolder",
+                    "size": "Medium"
+                },
+                {
+                    "type": "TextBlock",
+                    "text": "${description}",
+                    "wrap": true,
+                    "maxLines": 3
+                }
+            ]
+        }
+    }
+}

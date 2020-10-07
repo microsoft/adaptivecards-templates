@@ -1,0 +1,27 @@
+{
+    "bindings": [
+      {
+        "authLevel": "anonymous",
+        "type": "httpTrigger",
+        "direction": "in",
+        "name": "req",
+        "methods": [
+          "get"
+        ],
+        "route": "components/find"
+      },
+      {
+        "type": "http",
+        "direction": "out",
+        "name": "res"
+      },
+      {
+        "type": "blob",
+        "name": "componentsBlob",
+        "path": "components/components.json",
+        "connection": "AzureWebJobsStorage",
+        "direction": "in"
+      }
+    ],
+    "scriptFile": "../dist/Components-Find/index.js"
+  }

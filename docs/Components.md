@@ -28,18 +28,7 @@ A barebones /find will return the top 10 components.
 ```json
 [
     {
-        "type": "AdaptiveComponent",
-        "name": "schema.org/Thing",
-        "views": {
-            "default": {
-
-            }
-        },
-        "sampleData": {}
-    },
-    {
-        "type": "AdaptiveComponent",
-        "name": "schema.org/LocalBusiness"
+        "name": "schema.org/Thing"
     }
 ]
 ```

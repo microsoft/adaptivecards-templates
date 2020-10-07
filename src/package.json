@@ -20,19 +20,19 @@
   "bin": "generate",
   "dependencies": {
     "@wmfs/tymly-data-types": "^1.5.0",
-    "adaptivecards-templating": "0.1.0-alpha1",
+    "adaptivecards-templating": "^1.4.0",
     "change-case": "^4.1.1",
     "lodash": "^4.17.19",
     "lodash-inflection": "^1.5.0"
   },
   "devDependencies": {
-    "@azure/functions": "^1.0.2-beta2",
+    "@azure/functions": "^1.2.2",
     "@types/glob": "^7.1.1",
-    "@types/jest": "^24.0.13",
+    "@types/jest": "^24.9.1",
     "glob": "^7.1.4",
-    "jest": "^24.8.0",
-    "ts-jest": "^24.0.2",
-    "typescript": "^3.3.3"
+    "jest": "^26.5.2",
+    "ts-jest": "^26.4.1",
+    "typescript": "^3.9.7"
   },
   "jest": {
     "transform": {

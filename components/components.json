@@ -1,0 +1,9 @@
+{
+    "schema.org": {
+        "components": [
+            {
+                "name": "schema.org/Thing"
+            }
+        ]
+    }
+}
