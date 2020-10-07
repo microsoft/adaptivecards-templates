@@ -50,6 +50,7 @@
             "type": "ColumnSet",
             "columns": [{
                     "type": "Column",
+                    "width": 1,
                     "items": [{
                             "type": "Image",
                             "url": "${image}"
@@ -57,6 +58,7 @@
                     ]
                 }, {
                     "type": "Column",
+                    "width": 3,
                     "items": [{
                             "type": "TextBlock",
                             "text": "${name}"
