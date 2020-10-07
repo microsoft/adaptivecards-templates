@@ -16,10 +16,14 @@ const httpTrigger: AzureFunction = async function (
     (componentDomain) => componentsBlob[componentDomain].components
   );
 
-  for (let grp of grouped) for (let component of grp) flatList.push(component);
+  for (let grp of grouped) {
+    for (let component of grp) {
+      flatList.push(component);
+    }
+  }
 
   if (req.query.name) {
-    results = flatList.filter((c) => c.name === req.query.name);
+    results = flatList.filter((c) => c.name.toLowerCase().indexOf(req.query.name) !== -1);
   } else {
     results = flatList.slice(0, 10);
   }
