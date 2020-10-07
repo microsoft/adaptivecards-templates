@@ -1,8 +1,52 @@
 {
+    "finos.org": {
+        "components": [
+            {
+                "name": "finos.org/bond"
+            }
+        ]
+    },
+    "github.com": {
+        "components": [
+            {
+                "name": "github.com/issue"
+            }
+        ]
+    },
+    "graph.microsoft.com": {
+        "components": [
+            {
+                "name": "graph.microsoft.com/file"
+            },
+            {
+                "name": "graph.microsoft.com/fullProfile"
+            },
+            {
+                "name": "graph.microsoft.com/user"
+            }
+        ]
+    },
+    "iextrading.com": {
+        "components": [
+            {
+                "name": "iextrading.com/stockQuote"
+            }
+        ]
+    },
+    "ogp.me": {
+        "components": [
+            {
+                "name": "ogp.me/openGraph"
+            }
+        ]
+    },
     "schema.org": {
         "components": [
             {
-                "name": "schema.org/Thing"
+                "name": "schema.org/localBusiness"
+            },
+            {
+                "name": "schema.org/thing"
             }
         ]
     }

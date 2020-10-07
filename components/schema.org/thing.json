@@ -1,6 +1,6 @@
 {
     "type": "AdaptiveComponent",
-    "name": "schema.org/Thing",
+    "name": "schema.org/thing",
     "sampleData": {
         "name": "Adaptive Cards",
         "description": "An open-source, cross-platform card format",
@@ -43,6 +43,42 @@
                     "text": "${description}",
                     "wrap": true,
                     "maxLines": 3
+                }
+            ]
+        },
+        "thumbnail": {
+            "type": "ColumnSet",
+            "columns": [{
+                    "type": "Column",
+                    "items": [{
+                            "type": "Image",
+                            "url": "${image}"
+                        }
+                    ]
+                }, {
+                    "type": "Column",
+                    "items": [{
+                            "type": "TextBlock",
+                            "text": "${name}"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "text": "${description}"
+                        }
+                    ]
+                }
+            ]   
+        },
+        "stack": { 
+            "type": "Container",
+            "backgroundImage": "${image}",
+            "items": [{
+                    "type": "TextBlock",
+                    "text": "${name}",
+                    "size": "large"
+                }, {
+                    "type": "TextBlock",
+                    "text": "${description}"
                 }
             ]
         }

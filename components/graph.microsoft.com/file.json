@@ -1,0 +1,101 @@
+{
+    "type": "AdaptiveComponent",
+    "name": "graph.microsoft.com/file",
+    "sampleData": {
+        "createdDateTime": "2017-07-31T18:56:29Z",
+        "eTag": "\"{60F36ED0-85CE-4771-B349-E671C691EFCA},1\"",
+        "id": "01BYE5RZ6QN3ZWBTUFOFD3GSPGOHDJD36K",
+        "lastModifiedDateTime": "2017-07-31T18:56:29Z",
+        "name": "Attachments",
+        "webUrl": "https://m365x214355-my.sharepoint.com/personal/meganb_m365x214355_onmicrosoft_com/Documents/Attachments",
+        "cTag": "\"c:{60F36ED0-85CE-4771-B349-E671C691EFCA},0\"",
+        "size": 0,
+        "createdBy": {
+            "user": {
+                "email": "MeganB@M365x214355.onmicrosoft.com",
+                "id": "48d31887-5fad-4d73-a9f5-3c356e68a038",
+                "displayName": "Megan Bowen"
+            }
+        },
+        "lastModifiedBy": {
+            "user": {
+                "email": "MeganB@M365x214355.onmicrosoft.com",
+                "id": "48d31887-5fad-4d73-a9f5-3c356e68a038",
+                "displayName": "Megan Bowen"
+            }
+        },
+        "parentReference": {
+            "driveId": "b!-RIj2DuyvEyV1T4NlOaMHk8XkS_I8MdFlUCq1BlcjgmhRfAj3-Z8RY2VpuvV_tpd",
+            "driveType": "business",
+            "id": "01BYE5RZ56Y2GOVW7725BZO354PWSELRRZ",
+            "path": "/drive/root:"
+        },
+        "fileSystemInfo": {
+            "createdDateTime": "2017-07-31T18:56:29Z",
+            "lastModifiedDateTime": "2017-07-31T18:56:29Z"
+        },
+        "folder": {
+            "childCount": 0
+        },
+        "specialFolder": {
+            "name": "attachments"
+        }
+    },
+    "schema": {
+        "properties": {
+            "title": {
+                "type": "string"
+            },
+            "fileType": {
+                "type": "string"
+            },
+            "url": {
+                "type": "string"
+            }
+        },
+        "required": [
+            "title",
+            "fileType"
+        ]
+    },
+    "views": {
+        "default": {
+            "type": "ColumnSet",
+            "columns": [
+                {
+                    "type": "Column",
+                    "width": "35px",
+                    "items": [
+                        {
+                            "type": "Image",
+                            "$when": "${fileType == 'docx'}",
+                            "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Microsoft_Word_2013_logo.svg/782px-Microsoft_Word_2013_logo.svg.png"
+                        },
+                        {
+                            "type": "Image",
+                            "$when": "${fileType == 'xlsx'}",
+                            "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/Microsoft_Office_Excel_%282018%E2%80%93present%29.svg/1101px-Microsoft_Office_Excel_%282018%E2%80%93present%29.svg.png"
+                        }
+                    ]
+                },
+                {
+                    "type": "Column",
+                    "width": "stretch",
+                    "items": [
+                        {
+                            "type": "TextBlock",
+                            "text": "${title}",
+                            "weight": "bolder"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "text": "${url}",
+                            "isSubtle": true,
+                            "spacing": "none"
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}

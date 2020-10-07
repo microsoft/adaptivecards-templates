@@ -1,0 +1,193 @@
+{
+    "type": "AdaptiveComponent",
+    "name": "github.com/issue",
+    "sampleData": {
+        "url": "https://api.github.com/repos/microsoft/AdaptiveCards/issues/4313",
+        "repository_url": "https://api.github.com/repos/microsoft/AdaptiveCards",
+        "id": 652455685,
+        "number": 4313,
+        "title": "[JS] npm packages need to include a LICENSE file in the root",
+        "user": {
+            "login": "matthidinger",
+            "id": 1432195,
+            "node_id": "MDQ6VXNlcjE0MzIxOTU=",
+            "avatar_url": "https://avatars1.githubusercontent.com/u/1432195?v=4",
+            "url": "https://api.github.com/users/matthidinger",
+            "html_url": "https://github.com/matthidinger",
+            "type": "User"
+        },
+        "labels": [
+            {
+                "id": 497280004,
+                "node_id": "MDU6TGFiZWw0OTcyODAwMDQ=",
+                "url": "https://api.github.com/repos/microsoft/AdaptiveCards/labels/Bug",
+                "name": "Bug",
+                "color": "ee0701",
+                "default": false,
+                "description": null
+            }
+        ],
+        "state": "closed",
+        "locked": false,
+        "assignee": {
+            "login": "matthidinger",
+            "id": 1432195,
+            "node_id": "MDQ6VXNlcjE0MzIxOTU=",
+            "avatar_url": "https://avatars1.githubusercontent.com/u/1432195?v=4",
+            "url": "https://api.github.com/users/matthidinger",
+            "html_url": "https://github.com/matthidinger",
+            "type": "User",
+            "site_admin": false
+        },
+        "assignees": [
+            {
+                "login": "matthidinger",
+                "id": 1432195,
+                "node_id": "MDQ6VXNlcjE0MzIxOTU=",
+                "avatar_url": "https://avatars1.githubusercontent.com/u/1432195?v=4",
+                "gravatar_id": "",
+                "url": "https://api.github.com/users/matthidinger",
+                "html_url": "https://github.com/matthidinger",
+                "followers_url": "https://api.github.com/users/matthidinger/followers",
+                "following_url": "https://api.github.com/users/matthidinger/following{/other_user}",
+                "gists_url": "https://api.github.com/users/matthidinger/gists{/gist_id}",
+                "starred_url": "https://api.github.com/users/matthidinger/starred{/owner}{/repo}",
+                "subscriptions_url": "https://api.github.com/users/matthidinger/subscriptions",
+                "organizations_url": "https://api.github.com/users/matthidinger/orgs",
+                "repos_url": "https://api.github.com/users/matthidinger/repos",
+                "events_url": "https://api.github.com/users/matthidinger/events{/privacy}",
+                "received_events_url": "https://api.github.com/users/matthidinger/received_events",
+                "type": "User",
+                "site_admin": false
+            }
+        ],
+        "milestone": null,
+        "comments": 0,
+        "created_at": "2020-07-07T16:23:55Z",
+        "updated_at": "2020-07-10T17:51:38Z",
+        "closed_at": "2020-07-10T17:51:31Z",
+        "author_association": "MEMBER",
+        "active_lock_reason": null,
+        "body": "\r\n\r\n```\r\nlerna WARN ENOLICENSE Packages adaptivecards-controls, adaptivecards-designer, adaptivecards-fabric, and adaptivecards-templating are missing a license.\r\nlerna WARN ENOLICENSE One way to fix this is to add a LICENSE.md file to the root of this repository.\r\n```",
+        "closed_by": {
+            "login": "matthidinger",
+            "id": 1432195,
+            "node_id": "MDQ6VXNlcjE0MzIxOTU=",
+            "avatar_url": "https://avatars1.githubusercontent.com/u/1432195?v=4",
+            "gravatar_id": "",
+            "url": "https://api.github.com/users/matthidinger",
+            "html_url": "https://github.com/matthidinger",
+            "followers_url": "https://api.github.com/users/matthidinger/followers",
+            "following_url": "https://api.github.com/users/matthidinger/following{/other_user}",
+            "gists_url": "https://api.github.com/users/matthidinger/gists{/gist_id}",
+            "starred_url": "https://api.github.com/users/matthidinger/starred{/owner}{/repo}",
+            "subscriptions_url": "https://api.github.com/users/matthidinger/subscriptions",
+            "organizations_url": "https://api.github.com/users/matthidinger/orgs",
+            "repos_url": "https://api.github.com/users/matthidinger/repos",
+            "events_url": "https://api.github.com/users/matthidinger/events{/privacy}",
+            "received_events_url": "https://api.github.com/users/matthidinger/received_events",
+            "type": "User",
+            "site_admin": false
+        }
+    },
+    "schema": {
+        "properties": {
+            "title": {
+                "type": "string"
+            },
+            "url": {
+                "type": "string"
+            },
+            "user": {
+                "type": "object",
+                "properties": {
+                    "login": {
+                        "type": "string"
+                    },
+                    "avatar_url": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    },
+    "views": {
+        "default": {
+            "type": "Container",
+            "selectAction": {
+                "type": "Action.OpenUrl",
+                "url": "${url}"
+            },
+            "items": [
+                {
+                    "type": "TextBlock",
+                    "size": "Medium",
+                    "weight": "Bolder",
+                    "text": "[Issue]: [${title}](${url})"
+                },
+                {
+                    "type": "ColumnSet",
+                    "columns": [
+                        {
+                            "type": "Column",
+                            "items": [
+                                {
+                                    "type": "Image",
+                                    "style": "Person",
+                                    "url": "${user.avatar_url}",
+                                    "size": "Small"
+                                }
+                            ],
+                            "width": "auto"
+                        },
+                        {
+                            "type": "Column",
+                            "items": [
+                                {
+                                    "type": "TextBlock",
+                                    "weight": "Bolder",
+                                    "text": "${user.login}",
+                                    "wrap": true
+                                },
+                                {
+                                    "type": "TextBlock",
+                                    "spacing": "None",
+                                    "text": "Created {{DATE(${created_at},SHORT)}}",
+                                    "isSubtle": true,
+                                    "wrap": true
+                                }
+                            ],
+                            "width": "stretch"
+                        }
+                    ]
+                },
+                {
+                    "type": "TextBlock",
+                    "text": "${body}",
+                    "wrap": true
+                },
+                {
+                    "type": "FactSet",
+                    "facts": [
+                        {
+                            "title": "Repository:",
+                            "value": "[${repository_url}](${repository_url})"
+                        },
+                        {
+                            "title": "Issue:",
+                            "value": "[Issue: ${id}]: [${title}](${repository_url})"
+                        },
+                        {
+                            "title": "State:",
+                            "value": "${state}"
+                        },
+                        {
+                            "title": "Assigned to:",
+                            "value": "${assignee.login}"
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}

@@ -1,0 +1,65 @@
+{
+    "type": "AdaptiveComponent",
+    "name": "ogp.me/openGraph",
+    "schema": {
+        "properties": {
+            "type": {
+                "type": "string"
+            },
+            "title": {
+                "type": "string"
+            },
+            "description": {
+                "type": "string"
+            },
+            "url": {
+                "type": "string"
+            },
+            "image": {
+                "type": "string"
+            }
+        }
+    },
+    "views": {
+        "default": {
+            "type": "Container",
+            "items": [
+                {
+                    "type": "Container",
+                    "backgroundImage": {
+                        "url": "${image}",
+                        "verticalAlignment": "Center"
+                    },
+                    "bleed": true,
+                    "minHeight": "200px",
+                    "items": []
+                },
+                {
+                    "type": "Container",
+                    "items": [
+                        {
+                            "type": "TextBlock",
+                            "text": "${toUpper(substring(url, 7, length(url) - 7))}"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "text": "${title}",
+                            "weight": "Bolder"
+                        }
+                    ]
+                },
+                {
+                    "type": "TextBlock",
+                    "text": "${$root.description}",
+                    "wrap": true,
+                    "maxLines": 3
+                }
+            ],
+            "minHeight": "150px",
+            "selectAction": {
+                "type": "Action.OpenUrl",
+                "url": "${url}"
+            }
+        }
+    }
+}

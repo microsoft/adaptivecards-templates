@@ -51,7 +51,7 @@ function generateTemplates() {
         knownSamples.push(knownSample);
       }
     } catch (ex) {
-      console.log(`Failed to read file ${file}`);
+      console.log(`Failed to parse file ${file}`);
     }
   });
 
@@ -95,7 +95,7 @@ function generateComponents() {
         });
 
       } catch (ex) {
-        console.log(`Failed to read file ${file}`);
+        console.log(`Failed to parse file ${file}`);
       }
     });
 

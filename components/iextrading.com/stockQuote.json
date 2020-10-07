@@ -1,0 +1,161 @@
+{
+    "type": "AdaptiveComponent",
+    "name": "iextrading.com/stockQuote",
+    "sampleData": {
+        "symbol": "MSFT",
+        "companyName": "Microsoft Corporation",
+        "primaryExchange": "Nasdaq Global Select",
+        "sector": "Technology",
+        "calculationPrice": "close",
+        "open": 127.42,
+        "openTime": 1556890200966,
+        "close": 128.9,
+        "closeTime": 1556913600447,
+        "high": 129.43,
+        "low": 127.25,
+        "latestPrice": 128.9,
+        "latestSource": "Close",
+        "latestTime": "May 3, 2019",
+        "latestUpdate": 15569136004,
+        "latestVolume": 24835154,
+        "iexRealtimePrice": null,
+        "iexRealtimeSize": null,
+        "iexLastUpdated": null,
+        "delayedPrice": 128.9,
+        "delayedPriceTime": 1556913600447,
+        "extendedPrice": 129.04,
+        "extendedChange": 0.14,
+        "extendedChangePercent": 0.00109,
+        "extendedPriceTime": 1556917190214,
+        "previousClose": 126.21,
+        "change": 2.69,
+        "changePercent": 0.02131,
+        "iexMarketPercent": null,
+        "iexVolume": null,
+        "avgTotalVolume": 22183270,
+        "iexBidPrice": null,
+        "iexBidSize": null,
+        "iexAskPrice": null,
+        "iexAskSize": null,
+        "marketCap": 987737229888,
+        "peRatio": 30.84,
+        "week52High": 131.37,
+        "week52Low": 93.96,
+        "ytdChange": 0.30147812013916003
+    },
+    "schema": {
+        "properties": {
+            "companyName": {
+                "type": "string"
+            },
+            "primaryExchange": {
+                "type": "string"
+            },
+            "symbol": {
+                "type": "string"
+            },
+            "change": {
+                "type": "number"
+            },
+            "changePercent": {
+                "type": "number"
+            },
+            "latestUpdate": {
+                "type": "number",
+                "description": "Format is UNIX epoch"
+            },
+            "latestPrice": {
+                "type": "number"
+            },
+            "open": {
+                "type": "number"
+            },
+            "high": {
+                "type": "number"
+            },
+            "low": {
+                "type": "number"
+            }
+        }
+    },
+    "views": {
+        "default": {
+            "type": "Container",
+            "items": [
+                {
+                    "type": "Container",
+                    "items": [
+                        {
+                            "type": "TextBlock",
+                            "text": "${companyName}",
+                            "size": "Medium",
+                            "wrap": true
+                        },
+                        {
+                            "type": "TextBlock",
+                            "text": "${primaryExchange}: ${symbol}",
+                            "isSubtle": true,
+                            "spacing": "None",
+                            "wrap": true
+                        },
+                        {
+                            "type": "TextBlock",
+                            "text": "{{DATE(${formatEpoch(latestUpdate, 'yyyy-MM-ddTHH:mm:ssZ')}, SHORT)}} {{TIME(${formatEpoch(latestUpdate, 'yyyy-MM-ddTHH:mm:ssZ')})}}"
+                        }
+                    ]
+                },
+                {
+                    "type": "Container",
+                    "spacing": "None",
+                    "items": [
+                        {
+                            "type": "ColumnSet",
+                            "columns": [
+                                {
+                                    "type": "Column",
+                                    "width": "stretch",
+                                    "items": [
+                                        {
+                                            "type": "TextBlock",
+                                            "text": "${formatNumber(latestPrice, 2)} ",
+                                            "size": "ExtraLarge"
+                                        },
+                                        {
+                                            "type": "TextBlock",
+                                            "text": "${if(change >= 0, '▲', '▼')} ${formatNumber(change,2)} USD (${formatNumber(changePercent * 100, 2)}%)",
+                                            "color": "${if(change >= 0, 'good', 'attention')}",
+                                            "spacing": "None"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "Column",
+                                    "width": "auto",
+                                    "items": [
+                                        {
+                                            "type": "FactSet",
+                                            "facts": [
+                                                {
+                                                    "title": "Open",
+                                                    "value": "${open} "
+                                                },
+                                                {
+                                                    "title": "High",
+                                                    "value": "${high} "
+                                                },
+                                                {
+                                                    "title": "Low",
+                                                    "value": "${low} "
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}
