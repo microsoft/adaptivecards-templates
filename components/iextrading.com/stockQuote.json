@@ -63,7 +63,7 @@
             },
             "changePercent": {
                 "type": "number",
-                "displayName": "Change percent",
+                "displayName": "Change percent"
             },
             "latestUpdate": {
                 "type": "number",
@@ -72,19 +72,19 @@
             },
             "latestPrice": {
                 "type": "number",
-                "displayName": "Latest price",
+                "displayName": "Latest price"
             },
             "open": {
                 "type": "number",
-                "displayName": "Open price",
+                "displayName": "Open price"
             },
             "high": {
                 "type": "number",
-                "displayName": "High price",
+                "displayName": "High price"
             },
             "low": {
                 "type": "number",
-                "displayName": "Low price",
+                "displayName": "Low price"
             }
         }
     },

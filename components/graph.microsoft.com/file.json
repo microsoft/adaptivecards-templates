@@ -6,7 +6,7 @@
         "eTag": "\"{60F36ED0-85CE-4771-B349-E671C691EFCA},1\"",
         "id": "01BYE5RZ6QN3ZWBTUFOFD3GSPGOHDJD36K",
         "lastModifiedDateTime": "2017-07-31T18:56:29Z",
-        "name": "Attachments",
+        "name": "Status Report.docx",
         "webUrl": "https://m365x214355-my.sharepoint.com/personal/meganb_m365x214355_onmicrosoft_com/Documents/Attachments",
         "cTag": "\"c:{60F36ED0-85CE-4771-B349-E671C691EFCA},0\"",
         "size": 0,
@@ -39,7 +39,8 @@
         },
         "specialFolder": {
             "name": "attachments"
-        }
+        },
+        "fileType": "docx"
     },
     "schema": {
         "properties": {
@@ -84,12 +85,12 @@
                     "items": [
                         {
                             "type": "TextBlock",
-                            "text": "${title}",
+                            "text": "${name}",
                             "weight": "bolder"
                         },
                         {
                             "type": "TextBlock",
-                            "text": "${url}",
+                            "text": "${webUrl}",
                             "isSubtle": true,
                             "spacing": "none"
                         }
