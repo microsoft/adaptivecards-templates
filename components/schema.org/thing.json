@@ -42,7 +42,8 @@
                     "type": "TextBlock",
                     "text": "${description}",
                     "wrap": true,
-                    "maxLines": 3
+                    "maxLines": 3,
+                    "spacing": "small"
                 }
             ]
         },
@@ -61,11 +62,16 @@
                     "width": 3,
                     "items": [{
                             "type": "TextBlock",
-                            "text": "${name}"
+                            "text": "${name}",
+                            "weight": "bolder",
+                            "size": "Medium"
                         },
                         {
                             "type": "TextBlock",
-                            "text": "${description}"
+                            "text": "${description}",
+                            "wrap": true,
+                            "maxLines": 2,
+                            "spacing": "none"
                         }
                     ]
                 }
@@ -77,10 +83,13 @@
             "items": [{
                     "type": "TextBlock",
                     "text": "${name}",
-                    "size": "large"
+                    "size": "large",
+                    "weight": "bolder"
                 }, {
                     "type": "TextBlock",
-                    "text": "${description}"
+                    "text": "${description}",
+                    "wrap": true,
+                    "maxLines": 3
                 }
             ]
         }

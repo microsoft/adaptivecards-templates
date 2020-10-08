@@ -45,36 +45,46 @@
     },
     "schema": {
         "properties": {
-            "companyName": {
-                "type": "string"
-            },
             "primaryExchange": {
-                "type": "string"
+                "type": "string",
+                "displayName": "Primary exchange"
             },
             "symbol": {
-                "type": "string"
+                "type": "string",
+                "displayName": "Symbol"
+            },
+            "companyName": {
+                "type": "string",
+                "displayName": "Company name"
             },
             "change": {
-                "type": "number"
+                "type": "number",
+                "displayName": "Change value"
             },
             "changePercent": {
-                "type": "number"
+                "type": "number",
+                "displayName": "Change percent",
             },
             "latestUpdate": {
                 "type": "number",
+                "displayName": "Latest update",
                 "description": "Format is UNIX epoch"
             },
             "latestPrice": {
-                "type": "number"
+                "type": "number",
+                "displayName": "Latest price",
             },
             "open": {
-                "type": "number"
+                "type": "number",
+                "displayName": "Open price",
             },
             "high": {
-                "type": "number"
+                "type": "number",
+                "displayName": "High price",
             },
             "low": {
-                "type": "number"
+                "type": "number",
+                "displayName": "Low price",
             }
         }
     },
