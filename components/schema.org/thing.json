@@ -49,18 +49,22 @@
         },
         "thumbnail": {
             "type": "ColumnSet",
-            "columns": [{
+            "columns": [
+                {
                     "type": "Column",
                     "width": 1,
-                    "items": [{
+                    "items": [
+                        {
                             "type": "Image",
                             "url": "${image}"
                         }
                     ]
-                }, {
+                },
+                {
                     "type": "Column",
                     "width": 3,
-                    "items": [{
+                    "items": [
+                        {
                             "type": "TextBlock",
                             "text": "${name}",
                             "weight": "bolder",
@@ -75,17 +79,41 @@
                         }
                     ]
                 }
-            ]   
+            ]
         },
-        "stack": { 
+        "stack": {
             "type": "Container",
             "backgroundImage": "${image}",
-            "items": [{
+            "items": [
+                {
                     "type": "TextBlock",
                     "text": "${name}",
                     "size": "large",
                     "weight": "bolder"
-                }, {
+                },
+                {
+                    "type": "TextBlock",
+                    "text": "${description}",
+                    "wrap": true,
+                    "maxLines": 3
+                }
+            ]
+        },
+        "demo": {
+            "type": "Container",
+            "backgroundImage": "${image}",
+            "items": [
+                {
+                    "type": "TextBlock",
+                    "text": "DON'T USE THIS VIEW, IT'S JUST FOR FUNSIES"
+                },
+                {
+                    "type": "TextBlock",
+                    "text": "${name}",
+                    "size": "large",
+                    "weight": "bolder"
+                },
+                {
                     "type": "TextBlock",
                     "text": "${description}",
                     "wrap": true,
