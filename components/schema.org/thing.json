@@ -15,7 +15,7 @@
             "description": {
                 "type": "string",
                 "displayName": "Description",
-                "editor:isMultiLine": "true"
+                "editor:isMultiLine": true
             },
             "image": {
                 "type": "string",

@@ -21,11 +21,11 @@
                     "facts": [
                         {
                             "title": "Created",
-                            "value": "{{DATE({createdDateTime}, SHORT)}} by ${createdBy.user.displayName}"
+                            "value": "{{DATE(${createdDateTime}, SHORT)}} by ${createdBy.user.displayName}"
                         },
                         {
                             "title": "Modified",
-                            "value": "{{DATE({lastModifiedDateTime}, SHORT)}} by ${lastModifiedBy.user.displayName}"
+                            "value": "{{DATE(${lastModifiedDateTime}, SHORT)}} by ${lastModifiedBy.user.displayName}"
                         }
                     ]
                 }
