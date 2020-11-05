@@ -1,0 +1,28 @@
+{
+  "bindings": [
+    {
+      "authLevel": "anonymous",
+      "type": "httpTrigger",
+      "direction": "in",
+      "name": "req",
+      "methods": [
+        "get",
+        "post"
+      ],
+      "route": "links/{*domain}"
+    },
+    {
+      "type": "http",
+      "direction": "out",
+      "name": "res"
+    },
+    {
+      "type": "blob",
+      "name": "linkManifestBlob",
+      "path": "links/{domain}/manifest.json",
+      "connection": "AzureWebJobsStorage",
+      "direction": "in"
+    }
+  ],
+  "scriptFile": "../dist/Links-Get/index.js"
+}

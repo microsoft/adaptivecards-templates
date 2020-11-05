@@ -58,5 +58,7 @@ jobs:
         sudo pip3 install blobxfer
         blobxfer upload --storage-account ${{ env.AZURE_STORAGEACCOUNT_NAME }} --storage-account-key "${{ secrets.AZURE_STORAGE_ACCESSKEY }}" --local-path ./templates --remote-path templates --skip-on-lmt-ge
         blobxfer upload --storage-account ${{ env.AZURE_STORAGEACCOUNT_NAME }} --storage-account-key "${{ secrets.AZURE_STORAGE_ACCESSKEY }}" --local-path ./components --remote-path components --skip-on-lmt-ge
+        blobxfer upload --storage-account ${{ env.AZURE_STORAGEACCOUNT_NAME }} --storage-account-key "${{ secrets.AZURE_STORAGE_ACCESSKEY }}" --local-path ./links --remote-path links --skip-on-lmt-ge
+
 
 # For more samples to get started with GitHub Action workflows to deploy to Azure, refer to https://github.com/Azure/actions-workflow-samples

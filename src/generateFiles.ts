@@ -71,8 +71,8 @@ function generateTemplates() {
 
 function generateComponents() {
   const knownComponents = {};
+  const componentsDir = path.resolve(__filename, "../../../components");
 
-  let componentsDir = path.resolve(__filename, "../../../components");
   glob
     .sync("**/*/*.json", { cwd: componentsDir, nocase: false })
     .map((file) => {
@@ -109,7 +109,15 @@ function generateComponents() {
   }
 }
 
+function generateLinks() {
+  const knownLinks = {};
+  const linksDir = path.resolve(__filename, "../../../links");
+
+}
+
+
 export function generate() {
   generateTemplates();
   generateComponents();
+  generateLinks();
 }
