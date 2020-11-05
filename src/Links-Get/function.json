@@ -6,10 +6,9 @@
       "direction": "in",
       "name": "req",
       "methods": [
-        "get",
-        "post"
+        "get"
       ],
-      "route": "links/{*domain}"
+      "route": "links/{domain}/manifest.json"
     },
     {
       "type": "http",

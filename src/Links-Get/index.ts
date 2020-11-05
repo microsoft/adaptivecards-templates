@@ -17,7 +17,7 @@ const httpTrigger: AzureFunction = async function (
   } else {
     context.res = {
       status: 404,
-      body: "No link manifest found for " + req.params.domain,
+      body: "No link manifest found for " + context.bindingData.domain
     };
   }
 };
