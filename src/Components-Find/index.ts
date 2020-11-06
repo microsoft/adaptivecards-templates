@@ -23,7 +23,7 @@ const httpTrigger: AzureFunction = async function (
   }
 
   if (req.query.name) {
-    results = flatList.filter((c) => c.name.toLowerCase().indexOf(req.query.name) !== -1);
+    results = flatList.filter((c) => c.name.toLowerCase().indexOf(req.query.name.toLowerCase) !== -1);
   } else {
     results = flatList.slice(0, 10);
   }
