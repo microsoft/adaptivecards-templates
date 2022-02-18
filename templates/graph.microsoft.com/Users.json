@@ -1,16 +1,16 @@
 {
     "type": "AdaptiveCard",
-    "version": "1.0",
-    "@odata.type": "#microsoft.graph.user",
+    "version": "1.4",
+    "@odata.type": "#microsoft.graph.group",
     "body": [
         {
             "type": "Container",
-            "$data": "{value}",
+            "$data": "${value}",
             "items": [
                 {
                     "type": "TextBlock",
                     "weight": "Bolder",
-                    "text": "{displayName}"
+                    "text": "${displayName}"
                 },
                 {
                     "type": "Container",
@@ -18,24 +18,36 @@
                     "items": [
                         {
                             "type": "TextBlock",
-                            "text": "{toUpper(jobTitle)}",
+                            "$when": "${jobTitle != $null}",
+                            "text": "${toUpper(jobTitle)}",
                             "spacing": "Small"
                         },
                         {
                             "type": "TextBlock",
-                            "text": "{officeLocation}",
+                            "text": "${officeLocation}",
                             "spacing": "None"
                         },
                         {
                             "type": "TextBlock",
-                            "text": "{$data}",
-                            "$data": "{businessPhones}",
+                            "text": "${mail}",
                             "spacing": "None"
+                        }
+                    ]
+                },
+                {
+                    "type": "ActionSet",
+                    "actions": [
+                        {
+                            "type": "Action.OpenUrl",
+                            "$when": "${userPrincipalName != $null}",
+                            "title": "Send a message",
+                            "url": "im:${userPrincipalName}"
                         },
                         {
-                            "type": "TextBlock",
-                            "text": "{mail}",
-                            "spacing": "None"
+                            "type": "Action.OpenUrl",
+                            "$when": "${mail != $null}",
+                            "title": "Send an email",
+                            "url": "mailto:${mail}"
                         }
                     ]
                 }
