@@ -1,0 +1,37 @@
+{
+	"type": "AdaptiveCard",
+	"@odata.type": "#microsoft.graph.teams",
+	"version": "1.0",
+	"body": [
+		{
+			"type": "Container",
+			"$data": "${value}",
+			"items": [
+				{
+					"type": "TextBlock",
+					"text": "${displayName}",
+					"wrap": true,
+					"size": "medium",
+					"weight": "bolder"
+				},
+				{
+					"type": "TextBlock",
+					"text": "${description}",
+					"wrap": true
+				},
+				{
+					"type": "ActionSet",
+					"actions": [
+						{
+							"type": "Action.OpenUrl",
+							"$when": "${webUrl != $null}",
+							"title": "Open Team link",
+							"url": "${webUrl}"
+						}
+					]
+				}
+			],
+			"separator": true
+		}
+	]
+}

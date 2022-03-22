@@ -13,3 +13,4 @@
 | `groups` | `#microsoft.graph.group`
 | `me/directreports` | `#microsoft.graph.user`
 | `sites('key')` | `#microsoft.graph.site`
+| `me/joinedTeams` | `#microsoft.graph.teams`
