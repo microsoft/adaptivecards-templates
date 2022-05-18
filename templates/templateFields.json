@@ -40,20 +40,6 @@
     },
     {
         "templatePath": "graph.microsoft.com/Profile.json",
-        "properties": [
-            "@odata.context",
-            "businessPhones",
-            "displayName",
-            "givenName",
-            "jobTitle",
-            "mail",
-            "mobilePhone",
-            "officeLocation",
-            "preferredLanguage",
-            "surname",
-            "userPrincipalName",
-            "id"
-        ],
         "typeKey": "@odata.type",
         "typeValue": "#microsoft.graph.user"
     },
@@ -75,7 +61,7 @@
     {
         "templatePath": "graph.microsoft.com/Users.json",
         "typeKey": "@odata.type",
-        "typeValue": "#microsoft.graph.user"
+        "typeValue": "#microsoft.graph.group"
     },
     {
         "templatePath": "iextrading.com/Quote.json",
