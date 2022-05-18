@@ -66,8 +66,8 @@ export function generate() {
 
         });
 
-        fs.writeFileSync(path.resolve(templatesDir, "templates.json"), JSON.stringify(knownTemplates));
-        fs.writeFileSync(path.resolve(templatesDir, "templateFields.json"), JSON.stringify(knownSamples));
+        fs.writeFileSync(path.resolve(templatesDir, "templates.json"), JSON.stringify(knownTemplates, null, 4));
+        fs.writeFileSync(path.resolve(templatesDir, "templateFields.json"), JSON.stringify(knownSamples, null, 4));
     }
     catch (err) {
         console.error(err);

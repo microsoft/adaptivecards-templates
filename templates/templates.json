@@ -74,6 +74,10 @@
                 "fullPath": "graph.microsoft.com/Messages.json"
             },
             {
+                "file": "Profile.data.json",
+                "fullPath": "graph.microsoft.com/Profile.data.json"
+            },
+            {
                 "file": "Profile.json",
                 "fullPath": "graph.microsoft.com/Profile.json"
             },
@@ -120,6 +124,18 @@
             {
                 "file": "Quote.json",
                 "fullPath": "iextrading.com/Quote.json"
+            }
+        ]
+    },
+    "ogp.me": {
+        "templates": [
+            {
+                "file": "OpenGraph.data.json",
+                "fullPath": "ogp.me/OpenGraph.data.json"
+            },
+            {
+                "file": "OpenGraph.json",
+                "fullPath": "ogp.me/OpenGraph.json"
             }
         ]
     },
